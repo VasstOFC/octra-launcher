@@ -46,6 +46,7 @@ interface AppStore {
   offlineOpen: boolean;
   skinEditUuid: string | null;
   skinEpoch: number;
+  profileVisualEpoch: Record<string, number>;
   launchingId: string | null;
   playingSessions: PlayingSession[];
   runningServers: RunningLocalServer[];
@@ -53,6 +54,8 @@ interface AppStore {
   loadAll: () => Promise<void>;
   setSettings: (settings: Settings) => void;
   refreshInstances: () => Promise<void>;
+  patchInstance: (inst: Instance) => void;
+  bumpProfileVisual: (id: string) => void;
   refreshAccounts: () => Promise<void>;
   setProgress: (p: InstallProgress | null) => void;
   setLogin: (d: DeviceCode | null) => void;
@@ -89,6 +92,7 @@ export const useApp = create<AppStore>((set, get) => ({
   offlineOpen: false,
   skinEditUuid: null,
   skinEpoch: 0,
+  profileVisualEpoch: {},
   launchingId: null,
   playingSessions: [],
   runningServers: [],
@@ -133,6 +137,17 @@ export const useApp = create<AppStore>((set, get) => ({
   refreshInstances: async () => {
     set({ instances: await api.listInstances() });
   },
+  patchInstance: (inst) =>
+    set((s) => ({
+      instances: s.instances.map((i) => (i.id === inst.id ? inst : i)),
+    })),
+  bumpProfileVisual: (id) =>
+    set((s) => ({
+      profileVisualEpoch: {
+        ...s.profileVisualEpoch,
+        [id]: (s.profileVisualEpoch[id] ?? 0) + 1,
+      },
+    })),
   refreshAccounts: async () => {
     set({ accounts: await api.getAccounts() });
   },

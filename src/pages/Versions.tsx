@@ -1,11 +1,11 @@
-import { Plus, Settings2, SquarePen } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useMemo, useState } from "react";
 import { clsx } from "clsx";
 import { api } from "../lib/api";
 import { confirmDialog, promptDialog } from "../lib/dialog";
-import { formatDate, LOADER_LABEL, loaderChipClass } from "../lib/format";
 import { pl } from "../locales/pl";
 import { InstanceCreator } from "../components/InstanceCreator";
+import { ProfileCard } from "../components/ProfileCard";
 import { ProfileContextMenu } from "../components/ProfileContextMenu";
 import { useApp } from "../stores/appStore";
 import { useOctra } from "../stores/octraStore";
@@ -67,6 +67,8 @@ export function VersionsPage() {
         }
       />
 
+      <p className="mt-1 text-sm text-mute">{pl.versions.libraryHint}</p>
+
       <div className="mt-3 flex flex-wrap gap-1.5">
         {LOADER_FILTERS.map((f) => (
           <button
@@ -85,84 +87,47 @@ export function VersionsPage() {
         ))}
       </div>
 
-      <div className="mt-3 flex flex-col gap-1.5">
-        {filtered.map((inst) => {
-          const active = selectedId === inst.id;
-          return (
-            <article
-              key={inst.id}
-              className={clsx(
-                "flex items-center gap-3 rounded-xl border bg-raised2/80 px-3 py-2",
-                active ? "border-accent/50" : "border-line",
-              )}
-              onContextMenu={(e) => {
-                e.preventDefault();
-                setCtxMenu({ x: e.clientX, y: e.clientY, inst });
+      <div
+        className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2"
+        onContextMenu={(e) => {
+          const card = (e.target as HTMLElement).closest("[data-profile-id]");
+          if (!card) return;
+          const id = card.getAttribute("data-profile-id");
+          const inst = filtered.find((i) => i.id === id);
+          if (!inst) return;
+          e.preventDefault();
+          setCtxMenu({ x: e.clientX, y: e.clientY, inst });
+        }}
+      >
+        {filtered.map((inst) => (
+          <div key={inst.id} data-profile-id={inst.id}>
+            <ProfileCard
+              inst={inst}
+              variant="library"
+              active={selectedId === inst.id}
+              showPlaytime
+              onClick={() => select(inst.id)}
+              onPlay={() => {
+                select(inst.id);
+                void play(inst.id);
               }}
-            >
-              <button
-                type="button"
-                className="min-w-0 flex-1 text-left"
-                onClick={() => select(inst.id)}
-              >
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="truncate text-sm font-semibold">{inst.name}</span>
-                  <span
-                    className={clsx(
-                      "rounded-full px-2 py-0.5 text-[10px] font-semibold",
-                      loaderChipClass(inst.loader),
-                    )}
-                  >
-                    {LOADER_LABEL[inst.loader] ?? inst.loader} {inst.gameVersion}
-                  </span>
-                </div>
-                <p className="mt-0.5 text-[10px] text-mute">
-                  {pl.versions.lastPlayed}: {formatDate(inst.lastPlayed)}
-                </p>
-              </button>
-              <div className="flex shrink-0 items-center gap-1">
-                <button
-                  className="grid h-8 w-8 place-items-center rounded-lg text-mute hover:bg-white/6 hover:text-ink"
-                  onClick={() => {
-                    select(inst.id);
-                    openContent("mods");
-                  }}
-                  title={pl.versions.mods}
-                >
-                  <SquarePen size={15} />
-                </button>
-                <button
-                  className="grid h-8 w-8 place-items-center rounded-lg text-mute hover:bg-white/6 hover:text-ink"
-                  onClick={() => {
-                    select(inst.id);
-                    openContent("advanced");
-                  }}
-                  title={pl.versions.advanced}
-                >
-                  <Settings2 size={15} />
-                </button>
-                <button
-                  className={clsx(
-                    "rounded-full px-3 py-1 text-[11px] font-bold",
-                    active ? "bg-launch text-white" : "bg-white/10 text-ink",
-                  )}
-                  onClick={() => {
-                    select(inst.id);
-                    void play(inst.id);
-                  }}
-                >
-                  {pl.versions.play}
-                </button>
-              </div>
-            </article>
-          );
-        })}
+              onEdit={() => {
+                select(inst.id);
+                openContent("mods");
+              }}
+              onSettings={() => {
+                select(inst.id);
+                openContent("appearance");
+              }}
+            />
+          </div>
+        ))}
         {filtered.length === 0 && (
           <button
             onClick={openCreator}
-            className="grid min-h-[120px] place-items-center rounded-xl border border-dashed border-line text-sm text-mute"
+            className="col-span-full grid min-h-[180px] place-items-center rounded-2xl border border-dashed border-line bg-raised2/30 text-sm text-mute hover:border-accent/30 hover:text-ink"
           >
-            {instances.length === 0 ? pl.versions.noProfiles : "Brak profili dla tego filtra"}
+            {instances.length === 0 ? pl.versions.noProfiles : pl.versions.noFilterMatch}
           </button>
         )}
       </div>
@@ -175,6 +140,32 @@ export function VersionsPage() {
           y={ctxMenu.y}
           inst={ctxMenu.inst}
           onClose={() => setCtxMenu(null)}
+          onPlay={() => {
+            select(ctxMenu.inst.id);
+            setCtxMenu(null);
+            void play(ctxMenu.inst.id);
+          }}
+          onMods={() => {
+            select(ctxMenu.inst.id);
+            setCtxMenu(null);
+            openContent("mods");
+          }}
+          onAppearance={() => {
+            select(ctxMenu.inst.id);
+            setCtxMenu(null);
+            openContent("appearance");
+          }}
+          onAdvanced={() => {
+            select(ctxMenu.inst.id);
+            setCtxMenu(null);
+            openContent("advanced");
+          }}
+          onOpenFolder={() => {
+            setCtxMenu(null);
+            void api.openInstanceFolder(ctxMenu.inst.id).catch((e) =>
+              showError(e instanceof Error ? e.message : String(e)),
+            );
+          }}
           onDelete={() => {
             void (async () => {
               const target = ctxMenu.inst;
@@ -317,7 +308,7 @@ function ImportSection({
     "rounded-full border border-line px-3 py-1.5 text-[11px] font-semibold text-mute hover:border-accent/40 hover:text-ink disabled:opacity-40";
 
   return (
-    <section className="mt-6 rounded-xl border border-line bg-raised/50 p-4">
+    <section className="mt-8 rounded-xl border border-line bg-raised/50 p-4">
       <h2 className="text-sm font-bold">{pl.versions.importTitle}</h2>
       <div className="mt-3 flex flex-wrap gap-2">
         <button className={btn} disabled={busy} onClick={() => void importModrinth()}>

@@ -9,6 +9,7 @@ import { contentTabLabel } from "../lib/contentUi";
 import { formatBytes, formatRam } from "../lib/format";
 
 import { InstanceContentPane } from "../components/InstanceContentPane";
+import { ProfileAppearancePane } from "../components/ProfileAppearancePane";
 
 import { useApp } from "../stores/appStore";
 
@@ -18,7 +19,7 @@ import type { WorldEntry } from "../types";
 
 
 
-const TABS: ContentTab[] = ["loader", "mods", "shaders", "worlds", "resources", "advanced"];
+const TABS: ContentTab[] = ["loader", "mods", "shaders", "worlds", "resources", "appearance", "advanced"];
 
 
 
@@ -91,6 +92,10 @@ export function ContentOverlay() {
           {overlay.tab === "advanced" ? (
 
             <AdvancedPane id={inst.id} />
+
+          ) : overlay.tab === "appearance" ? (
+
+            <ProfileAppearancePane id={inst.id} />
 
           ) : overlay.tab === "worlds" ? (
 

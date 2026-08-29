@@ -47,6 +47,8 @@ export function contentTabLabel(tab: ContentTab): string {
       return "Światy";
     case "resources":
       return "Zasoby";
+    case "appearance":
+      return "Wygląd";
     case "advanced":
       return "Zaawansowane";
     default:

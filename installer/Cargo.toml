@@ -1,6 +1,6 @@
 [package]
 name = "octra-installer"
-version = "1.0.1"
+version = "1.1.0"
 description = "Instalator Octra"
 authors = ["Octra"]
 edition = "2021"

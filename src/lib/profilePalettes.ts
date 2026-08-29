@@ -24,3 +24,14 @@ export const PROFILE_PALETTES: ProfilePalette[] = [
 export function paletteById(id: string): ProfilePalette {
   return PROFILE_PALETTES.find((p) => p.id === id) ?? PROFILE_PALETTES[3]!;
 }
+
+export function paletteIdFromInstance(inst: {
+  ledColor?: string | null;
+  ledColor2?: string | null;
+}): string {
+  const c1 = inst.ledColor?.trim();
+  const c2 = inst.ledColor2?.trim();
+  if (!c1 && !c2) return PROFILE_PALETTES[3]!.id;
+  const match = PROFILE_PALETTES.find((p) => p.c1 === c1 && p.c2 === c2);
+  return match?.id ?? PROFILE_PALETTES[3]!.id;
+}

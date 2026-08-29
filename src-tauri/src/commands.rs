@@ -317,6 +317,12 @@ pub fn set_instance_icon_glyph(id: String, color: String, symbol: String) -> Res
 }
 
 #[tauri::command]
+pub fn set_instance_icon_bytes(id: String, bytes: Vec<u8>) -> Result<Instance> {
+    let (_, dirs) = ctx()?;
+    instances::apply_icon_bytes(&dirs, &id, &bytes)
+}
+
+#[tauri::command]
 pub async fn pick_instance_icon_file(id: String) -> Result<Option<Instance>> {
     let file = rfd::AsyncFileDialog::new()
         .add_filter("Obraz", &["png", "jpg", "jpeg", "webp", "gif"])
@@ -356,6 +362,18 @@ pub async fn pick_profile_wallpaper(id: String) -> Result<Option<Instance>> {
 pub fn set_profile_wallpaper(id: String, path: String) -> Result<Instance> {
     let (_, dirs) = ctx()?;
     instances::apply_profile_wallpaper(&dirs, &id, Path::new(&path))
+}
+
+#[tauri::command]
+pub fn set_profile_wallpaper_bytes(id: String, bytes: Vec<u8>) -> Result<Instance> {
+    let (_, dirs) = ctx()?;
+    instances::apply_profile_wallpaper_bytes(&dirs, &id, &bytes)
+}
+
+#[tauri::command]
+pub fn clear_profile_wallpaper(id: String) -> Result<Instance> {
+    let (_, dirs) = ctx()?;
+    instances::clear_profile_wallpaper(&dirs, &id)
 }
 
 #[tauri::command]
@@ -1436,6 +1454,26 @@ pub fn read_screenshot(id: String, name: String, full: Option<bool>) -> Result<S
 }
 
 #[tauri::command]
+pub async fn save_screenshot_as(id: String, name: String) -> Result<Option<String>> {
+    let (_, dirs) = ctx()?;
+    let src = instances::read_screenshot_path(&dirs, &id, &name, true)?;
+    let src_path = Path::new(&src);
+    let mut dialog = rfd::AsyncFileDialog::new()
+        .set_file_name(&name)
+        .set_title("Zapisz zrzut ekranu");
+    if name.to_ascii_lowercase().ends_with(".png") {
+        dialog = dialog.add_filter("PNG", &["png"]);
+    } else {
+        dialog = dialog.add_filter("Obraz", &["png", "jpg", "jpeg", "webp"]);
+    }
+    let Some(file) = dialog.save_file().await else {
+        return Ok(None);
+    };
+    std::fs::copy(src_path, file.path())?;
+    Ok(Some(file.path().to_string_lossy().to_string()))
+}
+
+#[tauri::command]
 pub fn open_instance_subdir(id: String, folder: String) -> Result<()> {
     let (_, dirs) = ctx()?;
     let path = instances::game_subdir(&dirs, &id, &folder)?;
@@ -1791,6 +1829,28 @@ pub async fn get_mojang_texture_preview(
     texture_key: String,
 ) -> Result<String> {
     crate::mojang_skins::texture_png_base64(&state.http, &texture_key).await
+}
+
+/// Pobiera obraz (skin z mc-heads itd.) po HTTP — omija CORS w WebGL.
+#[tauri::command]
+pub async fn fetch_image_base64(state: State<'_, AppState>, url: String) -> Result<String> {
+    use base64::Engine as _;
+    let url = url.trim();
+    if url.is_empty() {
+        return Err(Error::msg("Brak adresu URL obrazu."));
+    }
+    if url.starts_with("data:") {
+        return Err(Error::msg("URL data: nie jest obsługiwany w tym API."));
+    }
+    let resp = state.http.get(url).send().await?;
+    if !resp.status().is_success() {
+        return Err(Error::msg(format!(
+            "Nie udało się pobrać obrazu (HTTP {}).",
+            resp.status().as_u16()
+        )));
+    }
+    let bytes = resp.bytes().await?;
+    Ok(base64::engine::general_purpose::STANDARD.encode(bytes))
 }
 
 #[tauri::command]

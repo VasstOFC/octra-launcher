@@ -76,12 +76,18 @@ export const api = {
     unwrap(
       invoke<Instance>("set_instance_icon_glyph", { id, color, symbol }),
     ),
+  setInstanceIconBytes: (id: string, bytes: number[]) =>
+    unwrap(invoke<Instance>("set_instance_icon_bytes", { id, bytes })),
   pickInstanceIconFile: (id: string) =>
     unwrap(invoke<Instance | null>("pick_instance_icon_file", { id })),
   pickProfileWallpaper: (id: string) =>
     unwrap(invoke<Instance | null>("pick_profile_wallpaper", { id })),
   setProfileWallpaper: (id: string, path: string) =>
     unwrap(invoke<Instance>("set_profile_wallpaper", { id, path })),
+  setProfileWallpaperBytes: (id: string, bytes: number[]) =>
+    unwrap(invoke<Instance>("set_profile_wallpaper_bytes", { id, bytes })),
+  clearProfileWallpaper: (id: string) =>
+    unwrap(invoke<Instance>("clear_profile_wallpaper", { id })),
   readInstanceWallpaper: (id: string) =>
     unwrap(invoke<string | null>("read_instance_wallpaper", { id })),
   listInstanceContent: (id: string) =>
@@ -278,6 +284,8 @@ export const api = {
     unwrap(invoke<ScreenshotEntry[]>("list_screenshots", { id })),
   readScreenshot: (id: string, name: string, full?: boolean) =>
     unwrap(invoke<string>("read_screenshot", { id, name, full: full ?? false })),
+  saveScreenshotAs: (id: string, name: string) =>
+    unwrap(invoke<string | null>("save_screenshot_as", { id, name })),
   listAllScreenshots: () =>
     unwrap(invoke<GlobalScreenshotEntry[]>("list_all_screenshots")),
   getAccountSkin: (uuid: string, refresh = false) =>
@@ -298,6 +306,8 @@ export const api = {
     unwrap(invoke<McPlayerProfile>("set_minecraft_cape", { uuid, capeId })),
   getMojangTexturePreview: (textureKey: string) =>
     unwrap(invoke<string>("get_mojang_texture_preview", { textureKey })),
+  fetchImageBase64: (url: string) =>
+    unwrap(invoke<string>("fetch_image_base64", { url })),
   relayStart: (name: string) => unwrap(invoke("relay_start", { name })),
   relayStop: () => unwrap(invoke("relay_stop")),
   relayListPeers: () => unwrap(invoke<RelayPeerInfo[]>("relay_list_peers")),

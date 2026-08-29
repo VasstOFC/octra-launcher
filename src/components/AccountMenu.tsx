@@ -32,7 +32,7 @@ function accountTypeLabel(acc: Account): string {
   return acc.kind === "offline" ? pl.accounts.nonPremium : pl.accounts.premium;
 }
 
-export function AccountMenu() {
+export function AccountMenu({ expanded = false }: { expanded?: boolean }) {
   const accounts = useApp((s) => s.accounts);
   const refreshAccounts = useApp((s) => s.refreshAccounts);
   const bumpSkin = useApp((s) => s.bumpSkin);
@@ -196,7 +196,7 @@ export function AccountMenu() {
   }
 
   return (
-    <div ref={ref} className="relative">
+    <div ref={ref} className={clsx("relative", expanded ? "w-full" : "")}>
       <button
         type="button"
         title={active ? `${pl.accounts.title} — ${pl.accounts.contextHint}` : pl.accounts.title}
@@ -206,15 +206,25 @@ export function AccountMenu() {
           if (active) openAccountContext(e, active);
         }}
         className={clsx(
-          "relative grid h-10 w-10 place-items-center rounded-lg transition",
+          "relative flex items-center rounded-xl transition",
+          expanded ? "h-11 w-full gap-3 px-3" : "h-11 w-11 justify-center",
           open ? "bg-white/8 text-accent" : "text-mute hover:bg-white/5 hover:text-ink",
         )}
       >
         {active ? (
-          <AccountAvatar account={active} size={28} className="rounded-md ring-0" />
+          <AccountAvatar
+            account={active}
+            size={expanded ? 26 : 28}
+            className="shrink-0 rounded-md ring-0"
+          />
         ) : (
-          <UserRound size={18} strokeWidth={1.7} />
+          <UserRound size={21} strokeWidth={1.75} className="shrink-0" />
         )}
+        {expanded ? (
+          <span className="min-w-0 truncate text-left text-[13px] font-medium">
+            {active?.name ?? pl.accounts.title}
+          </span>
+        ) : null}
       </button>
 
       {open && (

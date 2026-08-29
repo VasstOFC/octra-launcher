@@ -6,13 +6,15 @@ import {
   Terminal,
   Trash2,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { listen } from "@tauri-apps/api/event";
 import { clsx } from "clsx";
 import { api } from "../lib/api";
-import { promptDialog } from "../lib/dialog";
+import { pl } from "../locales/pl";
+import { LocalServerCreateDialog, type CreateServerDraft } from "../components/LocalServerCreateDialog";
+import { LocalServerSettings } from "../components/LocalServerSettings";
 import { useApp } from "../stores/appStore";
-import type { LocalServerInfo, LocalSoftware } from "../types";
+import type { LocalServerInfo } from "../types";
 
 export function HostPage() {
   const instances = useApp((s) => s.instances);
@@ -24,8 +26,11 @@ export function HostPage() {
   const [log, setLog] = useState("");
   const [cmd, setCmd] = useState("");
   const [busy, setBusy] = useState(false);
+  const [createOpen, setCreateOpen] = useState(false);
+  const logEndRef = useRef<HTMLDivElement>(null);
 
   const active = servers.find((s) => s.id === selected) ?? servers[0] ?? null;
+  const defaultVersion = instances[0]?.gameVersion ?? "1.21.1";
 
   async function refresh() {
     try {
@@ -42,7 +47,10 @@ export function HostPage() {
     const unsubs: Array<() => void> = [];
     void listen<{ serverId: string; line: string }>("local-server-log", (e) => {
       if (e.payload.serverId === selected) {
-        setLog((l) => l + e.payload.line + "\n");
+        setLog((l) => {
+          const next = l + e.payload.line + "\n";
+          return next.length > 200_000 ? next.slice(-200_000) : next;
+        });
       }
     }).then((u) => unsubs.push(u));
     void listen<{ serverId: string; status: string; name: string }>(
@@ -60,27 +68,32 @@ export function HostPage() {
     api.readLocalServerLog(active.id).then(setLog).catch(() => setLog(""));
   }, [active?.id]);
 
-  async function createServer() {
-    const name = await promptDialog("Nazwa serwera:", {
-      title: "Nowy serwer lokalny",
-      defaultValue: "Mój serwer",
-      confirmLabel: "Utwórz",
-    });
-    if (!name) return;
+  useEffect(() => {
+    logEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [log]);
+
+  async function createServer(draft: CreateServerDraft) {
     const inst = instances[0];
     setBusy(true);
     try {
       const s = await api.createLocalServer({
-        name,
-        gameVersion: inst?.gameVersion ?? "1.21.1",
-        software: "paper" as LocalSoftware,
-        onlineMode: false,
+        name: draft.name,
+        gameVersion: draft.gameVersion,
+        software: draft.software,
+        onlineMode: draft.onlineMode,
         eulaAccepted: true,
         sourceInstanceId: inst?.id ?? null,
+        motd: draft.motd,
+        port: draft.port,
+        maxPlayers: draft.maxPlayers,
+        difficulty: draft.difficulty,
+        viewDistance: draft.viewDistance,
+        memoryMb: draft.memoryMb,
       });
       setSelected(s.id);
+      setCreateOpen(false);
       await refresh();
-      showOk("Serwer utworzony.");
+      showOk(pl.host.created);
     } catch (e) {
       showError(String(e));
     } finally {
@@ -96,7 +109,7 @@ export function HostPage() {
       else if (action === "start") await api.startLocalServer(active.id);
       else if (action === "stop") await api.stopLocalServer(active.id);
       else if (action === "delete") {
-        if (!confirm(`Usunąć serwer „${active.name}"?`)) return;
+        if (!confirm(pl.host.deleteConfirm.replace("{name}", active.name))) return;
         await api.deleteLocalServer(active.id);
         setSelected(null);
       }
@@ -110,25 +123,33 @@ export function HostPage() {
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
+      <LocalServerCreateDialog
+        open={createOpen}
+        defaultVersion={defaultVersion}
+        busy={busy}
+        onClose={() => setCreateOpen(false)}
+        onSubmit={(draft) => void createServer(draft)}
+      />
+
       <header className="flex items-center justify-between border-b border-line px-6 py-4">
         <div>
-          <h1 className="text-xl font-extrabold">Host serwera</h1>
-          <p className="mt-0.5 text-xs text-mute">Lokalny serwer Minecraft — Paper / Vanilla / Fabric.</p>
+          <h1 className="text-xl font-extrabold">{pl.host.title}</h1>
+          <p className="mt-0.5 text-xs text-mute">{pl.host.subtitle}</p>
         </div>
         <button
           disabled={busy}
-          onClick={() => void createServer()}
+          onClick={() => setCreateOpen(true)}
           className="inline-flex items-center gap-2 rounded-full bg-accent px-4 py-2 text-sm font-semibold text-bg-on-accent"
         >
           <Plus size={16} />
-          Nowy serwer
+          {pl.host.newServer}
         </button>
       </header>
 
       <div className="flex min-h-0 flex-1">
         <aside className="w-56 shrink-0 overflow-auto border-r border-line p-3">
           {servers.length === 0 ? (
-            <p className="px-2 py-6 text-xs text-mute">Brak serwerów — utwórz pierwszy.</p>
+            <p className="px-2 py-6 text-xs text-mute">{pl.host.empty}</p>
           ) : (
             servers.map((s) => (
               <button
@@ -143,7 +164,7 @@ export function HostPage() {
                 <div className="text-[10px] text-mute">
                   {s.software} · {s.gameVersion} ·{" "}
                   <span className={s.status === "running" ? "text-good" : "text-mute"}>
-                    {s.status === "running" ? "Działa" : s.status}
+                    {s.status === "running" ? pl.host.running : s.status}
                   </span>
                 </div>
               </button>
@@ -152,82 +173,91 @@ export function HostPage() {
         </aside>
 
         {active ? (
-          <section className="flex min-w-0 flex-1 flex-col">
-            <div className="flex flex-wrap items-center gap-2 border-b border-line px-4 py-3">
-              <button
-                disabled={busy || active.jarReady}
-                onClick={() => void run("install")}
-                className="rounded-full border border-line px-3 py-1 text-xs hover:bg-white/5 disabled:opacity-40"
-              >
-                {active.jarReady ? "Zainstalowany" : "Instaluj JAR"}
-              </button>
-              {active.status !== "running" ? (
+          <section className="flex min-w-0 flex-1">
+            <div className="flex min-w-0 flex-1 flex-col">
+              <div className="flex flex-wrap items-center gap-2 border-b border-line px-4 py-3">
                 <button
-                  disabled={busy || !active.jarReady}
-                  onClick={() => void run("start")}
-                  className="inline-flex items-center gap-1 rounded-full bg-good px-3 py-1 text-xs font-semibold text-black disabled:opacity-40"
+                  disabled={busy || active.jarReady}
+                  onClick={() => void run("install")}
+                  className="rounded-full border border-line px-3 py-1 text-xs hover:bg-white/5 disabled:opacity-40"
                 >
-                  <Play size={12} />
-                  Start
+                  {active.jarReady ? pl.host.installed : pl.host.install}
                 </button>
-              ) : (
+                {active.status !== "running" ? (
+                  <button
+                    disabled={busy || !active.jarReady}
+                    onClick={() => void run("start")}
+                    className="inline-flex items-center gap-1 rounded-full bg-good px-3 py-1 text-xs font-semibold text-black disabled:opacity-40"
+                  >
+                    <Play size={12} />
+                    {pl.host.start}
+                  </button>
+                ) : (
+                  <button
+                    disabled={busy}
+                    onClick={() => void run("stop")}
+                    className="inline-flex items-center gap-1 rounded-full bg-danger px-3 py-1 text-xs font-semibold text-white"
+                  >
+                    <Square size={12} />
+                    {pl.host.stop}
+                  </button>
+                )}
+                <button
+                  onClick={() => api.openLocalServerFolder(active.id).catch((e) => showError(String(e)))}
+                  className="inline-flex items-center gap-1 rounded-full border border-line px-3 py-1 text-xs"
+                >
+                  <FolderOpen size={12} />
+                  {pl.host.folder}
+                </button>
                 <button
                   disabled={busy}
-                  onClick={() => void run("stop")}
-                  className="inline-flex items-center gap-1 rounded-full bg-danger px-3 py-1 text-xs font-semibold text-white"
+                  onClick={() => void run("delete")}
+                  className="ml-auto inline-flex items-center gap-1 rounded-full border border-danger/40 px-3 py-1 text-xs text-danger"
                 >
-                  <Square size={12} />
-                  Stop
+                  <Trash2 size={12} />
+                  {pl.host.delete}
                 </button>
-              )}
-              <button
-                onClick={() => api.openLocalServerFolder(active.id).catch((e) => showError(String(e)))}
-                className="inline-flex items-center gap-1 rounded-full border border-line px-3 py-1 text-xs"
+                <span className="w-full text-[10px] text-mute">
+                  {pl.host.port} {active.port} · {active.address}
+                  {active.lanIp ? ` · LAN ${active.lanIp}` : ""}
+                </span>
+              </div>
+
+              <pre className="min-h-0 flex-1 overflow-auto whitespace-pre-wrap break-words bg-black/40 p-3 font-mono text-[11px] leading-relaxed text-mute">
+                {log || pl.host.logEmpty}
+                <div ref={logEndRef} />
+              </pre>
+
+              <form
+                className="flex items-center gap-2 border-t border-line p-3"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (!cmd.trim()) return;
+                  api.sendLocalServerCommand(active.id, cmd).catch((e) => showError(String(e)));
+                  setCmd("");
+                }}
               >
-                <FolderOpen size={12} />
-                Folder
-              </button>
-              <button
+                <Terminal size={14} className="shrink-0 text-mute" />
+                <input
+                  value={cmd}
+                  onChange={(e) => setCmd(e.target.value)}
+                  placeholder={pl.host.commandPlaceholder}
+                  className="flex-1 rounded-xl bg-raised px-3 py-2 text-sm outline-none ring-1 ring-line"
+                  disabled={active.status !== "running"}
+                />
+              </form>
+            </div>
+
+            <aside className="w-72 shrink-0 border-l border-line bg-raised/30">
+              <LocalServerSettings
+                server={active}
                 disabled={busy}
-                onClick={() => void run("delete")}
-                className="ml-auto inline-flex items-center gap-1 rounded-full border border-danger/40 px-3 py-1 text-xs text-danger"
-              >
-                <Trash2 size={12} />
-                Usuń
-              </button>
-              <span className="w-full text-[10px] text-mute">
-                Port {active.port} · {active.address}
-                {active.lanIp ? ` · LAN ${active.lanIp}` : ""}
-              </span>
-            </div>
-
-            <div className="min-h-0 flex-1 overflow-auto bg-black/40 p-3 font-mono text-[11px] leading-relaxed text-mute">
-              {log || "Log serwera pojawi się tutaj…"}
-            </div>
-
-            <form
-              className="flex items-center gap-2 border-t border-line p-3"
-              onSubmit={(e) => {
-                e.preventDefault();
-                if (!cmd.trim()) return;
-                api.sendLocalServerCommand(active.id, cmd).catch((e) => showError(String(e)));
-                setCmd("");
-              }}
-            >
-              <Terminal size={14} className="text-mute" />
-              <input
-                value={cmd}
-                onChange={(e) => setCmd(e.target.value)}
-                placeholder="Komenda serwera…"
-                className="flex-1 rounded-xl bg-raised px-3 py-2 text-sm outline-none ring-1 ring-line"
-                disabled={active.status !== "running"}
+                onSaved={() => void refresh()}
               />
-            </form>
+            </aside>
           </section>
         ) : (
-          <div className="grid flex-1 place-items-center text-sm text-mute">
-            Wybierz lub utwórz serwer lokalny.
-          </div>
+          <div className="grid flex-1 place-items-center text-sm text-mute">{pl.host.pickServer}</div>
         )}
       </div>
     </div>

@@ -12,7 +12,14 @@ export type OctraView =
   | "host"
   | "settings";
 
-export type ContentTab = "loader" | "mods" | "shaders" | "worlds" | "resources" | "advanced";
+export type ContentTab =
+  | "loader"
+  | "mods"
+  | "shaders"
+  | "worlds"
+  | "resources"
+  | "appearance"
+  | "advanced";
 
 export const VIEW_LABELS: Record<OctraView, string> = {
   home: pl.nav.home,
@@ -32,6 +39,7 @@ export const CONTENT_TAB_LABELS: Record<ContentTab, string> = {
   shaders: "Shadery",
   worlds: "Światy",
   resources: "Zasoby",
+  appearance: "Wygląd",
   advanced: "Zaawansowane",
 };
 

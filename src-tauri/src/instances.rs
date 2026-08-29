@@ -736,26 +736,46 @@ pub fn apply_glyph_icon(dirs: &Dirs, id: &str, color: &str, symbol: &str) -> Res
     Ok(inst)
 }
 
-/// Zapisuje nowy obraz jako `icon.*`, kasuje poprzednie pliki i ustawia `iconPath`.
-pub fn apply_file_icon(dirs: &Dirs, id: &str, path: &Path) -> Result<Instance> {
-    let mut inst = get(dirs, id)?;
-    if inst.pack_locked {
-        return Err(icon_edit_error());
-    }
-    if !path.is_file() {
-        return Err(Error::msg("Nie znaleziono pliku obrazu."));
-    }
-    let bytes = std::fs::read(path)?;
+fn validate_icon_bytes(bytes: &[u8]) -> Result<()> {
     if bytes.is_empty() {
         return Err(Error::msg("Plik obrazu jest pusty."));
     }
     if bytes.len() > 2 * 1024 * 1024 {
         return Err(Error::msg("Obraz jest za duży (maks. 2 MB)."));
     }
-    icon::install_icon_bytes(dirs, &mut inst, &bytes)?;
-    if inst.icon_path.as_deref().map(str::trim).filter(|s| !s.is_empty()).is_none() {
-        return Err(Error::msg("Nie udało się zapisać ikony. Wybierz PNG, JPEG, WebP albo GIF."));
+    Ok(())
+}
+
+/// Zapisuje nowy obraz jako `icon.*`, kasuje poprzednie pliki i ustawia `iconPath`.
+pub fn apply_file_icon(dirs: &Dirs, id: &str, path: &Path) -> Result<Instance> {
+    if !path.is_file() {
+        return Err(Error::msg("Nie znaleziono pliku obrazu."));
     }
+    let bytes = std::fs::read(path)?;
+    apply_icon_bytes(dirs, id, &bytes)
+}
+
+/// Zapisuje ikonę profilu z surowych bajtów (np. z przeglądarkowego pickera plików).
+pub fn apply_icon_bytes(dirs: &Dirs, id: &str, bytes: &[u8]) -> Result<Instance> {
+    let mut inst = get(dirs, id)?;
+    if inst.pack_locked {
+        return Err(icon_edit_error());
+    }
+    validate_icon_bytes(bytes)?;
+    icon::install_icon_bytes(dirs, &mut inst, bytes)?;
+    if inst
+        .icon_path
+        .as_deref()
+        .map(str::trim)
+        .filter(|s| !s.is_empty())
+        .is_none()
+    {
+        return Err(Error::msg(
+            "Nie udało się zapisać ikony. Wybierz PNG, JPEG, WebP albo GIF.",
+        ));
+    }
+    inst.icon_symbol.clear();
+    inst.icon_color.clear();
     save(dirs, &inst)?;
     Ok(inst)
 }
@@ -823,6 +843,37 @@ pub fn read_wallpaper_thumb_path(dirs: &Dirs, inst: &Instance) -> Option<String>
     let path = wallpaper_abs_path(dirs, inst)?;
     let thumb = crate::thumbs::ensure_thumb(dirs, &path, 800).ok()?;
     Some(crate::thumbs::path_to_string(thumb))
+}
+
+/// Usuwa tapetę profilu i czyści `wallpaperPath`.
+pub fn clear_profile_wallpaper(dirs: &Dirs, id: &str) -> Result<Instance> {
+    let mut inst = get(dirs, id)?;
+    let dir = dirs.instance_dir(&inst.id);
+    remove_other_wallpapers(&dir, "");
+    inst.wallpaper_path = None;
+    save(dirs, &inst)?;
+    Ok(inst)
+}
+
+/// Zapisuje tapetę profilu z surowych bajtów (np. z przeglądarkowego pickera plików).
+pub fn apply_profile_wallpaper_bytes(dirs: &Dirs, id: &str, bytes: &[u8]) -> Result<Instance> {
+    let mut inst = get(dirs, id)?;
+    if bytes.is_empty() {
+        return Err(Error::msg("Plik obrazu jest pusty."));
+    }
+    if bytes.len() > MAX_WALLPAPER_BYTES {
+        return Err(Error::msg("Tapeta jest za duża (maks. 4 MB)."));
+    }
+    let ext = sniff_image_ext(bytes);
+    let name = format!("wallpaper.{ext}");
+    let dir = dirs.instance_dir(&inst.id);
+    std::fs::create_dir_all(&dir)?;
+    let dest = dir.join(&name);
+    std::fs::write(&dest, bytes)?;
+    remove_other_wallpapers(&dir, &name);
+    inst.wallpaper_path = Some(name);
+    save(dirs, &inst)?;
+    Ok(inst)
 }
 
 fn resolved_icon_path<'a>(existing: &'a Instance, incoming: &'a Instance) -> Option<&'a str> {

@@ -183,24 +183,28 @@ export function LockerPage() {
 
   const viewerSkinPng = useMemo(() => {
     if (draftSkin?.pngDataUrl) return draftSkin.pngDataUrl;
+    if (isOffline && offlinePreviewUrl) return offlinePreviewUrl;
     if (!dirty) return pngDataUrlFromAccountSkin(msSkin);
     return null;
-  }, [dirty, draftSkin?.pngDataUrl, msSkin]);
+  }, [dirty, draftSkin?.pngDataUrl, isOffline, offlinePreviewUrl, msSkin]);
 
   const draftSkinTextureKey = useMemo(() => {
-    if (draftSkin?.pngDataUrl) return null;
+    if (viewerSkinPng) return null;
     const skin = draftSkin ?? committedSkin(msSkin);
-    return skin?.textureKey ?? null;
-  }, [draftSkin, msSkin]);
+    if (skin?.textureKey) return skin.textureKey;
+    return textureKeyFromUrl(msSkin?.textureUrl) ?? null;
+  }, [draftSkin, msSkin, viewerSkinPng]);
 
   const draftSkinUrl = useMemo(() => {
-    if (isOffline) {
-      if (offlinePreviewUrl) return offlinePreviewUrl;
-      if (acc) return `https://mc-heads.net/skin/${encodeURIComponent(acc.name)}`;
-      return null;
+    if (viewerSkinPng || draftSkinTextureKey) return null;
+    if (isOffline && acc) {
+      return `https://mc-heads.net/skin/${encodeURIComponent(acc.name)}`;
+    }
+    if (!isOffline && msSkin?.textureUrl) {
+      return normalizeTextureUrl(msSkin.textureUrl);
     }
     return null;
-  }, [acc, isOffline, offlinePreviewUrl]);
+  }, [acc, draftSkinTextureKey, isOffline, msSkin?.textureUrl, viewerSkinPng]);
 
   const viewerModel = useMemo(() => {
     if (isOffline) return model === "slim" ? "slim" : "classic";
@@ -346,16 +350,16 @@ export function LockerPage() {
   return (
     <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
       <div className="flex min-h-0 flex-1 overflow-hidden">
-        <aside className="flex w-[min(100%,320px)] shrink-0 flex-col border-r border-line bg-raised/40 p-5">
+        <aside className="flex min-h-0 w-[min(100%,320px)] shrink-0 flex-col border-r border-line bg-raised/40 p-5">
           <span className="mx-auto rounded-lg bg-black/40 px-3 py-1 text-xs font-semibold">
             {acc.name}
           </span>
           <SkinViewer3D
             large
-            className="mt-4 flex-1"
-            skinPngDataUrl={loading ? null : viewerSkinPng}
-            skinUrl={isOffline && !loading ? draftSkinUrl : null}
-            skinTextureKey={loading ? null : draftSkinTextureKey}
+            className="mt-4 min-h-0 flex-1"
+            skinPngDataUrl={viewerSkinPng}
+            skinUrl={draftSkinUrl}
+            skinTextureKey={draftSkinTextureKey}
             capeUrl={isOffline ? null : draftCapeUrl}
             model={viewerModel}
           />

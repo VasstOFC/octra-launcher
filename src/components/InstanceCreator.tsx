@@ -12,8 +12,13 @@ import {
   type VersionBucket,
 } from "../lib/minecraftVersions";
 import { paletteById, PROFILE_PALETTES } from "../lib/profilePalettes";
+import { galleryIconSymbol } from "../lib/profileIconResolve";
 import { pl } from "../locales/pl";
 import { Button } from "./ui/Button";
+import {
+  ProfileAppearanceEditor,
+  type ProfileIconDraft,
+} from "./ProfileAppearanceEditor";
 import type { Loader, ManifestVersion } from "../types";
 
 const LOADERS: Loader[] = ["vanilla", "fabric", "quilt", "forge", "neoforge"];
@@ -34,6 +39,9 @@ export function InstanceCreator({ open, onClose, onCreated }: Props) {
   const [gameVersion, setGameVersion] = useState<ManifestVersion | null>(null);
   const [loaderVersion, setLoaderVersion] = useState("");
   const [paletteId, setPaletteId] = useState(PROFILE_PALETTES[3]!.id);
+  const [icon, setIcon] = useState<ProfileIconDraft>({ kind: "default" });
+  const [wallpaperPreviewUrl, setWallpaperPreviewUrl] = useState<string | null>(null);
+  const [wallpaperBytes, setWallpaperBytes] = useState<Uint8Array | null>(null);
   const [versions, setVersions] = useState<ManifestVersion[]>([]);
   const [loaderVersions, setLoaderVersions] = useState<string[]>([]);
   const [loaderRecommended, setLoaderRecommended] = useState<string | null>(null);
@@ -53,6 +61,9 @@ export function InstanceCreator({ open, onClose, onCreated }: Props) {
     setGameVersion(null);
     setLoaderVersion("");
     setPaletteId(PROFILE_PALETTES[3]!.id);
+    setIcon({ kind: "default" });
+    setWallpaperPreviewUrl(null);
+    setWallpaperBytes(null);
     setVersionQuery("");
     setVersionFilter("all");
     setLegacyExpanded(false);
@@ -123,6 +134,34 @@ export function InstanceCreator({ open, onClose, onCreated }: Props) {
   const palette = paletteById(paletteId);
   const stepIndex = STEPS.indexOf(step);
 
+  function onWallpaperFile(file: File | undefined) {
+    if (!file) return;
+    const previewUrl = URL.createObjectURL(file);
+    if (wallpaperPreviewUrl?.startsWith("blob:")) {
+      URL.revokeObjectURL(wallpaperPreviewUrl);
+    }
+    setWallpaperPreviewUrl(previewUrl);
+    void file.arrayBuffer().then((buf) => {
+      setWallpaperBytes(new Uint8Array(buf));
+    });
+  }
+
+  function clearWallpaperDraft() {
+    if (wallpaperPreviewUrl?.startsWith("blob:")) {
+      URL.revokeObjectURL(wallpaperPreviewUrl);
+    }
+    setWallpaperPreviewUrl(null);
+    setWallpaperBytes(null);
+  }
+
+  useEffect(() => {
+    return () => {
+      if (wallpaperPreviewUrl?.startsWith("blob:")) {
+        URL.revokeObjectURL(wallpaperPreviewUrl);
+      }
+    };
+  }, [wallpaperPreviewUrl]);
+
   if (!open) return null;
 
   async function pickVersion(v: ManifestVersion) {
@@ -167,15 +206,21 @@ export function InstanceCreator({ open, onClose, onCreated }: Props) {
         loader,
         loaderVersion: loader === "vanilla" ? undefined : loaderVersion,
       });
-      const glyph = trimmed.slice(0, 2).toUpperCase();
-      const styled = await api.updateInstance({
+      let next = await api.updateInstance({
         ...created,
-        iconColor: palette.glyph,
-        iconSymbol: glyph,
+        iconColor: "",
+        iconSymbol:
+          icon.kind === "preset" ? galleryIconSymbol(icon.id) : "",
         ledColor: palette.c1,
         ledColor2: palette.c2,
       });
-      onCreated(styled.id);
+      if (icon.kind === "file") {
+        next = await api.setInstanceIconBytes(next.id, [...icon.bytes]);
+      }
+      if (wallpaperBytes && wallpaperBytes.length > 0) {
+        next = await api.setProfileWallpaperBytes(next.id, [...wallpaperBytes]);
+      }
+      onCreated(next.id);
       onClose();
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
@@ -390,59 +435,18 @@ export function InstanceCreator({ open, onClose, onCreated }: Props) {
           )}
 
           {step === "look" && (
-            <div className="space-y-4">
-              <p className="text-sm text-mute">{pl.creator.colorHint}</p>
-              <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
-                {PROFILE_PALETTES.map((p) => (
-                  <button
-                    key={p.id}
-                    type="button"
-                    onClick={() => setPaletteId(p.id)}
-                    className={clsx(
-                      "overflow-hidden rounded-xl border p-2 text-left transition",
-                      paletteId === p.id
-                        ? "border-accent ring-1 ring-accent/40"
-                        : "border-line hover:border-accent/30",
-                    )}
-                  >
-                    <div
-                      className="h-12 rounded-lg"
-                      style={{
-                        background: `linear-gradient(135deg, ${p.c1} 0%, ${p.c2} 100%)`,
-                      }}
-                    />
-                    <span className="mt-1.5 block text-[10px] font-semibold">{p.name}</span>
-                  </button>
-                ))}
-              </div>
-
-              <div className="overflow-hidden rounded-2xl border border-line">
-                <div
-                  className="relative h-36"
-                  style={{
-                    background: `linear-gradient(135deg, ${palette.c1} 0%, ${palette.c2}55 45%, #0f0f12 100%)`,
-                  }}
-                >
-                  <div className="absolute right-[20%] top-1/2 flex -translate-y-1/2 flex-col items-center">
-                    <div
-                      className="grid h-14 w-14 place-items-center rounded-xl border border-white/15 bg-black/25 text-lg font-bold"
-                      style={{ color: palette.glyph }}
-                    >
-                      {(name.trim() || "MC").slice(0, 2).toUpperCase()}
-                    </div>
-                    <span className="mt-2 text-[10px] font-semibold uppercase tracking-widest text-white/50">
-                      {LOADER_LABEL[loader]}
-                    </span>
-                  </div>
-                </div>
-                <div className="border-t border-line bg-raised2/50 px-4 py-3 text-sm">
-                  <p className="font-semibold">{name.trim() || "—"}</p>
-                  <p className="mt-0.5 text-xs text-mute">
-                    {LOADER_LABEL[loader]} · {gameVersion?.id ?? "—"}
-                  </p>
-                </div>
-              </div>
-            </div>
+            <ProfileAppearanceEditor
+              name={name}
+              loader={loader}
+              gameVersion={gameVersion?.id}
+              paletteId={paletteId}
+              onPaletteIdChange={setPaletteId}
+              icon={icon}
+              onIconChange={setIcon}
+              wallpaperPreviewUrl={wallpaperPreviewUrl}
+              onPickWallpaperFile={onWallpaperFile}
+              onClearWallpaper={clearWallpaperDraft}
+            />
           )}
 
           {error && (

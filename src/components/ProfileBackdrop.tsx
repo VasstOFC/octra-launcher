@@ -1,6 +1,6 @@
 import type { Instance } from "../types";
 import { instanceAccent, LOADER_LABEL } from "../lib/format";
-import { Layers } from "lucide-react";
+import { ProfileIcon } from "./ProfileIcon";
 
 /** Domyślna grafika profilu gdy brak tapety. */
 export function ProfileBackdrop({
@@ -15,11 +15,8 @@ export function ProfileBackdrop({
   const [defaultC1, defaultC2] = instanceAccent(inst.id);
   const c1 = inst.ledColor?.trim() || defaultC1;
   const c2 = inst.ledColor2?.trim() || defaultC2;
-  const glyph =
-    inst.iconSymbol?.trim() ||
-    inst.name.slice(0, 2).toUpperCase() ||
-    "?";
   const loader = LOADER_LABEL[inst.loader] ?? inst.loader;
+  const iconSize = size === "hero" ? 80 : 40;
 
   return (
     <div
@@ -35,12 +32,11 @@ export function ProfileBackdrop({
         }`}
       >
         <div
-          className={`grid place-items-center rounded-2xl border border-white/15 bg-black/25 font-bold ${
-            size === "hero" ? "h-20 w-20 text-2xl" : "h-10 w-10 text-sm"
+          className={`grid place-items-center overflow-hidden rounded-2xl border border-white/15 bg-black/25 ${
+            size === "hero" ? "h-20 w-20" : "h-10 w-10"
           }`}
-          style={{ color: inst.iconColor || "#fff" }}
         >
-          {glyph.length <= 2 ? glyph : <Layers size={size === "hero" ? 28 : 16} />}
+          <ProfileIcon inst={inst} size={iconSize} />
         </div>
         {size === "hero" && (
           <span className="mt-2 text-[10px] font-semibold uppercase tracking-widest text-white/50">
