@@ -39,7 +39,12 @@ jobs:
         run: |
           if ($env:TAURI_SIGNING_PRIVATE_KEY) {
             node scripts/pack-installer.mjs --sign --write-manifest
-            echo "signed=true" >> $env:GITHUB_OUTPUT
+            if ($LASTEXITCODE -eq 0) {
+              echo "signed=true" >> $env:GITHUB_OUTPUT
+            } else {
+              Write-Warning "Podpisywanie nie powiodło się — publikuję bez latest.json (sprawdź TAURI_SIGNING_PRIVATE_KEY_PASSWORD)."
+              echo "signed=false" >> $env:GITHUB_OUTPUT
+            }
           } else {
             Write-Warning "Brak TAURI_SIGNING_PRIVATE_KEY — publikuję tylko Octra-setup.exe (bez auto-updatera)."
             echo "signed=false" >> $env:GITHUB_OUTPUT
