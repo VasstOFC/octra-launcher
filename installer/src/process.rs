@@ -80,20 +80,16 @@ pub fn terminate_all() {
 #[cfg(not(windows))]
 pub fn terminate_all() {}
 
-pub fn wait_or_stop(update_or_silent: bool) -> Result<(), String> {
+pub fn wait_or_stop(_update_or_silent: bool) -> Result<(), String> {
     if !is_running() {
         return Ok(());
     }
     if !wait_until_gone(Duration::from_secs(8)) {
-        if update_or_silent {
-            terminate_all();
-            if !wait_until_gone(Duration::from_secs(5)) {
-                return Err(
-                    "Octra jest nadal uruchomiona. Zamknij go i spróbuj ponownie.".into(),
-                );
-            }
-        } else {
-            return Err("Zamknij Octra i spróbuj ponownie.".into());
+        terminate_all();
+        if !wait_until_gone(Duration::from_secs(5)) {
+            return Err(
+                "Octra jest nadal uruchomiona (sprawdź Menedżer zadań → octra.exe). Zamknij ją i spróbuj ponownie.".into(),
+            );
         }
     }
     Ok(())

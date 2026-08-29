@@ -54,7 +54,7 @@ pub fn run_install(
         )
     })?;
 
-    process::wait_or_stop(req.update)?;
+    process::wait_or_stop(true)?;
 
     on_progress(0.08, "Kopiowanie plików…");
     payload::extract_to(&exe, &req.dest, |p, msg| {
