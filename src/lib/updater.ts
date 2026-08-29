@@ -24,11 +24,14 @@ export type UpdateStatus =
   | { state: "installing" };
 
 const RELEASES_URL = "https://github.com/VasstOFC/octra-launcher/releases";
-const INSTALLER_URL = `${RELEASES_URL}/latest/download/Octra-setup.exe`;
+export const INSTALLER_URL = `${RELEASES_URL}/latest/download/Octra-setup.exe`;
+
+/** Wersje przed rotacją klucza podpisu — wymagają jednorazowej ręcznej instalacji. */
+const LEGACY_MANUAL_UPGRADE_BEFORE: [number, number, number] = [1, 1, 0];
 
 type GithubNewer = Extract<GithubReleaseCheck, { kind: "newer" }>;
 
-function isUpdaterSignatureError(error: unknown): boolean {
+export function isUpdaterSignatureError(error: unknown): boolean {
   const msg = (error instanceof Error ? error.message : String(error)).toLowerCase();
   return (
     msg.includes("different key") ||
@@ -38,13 +41,30 @@ function isUpdaterSignatureError(error: unknown): boolean {
   );
 }
 
+export function needsLegacyManualUpgrade(currentVersion: string): boolean {
+  const local = parseVersion(currentVersion);
+  if (!local) return false;
+  return versionLt(local, LEGACY_MANUAL_UPGRADE_BEFORE);
+}
+
+function versionLt(a: number[], b: [number, number, number]): boolean {
+  for (let i = 0; i < 3; i++) {
+    const av = a[i] ?? 0;
+    const bv = b[i] ?? 0;
+    if (av < bv) return true;
+    if (av > bv) return false;
+  }
+  return false;
+}
+
 export async function checkForUpdates(
   appInfo: AppInfo | null,
 ): Promise<UpdateStatus> {
   const currentVersion = appInfo?.version ?? "0.0.0";
+  const legacyManual = needsLegacyManualUpgrade(currentVersion);
 
   const [tauriUpdate, githubResult] = await Promise.all([
-    checkTauriUpdate(),
+    legacyManual ? Promise.resolve(null) : checkTauriUpdate(),
     checkGithubUpdate().catch((e: unknown) => ({
       kind: "error" as const,
       message: e instanceof Error ? e.message : String(e),
@@ -52,15 +72,15 @@ export async function checkForUpdates(
   ]);
 
   if (githubResult.kind === "error") {
-    if (tauriUpdate) {
+    if (tauriUpdate && !legacyManual) {
       return tauriAvailable(tauriUpdate);
     }
     return { state: "error", message: githubResult.message };
   }
 
-  const githubStatus = mapGithubRelease(githubResult, currentVersion);
+  const githubStatus = mapGithubRelease(githubResult, currentVersion, legacyManual);
 
-  if (tauriUpdate) {
+  if (tauriUpdate && !legacyManual) {
     const remote = parseVersion(tauriUpdate.version);
     const local = parseVersion(currentVersion);
     if (!remote || !local || remote > local) {
@@ -114,6 +134,7 @@ function tauriAvailable(update: Update, github?: GithubNewer): UpdateStatus {
 function mapGithubRelease(
   release: GithubReleaseCheck,
   currentVersion: string,
+  legacyManual = false,
 ): UpdateStatus {
   switch (release.kind) {
     case "notFound":
@@ -130,8 +151,8 @@ function mapGithubRelease(
         version: release.version,
         notes: release.notes,
         htmlUrl: release.htmlUrl,
-        installerUrl: release.installerUrl,
-        mode: release.hasLatestJson ? "tauri" : "manual",
+        installerUrl: release.installerUrl ?? INSTALLER_URL,
+        mode: legacyManual || !release.hasLatestJson ? "manual" : "tauri",
       };
     case "unversioned":
       return {
@@ -182,12 +203,18 @@ async function manualInstallFallback(
 ): Promise<UpdateStatus> {
   const url = status.installerUrl ?? INSTALLER_URL;
   const ok = await confirmDialog(
-    `Automatyczna instalacja nie powiodła się — ta wersja launchera wymaga jednorazowego pobrania instalatora (v${status.version}). ` +
-      "Po ponownej instalacji kolejne aktualizacje będą działać normalnie.\n\nOtworzyć pobieranie?",
+    `Ta wersja launchera (v${status.version}) wymaga jednorazowego pobrania instalatora. ` +
+      "Po ponownej instalacji kolejne aktualizacje będą działać automatycznie.\n\nOtworzyć pobieranie?",
     { title: "Aktualizacja", confirmLabel: "Pobierz instalator" },
   );
   if (ok) await openUrl(url);
   return status;
+}
+
+export async function openManualInstaller(
+  status: Extract<UpdateStatus, { state: "available" }>,
+): Promise<void> {
+  await openUrl(status.installerUrl ?? INSTALLER_URL);
 }
 
 export function formatChannel(channel: string): string {

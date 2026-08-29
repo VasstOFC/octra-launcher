@@ -9,6 +9,9 @@ import {
   checkForUpdates,
   formatChannel,
   installUpdate,
+  isUpdaterSignatureError,
+  needsLegacyManualUpgrade,
+  openManualInstaller,
   updateStatusMessage,
   type UpdateStatus,
 } from "../lib/updater";
@@ -101,8 +104,25 @@ export function SettingsPage() {
         showOk("Otwarto pobieranie instalatora. Uruchom Octra-setup.exe po zakończeniu.");
       }
     } catch (e) {
+      if (isUpdaterSignatureError(e)) {
+        const next = await installUpdate({
+          ...updateStatus,
+          mode: "manual",
+          tauriUpdate: undefined,
+        });
+        if (next.state === "available") {
+          showOk("Otwarto pobieranie instalatora. Uruchom Octra-setup.exe po zakończeniu.");
+        }
+        return;
+      }
       showError(e instanceof Error ? e.message : String(e));
     }
+  }
+
+  async function runManualInstall() {
+    if (updateStatus.state !== "available") return;
+    await openManualInstaller(updateStatus);
+    showOk("Otwarto pobieranie instalatora. Uruchom Octra-setup.exe po zakończeniu.");
   }
 
   async function rescanJava() {
@@ -119,6 +139,7 @@ export function SettingsPage() {
   }
 
   const updatesEnabled = appInfo?.updatesEnabled ?? false;
+  const legacyUpgrade = needsLegacyManualUpgrade(appInfo?.version ?? "0.0.0");
 
   return (
     <div className="min-h-0 flex-1 overflow-auto p-5 pb-10">
@@ -213,6 +234,13 @@ export function SettingsPage() {
 
         {updateStatus.state === "available" ? (
           <div className="rounded-lg bg-raised2 p-3 ring-1 ring-line">
+            {legacyUpgrade ? (
+              <p className="mb-3 rounded-lg border border-warn/35 bg-warn/10 px-3 py-2 text-xs text-warn">
+                Masz starą wersję (v{appInfo?.version}) — auto-instalacja nie zadziała.
+                Pobierz instalator ręcznie <strong>raz</strong>, uruchom Octra-setup.exe i
+                zainstaluj ponownie. Kolejne aktualizacje będą już automatyczne.
+              </p>
+            ) : null}
             <p className="text-sm font-semibold text-ink">
               Dostępna wersja {updateStatus.version}
             </p>
@@ -226,9 +254,24 @@ export function SettingsPage() {
               Jeśli auto-instalacja się nie powiedzie, pobierz instalator ręcznie — wystarczy raz.
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
-              <Button variant="primary" className="text-xs" onClick={() => void runInstall()}>
-                {updateStatus.mode === "tauri" ? "Pobierz i zainstaluj" : "Pobierz instalator"}
-              </Button>
+              {legacyUpgrade || updateStatus.mode === "manual" ? (
+                <Button
+                  variant="primary"
+                  className="text-xs"
+                  onClick={() => void runManualInstall()}
+                >
+                  Pobierz instalator ręcznie
+                </Button>
+              ) : (
+                <Button variant="primary" className="text-xs" onClick={() => void runInstall()}>
+                  Pobierz i zainstaluj
+                </Button>
+              )}
+              {!legacyUpgrade && updateStatus.mode === "tauri" ? (
+                <Button variant="secondary" className="text-xs" onClick={() => void runManualInstall()}>
+                  Pobierz instalator ręcznie
+                </Button>
+              ) : null}
               <Button
                 variant="ghost"
                 className="text-xs"
