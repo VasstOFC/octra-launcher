@@ -10,6 +10,7 @@ export type OctraView =
   | "gallery"
   | "store"
   | "host"
+  | "servers"
   | "settings";
 
 export type ContentTab =
@@ -30,6 +31,7 @@ export const VIEW_LABELS: Record<OctraView, string> = {
   gallery: pl.nav.gallery,
   store: pl.nav.store,
   host: pl.nav.host,
+  servers: pl.nav.servers,
   settings: pl.nav.settings,
 };
 

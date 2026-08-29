@@ -24,6 +24,7 @@ use crate::import_launchers;
 use crate::paths::Dirs;
 use crate::relay;
 use crate::servers::{self, ServerEntry};
+use crate::server_ping;
 use crate::settings::Settings;
 use crate::AppState;
 
@@ -947,6 +948,19 @@ pub fn save_servers(servers: Vec<ServerEntry>) -> Result<Vec<ServerEntry>> {
 }
 
 #[tauri::command]
+pub fn sync_servers_to_instance(id: String) -> Result<usize> {
+    let (_, dirs) = ctx()?;
+    servers::collect_all(&dirs)?;
+    let game_dir = dirs.game_dir(&id);
+    servers::sync_instance(&dirs, &game_dir)
+}
+
+#[tauri::command]
+pub async fn ping_server(address: String) -> Result<server_ping::ServerPingResult> {
+    server_ping::ping_server(&address).await
+}
+
+#[tauri::command]
 pub async fn pick_mrpack_file(kind: Option<String>) -> Option<String> {
     mrpack::pick_mrpack_file(kind.as_deref()).await
 }
@@ -1014,6 +1028,22 @@ pub async fn search_modrinth_packs(
         sort.as_deref().unwrap_or("downloads"),
     )
     .await
+}
+
+#[tauri::command]
+pub async fn get_modrinth_project(
+    state: State<'_, AppState>,
+    slug: String,
+) -> Result<mrpack::ModrinthProjectDetail> {
+    mrpack::get_modrinth_project(&state.http, &slug).await
+}
+
+#[tauri::command]
+pub async fn get_modrinth_pack_versions(
+    state: State<'_, AppState>,
+    slug: String,
+) -> Result<Vec<mrpack::ModrinthPackVersionHit>> {
+    mrpack::get_modrinth_pack_versions(&state.http, &slug).await
 }
 
 #[tauri::command]
@@ -1085,6 +1115,7 @@ pub async fn install_modrinth_content(
 #[serde(rename_all = "camelCase")]
 pub struct FeaturedPackInfo {
     pub enabled: bool,
+    pub slug: String,
     pub title: String,
     pub blurb: String,
     pub server_name: String,
@@ -1094,8 +1125,13 @@ pub struct FeaturedPackInfo {
 #[tauri::command]
 pub fn get_featured_pack() -> Result<FeaturedPackInfo> {
     let (settings, _) = ctx()?;
+    let query = settings.featured_pack_query();
+    let slug = mrpack::parse_modrinth_query(&query)
+        .map(|(s, _)| s)
+        .unwrap_or_default();
     Ok(FeaturedPackInfo {
-        enabled: !settings.featured_pack_query().is_empty(),
+        enabled: !query.is_empty(),
+        slug,
         title: settings.featured_pack_title(),
         blurb: settings.featured_pack_blurb(),
         server_name: settings.featured_server_name(),
@@ -1592,6 +1628,16 @@ pub async fn check_content_updates(
     let (_, dirs) = ctx()?;
     let inst = instances::get(&dirs, &id)?;
     mrpack::check_content_updates(&state.http, &dirs, &inst).await
+}
+
+#[tauri::command]
+pub async fn check_pack_update(
+    state: State<'_, AppState>,
+    id: String,
+) -> Result<mrpack::PackUpdateInfo> {
+    let (_, dirs) = ctx()?;
+    let inst = instances::get(&dirs, &id)?;
+    mrpack::check_pack_update(&state.http, &dirs, &inst).await
 }
 
 #[tauri::command]

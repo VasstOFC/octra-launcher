@@ -3,6 +3,7 @@ import { clsx } from "clsx";
 import {
   Bell,
   Crop,
+  Globe,
   House,
   Layers,
   Package,
@@ -31,6 +32,7 @@ const ITEMS: { id: OctraView; icon: typeof House; label: string }[] = [
   { id: "versions", icon: Layers, label: pl.nav.versions },
   { id: "gallery", icon: Crop, label: pl.nav.gallery },
   { id: "host", icon: Server, label: pl.nav.host },
+  { id: "servers", icon: Globe, label: pl.nav.servers },
 ];
 
 export function Rail() {

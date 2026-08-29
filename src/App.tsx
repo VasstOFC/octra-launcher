@@ -2,6 +2,7 @@ import { memo, useEffect } from "react";
 import { listen } from "@tauri-apps/api/event";
 import { DialogHost } from "./components/DialogHost";
 import { FriendsDrawer } from "./components/FriendsDrawer";
+import { PackUpdateDialog } from "./components/PackUpdateDialog";
 import { LoginModal } from "./components/LoginModal";
 import { Rail } from "./components/Rail";
 import { Titlebar } from "./components/Titlebar";
@@ -17,6 +18,7 @@ import { RelayPage } from "./pages/Relay";
 import { OctraMenu } from "./components/OctraMenu";
 import { installKeyboardGuard } from "./lib/keyboardGuard";
 import { HostPage } from "./pages/Host";
+import { ServersPage } from "./pages/Servers";
 import { SettingsPage } from "./pages/Settings";
 import { VersionsPage } from "./pages/Versions";
 import { useApp } from "./stores/appStore";
@@ -59,6 +61,7 @@ function MainView({ view }: { view: string }) {
       {view === "gallery" && <GalleryPage />}
       {view === "store" && <StorePage />}
       {view === "host" && <HostPage />}
+      {view === "servers" && <ServersPage />}
       {view === "settings" && <SettingsPage />}
     </div>
   );
@@ -226,6 +229,7 @@ export default function App() {
       <FriendsDrawer />
       <OctraMenu />
       <LoginModal />
+      <PackUpdateDialog />
       <DialogHost />
     </div>
   );

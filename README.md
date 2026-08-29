@@ -70,8 +70,12 @@ node scripts/pack-installer.mjs --sign --write-manifest
 - Rust **1.88+** (`rust-toolchain.toml` — `rustup toolchain install 1.88.0`)
 - Visual Studio Build Tools (C++) + WebView2
 
-## Funkcje (v1.1.x)
+## Funkcje (v1.2.0)
 
+- **Galeria paczek Modrinth** — większe karty, szczegóły paczki (opis, galeria, wersje, changelog), polecana paczka
+- **Aktualizacje modpacków** — sprawdzanie nowej wersji paczki z changelogiem i resync jednym kliknięciem
+- **Lista serwerów** — CRUD na `servers.json`, ping (online/offline, ms, gracze), sync z `servers.dat`
+- **Smart Start** — kontekstowe podpowiedzi: aktualizacja paczki, ostatni profil, featured, serwer online
 - Logowanie Microsoft / offline, ponowne logowanie po wygaśnięciu tokenu
 - Start: LAUNCH / STOP, profile z tapetą/ikoną, news
 - Wersje, mody, shadery, światy, zasoby; import z CurseForge / Prism / MultiMC
@@ -79,6 +83,10 @@ node scripts/pack-installer.mjs --sign --write-manifest
 - Lokalny serwer (Host): Paper / Vanilla / Fabric, ustawienia `server.properties`
 - Auto-updater z GitHub Releases
 - Ustawienia: motyw, RAM, Java, aktualizacje, folder danych
+
+## Funkcje (v1.1.x)
+
+- Wersja 1.1.x — profil wyglądu, auto-updater z fallbackiem, installer zamyka proces Octra
 
 **Wkrótce:** znajomi, czat LAN (Relay), centrum powiadomień.
 

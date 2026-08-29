@@ -84,6 +84,8 @@ struct ModrinthVersion {
     loaders: Vec<String>,
     #[serde(default)]
     dependencies: Vec<ModrinthDependency>,
+    #[serde(default)]
+    changelog: Option<String>,
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -249,6 +251,80 @@ pub struct ModrinthPackHit {
     pub loaders: Vec<String>,
     pub game_versions: Vec<String>,
     pub author: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ModrinthProjectDetail {
+    pub slug: String,
+    pub project_id: String,
+    pub title: String,
+    pub description: String,
+    pub body: String,
+    pub icon_url: Option<String>,
+    pub downloads: u64,
+    pub follows: u64,
+    pub gallery: Vec<String>,
+    pub categories: Vec<String>,
+    pub loaders: Vec<String>,
+    pub game_versions: Vec<String>,
+}
+
+#[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ModrinthPackVersionHit {
+    pub id: String,
+    pub version_number: String,
+    pub name: String,
+    pub version_type: String,
+    pub changelog: String,
+    pub date_published: String,
+    pub downloads: u64,
+    pub game_versions: Vec<String>,
+    pub loaders: Vec<String>,
+}
+
+#[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PackUpdateInfo {
+    pub has_update: bool,
+    pub slug: String,
+    pub current_version: Option<String>,
+    pub latest_version: String,
+    pub latest_version_id: String,
+    pub changelog: String,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+struct ModrinthProjectFull {
+    #[serde(default)]
+    id: String,
+    #[serde(default)]
+    slug: String,
+    #[serde(default)]
+    title: String,
+    #[serde(default)]
+    description: String,
+    #[serde(default)]
+    body: String,
+    #[serde(default)]
+    project_type: String,
+    #[serde(default)]
+    icon_url: Option<String>,
+    #[serde(default)]
+    downloads: u64,
+    #[serde(default)]
+    followers: u64,
+    #[serde(default)]
+    gallery: Vec<ModrinthGalleryApi>,
+    #[serde(default)]
+    categories: Vec<String>,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+struct ModrinthGalleryApi {
+    #[serde(default)]
+    url: String,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -1718,6 +1794,195 @@ pub async fn export_mrpack(dirs: &Dirs, inst: &Instance, dest: &Path) -> Result<
     }
     zip.finish()?;
     Ok(dest.to_path_buf())
+}
+
+fn version_has_mrpack(v: &ModrinthVersion) -> bool {
+    v.files
+        .iter()
+        .any(|f| f.filename.ends_with(".mrpack") || f.url.ends_with(".mrpack"))
+}
+
+fn pack_version_hit(v: &ModrinthVersion) -> ModrinthPackVersionHit {
+    ModrinthPackVersionHit {
+        id: v.id.clone(),
+        version_number: v.version_number.clone(),
+        name: v.name.clone(),
+        version_type: v.version_type.clone(),
+        changelog: v.changelog.clone().unwrap_or_default(),
+        date_published: v.date_published.clone(),
+        downloads: v.downloads,
+        game_versions: v.game_versions.clone(),
+        loaders: v.loaders.clone(),
+    }
+}
+
+async fn fetch_modrinth_pack_versions_raw(
+    client: &reqwest::Client,
+    slug: &str,
+) -> Result<Vec<ModrinthVersion>> {
+    let versions: Vec<ModrinthVersion> = download::download_json(
+        client,
+        &format!("https://api.modrinth.com/v2/project/{slug}/version"),
+    )
+    .await
+    .map_err(|_| Error::msg(format!("Nie znaleziono wersji modpacka „{slug}”.")))?;
+    Ok(versions.into_iter().filter(version_has_mrpack).collect())
+}
+
+pub async fn get_modrinth_project(
+    client: &reqwest::Client,
+    slug: &str,
+) -> Result<ModrinthProjectDetail> {
+    let (slug, _) = parse_modrinth_query(slug)?;
+    let project: ModrinthProjectFull = download::download_json(
+        client,
+        &format!("https://api.modrinth.com/v2/project/{slug}"),
+    )
+    .await
+    .map_err(|_| Error::msg(format!("Nie znaleziono projektu Modrinth „{slug}”.")))?;
+    if project.project_type != "modpack" && !project.project_type.is_empty() {
+        return Err(Error::msg(format!(
+            "„{}” to nie modpack.",
+            project.title
+        )));
+    }
+    let versions = fetch_modrinth_pack_versions_raw(client, &slug).await?;
+    let mut loaders = HashSet::new();
+    let mut game_versions = HashSet::new();
+    for v in &versions {
+        for l in &v.loaders {
+            loaders.insert(l.clone());
+        }
+        for gv in &v.game_versions {
+            game_versions.insert(gv.clone());
+        }
+    }
+    let mut gallery: Vec<String> = project
+        .gallery
+        .into_iter()
+        .map(|g| g.url)
+        .filter(|u| !u.is_empty() && u.starts_with("http"))
+        .collect();
+    gallery.dedup();
+    Ok(ModrinthProjectDetail {
+        slug: if project.slug.is_empty() {
+            slug
+        } else {
+            project.slug
+        },
+        project_id: project.id,
+        title: project.title,
+        description: project.description,
+        body: project.body,
+        icon_url: project.icon_url,
+        downloads: project.downloads,
+        follows: project.followers,
+        gallery,
+        categories: project.categories,
+        loaders: loaders.into_iter().collect(),
+        game_versions: game_versions.into_iter().collect(),
+    })
+}
+
+pub async fn get_modrinth_pack_versions(
+    client: &reqwest::Client,
+    slug: &str,
+) -> Result<Vec<ModrinthPackVersionHit>> {
+    let (slug, _) = parse_modrinth_query(slug)?;
+    let versions = fetch_modrinth_pack_versions_raw(client, &slug).await?;
+    Ok(versions.iter().map(pack_version_hit).collect())
+}
+
+fn find_cached_pack_version_id(dirs: &Dirs, slug: &str) -> Option<String> {
+    let prefix = format!("modrinth-{slug}-");
+    let mut best: Option<(std::time::SystemTime, String)> = None;
+    let cache = &dirs.cache;
+    if !cache.is_dir() {
+        return None;
+    }
+    let Ok(entries) = std::fs::read_dir(cache) else {
+        return None;
+    };
+    for ent in entries.flatten() {
+        let name = ent.file_name().to_string_lossy().to_string();
+        if !name.starts_with(&prefix) || !name.ends_with(".mrpack") {
+            continue;
+        }
+        let Some(vid) = name
+            .strip_prefix(&prefix)
+            .and_then(|s| s.strip_suffix(".mrpack"))
+        else {
+            continue;
+        };
+        let Ok(meta) = ent.metadata() else {
+            continue;
+        };
+        let Ok(modified) = meta.modified() else {
+            continue;
+        };
+        if best
+            .as_ref()
+            .map(|(t, _)| modified > *t)
+            .unwrap_or(true)
+        {
+            best = Some((modified, vid.to_string()));
+        }
+    }
+    best.map(|(_, id)| id)
+}
+
+pub async fn check_pack_update(
+    client: &reqwest::Client,
+    dirs: &Dirs,
+    inst: &Instance,
+) -> Result<PackUpdateInfo> {
+    let slug = inst
+        .linked_pack
+        .as_deref()
+        .filter(|s| is_catalog_pack_slug(s))
+        .map(|s| parse_modrinth_query(s).map(|(q, _)| q))
+        .transpose()?
+        .unwrap_or_default();
+    if slug.is_empty() {
+        return Ok(PackUpdateInfo {
+            has_update: false,
+            slug: String::new(),
+            current_version: None,
+            latest_version: String::new(),
+            latest_version_id: String::new(),
+            changelog: String::new(),
+        });
+    }
+    let versions = fetch_modrinth_pack_versions_raw(client, &slug).await?;
+    let Some(latest) = versions.first() else {
+        return Ok(PackUpdateInfo {
+            has_update: false,
+            slug,
+            current_version: None,
+            latest_version: String::new(),
+            latest_version_id: String::new(),
+            changelog: String::new(),
+        });
+    };
+    let current_id = find_cached_pack_version_id(dirs, &slug);
+    let current_version = current_id.as_ref().and_then(|id| {
+        versions
+            .iter()
+            .find(|v| &v.id == id)
+            .map(|v| display_version(v).to_string())
+    });
+    let has_update = current_id
+        .as_ref()
+        .map(|id| id != &latest.id)
+        .unwrap_or(false);
+    Ok(PackUpdateInfo {
+        has_update,
+        slug,
+        current_version,
+        latest_version: display_version(latest).to_string(),
+        latest_version_id: latest.id.clone(),
+        changelog: latest.changelog.clone().unwrap_or_default(),
+    })
 }
 
 #[cfg(test)]

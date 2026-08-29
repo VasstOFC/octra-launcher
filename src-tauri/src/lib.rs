@@ -24,6 +24,7 @@ mod news;
 mod paths;
 mod relay;
 mod servers;
+mod server_ping;
 mod settings;
 mod skin_loader;
 mod skins;
@@ -178,11 +179,15 @@ pub fn run() {
             commands::open_data_dir,
             commands::list_servers,
             commands::save_servers,
+            commands::sync_servers_to_instance,
+            commands::ping_server,
             commands::pick_mrpack_file,
             commands::import_mrpack,
             commands::import_modrinth_pack,
             commands::read_instance_icon,
             commands::search_modrinth_packs,
+            commands::get_modrinth_project,
+            commands::get_modrinth_pack_versions,
             commands::search_modrinth_content,
             commands::list_modrinth_content_versions,
             commands::install_modrinth_content,
@@ -206,6 +211,7 @@ pub fn run() {
             commands::purge_cache,
             commands::export_mrpack,
             commands::check_content_updates,
+            commands::check_pack_update,
             commands::required_java_for_version,
             commands::list_local_servers,
             commands::get_local_server,

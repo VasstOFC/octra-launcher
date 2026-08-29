@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export type NotificationKind = "crash" | "update" | "friend" | "info";
+export type NotificationKind = "crash" | "update" | "pack-update" | "friend" | "info";
 
 export type Notification = {
   id: string;
@@ -88,6 +88,15 @@ export function notifyContentUpdates(instanceName: string, count: number) {
     kind: "update",
     title: "Aktualizacje modów",
     body: `${instanceName}: dostępne ${count} aktualizacji treści.`,
+  });
+}
+
+export function notifyPackUpdate(instanceId: string, instanceName: string) {
+  useNotifications.getState().push({
+    kind: "pack-update",
+    title: "Aktualizacja paczki",
+    body: `„${instanceName}”: dostępna nowa wersja paczki.`,
+    instanceId,
   });
 }
 

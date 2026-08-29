@@ -7,6 +7,7 @@ import { useProfileWallpaper } from "../lib/useProfileWallpaper";
 import { useApplyProfileVisualUpdate } from "../lib/profileVisual";
 import { pl } from "../locales/pl";
 import { Button } from "../components/ui/Button";
+import { SmartSuggestionsStrip } from "../components/SmartSuggestionsStrip";
 import { ProfileBackdrop } from "../components/ProfileBackdrop";
 import { ProfileCard } from "../components/ProfileCard";
 import { ProfileIcon } from "../components/ProfileIcon";
@@ -89,6 +90,8 @@ export function HomePage() {
         loading={newsLoading}
         offline={newsOffline}
       />
+
+      <SmartSuggestionsStrip />
 
       <div className="mt-4 overflow-hidden rounded-2xl border border-line bg-raised shadow-[inset_0_1px_0_rgb(255_255_255/0.04)]">
         <div className="grid min-h-[240px] grid-cols-1 lg:grid-cols-5">

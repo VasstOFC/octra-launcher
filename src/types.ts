@@ -309,8 +309,54 @@ export interface ModrinthPackHit {
   author?: string | null;
 }
 
+export interface ModrinthProjectDetail {
+  slug: string;
+  projectId: string;
+  title: string;
+  description: string;
+  body: string;
+  iconUrl?: string | null;
+  downloads: number;
+  follows: number;
+  gallery: string[];
+  categories: string[];
+  loaders: string[];
+  gameVersions: string[];
+}
+
+export interface ModrinthPackVersionHit {
+  id: string;
+  versionNumber: string;
+  name: string;
+  versionType: string;
+  changelog: string;
+  datePublished: string;
+  downloads: number;
+  gameVersions: string[];
+  loaders: string[];
+}
+
+export interface PackUpdateInfo {
+  hasUpdate: boolean;
+  slug: string;
+  currentVersion?: string | null;
+  latestVersion: string;
+  latestVersionId: string;
+  changelog: string;
+}
+
+export interface ServerPingResult {
+  online: boolean;
+  latencyMs?: number | null;
+  players?: number | null;
+  maxPlayers?: number | null;
+  version?: string | null;
+  motd?: string | null;
+}
+
 export interface FeaturedPackInfo {
   enabled: boolean;
+  slug: string;
   title: string;
   blurb: string;
   serverName: string;

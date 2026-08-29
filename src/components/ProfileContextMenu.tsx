@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { clsx } from "clsx";
 import {
   FolderOpen,
+  PackageCheck,
   Palette,
   Play,
   Settings2,
@@ -30,6 +31,7 @@ export function ProfileContextMenu({
   onAdvanced,
   onOpenFolder,
   onDelete,
+  onCheckPackUpdate,
 }: {
   x: number;
   y: number;
@@ -41,6 +43,7 @@ export function ProfileContextMenu({
   onAdvanced: () => void;
   onOpenFolder: () => void;
   onDelete: () => void;
+  onCheckPackUpdate?: () => void;
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -74,6 +77,16 @@ export function ProfileContextMenu({
       icon: Settings2,
       onClick: onAdvanced,
     },
+    ...(inst.packLocked && onCheckPackUpdate
+      ? [
+          {
+            id: "pack-update",
+            label: pl.versions.checkPackUpdate,
+            icon: PackageCheck,
+            onClick: onCheckPackUpdate,
+          } satisfies Action,
+        ]
+      : []),
     {
       id: "folder",
       label: pl.versions.openFolder,

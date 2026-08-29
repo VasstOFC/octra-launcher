@@ -1,5 +1,6 @@
 import {
   Crop,
+  Globe,
   House,
   Layers,
   Package,
@@ -19,6 +20,7 @@ const NAV_ITEMS: { id: OctraView; icon: typeof House }[] = [
   { id: "versions", icon: Layers },
   { id: "gallery", icon: Crop },
   { id: "host", icon: Server },
+  { id: "servers", icon: Globe },
   { id: "store", icon: Package },
   { id: "settings", icon: Settings },
 ];

@@ -11,6 +11,10 @@ import type {
   LoaderVersions,
   ManifestVersion,
   ModrinthSearchResult,
+  ModrinthProjectDetail,
+  ModrinthPackVersionHit,
+  PackUpdateInfo,
+  ServerPingResult,
   ModrinthContentVersions,
   InstallContentResult,
   FeaturedPackInfo,
@@ -151,6 +155,10 @@ export const api = {
   listServers: () => unwrap(invoke<ServerEntry[]>("list_servers")),
   saveServers: (servers: ServerEntry[]) =>
     unwrap(invoke<ServerEntry[]>("save_servers", { servers })),
+  syncServersToInstance: (id: string) =>
+    unwrap(invoke<number>("sync_servers_to_instance", { id })),
+  pingServer: (address: string) =>
+    unwrap(invoke<ServerPingResult>("ping_server", { address })),
   pickMrpackFile: (kind?: "zip" | "mrpack" | null) =>
     unwrap(invoke<string | null>("pick_mrpack_file", { kind: kind ?? null })),
   importMrpack: (path: string) =>
@@ -170,6 +178,10 @@ export const api = {
     limit?: number;
     sort?: string;
   }) => unwrap(invoke<ModrinthSearchResult>("search_modrinth_packs", opts ?? {})),
+  getModrinthProject: (slug: string) =>
+    unwrap(invoke<ModrinthProjectDetail>("get_modrinth_project", { slug })),
+  getModrinthPackVersions: (slug: string) =>
+    unwrap(invoke<ModrinthPackVersionHit[]>("get_modrinth_pack_versions", { slug })),
   searchModrinthContent: (opts: {
     query?: string;
     offset?: number;
@@ -239,6 +251,8 @@ export const api = {
     unwrap(invoke<string | null>("export_mrpack", { id })),
   checkContentUpdates: (id: string) =>
     unwrap(invoke<ContentUpdate[]>("check_content_updates", { id })),
+  checkPackUpdate: (id: string) =>
+    unwrap(invoke<PackUpdateInfo>("check_pack_update", { id })),
   listLocalServers: () => unwrap(invoke<LocalServerInfo[]>("list_local_servers")),
   getLocalServer: (id: string) =>
     unwrap(invoke<LocalServerInfo>("get_local_server", { id })),

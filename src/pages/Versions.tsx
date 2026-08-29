@@ -9,6 +9,7 @@ import { ProfileCard } from "../components/ProfileCard";
 import { ProfileContextMenu } from "../components/ProfileContextMenu";
 import { useApp } from "../stores/appStore";
 import { useOctra } from "../stores/octraStore";
+import { usePackUpdate } from "../stores/packUpdateStore";
 import { SectionHeader } from "../components/ui/SectionHeader";
 import type { Instance, Loader } from "../types";
 
@@ -35,6 +36,7 @@ export function VersionsPage() {
   const showOk = useApp((s) => s.showOk);
   const [filter, setFilter] = useState<Loader | "all">("all");
   const [ctxMenu, setCtxMenu] = useState<{ x: number; y: number; inst: Instance } | null>(null);
+  const openPackUpdate = usePackUpdate((s) => s.openFor);
 
   const filtered = useMemo(() => {
     const list = instances
@@ -192,6 +194,14 @@ export function VersionsPage() {
               }
             })();
           }}
+          onCheckPackUpdate={
+            ctxMenu.inst.packLocked
+              ? () => {
+                  openPackUpdate(ctxMenu.inst.id);
+                  setCtxMenu(null);
+                }
+              : undefined
+          }
         />
       )}
     </div>
