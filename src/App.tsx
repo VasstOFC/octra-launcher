@@ -187,7 +187,7 @@ export default function App() {
   useEffect(() => {
     if (!ready) return;
     const { settings, appInfo } = useApp.getState();
-    if (!appInfo?.updatesEnabled || settings?.autoCheckUpdates === false) return;
+    if (settings?.autoCheckUpdates === false) return;
     void checkForUpdates(appInfo)
       .then((status) => {
         if (status.state === "available") {

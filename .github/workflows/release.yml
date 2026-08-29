@@ -27,20 +27,26 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build signed installer + latest.json
+      - name: Build installer
+        run: npm run dist:windows
+
+      - name: Sign installer + write latest.json
         env:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
-          OCTRA_RELEASE_NOTES: ${{ github.event.head_commit.message }}
+          OCTRA_RELEASE_NOTES: Octra Launcher ${{ github.ref_name }}
         run: |
-          npm run dist:windows
-          if ("$env:TAURI_SIGNING_PRIVATE_KEY") {
-            node scripts/pack-installer.mjs --sign --write-manifest
+          if (-not $env:TAURI_SIGNING_PRIVATE_KEY) {
+            Write-Error "Brak sekretu TAURI_SIGNING_PRIVATE_KEY w GitHub Actions. Dodaj klucz prywatny minisign pasujący do pubkey w tauri.conf.json."
+            exit 1
           }
+          node scripts/pack-installer.mjs --sign --write-manifest
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ github.ref_name }}
+          name: Octra Launcher ${{ github.ref_name }}
           generate_release_notes: true
           files: |
             dist-installer/Octra-setup.exe

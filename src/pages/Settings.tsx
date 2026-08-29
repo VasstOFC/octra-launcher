@@ -9,6 +9,7 @@ import {
   checkForUpdates,
   formatChannel,
   installUpdate,
+  updateStatusMessage,
   type UpdateStatus,
 } from "../lib/updater";
 import { Card } from "../components/ui/Card";
@@ -81,8 +82,9 @@ export function SettingsPage() {
     try {
       const status = await checkForUpdates(appInfo);
       setUpdateStatus(status);
-      if (status.state === "current") {
-        showOk(`Masz najnowszą wersję (${status.version}).`);
+      const msg = updateStatusMessage(status);
+      if (status.state === "current" && msg) {
+        showOk(msg);
       }
     } catch (e) {
       const message = e instanceof Error ? e.message : String(e);
@@ -173,9 +175,11 @@ export function SettingsPage() {
           <div>
             <h2 className="text-sm font-semibold">Aktualizacje</h2>
             <p className="mt-1 text-xs text-mute">
+              Przycisk sprawdza GitHub Releases i manifest auto-updatera (
+              <code className="text-[11px]">latest.json</code>).
               {updatesEnabled
-                ? "Auto-updater włączony (build release)."
-                : "Tryb dev — sprawdzanie ręczne przez GitHub Releases."}
+                ? " W buildzie release aktualizacje mogą instalować się automatycznie."
+                : " W trybie dev sprawdzanie jest ręczne lub przy starcie (jeśli włączone)."}
             </p>
           </div>
           <Button
@@ -191,15 +195,17 @@ export function SettingsPage() {
           </Button>
         </div>
 
-        {updatesEnabled ? (
-          <label className="flex items-center gap-2 text-[13px]">
-            <input
-              type="checkbox"
-              checked={settings.autoCheckUpdates !== false}
-              onChange={(e) => void save({ autoCheckUpdates: e.target.checked })}
-            />
-            Sprawdzaj przy starcie launchera
-          </label>
+        <label className="flex items-center gap-2 text-[13px]">
+          <input
+            type="checkbox"
+            checked={settings.autoCheckUpdates !== false}
+            onChange={(e) => void save({ autoCheckUpdates: e.target.checked })}
+          />
+          Sprawdzaj przy starcie launchera
+        </label>
+
+        {updateStatus.state === "current" || updateStatus.state === "noReleases" ? (
+          <p className="text-xs text-mute">{updateStatusMessage(updateStatus)}</p>
         ) : null}
 
         {updateStatus.state === "available" ? (

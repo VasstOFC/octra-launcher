@@ -8,7 +8,8 @@ import type { AppInfo, GithubReleaseCheck } from "../types";
 export type UpdateStatus =
   | { state: "idle" }
   | { state: "checking" }
-  | { state: "current"; version: string }
+  | { state: "current"; version: string; detail?: string }
+  | { state: "noReleases"; version: string }
   | { state: "error"; message: string }
   | {
       state: "available";
@@ -22,37 +23,78 @@ export type UpdateStatus =
   | { state: "downloading"; percent: number }
   | { state: "installing" };
 
+const RELEASES_URL = "https://github.com/VasstOFC/octra-launcher/releases";
+
 export async function checkForUpdates(
   appInfo: AppInfo | null,
 ): Promise<UpdateStatus> {
-  if (appInfo?.updatesEnabled) {
-    try {
-      const update = await check();
-      if (update) {
-        return {
-          state: "available",
-          version: update.version,
-          notes: update.body ?? "",
-          htmlUrl: "https://github.com/VasstOFC/octra-launcher/releases/latest",
-          installerUrl: null,
-          mode: "tauri",
-          tauriUpdate: update,
-        };
-      }
-      return {
-        state: "current",
-        version: appInfo.version,
-      };
-    } catch (e) {
-      const message = e instanceof Error ? e.message : String(e);
-      if (!message.toLowerCase().includes("unsupported")) {
-        return { state: "error", message };
-      }
+  const currentVersion = appInfo?.version ?? "0.0.0";
+
+  const [tauriUpdate, githubResult] = await Promise.all([
+    checkTauriUpdate(),
+    checkGithubUpdate().catch((e: unknown) => ({
+      kind: "error" as const,
+      message: e instanceof Error ? e.message : String(e),
+    })),
+  ]);
+
+  if (githubResult.kind === "error") {
+    if (tauriUpdate) {
+      return tauriAvailable(tauriUpdate);
+    }
+    return { state: "error", message: githubResult.message };
+  }
+
+  const githubStatus = mapGithubRelease(githubResult, currentVersion);
+
+  if (tauriUpdate) {
+    const remote = parseVersion(tauriUpdate.version);
+    const local = parseVersion(currentVersion);
+    if (!remote || !local || remote > local) {
+      return tauriAvailable(tauriUpdate);
     }
   }
 
-  const release = await api.checkGithubRelease();
-  return mapGithubRelease(release, appInfo?.version ?? "0.0.0");
+  if (githubStatus.state === "available") {
+    return githubStatus;
+  }
+
+  if (githubStatus.state === "current") {
+    return githubStatus;
+  }
+
+  if (githubResult.kind === "notFound") {
+    return {
+      state: "noReleases",
+      version: currentVersion,
+    };
+  }
+
+  return githubStatus;
+}
+
+async function checkTauriUpdate(): Promise<Update | null> {
+  try {
+    return (await check()) ?? null;
+  } catch {
+    return null;
+  }
+}
+
+async function checkGithubUpdate(): Promise<GithubReleaseCheck> {
+  return api.checkGithubRelease();
+}
+
+function tauriAvailable(update: Update): UpdateStatus {
+  return {
+    state: "available",
+    version: update.version,
+    notes: update.body ?? "",
+    htmlUrl: `${RELEASES_URL}/latest`,
+    installerUrl: null,
+    mode: "tauri",
+    tauriUpdate: update,
+  };
 }
 
 function mapGithubRelease(
@@ -61,9 +103,13 @@ function mapGithubRelease(
 ): UpdateStatus {
   switch (release.kind) {
     case "notFound":
-      return { state: "error", message: "Brak publikacji na GitHubie." };
+      return { state: "noReleases", version: currentVersion };
     case "current":
-      return { state: "current", version: release.version };
+      return {
+        state: "current",
+        version: release.version,
+        detail: "Masz najnowszą opublikowaną wersję.",
+      };
     case "newer":
       return {
         state: "available",
@@ -85,10 +131,16 @@ function mapGithubRelease(
   }
 }
 
-export async function installUpdate(status: Extract<
-  UpdateStatus,
-  { state: "available" }
->): Promise<UpdateStatus> {
+function parseVersion(raw: string): number[] | null {
+  const core = raw.trim().replace(/^[vV]/, "").split(/[-+]/)[0];
+  const parts = core.split(".").map((p) => Number.parseInt(p, 10));
+  if (parts.length < 3 || parts.some((n) => Number.isNaN(n))) return null;
+  return parts;
+}
+
+export async function installUpdate(
+  status: Extract<UpdateStatus, { state: "available" }>,
+): Promise<UpdateStatus> {
   if (status.mode === "tauri" && status.tauriUpdate) {
     const ok = await confirmDialog(
       `Pobrać i zainstalować Octra ${status.version}? Launcher uruchomi się ponownie.`,
@@ -96,11 +148,7 @@ export async function installUpdate(status: Extract<
     );
     if (!ok) return status;
 
-    await status.tauriUpdate.downloadAndInstall((event) => {
-      if (event.event === "Started") {
-        // progress UI polls separately if needed
-      }
-    });
+    await status.tauriUpdate.downloadAndInstall();
     await relaunch();
     return { state: "installing" };
   }
@@ -120,5 +168,20 @@ export function formatChannel(channel: string): string {
       return "Dev";
     default:
       return channel;
+  }
+}
+
+export function updateStatusMessage(status: UpdateStatus): string | null {
+  switch (status.state) {
+    case "current":
+      return status.detail ?? `Masz najnowszą wersję (${status.version}).`;
+    case "noReleases":
+      return `Sprawdzono GitHub — nie ma jeszcze opublikowanego wydania. Lokalna wersja: ${status.version}.`;
+    case "available":
+      return `Dostępna nowsza wersja ${status.version}.`;
+    case "error":
+      return status.message;
+    default:
+      return null;
   }
 }
