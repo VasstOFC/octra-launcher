@@ -50,7 +50,7 @@
   },
   "plugins": {
     "updater": {
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEI2NzFENEI0NTRFMjJGQTQKUldTa0wrSlV0TlJ4dGdubEYvUmdtZUFFbHZoM09JSVczS21vRWFER21vbzhjU05ub3Fqa2JtcHgK",
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEExQ0VGRDg3NkFBQ0RGNEUKUldSTzM2eHFoLzNPb2UrSGpOUFcxOHZhR2VaQzVtcXd1eml6cHlmUzMycDNSSHRuRjBaMDY1UXcK",
       "endpoints": [
         "https://github.com/VasstOFC/octra-launcher/releases/latest/download/latest.json"
       ],

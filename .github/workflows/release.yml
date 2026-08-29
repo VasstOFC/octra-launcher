@@ -49,6 +49,7 @@ jobs:
             Write-Warning "Brak TAURI_SIGNING_PRIVATE_KEY — publikuję tylko Octra-setup.exe (bez auto-updatera)."
             echo "signed=false" >> $env:GITHUB_OUTPUT
           }
+          exit 0
 
       - name: Create GitHub Release (signed)
         if: steps.sign.outputs.signed == 'true'
