@@ -1,0 +1,44 @@
+[package]
+name = "octra"
+version = "0.1.0"
+description = "Octra Launcher — experimental Minecraft launcher"
+authors = ["you"]
+edition = "2021"
+rust-version = "1.88"
+
+[lib]
+name = "octra_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = ["protocol-asset", "tray-icon"] }
+tauri-plugin-opener = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+tokio = { version = "1", features = ["full"] }
+reqwest = { version = "0.12", default-features = true, features = ["json", "stream", "gzip", "deflate", "multipart"] }
+sha1 = "0.10"
+sha2 = "0.10"
+md-5 = "0.10"
+hex = "0.4"
+base64 = "0.22"
+zip = { version = "2", default-features = false, features = ["deflate"] }
+dirs = "6"
+uuid = { version = "1", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+futures = "0.3"
+tokio-util = "0.7"
+sysinfo = "0.33"
+parking_lot = "0.12"
+regex = "1"
+rfd = "0.15"
+walkdir = "2"
+hematite-nbt = "0.5"
+image = { version = "0.25", default-features = false, features = ["png", "jpeg", "gif", "webp"] }
+tauri-plugin-process = "2.3.1"
+tauri-plugin-updater = "2.10.1"
+discord-rich-presence = "0.2"

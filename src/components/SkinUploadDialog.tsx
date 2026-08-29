@@ -1,0 +1,106 @@
+import { useEffect } from "react";
+import { Save, X } from "lucide-react";
+import type { ApiSkinModel } from "../lib/skinModel";
+
+export function SkinUploadDialog({
+  open,
+  previewUrl,
+  model,
+  onModelChange,
+  onConfirm,
+  onCancel,
+  busy,
+}: {
+  open: boolean;
+  previewUrl: string | null;
+  model: ApiSkinModel;
+  onModelChange: (m: ApiSkinModel) => void;
+  onConfirm: () => void;
+  onCancel: () => void;
+  busy?: boolean;
+}) {
+  useEffect(() => {
+    if (!open) return;
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") onCancel();
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, onCancel]);
+
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm">
+      <div className="w-full max-w-md rounded-2xl border border-line bg-raised shadow-2xl">
+        <div className="flex items-center justify-between border-b border-line px-5 py-4">
+          <h2 className="text-lg font-bold">Dodaj skin</h2>
+          <button
+            type="button"
+            onClick={onCancel}
+            className="grid h-9 w-9 place-items-center rounded-lg text-mute hover:bg-white/6 hover:text-ink"
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        <div className="space-y-5 p-5">
+          {previewUrl && (
+            <div className="mx-auto flex h-40 w-32 items-center justify-center rounded-xl border border-line bg-raised2">
+              <img
+                src={previewUrl}
+                alt=""
+                className="max-h-full max-w-full object-contain [image-rendering:pixelated]"
+              />
+            </div>
+          )}
+
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wider text-mute">
+              Grubość ramion
+            </p>
+            <div className="mt-2 flex gap-4 text-sm">
+              <label className="flex cursor-pointer items-center gap-2">
+                <input
+                  type="radio"
+                  name="upload-arm"
+                  checked={model === "classic"}
+                  onChange={() => onModelChange("classic")}
+                />
+                Steve (szerokie)
+              </label>
+              <label className="flex cursor-pointer items-center gap-2">
+                <input
+                  type="radio"
+                  name="upload-arm"
+                  checked={model === "slim"}
+                  onChange={() => onModelChange("slim")}
+                />
+                Alex (smukłe)
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex justify-end gap-2 border-t border-line px-5 py-4">
+          <button
+            type="button"
+            onClick={onCancel}
+            className="rounded-xl px-4 py-2 text-sm text-mute hover:bg-white/5"
+          >
+            Anuluj
+          </button>
+          <button
+            type="button"
+            disabled={busy}
+            onClick={onConfirm}
+            className="inline-flex items-center gap-2 rounded-xl bg-good px-4 py-2 text-sm font-semibold text-black disabled:opacity-50"
+          >
+            <Save size={15} />
+            Zapisz skin
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}

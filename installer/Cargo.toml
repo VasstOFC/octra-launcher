@@ -1,0 +1,43 @@
+[package]
+name = "octra-installer"
+version = "0.1.0"
+description = "Instalator Octra"
+authors = ["Octra"]
+edition = "2021"
+rust-version = "1.88"
+publish = false
+
+[dependencies]
+eframe = { version = "0.31.1", default-features = false, features = ["glow", "default_fonts"] }
+egui = "0.31.1"
+rfd = "0.15"
+zip = { version = "2", default-features = false, features = ["deflate"] }
+winreg = "0.55"
+ureq = "2"
+walkdir = "2"
+image = { version = "0.25", default-features = false, features = ["png"] }
+
+[target.'cfg(windows)'.dependencies.windows]
+version = "0.58"
+features = [
+    "Win32_Foundation",
+    "Win32_UI_Shell",
+    "Win32_UI_WindowsAndMessaging",
+    "Win32_System_Com",
+    "Win32_System_Console",
+    "Win32_System_Threading",
+    "Win32_System_Diagnostics_ToolHelp",
+    "Win32_Storage_FileSystem",
+    "Win32_Security",
+    "Win32_System_Memory",
+]
+
+[build-dependencies]
+winres = "0.1"
+serde_json = "1"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+opt-level = "s"
+strip = true

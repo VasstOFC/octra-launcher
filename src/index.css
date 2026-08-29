@@ -1,0 +1,131 @@
+@import "@fontsource/figtree/400.css";
+@import "@fontsource/figtree/600.css";
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Figtree", "Segoe UI", system-ui, sans-serif;
+  --color-bg: #0f0f12;
+  --color-raised: #18181c;
+  --color-raised2: #222228;
+  --color-ink: #e4e4e7;
+  --color-mute: #9b9ba8;
+  --color-line: rgb(255 255 255 / 0.06);
+  --color-accent: var(--preset-accent);
+  --color-accent-dim: var(--preset-accent-dim);
+  --color-teal: #45b1a8;
+  --color-teal-dim: #368f88;
+  --color-launch: #45b1a8;
+  --color-launch-dim: #368f88;
+  --color-good: #3dcc6a;
+  --color-warn: #e08a3c;
+  --color-danger: #e24b5a;
+  --color-bg-on-accent: #120814;
+  --color-vanilla: #9ca3af;
+  --color-fabric: #c4a7ff;
+  --color-quilt: #a78bfa;
+  --color-forge: #fb923c;
+  --color-neoforge: #f87171;
+}
+
+:root,
+[data-preset="violet"] {
+  --preset-accent: #a051a2;
+  --preset-accent-dim: #7a3d7c;
+}
+
+[data-preset="cyber"] {
+  --preset-accent: #00d4aa;
+  --preset-accent-dim: #00a88a;
+}
+
+[data-preset="ember"] {
+  --preset-accent: #e85d3c;
+  --preset-accent-dim: #c2410c;
+}
+
+[data-preset="mono"] {
+  --preset-accent: #b0b0b0;
+  --preset-accent-dim: #707070;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  overflow: hidden;
+  user-select: none;
+}
+
+.select-text {
+  user-select: text;
+}
+
+.drag-region {
+  -webkit-app-region: drag;
+}
+.no-drag {
+  -webkit-app-region: no-drag;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  -webkit-app-region: no-drag;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgb(255 255 255 / 0.12);
+  border-radius: 99px;
+}
+
+.pill {
+  border-radius: 999px;
+}
+
+.home-surface {
+  background:
+    radial-gradient(ellipse 70% 45% at 50% -5%, rgb(160 81 162 / 0.07), transparent 55%),
+    radial-gradient(ellipse 40% 30% at 100% 50%, rgb(69 177 168 / 0.04), transparent 50%),
+    var(--color-bg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Minecraft cape atlas crop — visible 10×16 region at offset (1,1) in 64×32 PNG */
+.cape-thumb {
+  aspect-ratio: 10 / 16;
+  position: relative;
+  overflow: hidden;
+  box-sizing: content-box;
+}
+
+.cape-thumb-img {
+  position: absolute;
+  object-fit: cover;
+  image-rendering: pixelated;
+  width: calc(64 / 10 * 100%);
+  height: calc(32 / 16 * 100%);
+  left: calc(1 / 10 * -100%);
+  top: calc(1 / 16 * -100%);
+  transform: scale(1.01);
+  transform-origin: calc(10 / 2 / 64 * 100%) calc(16 / 2 / 32 * 100%);
+}

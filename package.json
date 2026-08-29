@@ -1,0 +1,43 @@
+{
+  "name": "octra",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:app": "node scripts/with-cargo.mjs dev",
+    "build": "tsc && vite build",
+    "build:app": "node scripts/with-cargo.mjs build -- --no-bundle",
+    "preview": "vite preview",
+    "tauri": "node scripts/with-cargo.mjs",
+    "installer:pack": "node scripts/pack-installer.mjs",
+    "dist:windows": "node scripts/pack-installer.mjs --build-launcher",
+    "shortcut": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/create-desktop-shortcut.ps1",
+    "start": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/start-octra.ps1"
+  },
+  "dependencies": {
+    "@fontsource/figtree": "^5.2.8",
+    "@tauri-apps/api": "^2",
+    "@tauri-apps/plugin-opener": "^2",
+    "@tauri-apps/plugin-process": "^2.3.1",
+    "@tauri-apps/plugin-updater": "^2.10.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.23.12",
+    "lucide-react": "^0.542.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.8.2",
+    "skinview3d": "^3.4.2",
+    "zustand": "^5.0.8"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.12",
+    "@tauri-apps/cli": "^2",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react": "^4.6.0",
+    "tailwindcss": "^4.1.12",
+    "typescript": "~5.8.3",
+    "vite": "^7.0.4"
+  }
+}

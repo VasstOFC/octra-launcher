@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Octra Launcher</title>
+    <style>
+      #boot {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: grid;
+        place-items: center;
+        background: #060305;
+        color: #d2d2d2;
+        font-family: Figtree, Segoe UI, sans-serif;
+      }
+      #boot.boot-out { opacity: 0; transition: opacity .35s ease; pointer-events: none; }
+      .boot-o {
+        width: 72px; height: 72px; border-radius: 50%;
+        border: 8px solid #a051a2;
+        box-shadow: 0 0 28px rgb(160 81 162 / .45);
+        animation: pulse 1.4s ease-in-out infinite;
+      }
+      .boot-word { margin-top: 22px; letter-spacing: .42em; font-weight: 800; font-size: 13px; color: #8a828c; }
+      @keyframes pulse { 50% { transform: scale(.92); opacity: .7; } }
+    </style>
+  </head>
+  <body>
+    <div id="boot" data-tauri-drag-region>
+      <div style="text-align:center">
+        <div class="boot-o"></div>
+        <div class="boot-word">OCTRA</div>
+      </div>
+    </div>
+    <div id="root"></div>
+    <script>
+      window.__octraBootFinish = function () {
+        var b = document.getElementById("boot");
+        if (!b) return;
+        b.classList.add("boot-out");
+        setTimeout(function () { b.remove(); }, 380);
+      };
+    </script>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

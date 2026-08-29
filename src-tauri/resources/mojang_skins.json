@@ -1,0 +1,386 @@
+[
+  {
+    "id": "default-skins",
+    "title": "Default skins",
+    "skins": [
+      {
+        "id": "46acd06e8483",
+        "name": "Alex",
+        "textureKey": "46acd06e8483b176e8ea39fc12fe105eb3a2a4970f5100057e9d84d4b60bdfa7",
+        "variant": "slim"
+      },
+      {
+        "id": "1abc803022d8",
+        "name": "Alex",
+        "textureKey": "1abc803022d8300ab7578b189294cce39622d9a404cdc00d3feacfdf45be6981",
+        "variant": "classic"
+      },
+      {
+        "id": "6ac6ca262d67",
+        "name": "Ari",
+        "textureKey": "6ac6ca262d67bcfb3dbc924ba8215a18195497c780058a5749de674217721892",
+        "variant": "slim"
+      },
+      {
+        "id": "4c05ab9e07b3",
+        "name": "Ari",
+        "textureKey": "4c05ab9e07b3505dc3ec11370c3bdce5570ad2fb2b562e9b9dd9cf271f81aa44",
+        "variant": "classic"
+      },
+      {
+        "id": "fece7017b1bb",
+        "name": "Efe",
+        "textureKey": "fece7017b1bb13926d1158864b283b8b930271f80a90482f174cca6a17e88236",
+        "variant": "slim"
+      },
+      {
+        "id": "daf3d88ccb38",
+        "name": "Efe",
+        "textureKey": "daf3d88ccb38f11f74814e92053d92f7728ddb1a7955652a60e30cb27ae6659f",
+        "variant": "classic"
+      },
+      {
+        "id": "226c617fde5b",
+        "name": "Kai",
+        "textureKey": "226c617fde5b1ba569aa08bd2cb6fd84c93337532a872b3eb7bf66bdd5b395f8",
+        "variant": "slim"
+      },
+      {
+        "id": "e5cdc3243b21",
+        "name": "Kai",
+        "textureKey": "e5cdc3243b2153ab28a159861be643a4fc1e3c17d291cdd3e57a7f370ad676f3",
+        "variant": "classic"
+      },
+      {
+        "id": "7cb3ba52ddd5",
+        "name": "Makena",
+        "textureKey": "7cb3ba52ddd5cc82c0b050c3f920f87da36add80165846f479079663805433db",
+        "variant": "slim"
+      },
+      {
+        "id": "dc0fcfaf2aa0",
+        "name": "Makena",
+        "textureKey": "dc0fcfaf2aa040a83dc0de4e56058d1bbb2ea40157501f3e7d15dc245e493095",
+        "variant": "classic"
+      },
+      {
+        "id": "6c160fbd16ad",
+        "name": "Noor",
+        "textureKey": "6c160fbd16adbc4bff2409e70180d911002aebcfa811eb6ec3d1040761aea6dd",
+        "variant": "slim"
+      },
+      {
+        "id": "90e75cd429ba",
+        "name": "Noor",
+        "textureKey": "90e75cd429ba6331cd210b9bd19399527ee3bab467b5a9f61cb8a27b177f6789",
+        "variant": "classic"
+      },
+      {
+        "id": "d5c4ee5ce20a",
+        "name": "Steve",
+        "textureKey": "d5c4ee5ce20aed9e33e866c66caa37178606234b3721084bf01d13320fb2eb3f",
+        "variant": "slim"
+      },
+      {
+        "id": "31f477eb1a7b",
+        "name": "Steve",
+        "textureKey": "31f477eb1a7beee631c2ca64d06f8f68fa93a3386d04452ab27f43acdf1b60cb",
+        "variant": "classic"
+      },
+      {
+        "id": "b66bc80f002b",
+        "name": "Sunny",
+        "textureKey": "b66bc80f002b10371e2fa23de6f230dd5e2f3affc2e15786f65bc9be4c6eb71a",
+        "variant": "slim"
+      },
+      {
+        "id": "a3bd16079f76",
+        "name": "Sunny",
+        "textureKey": "a3bd16079f764cd541e072e888fe43885e711f98658323db0f9a6045da91ee7a",
+        "variant": "classic"
+      },
+      {
+        "id": "eee522611005",
+        "name": "Zuri",
+        "textureKey": "eee522611005acf256dbd152e992c60c0bb7978cb0f3127807700e478ad97664",
+        "variant": "slim"
+      },
+      {
+        "id": "f5dddb41dcaf",
+        "name": "Zuri",
+        "textureKey": "f5dddb41dcafef616e959c2817808e0be741c89ffbfed39134a13e75b811863d",
+        "variant": "classic"
+      }
+    ]
+  },
+  {
+    "id": "minecon-earth-2017",
+    "title": "MINECON Earth 2017",
+    "skins": [
+      {
+        "id": "6c25523e7dab",
+        "name": "Globe Alex",
+        "textureKey": "6c25523e7dabfcaf0dbe32d90fd0c001d5d57ac66206a0595defe9be5947ff08",
+        "variant": "classic"
+      },
+      {
+        "id": "66206c8f51d1",
+        "name": "Party Alex",
+        "textureKey": "66206c8f51d13d2d31c54696a58a3e8bcd1e5e7db9888d331d0753129324e4f1",
+        "variant": "slim"
+      },
+      {
+        "id": "6acf91326bd1",
+        "name": "Cardboard Cosplayer",
+        "textureKey": "6acf91326bd116ce889e461ddb57e92ace07a8367dbd2d191075078fccc3c727",
+        "variant": "classic"
+      },
+      {
+        "id": "b9f7facdca2b",
+        "name": "Creeper Cosplayer",
+        "textureKey": "b9f7facdca2bf4772fa168e1c3cf7b020124eb1fc82118307d426da1b88c32c5",
+        "variant": "classic"
+      },
+      {
+        "id": "b7393199a84e",
+        "name": "Creeper Piñata Cosplayer",
+        "textureKey": "b7393199a84eb9e932efa8dda6829423875eb65af76cb82912ade62f93996b9c",
+        "variant": "classic"
+      },
+      {
+        "id": "7cbe449d9d37",
+        "name": "Sheep Cosplayer",
+        "textureKey": "7cbe449d9d37c111a07a902e322d3869d98790c48f1fa16a24bcbe2d8d73808b",
+        "variant": "classic"
+      },
+      {
+        "id": "b182ad5783a3",
+        "name": "Cake Steve",
+        "textureKey": "b182ad5783a343be3e202ac35902270a8d31042fdfd48b849fc99a55a1b60a91",
+        "variant": "classic"
+      },
+      {
+        "id": "c05e396bbf74",
+        "name": "Party Steve",
+        "textureKey": "c05e396bbf744082122f77b7277af390d11d2d4e93dd2f8c67942ca9626db24d",
+        "variant": "classic"
+      }
+    ]
+  },
+  {
+    "id": "builders-biomes",
+    "title": "Builders & Biomes",
+    "skins": [
+      {
+        "id": "2007b66a99ae",
+        "name": "Barn Builder",
+        "textureKey": "2007b66a99ae905c81f339e2a0a4bf4b99e9454a485d5164e3e1051c3036ad70",
+        "variant": "classic"
+      },
+      {
+        "id": "59f2872323bf",
+        "name": "Bee-Friender",
+        "textureKey": "59f2872323bf515aa8d84c00931fbf8170b2cec5138961527c09ffcd06ca4ab2",
+        "variant": "classic"
+      },
+      {
+        "id": "7cd85127cbc7",
+        "name": "Bee-Friender (Alternate)",
+        "textureKey": "7cd85127cbc710a1c9a53c6bb3474f59995c222b9d8c57b293993cc2d8a225aa",
+        "variant": "classic"
+      },
+      {
+        "id": "5e4e09eccbce",
+        "name": "Buff Butcher",
+        "textureKey": "5e4e09eccbce11e701c51bb64b102d688a6ac4018c725dd2b780210aee101b31",
+        "variant": "classic"
+      },
+      {
+        "id": "d66ed86ce96a",
+        "name": "Buff Butcher (Alternate)",
+        "textureKey": "d66ed86ce96a1b63c30f1baac762f638717930866474ac4fce697cdbd0bd6fbb",
+        "variant": "classic"
+      },
+      {
+        "id": "b9e9d1b51b4b",
+        "name": "Homestead Healer",
+        "textureKey": "b9e9d1b51b4be289b9525d4decd798cb7912e920bac8846a2df70e9ff4f0b1d8",
+        "variant": "classic"
+      },
+      {
+        "id": "83e283ab3355",
+        "name": "Pig Whisperer",
+        "textureKey": "83e283ab33558baa2cd0184d2e85f090c795a797bdbcb2cc47230c27f23fe9b1",
+        "variant": "classic"
+      },
+      {
+        "id": "e1fc44f1d69f",
+        "name": "Pig Whisperer (Alternate)",
+        "textureKey": "e1fc44f1d69fd2864df7b80618a38af4170d4800f2df4fbde81c17b74b2a818b",
+        "variant": "classic"
+      },
+      {
+        "id": "25dc6421d47c",
+        "name": "Ranch Ranger",
+        "textureKey": "25dc6421d47cad8e2bdf93f56fae9ab06fcfe218c8645c1775ae2e4563c065ad",
+        "variant": "classic"
+      }
+    ]
+  },
+  {
+    "id": "striding-hero",
+    "title": "Striding Hero",
+    "skins": [
+      {
+        "id": "721c05483a43",
+        "name": "Snowfeather",
+        "textureKey": "721c05483a435d4362047ccb62e075ef5f001aa63a7e0e2afe03e60759bab91d",
+        "variant": "classic"
+      },
+      {
+        "id": "b914cf5106aa",
+        "name": "Stray",
+        "textureKey": "b914cf5106aaa82409fdd9213fbdb1479b4d65aecc5d5e22b1f25e5744c4c4f7",
+        "variant": "classic"
+      },
+      {
+        "id": "5eb077c54ecf",
+        "name": "Strider",
+        "textureKey": "5eb077c54ecfc7e760c36add887b68859d7a3160d331580ff859f7353d959151",
+        "variant": "classic"
+      },
+      {
+        "id": "b271a744ef47",
+        "name": "Villager 1",
+        "textureKey": "b271a744ef479018927575952621b110b9c11f62730a95729af7e8591cf8dbf6",
+        "variant": "classic"
+      },
+      {
+        "id": "748923629fed",
+        "name": "Villager 2",
+        "textureKey": "748923629fed7c6ec9462016b4480fa3cff8c16e82ee6fe26d4b707f4de10060",
+        "variant": "classic"
+      },
+      {
+        "id": "3d996abc69ea",
+        "name": "Wither Skeleton",
+        "textureKey": "3d996abc69ea70a20442855e429bf44b45111f9818d0f8c46272e12d12bec218",
+        "variant": "classic"
+      }
+    ]
+  },
+  {
+    "id": "the-garden-awakens",
+    "title": "The Garden Awakens",
+    "skins": [
+      {
+        "id": "6f8fc677cdcd",
+        "name": "Pale Lumberjack",
+        "textureKey": "6f8fc677cdcd4c6eed67d90c08d23162abc3a3a85357c7636fdf80d874aa857f",
+        "variant": "classic"
+      },
+      {
+        "id": "9a0af2b1fd96",
+        "name": "Creaking",
+        "textureKey": "9a0af2b1fd9659480d43132db95cd7d459d1a66480fe42150e132d03b9731573",
+        "variant": "classic"
+      }
+    ]
+  },
+  {
+    "id": "chase-the-skies",
+    "title": "Chase the Skies",
+    "skins": [
+      {
+        "id": "8409954698b6",
+        "name": "Ghast Pilot",
+        "textureKey": "8409954698b6c7741460fdd85d6ec6a5e0a9ad04ade7e2c72c913f02936a607d",
+        "variant": "classic"
+      },
+      {
+        "id": "e12d98dab548",
+        "name": "Ghast Swimmer",
+        "textureKey": "e12d98dab548e92cad7ac80f92d8fefbb9ca7a1af94aa4f428daf6ef723aa8e0",
+        "variant": "classic"
+      }
+    ]
+  },
+  {
+    "id": "the-copper-age",
+    "title": "The Copper Age",
+    "skins": [
+      {
+        "id": "33aef79a4ca9",
+        "name": "Copper Chemist",
+        "textureKey": "33aef79a4ca986a2971057d35046e71dce326b645353e6f92d56e1c4bb3b0073",
+        "variant": "classic"
+      },
+      {
+        "id": "514b10ff7bc5",
+        "name": "Copper Welder",
+        "textureKey": "514b10ff7bc50dd01b5438632815b9e27cfe54064d1a28ef6014f3309d278b38",
+        "variant": "classic"
+      }
+    ]
+  },
+  {
+    "id": "mounts-of-mayhem",
+    "title": "Mounts of Mayhem",
+    "skins": [
+      {
+        "id": "e0bae80c765f",
+        "name": "Zombie Horse Onesie",
+        "textureKey": "e0bae80c765f9ef3c3050dd72ea4d4bc53ae00e39c8a376a886d419abdc5dd84",
+        "variant": "classic"
+      }
+    ]
+  },
+  {
+    "id": "tiny-takeover",
+    "title": "Tiny Takeover",
+    "skins": [
+      {
+        "id": "890044fb07cb",
+        "name": "Baby Bee",
+        "textureKey": "890044fb07cbca79bb9ffec4d2f15cdd1053e4b554e9a02469e9d0b271f3fdfa",
+        "variant": "classic"
+      },
+      {
+        "id": "8d0484011053",
+        "name": "Baby Axolotl",
+        "textureKey": "8d0484011053097a9809f14c0301166981369b3a660150afea1e753ae7e54685",
+        "variant": "classic"
+      },
+      {
+        "id": "b240795e2142",
+        "name": "Dandelion Onesie",
+        "textureKey": "b240795e214270b5b864cea3cbbcbac2fae60abed5de10229a7567510713355b",
+        "variant": "classic"
+      }
+    ]
+  },
+  {
+    "id": "chaos-cubed",
+    "title": "Chaos Cubed",
+    "skins": [
+      {
+        "id": "fa4d0a00cfab",
+        "name": "Brawler",
+        "textureKey": "fa4d0a00cfabcad04659b991176e2b7872c661d54e85808bc12aa59e10dde326",
+        "variant": "classic"
+      },
+      {
+        "id": "bfa251327ce1",
+        "name": "Builder",
+        "textureKey": "bfa251327ce1fc617dc90879dbfb77dabf151381d5d40f261c7f16e2d147d942",
+        "variant": "classic"
+      },
+      {
+        "id": "2d89c01ed54a",
+        "name": "Rancher",
+        "textureKey": "2d89c01ed54a6fa08d534c07200ccddda426183e642d17cef648d90716f4aa92",
+        "variant": "classic"
+      }
+    ]
+  }
+]

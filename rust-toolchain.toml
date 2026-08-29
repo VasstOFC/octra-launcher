@@ -1,0 +1,6 @@
+# Current crates need edition 2024 (Rust 1.85+) and several rust-version
+# gates at 1.88 (image, serde_with, time, darling). Cargo 1.83 fails with:
+#   feature `edition2024` is required
+[toolchain]
+channel = "1.88.0"
+profile = "minimal"
