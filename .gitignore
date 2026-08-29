@@ -31,6 +31,7 @@ installer/.payload-stage/
 dist-installer/
 
 # Updater signing keys — never commit the private key
+.keys/
 *.key
 *.key.pub
 
