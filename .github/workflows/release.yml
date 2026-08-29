@@ -31,18 +31,22 @@ jobs:
         run: npm run dist:windows
 
       - name: Sign installer + write latest.json
+        id: sign
         env:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
           OCTRA_RELEASE_NOTES: Octra Launcher ${{ github.ref_name }}
         run: |
-          if (-not $env:TAURI_SIGNING_PRIVATE_KEY) {
-            Write-Error "Brak sekretu TAURI_SIGNING_PRIVATE_KEY w GitHub Actions. Dodaj klucz prywatny minisign pasujący do pubkey w tauri.conf.json."
-            exit 1
+          if ($env:TAURI_SIGNING_PRIVATE_KEY) {
+            node scripts/pack-installer.mjs --sign --write-manifest
+            echo "signed=true" >> $env:GITHUB_OUTPUT
+          } else {
+            Write-Warning "Brak TAURI_SIGNING_PRIVATE_KEY — publikuję tylko Octra-setup.exe (bez auto-updatera)."
+            echo "signed=false" >> $env:GITHUB_OUTPUT
           }
-          node scripts/pack-installer.mjs --sign --write-manifest
 
-      - name: Create GitHub Release
+      - name: Create GitHub Release (signed)
+        if: steps.sign.outputs.signed == 'true'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
@@ -52,5 +56,19 @@ jobs:
             dist-installer/Octra-setup.exe
             dist-installer/latest.json
             dist-installer/Octra-setup.exe.sig
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create GitHub Release (unsigned)
+        if: steps.sign.outputs.signed != 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Octra Launcher ${{ github.ref_name }}
+          generate_release_notes: true
+          body: |
+            **Uwaga:** brak `TAURI_SIGNING_PRIVATE_KEY` w GitHub Actions — auto-updater (latest.json) nie został opublikowany.
+            Pobierz `Octra-setup.exe` ręcznie lub dodaj sekret i opublikuj ponownie.
+          files: dist-installer/Octra-setup.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
