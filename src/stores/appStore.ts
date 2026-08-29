@@ -222,6 +222,7 @@ export const useApp = create<AppStore>((set, get) => ({
       showError,
       markPlaying,
       setLoginOpen,
+      setLogin,
     } = get();
     if (!accounts.active) {
       showError(
@@ -238,6 +239,7 @@ export const useApp = create<AppStore>((set, get) => ({
       const msg = e instanceof Error ? e.message : String(e);
       if (/tokenu|zaloguj/i.test(msg)) {
         setLoginOpen(true);
+        setLogin(null);
       }
       showError(msg);
     } finally {

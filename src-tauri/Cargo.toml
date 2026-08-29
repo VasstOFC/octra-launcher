@@ -1,6 +1,6 @@
 [package]
 name = "octra"
-version = "1.1.0"
+version = "1.1.1"
 description = "Octra Launcher — experimental Minecraft launcher"
 authors = ["you"]
 edition = "2021"

@@ -10,6 +10,7 @@ import { useEffect, useRef, useState } from "react";
 import { listen } from "@tauri-apps/api/event";
 import { clsx } from "clsx";
 import { api } from "../lib/api";
+import { confirmDialog } from "../lib/dialog";
 import { pl } from "../locales/pl";
 import { LocalServerCreateDialog, type CreateServerDraft } from "../components/LocalServerCreateDialog";
 import { LocalServerSettings } from "../components/LocalServerSettings";
@@ -109,7 +110,11 @@ export function HostPage() {
       else if (action === "start") await api.startLocalServer(active.id);
       else if (action === "stop") await api.stopLocalServer(active.id);
       else if (action === "delete") {
-        if (!confirm(pl.host.deleteConfirm.replace("{name}", active.name))) return;
+        const ok = await confirmDialog(
+          pl.host.deleteConfirm.replace("{name}", active.name),
+          { title: pl.host.delete, confirmLabel: pl.host.delete },
+        );
+        if (!ok) return;
         await api.deleteLocalServer(active.id);
         setSelected(null);
       }

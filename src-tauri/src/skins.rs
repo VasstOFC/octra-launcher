@@ -153,7 +153,7 @@ pub fn require_offline_account(dirs: &Dirs, uuid: &str) -> Result<auth::Account>
         .ok_or_else(|| Error::msg("Nie znaleziono konta."))?;
     if !acc.is_offline() {
         return Err(Error::msg(
-            "Konta Microsoft używają oficjalnego skina Mojang — Lumen go nie podmienia.",
+            "Konta Microsoft używają oficjalnego skina Mojang — Octra go nie podmienia.",
         ));
     }
     Ok(acc)

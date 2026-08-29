@@ -15,13 +15,15 @@ npm run dev:app
 
 Albo skrót **Octra Dev** na pulpicie (`npm run shortcut`).
 
-## Instalacja (testy ze znajomymi)
+## Instalacja
 
 1. Pobierz **`Octra-setup.exe`** z [Releases](https://github.com/VasstOFC/octra-launcher/releases/latest).
 2. Uruchom instalator — program trafi do `%LOCALAPPDATA%\Octra Launcher\`.
 3. Dane gry (instancje, konta, skiny): `%APPDATA%\.octralauncher\`.
 
 Build release włącza **auto-updater** (kanał Stable). W trybie dev (`npm run dev:app`) aktualizacje sprawdzasz ręcznie w **Ustawienia → Aktualizacje**.
+
+Jeśli aktualizacja z bardzo starej wersji (np. v1.0.0) nie instaluje się automatycznie, pobierz instalator ręcznie **raz** — kolejne aktualizacje powinny już działać normalnie.
 
 ## Skrypty
 
@@ -36,16 +38,16 @@ Build release włącza **auto-updater** (kanał Stable). W trybie dev (`npm run 
 
 ## Wydanie nowej wersji
 
-1. Podnieś wersję w `package.json`, `src-tauri/Cargo.toml` i `src-tauri/tauri.conf.json`.
-2. Ustaw sekrety w GitHub Actions: `TAURI_SIGNING_PRIVATE_KEY` (+ opcjonalnie hasło).
+1. Podnieś wersję w `package.json`, `src-tauri/Cargo.toml`, `installer/Cargo.toml` i `src-tauri/tauri.conf.json`.
+2. Ustaw sekret `TAURI_SIGNING_PRIVATE_KEY` w GitHub Actions.
 3. Utwórz tag i wypchnij:
 
 ```powershell
-git tag v0.1.0
-git push origin v0.1.0
+git tag v1.1.1
+git push origin v1.1.1
 ```
 
-Workflow **Release** zbuduje `Octra-setup.exe`, `latest.json` i opublikuje na GitHub Releases.
+Workflow **Release** zbuduje podpisany `Octra-setup.exe`, `latest.json` i opublikuje na GitHub Releases.
 
 Lokalnie (bez CI):
 
@@ -68,15 +70,17 @@ node scripts/pack-installer.mjs --sign --write-manifest
 - Rust **1.88+** (`rust-toolchain.toml` — `rustup toolchain install 1.88.0`)
 - Visual Studio Build Tools (C++) + WebView2
 
-## Funkcje (0.1.0)
+## Funkcje (v1.1.x)
 
-- Logowanie Microsoft / offline
-- Start: LAUNCH / STOP, profile, news
-- Wersje, mody, shadery, światy, zasoby
-- Znajomi i czat lokalnie, Relay, galeria F2, szafka skinów
-- Skiny multiplayer (Lumen + CustomSkinLoader) bez SkinRestorer
-- Modal po crashu
+- Logowanie Microsoft / offline, ponowne logowanie po wygaśnięciu tokenu
+- Start: LAUNCH / STOP, profile z tapetą/ikoną, news
+- Wersje, mody, shadery, światy, zasoby; import z CurseForge / Prism / MultiMC
+- Galeria zrzutów F2, szafka skinów, skórki offline (CustomSkinLoader)
+- Lokalny serwer (Host): Paper / Vanilla / Fabric, ustawienia `server.properties`
+- Auto-updater z GitHub Releases
 - Ustawienia: motyw, RAM, Java, aktualizacje, folder danych
+
+**Wkrótce:** znajomi, czat LAN (Relay), centrum powiadomień.
 
 ## Licencja
 

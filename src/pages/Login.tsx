@@ -11,6 +11,7 @@ const LOGIN_BG = "/login-bg.jpg";
 
 export function LoginPage() {
   const login = useApp((s) => s.login);
+  const appInfo = useApp((s) => s.appInfo);
   const setLogin = useApp((s) => s.setLogin);
   const setLoginOpen = useApp((s) => s.setLoginOpen);
   const showError = useApp((s) => s.showError);
@@ -61,7 +62,11 @@ export function LoginPage() {
         data-tauri-drag-region
         className="drag-region relative z-10 flex h-10 shrink-0 items-center justify-between px-3 text-[11px] text-white/70"
       >
-        <span>{pl.login.version}</span>
+        <span>
+          {appInfo?.version
+            ? `${pl.login.version} v${appInfo.version}`
+            : pl.login.version}
+        </span>
         <WindowButtons />
       </header>
 

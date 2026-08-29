@@ -96,7 +96,10 @@ export function SettingsPage() {
   async function runInstall() {
     if (updateStatus.state !== "available") return;
     try {
-      await installUpdate(updateStatus);
+      const next = await installUpdate(updateStatus);
+      if (next.state === "available") {
+        showOk("Otwarto pobieranie instalatora. Uruchom Octra-setup.exe po zakończeniu.");
+      }
     } catch (e) {
       showError(e instanceof Error ? e.message : String(e));
     }
@@ -219,6 +222,9 @@ export function SettingsPage() {
                 {updateStatus.notes.length > 500 ? "…" : ""}
               </p>
             ) : null}
+            <p className="mt-2 text-center text-[11px] text-mute">
+              Jeśli auto-instalacja się nie powiedzie, pobierz instalator ręcznie — wystarczy raz.
+            </p>
             <div className="mt-3 flex flex-wrap gap-2">
               <Button variant="primary" className="text-xs" onClick={() => void runInstall()}>
                 {updateStatus.mode === "tauri" ? "Pobierz i zainstaluj" : "Pobierz instalator"}
@@ -394,7 +400,7 @@ export function SettingsPage() {
               />
             </div>
             <div>
-              <label className="text-xs text-mute">URL serwera skinów Lumen (opcjonalnie)</label>
+              <label className="text-xs text-mute">URL serwera skinów Octra (opcjonalnie)</label>
               <input
                 type="text"
                 className="mt-1 w-full rounded-lg bg-raised2 px-3 py-2 font-mono text-xs ring-1 ring-line"

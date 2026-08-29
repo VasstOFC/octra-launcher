@@ -89,7 +89,7 @@ fn default_port() -> u16 {
     25565
 }
 fn default_motd() -> String {
-    "Serwer Lumen".into()
+    "Serwer Octra".into()
 }
 fn default_max_players() -> u32 {
     10
@@ -1109,7 +1109,7 @@ pub async fn start(app: AppHandle, id: String) -> Result<LocalServerInfo> {
         &app,
         &cfg.id,
         &format!(
-            "[Lumen] Start {} {} · Java {} · {} MB · port {}",
+            "[Octra] Start {} {} · Java {} · {} MB · port {}",
             cfg.software.label(),
             cfg.game_version,
             java_rt.major,
@@ -1258,7 +1258,7 @@ async fn watch_server(
             }
             status = child.wait() => {
                 let code = status.ok().and_then(|s| s.code()).unwrap_or(-1);
-                emit_log(&app, &id, &format!("[Lumen] Proces zakończony (kod {code})."));
+                emit_log(&app, &id, &format!("[Octra] Proces zakończony (kod {code})."));
                 break;
             }
         }

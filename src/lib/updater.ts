@@ -24,6 +24,19 @@ export type UpdateStatus =
   | { state: "installing" };
 
 const RELEASES_URL = "https://github.com/VasstOFC/octra-launcher/releases";
+const INSTALLER_URL = `${RELEASES_URL}/latest/download/Octra-setup.exe`;
+
+type GithubNewer = Extract<GithubReleaseCheck, { kind: "newer" }>;
+
+function isUpdaterSignatureError(error: unknown): boolean {
+  const msg = (error instanceof Error ? error.message : String(error)).toLowerCase();
+  return (
+    msg.includes("different key") ||
+    msg.includes("signature") ||
+    msg.includes("minisign") ||
+    msg.includes("public key")
+  );
+}
 
 export async function checkForUpdates(
   appInfo: AppInfo | null,
@@ -51,7 +64,8 @@ export async function checkForUpdates(
     const remote = parseVersion(tauriUpdate.version);
     const local = parseVersion(currentVersion);
     if (!remote || !local || remote > local) {
-      return tauriAvailable(tauriUpdate);
+      const githubNewer = githubResult.kind === "newer" ? githubResult : undefined;
+      return tauriAvailable(tauriUpdate, githubNewer);
     }
   }
 
@@ -85,13 +99,13 @@ async function checkGithubUpdate(): Promise<GithubReleaseCheck> {
   return api.checkGithubRelease();
 }
 
-function tauriAvailable(update: Update): UpdateStatus {
+function tauriAvailable(update: Update, github?: GithubNewer): UpdateStatus {
   return {
     state: "available",
     version: update.version,
-    notes: update.body ?? "",
-    htmlUrl: `${RELEASES_URL}/latest`,
-    installerUrl: null,
+    notes: github?.notes || update.body || "",
+    htmlUrl: github?.htmlUrl ?? `${RELEASES_URL}/latest`,
+    installerUrl: github?.installerUrl ?? INSTALLER_URL,
     mode: "tauri",
     tauriUpdate: update,
   };
@@ -148,13 +162,31 @@ export async function installUpdate(
     );
     if (!ok) return status;
 
-    await status.tauriUpdate.downloadAndInstall();
-    await relaunch();
-    return { state: "installing" };
+    try {
+      await status.tauriUpdate.downloadAndInstall();
+      await relaunch();
+      return { state: "installing" };
+    } catch (e) {
+      if (!isUpdaterSignatureError(e)) throw e;
+      return manualInstallFallback(status);
+    }
   }
 
   const url = status.installerUrl ?? status.htmlUrl;
   await openUrl(url);
+  return status;
+}
+
+async function manualInstallFallback(
+  status: Extract<UpdateStatus, { state: "available" }>,
+): Promise<UpdateStatus> {
+  const url = status.installerUrl ?? INSTALLER_URL;
+  const ok = await confirmDialog(
+    `Automatyczna instalacja nie powiodła się — ta wersja launchera wymaga jednorazowego pobrania instalatora (v${status.version}). ` +
+      "Po ponownej instalacji kolejne aktualizacje będą działać normalnie.\n\nOtworzyć pobieranie?",
+    { title: "Aktualizacja", confirmLabel: "Pobierz instalator" },
+  );
+  if (ok) await openUrl(url);
   return status;
 }
 

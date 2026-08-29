@@ -2,6 +2,7 @@ import { memo, useEffect } from "react";
 import { listen } from "@tauri-apps/api/event";
 import { DialogHost } from "./components/DialogHost";
 import { FriendsDrawer } from "./components/FriendsDrawer";
+import { LoginModal } from "./components/LoginModal";
 import { Rail } from "./components/Rail";
 import { Titlebar } from "./components/Titlebar";
 import { CrashModal } from "./pages/CrashModal";
@@ -224,6 +225,7 @@ export default function App() {
       </div>
       <FriendsDrawer />
       <OctraMenu />
+      <LoginModal />
       <DialogHost />
     </div>
   );

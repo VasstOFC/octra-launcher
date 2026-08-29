@@ -807,7 +807,7 @@ pub async fn launch_instance(app: AppHandle, state: State<'_, AppState>, id: Str
         .skins
         .ensure_started(state.http.clone())
         .await
-        .map_err(|e| Error::msg(format!("Serwer skinów Lumen nie wystartował: {e}")))?;
+        .map_err(|e| Error::msg(format!("Serwer skinów Octra nie wystartował: {e}")))?;
     state
         .skins
         .prefetch_account_skins(&state.http, &dirs)

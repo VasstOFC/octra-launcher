@@ -136,6 +136,10 @@ export function HomePage() {
               )}
             </div>
 
+            {!acc ? (
+              <p className="text-center text-xs text-mute">{pl.home.addAccountHint}</p>
+            ) : null}
+
             {busy && progress && (
               <div className="w-full max-w-[200px]">
                 <div className="h-1.5 overflow-hidden rounded-full bg-white/10">

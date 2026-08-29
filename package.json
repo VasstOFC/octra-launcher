@@ -1,11 +1,12 @@
 {
   "name": "octra",
   "private": true,
-  "version": "1.1.0",
+  "version": "1.1.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "dev:app": "node scripts/with-cargo.mjs dev",
+    "prebuild": "node scripts/fetch-mc-textures.mjs",
     "build": "tsc && vite build",
     "build:app": "node scripts/with-cargo.mjs build -- --no-bundle",
     "preview": "vite preview",
