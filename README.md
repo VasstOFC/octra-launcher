@@ -1,16 +1,12 @@
 # Octra Launcher
 
-Starszy launcher. **Kod i nowe wydania:** [VasstOFC/octra-app](https://github.com/VasstOFC/octra-app) (Octra App).
+**Octra App** (nowy launcher) jest na gałęzi [`app`](https://github.com/VasstOFC/octra-launcher/tree/app). `main` to jeszcze stary Octra Launcher.
 
-Ten repozytorium zostaje jako **kanał aktualizacji** zainstalowanych kopii (`latest.json` + `Octra-setup.exe`). Workflow **Octra App update** buduje nowy launcher i publikuje go tutaj, żeby wbudowany updater podmienił Octra Launcher na Octra App.
-
-**Pobierz:** [Releases](https://github.com/VasstOFC/octra-launcher/releases/latest)
+Po zmianie nazwy repo na `octra-app` linki `octra-launcher/releases` nadal działają (redirect GitHuba). Wydania: [Releases](https://github.com/VasstOFC/octra-launcher/releases/latest).
 
 ---
 
 Launcher Minecraft na Windows — interfejs według mockupów (Figtree, fiolet `#a051a2`, teal Launch).
-
-**Repozytorium źródłowe (nowe):** [github.com/VasstOFC/octra-app](https://github.com/VasstOFC/octra-app)
 
 ## Szybki start (dev)
 

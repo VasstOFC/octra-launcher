@@ -1,7 +1,7 @@
 name: Octra App update
 
-# Builds Octra App from VasstOFC/octra-app and publishes Octra-setup.exe
-# here so existing Octra Launcher installs can auto-update.
+# Builds Octra App from this repo's `app` branch and publishes Octra-setup.exe
+# so existing Octra Launcher installs can auto-update.
 
 on:
   workflow_dispatch:
@@ -11,9 +11,9 @@ on:
         required: true
         default: '2.0.0'
       ref:
-        description: octra-app git ref
+        description: git ref with Octra App source
         required: true
-        default: 'main'
+        default: 'app'
 
 permissions:
   contents: write
@@ -27,7 +27,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: VasstOFC/octra-app
           ref: ${{ inputs.ref }}
 
       - uses: actions/setup-node@v4
@@ -82,7 +81,7 @@ jobs:
           if ($sig) {
             Copy-Item $sig.FullName "$out/Octra-setup.nsis.zip.sig"
             $signature = (Get-Content $sig.FullName -Raw).Trim()
-            $url = "https://github.com/VasstOFC/octra-launcher/releases/download/v$($env:VERSION)/Octra-setup.nsis.zip"
+            $url = "https://github.com/$($env:GITHUB_REPOSITORY)/releases/download/v$($env:VERSION)/Octra-setup.nsis.zip"
             $manifest = [ordered]@{
               version = $env:VERSION
               notes = "Octra App $($env:VERSION) replaces Octra Launcher."
@@ -108,4 +107,4 @@ jobs:
             'dist-installer/Octra-setup.nsis.zip.sig',
             'dist-installer/latest.json'
           ) | Where-Object { Test-Path $_ }
-          gh release create $tag @files --repo VasstOFC/octra-launcher --title "Octra App $tag" --notes "Octra App $($env:VERSION) replaces Octra Launcher. Open the in-app updater or install Octra-setup.exe. Worlds and instances import from .octralauncher." --latest
+          gh release create $tag @files --title "Octra App $tag" --notes "Octra App $($env:VERSION) replaces Octra Launcher. Open the in-app updater or install Octra-setup.exe. Worlds and instances import from .octralauncher." --latest
