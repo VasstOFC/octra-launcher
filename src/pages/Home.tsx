@@ -21,6 +21,8 @@ export function HomePage() {
   const progress = useApp((s) => s.progress);
   const launching = useApp((s) => s.launchingId);
   const isPlaying = useApp((s) => s.isPlaying);
+  const playingSessionCount = useApp((s) => s.playingSessionCount);
+  const settings = useApp((s) => s.settings);
   const playInstance = useApp((s) => s.playInstance);
   const stopInstance = useApp((s) => s.stopInstance);
   const selectedId = useOctra((s) => s.selectedId);
@@ -52,14 +54,17 @@ export function HomePage() {
   const last = sorted[0];
 
   const busy = Boolean(progress) || launching === selected?.id;
+  const allowMulti = settings?.allowMultipleInstances !== false;
   const playing = selected && acc ? isPlaying(selected.id, acc.uuid) : false;
+  const sessionCount =
+    selected && acc ? playingSessionCount(selected.id, acc.uuid) : 0;
 
   async function launch() {
     if (!selected) {
       setView("versions");
       return;
     }
-    if (playing) await stopInstance(selected.id);
+    if (playing && !allowMulti) await stopInstance(selected.id);
     else await playInstance(selected.id);
   }
 
@@ -110,24 +115,52 @@ export function HomePage() {
 
           <div className="flex flex-col items-center justify-center gap-3 border-line bg-raised2/30 p-6 lg:col-span-2 lg:border-l">
             <div className="relative w-full max-w-[200px]">
-              <Button
-                variant={playing ? "danger" : busy ? "secondary" : "launch"}
-                onClick={() => void launch()}
-                disabled={!acc || busy}
-                className="h-[88px] w-full flex-col gap-1 text-lg font-extrabold tracking-wide"
-              >
-                {busy
-                  ? pl.home.downloading
-                  : playing
-                    ? pl.home.stop
-                    : pl.home.launch}
-                {selected && (
-                  <span className="text-[11px] font-medium opacity-85">
-                    {LOADER_LABEL[selected.loader] ?? selected.loader} ·{" "}
-                    {selected.gameVersion}
-                  </span>
-                )}
-              </Button>
+              {allowMulti && playing ? (
+                <div className="flex flex-col gap-2">
+                  <Button
+                    variant={busy ? "secondary" : "launch"}
+                    onClick={() => void playInstance(selected!.id)}
+                    disabled={!acc || busy}
+                    className="h-[72px] w-full flex-col gap-1 text-base font-extrabold tracking-wide"
+                  >
+                    {busy ? pl.home.downloading : pl.home.launchAnother}
+                    {selected && (
+                      <span className="text-[11px] font-medium opacity-85">
+                        {LOADER_LABEL[selected.loader] ?? selected.loader} ·{" "}
+                        {selected.gameVersion}
+                      </span>
+                    )}
+                  </Button>
+                  <Button
+                    variant="danger"
+                    onClick={() => void stopInstance(selected!.id)}
+                    disabled={!acc || busy}
+                    className="h-11 w-full text-sm font-bold tracking-wide"
+                  >
+                    {pl.home.stop}
+                    {sessionCount > 1 ? ` (${sessionCount})` : ""}
+                  </Button>
+                </div>
+              ) : (
+                <Button
+                  variant={playing ? "danger" : busy ? "secondary" : "launch"}
+                  onClick={() => void launch()}
+                  disabled={!acc || busy}
+                  className="h-[88px] w-full flex-col gap-1 text-lg font-extrabold tracking-wide"
+                >
+                  {busy
+                    ? pl.home.downloading
+                    : playing
+                      ? pl.home.stop
+                      : pl.home.launch}
+                  {selected && (
+                    <span className="text-[11px] font-medium opacity-85">
+                      {LOADER_LABEL[selected.loader] ?? selected.loader} ·{" "}
+                      {selected.gameVersion}
+                    </span>
+                  )}
+                </Button>
+              )}
               {busy && (
                 <button
                   className="absolute right-2 top-1/2 grid h-7 w-7 -translate-y-1/2 place-items-center rounded-md bg-black/30 text-white"

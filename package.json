@@ -1,7 +1,7 @@
 {
   "name": "octra",
   "private": true,
-  "version": "1.2.1",
+  "version": "1.14.0",
   "type": "module",
   "scripts": {
     "dev": "vite",

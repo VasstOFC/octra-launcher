@@ -30,6 +30,8 @@ import type {
   LocalServerInfo,
   UpdateLocalServer,
   OfflineSkin,
+  SkinLibraryEntry,
+  SavePremiumLibraryReq,
   LocalSoftware,
   GithubReleaseCheck,
   AppInfo,
@@ -136,6 +138,92 @@ export const api = {
     unwrap(invoke<OfflineSkin>("set_offline_skin_model", { uuid, model })),
   resetOfflineSkin: (uuid: string) =>
     unwrap(invoke("reset_offline_skin", { uuid })),
+  listOfflineSkinLibrary: (uuid: string) =>
+    unwrap(invoke<SkinLibraryEntry[]>("list_offline_skin_library", { uuid })),
+  addOfflineSkinLibraryEntry: (
+    uuid: string,
+    png: number[],
+    model: string,
+    name: string,
+  ) =>
+    unwrap(
+      invoke<SkinLibraryEntry>("add_offline_skin_library_entry", {
+        uuid,
+        png,
+        model,
+        name,
+      }),
+    ),
+  equipOfflineSkinLibraryEntry: (uuid: string, entryId: string) =>
+    unwrap(
+      invoke<OfflineSkin>("equip_offline_skin_library_entry", {
+        uuid,
+        entryId,
+      }),
+    ),
+  deleteOfflineSkinLibraryEntry: (uuid: string, entryId: string) =>
+    unwrap(
+      invoke("delete_offline_skin_library_entry", { uuid, entryId }),
+    ),
+  setOfflineSkinLibraryModel: (
+    uuid: string,
+    entryId: string,
+    model: string,
+  ) =>
+    unwrap(
+      invoke<SkinLibraryEntry>("set_offline_skin_library_model", {
+        uuid,
+        entryId,
+        model,
+      }),
+    ),
+  listPremiumSkinLibrary: (uuid: string) =>
+    unwrap(invoke<SkinLibraryEntry[]>("list_premium_skin_library", { uuid })),
+  savePremiumSkinLibraryEntry: (uuid: string, req: SavePremiumLibraryReq) =>
+    unwrap(
+      invoke<SkinLibraryEntry>("save_premium_skin_library_entry", { uuid, req }),
+    ),
+  deletePremiumSkinLibraryEntry: (uuid: string, entryId: string) =>
+    unwrap(
+      invoke("delete_premium_skin_library_entry", { uuid, entryId }),
+    ),
+  syncPremiumSkinLibraryActive: (
+    uuid: string,
+    textureKey: string | null,
+    variant: string,
+    png?: number[] | null,
+  ) =>
+    unwrap(
+      invoke<SkinLibraryEntry[]>("sync_premium_skin_library_active", {
+        uuid,
+        textureKey,
+        variant,
+        png: png ?? null,
+      }),
+    ),
+  setPremiumSkinLibraryActive: (uuid: string, entryId: string) =>
+    unwrap(
+      invoke<SkinLibraryEntry[]>("set_premium_skin_library_active", {
+        uuid,
+        entryId,
+      }),
+    ),
+  findPremiumSkinLibraryDuplicate: (
+    uuid: string,
+    textureKey: string | null,
+    variant: string,
+    capeId: string | null,
+    png?: number[] | null,
+  ) =>
+    unwrap(
+      invoke<SkinLibraryEntry | null>("find_premium_skin_library_duplicate", {
+        uuid,
+        textureKey,
+        variant,
+        capeId,
+        png: png ?? null,
+      }),
+    ),
   startLogin: () => unwrap(invoke<DeviceCode>("start_login")),
   cancelLogin: () => unwrap(invoke("cancel_login")),
   installInstance: (id: string) =>
@@ -308,8 +396,8 @@ export const api = {
     ),
   getMojangSkinCatalog: () =>
     unwrap(invoke<CatalogGroup[]>("get_mojang_skin_catalog")),
-  getMinecraftProfile: (uuid: string) =>
-    unwrap(invoke<McPlayerProfile>("get_minecraft_profile", { uuid })),
+  getMinecraftProfile: (uuid: string, refresh = false) =>
+    unwrap(invoke<McPlayerProfile>("get_minecraft_profile", { uuid, refresh })),
   equipMojangSkin: (uuid: string, textureKey: string, variant: string) =>
     unwrap(
       invoke<McPlayerProfile>("equip_mojang_skin", { uuid, textureKey, variant }),
@@ -320,6 +408,39 @@ export const api = {
     unwrap(invoke<McPlayerProfile>("set_minecraft_cape", { uuid, capeId })),
   getMojangTexturePreview: (textureKey: string) =>
     unwrap(invoke<string>("get_mojang_texture_preview", { textureKey })),
+  getAvailableSkins: (uuid: string) =>
+    unwrap(invoke<import("./skins").Skin[]>("get_available_skins", { uuid })),
+  getAvailableCapes: (uuid: string) =>
+    unwrap(invoke<import("./skins").Cape[]>("get_available_capes", { uuid })),
+  equipSkin: (uuid: string, skin: import("./skins").Skin, png?: number[] | null) =>
+    unwrap(
+      invoke<McPlayerProfile | null>("equip_skin", {
+        req: { uuid, skin, png: png ?? null },
+      }),
+    ),
+  saveCustomSkin: (
+    uuid: string,
+    skin: import("./skins").Skin,
+    variant: string,
+    opts?: { capeId?: string | null; png?: number[] | null; replaceTexture?: boolean },
+  ) =>
+    unwrap(
+      invoke<SkinLibraryEntry>("save_custom_skin", {
+        req: {
+          uuid,
+          skin,
+          variant,
+          capeId: opts?.capeId ?? null,
+          png: opts?.png ?? null,
+          replaceTexture: opts?.replaceTexture ?? true,
+        },
+      }),
+    ),
+  removeCustomSkin: (uuid: string, skin: import("./skins").Skin) =>
+    unwrap(invoke("remove_custom_skin", { uuid, skin })),
+  normalizeSkinTexture: (texture: string | number[]) =>
+    unwrap(invoke<number[]>("normalize_skin_texture", { texture })),
+  flushPendingSkinChange: () => unwrap(invoke("flush_pending_skin_change")),
   fetchImageBase64: (url: string) =>
     unwrap(invoke<string>("fetch_image_base64", { url })),
   relayStart: (name: string) => unwrap(invoke("relay_start", { name })),

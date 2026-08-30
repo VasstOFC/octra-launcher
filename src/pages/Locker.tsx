@@ -1,17 +1,35 @@
-import { ChevronDown, Pencil, Plus, Save, X } from "lucide-react";
+import { ChevronDown, Trash2 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { clsx } from "clsx";
+import { confirmDialog } from "../lib/dialog";
 import { api } from "../lib/api";
+import { normalizeTextureUrl } from "../lib/skinRender";
 import {
-  normalizeTextureUrl,
-} from "../lib/skinRender";
+  buildSavedSkinsList,
+  dedupeSkinsByName,
+  draftFromSkin,
+  groupSkinsBySection,
+  pngDataUrlFromSkin,
+  skinIdentity,
+  skinToUiModel,
+  uiModelToSkinVariant,
+  type Cape,
+  type Skin,
+} from "../lib/skins";
 import { pl } from "../locales/pl";
 import { useApp, useActiveAccount } from "../stores/appStore";
-import type { AccountSkin, CatalogGroup, CatalogSkin, McPlayerProfile } from "../types";
+import type {
+  AccountSkin,
+  CatalogSkin,
+  McPlayerProfile,
+  SkinLibraryEntry,
+} from "../types";
+import { LockerLoadingScreen } from "../components/LockerLoadingScreen";
 import { SkinEditModal } from "../components/SkinEditModal";
-import { SkinThumbnail } from "../components/SkinThumbnail";
+import { SkinAddCard, SkinGridButton } from "../components/SkinGridButton";
+import { LockerSkinGrid } from "../components/LockerSkinGrid";
+import { SkinPreviewPanel } from "../components/SkinPreviewPanel";
 import { SkinUploadDialog } from "../components/SkinUploadDialog";
-import { SkinViewer3D } from "../components/SkinViewer3D";
 import { clearAccountAvatarCache } from "../components/AccountAvatar";
 import {
   toApiSkinModel,
@@ -20,11 +38,36 @@ import {
   type UiSkinModel,
 } from "../lib/skinModel";
 
+function savedSkinId(skin: Skin): string {
+  return skin.libraryId ?? skin.textureKey;
+}
+
+function skinTextureProps(skin: Skin) {
+  const variant = skinToUiModel(skin.variant);
+  const skinPngDataUrl = pngDataUrlFromSkin(skin);
+  return {
+    variant,
+    skinPngDataUrl,
+    textureKey: skinPngDataUrl ? null : skin.textureKey,
+    alt: skin.name ?? skin.textureKey,
+  };
+}
+
+function catalogSkinFromSkin(skin: Skin): CatalogSkin {
+  return {
+    id: skin.textureKey,
+    name: skin.name ?? skin.textureKey,
+    textureKey: skin.textureKey,
+    variant: skin.variant === "SLIM" ? "slim" : "classic",
+  };
+}
+
 type DraftSkin = {
   textureKey?: string;
   variant: string;
   name: string;
   pngDataUrl?: string;
+  libraryId?: string;
 };
 
 function pngDataUrlFromAccountSkin(skin: AccountSkin | null): string | null {
@@ -32,6 +75,11 @@ function pngDataUrlFromAccountSkin(skin: AccountSkin | null): string | null {
   return skin.pngBase64.startsWith("data:")
     ? skin.pngBase64
     : `data:image/png;base64,${skin.pngBase64}`;
+}
+
+function pngDataUrlFromBase64(b64?: string | null): string | null {
+  if (!b64) return null;
+  return b64.startsWith("data:") ? b64 : `data:image/png;base64,${b64}`;
 }
 
 function committedSkin(msSkin: AccountSkin | null): DraftSkin | null {
@@ -52,7 +100,8 @@ function draftSkinsEqual(a: DraftSkin | null, b: DraftSkin | null): boolean {
   return (
     a.textureKey === b.textureKey &&
     a.variant === b.variant &&
-    a.pngDataUrl === b.pngDataUrl
+    a.pngDataUrl === b.pngDataUrl &&
+    a.libraryId === b.libraryId
   );
 }
 
@@ -62,8 +111,11 @@ function textureKeyFromUrl(url?: string | null): string | null {
   return parts[parts.length - 1] || null;
 }
 
-function committedCapeId(profile: McPlayerProfile | null): string | null {
-  return profile?.capes.find((c) => c.state.toUpperCase() === "ACTIVE")?.id ?? null;
+function committedCapeId(profile: McPlayerProfile | null, capes: Cape[] = []): string | null {
+  const fromProfile =
+    profile?.capes.find((c) => c.state.toUpperCase() === "ACTIVE")?.id ?? null;
+  if (fromProfile) return fromProfile;
+  return capes.find((c) => c.isEquipped)?.id ?? null;
 }
 
 export function LockerPage() {
@@ -73,69 +125,139 @@ export function LockerPage() {
   const bump = useApp((s) => s.bumpSkin);
   const skinEpoch = useApp((s) => s.skinEpoch);
 
-  const [catalog, setCatalog] = useState<CatalogGroup[]>([]);
+  const [allSkins, setAllSkins] = useState<Skin[]>([]);
   const [msSkin, setMsSkin] = useState<AccountSkin | null>(null);
   const [mcProfile, setMcProfile] = useState<McPlayerProfile | null>(null);
   const [loading, setLoading] = useState(false);
+  const [initialLoad, setInitialLoad] = useState(true);
   const [editOpen, setEditOpen] = useState(false);
   const [model, setModel] = useState<UiSkinModel>("wide");
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
   const [profileError, setProfileError] = useState<string | null>(null);
   const [profileLoading, setProfileLoading] = useState(false);
+  const [availableCapes, setAvailableCapes] = useState<Cape[]>([]);
+  const [capesLoading, setCapesLoading] = useState(false);
+  const [capesError, setCapesError] = useState<string | null>(null);
 
   const [draftSkin, setDraftSkin] = useState<DraftSkin | null>(null);
   const [draftCapeId, setDraftCapeId] = useState<string | null>(null);
   const [pendingPng, setPendingPng] = useState<Uint8Array | null>(null);
   const [offlinePreviewUrl, setOfflinePreviewUrl] = useState<string | null>(null);
+  const [previewingOfflineId, setPreviewingOfflineId] = useState<string | null>(null);
+  const [previewingPremiumId, setPreviewingPremiumId] = useState<string | null>(null);
+
   const [uploadPending, setUploadPending] = useState<{
     buf: Uint8Array;
     previewUrl: string;
+    forPremium?: boolean;
   } | null>(null);
   const [uploadModel, setUploadModel] = useState<ApiSkinModel>("classic");
+  const [uploadName, setUploadName] = useState("");
 
   const isOffline = acc?.kind === "offline";
+
+  const savedSkins = useMemo(() => buildSavedSkinsList(allSkins), [allSkins]);
+
+  const displayCatalog = useMemo(
+    () =>
+      groupSkinsBySection(dedupeSkinsByName(allSkins.filter((s) => s.source === "default"))).map(
+        (group) => ({
+          id: group.title.toLowerCase().replace(/\s+/g, "-"),
+          title: group.title,
+          skins: group.skins.map(catalogSkinFromSkin),
+        }),
+      ),
+    [allSkins],
+  );
 
   const dirty = useMemo(() => {
     if (isOffline) return false;
     const baseSkin = committedSkin(msSkin);
-    const baseCape = committedCapeId(mcProfile);
+    const baseCape = committedCapeId(mcProfile, availableCapes);
     const skinChanged = !draftSkinsEqual(draftSkin, baseSkin);
     const capeChanged = (draftCapeId ?? null) !== (baseCape ?? null);
     return skinChanged || capeChanged;
-  }, [draftSkin, draftCapeId, isOffline, mcProfile, msSkin]);
+  }, [draftSkin, draftCapeId, isOffline, mcProfile, msSkin, availableCapes]);
+
+  const offlinePreviewDirty = useMemo(() => {
+    if (!isOffline || !previewingOfflineId) return false;
+    const active = savedSkins.find((s) => s.isEquipped);
+    return (active ? savedSkinId(active) : null) !== previewingOfflineId;
+  }, [isOffline, previewingOfflineId, savedSkins]);
+
+  const reloadCapes = useCallback(async () => {
+    if (!acc || isOffline) {
+      setAvailableCapes([]);
+      return [];
+    }
+    setCapesLoading(true);
+    try {
+      const capes = await api.getAvailableCapes(acc.uuid);
+      setAvailableCapes(capes);
+      setCapesError(null);
+      return capes;
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      setCapesError(msg);
+      return [];
+    } finally {
+      setCapesLoading(false);
+    }
+  }, [acc, isOffline]);
+
+  const reloadSkins = useCallback(async () => {
+    if (!acc) return [];
+    try {
+      const skins = await api.getAvailableSkins(acc.uuid);
+      setAllSkins(skins);
+      return skins;
+    } catch {
+      setAllSkins([]);
+      return [];
+    }
+  }, [acc]);
 
   const syncDraftFromCommitted = useCallback(() => {
-    setDraftSkin(committedSkin(msSkin));
-    setDraftCapeId(committedCapeId(mcProfile));
+    const equipped = allSkins.find((s) => s.isEquipped);
+    if (!isOffline && equipped) {
+      setDraftSkin(draftFromSkin(equipped));
+    } else {
+      setDraftSkin(committedSkin(msSkin));
+    }
+    setDraftCapeId(committedCapeId(mcProfile, availableCapes));
     setPendingPng(null);
-  }, [mcProfile, msSkin]);
-
-  useEffect(() => {
-    api.getMojangSkinCatalog().then(setCatalog).catch(() => setCatalog([]));
-  }, []);
+    const active = savedSkins.find((s) => s.isEquipped);
+    if (active?.libraryId) setPreviewingPremiumId(active.libraryId);
+  }, [allSkins, availableCapes, isOffline, mcProfile, msSkin, savedSkins]);
 
   const reload = useCallback(
     async (refresh = false) => {
       if (!acc) return;
       setLoading(true);
       try {
+        const skins = await reloadSkins();
         if (isOffline) {
           const os = await api.getOfflineSkin(acc.uuid);
           setMcProfile(null);
           setModel(toUiSkinModel(os.model));
           if (os.hasCustom && os.pngBase64) {
-            const src = os.pngBase64.startsWith("data:")
-              ? os.pngBase64
-              : `data:image/png;base64,${os.pngBase64}`;
-            setOfflinePreviewUrl(src);
+            setOfflinePreviewUrl(pngDataUrlFromBase64(os.pngBase64));
           } else {
             setOfflinePreviewUrl(null);
+          }
+          const active = skins.find((s) => s.isEquipped);
+          if (active?.libraryId) {
+            setPreviewingOfflineId(active.libraryId);
+            setModel(active.variant === "SLIM" ? "slim" : "wide");
+            if (active.texture.startsWith("data:")) {
+              setOfflinePreviewUrl(active.texture);
+            }
           }
         } else {
           const skin = await api.getAccountSkin(acc.uuid, refresh);
           let profile: McPlayerProfile | null = null;
           try {
-            profile = await api.getMinecraftProfile(acc.uuid);
+            profile = await api.getMinecraftProfile(acc.uuid, refresh);
             setProfileError(null);
           } catch (e) {
             const msg = e instanceof Error ? e.message : String(e);
@@ -145,29 +267,39 @@ export function LockerPage() {
           setMsSkin(skin);
           setMcProfile(profile);
           setModel(toUiSkinModel(skin.model));
-          const nextSkin = committedSkin(skin);
-          const nextCape = committedCapeId(profile);
-          setDraftSkin(nextSkin);
-          setDraftCapeId(nextCape);
+          const equipped = skins.find((s) => s.isEquipped);
+          if (equipped) {
+            setDraftSkin(draftFromSkin(equipped));
+            if (equipped.libraryId) setPreviewingPremiumId(equipped.libraryId);
+          } else {
+            setDraftSkin(committedSkin(skin));
+            setDraftCapeId(committedCapeId(profile, []));
+          }
         }
       } catch (e) {
         showError(e instanceof Error ? e.message : String(e));
       } finally {
         setLoading(false);
+        setInitialLoad(false);
       }
     },
-    [acc, isOffline, showError],
+    [acc, isOffline, reloadSkins, showError],
   );
 
   useEffect(() => {
-    void reload(false);
-  }, [acc?.uuid, isOffline, skinEpoch, reload]);
+    setInitialLoad(true);
+  }, [acc?.uuid, isOffline]);
 
   useEffect(() => {
-    if (!editOpen || !acc || isOffline) return;
+    void reload(false);
+    void reloadCapes();
+  }, [acc?.uuid, isOffline, skinEpoch, reload, reloadCapes]);
+
+  useEffect(() => {
+    if (!editOpen || !acc || isOffline || mcProfile) return;
     setProfileLoading(true);
     void api
-      .getMinecraftProfile(acc.uuid)
+      .getMinecraftProfile(acc.uuid, false)
       .then((profile) => {
         setMcProfile(profile);
         setProfileError(null);
@@ -177,23 +309,54 @@ export function LockerPage() {
         setProfileError(msg);
       })
       .finally(() => setProfileLoading(false));
-  }, [editOpen, acc?.uuid, isOffline]);
+  }, [editOpen, acc?.uuid, isOffline, mcProfile]);
 
-  const displaySkin = draftSkin ?? committedSkin(msSkin);
+  const previewingSavedSkin = useMemo(() => {
+    const id = isOffline ? previewingOfflineId : previewingPremiumId;
+    if (!id) return undefined;
+    return savedSkins.find((s) => savedSkinId(s) === id);
+  }, [isOffline, previewingOfflineId, previewingPremiumId, savedSkins]);
+
+  const activeSavedSkin = useMemo(
+    () => savedSkins.find((s) => s.isEquipped),
+    [savedSkins],
+  );
 
   const viewerSkinPng = useMemo(() => {
-    if (draftSkin?.pngDataUrl) return draftSkin.pngDataUrl;
+    if (!isOffline && draftSkin?.pngDataUrl) return draftSkin.pngDataUrl;
+    if (!isOffline && !dirty) {
+      const fromAccount = pngDataUrlFromAccountSkin(msSkin);
+      if (fromAccount) return fromAccount;
+      const libPng =
+        (activeSavedSkin && pngDataUrlFromSkin(activeSavedSkin)) ||
+        (previewingSavedSkin && pngDataUrlFromSkin(previewingSavedSkin)) ||
+        null;
+      if (libPng) return libPng;
+    }
+    if (isOffline && previewingSavedSkin) {
+      const png = pngDataUrlFromSkin(previewingSavedSkin);
+      if (png) return png;
+    }
     if (isOffline && offlinePreviewUrl) return offlinePreviewUrl;
-    if (!dirty) return pngDataUrlFromAccountSkin(msSkin);
     return null;
-  }, [dirty, draftSkin?.pngDataUrl, isOffline, offlinePreviewUrl, msSkin]);
+  }, [
+    activeSavedSkin,
+    dirty,
+    draftSkin?.pngDataUrl,
+    isOffline,
+    msSkin,
+    offlinePreviewUrl,
+    previewingSavedSkin,
+  ]);
 
   const draftSkinTextureKey = useMemo(() => {
     if (viewerSkinPng) return null;
-    const skin = draftSkin ?? committedSkin(msSkin);
+    if (isOffline) return null;
+    const skin = !dirty ? (committedSkin(msSkin) ?? draftSkin) : (draftSkin ?? committedSkin(msSkin));
     if (skin?.textureKey) return skin.textureKey;
-    return textureKeyFromUrl(msSkin?.textureUrl) ?? null;
-  }, [draftSkin, msSkin, viewerSkinPng]);
+    if (!dirty) return textureKeyFromUrl(msSkin?.textureUrl) ?? null;
+    return null;
+  }, [dirty, draftSkin, isOffline, msSkin, viewerSkinPng]);
 
   const draftSkinUrl = useMemo(() => {
     if (viewerSkinPng || draftSkinTextureKey) return null;
@@ -207,22 +370,33 @@ export function LockerPage() {
   }, [acc, draftSkinTextureKey, isOffline, msSkin?.textureUrl, viewerSkinPng]);
 
   const viewerModel = useMemo(() => {
-    if (isOffline) return model === "slim" ? "slim" : "classic";
+    if (isOffline) {
+      const variant = previewingSavedSkin?.variant ?? activeSavedSkin?.variant;
+      if (variant) return skinToUiModel(variant);
+      return model === "slim" ? "slim" : "classic";
+    }
+    if (!dirty && msSkin) {
+      return msSkin.model === "slim" ? "slim" : "classic";
+    }
     const variant = (draftSkin ?? committedSkin(msSkin))?.variant;
     return variant === "slim" ? "slim" : "classic";
-  }, [draftSkin, isOffline, model, msSkin]);
+  }, [activeSavedSkin?.variant, dirty, draftSkin, isOffline, model, msSkin, previewingSavedSkin?.variant]);
 
   const draftCapeUrl = useMemo(() => {
-    if (!draftCapeId || !mcProfile) return null;
-    const cape = mcProfile.capes.find((c) => c.id === draftCapeId);
-    return cape ? normalizeTextureUrl(cape.url) : null;
-  }, [draftCapeId, mcProfile]);
+    if (!draftCapeId) return null;
+    const fromProfile = mcProfile?.capes.find((c) => c.id === draftCapeId);
+    if (fromProfile) return normalizeTextureUrl(fromProfile.url);
+    const fromList = availableCapes.find((c) => c.id === draftCapeId);
+    if (fromList) return normalizeTextureUrl(fromList.texture);
+    return null;
+  }, [availableCapes, draftCapeId, mcProfile]);
 
   async function onPremiumUpload(file: File) {
     if (!acc || isOffline) return;
     const buf = new Uint8Array(await file.arrayBuffer());
     const url = URL.createObjectURL(new Blob([buf], { type: "image/png" }));
     setPendingPng(buf);
+    setPreviewingPremiumId(null);
     setDraftSkin({
       name: file.name.replace(/\.png$/i, "") || "Własny",
       variant: model === "slim" ? "slim" : "classic",
@@ -230,28 +404,45 @@ export function LockerPage() {
     });
   }
 
-  function queueOfflineUpload(buf: Uint8Array) {
+  function queueUpload(buf: Uint8Array, forPremium: boolean) {
     const previewUrl = URL.createObjectURL(new Blob([buf], { type: "image/png" }));
-    setUploadModel(toApiSkinModel(model));
-    setUploadPending({ buf, previewUrl });
+    setUploadModel(forPremium ? toApiSkinModel(model) : toApiSkinModel(model));
+    setUploadName("");
+    setUploadPending({ buf, previewUrl, forPremium });
   }
 
-  function cancelOfflineUpload() {
+  function cancelUpload() {
     if (uploadPending?.previewUrl) URL.revokeObjectURL(uploadPending.previewUrl);
     setUploadPending(null);
+    setUploadName("");
   }
 
-  async function confirmOfflineUpload() {
-    if (!acc || !isOffline || !uploadPending) return;
+  async function confirmUpload() {
+    if (!acc || !uploadPending) return;
     setLoading(true);
     try {
-      await api.saveOfflineSkin(acc.uuid, [...uploadPending.buf], uploadModel);
-      setModel(uploadModel === "slim" ? "slim" : "wide");
-      cancelOfflineUpload();
-      bump();
-      clearAccountAvatarCache();
-      await reload(false);
-      showOk("Zapisano skin.");
+      const variant = uiModelToSkinVariant(uploadModel);
+      const skin: Skin = {
+        textureKey: `local-pending-${Date.now()}`,
+        name: uploadName.trim() || "Własny skin",
+        variant,
+        texture: uploadPending.previewUrl,
+        source: "custom",
+        isEquipped: false,
+      };
+      await api.saveCustomSkin(acc.uuid, skin, uploadModel, {
+        png: [...uploadPending.buf],
+        capeId: uploadPending.forPremium ? draftCapeId : null,
+        replaceTexture: true,
+      });
+      await reloadSkins();
+      if (uploadPending.forPremium) {
+        showOk("Zapisano skin w bibliotece.");
+      } else {
+        await reload(false);
+        showOk("Dodano skin do biblioteki.");
+      }
+      cancelUpload();
     } catch (e) {
       showError(e instanceof Error ? e.message : String(e));
     } finally {
@@ -260,9 +451,108 @@ export function LockerPage() {
   }
 
   async function onUpload(file: File) {
-    if (!acc || !isOffline) return;
+    if (!acc) return;
     const buf = new Uint8Array(await file.arrayBuffer());
-    queueOfflineUpload(buf);
+    queueUpload(buf, false);
+  }
+
+  function previewSavedSkin(skin: Skin, fromSave = false) {
+    const id = savedSkinId(skin);
+    if (isOffline) {
+      setPreviewingOfflineId(id);
+      setModel(skinToUiModel(skin.variant) === "slim" ? "slim" : "wide");
+      const png = pngDataUrlFromSkin(skin);
+      if (png) setOfflinePreviewUrl(png);
+      return;
+    }
+    setPreviewingPremiumId(id);
+    setDraftSkin(draftFromSkin(skin));
+    setPendingPng(null);
+    if (skin.capeId) setDraftCapeId(skin.capeId);
+    if (fromSave && skin.texture.startsWith("data:image/png;base64,")) {
+      const b64 = skin.texture.replace(/^data:image\/png;base64,/, "");
+      try {
+        setPendingPng(Uint8Array.from(atob(b64), (c) => c.charCodeAt(0)));
+      } catch {
+        /* preview only */
+      }
+    }
+  }
+
+  function isSavedSkinSelected(skin: Skin): boolean {
+    const id = savedSkinId(skin);
+    if (isOffline) {
+      if (offlinePreviewDirty) return previewingOfflineId === id;
+      return skin.isEquipped;
+    }
+    if (dirty) {
+      const draftId = draftSkin?.libraryId ?? draftSkin?.textureKey;
+      if (draftId) return draftId === id;
+      return draftSkin?.textureKey === skin.textureKey;
+    }
+    return skin.isEquipped;
+  }
+
+  function isSavedSkinPreviewing(skin: Skin): boolean {
+    const id = savedSkinId(skin);
+    if (isOffline) return offlinePreviewDirty && previewingOfflineId === id;
+    return dirty && previewingPremiumId === id;
+  }
+
+  function canDeleteSavedSkin(skin: Skin): boolean {
+    return skin.source === "custom" && Boolean(skin.libraryId);
+  }
+
+  function previewPremiumLibraryEntry(entry: SkinLibraryEntry, fromSave = false) {
+    const skin = savedSkins.find((s) => savedSkinId(s) === entry.id);
+    if (skin) previewSavedSkin(skin, fromSave);
+  }
+
+  async function equipOfflinePreview() {
+    if (!acc || !previewingOfflineId) return;
+    const skin = savedSkins.find((s) => savedSkinId(s) === previewingOfflineId);
+    if (!skin) return;
+    setLoading(true);
+    try {
+      await api.equipSkin(acc.uuid, { ...skin, capeId: undefined });
+      bump();
+      clearAccountAvatarCache();
+      await reload(false);
+      showOk("Założono skin.");
+    } catch (e) {
+      showError(e instanceof Error ? e.message : String(e));
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function deleteSavedSkin(skin: Skin) {
+    if (!acc || !canDeleteSavedSkin(skin)) return;
+    const id = savedSkinId(skin);
+    if (
+      !(await confirmDialog(`Usunąć „${skin.name ?? "skin"}" z biblioteki?`, {
+        title: "Usuń skin",
+        confirmLabel: "Usuń",
+        danger: true,
+      }))
+    )
+      return;
+    setLoading(true);
+    try {
+      await api.removeCustomSkin(acc.uuid, skin);
+      if (isOffline) {
+        if (previewingOfflineId === id) setPreviewingOfflineId(null);
+        await reload(false);
+      } else {
+        if (previewingPremiumId === id) syncDraftFromCommitted();
+        await reloadSkins();
+      }
+      showOk("Usunięto skin z biblioteki.");
+    } catch (e) {
+      showError(e instanceof Error ? e.message : String(e));
+    } finally {
+      setLoading(false);
+    }
   }
 
   function onCatalogPick(item: CatalogSkin) {
@@ -285,6 +575,7 @@ export function LockerPage() {
       }
       return;
     }
+    setPreviewingPremiumId(null);
     setDraftSkin({
       textureKey: item.textureKey,
       variant: item.variant,
@@ -293,36 +584,87 @@ export function LockerPage() {
     setPendingPng(null);
   }
 
-  async function commitChanges() {
+  async function saveDraftToLibrary() {
     if (!acc || isOffline || !draftSkin) return;
     setLoading(true);
     try {
-      if (pendingPng) {
-        const profile = await api.uploadMojangSkin(
-          acc.uuid,
-          [...pendingPng],
-          draftSkin.variant,
-        );
-        setMcProfile(profile);
-        setPendingPng(null);
-      } else if (draftSkin.textureKey) {
-        const profile = await api.equipMojangSkin(
-          acc.uuid,
-          draftSkin.textureKey,
-          draftSkin.variant,
-        );
-        setMcProfile(profile);
-      } else {
-        showError("Brak skina do zapisania.");
+      const skin: Skin = {
+        textureKey: draftSkin.textureKey ?? `local-${Date.now()}`,
+        name: draftSkin.name || "Profil",
+        variant: uiModelToSkinVariant(draftSkin.variant),
+        capeId: draftCapeId ?? undefined,
+        texture: draftSkin.pngDataUrl ?? `https://textures.minecraft.net/texture/${draftSkin.textureKey}`,
+        source: "custom",
+        isEquipped: false,
+        libraryId: draftSkin.libraryId,
+      };
+      const entry = await api.saveCustomSkin(acc.uuid, skin, draftSkin.variant, {
+        capeId: draftCapeId,
+        png: pendingPng ? [...pendingPng] : null,
+        replaceTexture: true,
+      });
+      await reloadSkins();
+      previewPremiumLibraryEntry(entry, true);
+      showOk("Zapisano profil w bibliotece.");
+    } catch (e) {
+      showError(e instanceof Error ? e.message : String(e));
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function commitChanges() {
+    if (!acc || isOffline || !draftSkin) return;
+    const baseSkin = committedSkin(msSkin);
+    const baseCape = committedCapeId(mcProfile, availableCapes);
+    const skinChanged = !draftSkinsEqual(draftSkin, baseSkin) || Boolean(pendingPng);
+    const capeChanged = (draftCapeId ?? null) !== (baseCape ?? null);
+    if (!skinChanged && !capeChanged) return;
+
+    setLoading(true);
+    try {
+      if (!skinChanged && capeChanged) {
+        const profile = await api.setMinecraftCape(acc.uuid, draftCapeId);
+        if (profile) setMcProfile(profile);
+        await reloadCapes();
+        bump();
+        clearAccountAvatarCache();
+        setEditOpen(false);
+        showOk("Zastosowano pelerynę na koncie Mojang.");
         return;
       }
-      const updated = await api.setMinecraftCape(acc.uuid, draftCapeId);
-      setMcProfile(updated);
+
+      const skin: Skin = {
+        textureKey: draftSkin.textureKey ?? `local-${Date.now()}`,
+        name: draftSkin.name,
+        variant: uiModelToSkinVariant(draftSkin.variant),
+        capeId: draftCapeId ?? undefined,
+        texture:
+          draftSkin.pngDataUrl ??
+          (draftSkin.textureKey
+            ? `https://textures.minecraft.net/texture/${draftSkin.textureKey}`
+            : ""),
+        source: draftSkin.libraryId ? "custom" : draftSkin.textureKey ? "default" : "custom_external",
+        isEquipped: true,
+        libraryId: draftSkin.libraryId,
+      };
+      const profile = await api.equipSkin(
+        acc.uuid,
+        skin,
+        pendingPng ? [...pendingPng] : null,
+      );
+      if (profile) setMcProfile(profile);
+      setPendingPng(null);
       bump();
       clearAccountAvatarCache();
-      await reload(true);
+      await reload(false);
+      await reloadCapes();
       setEditOpen(false);
-      showOk("Zapisano skin i pelerynę.");
+      showOk(
+        capeChanged
+          ? "Zastosowano skin i pelerynę na koncie Mojang."
+          : "Zastosowano skin na koncie Mojang.",
+      );
     } catch (e) {
       showError(e instanceof Error ? e.message : String(e));
     } finally {
@@ -347,212 +689,177 @@ export function LockerPage() {
     );
   }
 
-  return (
-    <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
-      <div className="flex min-h-0 flex-1 overflow-hidden">
-        <aside className="flex min-h-0 w-[min(100%,320px)] shrink-0 flex-col border-r border-line bg-raised/40 p-5">
-          <span className="mx-auto rounded-lg bg-black/40 px-3 py-1 text-xs font-semibold">
-            {acc.name}
-          </span>
-          <SkinViewer3D
-            large
-            className="mt-4 min-h-0 flex-1"
-            skinPngDataUrl={viewerSkinPng}
-            skinUrl={draftSkinUrl}
-            skinTextureKey={draftSkinTextureKey}
-            capeUrl={isOffline ? null : draftCapeUrl}
-            model={viewerModel}
-          />
-          <button
-            type="button"
-            onClick={() => setEditOpen(true)}
-            className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl border border-line bg-raised2 py-2.5 text-sm font-semibold hover:bg-white/6"
-          >
-            <Pencil size={15} />
-            Edytuj skin
-          </button>
-        </aside>
-
-        <div className="min-w-0 flex-1 overflow-y-auto p-6">
-          <h1 className="text-2xl font-extrabold tracking-tight">Wybór skina</h1>
-          <p className="mt-1 text-sm text-mute">
-            {isOffline
-              ? pl.accounts.nonPremium
-              : `${pl.accounts.premium} — kliknij skin, potem zatwierdź zmiany`}
-          </p>
-
-          {!isOffline && (
-            <section className="mt-8">
-              <p className="text-sm font-semibold text-mute">Saved skins</p>
-              <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-                <label className="flex aspect-[3/4] cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-line bg-raised2/50 text-center text-xs text-mute hover:border-accent/40">
-                  <Plus size={22} className="mb-2 text-ink" />
-                  Dodaj skin
-                  <input
-                    type="file"
-                    accept="image/png"
-                    className="hidden"
-                    onChange={(e) => {
-                      const f = e.target.files?.[0];
-                      if (f) void onPremiumUpload(f);
-                    }}
-                  />
-                </label>
-                <button
-                  type="button"
-                  onClick={() => syncDraftFromCommitted()}
-                  className={clsx(
-                    "relative aspect-[3/4] overflow-hidden rounded-2xl border bg-raised2 transition hover:border-accent/40",
-                    !dirty &&
-                      draftSkinsEqual(displaySkin, committedSkin(msSkin))
-                      ? "border-good ring-2 ring-good/40"
-                      : "border-line",
-                  )}
-                >
-                  {displaySkin?.pngDataUrl ? (
-                    <img
-                      src={displaySkin.pngDataUrl}
-                      alt=""
-                      className="h-full w-full object-contain p-2 [image-rendering:pixelated]"
-                    />
-                  ) : displaySkin?.textureKey ? (
-                    <SkinThumbnail
-                      textureKey={displaySkin.textureKey}
-                      variant={displaySkin.variant === "slim" ? "slim" : "classic"}
-                      alt="Aktywny"
-                    />
-                  ) : (
-                    <div className="grid h-full place-items-center text-xs text-mute">Aktywny</div>
-                  )}
-                  <span className="absolute bottom-2 left-2 rounded-md bg-black/60 px-2 py-0.5 text-[10px]">
-                    Aktywny
-                  </span>
-                </button>
-              </div>
-            </section>
-          )}
-
-          {isOffline && (
-            <section className="mt-8">
-              <p className="text-sm font-semibold text-mute">Własne skiny</p>
-              <div className="mt-2 flex flex-wrap gap-4 text-sm text-mute">
-                <span>Model przy uploadzie:</span>
-                <label className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    name="offline-arm"
-                    checked={model === "wide"}
-                    onChange={() => setModel("wide")}
-                  />
-                  Steve (szerokie)
-                </label>
-                <label className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    name="offline-arm"
-                    checked={model === "slim"}
-                    onChange={() => setModel("slim")}
-                  />
-                  Alex (smukłe)
-                </label>
-              </div>
-              <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-                <label className="flex aspect-[3/4] cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-line bg-raised2/50 text-center text-xs text-mute hover:border-accent/40">
-                  <Plus size={22} className="mb-2 text-ink" />
-                  Dodaj skin
-                  <input
-                    type="file"
-                    accept="image/png"
-                    className="hidden"
-                    onChange={(e) => {
-                      const f = e.target.files?.[0];
-                      if (f) void onUpload(f);
-                    }}
-                  />
-                </label>
-              </div>
-            </section>
-          )}
-
-          {catalog.map((group) => (
-            <section key={group.id} className="mt-8">
-              <button
-                type="button"
-                className="flex w-full items-center gap-2 text-left text-sm font-semibold text-mute"
-                onClick={() => toggleGroup(group.id)}
-              >
-                <ChevronDown
-                  size={16}
-                  className={clsx("transition", collapsed[group.id] && "-rotate-90")}
-                />
-                {group.title}
-              </button>
-              {!collapsed[group.id] && (
-                <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-                  {group.skins.map((item) => {
-                    const selected =
-                      !draftSkin?.pngDataUrl &&
-                      draftSkin?.textureKey === item.textureKey &&
-                      draftSkin.variant === item.variant;
-                    return (
-                      <button
-                        key={`${item.textureKey}-${item.variant}`}
-                        type="button"
-                        disabled={loading}
-                        onClick={() => onCatalogPick(item)}
-                        className={clsx(
-                          "group relative aspect-[3/4] overflow-hidden rounded-2xl border bg-raised2 transition hover:border-accent/40 disabled:opacity-60",
-                          selected ? "border-good ring-2 ring-good/40" : "border-line",
-                        )}
-                      >
-                        <SkinThumbnail
-                          textureKey={item.textureKey}
-                          variant={item.variant === "slim" ? "slim" : "classic"}
-                          alt={item.name}
-                        />
-                        <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-2 py-2 text-left text-[10px] font-medium">
-                          {item.name}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-            </section>
-          ))}
+  if (initialLoad) {
+    return (
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+        <div className="min-h-0 flex-1 overflow-y-auto p-4">
+          <LockerLoadingScreen accountName={acc.name} />
         </div>
       </div>
+    );
+  }
 
-      {!isOffline && dirty && (
-        <div className="flex shrink-0 items-center justify-end gap-2 border-t border-line bg-raised/95 px-5 py-3 backdrop-blur-sm">
-          <button
-            type="button"
-            disabled={loading}
-            onClick={cancelDraft}
-            className="inline-flex items-center gap-2 rounded-xl border border-line px-4 py-2 text-sm text-mute hover:bg-white/5 disabled:opacity-50"
-          >
-            <X size={15} />
-            Anuluj
-          </button>
-          <button
-            type="button"
-            disabled={loading || !draftSkin}
-            onClick={() => void commitChanges()}
-            className="inline-flex items-center gap-2 rounded-xl bg-good px-4 py-2 text-sm font-semibold text-black disabled:opacity-50"
-          >
-            <Save size={15} />
-            Zapisz skin
-          </button>
+  return (
+    <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+      <div className="min-h-0 flex-1 overflow-y-auto p-4">
+        <div className="locker-layout mx-auto max-w-[1400px]">
+          <div className="sticky top-4 self-start">
+            <h1 className="m-0 text-2xl font-bold">Wybór skina</h1>
+            <p className="mt-1 text-sm text-mute">
+              {isOffline ? pl.locker.offlineHint : pl.locker.premiumHint}
+            </p>
+            <div className="mt-4">
+              <SkinPreviewPanel
+                nametag={acc.name}
+                skinPngDataUrl={viewerSkinPng}
+                skinUrl={draftSkinUrl}
+                skinTextureKey={draftSkinTextureKey}
+                capeUrl={isOffline ? null : draftCapeUrl}
+                model={viewerModel}
+                previewing={!isOffline ? dirty : offlinePreviewDirty}
+                dirty={!isOffline ? dirty : offlinePreviewDirty}
+                loading={loading}
+                onApply={() => {
+                  if (isOffline) void equipOfflinePreview();
+                  else void commitChanges();
+                }}
+                onReset={() => {
+                  if (isOffline) {
+                    const active = savedSkins.find((s) => s.isEquipped);
+                    if (active) previewSavedSkin(active);
+                    else void reload(false);
+                  } else {
+                    cancelDraft();
+                  }
+                }}
+                onSaveToLibrary={!isOffline && dirty ? () => void saveDraftToLibrary() : undefined}
+                onEdit={() => setEditOpen(true)}
+                editDisabled={loading}
+                showCapes={!isOffline}
+                availableCapes={availableCapes}
+                draftCapeId={draftCapeId}
+                onDraftCapeChange={setDraftCapeId}
+                capesLoading={capesLoading}
+                capesError={capesError}
+              />
+            </div>
+          </div>
+
+          <div className="min-w-0 pt-2">
+            <section className="mb-8">
+              <h2 className="mb-3 flex items-center gap-2 text-base font-semibold text-ink">
+                {pl.locker.savedSkins}
+              </h2>
+              <LockerSkinGrid>
+                {(cardHeight) => (
+                  <>
+                    <div style={{ height: cardHeight }}>
+                      <SkinAddCard
+                        disabled={loading}
+                        onFile={(f) => {
+                          void (async () => {
+                            const buf = new Uint8Array(await f.arrayBuffer());
+                            if (isOffline) queueUpload(buf, false);
+                            else queueUpload(buf, true);
+                          })();
+                        }}
+                      />
+                    </div>
+                    {savedSkins.map((skin) => {
+                      const props = skinTextureProps(skin);
+                      return (
+                        <div
+                          key={skinIdentity(skin)}
+                          className="group relative"
+                          style={{ height: cardHeight }}
+                        >
+                          <SkinGridButton
+                            selected={isSavedSkinSelected(skin)}
+                            active={skin.isEquipped}
+                            previewing={isSavedSkinPreviewing(skin)}
+                            disabled={loading}
+                            alt={props.alt}
+                            variant={props.variant}
+                            skinPngDataUrl={props.skinPngDataUrl}
+                            textureKey={props.textureKey}
+                            onClick={() => previewSavedSkin(skin)}
+                          />
+                          {canDeleteSavedSkin(skin) && (
+                            <button
+                              type="button"
+                              disabled={loading}
+                              title="Usuń z biblioteki"
+                              onClick={() => void deleteSavedSkin(skin)}
+                              className="absolute right-2 top-2 z-30 grid h-7 w-7 place-items-center rounded-lg bg-black/70 text-mute opacity-0 transition hover:bg-bad/80 hover:text-white group-hover:opacity-100 disabled:opacity-40"
+                            >
+                              <Trash2 size={13} />
+                            </button>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </>
+                )}
+              </LockerSkinGrid>
+            </section>
+
+            {displayCatalog.map((group) => (
+              <section key={group.id} className="mb-8">
+                <button
+                  type="button"
+                  className="mb-3 flex w-full items-center gap-2 text-left text-base font-semibold text-ink"
+                  onClick={() => toggleGroup(group.id)}
+                >
+                  <ChevronDown
+                    size={18}
+                    className={clsx("text-mute transition", collapsed[group.id] && "-rotate-90")}
+                  />
+                  {group.title}
+                </button>
+                {!collapsed[group.id] && (
+                  <LockerSkinGrid>
+                    {(cardHeight) =>
+                      group.skins.map((item) => {
+                        const selected =
+                          !isOffline &&
+                          !draftSkin?.pngDataUrl &&
+                          draftSkin?.textureKey === item.textureKey &&
+                          draftSkin.variant === item.variant;
+                        return (
+                          <div
+                            key={`${item.textureKey}-${item.variant}`}
+                            style={{ height: cardHeight }}
+                          >
+                            <SkinGridButton
+                              selected={selected}
+                              active={selected}
+                              disabled={loading}
+                              alt={item.name}
+                              variant={item.variant === "slim" ? "slim" : "classic"}
+                              textureKey={item.textureKey}
+                              onClick={() => onCatalogPick(item)}
+                            />
+                          </div>
+                        );
+                      })
+                    }
+                  </LockerSkinGrid>
+                )}
+              </section>
+            ))}
+          </div>
         </div>
-      )}
+      </div>
 
       <SkinUploadDialog
         open={uploadPending !== null}
         previewUrl={uploadPending?.previewUrl ?? null}
         model={uploadModel}
+        name={uploadName}
+        onNameChange={setUploadName}
         onModelChange={setUploadModel}
-        onConfirm={() => void confirmOfflineUpload()}
-        onCancel={cancelOfflineUpload}
+        onConfirm={() => void confirmUpload()}
+        onCancel={cancelUpload}
         busy={loading}
       />
 
@@ -566,8 +873,9 @@ export function LockerPage() {
         capeUrl={draftCapeUrl}
         viewerModel={viewerModel}
         draftCapeId={draftCapeId}
-        profileError={profileError}
-        profileLoading={profileLoading}
+        profileError={profileError ?? capesError}
+        profileLoading={profileLoading || capesLoading}
+        availableCapes={availableCapes}
         model={model}
         dirty={dirty}
         onModelChange={setModel}
@@ -588,6 +896,7 @@ export function LockerPage() {
         onPremiumUpload={(f) => void onPremiumUpload(f)}
         onRefreshPremium={async () => {
           await reload(true);
+          await reloadCapes();
           bump();
           clearAccountAvatarCache();
         }}

@@ -1,6 +1,6 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState } from "react";
 import { openUrl } from "@tauri-apps/plugin-opener";
-import { FolderOpen, RefreshCw, ExternalLink, ChevronDown } from "lucide-react";
+import { FolderOpen, RefreshCw, ExternalLink } from "lucide-react";
 import { useApp } from "../stores/appStore";
 import { api } from "../lib/api";
 import { formatRam } from "../lib/format";
@@ -18,27 +18,9 @@ import {
 import { Card } from "../components/ui/Card";
 import { SectionHeader } from "../components/ui/SectionHeader";
 import { Button } from "../components/ui/Button";
+import { ToggleField } from "../components/ui/Checkbox";
+import { RangeSlider } from "../components/ui/RangeSlider";
 import type { JavaRuntime, Settings } from "../types";
-
-function SettingRow({
-  label,
-  hint,
-  children,
-}: {
-  label: string;
-  hint?: string;
-  children: ReactNode;
-}) {
-  return (
-    <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-      <div>
-        <p className="text-[13px] text-ink">{label}</p>
-        {hint ? <p className="text-xs text-mute">{hint}</p> : null}
-      </div>
-      <div className="shrink-0">{children}</div>
-    </div>
-  );
-}
 
 function ChannelBadge({ channel }: { channel: string }) {
   const label = formatChannel(channel);
@@ -63,7 +45,6 @@ export function SettingsPage() {
   const [updateStatus, setUpdateStatus] = useState<UpdateStatus>({ state: "idle" });
   const [javaRuntimes, setJavaRuntimes] = useState<JavaRuntime[]>([]);
   const [javaLoading, setJavaLoading] = useState(false);
-  const [advancedOpen, setAdvancedOpen] = useState(false);
 
   useEffect(() => {
     void api.scanJava().then((j) => setJavaRuntimes(j.runtimes)).catch(() => {});
@@ -219,14 +200,11 @@ export function SettingsPage() {
           </Button>
         </div>
 
-        <label className="flex items-center gap-2 text-[13px]">
-          <input
-            type="checkbox"
-            checked={settings.autoCheckUpdates !== false}
-            onChange={(e) => void save({ autoCheckUpdates: e.target.checked })}
-          />
-          Sprawdzaj przy starcie launchera
-        </label>
+        <ToggleField
+          label="Sprawdzaj przy starcie launchera"
+          checked={settings.autoCheckUpdates !== false}
+          onChange={(checked) => void save({ autoCheckUpdates: checked })}
+        />
 
         {updateStatus.state === "current" || updateStatus.state === "noReleases" ? (
           <p className="text-xs text-mute">{updateStatusMessage(updateStatus)}</p>
@@ -317,14 +295,22 @@ export function SettingsPage() {
               {formatRam(settings.memoryMaxMb)}
             </span>
           </div>
-          <input
-            type="range"
+          <RangeSlider
             min={1024}
             max={32768}
             step={256}
-            className="mt-2 w-full"
+            className="mt-2"
             value={settings.memoryMaxMb}
-            onChange={(e) => void save({ memoryMaxMb: Number(e.target.value) })}
+            onChange={(value) => void save({ memoryMaxMb: value })}
+          />
+        </div>
+
+        <div className="border-t border-line pt-4">
+          <ToggleField
+            label="Wiele instancji gry"
+            hint="Pozwól uruchomić kilka klientów Minecraft na tym samym profilu i koncie. Współdzielony jest folder zapisu (światy, options.txt)."
+            checked={settings.allowMultipleInstances !== false}
+            onChange={(checked) => void save({ allowMultipleInstances: checked })}
           />
         </div>
 
@@ -371,36 +357,31 @@ export function SettingsPage() {
         </div>
       </Card>
 
-      <Card className="mt-4 space-y-3">
+      <Card className="mt-4 space-y-4">
         <h2 className="text-sm font-semibold">Launcher</h2>
-        <SettingRow label="Ukryj po starcie gry" hint="Zminimalizuj okno po uruchomieniu Minecrafta.">
-          <input
-            type="checkbox"
-            checked={Boolean(settings.closeOnLaunch)}
-            onChange={(e) => void save({ closeOnLaunch: e.target.checked })}
-          />
-        </SettingRow>
-        <SettingRow label="Zasobnik systemowy" hint="Zamknięcie okna chowa launcher do tray.">
-          <input
-            type="checkbox"
-            checked={settings.hideToTray !== false}
-            onChange={(e) => void save({ hideToTray: e.target.checked })}
-          />
-        </SettingRow>
-        <SettingRow label="Discord Rich Presence">
-          <input
-            type="checkbox"
-            checked={settings.discordRpc !== false}
-            onChange={(e) => void save({ discordRpc: e.target.checked })}
-          />
-        </SettingRow>
-        <SettingRow label="Wersje snapshot" hint="Pokaż wersje rozwojowe Minecrafta.">
-          <input
-            type="checkbox"
-            checked={Boolean(settings.showSnapshots)}
-            onChange={(e) => void save({ showSnapshots: e.target.checked })}
-          />
-        </SettingRow>
+        <ToggleField
+          label="Ukryj po starcie gry"
+          hint="Zminimalizuj okno po uruchomieniu Minecrafta."
+          checked={Boolean(settings.closeOnLaunch)}
+          onChange={(checked) => void save({ closeOnLaunch: checked })}
+        />
+        <ToggleField
+          label="Zasobnik systemowy"
+          hint="Zamknięcie okna chowa launcher do tray."
+          checked={settings.hideToTray !== false}
+          onChange={(checked) => void save({ hideToTray: checked })}
+        />
+        <ToggleField
+          label="Discord Rich Presence"
+          checked={settings.discordRpc !== false}
+          onChange={(checked) => void save({ discordRpc: checked })}
+        />
+        <ToggleField
+          label="Wersje snapshot"
+          hint="Pokaż wersje rozwojowe Minecrafta."
+          checked={Boolean(settings.showSnapshots)}
+          onChange={(checked) => void save({ showSnapshots: checked })}
+        />
       </Card>
 
       <Card className="mt-4 space-y-3">
@@ -414,46 +395,6 @@ export function SettingsPage() {
           <FolderOpen className="size-3.5" />
           Otwórz folder danych
         </Button>
-      </Card>
-
-      <Card className="mt-4">
-        <button
-          type="button"
-          className="flex w-full items-center justify-between text-left"
-          onClick={() => setAdvancedOpen((v) => !v)}
-        >
-          <h2 className="text-sm font-semibold">Zaawansowane</h2>
-          <ChevronDown
-            className={`size-4 text-mute transition ${advancedOpen ? "rotate-180" : ""}`}
-          />
-        </button>
-        {advancedOpen ? (
-          <div className="mt-4 space-y-4 border-t border-line pt-4">
-            <div>
-              <label className="text-xs text-mute">Równoległe pobierania</label>
-              <input
-                type="number"
-                min={1}
-                max={32}
-                className="mt-1 w-full rounded-lg bg-raised2 px-3 py-2 text-[13px] ring-1 ring-line"
-                value={settings.maxConcurrentDownloads ?? 10}
-                onChange={(e) =>
-                  void save({ maxConcurrentDownloads: Number(e.target.value) })
-                }
-              />
-            </div>
-            <div>
-              <label className="text-xs text-mute">URL serwera skinów Octra (opcjonalnie)</label>
-              <input
-                type="text"
-                className="mt-1 w-full rounded-lg bg-raised2 px-3 py-2 font-mono text-xs ring-1 ring-line"
-                placeholder="http://192.168.x.x:port"
-                value={settings.skinsUrl ?? ""}
-                onChange={(e) => void save({ skinsUrl: e.target.value })}
-              />
-            </div>
-          </div>
-        ) : null}
       </Card>
     </div>
   );

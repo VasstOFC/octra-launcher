@@ -591,6 +591,142 @@ pub fn reset_offline_skin(state: State<'_, AppState>, uuid: String) -> Result<()
 }
 
 #[tauri::command]
+pub fn list_offline_skin_library(uuid: String) -> Result<Vec<crate::skin_library::SkinLibraryEntryView>> {
+    let (_, dirs) = ctx()?;
+    crate::skin_library::list_offline_library(&dirs, &uuid)
+}
+
+#[tauri::command]
+pub fn add_offline_skin_library_entry(
+    uuid: String,
+    png: Vec<u8>,
+    model: String,
+    name: String,
+) -> Result<crate::skin_library::SkinLibraryEntryView> {
+    let (_, dirs) = ctx()?;
+    crate::skin_library::add_offline_library_entry(&dirs, &uuid, &png, &model, &name)
+}
+
+use base64::Engine as _;
+
+#[tauri::command]
+pub async fn equip_offline_skin_library_entry(
+    state: State<'_, AppState>,
+    uuid: String,
+    entry_id: String,
+) -> Result<crate::skins::OfflineSkin> {
+    let (_, dirs) = ctx()?;
+    let info = crate::skin_library::equip_offline_library_entry(&dirs, &uuid, &entry_id)?;
+    if let Some(bytes) = info
+        .png_base64
+        .as_ref()
+        .and_then(|b| base64::engine::general_purpose::STANDARD.decode(b).ok())
+    {
+        let hash = crate::skins::sha256_hex(&bytes);
+        state.skins.put_texture(hash, bytes.clone());
+        state.skins.reindex(&dirs);
+        state.skins.notify_lan();
+        let name = auth::load_accounts(&dirs)
+            .ok()
+            .and_then(|f| f.accounts.into_iter().find(|a| a.uuid == uuid))
+            .map(|a| a.name)
+            .unwrap_or_default();
+        crate::yggdrasil::push_registry(&state.http, &uuid, &bytes, &info.model, &name).await;
+        if let Ok(instances) = crate::instances::list(&dirs) {
+            for inst in instances {
+                let game_dir = dirs.game_dir(&inst.id);
+                if game_dir.exists() {
+                    let _ = crate::skin_loader::sync_username_skin_files(&game_dir, &dirs);
+                }
+            }
+        }
+    }
+    Ok(info)
+}
+
+#[tauri::command]
+pub fn delete_offline_skin_library_entry(uuid: String, entry_id: String) -> Result<()> {
+    let (_, dirs) = ctx()?;
+    crate::skin_library::delete_offline_library_entry(&dirs, &uuid, &entry_id)
+}
+
+#[tauri::command]
+pub fn set_offline_skin_library_model(
+    uuid: String,
+    entry_id: String,
+    model: String,
+) -> Result<crate::skin_library::SkinLibraryEntryView> {
+    let (_, dirs) = ctx()?;
+    crate::skin_library::set_offline_library_entry_model(&dirs, &uuid, &entry_id, &model)
+}
+
+#[tauri::command]
+pub fn list_premium_skin_library(uuid: String) -> Result<Vec<crate::skin_library::SkinLibraryEntryView>> {
+    let (_, dirs) = ctx()?;
+    crate::skin_library::list_premium_library(&dirs, &uuid)
+}
+
+#[tauri::command]
+pub fn save_premium_skin_library_entry(
+    uuid: String,
+    req: crate::skin_library::SavePremiumLibraryReq,
+) -> Result<crate::skin_library::SkinLibraryEntryView> {
+    let (_, dirs) = ctx()?;
+    crate::skin_library::save_premium_library_entry(&dirs, &uuid, req)
+}
+
+#[tauri::command]
+pub fn delete_premium_skin_library_entry(uuid: String, entry_id: String) -> Result<()> {
+    let (_, dirs) = ctx()?;
+    crate::skin_library::delete_premium_library_entry(&dirs, &uuid, &entry_id)
+}
+
+#[tauri::command]
+pub fn sync_premium_skin_library_active(
+    uuid: String,
+    texture_key: Option<String>,
+    variant: String,
+    png: Option<Vec<u8>>,
+) -> Result<Vec<crate::skin_library::SkinLibraryEntryView>> {
+    let (_, dirs) = ctx()?;
+    crate::skin_library::sync_premium_library_active(
+        &dirs,
+        &uuid,
+        texture_key.as_deref(),
+        &variant,
+        png.as_deref(),
+    )
+}
+
+#[tauri::command]
+pub fn set_premium_skin_library_active(
+    uuid: String,
+    entry_id: String,
+) -> Result<Vec<crate::skin_library::SkinLibraryEntryView>> {
+    let (_, dirs) = ctx()?;
+    crate::skin_library::set_premium_library_active(&dirs, &uuid, &entry_id)
+}
+
+#[tauri::command]
+pub fn find_premium_skin_library_duplicate(
+    uuid: String,
+    texture_key: Option<String>,
+    variant: String,
+    cape_id: Option<String>,
+    png: Option<Vec<u8>>,
+) -> Result<Option<crate::skin_library::SkinLibraryEntryView>> {
+    let (_, dirs) = ctx()?;
+    Ok(crate::skin_library::find_premium_library_duplicate(
+        &dirs,
+        &uuid,
+        texture_key.as_deref(),
+        &variant,
+        cape_id.as_deref(),
+        png.as_deref(),
+    ))
+}
+
+#[tauri::command]
 pub async fn start_login(app: AppHandle, state: State<'_, AppState>) -> Result<DeviceCode> {
     let (settings, _) = ctx()?;
     let client_id = settings.azure_client_id();
@@ -788,12 +924,23 @@ pub async fn launch_instance(app: AppHandle, state: State<'_, AppState>, id: Str
     let (settings, dirs) = ctx()?;
     let account = auth::active_account(&dirs)?
         .ok_or_else(|| Error::msg("Dodaj konto (Microsoft albo offline), żeby zagrać."))?;
-    let run_key = launch::running_key(&id, &account.uuid);
-    if state.running.lock().contains_key(&run_key) {
-        return Err(Error::msg(
-            "To konto już gra na tej instancji. Zatrzymaj grę, żeby uruchomić ponownie.",
-        ));
-    }
+    let allow_multi = settings.allow_multiple_instances;
+    let session_id = if allow_multi {
+        uuid::Uuid::new_v4().to_string()
+    } else {
+        String::new()
+    };
+    let run_key = if allow_multi {
+        launch::running_key_session(&id, &account.uuid, &session_id)
+    } else {
+        let run_key = launch::running_key(&id, &account.uuid);
+        if state.running.lock().contains_key(&run_key) {
+            return Err(Error::msg(
+                "To konto już gra na tej instancji. Zatrzymaj grę, żeby uruchomić ponownie.",
+            ));
+        }
+        run_key
+    };
     let mut inst = instances::get(&dirs, &id)?;
     if !instances::is_installed(&dirs, &inst) {
         inst = run_install(app.clone(), state.inner(), id.clone()).await?;
@@ -823,6 +970,16 @@ pub async fn launch_instance(app: AppHandle, state: State<'_, AppState>, id: Str
         }
     }
     let resolved = install::resolve_version(&state.http, &dirs, &launch_inst.version_id).await?;
+    let game_dir = dirs.game_dir(&inst.id);
+    if !allow_multi
+        && !launch::instance_has_running(&state.running.lock(), &inst.id)
+        && launch::game_dir_has_jvm(&game_dir)
+    {
+        return Err(Error::msg(
+            "Minecraft dla tego profilu wciąż działa w tle (javaw.exe). \
+             Kliknij ZATRZYMAJ na ekranie Start albo zamknij javaw.exe w Menedżerze zadań, potem spróbuj ponownie.",
+        ));
+    }
     let required = meta::required_java(&resolved);
     let runtimes = java::scan(&dirs, &settings);
     let java_rt = if inst.custom_java {
@@ -842,7 +999,12 @@ pub async fn launch_instance(app: AppHandle, state: State<'_, AppState>, id: Str
     let natives = if launch::instance_has_running(&state.running.lock(), &inst.id) {
         dirs.natives_dir(&inst.id)
     } else {
-        launch::extract_natives(&dirs, &launch_inst, &resolved)?
+        launch::extract_natives(&dirs, &launch_inst, &resolved).map_err(|e| {
+            Error::msg(format!(
+                "Nie udało się przygotować bibliotek natywnych (natives) dla „{}”: {e}",
+                inst.name
+            ))
+        })?
     };
     let (java_path, mut args) = launch::build_command_line(
         PathBuf::from(&java_rt.path).as_path(),
@@ -885,6 +1047,8 @@ pub async fn launch_instance(app: AppHandle, state: State<'_, AppState>, id: Str
         settings.clone(),
         launch_inst,
         account.uuid.clone(),
+        run_key,
+        session_id,
         java_path,
         args,
     )
@@ -906,7 +1070,7 @@ pub fn stop_instance(app: AppHandle, id: String, account_uuid: Option<String>) -
             .map(|a| a.uuid)
             .ok_or_else(|| Error::msg("Wybierz konto, dla którego chcesz zatrzymać grę."))?,
     };
-    launch::stop_game(&app, &launch::running_key(&id, &uuid))
+    launch::stop_games_for_instance_account(&app, &id, &uuid)
 }
 
 #[tauri::command]
@@ -1803,13 +1967,15 @@ pub fn get_mojang_skin_catalog() -> Vec<crate::mojang_skins::CatalogGroup> {
 pub async fn get_minecraft_profile(
     state: State<'_, AppState>,
     uuid: String,
+    refresh: Option<bool>,
 ) -> Result<crate::mojang_skins::McPlayerProfile> {
     let (settings, dirs) = ctx()?;
-    crate::mojang_skins::profile_for_account(
+    crate::mojang_skins::profile_for_account_with_refresh(
         &state.http,
         &settings.azure_client_id(),
         &dirs,
         &uuid,
+        refresh.unwrap_or(false),
     )
     .await
 }
@@ -1875,6 +2041,121 @@ pub async fn get_mojang_texture_preview(
     texture_key: String,
 ) -> Result<String> {
     crate::mojang_skins::texture_png_base64(&state.http, &texture_key).await
+}
+
+// ── Minecraft skins (Modrinth-style API) ─────────────────────────────────────
+
+#[tauri::command]
+pub async fn get_available_skins(
+    state: State<'_, AppState>,
+    uuid: String,
+) -> Result<Vec<crate::minecraft_skins::Skin>> {
+    let (settings, dirs) = ctx()?;
+    crate::minecraft_skins::get_available_skins(
+        &state.http,
+        &settings.azure_client_id(),
+        &dirs,
+        &uuid,
+    )
+    .await
+}
+
+#[tauri::command]
+pub async fn get_available_capes(
+    state: State<'_, AppState>,
+    uuid: String,
+) -> Result<Vec<crate::minecraft_skins::Cape>> {
+    let (settings, dirs) = ctx()?;
+    crate::minecraft_skins::get_available_capes(
+        &state.http,
+        &settings.azure_client_id(),
+        &dirs,
+        &uuid,
+    )
+    .await
+}
+
+#[tauri::command]
+pub async fn equip_skin(
+    state: State<'_, AppState>,
+    req: crate::minecraft_skins::EquipSkinReq,
+) -> Result<Option<crate::mojang_skins::McPlayerProfile>> {
+    let (settings, dirs) = ctx()?;
+    let profile = crate::minecraft_skins::equip_skin(
+        &state.http,
+        &settings.azure_client_id(),
+        &dirs,
+        &req.uuid,
+        &req.skin,
+        req.png.as_deref(),
+    )
+    .await?;
+    state.skins.reindex(&dirs);
+    state.skins.notify_lan();
+    crate::yggdrasil::push_account_skin(&state.http, &dirs, &req.uuid).await;
+    if let Some(ygg) = state.skins.ygg_root() {
+        let registry = settings.skins_url();
+        let _ = crate::skin_loader::refresh_csl_configs(&ygg, &registry, &dirs);
+    }
+    Ok(profile)
+}
+
+#[tauri::command]
+pub async fn save_custom_skin(
+    state: State<'_, AppState>,
+    req: crate::minecraft_skins::SaveCustomSkinReq,
+) -> Result<crate::skin_library::SkinLibraryEntryView> {
+    let (settings, dirs) = ctx()?;
+    let entry = crate::minecraft_skins::save_custom_skin(
+        &dirs,
+        &req.uuid,
+        &req.skin,
+        &req.variant,
+        req.cape_id.as_deref(),
+        req.png.as_deref(),
+        req.replace_texture,
+    )?;
+    if entry.is_active {
+        state.skins.reindex(&dirs);
+        state.skins.notify_lan();
+        crate::yggdrasil::push_account_skin(&state.http, &dirs, &req.uuid).await;
+        if let Some(ygg) = state.skins.ygg_root() {
+            let registry = settings.skins_url();
+            let _ = crate::skin_loader::refresh_csl_configs(&ygg, &registry, &dirs);
+        }
+    }
+    Ok(entry)
+}
+
+#[tauri::command]
+pub fn remove_custom_skin(uuid: String, skin: crate::minecraft_skins::Skin) -> Result<()> {
+    let (_, dirs) = ctx()?;
+    crate::minecraft_skins::remove_custom_skin(&dirs, &uuid, &skin)
+}
+
+#[tauri::command]
+pub async fn normalize_skin_texture(
+    state: State<'_, AppState>,
+    texture: serde_json::Value,
+) -> Result<Vec<u8>> {
+    use crate::minecraft_skins::TextureInput;
+    let input = if let Some(s) = texture.as_str() {
+        TextureInput::Url(s.to_string())
+    } else if let Some(arr) = texture.as_array() {
+        let bytes: Vec<u8> = arr
+            .iter()
+            .filter_map(|v| v.as_u64().map(|n| n as u8))
+            .collect();
+        TextureInput::Bytes(bytes)
+    } else {
+        return Err(Error::msg("texture musi być URL (string) albo tablicą bajtów."));
+    };
+    crate::minecraft_skins::normalize_skin_texture_input(&state.http, input).await
+}
+
+#[tauri::command]
+pub async fn flush_pending_skin_change() -> Result<()> {
+    Ok(())
 }
 
 /// Pobiera obraz (skin z mc-heads itd.) po HTTP — omija CORS w WebGL.

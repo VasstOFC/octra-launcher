@@ -1,12 +1,18 @@
 import { useEffect, useMemo } from "react";
-import { clsx } from "clsx";
 import { Save, Upload, X } from "lucide-react";
 import type { Account, McCape, McPlayerProfile } from "../types";
-import { CapeThumbnail } from "./CapeThumbnail";
+import type { Cape } from "../lib/skins";
+import { CapePicker } from "./CapePicker";
 import { SkinViewer3D } from "./SkinViewer3D";
 
-function capeLabel(cape: McCape): string {
-  return cape.alias?.trim() || cape.id;
+function capeLabel(cape: McCape | Cape): string {
+  if ("alias" in cape && cape.alias?.trim()) return cape.alias.trim();
+  if ("name" in cape && cape.name?.trim()) return cape.name.trim();
+  return cape.id;
+}
+
+function capeTexture(cape: McCape | Cape): string {
+  return "url" in cape ? cape.url : cape.texture;
 }
 
 export function SkinEditModal({
@@ -32,6 +38,7 @@ export function SkinEditModal({
   onDraftCapeChange,
   onSave,
   busy,
+  availableCapes,
 }: {
   open: boolean;
   account: Account;
@@ -55,16 +62,19 @@ export function SkinEditModal({
   onDraftCapeChange: (capeId: string | null) => void;
   onSave: () => void;
   busy: boolean;
+  availableCapes?: Cape[];
 }) {
   const isOffline = account.kind === "offline";
 
-  const sortedCapes = useMemo(
-    () =>
-      [...(mcProfile?.capes ?? [])].sort((a, b) =>
-        capeLabel(a).localeCompare(capeLabel(b), undefined, { sensitivity: "base" }),
-      ),
-    [mcProfile?.capes],
-  );
+  const capesForPicker = useMemo(() => {
+    if (availableCapes && availableCapes.length > 0) return availableCapes;
+    return (mcProfile?.capes ?? []).map((cape) => ({
+      id: cape.id,
+      name: capeLabel(cape),
+      texture: capeTexture(cape),
+      isEquipped: cape.state.toUpperCase() === "ACTIVE",
+    }));
+  }, [availableCapes, mcProfile?.capes]);
 
   useEffect(() => {
     if (!open) return;
@@ -181,54 +191,16 @@ export function SkinEditModal({
               {isOffline ? (
                 <p className="mt-2 text-sm text-mute">Peleryny są dostępne tylko na koncie Premium.</p>
               ) : (
-                <>
-                  <div className="mt-2 grid max-h-52 grid-cols-4 gap-2 overflow-y-auto">
-                    <button
-                      type="button"
-                      onClick={() => onDraftCapeChange(null)}
-                      className={clsx(
-                        "flex h-[6rem] w-[3.75rem] flex-col items-center justify-center rounded-xl border bg-raised2 transition",
-                        !draftCapeId
-                          ? "border-good ring-2 ring-good/50"
-                          : "border-line hover:border-accent/40",
-                      )}
-                    >
-                      <span className="text-lg text-mute">×</span>
-                      <span className="mt-1 text-[9px] text-mute">Brak</span>
-                    </button>
-                    {sortedCapes.map((cape) => (
-                      <button
-                        key={cape.id}
-                        type="button"
-                        title={capeLabel(cape)}
-                        onClick={() => onDraftCapeChange(cape.id)}
-                        className={clsx(
-                          "h-[6rem] w-[3.75rem] overflow-hidden rounded-xl border p-0 transition",
-                          draftCapeId === cape.id
-                            ? "border-good ring-2 ring-good/50"
-                            : "border-line hover:border-accent/40",
-                        )}
-                      >
-                        <CapeThumbnail
-                          textureUrl={cape.url}
-                          alt={capeLabel(cape)}
-                          selected={draftCapeId === cape.id}
-                        />
-                      </button>
-                    ))}
-                  </div>
-                  {profileLoading && (
-                    <p className="mt-2 text-[10px] text-mute">Ładowanie peleryn z Mojang…</p>
-                  )}
-                  {profileError && (
-                    <p className="mt-2 text-[10px] text-danger">{profileError}</p>
-                  )}
-                  {mcProfile && mcProfile.capes.length === 0 && !profileError && !profileLoading && (
-                    <p className="mt-2 text-[10px] text-mute">
-                      To konto nie ma żadnych peleryn Mojang.
-                    </p>
-                  )}
-                </>
+                <div className="mt-2">
+                  <CapePicker
+                    capes={capesForPicker}
+                    draftCapeId={draftCapeId}
+                    onDraftCapeChange={onDraftCapeChange}
+                    loading={profileLoading}
+                    error={profileError}
+                    disabled={busy}
+                  />
+                </div>
               )}
             </div>
           </div>

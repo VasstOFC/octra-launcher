@@ -1,7 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { clsx } from "clsx";
-import { MoveHorizontal } from "lucide-react";
-import { IdleAnimation, SkinViewer } from "skinview3d";
+import { HitAnimation, IdleAnimation, SkinViewer, WaveAnimation } from "skinview3d";
 import { api } from "../lib/api";
 import { normalizeTextureUrl } from "../lib/skinRender";
 
@@ -43,9 +42,10 @@ async function resolveSkinSource(
   skinTextureKey: string | null,
 ): Promise<string | null> {
   if (skinPngDataUrl) {
-    return skinPngDataUrl.startsWith("data:")
-      ? skinPngDataUrl
-      : toDataUrl(skinPngDataUrl);
+    if (skinPngDataUrl.startsWith("data:") || skinPngDataUrl.startsWith("blob:")) {
+      return skinPngDataUrl;
+    }
+    return toDataUrl(skinPngDataUrl);
   }
   if (skinTextureKey) {
     const cached = skinDataCache.get(skinTextureKey);
@@ -79,7 +79,7 @@ async function resolveCapeSource(capeUrl: string | null): Promise<string | null>
       skinDataCache.set(cacheKey, dataUrl);
       return dataUrl;
     } catch {
-      /* fallback fetch */
+      /* fallback */
     }
   }
   const dataUrl = await remoteUrlToDataUrl(normalized);
@@ -87,29 +87,70 @@ async function resolveCapeSource(capeUrl: string | null): Promise<string | null>
   return dataUrl;
 }
 
+const INITIAL_YAW = 0;
+const MODRINTH_MODEL_Y_OFFSET = -0.3;
+
 export function SkinViewer3D({
   skinPngDataUrl,
   skinUrl,
   skinTextureKey,
   capeUrl,
   model = "classic",
+  nametag,
   className,
   large,
+  compact,
+  modrinth,
 }: {
   skinPngDataUrl?: string | null;
   skinUrl?: string | null;
   skinTextureKey?: string | null;
   capeUrl?: string | null;
   model?: "slim" | "classic";
+  nametag?: string;
   className?: string;
   large?: boolean;
+  compact?: boolean;
+  modrinth?: boolean;
 }) {
   const hostRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const viewerRef = useRef<SkinViewer | null>(null);
+  const pointerRef = useRef({ down: false, x: 0, y: 0, moved: false });
+  const idleTimerRef = useRef<number | null>(null);
   const [viewerReady, setViewerReady] = useState(false);
   const [skinLoaded, setSkinLoaded] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [visible, setVisible] = useState(false);
+
+  const playClickBounce = useCallback(() => {
+    const viewer = viewerRef.current;
+    if (!viewer || compact) return;
+    const hit = new HitAnimation();
+    hit.speed = 1.2;
+    viewer.animation = hit;
+    window.setTimeout(() => {
+      if (viewerRef.current === viewer) viewer.animation = new IdleAnimation();
+    }, 450);
+  }, [compact]);
+
+  const scheduleIdleVariation = useCallback(() => {
+    if (idleTimerRef.current !== null) window.clearTimeout(idleTimerRef.current);
+    if (compact || !modrinth) return;
+    idleTimerRef.current = window.setTimeout(() => {
+      const viewer = viewerRef.current;
+      if (!viewer) return;
+      const wave = new WaveAnimation();
+      wave.speed = 0.85;
+      viewer.animation = wave;
+      window.setTimeout(() => {
+        if (viewerRef.current === viewer) {
+          viewer.animation = new IdleAnimation();
+          scheduleIdleVariation();
+        }
+      }, 2200);
+    }, 7000 + Math.random() * 4000);
+  }, [compact, modrinth]);
 
   useEffect(() => {
     const host = hostRef.current;
@@ -129,18 +170,29 @@ export function SkinViewer3D({
         canvas,
         width: w,
         height: h,
-        background: 0x18181c,
+        background: modrinth && large ? undefined : 0x18181c,
         preserveDrawingBuffer: true,
       });
-      viewer.fov = 42;
-      viewer.zoom = 0.92;
-      viewer.controls.enableRotate = true;
+      viewer.fov = compact ? 42 : modrinth ? 38 : 40;
+      viewer.zoom = compact ? 0.72 : large ? (modrinth ? 0.88 : 0.78) : 0.88;
+      viewer.controls.enableRotate = !compact;
       viewer.controls.enableZoom = false;
       viewer.controls.enablePan = false;
-      viewer.animation = new IdleAnimation();
-      viewer.autoRotate = false;
+      if (compact) {
+        viewer.animation = null;
+        viewer.autoRotate = false;
+        viewer.playerObject.rotation.y = 0;
+      } else {
+        viewer.animation = new IdleAnimation();
+        viewer.autoRotate = false;
+        viewer.playerObject.rotation.y = INITIAL_YAW;
+        if (modrinth) {
+          viewer.playerWrapper.position.y = MODRINTH_MODEL_Y_OFFSET;
+        }
+      }
       viewerRef.current = viewer;
       setViewerReady(true);
+      if (modrinth && !compact) scheduleIdleVariation();
     };
 
     const onResize = () => {
@@ -159,12 +211,17 @@ export function SkinViewer3D({
     return () => {
       disposed = true;
       ro.disconnect();
+      if (idleTimerRef.current !== null) {
+        window.clearTimeout(idleTimerRef.current);
+        idleTimerRef.current = null;
+      }
       viewer?.dispose();
       viewerRef.current = null;
       setViewerReady(false);
       setSkinLoaded(false);
+      setVisible(false);
     };
-  }, []);
+  }, [compact, large, modrinth, scheduleIdleVariation]);
 
   useEffect(() => {
     if (!viewerReady) return;
@@ -174,8 +231,9 @@ export function SkinViewer3D({
     let cancelled = false;
     setSkinLoaded(false);
     setLoadError(null);
+    setVisible(false);
 
-    (async () => {
+    void (async () => {
       try {
         const src = await resolveSkinSource(
           skinPngDataUrl ?? null,
@@ -188,9 +246,16 @@ export function SkinViewer3D({
           await viewer.loadSkin(src, { model: skinModel });
           if (cancelled) return;
           viewer.adjustCameraDistance();
+          if (compact) viewer.zoom = 0.72;
+          else if (large) viewer.zoom = modrinth ? 0.88 : 0.78;
+          if (!compact) {
+            viewer.playerObject.rotation.y = INITIAL_YAW;
+            if (modrinth) viewer.playerWrapper.position.y = MODRINTH_MODEL_Y_OFFSET;
+          }
           viewer.resetCameraPose();
           viewer.render();
           setSkinLoaded(true);
+          requestAnimationFrame(() => setVisible(true));
         } else {
           viewer.resetSkin();
         }
@@ -206,7 +271,7 @@ export function SkinViewer3D({
     return () => {
       cancelled = true;
     };
-  }, [viewerReady, skinPngDataUrl, skinUrl, skinTextureKey, model]);
+  }, [viewerReady, skinPngDataUrl, skinUrl, skinTextureKey, model, compact, large, modrinth]);
 
   useEffect(() => {
     if (!viewerReady) return;
@@ -214,16 +279,12 @@ export function SkinViewer3D({
     if (!viewer) return;
 
     let cancelled = false;
-
-    (async () => {
+    void (async () => {
       try {
         const src = await resolveCapeSource(capeUrl ?? null);
         if (cancelled) return;
-        if (src) {
-          await viewer.loadCape(src);
-        } else {
-          viewer.loadCape(null);
-        }
+        if (src) await viewer.loadCape(src);
+        else viewer.loadCape(null);
         if (!cancelled) viewer.render();
       } catch {
         if (!cancelled) viewer.loadCape(null);
@@ -235,40 +296,83 @@ export function SkinViewer3D({
     };
   }, [viewerReady, capeUrl]);
 
+  useEffect(() => {
+    const viewer = viewerRef.current;
+    if (!viewer || compact || modrinth) return;
+    viewer.nameTag = nametag?.trim() ? nametag.trim() : null;
+    viewer.render();
+  }, [nametag, viewerReady, compact, skinLoaded, modrinth]);
+
   const hasSkinRequest = Boolean(skinPngDataUrl || skinTextureKey || skinUrl);
 
+  const onPointerDown = (e: React.PointerEvent) => {
+    pointerRef.current = { down: true, x: e.clientX, y: e.clientY, moved: false };
+  };
+  const onPointerMove = (e: React.PointerEvent) => {
+    if (!pointerRef.current.down) return;
+    const dx = Math.abs(e.clientX - pointerRef.current.x);
+    const dy = Math.abs(e.clientY - pointerRef.current.y);
+    if (dx > 4 || dy > 4) pointerRef.current.moved = true;
+  };
+  const onPointerUp = () => {
+    if (pointerRef.current.down && !pointerRef.current.moved && modrinth && large) {
+      playClickBounce();
+    }
+    pointerRef.current.down = false;
+  };
+
   return (
-    <div className={clsx("flex min-h-0 flex-col items-center", className)}>
+    <div
+      className={clsx(
+        compact ? "h-full w-full" : "flex min-h-0 flex-col items-center",
+        className,
+      )}
+    >
       <div
         ref={hostRef}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerLeave={onPointerUp}
         className={clsx(
-          "relative w-full min-h-[11rem] overflow-hidden rounded-xl border border-line/60 bg-[#141418]",
-          large ? "h-[min(52vh,420px)] flex-1" : "h-44",
+          "relative w-full overflow-hidden",
+          compact
+            ? "h-full bg-transparent"
+            : modrinth && large
+              ? "h-full cursor-grab bg-transparent active:cursor-grabbing"
+              : "min-h-[11rem] rounded-xl border border-line/60 bg-[#141418]",
+          !compact && !modrinth && (large ? "h-[min(46vh,360px)] flex-1" : "h-44"),
         )}
       >
-        <canvas ref={canvasRef} className="block h-full w-full" />
-        {hasSkinRequest && !skinLoaded && !loadError && (
-          <div className="pointer-events-none absolute inset-0 grid place-items-center text-xs text-mute">
-            Ładowanie skina…
+        {modrinth && large && (
+          <div className="skin-preview-spotlight pointer-events-none absolute left-1/2 z-0 -translate-x-1/2" />
+        )}
+        <canvas
+          ref={canvasRef}
+          className={clsx(
+            "relative z-[1] block h-full w-full transition-opacity duration-500",
+            visible || compact ? "opacity-100" : "opacity-0",
+          )}
+        />
+        {hasSkinRequest && !skinLoaded && !loadError && !compact && (
+          <div className="pointer-events-none absolute inset-0 z-[2] grid place-items-center bg-[#141418]/40 backdrop-blur-[1px]">
+            <div className="flex flex-col items-center gap-2 rounded-xl border border-line/50 bg-raised/80 px-4 py-3 shadow-lg">
+              <div className="size-6 animate-spin rounded-full border-2 border-accent/25 border-t-accent" />
+              <span className="text-xs font-medium text-mute">Ładowanie podglądu…</span>
+            </div>
           </div>
         )}
-        {!hasSkinRequest && (
-          <div className="pointer-events-none absolute inset-0 grid place-items-center text-xs text-mute">
+        {!hasSkinRequest && !compact && (
+          <div className="pointer-events-none absolute inset-0 z-[2] grid place-items-center text-sm text-mute">
             Wybierz skin
           </div>
         )}
         {loadError ? (
-          <div className="pointer-events-none absolute inset-x-3 bottom-3 rounded-lg bg-danger/15 px-2 py-1.5 text-center text-[10px] text-danger">
+          <div className="pointer-events-none absolute inset-x-3 bottom-3 z-[2] rounded-lg bg-danger/15 px-2 py-1.5 text-center text-[10px] text-danger">
             {loadError}
           </div>
         ) : null}
       </div>
-      {large && (
-        <p className="mt-2 flex items-center gap-1 text-[10px] text-mute">
-          <MoveHorizontal size={12} />
-          Przeciągnij, żeby obrócić
-        </p>
-      )}
     </div>
   );
 }

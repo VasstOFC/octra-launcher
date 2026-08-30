@@ -18,7 +18,9 @@ mod loaders;
 mod local_server;
 mod meta;
 mod migrate;
+mod mojang_cache;
 mod mojang_skins;
+mod minecraft_skins;
 mod mrpack;
 mod news;
 mod paths;
@@ -27,6 +29,7 @@ mod servers;
 mod server_ping;
 mod settings;
 mod skin_loader;
+mod skin_library;
 mod skins;
 mod thumbs;
 mod winhide;
@@ -167,6 +170,17 @@ pub fn run() {
             commands::save_offline_skin,
             commands::set_offline_skin_model,
             commands::reset_offline_skin,
+            commands::list_offline_skin_library,
+            commands::add_offline_skin_library_entry,
+            commands::equip_offline_skin_library_entry,
+            commands::delete_offline_skin_library_entry,
+            commands::set_offline_skin_library_model,
+            commands::list_premium_skin_library,
+            commands::save_premium_skin_library_entry,
+            commands::delete_premium_skin_library_entry,
+            commands::sync_premium_skin_library_active,
+            commands::set_premium_skin_library_active,
+            commands::find_premium_skin_library_duplicate,
             commands::start_login,
             commands::cancel_login,
             commands::install_instance,
@@ -239,6 +253,13 @@ pub fn run() {
             commands::upload_mojang_skin,
             commands::set_minecraft_cape,
             commands::get_mojang_texture_preview,
+            commands::get_available_skins,
+            commands::get_available_capes,
+            commands::equip_skin,
+            commands::save_custom_skin,
+            commands::remove_custom_skin,
+            commands::normalize_skin_texture,
+            commands::flush_pending_skin_change,
             commands::fetch_image_base64,
             commands::relay_start,
             commands::relay_stop,
@@ -269,6 +290,9 @@ pub fn run() {
                     state.discord.set_enabled(settings.discord_rpc);
                     if settings.discord_rpc {
                         state.discord.set_idle();
+                    }
+                    if !settings.skins_url().is_empty() {
+                        crate::yggdrasil::sync_all_to_registry(&http, &dirs).await;
                     }
                 }
             });

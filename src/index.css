@@ -107,6 +107,79 @@ textarea {
     var(--color-raised);
 }
 
+.octra-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--color-accent) 88%, white 8%) 0%,
+    color-mix(in srgb, var(--color-accent) 88%, white 8%) var(--range-pct, 0%),
+    rgb(255 255 255 / 0.08) var(--range-pct, 0%),
+    rgb(255 255 255 / 0.08) 100%
+  );
+  outline: none;
+  cursor: pointer;
+}
+
+.octra-range:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.octra-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  margin-top: -5px;
+  border-radius: 50%;
+  border: 2px solid color-mix(in srgb, var(--color-accent) 70%, white 15%);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-accent) 95%, white 12%) 0%,
+    var(--color-accent-dim) 100%
+  );
+  box-shadow:
+    0 1px 3px rgb(0 0 0 / 0.35),
+    inset 0 1px 0 rgb(255 255 255 / 0.2);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.octra-range::-webkit-slider-thumb:hover {
+  transform: scale(1.06);
+  box-shadow:
+    0 0 0 4px color-mix(in srgb, var(--color-accent) 18%, transparent),
+    0 1px 3px rgb(0 0 0 / 0.35),
+    inset 0 1px 0 rgb(255 255 255 / 0.2);
+}
+
+.octra-range::-moz-range-track {
+  height: 6px;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.08);
+}
+
+.octra-range::-moz-range-progress {
+  height: 6px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-accent) 88%, white 8%);
+}
+
+.octra-range::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid color-mix(in srgb, var(--color-accent) 70%, white 15%);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-accent) 95%, white 12%) 0%,
+    var(--color-accent-dim) 100%
+  );
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.35);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -115,26 +188,6 @@ textarea {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-}
-
-/* Minecraft cape atlas crop — visible 10×16 region at offset (1,1) in 64×32 PNG */
-.cape-thumb {
-  aspect-ratio: 10 / 16;
-  position: relative;
-  overflow: hidden;
-  box-sizing: content-box;
-}
-
-.cape-thumb-img {
-  position: absolute;
-  object-fit: cover;
-  image-rendering: pixelated;
-  width: calc(64 / 10 * 100%);
-  height: calc(32 / 16 * 100%);
-  left: calc(1 / 10 * -100%);
-  top: calc(1 / 16 * -100%);
-  transform: scale(1.01);
-  transform-origin: calc(10 / 2 / 64 * 100%) calc(16 / 2 / 32 * 100%);
 }
 
 .news-strip {
@@ -182,4 +235,236 @@ textarea {
 
 .news-pill:hover {
   box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-accent) 25%, transparent);
+}
+
+/* Szafa — styl inspirowany Modrinth App */
+.skin-grid-button {
+  border-radius: 20px;
+  background: var(--color-raised2);
+  box-shadow:
+    0 1px 1px rgb(0 0 0 / 0.25),
+    0 1px 2px rgb(0 0 0 / 0.15);
+  isolation: isolate;
+}
+
+.skin-add-card {
+  border-radius: 20px;
+  border-color: color-mix(in srgb, var(--color-mute) 35%, transparent);
+  background: color-mix(in srgb, var(--color-raised2) 70%, transparent);
+}
+
+.skin-preview-spotlight {
+  bottom: 12%;
+  width: min(72%, 280px);
+  height: 42px;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgb(255 255 255 / 0.14) 0%,
+    rgb(255 255 255 / 0.05) 42%,
+    transparent 72%
+  );
+  filter: blur(1px);
+}
+
+.locker-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2.5fr);
+  gap: 2.5rem;
+}
+
+@media (max-width: 860px) {
+  .locker-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.skin-preview-nametag {
+  max-width: min(100%, 220px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0.2rem 0.65rem;
+  border-radius: 0.375rem;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: rgb(180 180 188 / 0.95);
+  background:
+    linear-gradient(308deg, rgb(50 50 50 / 0.18) -52%, rgb(100 100 100 / 0.14) 95%),
+    rgb(0 0 0 / 0.22);
+  box-shadow:
+    inset -0.5px -0.5px 0 rgb(0 0 0 / 0.22),
+    inset 0.5px 0.5px 0 rgb(255 255 255 / 0.04);
+}
+
+.locker-skin-grid {
+  /* wymiary ustawiane inline przez LockerSkinGrid */
+}
+
+.locker-loading-screen {
+  min-height: min(72vh, 720px);
+  padding: 0.25rem 0 2rem;
+}
+
+.locker-loading-title-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgb(255 255 255 / 0.04) 0%,
+    rgb(255 255 255 / 0.1) 45%,
+    rgb(255 255 255 / 0.04) 90%
+  );
+  background-size: 200% 100%;
+  animation: locker-shimmer 1.6s ease-in-out infinite;
+}
+
+.locker-loading-nametag {
+  max-width: min(100%, 220px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0.2rem 0.65rem;
+  border-radius: 0.375rem;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: rgb(180 180 188 / 0.55);
+  background: rgb(255 255 255 / 0.04);
+  animation: locker-pulse 2s ease-in-out infinite;
+}
+
+.locker-loading-character {
+  position: relative;
+  width: 5.5rem;
+  height: 11rem;
+  transform-style: preserve-3d;
+  animation: locker-character-spin 4.5s ease-in-out infinite;
+  filter: drop-shadow(0 12px 28px rgb(0 0 0 / 0.35));
+}
+
+.locker-loading-head,
+.locker-loading-body,
+.locker-loading-arm,
+.locker-loading-legs > div {
+  position: absolute;
+  left: 50%;
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--color-accent) 35%, transparent),
+    rgb(255 255 255 / 0.08)
+  );
+  border: 1px solid rgb(255 255 255 / 0.12);
+  border-radius: 2px;
+  animation: locker-pulse 2.2s ease-in-out infinite;
+}
+
+.locker-loading-head {
+  top: 0;
+  width: 2rem;
+  height: 2rem;
+  margin-left: -1rem;
+}
+
+.locker-loading-body {
+  top: 2.15rem;
+  width: 2rem;
+  height: 3rem;
+  margin-left: -1rem;
+  animation-delay: 0.15s;
+}
+
+.locker-loading-arm {
+  top: 2.35rem;
+  width: 0.65rem;
+  height: 2.5rem;
+  margin-left: -0.325rem;
+}
+
+.locker-loading-arm--left {
+  left: calc(50% - 1.45rem);
+  transform: rotate(8deg);
+  animation-delay: 0.25s;
+}
+
+.locker-loading-arm--right {
+  left: calc(50% + 1.45rem);
+  transform: rotate(-8deg);
+  animation-delay: 0.35s;
+}
+
+.locker-loading-legs {
+  position: absolute;
+  top: 5.05rem;
+  left: 50%;
+  display: flex;
+  gap: 0.35rem;
+  margin-left: -1.175rem;
+}
+
+.locker-loading-legs > div {
+  position: static;
+  width: 0.9rem;
+  height: 2.6rem;
+  margin: 0;
+}
+
+.locker-loading-legs > div:last-child {
+  animation-delay: 0.2s;
+}
+
+.locker-loading-grid {
+  display: grid;
+}
+
+.locker-loading-card {
+  border-radius: 0.5rem;
+  border: 1px solid rgb(255 255 255 / 0.06);
+  background: linear-gradient(
+    135deg,
+    rgb(255 255 255 / 0.03) 0%,
+    rgb(255 255 255 / 0.07) 50%,
+    rgb(255 255 255 / 0.03) 100%
+  );
+  background-size: 200% 200%;
+  animation: locker-card-shimmer 1.8s ease-in-out infinite;
+}
+
+@keyframes locker-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@keyframes locker-card-shimmer {
+  0%,
+  100% {
+    background-position: 0% 50%;
+    opacity: 0.55;
+  }
+  50% {
+    background-position: 100% 50%;
+    opacity: 0.9;
+  }
+}
+
+@keyframes locker-pulse {
+  0%,
+  100% {
+    opacity: 0.65;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes locker-character-spin {
+  0%,
+  100% {
+    transform: perspective(520px) rotateY(-18deg);
+  }
+  50% {
+    transform: perspective(520px) rotateY(18deg);
+  }
 }

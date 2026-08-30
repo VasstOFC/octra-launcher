@@ -1,5 +1,8 @@
 //! Oficjalny katalog skinów Mojang + operacje profilu (skin, peleryna).
 
+use std::collections::HashMap;
+use std::sync::OnceLock;
+
 use serde::{Deserialize, Serialize};
 
 use crate::auth::{self, hyphenate_uuid};
@@ -10,6 +13,36 @@ const MC_PROFILE: &str = "https://api.minecraftservices.com/minecraft/profile";
 const MC_SKINS: &str = "https://api.minecraftservices.com/minecraft/profile/skins";
 const MC_CAPES: &str = "https://api.minecraftservices.com/minecraft/profile/capes/active";
 const TEXTURE_BASE: &str = "https://textures.minecraft.net/texture/";
+const MINECRAFT_USER_AGENT: &str =
+    "OctraLauncher/1.0 (Minecraft profile; +https://github.com/octra)";
+
+fn format_mojang_error(context: &str, body: &str) -> String {
+    if let Ok(value) = serde_json::from_str::<serde_json::Value>(body) {
+        if let Some(msg) = value.get("errorMessage").and_then(|v| v.as_str()) {
+            return format!("{context}: {msg}");
+        }
+        if let Some(detail) = value.get("detail").and_then(|v| v.as_str()) {
+            return format!("{context}: {detail}");
+        }
+        if let Some(title) = value.get("title").and_then(|v| v.as_str()) {
+            return format!("{context}: {title}");
+        }
+    }
+    let trimmed = body.trim();
+    if trimmed.is_empty() {
+        context.to_string()
+    } else {
+        format!("{context}: {trimmed}")
+    }
+}
+
+pub fn active_cape_id(profile: &McPlayerProfile) -> Option<String> {
+    profile
+        .capes
+        .iter()
+        .find(|c| c.state == McExpressionState::Active)
+        .map(|c| hyphenate_uuid(&c.id))
+}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -30,7 +63,7 @@ pub struct CatalogGroup {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Deserialize, Serialize)]
 #[serde(rename_all = "UPPERCASE")]
-enum McExpressionState {
+pub(crate) enum McExpressionState {
     Active,
     Inactive,
     #[default]
@@ -43,7 +76,7 @@ enum McExpressionState {
 pub struct McCape {
     pub id: String,
     #[serde(default)]
-    state: McExpressionState,
+    pub(crate) state: McExpressionState,
     pub url: String,
     #[serde(default, alias = "name")]
     pub alias: Option<String>,
@@ -54,7 +87,7 @@ pub struct McCape {
 pub struct McOwnedSkin {
     pub id: String,
     #[serde(default)]
-    state: McExpressionState,
+    pub(crate) state: McExpressionState,
     pub url: String,
     pub variant: String,
     #[serde(default, alias = "name")]
@@ -78,6 +111,17 @@ pub fn catalog() -> Vec<CatalogGroup> {
     serde_json::from_str(include_str!("../resources/mojang_skins.json")).unwrap_or_default()
 }
 
+fn bundled_texture_base64(texture_key: &str) -> Option<String> {
+    static BUNDLED: OnceLock<HashMap<String, String>> = OnceLock::new();
+    BUNDLED
+        .get_or_init(|| {
+            serde_json::from_str(include_str!("../resources/catalog_bundled_textures.json"))
+                .unwrap_or_default()
+        })
+        .get(texture_key)
+        .cloned()
+}
+
 pub async fn fetch_profile(client: &reqwest::Client, access_token: &str) -> Result<McPlayerProfile> {
     let resp = client
         .get(MC_PROFILE)
@@ -85,7 +129,7 @@ pub async fn fetch_profile(client: &reqwest::Client, access_token: &str) -> Resu
         .header("Accept", "application/json")
         .header(
             "User-Agent",
-            "OctraLauncher/1.0 (Minecraft profile; +https://github.com/octra)",
+            MINECRAFT_USER_AGENT,
         )
         .send()
         .await?;
@@ -121,27 +165,8 @@ pub async fn equip_catalog_skin(
     texture_key: &str,
     variant: &str,
 ) -> Result<McPlayerProfile> {
-    let variant = if variant.eq_ignore_ascii_case("slim") {
-        "slim"
-    } else {
-        "classic"
-    };
-    let url = format!("{TEXTURE_BASE}{texture_key}");
-    let resp = client
-        .post(MC_SKINS)
-        .bearer_auth(access_token)
-        .header("Content-Type", "application/json")
-        .json(&serde_json::json!({ "variant": variant, "url": url }))
-        .send()
-        .await?;
-    if !resp.status().is_success() {
-        let body = resp.text().await.unwrap_or_default();
-        return Err(Error::msg(format!(
-            "Minecraft odrzuciło zmianę skina: {}",
-            body.trim()
-        )));
-    }
-    fetch_profile(client, access_token).await
+    let bytes = texture_png_bytes(client, texture_key).await?;
+    upload_custom_skin(client, access_token, &bytes, variant).await
 }
 
 pub async fn upload_custom_skin(
@@ -165,14 +190,16 @@ pub async fn upload_custom_skin(
     let resp = client
         .post(MC_SKINS)
         .bearer_auth(access_token)
+        .header("Accept", "application/json")
+        .header("User-Agent", MINECRAFT_USER_AGENT)
         .multipart(form)
         .send()
         .await?;
     if !resp.status().is_success() {
         let body = resp.text().await.unwrap_or_default();
-        return Err(Error::msg(format!(
-            "Minecraft odrzuciło wgranie skina: {}",
-            body.trim()
+        return Err(Error::msg(format_mojang_error(
+            "Minecraft odrzuciło wgranie skina",
+            &body,
         )));
     }
     fetch_profile(client, access_token).await
@@ -187,7 +214,9 @@ pub async fn set_active_cape(
         client
             .put(MC_CAPES)
             .bearer_auth(access_token)
-            .header("Content-Type", "application/json")
+            .header("Content-Type", "application/json; charset=utf-8")
+            .header("Accept", "application/json")
+            .header("User-Agent", MINECRAFT_USER_AGENT)
             .json(&serde_json::json!({ "capeId": hyphenate_uuid(id) }))
             .send()
             .await?
@@ -195,30 +224,45 @@ pub async fn set_active_cape(
         client
             .delete(MC_CAPES)
             .bearer_auth(access_token)
+            .header("Accept", "application/json")
+            .header("User-Agent", MINECRAFT_USER_AGENT)
             .send()
             .await?
     };
     if !resp.status().is_success() {
         let body = resp.text().await.unwrap_or_default();
-        return Err(Error::msg(format!(
-            "Minecraft odrzuciło zmianę peleryny: {}",
-            body.trim()
+        return Err(Error::msg(format_mojang_error(
+            "Minecraft odrzuciło zmianę peleryny",
+            &body,
         )));
     }
     fetch_profile(client, access_token).await
 }
 
+pub async fn texture_png_bytes(client: &reqwest::Client, texture_key: &str) -> Result<Vec<u8>> {
+    use base64::Engine as _;
+    let b64 = texture_png_base64(client, texture_key).await?;
+    base64::engine::general_purpose::STANDARD
+        .decode(b64)
+        .map_err(|e| Error::msg(format!("Błąd dekodowania tekstury skina: {e}")))
+}
+
 pub async fn texture_png_base64(client: &reqwest::Client, texture_key: &str) -> Result<String> {
     use base64::Engine as _;
     let url = format!("{TEXTURE_BASE}{texture_key}");
-    let bytes = client
-        .get(url)
-        .send()
-        .await?
-        .error_for_status()?
-        .bytes()
-        .await?;
-    Ok(base64::engine::general_purpose::STANDARD.encode(bytes))
+    if let Ok(resp) = client.get(&url).send().await {
+        if resp.status().is_success() {
+            if let Ok(bytes) = resp.bytes().await {
+                return Ok(base64::engine::general_purpose::STANDARD.encode(bytes));
+            }
+        }
+    }
+    bundled_texture_base64(texture_key).ok_or_else(|| {
+        Error::msg(format!(
+            "Nie udało się pobrać tekstury skina ({}).",
+            &texture_key[..texture_key.len().min(12)]
+        ))
+    })
 }
 
 pub async fn profile_for_account(
@@ -227,29 +271,19 @@ pub async fn profile_for_account(
     dirs: &Dirs,
     account_uuid: &str,
 ) -> Result<McPlayerProfile> {
-    let file = auth::load_accounts(dirs)?;
-    let wanted = hyphenate_uuid(account_uuid);
-    let account = file
-        .accounts
-        .iter()
-        .find(|a| hyphenate_uuid(&a.uuid) == wanted)
-        .ok_or_else(|| Error::msg("Nie znaleziono konta."))?
-        .clone();
-    if account.is_offline() {
-        return Err(Error::msg("Profil Mojang wymaga konta Premium."));
-    }
-    let session = auth::session_for_account(client, client_id, dirs, &account).await?;
-    let profile = fetch_profile(client, &session.access_token).await?;
-    auth::auth_log(
-        dirs,
-        &format!(
-            "profil Mojang {}: {} skinów, {} peleryn",
-            profile.name,
-            profile.skins.len(),
-            profile.capes.len()
-        ),
-    );
-    Ok(profile)
+    profile_for_account_with_refresh(client, client_id, dirs, account_uuid, false).await
+}
+
+pub async fn profile_for_account_with_refresh(
+    client: &reqwest::Client,
+    client_id: &str,
+    dirs: &Dirs,
+    account_uuid: &str,
+    refresh: bool,
+) -> Result<McPlayerProfile> {
+    crate::mojang_cache::global()
+        .profile_for_account(client, client_id, dirs, account_uuid, refresh)
+        .await
 }
 
 pub async fn equip_for_account(
@@ -272,7 +306,9 @@ pub async fn equip_for_account(
         return Err(Error::msg("Skiny Mojang wymagają konta Premium."));
     }
     let session = auth::session_for_account(client, client_id, dirs, &account).await?;
-    equip_catalog_skin(client, &session.access_token, texture_key, variant).await
+    let profile = equip_catalog_skin(client, &session.access_token, texture_key, variant).await?;
+    crate::mojang_cache::global().set_profile(account_uuid, profile.clone());
+    Ok(profile)
 }
 
 pub async fn upload_for_account(
@@ -295,7 +331,9 @@ pub async fn upload_for_account(
         return Err(Error::msg("Wgrywanie skinów Mojang wymaga konta Premium."));
     }
     let session = auth::session_for_account(client, client_id, dirs, &account).await?;
-    upload_custom_skin(client, &session.access_token, png_bytes, variant).await
+    let profile = upload_custom_skin(client, &session.access_token, png_bytes, variant).await?;
+    crate::mojang_cache::global().set_profile(account_uuid, profile.clone());
+    Ok(profile)
 }
 
 pub async fn set_cape_for_account(
@@ -317,7 +355,38 @@ pub async fn set_cape_for_account(
         return Err(Error::msg("Peleryny Mojang wymagają konta Premium."));
     }
     let session = auth::session_for_account(client, client_id, dirs, &account).await?;
-    set_active_cape(client, &session.access_token, cape_id).await
+    let profile = set_active_cape(client, &session.access_token, cape_id).await?;
+    crate::mojang_cache::global().set_profile(account_uuid, profile.clone());
+    Ok(profile)
+}
+
+pub async fn sync_cape_for_account(
+    client: &reqwest::Client,
+    client_id: &str,
+    dirs: &Dirs,
+    account_uuid: &str,
+    target_cape_id: Option<&str>,
+    profile_after_skin: &McPlayerProfile,
+) -> Result<McPlayerProfile> {
+    let current = active_cape_id(profile_after_skin);
+    let target = target_cape_id
+        .filter(|s| !s.trim().is_empty())
+        .map(hyphenate_uuid);
+
+    if current == target {
+        return Ok(profile_after_skin.clone());
+    }
+
+    match target {
+        Some(ref id) => set_cape_for_account(client, client_id, dirs, account_uuid, Some(id)).await,
+        None => {
+            if current.is_some() {
+                set_cape_for_account(client, client_id, dirs, account_uuid, None).await
+            } else {
+                Ok(profile_after_skin.clone())
+            }
+        }
+    }
 }
 
 #[cfg(test)]

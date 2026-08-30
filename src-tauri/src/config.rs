@@ -18,10 +18,10 @@ pub const FEATURED_SERVER_NAME: &str = "Serwer";
 /// Adres serwera (host albo host:port). Puste = bez auto-join.
 pub const FEATURED_SERVER_ADDRESS: &str = "";
 
-/// HTTP serwer skinów Octra (nie ely.by / LittleSkin).
-/// Pusty = tylko własny skin + LAN. Wpisz tu albo w Ustawieniach, jeśli
-/// znajomi poza siecią lokalną mają widzieć skiny offline.
-pub const LUMEN_SKINS_URL: &str = "";
+/// HTTP serwer skinów Octra (VPS Oracle, Caddy :80 → localhost:8787).
+pub const LUMEN_SKINS_URL: &str = "http://92.5.186.6";
 
+/// Klucz zapisu na serwerze skinów (nagłówek X-Octra-Key). Musi zgadzać się z /etc/octra-skins.env na VPS.
+pub const LUMEN_SKINS_API_KEY: &str = "73184f02fd2715d7d07952222621461de55478fa3856747c";
 /// Discord Application ID (Rich Presence). Placeholder — zamień na własne.
 pub const DISCORD_APP_ID: &str = "142857142857142857";

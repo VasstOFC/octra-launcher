@@ -22,6 +22,7 @@ export type RunningLocalServer = {
 export type PlayingSession = {
   instanceId: string;
   accountUuid: string;
+  sessionId: string;
 };
 
 function sameSession(
@@ -64,10 +65,15 @@ interface AppStore {
   setSkinEditUuid: (uuid: string | null) => void;
   bumpSkin: () => void;
   setLaunching: (id: string | null) => void;
-  markPlaying: (instanceId: string, accountUuid: string) => void;
-  markStopped: (instanceId: string, accountUuid: string) => void;
+  markPlaying: (instanceId: string, accountUuid: string, sessionId?: string) => void;
+  markStopped: (
+    instanceId: string,
+    accountUuid: string,
+    sessionId?: string,
+  ) => void;
   markServerStatus: (id: string, name: string, status: string) => void;
   isPlaying: (instanceId: string, accountUuid?: string) => boolean;
+  playingSessionCount: (instanceId: string, accountUuid?: string) => number;
   showError: (text: string) => void;
   showOk: (text: string) => void;
   clearBanner: () => void;
@@ -177,22 +183,33 @@ export const useApp = create<AppStore>((set, get) => ({
   setSkinEditUuid: (skinEditUuid) => set({ skinEditUuid }),
   bumpSkin: () => set((s) => ({ skinEpoch: s.skinEpoch + 1 })),
   setLaunching: (launchingId) => set({ launchingId }),
-  markPlaying: (instanceId, accountUuid) =>
-    set((s) =>
-      s.playingSessions.some((x) => sameSession(x, instanceId, accountUuid))
-        ? s
-        : {
-            playingSessions: [
-              ...s.playingSessions,
-              { instanceId, accountUuid },
-            ],
-          },
-    ),
-  markStopped: (instanceId, accountUuid) =>
+  markPlaying: (instanceId, accountUuid, sessionId = "") =>
+    set((s) => {
+      if (
+        sessionId &&
+        s.playingSessions.some((x) => x.sessionId === sessionId)
+      ) {
+        return s;
+      }
+      if (
+        !sessionId &&
+        s.playingSessions.some((x) => sameSession(x, instanceId, accountUuid))
+      ) {
+        return s;
+      }
+      return {
+        playingSessions: [
+          ...s.playingSessions,
+          { instanceId, accountUuid, sessionId },
+        ],
+      };
+    }),
+  markStopped: (instanceId, accountUuid, sessionId) =>
     set((s) => ({
-      playingSessions: s.playingSessions.filter(
-        (x) => !sameSession(x, instanceId, accountUuid),
-      ),
+      playingSessions: s.playingSessions.filter((x) => {
+        if (sessionId) return x.sessionId !== sessionId;
+        return !sameSession(x, instanceId, accountUuid);
+      }),
     })),
   markServerStatus: (id, name, status) =>
     set((s) => {
@@ -209,6 +226,12 @@ export const useApp = create<AppStore>((set, get) => ({
     if (!uuid) return false;
     return get().playingSessions.some((x) => sameSession(x, instanceId, uuid));
   },
+  playingSessionCount: (instanceId, accountUuid) => {
+    const uuid = accountUuid ?? get().accounts.active;
+    if (!uuid) return 0;
+    return get().playingSessions.filter((x) => sameSession(x, instanceId, uuid))
+      .length;
+  },
   showError: (text) => {
     void alertDialog(text, "Błąd");
   },
@@ -220,7 +243,6 @@ export const useApp = create<AppStore>((set, get) => ({
       setLaunching,
       refreshInstances,
       showError,
-      markPlaying,
       setLoginOpen,
       setLogin,
     } = get();
@@ -233,7 +255,6 @@ export const useApp = create<AppStore>((set, get) => ({
     setLaunching(id);
     try {
       await api.launchInstance(id);
-      markPlaying(id, accounts.active!);
       await refreshInstances();
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);

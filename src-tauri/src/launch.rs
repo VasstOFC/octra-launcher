@@ -20,6 +20,7 @@ use crate::settings::Settings;
 pub struct GameEvent {
     pub instance_id: String,
     pub account_uuid: String,
+    pub session_id: String,
     pub pid: u32,
 }
 
@@ -28,11 +29,30 @@ pub struct GameEvent {
 pub struct GameExitEvent {
     pub instance_id: String,
     pub account_uuid: String,
+    pub session_id: String,
     pub code: i32,
 }
 
 pub fn running_key(instance_id: &str, account_uuid: &str) -> String {
     format!("{instance_id}:{account_uuid}")
+}
+
+pub fn running_key_session(instance_id: &str, account_uuid: &str, session_id: &str) -> String {
+    format!("{instance_id}:{account_uuid}:{session_id}")
+}
+
+pub fn running_keys_for_instance_account(
+    running: &HashMap<String, Vec<u32>>,
+    instance_id: &str,
+    account_uuid: &str,
+) -> Vec<String> {
+    let exact = running_key(instance_id, account_uuid);
+    let with_session = format!("{exact}:");
+    running
+        .keys()
+        .filter(|k| **k == exact || k.starts_with(&with_session))
+        .cloned()
+        .collect()
 }
 
 pub fn instance_has_running(running: &HashMap<String, Vec<u32>>, instance_id: &str) -> bool {
@@ -51,12 +71,77 @@ pub fn classpath_sep() -> &'static str {
     if cfg!(windows) { ";" } else { ":" }
 }
 
+fn is_access_denied(err: &std::io::Error) -> bool {
+    err.kind() == std::io::ErrorKind::PermissionDenied || err.raw_os_error() == Some(5)
+}
+
+/// Czyści folder natives; przy zablokowanych plikach (stara gra) przenosi go na bok zamiast failować.
+fn prepare_natives_dir(dest: &Path) -> Result<()> {
+    if !dest.exists() {
+        return std::fs::create_dir_all(dest).map_err(Into::into);
+    }
+    match std::fs::remove_dir_all(dest) {
+        Ok(()) => {}
+        Err(e) if is_access_denied(&e) => {
+            let stamp = std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .map(|d| d.as_secs())
+                .unwrap_or(0);
+            let backup = dest.with_file_name(format!(
+                "{}-stale-{stamp}",
+                dest.file_name()
+                    .and_then(|s| s.to_str())
+                    .unwrap_or("natives")
+            ));
+            let _ = std::fs::remove_dir_all(&backup);
+            if std::fs::rename(dest, &backup).is_ok() {
+                eprintln!(
+                    "Octra: folder natives był zajęty — przeniesiono do {}",
+                    backup.display()
+                );
+            } else {
+                eprintln!(
+                    "Octra: nie można wyczyścić natives ({}) — rozpakowuję na istniejące pliki",
+                    e
+                );
+                return Ok(());
+            }
+        }
+        Err(e) => return Err(e.into()),
+    }
+    std::fs::create_dir_all(dest).map_err(Into::into)
+}
+
+fn open_launch_log(path: &Path) -> Result<std::fs::File> {
+    use std::fs::OpenOptions;
+    #[cfg(windows)]
+    {
+        use std::os::windows::fs::OpenOptionsExt;
+        const FILE_SHARE_READ: u32 = 0x00000001;
+        const FILE_SHARE_WRITE: u32 = 0x00000002;
+        const FILE_SHARE_DELETE: u32 = 0x00000004;
+        OpenOptions::new()
+            .create(true)
+            .append(true)
+            .read(true)
+            .share_mode(FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE)
+            .open(path)
+            .map_err(Into::into)
+    }
+    #[cfg(not(windows))]
+    {
+        OpenOptions::new()
+            .create(true)
+            .append(true)
+            .read(true)
+            .open(path)
+            .map_err(Into::into)
+    }
+}
+
 pub fn extract_natives(dirs: &Dirs, inst: &Instance, meta: &VersionMeta) -> Result<PathBuf> {
     let dest = dirs.natives_dir(&inst.id);
-    if dest.exists() {
-        std::fs::remove_dir_all(&dest)?;
-    }
-    std::fs::create_dir_all(&dest)?;
+    prepare_natives_dir(&dest)?;
     let features = Features::default();
     for lib in &meta.libraries {
         if !meta::rules_allow(&lib.rules, &features) {
@@ -458,6 +543,15 @@ fn matches_instance_jvm(proc: &Process, game_dir: &Path) -> bool {
     })
 }
 
+/// Czy JVM tej instancji wciąż działa (np. po crashu bez sygnału do launchera).
+pub fn game_dir_has_jvm(game_dir: &Path) -> bool {
+    let mut sys = System::new();
+    refresh_processes(&mut sys);
+    sys.processes()
+        .values()
+        .any(|proc| matches_instance_jvm(proc, game_dir))
+}
+
 fn refresh_processes(sys: &mut System) {
     sys.refresh_processes_specifics(
         ProcessesToUpdate::All,
@@ -530,6 +624,7 @@ async fn watch_game_until_exit(
     app: AppHandle,
     instance_id: String,
     account_uuid: String,
+    session_id: String,
     run_key: String,
     mut child: tokio::process::Child,
     root: u32,
@@ -599,6 +694,7 @@ async fn watch_game_until_exit(
         GameExitEvent {
             instance_id,
             account_uuid,
+            session_id,
             code: exit_code,
         },
     );
@@ -693,7 +789,8 @@ fn spawn_java_process(
             }
         }
         Err(Error::msg(format!(
-            "Nie udało się uruchomić Javy: {}",
+            "Nie udało się uruchomić Javy ({}). Zamknij inne okno Minecraft, uruchom Octra jako administrator albo sprawdź ścieżkę Javy w ustawieniach instancji. Szczegóły: {}",
+            java.display(),
             last.map(|e| e.to_string()).unwrap_or_else(|| "odmowa dostępu".into())
         )))
     }
@@ -709,14 +806,20 @@ pub async fn spawn_game(
     settings: Settings,
     inst: Instance,
     account_uuid: String,
+    run_key: String,
+    session_id: String,
     java: PathBuf,
     args: Vec<String>,
 ) -> Result<u32> {
-    let run_key = running_key(&inst.id, &account_uuid);
     let logs = dirs.instance_logs(&inst.id);
     std::fs::create_dir_all(&logs)?;
     let log_path = logs.join("latest.log");
-    let mut log = std::fs::File::create(&log_path)?;
+    let mut log = open_launch_log(&log_path).map_err(|e| {
+        Error::msg(format!(
+            "Nie można otworzyć logu gry ({}): {e}",
+            log_path.display()
+        ))
+    })?;
     writeln!(log, "Octra launch {}", inst.version_id)?;
     writeln!(log, "{} {}", java.display(), args.join(" "))?;
     let game_dir = dirs.game_dir(&inst.id);
@@ -742,10 +845,12 @@ pub async fn spawn_game(
         drop(log);
     }
 
-    let log_file = std::fs::OpenOptions::new()
-        .create(true)
-        .append(true)
-        .open(&log_path)?;
+    let log_file = open_launch_log(&log_path).map_err(|e| {
+        Error::msg(format!(
+            "Nie można otworzyć logu gry ({}): {e}",
+            log_path.display()
+        ))
+    })?;
     let err_file = log_file.try_clone()?;
 
     let env = parse_env_vars(&inst.env_vars_text(&settings));
@@ -781,6 +886,7 @@ pub async fn spawn_game(
         GameEvent {
             instance_id: inst.id.clone(),
             account_uuid: account_uuid.clone(),
+            session_id: session_id.clone(),
             pid,
         },
     );
@@ -793,6 +899,7 @@ pub async fn spawn_game(
         app.clone(),
         inst.id.clone(),
         account_uuid,
+        session_id,
         run_key,
         child,
         pid,
@@ -800,6 +907,42 @@ pub async fn spawn_game(
         post_exit,
     ));
     Ok(pid)
+}
+
+pub fn stop_games_for_instance_account(
+    app: &AppHandle,
+    instance_id: &str,
+    account_uuid: &str,
+) -> Result<()> {
+    let keys = {
+        let state = app
+            .try_state::<crate::AppState>()
+            .ok_or_else(|| Error::msg("Brak stanu launchera."))?;
+        let running = state.running.lock();
+        running_keys_for_instance_account(&running, instance_id, account_uuid)
+    };
+    if keys.is_empty() {
+        return Err(Error::msg(
+            "Gra nie jest uruchomiona dla tego profilu i konta.",
+        ));
+    }
+    let mut stopped = false;
+    let mut last_err: Option<Error> = None;
+    for key in keys {
+        match stop_game(app, &key) {
+            Ok(()) => stopped = true,
+            Err(e) => last_err = Some(e),
+        }
+    }
+    if stopped {
+        Ok(())
+    } else if let Some(e) = last_err {
+        Err(e)
+    } else {
+        Err(Error::msg(
+            "Nie udało się zatrzymać procesu gry (może już się zamknął).",
+        ))
+    }
 }
 
 pub fn stop_game(app: &AppHandle, run_key: &str) -> Result<()> {

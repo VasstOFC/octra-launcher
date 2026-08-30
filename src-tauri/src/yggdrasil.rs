@@ -1316,17 +1316,57 @@ pub async fn push_registry(
         return;
     }
     let url = format!("{}/skins/{}", base, hyphenate_uuid(uuid));
+    let api_key = settings.skins_registry_key();
     let send = |method: reqwest::Method| {
-        http.request(method, &url)
+        let mut req = http
+            .request(method, &url)
             .header(reqwest::header::CONTENT_TYPE, "image/png")
             .header("X-Lumen-Model", model)
             .header("X-Lumen-Name", name)
             .timeout(Duration::from_secs(12))
-            .body(png.to_vec())
-            .send()
+            .body(png.to_vec());
+        if !api_key.is_empty() {
+            req = req.header("X-Octra-Key", api_key.as_str());
+        }
+        req.send()
     };
     if send(reqwest::Method::PUT).await.is_err() {
         let _ = send(reqwest::Method::POST).await;
+    }
+}
+
+/// Wysyła aktywny skin konta na zdalny rejestr (jeśli skonfigurowany).
+pub async fn push_account_skin(http: &reqwest::Client, dirs: &Dirs, account_uuid: &str) {
+    let Some(skin) = skins::load_local_skin(dirs, account_uuid) else {
+        return;
+    };
+    push_registry(
+        http,
+        &skin.uuid,
+        &skin.png,
+        skin.model.as_str(),
+        &skin.name,
+    )
+    .await;
+}
+
+/// Synchronizuje wszystkie skiny z dysku na zdalny rejestr.
+pub async fn sync_all_to_registry(http: &reqwest::Client, dirs: &Dirs) {
+    let Ok((settings, _)) = Settings::load() else {
+        return;
+    };
+    if settings.skins_url().is_empty() {
+        return;
+    }
+    for skin in skins::list_gossip_skins(dirs) {
+        push_registry(
+            http,
+            &skin.uuid,
+            &skin.png,
+            skin.model.as_str(),
+            &skin.name,
+        )
+        .await;
     }
 }
 

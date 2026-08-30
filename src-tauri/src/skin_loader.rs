@@ -11,6 +11,7 @@ use crate::instances::{Instance, Loader};
 use crate::install;
 use crate::loaders::fabric;
 use crate::paths::Dirs;
+use crate::settings::Settings;
 use crate::skins;
 
 const CSL_SLUG: &str = "customskinloader";
@@ -55,7 +56,10 @@ pub async fn ensure_skin_support(
     }
 
     ensure_custom_skin_loader_jar(client, dirs, &game_dir, game_version).await?;
-    write_csl_config(&game_dir, ygg_root)?;
+    let registry = Settings::load()
+        .map(|(s, _)| s.skins_url())
+        .unwrap_or_default();
+    write_csl_config(&game_dir, ygg_root, &registry)?;
     sync_username_skin_files(&game_dir, dirs)?;
     Ok(())
 }
@@ -181,45 +185,67 @@ async fn ensure_custom_skin_loader_jar(
     Ok(())
 }
 
-fn write_csl_config(game_dir: &Path, ygg_root: &str) -> Result<()> {
+fn write_csl_config(game_dir: &Path, ygg_root: &str, registry_url: &str) -> Result<()> {
     let root = ygg_root.trim_end_matches('/');
     let legacy_root = format!("{root}/skins/MinecraftSkins/");
+    let registry = registry_url.trim().trim_end_matches('/');
     let cfg_dir = game_dir.join("CustomSkinLoader");
     std::fs::create_dir_all(&cfg_dir)?;
+    let mut loadlist: Vec<serde_json::Value> = vec![
+        json!({
+            "name": "LumenLocal",
+            "type": "Legacy",
+            "checkPNG": false,
+            "skin": "LocalSkin/skins/{USERNAME}.png",
+            "model": "auto"
+        }),
+        json!({
+            "name": "Lumen",
+            "type": "Legacy",
+            "root": legacy_root
+        }),
+    ];
+    if !registry.is_empty() {
+        loadlist.push(json!({
+            "name": "OctraCloud",
+            "type": "Legacy",
+            "root": format!("{registry}/skins/MinecraftSkins/")
+        }));
+    }
+    loadlist.push(json!({
+        "name": "Mojang",
+        "type": "MojangAPI"
+    }));
     let cfg = json!({
         "version": "15.0",
         "enable": true,
-        "loadlist": [
-            {
-                "name": "LumenLocal",
-                "type": "Legacy",
-                "checkPNG": false,
-                "skin": "LocalSkin/skins/{USERNAME}.png",
-                "model": "auto"
-            },
-            {
-                "name": "Lumen",
-                "type": "Legacy",
-                "root": legacy_root
-            },
-            {
-                "name": "Mojang",
-                "type": "MojangAPI"
-            }
-        ]
+        "loadlist": loadlist,
     });
     std::fs::write(
         cfg_dir.join("CustomSkinLoader.json"),
         serde_json::to_string_pretty(&cfg)?,
     )?;
-    std::fs::write(
-        cfg_dir.join("skinurls.txt"),
-        format!("{legacy_root}*.png\n"),
-    )?;
+    let mut skinurls = format!("{legacy_root}*.png\n");
+    if !registry.is_empty() {
+        skinurls.push_str(&format!("{registry}/skins/MinecraftSkins/*.png\n"));
+    }
+    std::fs::write(cfg_dir.join("skinurls.txt"), skinurls)?;
     Ok(())
 }
 
-/// Kopiuje skiny offline lockera jako `LocalSkin/skins/{username}.png` dla CustomSkinLoader.
+/// Odświeża CustomSkinLoader we wszystkich folderach gry (np. po zmianie URL rejestru).
+pub fn refresh_csl_configs(ygg_root: &str, registry_url: &str, dirs: &Dirs) -> Result<()> {
+    let insts = crate::instances::list(dirs)?;
+    for inst in insts {
+        let game_dir = dirs.game_dir(&inst.id);
+        if !game_dir.exists() {
+            continue;
+        }
+        write_csl_config(&game_dir, ygg_root, registry_url)?;
+        sync_username_skin_files(&game_dir, dirs)?;
+    }
+    Ok(())
+}
 pub fn sync_username_skin_files(game_dir: &Path, dirs: &Dirs) -> Result<()> {
     let skin_dir = game_dir
         .join("CustomSkinLoader")
@@ -249,12 +275,13 @@ mod tests {
     fn csl_config_has_lumen_legacy() {
         let dir = std::env::temp_dir().join("octra-csl-test");
         let _ = std::fs::remove_dir_all(&dir);
-        write_csl_config(&dir, "http://127.0.0.1:63078").unwrap();
+        write_csl_config(&dir, "http://127.0.0.1:63078", "https://skiny.example.com").unwrap();
         let raw =
             std::fs::read_to_string(dir.join("CustomSkinLoader/CustomSkinLoader.json")).unwrap();
         assert!(raw.contains("Lumen"));
         assert!(raw.contains("MinecraftSkins"));
-        assert!(raw.contains("LumenLocal"));
+        assert!(raw.contains("OctraCloud"));
+        assert!(raw.contains("skiny.example.com"));
         assert!(raw.contains("\"type\": \"Legacy\""));
         assert!(raw.contains("LocalSkin/skins/{USERNAME}.png"));
         assert!(!raw.contains("\"type\": \"Local\""));

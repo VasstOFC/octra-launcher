@@ -1,7 +1,5 @@
-function dataUrl(pngBase64: string): string {
-  return pngBase64.startsWith("data:")
-    ? pngBase64
-    : `data:image/png;base64,${pngBase64}`;
+function normalizeBase64(pngBase64: string): string {
+  return pngBase64.replace(/^data:image\/png;base64,/, "").replace(/\s/g, "");
 }
 
 function loadImage(src: string): Promise<HTMLImageElement> {
@@ -11,6 +9,19 @@ function loadImage(src: string): Promise<HTMLImageElement> {
     img.onerror = () => reject(new Error("skin"));
     img.src = src;
   });
+}
+
+/** Ładuje PNG skina — blob URL dla dużych plików (stabilniejsze niż długi data: URL). */
+async function loadSkinImage(pngBase64: string): Promise<HTMLImageElement> {
+  const raw = normalizeBase64(pngBase64);
+  const bytes = Uint8Array.from(atob(raw), (c) => c.charCodeAt(0));
+  const blob = new Blob([bytes], { type: "image/png" });
+  const url = URL.createObjectURL(blob);
+  try {
+    return await loadImage(url);
+  } finally {
+    URL.revokeObjectURL(url);
+  }
 }
 
 function drawPart(
@@ -34,7 +45,7 @@ export async function bodyFromSkinPngBase64(
   pngBase64: string,
   model: "slim" | "classic" = "classic",
 ): Promise<string> {
-  const img = await loadImage(dataUrl(pngBase64));
+  const img = await loadSkinImage(pngBase64);
   const unit = img.width / 64;
   const scale = 10;
   const w = 16 * scale;
@@ -65,7 +76,7 @@ export async function bustFromSkinPngBase64(
   pngBase64: string,
   model: "slim" | "classic" = "classic",
 ): Promise<string> {
-  const img = await loadImage(dataUrl(pngBase64));
+  const img = await loadSkinImage(pngBase64);
   const unit = img.width / 64;
   const scale = 8;
   const w = 14 * scale;
@@ -88,6 +99,26 @@ export async function bustFromSkinPngBase64(
 
   return canvas.toDataURL("image/png");
 }
+
+/** Miniatura peleryny — płaski przód (x=1…10, y=1…16 w atlasie 64×32), jak w Modrinth. */
+export async function capeFrontFromPngBase64(pngBase64: string): Promise<string> {
+  const img = await loadSkinImage(pngBase64);
+  const unit = img.width / 64;
+  const scale = 8;
+  const w = 10 * scale;
+  const h = 16 * scale;
+  const canvas = document.createElement("canvas");
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error("canvas");
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(img, 1 * unit, 1 * unit, 10 * unit, 16 * unit, 0, 0, w, h);
+  return canvas.toDataURL("image/png");
+}
+
+/** @deprecated Użyj capeFrontFromPngBase64 */
+export const capeBackFromPngBase64 = capeFrontFromPngBase64;
 
 export function mcHeadsBodyUrl(uuidOrName: string, size = 128): string {
   const id = uuidOrName.replace(/-/g, "");

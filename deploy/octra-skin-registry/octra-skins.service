@@ -1,0 +1,19 @@
+[Unit]
+Description=Octra skin registry
+After=network.target
+
+[Service]
+Type=simple
+User=octra
+Group=octra
+WorkingDirectory=/opt/octra-skin-registry
+Environment=PORT=8787
+Environment=BIND=127.0.0.1
+Environment=DATA_DIR=/var/lib/octra-skins
+EnvironmentFile=-/etc/octra-skins.env
+ExecStart=/usr/bin/python3 /opt/octra-skin-registry/server.py
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

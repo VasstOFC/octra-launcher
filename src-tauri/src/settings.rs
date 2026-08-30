@@ -20,6 +20,9 @@ pub struct Settings {
     pub show_snapshots: bool,
     #[serde(default)]
     pub close_on_launch: bool,
+    /// Pozwól uruchomić kilka klientów Minecraft na tym samym profilu i koncie.
+    #[serde(default = "default_true")]
+    pub allow_multiple_instances: bool,
     #[serde(default)]
     pub data_dir: Option<String>,
     /// Zostaje w JSON dla starych ustawień; karta korzysta z `config::FEATURED_PACK`.
@@ -76,6 +79,9 @@ pub struct Settings {
     /// Opcjonalny HTTP serwer skinów Lumen (`GET/PUT /skins/{uuid}`).
     #[serde(default)]
     pub skins_url: String,
+    /// Klucz API do zapisu na serwerze skinów (`X-Octra-Key`).
+    #[serde(default)]
+    pub skins_registry_key: String,
     /// Zamknięcie okna chowa launcher do zasobnika zamiast kończyć proces.
     #[serde(default = "default_true")]
     pub hide_to_tray: bool,
@@ -131,6 +137,7 @@ impl Default for Settings {
             azure_client_id: String::new(),
             show_snapshots: false,
             close_on_launch: false,
+            allow_multiple_instances: true,
             data_dir: None,
             featured_pack: String::new(),
             featured_pack_title: String::new(),
@@ -158,6 +165,7 @@ impl Default for Settings {
             max_concurrent_downloads: default_max_downloads(),
             max_concurrent_writes: default_max_writes(),
             skins_url: String::new(),
+            skins_registry_key: String::new(),
             hide_to_tray: true,
             discord_rpc: true,
             auto_check_updates: true,
@@ -204,10 +212,14 @@ impl Settings {
         crate::config::FEATURED_SERVER_ADDRESS.trim().to_string()
     }
 
+    /// Zawsze z builda (`config.rs`) — nie konfigurowalne w UI.
     pub fn skins_url(&self) -> String {
-        Self::first_nonempty(&[&self.skins_url, crate::config::LUMEN_SKINS_URL])
-            .trim_end_matches('/')
-            .to_string()
+        crate::config::LUMEN_SKINS_URL.trim().trim_end_matches('/').to_string()
+    }
+
+    /// Zawsze z builda (`config.rs`) — nie konfigurowalne w UI.
+    pub fn skins_registry_key(&self) -> String {
+        crate::config::LUMEN_SKINS_API_KEY.trim().to_string()
     }
 
     pub fn java_path_for_major(&self, major: u32) -> Option<&str> {

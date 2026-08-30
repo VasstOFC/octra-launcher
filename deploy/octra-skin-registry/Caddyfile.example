@@ -1,0 +1,7 @@
+# Przykład: Caddy na VPS (HTTPS → lokalny serwer na 8787)
+# Zainstaluj: sudo apt install caddy
+# Skopiuj do /etc/caddy/Caddyfile i: sudo systemctl reload caddy
+
+skiny.TWOJA-DOMENA.pl {
+    reverse_proxy 127.0.0.1:8787
+}

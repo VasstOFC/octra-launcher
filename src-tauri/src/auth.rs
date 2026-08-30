@@ -589,7 +589,7 @@ pub async fn complete_login(
     Ok(account)
 }
 
-pub async fn session_for_account(
+pub async fn fetch_session_uncached(
     client: &reqwest::Client,
     client_id: &str,
     dirs: &Dirs,
@@ -619,6 +619,17 @@ pub async fn session_for_account(
         .unwrap_or(&refresh);
     let _ = store_refresh(dirs, &session.uuid, refresh_to_store);
     Ok(session)
+}
+
+pub async fn session_for_account(
+    client: &reqwest::Client,
+    client_id: &str,
+    dirs: &Dirs,
+    account: &Account,
+) -> Result<McSession> {
+    crate::mojang_cache::global()
+        .session_for_account(client, client_id, dirs, account)
+        .await
 }
 
 pub fn add_offline_account(dirs: &Dirs, name: &str) -> Result<Account> {
@@ -695,6 +706,7 @@ pub fn is_offline_uuid(id: &str) -> bool {
 }
 
 pub fn logout(dirs: &Dirs, uuid: &str) -> Result<AccountsFile> {
+    crate::mojang_cache::global().invalidate_account(uuid);
     delete_refresh(dirs, uuid);
     let mut file = load_accounts(dirs)?;
     file.accounts.retain(|a| a.uuid != uuid);

@@ -34,7 +34,7 @@ import { checkForUpdates } from "./lib/updater";
 
 function sessionFromGameEvent(
   payload: unknown,
-): { instanceId: string; accountUuid: string } | undefined {
+): { instanceId: string; accountUuid: string; sessionId: string } | undefined {
   if (!payload || typeof payload !== "object") return undefined;
   const p = payload as Record<string, unknown>;
   const nested =
@@ -45,9 +45,15 @@ function sessionFromGameEvent(
     p.instanceId ?? p.instance_id ?? nested?.instanceId ?? nested?.instance_id;
   const accountUuid =
     p.accountUuid ?? p.account_uuid ?? nested?.accountUuid ?? nested?.account_uuid;
+  const sessionId =
+    p.sessionId ?? p.session_id ?? nested?.sessionId ?? nested?.session_id;
   if (typeof instanceId !== "string" || !instanceId) return undefined;
   if (typeof accountUuid !== "string" || !accountUuid) return undefined;
-  return { instanceId, accountUuid };
+  return {
+    instanceId,
+    accountUuid,
+    sessionId: typeof sessionId === "string" ? sessionId : "",
+  };
 }
 
 function MainView({ view }: { view: string }) {
@@ -137,12 +143,21 @@ export default function App() {
     }).then((u) => unsubs.push(u));
     void listen<unknown>("game-started", (e) => {
       const session = sessionFromGameEvent(e.payload);
-      if (session) markPlaying(session.instanceId, session.accountUuid);
+      if (session)
+        markPlaying(
+          session.instanceId,
+          session.accountUuid,
+          session.sessionId,
+        );
     }).then((u) => unsubs.push(u));
     void listen<unknown>("game-exited", (e) => {
       const session = sessionFromGameEvent(e.payload);
       if (session) {
-        markStopped(session.instanceId, session.accountUuid);
+        markStopped(
+          session.instanceId,
+          session.accountUuid,
+          session.sessionId || undefined,
+        );
         const code =
           typeof e.payload === "object" && e.payload && "code" in e.payload
             ? String((e.payload as { code?: unknown }).code ?? "exit")

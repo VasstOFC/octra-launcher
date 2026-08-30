@@ -19,7 +19,17 @@ impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Self::Msg(m) => write!(f, "{m}"),
-            Self::Io(e) => write!(f, "Błąd pliku: {e}"),
+            Self::Io(e) => {
+                if e.raw_os_error() == Some(5) {
+                    write!(
+                        f,
+                        "Odmowa dostępu do pliku. Zamknij Minecraft (javaw.exe w Menedżerze zadań), \
+                         wyłącz blokadę folderu przez antywirus lub uruchom Octra jako administrator. ({e})"
+                    )
+                } else {
+                    write!(f, "Błąd pliku: {e}")
+                }
+            }
             Self::Http(e) => write!(f, "Błąd sieci: {e}"),
             Self::Json(e) => write!(f, "Błąd JSON: {e}"),
         }

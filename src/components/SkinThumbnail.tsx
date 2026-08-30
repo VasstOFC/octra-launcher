@@ -1,35 +1,56 @@
 import { useEffect, useState } from "react";
 import { api } from "../lib/api";
-import { bustFromSkinPngBase64 } from "../lib/skinRender";
+import { bodyFromSkinPngBase64 } from "../lib/skinRender";
 
 const cache = new Map<string, string>();
 
+function cacheKey(textureKey: string | undefined, pngBase64: string | undefined, variant: string) {
+  if (textureKey) return `tk:${textureKey}:${variant}`;
+  if (pngBase64) return `png:${pngBase64.length}:${pngBase64.slice(0, 48)}:${variant}`;
+  return "";
+}
+
 export function SkinThumbnail({
   textureKey,
+  pngBase64,
   variant,
   alt,
   className,
 }: {
-  textureKey: string;
+  textureKey?: string;
+  pngBase64?: string | null;
   variant: "slim" | "classic";
   alt: string;
   className?: string;
 }) {
-  const [src, setSrc] = useState<string | null>(() => cache.get(textureKey) ?? null);
+  const key = cacheKey(textureKey, pngBase64 ?? undefined, variant);
+  const [src, setSrc] = useState<string | null>(() => (key ? (cache.get(key) ?? null) : null));
 
   useEffect(() => {
+    if (!key) {
+      setSrc(null);
+      return;
+    }
     let cancelled = false;
-    const cached = cache.get(textureKey);
+    setSrc(null);
+    const cached = cache.get(key);
     if (cached) {
       setSrc(cached);
       return;
     }
-    api
-      .getMojangTexturePreview(textureKey)
-      .then(async (b64) => {
-        const url = await bustFromSkinPngBase64(b64, variant);
+    const load =
+      pngBase64 != null && pngBase64 !== ""
+        ? bodyFromSkinPngBase64(pngBase64, variant)
+        : textureKey
+          ? api
+              .getMojangTexturePreview(textureKey)
+              .then((b64) => bodyFromSkinPngBase64(b64, variant))
+          : Promise.reject(new Error("brak skina"));
+
+    void load
+      .then((url) => {
         if (!cancelled) {
-          cache.set(textureKey, url);
+          cache.set(key, url);
           setSrc(url);
         }
       })
@@ -39,7 +60,7 @@ export function SkinThumbnail({
     return () => {
       cancelled = true;
     };
-  }, [textureKey, variant]);
+  }, [key, textureKey, pngBase64, variant]);
 
   if (!src) {
     return <div className={className ?? "h-full w-full animate-pulse bg-white/8"} />;

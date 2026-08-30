@@ -185,6 +185,7 @@ export interface Settings {
   azureClientId: string;
   showSnapshots: boolean;
   closeOnLaunch: boolean;
+  allowMultipleInstances?: boolean;
   dataDir?: string | null;
   featuredPack?: string;
   featuredPackTitle?: string;
@@ -212,6 +213,7 @@ export interface Settings {
   maxConcurrentDownloads?: number;
   maxConcurrentWrites?: number;
   skinsUrl?: string;
+  skinsRegistryKey?: string;
   hideToTray?: boolean;
   discordRpc?: boolean;
   autoCheckUpdates?: boolean;
@@ -238,6 +240,28 @@ export interface OfflineSkin {
   pngBase64?: string | null;
   uploadedAt?: string | null;
   hasCustom: boolean;
+}
+
+export interface SkinLibraryEntry {
+  id: string;
+  name: string;
+  model: string;
+  createdAt: string;
+  source: string;
+  textureKey?: string | null;
+  capeId?: string | null;
+  pngBase64?: string | null;
+  isActive: boolean;
+}
+
+export interface SavePremiumLibraryReq {
+  name: string;
+  variant: string;
+  source: string;
+  textureKey?: string | null;
+  capeId?: string | null;
+  png?: number[] | null;
+  markActive?: boolean;
 }
 
 export interface AccountsFile {
