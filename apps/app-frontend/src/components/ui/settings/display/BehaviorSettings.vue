@@ -41,7 +41,7 @@ const messages = defineMessages({
 	},
 	syncAcrossDevicesSignedOutTooltip: {
 		id: 'app.behavior-settings.sync-across-devices.signed-out-tooltip',
-		defaultMessage: 'Sign into a Modrinth account to sync settings.',
+		defaultMessage: "Octra accounts are coming later. You'll be able to sync settings then.",
 	},
 	startupAndNavigationTitle: {
 		id: 'app.behavior-settings.startup-and-navigation.title',
@@ -61,23 +61,7 @@ const messages = defineMessages({
 	},
 	minimizeLauncherDescription: {
 		id: 'app.appearance-settings.minimize-launcher.description',
-		defaultMessage: 'Minimize Modrinth App when Minecraft starts.',
-	},
-	defaultLandingPageHome: {
-		id: 'app.appearance-settings.default-landing-page.home',
-		defaultMessage: 'Home',
-	},
-	defaultLandingPageLibrary: {
-		id: 'app.appearance-settings.default-landing-page.library',
-		defaultMessage: 'Library',
-	},
-	toggleSidebarTitle: {
-		id: 'app.appearance-settings.toggle-sidebar.title',
-		defaultMessage: 'Hide right sidebar',
-	},
-	toggleSidebarDescription: {
-		id: 'app.appearance-settings.toggle-sidebar.description',
-		defaultMessage: 'Hide the right sidebar by default and add a button to show or hide it.',
+		defaultMessage: 'Minimize Octra App when Minecraft starts.',
 	},
 	jumpBackIntoWorldsTitle: {
 		id: 'app.appearance-settings.jump-back-into-worlds.title',
@@ -135,7 +119,6 @@ const messages = defineMessages({
 type BehaviorSettingsState = {
 	syncBehaviorAcrossDevices: boolean
 	minimizeApp: boolean
-	hideRightSidebar: boolean
 	showJumpIn: boolean
 	compactInstanceCards: boolean
 	showPlayTime: boolean
@@ -150,7 +133,6 @@ function getBehaviorSettingsState(settings: AppSettings): BehaviorSettingsState 
 	return {
 		syncBehaviorAcrossDevices: settings.sync_behavior_across_devices,
 		minimizeApp: settings.hide_on_process_start,
-		hideRightSidebar: settings.toggle_sidebar,
 		showJumpIn: settings.feature_flags[worldsInHomeFlag] ?? DEFAULT_FEATURE_FLAGS[worldsInHomeFlag],
 		compactInstanceCards:
 			settings.feature_flags[compactInstanceCardsFlag] ??
@@ -177,7 +159,6 @@ const { saved, current, changes, saving, hasChanges, reset, save } = useSavable(
 			await updatePreferences({
 				behavior: {
 					minimize_app: value.minimizeApp,
-					hide_right_sidebar: value.hideRightSidebar,
 					show_jump_in: value.showJumpIn,
 					compact_instance_cards: value.compactInstanceCards,
 					show_play_time: value.showPlayTime,
@@ -192,7 +173,7 @@ const { saved, current, changes, saving, hasChanges, reset, save } = useSavable(
 			...persistedSettings.value,
 			sync_behavior_across_devices: value.syncBehaviorAcrossDevices,
 			hide_on_process_start: value.minimizeApp,
-			toggle_sidebar: value.hideRightSidebar,
+			toggle_sidebar: true,
 			hide_nametag_skins_page: value.hideNametag,
 			feature_flags: {
 				...persistedSettings.value.feature_flags,
@@ -207,7 +188,6 @@ const { saved, current, changes, saving, hasChanges, reset, save } = useSavable(
 		await set(nextSettings)
 		persistedSettings.value = nextSettings
 		appSettings.setBehaviorSyncAcrossDevices(value.syncBehaviorAcrossDevices)
-		appSettings.toggleSidebar = value.hideRightSidebar
 		appSettings.hideNametagSkinsPage = value.hideNametag
 		appSettings.featureFlags[worldsInHomeFlag] = value.showJumpIn
 		appSettings.featureFlags[compactInstanceCardsFlag] = value.compactInstanceCards
@@ -283,16 +263,6 @@ onBeforeUnmount(() => {
 					</p>
 				</div>
 				<Toggle id="minimize-launcher" v-model="current.minimizeApp" />
-			</div>
-
-			<div class="flex items-center justify-between gap-4">
-				<div>
-					<h3 class="m-0 text-lg font-semibold text-contrast">
-						{{ formatMessage(messages.toggleSidebarTitle) }}
-					</h3>
-					<p class="m-0 mt-1">{{ formatMessage(messages.toggleSidebarDescription) }}</p>
-				</div>
-				<Toggle id="toggle-sidebar" v-model="current.hideRightSidebar" />
 			</div>
 		</div>
 	</section>

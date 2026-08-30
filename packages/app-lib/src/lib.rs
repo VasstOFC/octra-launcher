@@ -16,6 +16,8 @@ mod event;
 pub mod install;
 mod launcher;
 mod logger;
+pub mod nervia;
+pub mod octra_sync;
 mod state;
 
 pub use api::*;
@@ -32,11 +34,7 @@ pub use util::fetch::DownloadReason;
 
 pub fn launcher_user_agent() -> String {
     const LAUNCHER_BASE_USER_AGENT: &str =
-        concat!("modrinth/theseus/", env!("CARGO_PKG_VERSION"),);
+        concat!("octra/theseus/", env!("CARGO_PKG_VERSION"),);
 
-    format!(
-        "{} ({}; support@modrinth.com)",
-        LAUNCHER_BASE_USER_AGENT,
-        std::env::consts::OS
-    )
+    format!("{} ({})", LAUNCHER_BASE_USER_AGENT, std::env::consts::OS)
 }

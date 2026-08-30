@@ -12,6 +12,7 @@ jobs:
   release:
     name: Release Modrinth App
     if: >-
+      github.repository_owner == 'modrinth' &&
       github.event.workflow_run.conclusion == 'success' &&
       github.event.workflow_run.event == 'push' &&
       startsWith(github.event.workflow_run.head_branch, 'v')

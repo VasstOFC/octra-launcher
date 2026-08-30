@@ -64,7 +64,7 @@ jobs:
     name: Lint and Test
     runs-on: ${{ needs.skip-if-clean.outputs.internal == 'true' && 'namespace-profile-modrinth-turbo' || 'ubuntu-latest' }}
     needs: [skip-if-clean]
-    if: ${{ needs.skip-if-clean.outputs.skip != 'true' }}
+    if: ${{ github.repository_owner == 'modrinth' && needs.skip-if-clean.outputs.skip != 'true' }}
 
     env:
       # Ensure pnpm output is colored in GitHub Actions logs

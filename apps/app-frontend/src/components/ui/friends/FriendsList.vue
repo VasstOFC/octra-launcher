@@ -197,7 +197,7 @@ const messages = defineMessages({
 	signInToAddFriends: {
 		id: 'friends.sign-in-to-add-friends',
 		defaultMessage:
-			"<link>Sign in to a Modrinth account</link> to add friends and see what they're playing!",
+			'Octra accounts are coming later. Friends will be available then.',
 	},
 	addFriendsToShare: {
 		id: 'friends.add-friends-to-share',
@@ -335,15 +335,9 @@ const messages = defineMessages({
 		</template>
 		<template v-else-if="sortedFriends.length === 0">
 			<div class="text-sm">
-				<div v-if="!userCredentials">
-					<IntlFormatted :message-id="messages.signInToAddFriends">
-						<template #link="{ children }">
-							<span class="font-semibold text-brand cursor-pointer" @click="signIn">
-								<component :is="() => children" />
-							</span>
-						</template>
-					</IntlFormatted>
-				</div>
+					<div v-if="!userCredentials">
+						{{ formatMessage(messages.signInToAddFriends) }}
+					</div>
 				<div v-else>
 					<IntlFormatted :message-id="messages.addFriendsToShare">
 						<template #link="{ children }">

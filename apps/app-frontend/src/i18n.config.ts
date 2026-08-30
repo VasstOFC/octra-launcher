@@ -6,9 +6,11 @@ const localeModules = import.meta.glob<{ default: CrowdinMessages }>('./locales/
 	eager: true,
 })
 
+export const DEFAULT_APP_LOCALE = 'pl-PL'
+
 const i18n = createI18n({
 	legacy: false,
-	locale: 'en-US',
+	locale: DEFAULT_APP_LOCALE,
 	fallbackLocale: 'en-US',
 	messageCompiler: createMessageCompiler(),
 	missingWarn: false,

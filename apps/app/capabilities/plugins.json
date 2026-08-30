@@ -49,6 +49,9 @@
 					"url": "http://127.0.0.1:8000/*"
 				},
 				{
+					"url": "http://92.5.186.6/*"
+				},
+				{
 					"url": "http://*.taila228c5.ts.net/*"
 				},
 				{
@@ -89,6 +92,12 @@
 				},
 				{
 					"path": "$CONFIG/profiles/**"
+				},
+				{
+					"path": "$APPDATA/.octralauncher/instances"
+				},
+				{
+					"path": "$APPDATA/.octralauncher/instances/**"
 				}
 			]
 		},
@@ -113,6 +122,7 @@
 		"utils:default",
 		"ads:default",
 		"friends:default",
-		"worlds:default"
+		"worlds:default",
+		"octra:default"
 	]
 }

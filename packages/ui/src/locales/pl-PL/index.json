@@ -35,6 +35,12 @@
   "affiliate.viewAnalytics": {
     "defaultMessage": "Pokaż dane analityczne"
   },
+  "app.appearance-settings.native-decorations.description": {
+    "defaultMessage": "Użyj paska tytułu i przycisków okna systemu operacyjnego. Wymaga ponownego uruchomienia aplikacji."
+  },
+  "app.appearance-settings.native-decorations.title": {
+    "defaultMessage": "Systemowa ramka okna"
+  },
   "app.server-settings.failed-to-load-server": {
     "defaultMessage": "Nie udało się załadować ustawień serwera"
   },
@@ -91,6 +97,15 @@
   },
   "billing.resubscribe-modal.title": {
     "defaultMessage": "Wznów subskrypcję serwera"
+  },
+  "browse.advanced-filters.apply-saved-preferences": {
+    "defaultMessage": "Zastosuj zapisane preferencje"
+  },
+  "browse.advanced-filters.link-overriding-preferences": {
+    "defaultMessage": "Filtry tego linku różnią się od zapisanych zaawansowanych wykluczeń"
+  },
+  "browse.advanced-filters.persistence-note": {
+    "defaultMessage": "Zaawansowane wykluczenia są zapisywane między sesjami. Otwarcie udostępnionego linku z filtrami je nadpisze."
   },
   "browse.filter-results": {
     "defaultMessage": "Filtruj wyniki..."
@@ -160,6 +175,9 @@
   },
   "button.continue": {
     "defaultMessage": "Kontynuuj"
+  },
+  "button.copied-to-clipboard": {
+    "defaultMessage": "Skopiowano do schowka"
   },
   "button.copy-filename": {
     "defaultMessage": "Kopiuj nazwę pliku"
@@ -297,7 +315,7 @@
     "defaultMessage": "Zarejestruj się"
   },
   "button.stop": {
-    "defaultMessage": "Stop"
+    "defaultMessage": "Zatrzymaj"
   },
   "button.switch-to-version": {
     "defaultMessage": "Zmień na wersję"
@@ -352,6 +370,9 @@
   },
   "content-type.item.lowercase": {
     "defaultMessage": "{count, plural, one {przedmiot} few {przedmioty} other {przedmiotów}}"
+  },
+  "content.card.frozen": {
+    "defaultMessage": "Ten projekt jest zablokowany na obecnej wersji, dopóki nie zostanie odblokowany."
   },
   "content.card.select-project": {
     "defaultMessage": "Wybierz {project}"
@@ -593,6 +614,12 @@
   "content.managed-card.summary.installing": {
     "defaultMessage": "Instalowanie zawartości..."
   },
+  "content.managed-card.summary.loading": {
+    "defaultMessage": "Ładowanie podsumowania zarządzanej zawartości"
+  },
+  "content.managed-card.summary.no-provided-content": {
+    "defaultMessage": "Brak dostarczonej zawartości"
+  },
   "content.managed-card.switch-version": {
     "defaultMessage": "Zmień wersje"
   },
@@ -814,6 +841,9 @@
   },
   "creation-flow.modal.custom-setup.game-version.search-placeholder": {
     "defaultMessage": "Szukaj wersję gry..."
+  },
+  "creation-flow.modal.custom-setup.icon.customize": {
+    "defaultMessage": "Dostosuj"
   },
   "creation-flow.modal.custom-setup.icon.randomize": {
     "defaultMessage": "Losuj"
@@ -1364,6 +1394,12 @@
   "files.conflict-modal.overwrite-many-warning": {
     "defaultMessage": "Ponad 100 plików zostanie podmienionych, jeśli rozpakujesz ten plik; niektóre z nich są pokazane poniżej."
   },
+  "files.conflict-modal.overwrite-warning": {
+    "defaultMessage": "Następujące pliki ({count}) już istnieją na serwerze i zostaną nadpisane, jeśli kontynuujesz rozpakowywanie."
+  },
+  "files.conflict-modal.overwritten-count": {
+    "defaultMessage": "{count} nadpisanych"
+  },
   "files.conflict-modal.warning-header": {
     "defaultMessage": "Pliki zostaną nadpisane"
   },
@@ -1648,6 +1684,9 @@
   },
   "files.upload-dropdown.unexpected-error": {
     "defaultMessage": "Wystąpił nieoczekiwany błąd."
+  },
+  "files.upload-dropdown.uploads-left": {
+    "defaultMessage": " — pozostało {count}"
   },
   "files.upload.drag-and-drop.drop-to-upload": {
     "defaultMessage": "Upuść tutaj {type} do przesłania"
@@ -1982,6 +2021,117 @@
   "icon-select.select": {
     "defaultMessage": "Wybierz ikonę"
   },
+  "image-viewer.close": {
+    "defaultMessage": "Zamknij"
+  },
+  "image-viewer.edit": {
+    "defaultMessage": "Edytuj"
+  },
+  "image-viewer.editor.censor.blur": {
+    "defaultMessage": "Rozmycie"
+  },
+  "image-viewer.editor.censor.mode": {
+    "defaultMessage": "Typ cenzury"
+  },
+  "image-viewer.editor.censor.solid": {
+    "defaultMessage": "Jednolity"
+  },
+  "image-viewer.editor.colour": {
+    "defaultMessage": "Kolor"
+  },
+  "image-viewer.editor.crop.dimensions": {
+    "defaultMessage": "{width} × {height} px"
+  },
+  "image-viewer.editor.crop.reset": {
+    "defaultMessage": "Resetuj kadrowanie"
+  },
+  "image-viewer.editor.delete-selection": {
+    "defaultMessage": "Usuń zaznaczoną adnotację"
+  },
+  "image-viewer.editor.eraser.area": {
+    "defaultMessage": "Obszar"
+  },
+  "image-viewer.editor.eraser.element": {
+    "defaultMessage": "Element"
+  },
+  "image-viewer.editor.eraser.mode": {
+    "defaultMessage": "Tryb gumki"
+  },
+  "image-viewer.editor.image-editing-tools": {
+    "defaultMessage": "Narzędzia edycji obrazu"
+  },
+  "image-viewer.editor.more-save-options": {
+    "defaultMessage": "Więcej opcji zapisu"
+  },
+  "image-viewer.editor.overwrite": {
+    "defaultMessage": "Nadpisz"
+  },
+  "image-viewer.editor.redo": {
+    "defaultMessage": "Ponów"
+  },
+  "image-viewer.editor.save-as-new": {
+    "defaultMessage": "Zapisz kopię"
+  },
+  "image-viewer.editor.save-image": {
+    "defaultMessage": "Zapisz obraz"
+  },
+  "image-viewer.editor.size": {
+    "defaultMessage": "Rozmiar"
+  },
+  "image-viewer.editor.tool.arrow": {
+    "defaultMessage": "Strzałka"
+  },
+  "image-viewer.editor.tool.censor": {
+    "defaultMessage": "Cenzura"
+  },
+  "image-viewer.editor.tool.crop": {
+    "defaultMessage": "Kadrowanie"
+  },
+  "image-viewer.editor.tool.ellipse": {
+    "defaultMessage": "Elipsa"
+  },
+  "image-viewer.editor.tool.eraser": {
+    "defaultMessage": "Gumka"
+  },
+  "image-viewer.editor.tool.highlight": {
+    "defaultMessage": "Podświetlenie"
+  },
+  "image-viewer.editor.tool.pen": {
+    "defaultMessage": "Pędzel"
+  },
+  "image-viewer.editor.tool.rectangle": {
+    "defaultMessage": "Prostokąt"
+  },
+  "image-viewer.editor.tool.select": {
+    "defaultMessage": "Zaznacz"
+  },
+  "image-viewer.editor.tool.text": {
+    "defaultMessage": "Tekst"
+  },
+  "image-viewer.editor.undo": {
+    "defaultMessage": "Cofnij"
+  },
+  "image-viewer.editor.width": {
+    "defaultMessage": "Szerokość"
+  },
+  "image-viewer.editor.zoom-fit": {
+    "defaultMessage": "Dopasuj"
+  },
+  "image-viewer.editor.zoom-fit-workspace": {
+    "defaultMessage": "Dopasuj do obszaru roboczego"
+  },
+  "image-viewer.editor.zoom-in": {
+    "defaultMessage": "Powiększ"
+  },
+  "image-viewer.editor.zoom-out": {
+    "defaultMessage": "Pomniejsz"
+  },
+  "image-viewer.next": {
+    "defaultMessage": "Następny obraz"
+  },
+  "image-viewer.previous": {
+    "defaultMessage": "Poprzedni obraz"
+  },
   "input.search-version.placeholder": {
     "defaultMessage": "Szukaj wersji..."
   },
@@ -2210,6 +2360,12 @@
   "instances.content-install.show-unavailable": {
     "defaultMessage": "Pokaż niedostępne"
   },
+  "instances.managed-content-modal.download-file": {
+    "defaultMessage": "Pobierz plik"
+  },
+  "instances.managed-content-modal.empty-description": {
+    "defaultMessage": "To źródło nie zawiera zarządzanej zawartości."
+  },
   "instances.managed-content-modal.empty-title": {
     "defaultMessage": "Nie znaleziono żadnej zawartości"
   },
@@ -2227,6 +2383,12 @@
   },
   "instances.managed-content-modal.no-results": {
     "defaultMessage": "Nie znaleziono żadnego projektu pasującego do Twojego wyszukiwania."
+  },
+  "instances.managed-content-modal.open-in-slicer": {
+    "defaultMessage": "Otwórz w Slicerze"
+  },
+  "instances.managed-content-modal.search-placeholder": {
+    "defaultMessage": "Szukaj {count, number} {count, plural, one {projektu} few {projektów} many {projektów} other {projektu}}"
   },
   "instances.updater-modal.badge.current": {
     "defaultMessage": "Aktualny"
@@ -2561,6 +2723,9 @@
   "label.yes": {
     "defaultMessage": "Tak"
   },
+  "layout.account-switcher.switching": {
+    "defaultMessage": "Przełączanie kont..."
+  },
   "locale.cs-CZ": {
     "defaultMessage": "Czeski"
   },
@@ -2817,16 +2982,16 @@
     "defaultMessage": "Otrzymuj aktualizacje plików, gdy zmienione są na serwerze"
   },
   "modal.open-in-app.get-app": {
-    "defaultMessage": "Pobierz Modrinth App"
+    "defaultMessage": "Pobierz Octra App"
   },
   "modal.open-in-app.opening-automatically": {
-    "defaultMessage": "Modrinth App zostanie otwarte automatycznie..."
+    "defaultMessage": "Octra App zostanie otwarte automatycznie..."
   },
   "modal.open-in-app.title": {
-    "defaultMessage": "Otwieranie Modrinth App"
+    "defaultMessage": "Otwieranie Octra App"
   },
   "modal.open-in-app.why-use": {
-    "defaultMessage": "Czemu warto używać Modrinth App"
+    "defaultMessage": "Czemu warto używać Octra App"
   },
   "notification.error.title": {
     "defaultMessage": "Wystąpił błąd"
@@ -2840,17 +3005,29 @@
   "notifications.dismiss": {
     "defaultMessage": "Odrzuć powiadomienie"
   },
+  "notifications.friend-request.body": {
+    "defaultMessage": "<actor>{actor}</actor> wysłał(a) Ci zaproszenie do znajomych."
+  },
+  "notifications.instance-invite.body": {
+    "defaultMessage": "<actor>{actor}</actor> zaprosił(a) Cię do instancji <entity>{entity}</entity>."
+  },
   "notifications.instance-ready.launch-game": {
     "defaultMessage": "Uruchom grę"
   },
   "notifications.instance-ready.open-instance": {
     "defaultMessage": "Instancja"
   },
+  "notifications.instance-ready.status": {
+    "defaultMessage": "Zainstalowano i gotowe do gry."
+  },
   "notifications.invite.accept": {
     "defaultMessage": "Akceptuj"
   },
   "notifications.invite.decline": {
     "defaultMessage": "Odrzuć"
+  },
+  "notifications.server-invite.body": {
+    "defaultMessage": "<actor>{actor}</actor> zaprosił(a) Cię do zarządzania serwerem <entity>{entity}</entity>."
   },
   "omorphia.component.badge.label.accepted": {
     "defaultMessage": "Zaakceptowany"
@@ -3052,6 +3229,9 @@
   },
   "profile.button.set-affiliate": {
     "defaultMessage": "Ustaw jako partnera"
+  },
+  "profile.button.shared-instances": {
+    "defaultMessage": "Zobacz udostępnione instancje"
   },
   "profile.button.unblock": {
     "defaultMessage": "Odblokuj"
@@ -3410,8 +3590,20 @@
   "project.disclosure.derivative-work.show-more": {
     "defaultMessage": "Pokaż {count} więcej"
   },
+  "project.disclosure.derivative-work.title": {
+    "defaultMessage": "To dzieło pochodne względem:"
+  },
   "project.disclosure.paid-features.title": {
     "defaultMessage": "Zawiera płatne funkcje"
+  },
+  "project.disclosure.photosensitivity.title": {
+    "defaultMessage": "Ostrzeżenie o światłoczułości"
+  },
+  "project.disclosure.system-interactions.title": {
+    "defaultMessage": "Zawiera interakcje z zewnętrznymi systemami"
+  },
+  "project.disclosure.telemetry.title": {
+    "defaultMessage": "Zawiera {consent, select, opt_in {telemetrię wymagającą zgody} opt_out {telemetrię z możliwością rezygnacji} always_active {zawsze aktywną telemetrię} other {telemetrię}}"
   },
   "project.download-count-tooltip": {
     "defaultMessage": "{count, number} {count, plural, one {pobranie} few {pobrania} other {pobrań}}"
@@ -3791,14 +3983,23 @@
   "project.settings.disclosures.telemetry.consent-always-active": {
     "defaultMessage": "Zawsze aktywna"
   },
+  "project.settings.disclosures.telemetry.consent-opt-in": {
+    "defaultMessage": "Wymaga zgody"
+  },
+  "project.settings.disclosures.telemetry.consent-opt-out": {
+    "defaultMessage": "Z możliwością rezygnacji"
+  },
+  "project.settings.disclosures.title": {
+    "defaultMessage": "Ujawnienia"
+  },
   "project.settings.environment.client_and_server.description": {
     "defaultMessage": "Posiada pewne funkcje zarówno po stronie klienta, jak i serwera, nawet jeśli tylko częściowo."
   },
-  "project.settings.environment.client_and_server.optional_both.title": {
-    "defaultMessage": "Opcjonalne w obu przypadkach, działa tak samo po zainstalowaniu po dowolnej stronie"
-  },
   "project.settings.environment.client_and_server.optional_both_prefers_both.title": {
     "defaultMessage": "Opcjonalne w obu przypadkach, działa najlepiej po zainstalowaniu po obu stronach"
+  },
+  "project.settings.environment.client_and_server.optional_both.title": {
+    "defaultMessage": "Opcjonalne w obu przypadkach, działa tak samo po zainstalowaniu po dowolnej stronie"
   },
   "project.settings.environment.client_and_server.optional_client.title": {
     "defaultMessage": "Opcjonalne po stronie klienta"
@@ -3920,6 +4121,12 @@
   "project.stats.followers-label": {
     "defaultMessage": "{count, plural, one {obserwujący} other {obserwujących}}"
   },
+  "project.status.archived.body": {
+    "defaultMessage": "{title} nie otrzyma dalszych aktualizacji, chyba że autor zdecyduje się wycofać archiwizację projektu."
+  },
+  "project.status.archived.header": {
+    "defaultMessage": "{title} został zarchiwizowany"
+  },
   "project.versions.channel.alpha.symbol": {
     "defaultMessage": "A"
   },
@@ -3928,6 +4135,12 @@
   },
   "project.versions.channel.release.symbol": {
     "defaultMessage": "R"
+  },
+  "project.versions.filter.channel": {
+    "defaultMessage": "Kanał"
+  },
+  "project.versions.filter.selected-count": {
+    "defaultMessage": "{count, number} zaznaczonych"
   },
   "project.versions.filter.toggle-tooltip": {
     "defaultMessage": "Przełącz filtrowanie dla {filter}"
@@ -3986,6 +4199,12 @@
   "report.item-type.version": {
     "defaultMessage": "wersję"
   },
+  "report.type.ai-images": {
+    "defaultMessage": "Obrazy wygenerowane przez AI w ikonie, galerii lub opisie"
+  },
+  "report.type.copyright": {
+    "defaultMessage": "Ponownie przesłane dzieło"
+  },
   "report.type.fully-ai-generated": {
     "defaultMessage": "Projekt w pełni wygenerowany przez sztuczną inteligancję"
   },
@@ -3995,6 +4214,9 @@
   "report.type.malicious": {
     "defaultMessage": "Złośliwe"
   },
+  "report.type.missing-disclosure": {
+    "defaultMessage": "Brakujące lub nieprawidłowe ujawnienie"
+  },
   "report.type.name-squatting": {
     "defaultMessage": "Skradziona nazwa"
   },
@@ -4003,6 +4225,144 @@
   },
   "s.bg": {
     "defaultMessage": "Przetwarzanie w tle"
+  },
+  "search.filter_type.advanced": {
+    "defaultMessage": "Zaawansowane wykluczenia"
+  },
+  "search.filter_type.advanced.disclosure.advertisements": {
+    "defaultMessage": "Reklamy"
+  },
+  "search.filter_type.advanced.disclosure.ai_content": {
+    "defaultMessage": "Zawartość wygenerowana przez AI"
+  },
+  "search.filter_type.advanced.disclosure.ai_content.usage": {
+    "defaultMessage": "AI {usage}"
+  },
+  "search.filter_type.advanced.disclosure.archived": {
+    "defaultMessage": "Zarchiwizowane"
+  },
+  "search.filter_type.advanced.disclosure.derivative_work": {
+    "defaultMessage": "Zawartość pochodna"
+  },
+  "search.filter_type.advanced.disclosure.epilepsy_triggers": {
+    "defaultMessage": "Wyzwalacze światłoczułości"
+  },
+  "search.filter_type.advanced.disclosure.paid_features": {
+    "defaultMessage": "Płatne funkcje"
+  },
+  "search.filter_type.advanced.disclosure.system_interactions": {
+    "defaultMessage": "Zewnętrzne interakcje z systemem"
+  },
+  "search.filter_type.advanced.disclosure.telemetry": {
+    "defaultMessage": "Telemetria"
+  },
+  "search.filter_type.compatible_dependency_project_ids": {
+    "defaultMessage": "Zależy od"
+  },
+  "search.filter_type.environment": {
+    "defaultMessage": "Środowisko"
+  },
+  "search.filter_type.environment.client": {
+    "defaultMessage": "Klient"
+  },
+  "search.filter_type.environment.server": {
+    "defaultMessage": "Serwer"
+  },
+  "search.filter_type.game_version": {
+    "defaultMessage": "Wersja gry"
+  },
+  "search.filter_type.game_version.all_versions": {
+    "defaultMessage": "Pokaż wszystkie wersje"
+  },
+  "search.filter_type.included_content": {
+    "defaultMessage": "Zawarta zawartość"
+  },
+  "search.filter_type.license": {
+    "defaultMessage": "Licencja"
+  },
+  "search.filter_type.license.open_source": {
+    "defaultMessage": "Otwarte oprogramowanie"
+  },
+  "search.filter_type.mod_loader": {
+    "defaultMessage": "Loader"
+  },
+  "search.filter_type.modpack_loader": {
+    "defaultMessage": "Loader"
+  },
+  "search.filter_type.plugin_loader": {
+    "defaultMessage": "Loader"
+  },
+  "search.filter_type.plugin_platform": {
+    "defaultMessage": "Platforma"
+  },
+  "search.filter_type.project_id": {
+    "defaultMessage": "ID projektu"
+  },
+  "search.filter_type.server_content_type": {
+    "defaultMessage": "Rodzaj"
+  },
+  "search.filter_type.server_language": {
+    "defaultMessage": "Język"
+  },
+  "search.filter_type.server_region": {
+    "defaultMessage": "Region"
+  },
+  "search.filter_type.server_status": {
+    "defaultMessage": "Status"
+  },
+  "search.filter_type.shader_loader": {
+    "defaultMessage": "Loader"
+  },
+  "search.filter.dependency_type.any": {
+    "defaultMessage": "Dowolny typ zależności"
+  },
+  "search.filter.dependency_type.embedded": {
+    "defaultMessage": "Wbudowana"
+  },
+  "search.filter.dependency_type.optional": {
+    "defaultMessage": "Opcjonalna"
+  },
+  "search.filter.dependency_type.optional_or_embedded": {
+    "defaultMessage": "Opcjonalna lub wbudowana"
+  },
+  "search.filter.dependency_type.required": {
+    "defaultMessage": "Wymagana"
+  },
+  "search.filter.dependency_type.required_or_embedded": {
+    "defaultMessage": "Wymagana lub wbudowana"
+  },
+  "search.filter.dependency_type.required_or_optional": {
+    "defaultMessage": "Wymagana lub opcjonalna"
+  },
+  "search.filter.dependent_project": {
+    "defaultMessage": "Zależy od: {project}"
+  },
+  "search.filter.dependent_project.clear": {
+    "defaultMessage": "Wyczyść filtr zależności"
+  },
+  "search.filter.dependent_project.search_placeholder": {
+    "defaultMessage": "Szukaj projektu..."
+  },
+  "search.filter.excluded_projects": {
+    "defaultMessage": "Wyklucza: {projects}"
+  },
+  "search.filter.included_content.exclude": {
+    "defaultMessage": "Wyklucz"
+  },
+  "search.filter.included_content.excluded": {
+    "defaultMessage": "Wykluczone"
+  },
+  "search.filter.included_content.remove_project": {
+    "defaultMessage": "Usuń {project}"
+  },
+  "search.filter.included_content.remove_project.tooltip": {
+    "defaultMessage": "Usuń projekt"
+  },
+  "search.filter.included_content.search_placeholder": {
+    "defaultMessage": "Szukaj zawartości..."
+  },
+  "search.filter.included_projects": {
+    "defaultMessage": "Zawiera: {projects}"
   },
   "search.filter.locked.default": {
     "defaultMessage": "Filtr zablokowany"
@@ -4040,71 +4400,11 @@
   "search.filter.option.sub_options.expand.tooltip": {
     "defaultMessage": "Pokaż więcej opcji"
   },
-  "search.filter_type.advanced.disclosure.advertisements": {
-    "defaultMessage": "Reklamy"
+  "search.photosensitivity-warning-modal.body.1": {
+    "defaultMessage": "Nie możemy zagwarantować, że cała zawartość na Modrinth została poprawnie oznaczona."
   },
-  "search.filter_type.advanced.disclosure.archived": {
-    "defaultMessage": "Zarchiwizowane"
-  },
-  "search.filter_type.advanced.disclosure.paid_features": {
-    "defaultMessage": "Płatne funkcje"
-  },
-  "search.filter_type.advanced.disclosure.system_interactions": {
-    "defaultMessage": "Zewnętrzne interakcje z systemem"
-  },
-  "search.filter_type.advanced.disclosure.telemetry": {
-    "defaultMessage": "Telemetria"
-  },
-  "search.filter_type.environment": {
-    "defaultMessage": "Środowisko"
-  },
-  "search.filter_type.environment.client": {
-    "defaultMessage": "Klient"
-  },
-  "search.filter_type.environment.server": {
-    "defaultMessage": "Serwer"
-  },
-  "search.filter_type.game_version": {
-    "defaultMessage": "Wersja gry"
-  },
-  "search.filter_type.game_version.all_versions": {
-    "defaultMessage": "Pokaż wszystkie wersje"
-  },
-  "search.filter_type.license": {
-    "defaultMessage": "Licencja"
-  },
-  "search.filter_type.license.open_source": {
-    "defaultMessage": "Otwarte oprogramowanie"
-  },
-  "search.filter_type.mod_loader": {
-    "defaultMessage": "Loader"
-  },
-  "search.filter_type.modpack_loader": {
-    "defaultMessage": "Loader"
-  },
-  "search.filter_type.plugin_loader": {
-    "defaultMessage": "Loader"
-  },
-  "search.filter_type.plugin_platform": {
-    "defaultMessage": "Platforma"
-  },
-  "search.filter_type.project_id": {
-    "defaultMessage": "ID projektu"
-  },
-  "search.filter_type.server_content_type": {
-    "defaultMessage": "Rodzaj"
-  },
-  "search.filter_type.server_language": {
-    "defaultMessage": "Język"
-  },
-  "search.filter_type.server_region": {
-    "defaultMessage": "Region"
-  },
-  "search.filter_type.server_status": {
-    "defaultMessage": "Status"
-  },
-  "search.filter_type.shader_loader": {
-    "defaultMessage": "Loader"
+  "search.photosensitivity-warning-modal.body.2": {
+    "defaultMessage": "Oznaczenia dotyczące światłoczułości nadają sami twórcy przesyłający zawartość na Modrinth. Te projekty nie przeszły testów bezpieczeństwa."
   },
   "search.photosensitivity-warning-modal.body.3": {
     "defaultMessage": "Korzystasz z jakiejkolwiek zawartości na Modrinth na własne ryzyko. Dbaj o siebie! 💚"
@@ -4883,6 +5183,9 @@
   "servers.grant-access-modal.target.searching": {
     "defaultMessage": "Wyszukiwanie..."
   },
+  "servers.installing-banner.description.applying": {
+    "defaultMessage": "Stosowanie zmian instalacji..."
+  },
   "servers.installing-banner.description.controls": {
     "defaultMessage": "Ustawienia serwera zostaną odblokowane po ukończeniu instalacji."
   },
@@ -4891,6 +5194,9 @@
   },
   "servers.installing-banner.description.preparing": {
     "defaultMessage": "Przygotowywanie Twojego serwera..."
+  },
+  "servers.installing-banner.description.still-working": {
+    "defaultMessage": "Wciąż pracujemy — instalacja trwa..."
   },
   "servers.installing-banner.error.header": {
     "defaultMessage": "Instalacja nie powiodła się"
@@ -4941,13 +5247,16 @@
     "defaultMessage": "Nowy serwer"
   },
   "servers.list-empty.no-servers-description": {
-    "defaultMessage": "Instaluj modyfikacje, zapraszaj znajomych i graj z nimi przy użyciu Modrinth App."
+    "defaultMessage": "Instaluj modyfikacje, zapraszaj znajomych i graj z nimi przy użyciu Octra App."
   },
   "servers.list-empty.one-click-mod-installs-description": {
     "defaultMessage": "Wybierz swoje ulubione mody, a my zajmiemy się resztą."
   },
   "servers.list-empty.one-click-mod-installs-title": {
     "defaultMessage": "Instalacja modyfikacji za jednym kliknięciem"
+  },
+  "servers.list-empty.play-with-friends-description": {
+    "defaultMessage": "Zaproś znajomych do gry na swoim serwerze jednym kliknięciem z Octra App."
   },
   "servers.list-empty.play-with-friends-title": {
     "defaultMessage": "Graj z przyjaciółmi"
@@ -5481,7 +5790,7 @@
     "defaultMessage": "Ciemny"
   },
   "settings.display.theme.description": {
-    "defaultMessage": "Wybierz preferowany motyw kolorystyczny dla Modrinth App."
+    "defaultMessage": "Wybierz preferowany motyw kolorystyczny dla Octra App."
   },
   "settings.display.theme.light": {
     "defaultMessage": "Jasny"
@@ -5500,6 +5809,9 @@
   },
   "settings.display.theme.sync-across-devices": {
     "defaultMessage": "Synchronizuj motyw między urządzeniami"
+  },
+  "settings.display.theme.sync-across-devices.description": {
+    "defaultMessage": "Używaj tego motywu wszędzie, gdzie jesteś zalogowany. Wyłącz, aby zachować osobny motyw na tym urządzeniu."
   },
   "settings.display.theme.sync-across-devices.sign-in-tooltip": {
     "defaultMessage": "Zaloguj się na Modrinth, aby synchronizować motyw"
@@ -5521,6 +5833,15 @@
   },
   "settings.language.categories.search-result": {
     "defaultMessage": "Wyniki wyszukiwania"
+  },
+  "settings.language.coverage.app-tooltip": {
+    "defaultMessage": "Około {percentage}% Octra App jest dostępne w tym języku."
+  },
+  "settings.language.coverage.label": {
+    "defaultMessage": "{percentage}% obsługiwane"
+  },
+  "settings.language.coverage.website-tooltip": {
+    "defaultMessage": "Około {percentage}% strony jest dostępne w tym języku."
   },
   "settings.language.description": {
     "defaultMessage": "Wybierz język, w którym ma być {platform}. Tłumaczenia są tworzone przez chętnych <crowdin-link>na stronie Crowdin</crowdin-link>."
@@ -5548,6 +5869,12 @@
   },
   "settings.pats.title": {
     "defaultMessage": "Klucze dostępu osobistego"
+  },
+  "settings.preferences.update-failed.description": {
+    "defaultMessage": "Nie udało się zapisać ustawień na koncie Octra. Spróbuj ponownie."
+  },
+  "settings.preferences.update-failed.title": {
+    "defaultMessage": "Nie udało się zsynchronizować ustawień"
   },
   "settings.profile.bio.description": {
     "defaultMessage": "Krótki opis, aby powiedzieć wszystkim trochę o Tobie."
@@ -5633,6 +5960,12 @@
   "settings.social.friend-requests.title": {
     "defaultMessage": "Zaproszenia do znajomych"
   },
+  "settings.social.hosting-access.description": {
+    "defaultMessage": "Kontroluj, kto może zapraszać Cię do zarządzania serwerem Modrinth Hosting."
+  },
+  "settings.social.hosting-access.title": {
+    "defaultMessage": "Zaproszenia do hostingu"
+  },
   "settings.social.interaction-source.everyone": {
     "defaultMessage": "Wszyscy"
   },
@@ -5642,8 +5975,23 @@
   "settings.social.interaction-source.friends-of-friends": {
     "defaultMessage": "Znajomi znajomych"
   },
+  "settings.social.interaction-source.loading": {
+    "defaultMessage": "Ładowanie preferencji…"
+  },
   "settings.social.interaction-source.no-one": {
     "defaultMessage": "Nikt"
+  },
+  "settings.social.interaction-source.saving": {
+    "defaultMessage": "Zapisywanie preferencji…"
+  },
+  "settings.social.interaction-source.unavailable": {
+    "defaultMessage": "Twoje preferencje są teraz niedostępne."
+  },
+  "settings.social.shared-instance-invites.description": {
+    "defaultMessage": "Kontroluj, kto może wysyłać Ci zaproszenia do udostępnionych instancji."
+  },
+  "settings.social.shared-instance-invites.title": {
+    "defaultMessage": "Zaproszenia do udostępnionych instancji"
   },
   "settings.social.sign-in-required.description": {
     "defaultMessage": "Możesz kontrolować, kto może z Tobą pisać i zarządzać zablokowanymi użytkownikami na koncie Modrinth"
@@ -5761,6 +6109,12 @@
   },
   "sharing.invite-players-toast.decline": {
     "defaultMessage": "Odrzuć"
+  },
+  "sharing.invite-players-toast.invited-you-to": {
+    "defaultMessage": "zaprosił(a) Cię do"
+  },
+  "sharing.invite-players-toast.server-suffix": {
+    "defaultMessage": "serwera."
   },
   "skins.select": {
     "defaultMessage": "Wybierz skórkę"
@@ -6296,6 +6650,15 @@
   "ui.confirm-leave-modal.title": {
     "defaultMessage": "Opuścić stronę?"
   },
+  "ui.pagination.go-to-page": {
+    "defaultMessage": "Przejdź do strony"
+  },
+  "ui.pagination.next-page": {
+    "defaultMessage": "Następna strona"
+  },
+  "ui.pagination.previous-page": {
+    "defaultMessage": "Poprzednia strona"
+  },
   "ui.stacked-admonitions.alert-count": {
     "defaultMessage": "{count, plural, one {# alert} few {# alerty} other {# alertów}}"
   },
@@ -6429,6 +6792,12 @@
     "defaultMessage": "Ten użytkownik pracuje w Modrinth."
   },
   "user.profile.badge.staff.name": {
+    "defaultMessage": "Zespół Modrinth"
+  },
+  "user.role.moderator": {
+    "defaultMessage": "Moderator treści"
+  },
+  "user.role.modrinth-team": {
     "defaultMessage": "Zespół Modrinth"
   },
   "version.content.name": {

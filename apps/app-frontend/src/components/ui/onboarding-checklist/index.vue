@@ -37,7 +37,7 @@ const messages = defineMessages({
 	},
 	loginModrinth: {
 		id: 'onboarding-checklist.login-modrinth',
-		defaultMessage: 'Sign in to Modrinth',
+		defaultMessage: 'Octra account (coming soon)',
 	},
 })
 
@@ -46,19 +46,22 @@ const steps = computed(() => [
 		id: 'create-instance',
 		label: formatMessage(messages.createInstance),
 		complete: hasCreatedInstance.value,
+		disabled: false,
 		action: () => emit('create-instance'),
 	},
 	{
 		id: 'login-minecraft',
 		label: formatMessage(messages.loginMinecraft),
 		complete: hasLoggedIntoMinecraft.value,
+		disabled: false,
 		action: () => emit('login-minecraft'),
 	},
 	{
 		id: 'login-modrinth',
 		label: formatMessage(messages.loginModrinth),
-		complete: hasLoggedIntoModrinth.value,
-		action: () => emit('login-modrinth'),
+		complete: false,
+		disabled: true,
+		action: () => {},
 	},
 ])
 
@@ -104,11 +107,11 @@ onUnmounted(() => clearTimeout(collapseTimer))
 				type="button"
 				class="flex h-10 w-full items-center gap-2 rounded-xl border border-solid border-button-border bg-button-bg px-4 py-2.5 text-left text-primary shadow-[0_1px_0.5px_rgb(0_0_0_/_12%)] transition-[filter]"
 				:class="
-					step.complete
+					step.complete || step.disabled
 						? '!cursor-default opacity-50'
 						: 'cursor-pointer hover:brightness-110 active:brightness-90'
 				"
-				:disabled="step.complete"
+				:disabled="step.complete || step.disabled"
 				@click="step.action"
 			>
 				<span

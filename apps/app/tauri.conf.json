@@ -62,15 +62,15 @@
 			}
 		]
 	},
-	"productName": "Modrinth App",
+	"productName": "Octra App",
 	"version": "../app-frontend/package.json",
-	"mainBinaryName": "Modrinth App",
-	"identifier": "ModrinthApp",
+	"mainBinaryName": "Octra App",
+	"identifier": "OctraApp",
 	"plugins": {
 		"deep-link": {
 			"desktop": {
 				"schemes": [
-					"modrinth"
+					"octra"
 				]
 			},
 			"mobile": []
@@ -86,7 +86,7 @@
 				"fullscreen": false,
 				"height": 800,
 				"resizable": true,
-				"title": "Modrinth App",
+				"title": "Octra App",
 				"label": "main",
 				"width": 1280,
 				"minHeight": 700,
@@ -115,12 +115,12 @@
 			],
 			"csp": {
 				"default-src": "'self' customprotocol: asset:",
-				"connect-src": "ipc: http://ipc.localhost https://modrinth.com https://*.modrinth.com https://*.nodes.modrinth.com https://*.posthog.com https://posthog.modrinth.com https://*.sentry.io https://api.mclo.gs http://textures.minecraft.net https://textures.minecraft.net https://js.stripe.com https://*.stripe.com wss://*.stripe.com https://*.intercom.io wss://*.intercom.io https://*.intercomcdn.com https://www.intercom-reporting.com https://app.getsentry.com wss://*.nodes.modrinth.com https://*.taila228c5.ts.net https://*.taila228c5.ts.net wss://*.taila228c5.ts.net https://fill.papermc.io https://api.purpurmc.org 'self' data: blob:",
+				"connect-src": "ipc: http://ipc.localhost https://modrinth.com https://*.modrinth.com https://*.nodes.modrinth.com https://*.posthog.com https://posthog.modrinth.com https://*.sentry.io https://api.mclo.gs http://textures.minecraft.net https://textures.minecraft.net https://js.stripe.com https://*.stripe.com wss://*.stripe.com https://*.intercom.io wss://*.intercom.io https://*.intercomcdn.com https://www.intercom-reporting.com https://app.getsentry.com wss://*.nodes.modrinth.com https://*.taila228c5.ts.net https://*.taila228c5.ts.net wss://*.taila228c5.ts.net https://fill.papermc.io https://api.purpurmc.org http://92.5.186.6 https://login.microsoftonline.com https://login.live.com https://sisu.xboxlive.com https://device.auth.xboxlive.com https://user.auth.xboxlive.com https://xsts.auth.xboxlive.com https://api.minecraftservices.com 'self' data: blob:",
 				"font-src": [
 					"https://cdn-raw.modrinth.com/fonts/",
 					"https://js.intercomcdn.com"
 				],
-				"img-src": "https: 'unsafe-inline' 'self' asset: http://asset.localhost http://textures.minecraft.net blob: data:",
+				"img-src": "https: 'unsafe-inline' 'self' asset: http://asset.localhost http://textures.minecraft.net http://92.5.186.6 blob: data:",
 				"style-src": "'unsafe-inline' 'self'",
 				"script-src": "https://*.posthog.com https://posthog.modrinth.com https://js.stripe.com https://widget.intercom.io https://js.intercomcdn.com https://tally.so/widgets/embed.js 'self'",
 				"frame-src": "https://www.youtube.com https://www.youtube-nocookie.com https://discord.com https://tally.so/popup/ https://js.stripe.com https://hooks.stripe.com https://*.intercom.io https://intercom-sheets.com https://www.intercom-reporting.com https://app.intercom.com 'self'",

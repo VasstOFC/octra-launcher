@@ -55,6 +55,19 @@ Var /GLOBAL OldInstallDir
         ${EndIf}
     ${EndIf}
     SetShellVarContext current
+
+    ReadRegStr $R8 HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\pl.octra.launcher" "QuietUninstallString"
+    ReadRegStr $R9 HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\pl.octra.launcher" "UninstallString"
+    ${If} $R8 != ""
+        DetailPrint "Uninstalling Octra Launcher"
+        ExecWait '$R8'
+    ${ElseIf} $R9 != ""
+        DetailPrint "Uninstalling Octra Launcher"
+        ExecWait '"$R9" /P /S'
+    ${EndIf}
+    Delete "$DESKTOP\Octra Launcher.lnk"
+    Delete "$SMPROGRAMS\Octra Launcher.lnk"
+    Delete "$SMPROGRAMS\Octra\Octra Launcher.lnk"
 !macroend
 
 !macro NSIS_HOOK_POSTINSTALL

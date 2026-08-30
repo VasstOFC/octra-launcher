@@ -3,7 +3,6 @@ import {
 	CoffeeIcon,
 	GaugeIcon,
 	HeartHandshakeIcon,
-	LanguagesIcon,
 	ModrinthIcon,
 	PaintbrushIcon,
 	RefreshCwIcon,
@@ -32,7 +31,6 @@ import SocialSettings from '@/components/ui/settings/account/SocialSettings.vue'
 import AppearanceSettings from '@/components/ui/settings/display/AppearanceSettings.vue'
 import BehaviorSettings from '@/components/ui/settings/display/BehaviorSettings.vue'
 import FeatureFlagSettings from '@/components/ui/settings/display/FeatureFlagSettings.vue'
-import LanguageSettings from '@/components/ui/settings/display/LanguageSettings.vue'
 import InstancesSyncedSettings from '@/components/ui/settings/instances/InstancesSyncedSettings.vue'
 import JavaSettings from '@/components/ui/settings/instances/JavaSettings.vue'
 import ResourceManagementSettings from '@/components/ui/settings/instances/ResourceManagementSettings.vue'
@@ -89,16 +87,6 @@ const tabs = [
 		category: tabCategories.display,
 		icon: Settings2Icon,
 		content: BehaviorSettings,
-	},
-	{
-		name: defineMessage({
-			id: 'app.settings.tabs.language',
-			defaultMessage: 'Language',
-		}),
-		category: tabCategories.display,
-		icon: LanguagesIcon,
-		content: LanguageSettings,
-		badge: commonMessages.beta,
 	},
 	{
 		name: commonSettingsMessages.featureFlags,
@@ -282,7 +270,7 @@ const messages = defineMessages({
 	},
 	appVersion: {
 		id: 'app.settings.app-version',
-		defaultMessage: 'Modrinth App {version}',
+		defaultMessage: 'Octra App {version}',
 	},
 	macos: {
 		id: 'app.settings.operating-system.macos',

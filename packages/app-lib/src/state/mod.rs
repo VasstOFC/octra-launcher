@@ -167,6 +167,10 @@ impl State {
             tracing::error!("Error recovering interrupted install jobs: {e}");
         }
 
+        if let Err(e) = crate::octra_sync::sync_from_octra_launcher().await {
+            tracing::error!("Failed to sync Octra Launcher instances: {e}");
+        }
+
         tokio::task::spawn(async move {
             instances::watcher::watch_instances_init(
                 &state.file_watcher,

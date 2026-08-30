@@ -25,7 +25,9 @@ const APP_TITLE_BAR_HEIGHT: f32 = 48.0;
 pub(super) const OCCLUDED_AREA_THRESHOLD: f64 = 0.5;
 
 fn should_show_ads_webview(state: &AdsState) -> bool {
-    state.shown && (state.visibility_holds == 0 || state.consent_overlay_shown)
+    // Octra App does not serve ads.
+    let _ = state;
+    false
 }
 
 #[cfg(not(target_os = "linux"))]
@@ -852,14 +854,9 @@ pub async fn finish_ads_consent_flow<R: Runtime>(
 
 #[tauri::command]
 pub async fn should_show_ads_consent_popup<R: Runtime>(
-    app: tauri::AppHandle<R>,
+    _app: tauri::AppHandle<R>,
 ) -> crate::api::Result<bool> {
-    let state = app.state::<RwLock<AdsState>>();
-    let state = state.read().await;
-
-    Ok(state.shown
-        && state.consent_required
-        && state.consent_notification_enabled)
+    Ok(false)
 }
 
 #[tauri::command]

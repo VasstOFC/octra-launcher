@@ -17,6 +17,11 @@ export default new createRouter({
 			component: Pages.Index,
 		},
 		{
+			path: '/servers',
+			name: 'ServerList',
+			component: Pages.ServerList,
+		},
+		{
 			path: '/hosting/manage/',
 			name: 'Servers',
 			component: Pages.Servers,

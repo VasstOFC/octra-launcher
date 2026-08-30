@@ -14,15 +14,13 @@ import {
 	ChevronLeftIcon,
 	ChevronRightIcon,
 	CompassIcon,
+	GlobeIcon,
 	ImagesIcon,
 	LogInIcon,
 	LogOutIcon,
-	NewspaperIcon,
 	PlayIcon,
 	PlusIcon,
 	RefreshCwIcon,
-	RightArrowIcon,
-	ServerStackIcon,
 	SettingsIcon,
 	ShirtIcon,
 	SpinnerIcon,
@@ -35,7 +33,6 @@ import {
 	AccountSwitchOverlay,
 	Admonition,
 	Avatar,
-	ButtonLink,
 	commonMessages,
 	commonSettingsMessages,
 	ContentInstallModal,
@@ -45,7 +42,6 @@ import {
 	I18nDebugPanel,
 	IconButton,
 	LoadingBar,
-	NewsArticleCard,
 	NotificationPanel,
 	PopupNotificationPanel,
 	provideModalBehavior,
@@ -54,7 +50,6 @@ import {
 	providePageContext,
 	providePopupNotificationManager,
 	TeleportOverflowMenu,
-	TextLogo,
 	useDebugLogger,
 	useFormatBytes,
 	useHostingIntercom,
@@ -78,7 +73,6 @@ import AccountsCard from '@/components/ui/AccountsCard.vue'
 import AppActionBar from '@/components/ui/AppActionBar.vue'
 import Breadcrumbs from '@/components/ui/Breadcrumbs.vue'
 import ErrorModal from '@/components/ui/ErrorModal.vue'
-import FriendsList from '@/components/ui/friends/FriendsList.vue'
 import HostingUpdateRequired from '@/components/ui/HostingUpdateRequired.vue'
 import AddServerToInstanceModal from '@/components/ui/install_flow/AddServerToInstanceModal.vue'
 import UnknownPackWarningModal from '@/components/ui/install_flow/UnknownPackWarningModal.vue'
@@ -91,10 +85,9 @@ import ModpackAlreadyInstalledModal from '@/components/ui/modal/ModpackAlreadyIn
 import ModrinthAccountRequiredModal from '@/components/ui/modal/ModrinthAccountRequiredModal.vue'
 import UpdateToPlayModal from '@/components/ui/modal/UpdateToPlayModal.vue'
 import NavButton from '@/components/ui/NavButton.vue'
+import OctraWordmark from '@/components/brand/OctraWordmark.vue'
 import NewIconEditorNotification from '@/components/ui/new-icon-editor-notification/index.vue'
 import { shouldShowNewIconEditorNotification } from '@/components/ui/new-icon-editor-notification/show-notification'
-import OnboardingChecklist from '@/components/ui/onboarding-checklist/index.vue'
-import PrideFundraiserBanner from '@/components/ui/PrideFundraiserBanner.vue'
 import PromotionWrapper from '@/components/ui/PromotionWrapper.vue'
 import QuickInstanceSwitcher from '@/components/ui/QuickInstanceSwitcher.vue'
 import SharedInstanceInviteHandler from '@/components/ui/shared-instances/shared-instance-invite-handler/index.vue'
@@ -110,13 +103,10 @@ import { config } from '@/config'
 import { getAccountAppearance, rememberAccountAppearance } from '@/helpers/account-appearance.ts'
 import {
 	hide_ads_window,
-	init_ads_window,
-	perform_ads_consent_action,
 	release_ads_window_hold,
-	should_show_ads_consent_popup,
 	take_ads_window_hold,
 } from '@/helpers/ads.js'
-import { debugAnalytics, initAnalytics, trackEvent } from '@/helpers/analytics'
+import { trackEvent } from '@/helpers/analytics'
 import { check_reachable } from '@/helpers/auth.js'
 import { get_user, get_user_many, get_version } from '@/helpers/cache.js'
 import { install_create_modpack_instance, install_get_modpack_preview } from '@/helpers/install'
@@ -129,7 +119,6 @@ import {
 import {
 	get as getCreds,
 	getAll as getAllCreds,
-	login,
 	logout,
 	removeUser,
 	setActive,
@@ -137,7 +126,6 @@ import {
 import { mergeUrlQuery, parseModrinthLink } from '@/helpers/project-links.ts'
 import { get as getSettings, set as setSettings } from '@/helpers/settings.ts'
 import { get_opening_command, initialize_state } from '@/helpers/state'
-import { hasActivePride26Midas, hasMidasBadge } from '@/helpers/user-campaigns.ts'
 import { get_user_preferences } from '@/helpers/user-preferences.ts'
 import { parse_modrinth_user_link } from '@/helpers/users'
 import {
@@ -150,7 +138,7 @@ import {
 	setRestartAfterPendingUpdate,
 } from '@/helpers/utils.js'
 import { start_join_server, start_join_singleplayer_world } from '@/helpers/worlds.ts'
-import i18n from '@/i18n.config'
+import i18n, { DEFAULT_APP_LOCALE } from '@/i18n.config'
 import { instanceKeys } from '@/pages/instance/query-options'
 import {
 	appUpdateState,
@@ -225,33 +213,19 @@ updateHistoryNavigationState()
 const APP_LEFT_NAV_WIDTH = '4rem'
 const APP_SIDEBAR_WIDTH = 300
 const INTERCOM_BUBBLE_DEFAULT_PADDING = 20
-const PRIDE_FUNDRAISER_END_DATE = new Date('2026-07-01T00:00:00Z').getTime()
 const credentials = ref()
 const storedModrinthAccounts = ref([])
 let credentialsRefreshId = 0
-const sidebarToggled = ref(true)
-watch(
-	() => appSettings.toggleSidebar,
-	(toggleSidebar) => {
-		sidebarToggled.value = !toggleSidebar
-	},
-)
 const forceSidebar = computed(
-	() =>
-		route.path.startsWith('/browse') ||
-		route.path.startsWith('/project') ||
-		route.path.startsWith('/user'),
+	() => route.path.startsWith('/browse') || route.path.startsWith('/project'),
 )
-const sidebarVisible = computed(() => sidebarToggled.value || forceSidebar.value)
+const sidebarVisible = forceSidebar
 const hostingRouteActive = computed(() => route.path.startsWith('/hosting'))
 const hostingUpdateRequired = computed(
 	() =>
 		hostingRouteActive.value &&
 		!!appUpdateState.availableUpdate.value &&
 		appUpdateState.updatesEnabled.value,
-)
-const prideFundraiserEnabled = computed(
-	() => appSettings.getFeatureFlag('pride_fundraiser') && Date.now() < PRIDE_FUNDRAISER_END_DATE,
 )
 const hostingIntercomIdentityKey = computed(() => {
 	const rawServerId = route.params.id
@@ -291,12 +265,11 @@ useAppEvent(
 const popupNotificationManager = new AppPopupNotificationManager()
 providePopupNotificationManager(popupNotificationManager)
 const { addPopupNotification } = popupNotificationManager
-let adsConsentPopupId = null
 useAppEvent('ads_consent_required', handleAdsConsentRequired, appEvents)
 
 const appVersion = getVersion()
 const tauriApiClient = new TauriModrinthClient({
-	userAgent: async () => `modrinth/theseus/${await appVersion} (support@modrinth.com)`,
+	userAgent: async () => `octra/theseus/${await appVersion}`,
 	labrinthBaseUrl: config.labrinthBaseUrl,
 	archonBaseUrl: config.archonBaseUrl,
 	sharedInstancesBaseUrl: config.sharedInstancesBaseUrl,
@@ -333,16 +306,9 @@ useQuery({
 	refetchOnWindowFocus: false,
 	refetchOnReconnect: false,
 })
-const hasPlus = computed(
-	() =>
-		!!credentials.value?.user &&
-		(hasMidasBadge(credentials.value.user) ||
-			hasActivePride26Midas(authenticatedModrinthUser.value?.campaigns?.pride_26)),
-)
-const showAd = computed(
-	() => sidebarVisible.value && !hasPlus.value && credentials.value !== undefined,
-)
-const adConsentAvailable = computed(() => credentials.value !== undefined && !hasPlus.value)
+const hasPlus = computed(() => true)
+const showAd = computed(() => false)
+const adConsentAvailable = computed(() => false)
 providePageContext({
 	hierarchicalSidebarAvailable: ref(true),
 	showAds: showAd,
@@ -389,8 +355,7 @@ const {
 	(iconPath) =>
 		creationGeneratedIcon.value?.path === iconPath ? creationGeneratedIcon.value.config : null,
 )
-const { hasLoggedIntoMinecraft, hasLoggedIntoModrinth, showChecklist } = onboardingChecklist
-const showFriendsList = computed(() => !showChecklist.value || hasLoggedIntoModrinth.value)
+const { showChecklist } = onboardingChecklist
 
 async function randomizeCreationIcon() {
 	const generated = await creationIconEditorModal.value?.randomizeAndSave()
@@ -428,7 +393,6 @@ function onCreationIconSaved(iconPath, config) {
 	context.instanceIconPath.value = iconPath
 }
 
-const news = ref([])
 const displayedServerInviteNotifications = new Set()
 const serverInvitePopupNotificationIds = new Set()
 let liveNotificationGeneration = 0
@@ -503,11 +467,6 @@ onMounted(async () => {
 	}
 
 	await useCheckDisableMouseover()
-	try {
-		handleAdsConsentRequired(await should_show_ads_consent_popup())
-	} catch (error) {
-		handleError(error)
-	}
 
 	document.querySelector('body').addEventListener('click', handleClick)
 	document.querySelector('body').addEventListener('auxclick', handleAuxClick)
@@ -586,9 +545,9 @@ const messages = defineMessages({
 		id: 'app.nav.home',
 		defaultMessage: 'Home',
 	},
-	modrinthHosting: {
-		id: 'app.nav.modrinth-hosting',
-		defaultMessage: 'Modrinth Hosting',
+	servers: {
+		id: 'app.nav.servers',
+		defaultMessage: 'Servers',
 	},
 	screenshots: {
 		id: 'app.nav.screenshots',
@@ -600,7 +559,7 @@ const messages = defineMessages({
 	},
 	modrinthAccount: {
 		id: 'app.nav.modrinth-account',
-		defaultMessage: 'Modrinth account',
+		defaultMessage: 'Octra account',
 	},
 	viewProfile: {
 		id: 'app.nav.view-profile',
@@ -612,7 +571,7 @@ const messages = defineMessages({
 	},
 	signInToModrinthAccount: {
 		id: 'app.nav.sign-in-to-modrinth-account',
-		defaultMessage: 'Sign into Modrinth',
+		defaultMessage: 'Octra account — coming soon',
 	},
 	loadingProfile: {
 		id: 'app.nav.loading-profile',
@@ -636,7 +595,7 @@ const messages = defineMessages({
 	},
 	upgradeToModrinthPlus: {
 		id: 'app.nav.upgrade-to-modrinth-plus',
-		defaultMessage: 'Upgrade to Modrinth+',
+		defaultMessage: 'Octra account — coming soon',
 	},
 	news: {
 		id: 'app.news.title',
@@ -652,53 +611,13 @@ const messages = defineMessages({
 	},
 })
 
-function handleAdsConsentRequired(required) {
-	if (!required) {
-		if (adsConsentPopupId !== null) {
-			popupNotificationManager.removeNotification(adsConsentPopupId)
-			adsConsentPopupId = null
-		}
-		return
-	}
+function handleAdsConsentRequired(_required) {
+	// Ads are disabled in Octra App.
+}
 
-	if (
-		adsConsentPopupId !== null &&
-		popupNotificationManager.getNotifications().some((item) => item.id === adsConsentPopupId)
-	) {
-		return
-	}
-
-	const notification = addPopupNotification({
-		contentType: 'standard',
-		title: formatMessage(messages.adsConsentTitle),
-		text: formatMessage(messages.adsConsentBody),
-		type: 'info',
-		hideIcon: true,
-		autoCloseMs: null,
-		dismissible: false,
-		buttons: [
-			{
-				label: formatMessage(messages.adsConsentManage),
-				action: () => perform_ads_consent_action('manage').catch(handleError),
-				color: 'standard',
-				keepOpen: true,
-			},
-			{
-				label: formatMessage(messages.adsConsentReject),
-				action: () => perform_ads_consent_action('reject').catch(handleError),
-				color: 'brand',
-				keepOpen: true,
-			},
-			{
-				label: formatMessage(messages.adsConsentAccept),
-				action: () => perform_ads_consent_action('accept').catch(handleError),
-				color: 'brand',
-				keepOpen: true,
-			},
-		],
-	})
-
-	adsConsentPopupId = notification.id
+function applyForcedLocale() {
+	i18n.global.locale.value = DEFAULT_APP_LOCALE
+	document.documentElement.lang = 'pl'
 }
 
 async function setupApp() {
@@ -719,7 +638,6 @@ async function setupApp() {
 		telemetry,
 		hide_nametag_skins_page,
 		advanced_rendering,
-		toggle_sidebar,
 		sync_theme_across_devices,
 		sync_behavior_across_devices,
 		developer_mode,
@@ -727,9 +645,12 @@ async function setupApp() {
 		pending_update_toast_for_version,
 	} = await getSettings()
 
-	// Initialize locale from saved settings
-	if (locale) {
-		i18n.global.locale.value = locale
+	applyForcedLocale()
+	if (locale !== DEFAULT_APP_LOCALE || telemetry) {
+		const settings = await getSettings()
+		settings.locale = DEFAULT_APP_LOCALE
+		settings.telemetry = false
+		await setSettings(settings)
 	}
 
 	Object.assign(appSettings.featureFlags, feature_flags)
@@ -747,7 +668,6 @@ async function setupApp() {
 	appTheme.syncAcrossDevices = sync_theme_across_devices
 	appSettings.syncBehaviorAcrossDevices = sync_behavior_across_devices
 	appSettings.hideNametagSkinsPage = hide_nametag_skins_page
-	appSettings.toggleSidebar = toggle_sidebar
 	appSettings.devMode = developer_mode
 	stateInitialized.value = true
 
@@ -755,12 +675,6 @@ async function setupApp() {
 		isMaximized.value = await getCurrentWindow().isMaximized()
 		isFullscreen.value = await getCurrentWindow().isFullscreen()
 	})
-
-	if (telemetry) {
-		initAnalytics()
-		if (dev) debugAnalytics()
-		trackEvent('Launched', { version, dev })
-	}
 
 	const osType = await type()
 	if (osType === 'macos') {
@@ -780,22 +694,6 @@ async function setupApp() {
 			console.log(
 				`No critical announcement found at https://api.modrinth.com/appCriticalAnnouncement.json?version=${version}`,
 			)
-		})
-
-	fetch(`https://modrinth.com/news/feed/articles.json`)
-		.then((response) => response.json())
-		.then((res) => {
-			if (res && res.articles) {
-				news.value = res.articles
-					.map((article) => ({
-						...article,
-						path: article.link,
-					}))
-					.slice(0, 4)
-			}
-		})
-		.catch((error) => {
-			console.error('Failed to fetch news articles', error)
 		})
 
 	get_opening_command().then(handleCommand)
@@ -1071,23 +969,20 @@ watch(
 				if (appTheme.syncAcrossDevices && isDarkTheme(preferences.appearance.theme)) {
 					appTheme.preferredDark = preferences.appearance.theme
 				}
-				const locale = preferences.localization.locale
 				const behavior = preferences.behavior
 				let settingsChanged = false
 
 				if (appTheme.syncAcrossDevices && appTheme.preferred !== selectedTheme) {
 					appTheme.preferred = selectedTheme
 				}
-				if (i18n.global.locale.value !== locale) {
-					i18n.global.locale.value = locale
-				}
+				applyForcedLocale()
 
 				if (appTheme.syncAcrossDevices && settings.theme !== selectedTheme) {
 					settings.theme = selectedTheme
 					settingsChanged = true
 				}
-				if (settings.locale !== locale) {
-					settings.locale = locale
+				if (settings.locale !== DEFAULT_APP_LOCALE) {
+					settings.locale = DEFAULT_APP_LOCALE
 					settingsChanged = true
 				}
 
@@ -1100,16 +995,11 @@ watch(
 						skip_non_essential_warnings: behavior.skip_non_essential_warnings,
 					}
 
-					appSettings.toggleSidebar = behavior.hide_right_sidebar
 					appSettings.hideNametagSkinsPage = behavior.hide_nametag
 					Object.assign(appSettings.featureFlags, behaviorFeatureFlags)
 
 					if (settings.hide_on_process_start !== behavior.minimize_app) {
 						settings.hide_on_process_start = behavior.minimize_app
-						settingsChanged = true
-					}
-					if (settings.toggle_sidebar !== behavior.hide_right_sidebar) {
-						settings.toggle_sidebar = behavior.hide_right_sidebar
 						settingsChanged = true
 					}
 					if (settings.hide_nametag_skins_page !== behavior.hide_nametag) {
@@ -1176,25 +1066,12 @@ async function fetchCredentials() {
 	await fetchStoredModrinthAccounts()
 }
 
-async function signIn(flow = 'sign-in', addAccount = false) {
-	try {
-		await login(flow, addAccount)
-		await fetchCredentials()
-	} catch (error) {
-		if (
-			typeof error === 'object' &&
-			typeof error['message'] === 'string' &&
-			error.message.includes('Login canceled')
-		) {
-			// user closed the login window
-		} else {
-			handleError(error)
-		}
-	}
+async function signIn(_flow = 'sign-in', _addAccount = false) {
+	// Octra accounts are not available yet.
 }
 
-async function requestSignIn(flow = 'sign-in', addAccount = false) {
-	await modrinthLoginModal.value?.showSigningIn(flow, addAccount)
+async function requestSignIn(_flow = 'sign-in', _addAccount = false) {
+	// Octra accounts are not available yet.
 }
 
 async function requestModrinthAuth(flow = 'sign-in', addAccount = false) {
@@ -1258,9 +1135,10 @@ const accountSwitcherOptions = computed(() => [
 	},
 	{
 		id: 'add-account',
-		label: formatMessage(messages.addAccount),
+		label: formatMessage(messages.upgradeToModrinthPlus),
 		icon: PlusIcon,
-		action: () => requestSignIn('sign-in', true),
+		disabled: true,
+		action: () => {},
 	},
 ])
 
@@ -1332,17 +1210,15 @@ const modrinthAccountMenuOptions = computed(() => [
 		id: 'plus',
 		label: formatMessage(messages.upgradeToModrinthPlus),
 		icon: ArrowBigUpDashIcon,
-		type: 'link',
-		href: 'https://modrinth.plus?app',
-		target: '_blank',
-		tone: 'purple',
-		shown: !hasPlus.value,
+		disabled: true,
+		action: () => {},
+		shown: true,
 	},
 	{
 		id: 'add-friend',
 		label: formatMessage(messages.addFriend),
 		icon: UserPlusIcon,
-		action: () => friendsList.value?.showAddFriendModal(),
+		action: () => {},
 	},
 	{
 		id: 'flags',
@@ -1398,16 +1274,8 @@ async function fetchIntercomToken() {
 
 watch(
 	[showAd, adConsentAvailable],
-	async ([showAds, canManageConsent]) => {
-		if (showAds) {
-			await init_ads_window(true)
-			return
-		}
-
+	async () => {
 		await hide_ads_window(true)
-		if (canManageConsent) {
-			await init_ads_window()
-		}
 	},
 	{ immediate: true },
 )
@@ -1429,7 +1297,6 @@ onMounted(() => {
 })
 
 const accounts = ref(null)
-const friendsList = ref(null)
 provide('accountsCard', accounts)
 
 useAppEvent('command', handleCommand, appEvents)
@@ -1613,16 +1480,16 @@ const updatePopupMessages = defineMessages({
 	},
 	meteredBody: {
 		id: 'app.update-popup.body.metered',
-		defaultMessage: `Modrinth App v{version} is available now! Since you're on a metered network, we didn't automatically download it.`,
+		defaultMessage: `Octra App v{version} is available now! Since you're on a metered network, we didn't automatically download it.`,
 	},
 	downloadedBody: {
 		id: 'app.update-popup.body.download-complete',
-		defaultMessage: `Modrinth App v{version} has finished downloading. Reload to update now, or automatically when you close Modrinth App.`,
+		defaultMessage: `Octra App v{version} has finished downloading. Reload to update now, or automatically when you close Octra App.`,
 	},
 	linuxBody: {
 		id: 'app.update-popup.body.linux',
 		defaultMessage:
-			'Modrinth App v{version} is available. Use your package manager to update for the latest features and fixes!',
+			'Octra App v{version} is available. Use your package manager to update for the latest features and fixes!',
 	},
 	reload: {
 		id: 'app.update-popup.reload',
@@ -2071,16 +1938,11 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 				<ImagesIcon />
 			</NavButton>
 			<NavButton
-				v-tooltip.right="formatMessage(messages.modrinthHosting)"
-				to="/hosting/manage"
-				:is-primary="(r) => r.path === '/hosting/manage' || r.path === '/hosting/manage/'"
-				:is-subpage="
-					(r) =>
-						(r.path.startsWith('/hosting/manage/') && r.path !== '/hosting/manage/') ||
-						((r.path.startsWith('/browse') || r.path.startsWith('/project')) && r.query.sid)
-				"
+				v-tooltip.right="formatMessage(messages.servers)"
+				to="/servers"
+				:is-primary="(r) => r.path === '/servers' || r.path.startsWith('/servers/')"
 			>
-				<ServerStackIcon />
+				<GlobeIcon />
 			</NavButton>
 			<suspense>
 				<QuickInstanceSwitcher />
@@ -2158,14 +2020,14 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 						<UserRoleIcon :role="account.user.role" />
 					</template>
 				</TeleportOverflowMenu>
-				<NavButton v-else :to="() => requestSignIn()">
-					<LogInIcon class="text-brand" />
+				<NavButton v-else disabled :to="() => {}">
+					<LogInIcon class="text-secondary" />
 				</NavButton>
 			</span>
 		</div>
 		<div data-tauri-drag-region class="app-grid-statusbar bg-bg-raised h-[--top-bar-height] flex">
 			<div data-tauri-drag-region class="flex min-w-0 flex-1 items-center overflow-hidden p-2">
-				<TextLogo class="h-7 w-auto shrink-0 text-contrast pointer-events-none" />
+				<OctraWordmark class="h-7 w-auto shrink-0 pointer-events-none" />
 				<div data-tauri-drag-region class="ml-2 flex shrink-0 items-center gap-2">
 					<IconButton
 						type="outlined"
@@ -2195,16 +2057,6 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 				<Breadcrumbs />
 			</div>
 			<section data-tauri-drag-region class="flex shrink-0 ml-auto items-center">
-				<IconButton
-					v-if="!forceSidebar && appSettings.toggleSidebar"
-					:type="sidebarToggled ? 'base' : 'quiet'"
-					:label="formatMessage(messages.nextImage)"
-					class="mr-3 transition-transform"
-					:class="{ 'rotate-180': !sidebarToggled }"
-					@click="sidebarToggled = !sidebarToggled"
-				>
-					<RightArrowIcon />
-				</IconButton>
 				<div class="flex mr-3">
 					<Suspense>
 						<AppActionBar />
@@ -2287,66 +2139,14 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 				:class="{ 'pb-12': !hasPlus }"
 				data-overlayscrollbars-initialize
 			>
-				<OnboardingChecklist
-					@create-instance="installationModal?.show()"
-					@login-minecraft="accounts?.login()"
-					@login-modrinth="signIn"
-				/>
-				<div id="sidebar-teleport-target" class="sidebar-teleport-content"></div>
-				<div class="sidebar-default-content" :class="{ 'sidebar-enabled': sidebarVisible }">
-					<div
-						v-show="hasLoggedIntoMinecraft"
-						class="p-4 border-0 border-b-[1px] border-[--brand-gradient-border] border-solid"
-					>
-						<h3 class="text-base text-primary font-medium m-0">
-							{{ formatMessage(messages.playingAs) }}
-						</h3>
-						<suspense>
-							<AccountsCard ref="accounts" />
-						</suspense>
-					</div>
-					<div
-						v-show="showFriendsList"
-						class="p-4 border-0 border-b-[1px] border-[--brand-gradient-border] border-solid"
-					>
-						<suspense>
-							<FriendsList
-								ref="friendsList"
-								:credentials="credentials"
-								:sign-in="() => requestSignIn()"
-							/>
-						</suspense>
-					</div>
-					<PrideFundraiserBanner
-						v-if="prideFundraiserEnabled"
-						class="p-4 border-0 border-b-[1px] border-[--brand-gradient-border] border-solid"
-					/>
-					<div v-if="news && news.length > 0" class="p-4 flex flex-col items-center">
-						<h3 class="text-base mb-4 text-primary font-medium m-0 text-left w-full">
-							{{ formatMessage(messages.news) }}
-						</h3>
-						<div class="space-y-4 flex flex-col items-center w-full">
-							<NewsArticleCard
-								v-for="(item, index) in news"
-								:key="`news-${index}`"
-								:article="item"
-							/>
-							<ButtonLink
-								type="colored"
-								color="brand"
-								size="xl"
-								href="https://modrinth.com/news"
-								target="_blank"
-								class="my-4"
-							>
-								<NewspaperIcon />
-								{{ formatMessage(messages.viewAllNews) }}
-							</ButtonLink>
-						</div>
-					</div>
+				<div class="hidden">
+					<Suspense>
+						<AccountsCard ref="accounts" />
+					</Suspense>
 				</div>
+				<div id="sidebar-teleport-target" class="sidebar-teleport-content"></div>
 			</div>
-			<template v-if="showAd">
+			<template v-if="false">
 				<a
 					href="https://modrinth.plus?app"
 					class="absolute bottom-[250px] w-full flex justify-center items-center gap-1 px-4 py-3 text-purple font-medium hover:underline z-10"

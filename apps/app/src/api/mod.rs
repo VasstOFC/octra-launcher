@@ -28,6 +28,7 @@ mod ads_occlusion_windows;
 pub mod cache;
 pub mod files;
 pub mod friends;
+pub mod octra;
 pub mod worlds;
 
 mod oauth_utils;

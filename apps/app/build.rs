@@ -433,6 +433,14 @@ fn main() {
                     .default_permission(
                         DefaultPermissionRule::AllowAllCommands,
                     ),
+            )
+            .plugin(
+                "octra",
+                InlinedPlugin::new()
+                    .commands(&["list_servers"])
+                    .default_permission(
+                        DefaultPermissionRule::AllowAllCommands,
+                    ),
             ),
     )
     .expect("Failed to run tauri-build");

@@ -1,17 +1,17 @@
-# ![Modrinth Monorepo Cover](/.github/assets/monorepo_cover.png)
+# Octra App
 
-![Issues](https://img.shields.io/github/issues-raw/Modrinth/code?color=c78aff&label=issues&style=for-the-badge)
-![Pull Requests](https://img.shields.io/github/issues-pr-raw/Modrinth/code?color=c78aff&label=PRs&style=for-the-badge)
-![Contributors](https://img.shields.io/github/contributors/Modrinth/code?color=c78aff&label=contributors&style=for-the-badge)
-![Lines of Code](https://img.shields.io/endpoint?url=https://loctopus.creeperkatze.dev/github/modrinth/code/badge?style=flat&logoColor=white&color=c78aff&style=for-the-badge)
-![Commit Activity](https://img.shields.io/github/commit-activity/m/Modrinth/code?color=c78aff&label=commits&style=for-the-badge)
-![Last Commit](https://img.shields.io/github/last-commit/Modrinth/code?color=c78aff&label=last%20commit&style=for-the-badge)
+Minecraft launcher based on [Modrinth Theseus](https://github.com/modrinth/code). Catalog still uses Modrinth’s API.
 
-## Modrinth Monorepo
+**Downloads:** [Releases](https://github.com/VasstOFC/octra-app/releases) · existing **Octra Launcher** installs update from [octra-launcher](https://github.com/VasstOFC/octra-launcher/releases).
 
-Welcome to the Modrinth Monorepo, the primary codebase for the Modrinth web interface and app. It contains ![Lines of code](https://img.shields.io/endpoint?url=https://loctopus.creeperkatze.dev/github/modrinth/code/badge%3Fformat%3Dhuman&logoColor=white&color=black&label=) lines of code and has ![Contributors](https://img.shields.io/github/contributors/Modrinth/code?color=black&label=) contributors!
+```powershell
+pnpm install
+pnpm app:dev
+```
 
-If you're not a developer and you've stumbled upon this repository, you can access the web interface on the [Modrinth website](https://modrinth.com) and download the latest release of the app [here](https://modrinth.com/app).
+Windows installer: tag `v2.0.0` (or **Actions → Octra App release**) to build `Octra-setup.exe`. Copy GitHub secret `TAURI_SIGNING_PRIVATE_KEY` from `octra-launcher` so silent auto-update can sign `latest.json`.
+
+## Upstream (Modrinth monorepo)
 
 ## Development
 

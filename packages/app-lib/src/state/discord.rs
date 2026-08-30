@@ -17,7 +17,7 @@ impl DiscordGuard {
     /// Initialize discord IPC client, and attempt to connect to it
     /// If it fails, it will still return a DiscordGuard, but the client will be unconnected
     pub fn init() -> crate::Result<DiscordGuard> {
-        let dipc = DiscordIpcClient::new("1123683254248148992");
+        let dipc = DiscordIpcClient::new(crate::nervia::DISCORD_APP_ID);
 
         Ok(DiscordGuard {
             client: Arc::new(RwLock::new(dipc)),
@@ -70,11 +70,10 @@ impl DiscordGuard {
             return Ok(());
         }
 
-        let activity = Activity::new().state(msg).assets(
-            Assets::new()
-                .large_image("modrinth_simple")
-                .large_text("Modrinth Logo"),
-        );
+        let activity = Activity::new()
+            .details("Octra App")
+            .state(msg)
+            .assets(Assets::new().large_text("Octra App"));
 
         // Attempt to set the activity
         // If the existing connection fails, attempt to reconnect and try again
@@ -141,7 +140,7 @@ impl DiscordGuard {
             )
             .await?;
         } else {
-            self.set_activity("Idling...", reconnect_if_fail).await?;
+            self.set_activity("W menu", reconnect_if_fail).await?;
         }
         Ok(())
     }

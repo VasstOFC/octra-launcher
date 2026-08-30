@@ -43,6 +43,14 @@ async fn initialize_state(
     app.fs_scope()
         .allow_directory(state.directories.instances_dir(), true)?;
 
+    if let Some(octra_dir) = theseus::octra_sync::octra_launcher_dir() {
+        let octra_instances = octra_dir.join("instances");
+        let _ = app.fs_scope().allow_directory(&octra_instances, true);
+        let _ = app
+            .asset_protocol_scope()
+            .allow_directory(&octra_instances, true);
+    }
+
     Ok(())
 }
 
@@ -140,7 +148,7 @@ fn main() {
 
     let _log_guard = theseus::start_logger(&tauri_context.config().identifier);
 
-    tracing::info!("Initialized tracing subscriber. Loading Modrinth App!");
+    tracing::info!("Initialized tracing subscriber. Loading Octra App!");
 
     let mut builder = tauri::Builder::default();
 
@@ -270,6 +278,7 @@ fn main() {
         .plugin(api::ads::init())
         .plugin(api::friends::init())
         .plugin(api::worlds::init())
+        .plugin(api::octra::init())
         .manage(PendingUpdateData::default())
         .invoke_handler(tauri::generate_handler![
             initialize_state,

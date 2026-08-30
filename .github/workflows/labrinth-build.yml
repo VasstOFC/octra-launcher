@@ -80,7 +80,7 @@ jobs:
     name: Build Labrinth
     runs-on: ${{ needs.skip-if-clean.outputs.internal == 'true' && 'namespace-profile-modrinth-labrinth' || 'ubuntu-latest' }}
     needs: [skip-if-clean]
-    if: ${{ needs.skip-if-clean.outputs.skip != 'true' }}
+    if: ${{ github.repository_owner == 'modrinth' && needs.skip-if-clean.outputs.skip != 'true' }}
     env:
       SQLX_OFFLINE: 'true'
       GIT_HASH: ${{ github.sha }}

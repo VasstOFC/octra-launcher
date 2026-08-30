@@ -3,7 +3,7 @@ import { ImportIcon, PlusIcon } from '@modrinth/assets'
 import { Button, defineMessages, IntlFormatted, useVIntl } from '@modrinth/ui'
 import { inject, onMounted, onUnmounted, ref } from 'vue'
 
-import modrinthSocialIcon from '../../assets/welcome/modrinth-social-icon.png'
+import OctraMark from '@/components/brand/OctraMark.vue'
 
 const showCreationModal = inject<() => void>('showCreationModal')
 const showImportModal = inject<() => void>('showImportModal')
@@ -13,7 +13,7 @@ const { formatMessage } = useVIntl()
 const messages = defineMessages({
 	welcomeTitle: {
 		id: 'app.welcome-screen.title',
-		defaultMessage: 'Welcome to Modrinth',
+		defaultMessage: 'Welcome to Octra App',
 	},
 	welcomeDescription: {
 		id: 'app.welcome-screen.description',
@@ -88,8 +88,8 @@ onUnmounted(() => {
 					class="dot-pattern pointer-events-none absolute left-1/2 -top-52 -z-10 h-[29.875rem] w-[min(25.9375rem,80vw)] -translate-x-1/2 rounded-2xl [@media(max-height:700px)]:h-[23rem]"
 					aria-hidden="true"
 				/>
-				<div class="size-[6.25rem]">
-					<img :src="modrinthSocialIcon" alt="" class="pointer-events-none size-full" />
+				<div class="size-[6.25rem] text-brand">
+					<OctraMark class="pointer-events-none size-full" />
 				</div>
 				<div class="flex flex-col items-center gap-2">
 					<h1 class="m-0 flex items-center gap-2 text-2xl font-semibold leading-8 text-contrast">
