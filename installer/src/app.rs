@@ -2,12 +2,15 @@ use std::path::PathBuf;
 use std::sync::mpsc::{self, Receiver, Sender};
 use std::thread;
 
-use eframe::egui::{self, Align, Color32, Layout, PointerButton, Sense};
+use eframe::egui;
 
 use crate::args::InstallPreset;
 use crate::elevate;
 use crate::install::{self, InstallRequest, UninstallRequest};
-use crate::theme::{self, ACCENT, BG, DANGER, INK, LINE, MUTE};
+use crate::theme::{self, InstallStepVisual, ACCENT, DANGER, INK, MUTE};
+use crate::ui::animation::{self, PROGRESS_LERP};
+use crate::ui::layout::{self, FooterActions};
+use crate::ui::APP_NAME;
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 enum Page {
@@ -25,9 +28,42 @@ enum JobEvent {
     Err(String),
 }
 
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum StepKind {
+    Prepare,
+    Copy,
+    Runtime,
+    Shortcuts,
+    Finalize,
+}
+
+impl StepKind {
+    fn label(self) -> &'static str {
+        match self {
+            StepKind::Prepare => "Przygotowanie",
+            StepKind::Copy => "Kopiowanie plików",
+            StepKind::Runtime => "Środowisko uruchomieniowe",
+            StepKind::Shortcuts => "Skróty",
+            StepKind::Finalize => "Finalizacja",
+        }
+    }
+
+    fn all() -> [StepKind; 5] {
+        [
+            StepKind::Prepare,
+            StepKind::Copy,
+            StepKind::Runtime,
+            StepKind::Shortcuts,
+            StepKind::Finalize,
+        ]
+    }
+}
+
 pub struct InstallerApp {
     uninstall: bool,
     page: Page,
+    prev_page: Page,
+    page_anim_t: f32,
     dest: String,
     start_menu: bool,
     desktop: bool,
@@ -35,12 +71,14 @@ pub struct InstallerApp {
     launch_after: bool,
     remove_data: bool,
     progress: f32,
+    display_progress: f32,
     status: String,
     error: Option<String>,
     webview_ok: bool,
     fonts_ready: bool,
     auto_close: bool,
     close_now: bool,
+    success_anim_t: f32,
     rx: Option<Receiver<JobEvent>>,
 }
 
@@ -50,9 +88,11 @@ impl InstallerApp {
         let dest = preset
             .dest
             .unwrap_or_else(|| install::default_dest(preset.all_users));
-        let mut app = Self {
+        Self {
             uninstall,
-            page: if uninstall { Page::Welcome } else { Page::Welcome },
+            page: Page::Welcome,
+            prev_page: Page::Welcome,
+            page_anim_t: 1.0,
             dest: dest.to_string_lossy().into_owned(),
             start_menu: preset.start_menu,
             desktop: preset.desktop,
@@ -60,18 +100,16 @@ impl InstallerApp {
             launch_after: true,
             remove_data: false,
             progress: 0.0,
+            display_progress: 0.0,
             status: String::new(),
             error: None,
             webview_ok: true,
             fonts_ready: false,
             auto_close: false,
             close_now: false,
+            success_anim_t: 0.0,
             rx: None,
-        };
-        if preset.all_users && uninstall {
-            app.page = Page::Welcome;
         }
-        app
     }
 
     pub fn start_elevated_install(&mut self) {
@@ -93,6 +131,17 @@ impl InstallerApp {
         self.begin_uninstall();
     }
 
+    fn set_page(&mut self, page: Page) {
+        if self.page != page {
+            self.prev_page = self.page;
+            self.page = page;
+            self.page_anim_t = 0.0;
+            if page == Page::Done {
+                self.success_anim_t = 0.0;
+            }
+        }
+    }
+
     fn begin_install(&mut self) {
         let req = InstallRequest {
             dest: PathBuf::from(&self.dest),
@@ -109,8 +158,9 @@ impl InstallerApp {
     fn spawn_install(&mut self, req: InstallRequest) {
         let (tx, rx) = mpsc::channel();
         self.rx = Some(rx);
-        self.page = Page::Progress;
+        self.set_page(Page::Progress);
         self.progress = 0.0;
+        self.display_progress = 0.0;
         self.status = "Przygotowywanie…".into();
         thread::spawn(move || run_install_job(req, tx));
     }
@@ -123,15 +173,19 @@ impl InstallerApp {
         };
         let (tx, rx) = mpsc::channel();
         self.rx = Some(rx);
-        self.page = Page::Progress;
+        self.set_page(Page::Progress);
         self.progress = 0.0;
+        self.display_progress = 0.0;
         self.status = "Usuwanie…".into();
         thread::spawn(move || run_uninstall_job(req, tx));
     }
 
     fn pump(&mut self) {
-        let Some(rx) = &self.rx else { return };
-        while let Ok(ev) = rx.try_recv() {
+        let events: Vec<JobEvent> = match &self.rx {
+            Some(rx) => rx.try_iter().collect(),
+            None => return,
+        };
+        for ev in events {
             match ev {
                 JobEvent::Progress(p, s) => {
                     self.progress = p;
@@ -142,15 +196,59 @@ impl InstallerApp {
                     if self.auto_close {
                         self.close_now = true;
                     } else {
-                        self.page = Page::Done;
+                        self.set_page(Page::Done);
                     }
                 }
                 JobEvent::Err(e) => {
                     self.error = Some(e);
-                    self.page = Page::Error;
+                    self.set_page(Page::Error);
                 }
             }
         }
+    }
+
+    fn tick_animations(&mut self, ctx: &egui::Context) {
+        let dt = ctx.input(|i| i.stable_dt);
+        self.page_anim_t = animation::advance_t(
+            self.page_anim_t,
+            dt,
+            animation::PAGE_TRANSITION_MS,
+        );
+        self.display_progress = animation::lerp(
+            self.display_progress,
+            self.progress,
+            PROGRESS_LERP,
+        );
+        if self.page == Page::Done {
+            self.success_anim_t = animation::advance_t(self.success_anim_t, dt, 450.0);
+        }
+    }
+
+    fn step_index(&self) -> u32 {
+        match self.page {
+            Page::Welcome => 0,
+            Page::Path => 1,
+            Page::Options => 2,
+            Page::Progress => 3,
+            Page::Done | Page::Error => 3,
+        }
+    }
+
+    fn install_step_states(&self) -> Vec<(StepKind, InstallStepVisual)> {
+        let active = active_step_from_status(&self.status, self.progress);
+        StepKind::all()
+            .into_iter()
+            .map(|kind| {
+                let visual = if (kind as u8) < (active as u8) {
+                    InstallStepVisual::Done
+                } else if kind == active {
+                    InstallStepVisual::Active
+                } else {
+                    InstallStepVisual::Pending
+                };
+                (kind, visual)
+            })
+            .collect()
     }
 }
 
@@ -160,89 +258,143 @@ impl eframe::App for InstallerApp {
             theme::apply(ctx);
             self.fonts_ready = true;
         }
+        theme::block_editor_shortcuts(ctx);
         self.pump();
+        self.tick_animations(ctx);
         if self.close_now {
             ctx.send_viewport_cmd(egui::ViewportCommand::Close);
         }
         ctx.request_repaint();
 
         let screen = ctx.screen_rect();
-        let painter = ctx.layer_painter(egui::LayerId::background());
-        painter.rect_filled(screen, 0.0, BG);
-        painter.circle_filled(
-            egui::pos2(screen.max.x - 40.0, 8.0),
-            220.0,
-            Color32::from_rgba_unmultiplied(0xc4, 0xa7, 0xff, 18),
-        );
-        painter.circle_filled(
-            egui::pos2(screen.min.x + 80.0, screen.max.y + 20.0),
-            180.0,
-            Color32::from_rgba_unmultiplied(125, 211, 252, 10),
-        );
+        ctx.layer_painter(egui::LayerId::background())
+            .rect_filled(screen, 0.0, theme::BG);
 
         egui::CentralPanel::default()
             .frame(egui::Frame::NONE)
             .show(ctx, |ui| {
-                titlebar(ui, self.uninstall);
-                ui.add_space(4.0);
-                let body = ui.available_rect_before_wrap();
-                ui.allocate_new_ui(
-                    egui::UiBuilder::new().max_rect(body.shrink2(egui::vec2(36.0, 18.0))),
-                    |ui| {
+                layout::titlebar(ui, self.uninstall);
+                let _body = ui.available_rect_before_wrap();
+                let version = env!("LUMEN_VERSION");
+                layout::split_shell(ui, self.uninstall, version, |ui, right_rect| {
+                    let (content, footer) = layout::right_content_rect(right_rect);
+                    let alpha = animation::page_alpha(self.page_anim_t);
+                    let offset = animation::page_offset(self.page_anim_t);
+
+                    ui.allocate_new_ui(egui::UiBuilder::new().max_rect(content), |ui| {
+                        ui.add_space(offset);
+                        ui.set_opacity(alpha);
                         if self.uninstall {
                             uninstall_body(ui, self);
                         } else {
                             install_body(ui, self);
                         }
-                    },
-                );
+                    });
+
+                    draw_footer(ui, footer, self);
+                });
             });
     }
 }
 
-fn titlebar(ui: &mut egui::Ui, uninstall: bool) {
-    let (rect, resp) = ui.allocate_exact_size(egui::vec2(ui.available_width(), 44.0), Sense::drag());
-    if resp.dragged_by(PointerButton::Primary) {
-        ui.ctx()
-            .send_viewport_cmd(egui::ViewportCommand::StartDrag);
+fn draw_footer(ui: &mut egui::Ui, footer: egui::Rect, app: &mut InstallerApp) {
+    let ctx = ui.ctx().clone();
+
+    let (back, primary) = match app.page {
+        Page::Welcome => {
+            let (b, p) = layout::footer_with_cta(
+                ui,
+                footer,
+                FooterActions {
+                    back_label: Some("Anuluj"),
+                    back: true,
+                    primary_label: if app.uninstall { "Usuń" } else { "Dalej" },
+                    primary: true,
+                },
+            );
+            if b {
+                ctx.send_viewport_cmd(egui::ViewportCommand::Close);
+            }
+            if p {
+                if app.uninstall {
+                    app.begin_uninstall();
+                } else {
+                    app.set_page(Page::Path);
+                }
+            }
+            return;
+        }
+        Page::Path => layout::footer_with_cta(
+            ui,
+            footer,
+            FooterActions {
+                back_label: Some("Wstecz"),
+                back: true,
+                primary_label: "Dalej",
+                primary: true,
+            },
+        ),
+        Page::Options => layout::footer_with_cta(
+            ui,
+            footer,
+            FooterActions {
+                back_label: Some("Wstecz"),
+                back: true,
+                primary_label: "Zainstaluj",
+                primary: true,
+            },
+        ),
+        Page::Done => layout::footer_with_cta(
+            ui,
+            footer,
+            FooterActions {
+                back_label: None,
+                back: false,
+                primary_label: "Zakończ",
+                primary: true,
+            },
+        ),
+        Page::Error => layout::footer_with_cta(
+            ui,
+            footer,
+            FooterActions {
+                back_label: Some("Wstecz"),
+                back: true,
+                primary_label: "Zamknij",
+                primary: true,
+            },
+        ),
+        Page::Progress => return,
+    };
+
+    if back {
+        match app.page {
+            Page::Path => app.set_page(Page::Welcome),
+            Page::Options => app.set_page(Page::Path),
+            Page::Error => {
+                app.set_page(if app.uninstall {
+                    Page::Welcome
+                } else {
+                    Page::Options
+                });
+            }
+            _ => {}
+        }
     }
-    ui.allocate_new_ui(egui::UiBuilder::new().max_rect(rect), |ui| {
-        ui.horizontal(|ui| {
-            ui.add_space(14.0);
-            ui.vertical(|ui| {
-                ui.add_space(10.0);
-                theme::mark(ui, 22.0);
-            });
-            ui.add_space(8.0);
-            ui.vertical(|ui| {
-                ui.add_space(12.0);
-                ui.label(
-                    egui::RichText::new(if uninstall {
-                        "Octra — deinstalacja"
-                    } else {
-                        "Octra Launcher"
-                    })
-                    .color(INK)
-                    .font(theme::semibold()),
-                );
-            });
-            ui.with_layout(Layout::right_to_left(Align::Center), |ui| {
-                if theme::icon_hit(ui, "×", true).clicked() {
-                    ui.ctx().send_viewport_cmd(egui::ViewportCommand::Close);
+    if primary {
+        match app.page {
+            Page::Path => app.set_page(Page::Options),
+            Page::Options => try_start_install(app, &ctx),
+            Page::Done => {
+                if !app.uninstall && app.launch_after {
+                    install::launch_octra(&PathBuf::from(&app.dest));
                 }
-                if theme::icon_hit(ui, "–", false).clicked() {
-                    ui.ctx()
-                        .send_viewport_cmd(egui::ViewportCommand::Minimized(true));
-                }
-            });
-        });
-    });
-    let y = rect.bottom();
-    ui.painter().hline(
-        rect.x_range(),
-        y,
-        theme::hairline(LINE),
-    );
+                ctx.send_viewport_cmd(egui::ViewportCommand::Close);
+            }
+            Page::Error => ctx.send_viewport_cmd(egui::ViewportCommand::Close),
+            _ => {}
+        }
+    }
 }
 
 fn install_body(ui: &mut egui::Ui, app: &mut InstallerApp) {
@@ -265,69 +417,33 @@ fn uninstall_body(ui: &mut egui::Ui, app: &mut InstallerApp) {
     }
 }
 
-fn steps(ui: &mut egui::Ui, current: u32) {
-    ui.horizontal(|ui| {
-        for i in 0..4 {
-            let on = i <= current;
-            let (r, _) = ui.allocate_exact_size(egui::vec2(8.0, 8.0), Sense::hover());
-            ui.painter().circle_filled(r.center(), 4.0, if on { ACCENT } else { LINE });
-            if i < 3 {
-                let (line, _) = ui.allocate_exact_size(egui::vec2(18.0, 8.0), Sense::hover());
-                ui.painter().hline(
-                    line.x_range(),
-                    line.center().y,
-                    theme::hairline(LINE),
-                );
-            }
-        }
-    });
-    ui.add_space(18.0);
+fn page_header(ui: &mut egui::Ui, app: &InstallerApp, show_dots: bool) {
+    if show_dots {
+        let pulse = animation::pulse(ui.input(|i| i.time), 2.0);
+        theme::step_dots(ui, app.step_index(), 4, pulse);
+        ui.add_space(14.0);
+    }
 }
 
 fn welcome(ui: &mut egui::Ui, app: &mut InstallerApp) {
-    steps(ui, 0);
-    ui.label(egui::RichText::new("Witamy").color(INK).font(theme::title_font()));
+    page_header(ui, app, true);
+    ui.label(
+        egui::RichText::new(format!("Witaj w {APP_NAME}"))
+            .color(INK)
+            .font(theme::title_font()),
+    );
     ui.add_space(8.0);
     ui.label(
-        egui::RichText::new(
-            "Ten kreator zainstaluje Octra Launcher na tym komputerze. Instalacja nie wymaga uprawnień administratora.",
-        )
+        egui::RichText::new(format!(
+            "Ten kreator zainstaluje {APP_NAME} na tym komputerze — szybko i bez zbędnej konfiguracji."
+        ))
         .color(MUTE)
         .size(14.5),
     );
-    ui.add_space(20.0);
-    theme::card(ui, |ui| {
-        feature(ui, "Instancje i paczki", "Vanilla, Fabric, Forge i gotowe zestawy modów w jednym miejscu.");
-        ui.add_space(10.0);
-        feature(ui, "Java bez konfiguracji", "Octra dobierze środowisko uruchomieniowe, gdy będzie potrzebne.");
-        ui.add_space(10.0);
-        feature(ui, "Konto Microsoft", "Logowanie tym samym kontem, którego używasz do Minecraft Java Edition.");
-    });
-    footer(ui, |ui| {
-        if theme::ghost_button(ui, "Anuluj").clicked() {
-            ui.ctx().send_viewport_cmd(egui::ViewportCommand::Close);
-        }
-        ui.add_space(10.0);
-        if theme::accent_button(ui, "Dalej").clicked() {
-            app.page = Page::Path;
-        }
-    });
-}
-
-fn feature(ui: &mut egui::Ui, title: &str, body: &str) {
-    ui.horizontal(|ui| {
-        let (r, _) = ui.allocate_exact_size(egui::vec2(8.0, 8.0), Sense::hover());
-        ui.painter().circle_filled(r.center(), 3.5, ACCENT);
-        ui.add_space(6.0);
-        ui.vertical(|ui| {
-            ui.label(egui::RichText::new(title).color(INK).font(theme::semibold()));
-            ui.label(egui::RichText::new(body).color(MUTE).size(13.0));
-        });
-    });
 }
 
 fn path_page(ui: &mut egui::Ui, app: &mut InstallerApp) {
-    steps(ui, 1);
+    page_header(ui, app, true);
     ui.label(
         egui::RichText::new("Folder instalacji")
             .color(INK)
@@ -335,19 +451,19 @@ fn path_page(ui: &mut egui::Ui, app: &mut InstallerApp) {
     );
     ui.add_space(8.0);
     ui.label(
-        egui::RichText::new(
-            "Octra zostanie zainstalowana w tym folderze. Możesz wybrać inną lokalizację.",
-        )
+        egui::RichText::new(format!(
+            "{APP_NAME} zostanie zainstalowana w tym folderze. Możesz wybrać inną lokalizację."
+        ))
         .color(MUTE)
         .size(14.5),
     );
-    ui.add_space(18.0);
+    ui.add_space(16.0);
     theme::card(ui, |ui| {
         ui.label(egui::RichText::new("Lokalizacja").color(MUTE).size(12.0));
         ui.add_space(6.0);
         ui.horizontal(|ui| {
             let edit = egui::TextEdit::singleline(&mut app.dest)
-                .desired_width(ui.available_width() - 130.0)
+                .desired_width(ui.available_width() - 110.0)
                 .text_color(INK);
             ui.add(edit);
             if theme::ghost_button(ui, "Przeglądaj").clicked() {
@@ -359,7 +475,7 @@ fn path_page(ui: &mut egui::Ui, app: &mut InstallerApp) {
                 }
             }
         });
-        ui.add_space(10.0);
+        ui.add_space(8.0);
         if let Some(free) = install::disk_free_bytes(&PathBuf::from(&app.dest)) {
             ui.label(
                 egui::RichText::new(format!(
@@ -371,12 +487,13 @@ fn path_page(ui: &mut egui::Ui, app: &mut InstallerApp) {
             );
         }
     });
-    ui.add_space(14.0);
+    ui.add_space(12.0);
     let was_all = app.all_users;
-    theme::checkbox(
+    theme::checkbox_with_sublabel(
         ui,
         &mut app.all_users,
-        "Zainstaluj dla wszystkich użytkowników (wymaga uprawnień administratora)",
+        "Zainstaluj dla wszystkich użytkowników",
+        "(wymaga uprawnień administratora)",
     );
     if app.all_users && !was_all {
         app.dest = crate::args::default_machine_dir()
@@ -387,40 +504,24 @@ fn path_page(ui: &mut egui::Ui, app: &mut InstallerApp) {
             .to_string_lossy()
             .into_owned();
     }
-    footer(ui, |ui| {
-        if theme::ghost_button(ui, "Wstecz").clicked() {
-            app.page = Page::Welcome;
-        }
-        ui.add_space(10.0);
-        if theme::accent_button(ui, "Dalej").clicked() {
-            app.page = Page::Options;
-        }
-    });
 }
 
 fn options_page(ui: &mut egui::Ui, app: &mut InstallerApp) {
-    steps(ui, 2);
+    page_header(ui, app, true);
     ui.label(egui::RichText::new("Skróty").color(INK).font(theme::title_font()));
     ui.add_space(8.0);
     ui.label(
-        egui::RichText::new("Wybierz, gdzie Octra ma być widoczny po instalacji.")
-            .color(MUTE)
-            .size(14.5),
+        egui::RichText::new(format!(
+            "Wybierz, gdzie {APP_NAME} ma być widoczna po instalacji."
+        ))
+        .color(MUTE)
+        .size(14.5),
     );
-    ui.add_space(18.0);
+    ui.add_space(16.0);
     theme::card(ui, |ui| {
         theme::checkbox(ui, &mut app.start_menu, "Utwórz skrót w menu Start");
         ui.add_space(10.0);
         theme::checkbox(ui, &mut app.desktop, "Utwórz skrót na pulpicie");
-    });
-    footer(ui, |ui| {
-        if theme::ghost_button(ui, "Wstecz").clicked() {
-            app.page = Page::Path;
-        }
-        ui.add_space(10.0);
-        if theme::accent_button(ui, "Zainstaluj").clicked() {
-            try_start_install(app, ui.ctx());
-        }
     });
 }
 
@@ -448,7 +549,7 @@ fn try_start_install(app: &mut InstallerApp, ctx: &egui::Context) {
             Ok(()) => ctx.send_viewport_cmd(egui::ViewportCommand::Close),
             Err(e) => {
                 app.error = Some(e);
-                app.page = Page::Error;
+                app.set_page(Page::Error);
             }
         }
         return;
@@ -457,51 +558,66 @@ fn try_start_install(app: &mut InstallerApp, ctx: &egui::Context) {
 }
 
 fn progress_page(ui: &mut egui::Ui, app: &mut InstallerApp, uninstall: bool) {
-    steps(ui, 3);
+    page_header(ui, app, !uninstall);
     ui.label(
         egui::RichText::new(if uninstall {
-            "Trwa usuwanie"
+            "Trwa usuwanie".to_string()
         } else {
-            "Instalowanie Octra"
+            format!("Instalowanie {APP_NAME}")
         })
         .color(INK)
         .font(theme::title_font()),
     );
     ui.add_space(8.0);
-    ui.label(egui::RichText::new(&app.status).color(MUTE).size(14.5));
-    ui.add_space(22.0);
-    theme::progress_bar(ui, app.progress);
-    ui.add_space(8.0);
+    ui.label(egui::RichText::new(&app.status).color(MUTE).size(14.0));
+    ui.add_space(16.0);
+
+    if !uninstall {
+        let spin = ui.input(|i| i.time) as f32;
+        for (kind, state) in app.install_step_states() {
+            theme::install_step_row(ui, state, kind.label(), spin);
+            ui.add_space(4.0);
+        }
+        ui.add_space(12.0);
+    }
+
+    theme::progress_bar_animated(ui, app.display_progress);
+    ui.add_space(6.0);
     ui.label(
-        egui::RichText::new(format!("{}%", (app.progress * 100.0).round() as i32))
-            .color(ACCENT)
-            .font(theme::semibold()),
+        egui::RichText::new(format!(
+            "{}%",
+            (app.display_progress * 100.0).round() as i32
+        ))
+        .color(ACCENT)
+        .font(theme::semibold()),
     );
 }
 
 fn done_page(ui: &mut egui::Ui, app: &mut InstallerApp, uninstall: bool) {
+    let pulse = animation::pulse(ui.input(|i| i.time), 1.4);
+    theme::success_check_animated(ui, app.success_anim_t, pulse);
     ui.add_space(12.0);
     ui.label(
         egui::RichText::new(if uninstall {
-            "Octra została usunięta"
+            format!("{APP_NAME} została usunięta")
         } else {
-            "Instalacja zakończona"
+            "Instalacja zakończona".to_string()
         })
         .color(INK)
         .font(theme::title_font()),
     );
-    ui.add_space(8.0);
+    ui.add_space(6.0);
     ui.label(
         egui::RichText::new(if uninstall {
-            "Program został usunięty z tego komputera."
+            "Program został usunięty z tego komputera.".to_string()
         } else {
-            "Octra jest gotowa do użycia."
+            format!("{APP_NAME} jest gotowa do użycia.")
         })
         .color(MUTE)
         .size(14.5),
     );
     if !uninstall && !app.webview_ok {
-        ui.add_space(12.0);
+        ui.add_space(10.0);
         ui.label(
             egui::RichText::new(
                 "Przy pierwszym uruchomieniu system może poprosić o składnik Microsoft Edge WebView2 — warto go zainstalować.",
@@ -511,21 +627,13 @@ fn done_page(ui: &mut egui::Ui, app: &mut InstallerApp, uninstall: bool) {
         );
     }
     if !uninstall {
-        ui.add_space(18.0);
-        theme::checkbox(ui, &mut app.launch_after, "Uruchom Octra");
+        ui.add_space(14.0);
+        theme::checkbox(ui, &mut app.launch_after, &format!("Uruchom {APP_NAME}"));
     }
-    footer(ui, |ui| {
-        if theme::accent_button(ui, "Zakończ").clicked() {
-            if !uninstall && app.launch_after {
-                install::launch_octra(&PathBuf::from(&app.dest));
-            }
-            ui.ctx().send_viewport_cmd(egui::ViewportCommand::Close);
-        }
-    });
 }
 
 fn error_page(ui: &mut egui::Ui, app: &mut InstallerApp) {
-    ui.add_space(12.0);
+    ui.add_space(8.0);
     ui.label(
         egui::RichText::new("Nie udało się dokończyć")
             .color(INK)
@@ -539,25 +647,11 @@ fn error_page(ui: &mut egui::Ui, app: &mut InstallerApp) {
                 .size(14.0),
         );
     });
-    footer(ui, |ui| {
-        if theme::ghost_button(ui, "Wstecz").clicked() {
-            app.page = if app.uninstall {
-                Page::Welcome
-            } else {
-                Page::Options
-            };
-        }
-        ui.add_space(10.0);
-        if theme::accent_button(ui, "Zamknij").clicked() {
-            ui.ctx().send_viewport_cmd(egui::ViewportCommand::Close);
-        }
-    });
 }
 
 fn uninstall_confirm(ui: &mut egui::Ui, app: &mut InstallerApp) {
-    ui.add_space(8.0);
     ui.label(
-        egui::RichText::new("Usunąć Octra?")
+        egui::RichText::new(format!("Usunąć {APP_NAME}?"))
             .color(INK)
             .font(theme::title_font()),
     );
@@ -569,7 +663,7 @@ fn uninstall_confirm(ui: &mut egui::Ui, app: &mut InstallerApp) {
         .color(MUTE)
         .size(14.5),
     );
-    ui.add_space(18.0);
+    ui.add_space(16.0);
     theme::card(ui, |ui| {
         ui.label(
             egui::RichText::new(format!("Folder: {}", app.dest))
@@ -583,26 +677,27 @@ fn uninstall_confirm(ui: &mut egui::Ui, app: &mut InstallerApp) {
             "Usuń także dane gier i instancji",
         );
     });
-    footer(ui, |ui| {
-        if theme::ghost_button(ui, "Anuluj").clicked() {
-            ui.ctx().send_viewport_cmd(egui::ViewportCommand::Close);
-        }
-        ui.add_space(10.0);
-        if theme::accent_button(ui, "Usuń").clicked() {
-            app.begin_uninstall();
-        }
-    });
 }
 
-fn footer(ui: &mut egui::Ui, add: impl FnOnce(&mut egui::Ui)) {
-    ui.with_layout(Layout::bottom_up(Align::RIGHT), |ui| {
-        ui.add_space(8.0);
-        ui.horizontal(|ui| add(ui));
-        ui.add_space(12.0);
-        let (rect, _) = ui.allocate_exact_size(egui::vec2(ui.available_width(), 1.0), Sense::hover());
-        ui.painter()
-            .rect_filled(rect, 0.0, LINE);
-    });
+fn active_step_from_status(status: &str, progress: f32) -> StepKind {
+    let s = status.to_ascii_lowercase();
+    if s.contains("kończ") || s.contains("gotowe") || s.contains("zapisywanie deinstalatora") {
+        StepKind::Finalize
+    } else if s.contains("skrót") {
+        StepKind::Shortcuts
+    } else if s.contains("środowisk") || s.contains("webview") {
+        StepKind::Runtime
+    } else if s.contains("kopiow") || s.contains("rozpak") {
+        StepKind::Copy
+    } else if progress >= 0.97 {
+        StepKind::Finalize
+    } else if progress >= 0.86 {
+        StepKind::Runtime
+    } else if progress >= 0.08 {
+        StepKind::Copy
+    } else {
+        StepKind::Prepare
+    }
 }
 
 fn run_install_job(req: InstallRequest, tx: Sender<JobEvent>) {

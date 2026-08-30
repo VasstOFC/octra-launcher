@@ -110,10 +110,8 @@ pub fn run_uninstall(
 ) -> Result<(), String> {
     process::wait_or_stop(true)?;
     on_progress(0.1, "Usuwanie skrótów…");
-    shortcuts::remove_if_exists(&shortcuts::start_menu_link(req.all_users));
-    shortcuts::remove_if_exists(&shortcuts::desktop_link(req.all_users));
-    shortcuts::remove_if_exists(&shortcuts::start_menu_link(!req.all_users));
-    shortcuts::remove_if_exists(&shortcuts::desktop_link(!req.all_users));
+    shortcuts::remove_shortcuts(req.all_users);
+    shortcuts::remove_shortcuts(!req.all_users);
 
     on_progress(0.4, "Usuwanie plików…");
     remove_install_tree(&req.dest)?;

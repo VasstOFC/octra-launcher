@@ -9,6 +9,7 @@ mod process;
 mod registry;
 mod shortcuts;
 mod theme;
+mod ui;
 mod webview2;
 
 use std::path::PathBuf;
@@ -18,6 +19,7 @@ use eframe::egui;
 use app::InstallerApp;
 use args::Mode;
 use install::InstallRequest;
+use ui::APP_NAME;
 
 fn main() {
     match args::parse() {
@@ -127,7 +129,7 @@ fn run_unattended(
 fn run_gui(uninstall: bool, elevated: bool, preset: args::InstallPreset) {
     let options = native_options();
     let _ = eframe::run_native(
-        "Octra Launcher",
+        APP_NAME,
         options,
         Box::new(move |cc| {
             let mut app = InstallerApp::new(cc, uninstall, preset);
@@ -157,7 +159,7 @@ fn run_progress_window(
     };
     let options = native_options();
     let _ = eframe::run_native(
-        "Octra Launcher",
+        APP_NAME,
         options,
         Box::new(move |cc| {
             let mut app = InstallerApp::new(cc, uninstall, preset);
@@ -183,12 +185,12 @@ fn run_progress_window(
 fn native_options() -> eframe::NativeOptions {
     eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
-            .with_inner_size([860.0, 560.0])
-            .with_min_inner_size([860.0, 560.0])
-            .with_max_inner_size([860.0, 560.0])
+            .with_inner_size([800.0, 540.0])
+            .with_min_inner_size([800.0, 540.0])
+            .with_max_inner_size([800.0, 540.0])
             .with_resizable(false)
             .with_decorations(false)
-            .with_title("Octra Launcher")
+            .with_title(APP_NAME)
             .with_icon(window_icon())
             .with_taskbar(true),
         centered: true,

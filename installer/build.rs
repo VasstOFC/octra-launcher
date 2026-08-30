@@ -10,6 +10,8 @@ fn main() {
         "cargo:rerun-if-changed={}",
         repo.join("src-tauri/icons/icon.ico").display()
     );
+    println!("cargo:rerun-if-changed={}", manifest.join("assets/fonts/figtree-400.ttf").display());
+    println!("cargo:rerun-if-changed={}", manifest.join("assets/fonts/figtree-600.ttf").display());
 
     let version = read_version(&pkg).unwrap_or_else(|| env!("CARGO_PKG_VERSION").into());
     println!("cargo:rustc-env=LUMEN_VERSION={version}");
@@ -26,12 +28,12 @@ fn main() {
         if icon.is_file() {
             res.set_icon(icon.to_str().unwrap());
         }
-        res.set("ProductName", "Octra Launcher");
+        res.set("ProductName", "Octra App");
         res.set("FileDescription", "Instalator Octra");
-        res.set("CompanyName", "Octra Launcher");
-        res.set("LegalCopyright", "Octra Launcher");
+        res.set("CompanyName", "Octra App");
+        res.set("LegalCopyright", "Octra App");
         res.set("OriginalFilename", "Octra-setup.exe");
-        res.set("InternalName", "Octra Launcher");
+        res.set("InternalName", "Octra App");
         res.set_version_info(winres::VersionInfo::PRODUCTVERSION, packed(major, minor, patch));
         res.set_version_info(winres::VersionInfo::FILEVERSION, packed(major, minor, patch));
         res.set("ProductVersion", &version);

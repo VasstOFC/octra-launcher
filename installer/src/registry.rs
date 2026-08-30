@@ -25,11 +25,11 @@ pub fn write_uninstall(
         .map_err(|e| format!("Rejestr: {e}"))?;
     let lumen = dest.join("octra.exe");
     let uninstall = dest.join("uninstall.exe");
-    key.set_value("DisplayName", &"Octra Launcher")
+    key.set_value("DisplayName", &"Octra App")
         .map_err(|e| e.to_string())?;
     key.set_value("DisplayVersion", &env!("LUMEN_VERSION"))
         .map_err(|e| e.to_string())?;
-    key.set_value("Publisher", &"Octra Launcher")
+    key.set_value("Publisher", &"Octra App")
         .map_err(|e| e.to_string())?;
     key.set_value("InstallLocation", &dest.to_string_lossy().as_ref())
         .map_err(|e| e.to_string())?;
@@ -90,6 +90,7 @@ pub fn remove(all_users: bool) {
     let _ = root.delete_subkey_all(UNINSTALL_KEY);
     let _ = root.delete_subkey_all(PRODUCT_KEY);
     if let Ok(lumen) = root.open_subkey_with_flags(r"Software\octra", KEY_WRITE) {
+        let _ = lumen.delete_subkey("Octra App");
         let _ = lumen.delete_subkey("Octra Launcher");
     }
 }

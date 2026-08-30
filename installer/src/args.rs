@@ -219,7 +219,7 @@ fn dest_flag(a: &str) -> Option<&str> {
 }
 
 pub fn default_user_dir() -> PathBuf {
-    local_app_data().join("Octra Launcher")
+    local_app_data().join("Octra App")
 }
 
 pub fn default_machine_dir() -> PathBuf {
@@ -227,7 +227,7 @@ pub fn default_machine_dir() -> PathBuf {
         .or_else(|| env::var_os("ProgramFiles"))
         .map(PathBuf::from)
         .unwrap_or_else(|| PathBuf::from(r"C:\Program Files"))
-        .join("Octra Launcher")
+        .join("Octra App")
 }
 
 pub fn local_app_data() -> PathBuf {
