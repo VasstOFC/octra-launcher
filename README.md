@@ -2,14 +2,14 @@
 
 Minecraft launcher based on [Modrinth Theseus](https://github.com/modrinth/code). Catalog still uses Modrinth’s API.
 
-**Downloads:** [Releases](https://github.com/VasstOFC/octra-app/releases) · existing **Octra Launcher** installs update from [octra-launcher](https://github.com/VasstOFC/octra-launcher/releases).
+**Downloads / auto-update:** [Releases](https://github.com/VasstOFC/octra-launcher/releases)
 
 ```powershell
 pnpm install
 pnpm app:dev
 ```
 
-Windows installer: tag `v2.0.0` (or **Actions → Octra App release**) to build `Octra-setup.exe`. Copy GitHub secret `TAURI_SIGNING_PRIVATE_KEY` from `octra-launcher` so silent auto-update can sign `latest.json`.
+Windows installer: **Actions → Octra App update** on this repo (branch `app`) builds `Octra-setup.exe`. Needs GitHub secret `TAURI_SIGNING_PRIVATE_KEY`. After you rename the repo to `octra-app`, old `octra-launcher` download URLs keep working via GitHub redirect.
 
 ## Upstream (Modrinth monorepo)
 
