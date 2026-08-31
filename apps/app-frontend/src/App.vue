@@ -70,6 +70,7 @@ import { computed, nextTick, onMounted, onUnmounted, provide, ref, watch } from 
 import { RouterView, useRoute, useRouter } from 'vue-router'
 
 import AccountsCard from '@/components/ui/AccountsCard.vue'
+import AddOfflineAccountModal from '@/components/ui/AddOfflineAccountModal.vue'
 import AppActionBar from '@/components/ui/AppActionBar.vue'
 import Breadcrumbs from '@/components/ui/Breadcrumbs.vue'
 import ErrorModal from '@/components/ui/ErrorModal.vue'
@@ -107,7 +108,15 @@ import {
 	take_ads_window_hold,
 } from '@/helpers/ads.js'
 import { trackEvent } from '@/helpers/analytics'
-import { check_reachable } from '@/helpers/auth.js'
+import {
+	check_reachable,
+	get_default_user,
+	isOfflineAccount,
+	login as loginMinecraft,
+	remove_user,
+	set_default_user,
+	users as listMinecraftUsers,
+} from '@/helpers/auth.js'
 import { get_user, get_user_many, get_version } from '@/helpers/cache.js'
 import { install_create_modpack_instance, install_get_modpack_preview } from '@/helpers/install'
 import {
@@ -608,6 +617,26 @@ const messages = defineMessages({
 	playingAs: {
 		id: 'app.sidebar.playing-as',
 		defaultMessage: 'Playing as',
+	},
+	minecraftAccount: {
+		id: 'minecraft-account.label',
+		defaultMessage: 'Minecraft account',
+	},
+	addMicrosoftAccount: {
+		id: 'minecraft-account.add-microsoft',
+		defaultMessage: 'Add Microsoft account',
+	},
+	addOfflineAccount: {
+		id: 'minecraft-account.add-offline',
+		defaultMessage: 'Add offline account',
+	},
+	nonPremium: {
+		id: 'minecraft-account.non-premium',
+		defaultMessage: 'Non-premium',
+	},
+	playOffline: {
+		id: 'minecraft-account.play-offline',
+		defaultMessage: 'Play offline',
 	},
 })
 
@@ -1299,6 +1328,136 @@ onMounted(() => {
 const accounts = ref(null)
 provide('accountsCard', accounts)
 
+const STEVE_HEAD = 'https://launcher-files.modrinth.com/assets/steve_head.png'
+const minecraftAccounts = ref([])
+const minecraftDefaultUser = ref()
+
+async function refreshMinecraftAccounts() {
+	try {
+		minecraftDefaultUser.value = await get_default_user()
+		const list = await listMinecraftUsers()
+		minecraftAccounts.value = Array.isArray(list) ? [...list] : []
+		minecraftAccounts.value.sort((a, b) =>
+			(a.profile?.name ?? '').localeCompare(b.profile?.name ?? ''),
+		)
+	} catch {
+		minecraftAccounts.value = []
+	}
+}
+
+const selectedMinecraftAccount = computed(() =>
+	minecraftAccounts.value.find((account) => account.profile?.id === minecraftDefaultUser.value),
+)
+
+const minecraftAccountAvatar = computed(() => {
+	const id = selectedMinecraftAccount.value?.profile?.id
+	return id ? `https://mc-heads.net/avatar/${id}/128` : STEVE_HEAD
+})
+
+const minecraftAccountSwitcherAccounts = computed(() =>
+	minecraftAccounts.value.map((account) => ({
+		...account,
+		optionId: `mc-account-${account.profile.id}`,
+		offline: isOfflineAccount(account),
+		avatarUrl: `https://mc-heads.net/avatar/${account.profile.id}/128`,
+	})),
+)
+
+const addOfflineAccountModal = ref(null)
+
+async function setMinecraftAccount(account) {
+	if (!account?.profile?.id || account.profile.id === minecraftDefaultUser.value) return
+	await set_default_user(account.profile.id).catch(handleError)
+	await refreshMinecraftAccounts()
+	await accounts.value?.refreshValues?.()
+}
+
+async function addMicrosoftMinecraftAccount() {
+	accounts.value?.setLoginDisabled?.(true)
+	try {
+		const loggedIn = await loginMinecraft().catch(handleError)
+		if (loggedIn) {
+			await set_default_user(loggedIn.profile.id).catch(handleError)
+			await refreshMinecraftAccounts()
+			await accounts.value?.refreshValues?.()
+		}
+	} finally {
+		accounts.value?.setLoginDisabled?.(false)
+	}
+}
+
+async function onOfflineMinecraftAccountAdded(loggedIn) {
+	if (!loggedIn?.profile?.id) return
+	await set_default_user(loggedIn.profile.id).catch(handleError)
+	await refreshMinecraftAccounts()
+	await accounts.value?.refreshValues?.()
+}
+
+async function signOutMinecraftAccount() {
+	const selected = selectedMinecraftAccount.value
+	if (!selected?.profile?.id) return
+	await remove_user(selected.profile.id).catch(handleError)
+	await refreshMinecraftAccounts()
+	await accounts.value?.refreshValues?.()
+}
+
+const minecraftAccountMenuOptions = computed(() => {
+	const options = []
+	if (minecraftAccountSwitcherAccounts.value.length > 0) {
+		options.push({
+			type: 'heading',
+			id: 'minecraft-accounts-heading',
+			label: formatMessage(messages.minecraftAccount),
+		})
+		for (const account of minecraftAccountSwitcherAccounts.value) {
+			options.push({
+				id: account.optionId,
+				label: account.profile.name,
+				selected: account.profile.id === minecraftDefaultUser.value,
+				action: () => setMinecraftAccount(account),
+			})
+		}
+		options.push({ type: 'divider' })
+	}
+	options.push({
+		id: 'add-microsoft',
+		label: formatMessage(messages.addMicrosoftAccount),
+		icon: PlusIcon,
+		action: () => addMicrosoftMinecraftAccount(),
+	})
+	options.push({
+		id: 'add-offline',
+		label: formatMessage(messages.addOfflineAccount),
+		icon: PlusIcon,
+		action: () => addOfflineAccountModal.value?.show(),
+	})
+	if (selectedMinecraftAccount.value?.profile?.id) {
+		options.push({ type: 'divider' })
+		options.push({
+			id: 'sign-out-minecraft',
+			label: formatMessage(commonMessages.signOutButton),
+			icon: LogOutIcon,
+			tone: 'red',
+			action: () => signOutMinecraftAccount(),
+		})
+	}
+	return options
+})
+
+onMounted(() => {
+	refreshMinecraftAccounts()
+})
+
+useAppEvent(
+	'process',
+	async (e) => {
+		if (e.event === 'launched') {
+			await refreshMinecraftAccounts()
+		}
+	},
+	appEvents,
+)
+
 useAppEvent('command', handleCommand, appEvents)
 useAppEvent('notification', handleLiveNotification, appEvents)
 
@@ -1955,6 +2114,40 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 				<PlusIcon />
 			</NavButton>
 			<div class="flex flex-grow"></div>
+			<span v-tooltip.right="formatMessage(messages.minecraftAccount)" class="inline-flex">
+				<TeleportOverflowMenu
+					type="quiet"
+					size="xl"
+					:label="formatMessage(messages.minecraftAccount)"
+					:options="minecraftAccountMenuOptions"
+					placement="right-end"
+					:distance="4"
+					class="brightness-100 hover:!brightness-100 focus-visible:!brightness-100"
+				>
+					<Avatar
+						:src="minecraftAccountAvatar"
+						alt=""
+						size="32px"
+						circle
+						no-shadow
+						class="pointer-events-none !size-8"
+					/>
+					<template
+						v-for="account in minecraftAccountSwitcherAccounts"
+						:key="account.optionId"
+						#[account.optionId]
+					>
+						<Avatar :src="account.avatarUrl" size="1.25rem" aria-hidden="true" circle />
+						<span class="min-w-0 truncate">{{ account.profile.name }}</span>
+						<span
+							v-if="account.offline"
+							class="shrink-0 rounded-full bg-surface-3 px-1.5 py-0.5 text-[0.65rem] font-semibold leading-none text-secondary"
+						>
+							{{ formatMessage(messages.nonPremium) }}
+						</span>
+					</template>
+				</TeleportOverflowMenu>
+			</span>
 			<NavButton
 				v-tooltip.right="formatMessage(commonMessages.settingsLabel)"
 				:to="() => appSettingsModal?.show()"
@@ -2141,7 +2334,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 			>
 				<div class="hidden">
 					<Suspense>
-						<AccountsCard ref="accounts" />
+						<AccountsCard ref="accounts" @change="refreshMinecraftAccounts" />
 					</Suspense>
 				</div>
 				<div id="sidebar-teleport-target" class="sidebar-teleport-content"></div>
@@ -2164,7 +2357,11 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	<PopupNotificationPanel :has-sidebar="sidebarVisible" />
 	<ErrorModal ref="errorModal" />
 	<MinecraftAuthErrorModal ref="minecraftAuthErrorModal" />
-	<MinecraftRequiredModal ref="minecraftRequiredModal" />
+	<MinecraftRequiredModal
+		ref="minecraftRequiredModal"
+		@accounts-changed="refreshMinecraftAccounts"
+	/>
+	<AddOfflineAccountModal ref="addOfflineAccountModal" @added="onOfflineMinecraftAccountAdded" />
 	<ContentInstallModal
 		ref="modInstallModal"
 		:instances="contentInstallInstances"

@@ -703,12 +703,13 @@ impl Serialize for Credentials {
         // consumption, transparently handling all the possible Tokio runtime states the current
         // thread may be in the most efficient way
         if self.is_offline() {
-            let mut ser = serializer.serialize_struct("Credentials", 5)?;
+            let mut ser = serializer.serialize_struct("Credentials", 6)?;
             ser.serialize_field("profile", &self.offline_profile)?;
             ser.serialize_field("access_token", &self.access_token)?;
             ser.serialize_field("refresh_token", &self.refresh_token)?;
             ser.serialize_field("expires", &self.expires)?;
             ser.serialize_field("active", &self.active)?;
+            ser.serialize_field("is_offline", &self.is_offline())?;
             return ser.end();
         }
 
@@ -734,12 +735,13 @@ impl Serialize for Credentials {
                 ),
         };
 
-        let mut ser = serializer.serialize_struct("Credentials", 5)?;
+        let mut ser = serializer.serialize_struct("Credentials", 6)?;
         ser.serialize_field("profile", &*profile)?;
         ser.serialize_field("access_token", &self.access_token)?;
         ser.serialize_field("refresh_token", &self.refresh_token)?;
         ser.serialize_field("expires", &self.expires)?;
         ser.serialize_field("active", &self.active)?;
+        ser.serialize_field("is_offline", &self.is_offline())?;
         ser.end()
     }
 }

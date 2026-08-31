@@ -2948,8 +2948,14 @@
   "minecraft-account.add-microsoft": {
     "message": "Add Microsoft account"
   },
+  "minecraft-account.add-offline": {
+    "message": "Add offline account"
+  },
   "minecraft-account.label": {
     "message": "Minecraft account"
+  },
+  "minecraft-account.non-premium": {
+    "message": "Non-premium"
   },
   "minecraft-account.not-signed-in": {
     "message": "Not signed in"

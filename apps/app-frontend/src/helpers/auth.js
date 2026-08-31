@@ -68,3 +68,7 @@ export async function remove_user(user) {
 export async function users() {
 	return await invoke('plugin:auth|get_users')
 }
+
+export function isOfflineAccount(account) {
+	return account?.is_offline === true || account?.refresh_token === 'octra-offline'
+}

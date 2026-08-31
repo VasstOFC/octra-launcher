@@ -7,22 +7,12 @@
 		<Button type="colored" color="brand" :disabled="loginDisabled" @click="login()">
 			<LogInIcon v-if="!loginDisabled" />
 			<SpinnerIcon v-else class="animate-spin" />
-			{{ formatMessage(messages.signInToOctra) }}
+			{{ formatMessage(messages.addMicrosoftAccount) }}
 		</Button>
-		<div class="flex flex-col gap-2">
-			<span class="text-secondary text-xs">{{ formatMessage(messages.orPlayOffline) }}</span>
-			<Input
-				v-model="offlineName"
-				size="small"
-				maxlength="16"
-				:placeholder="formatMessage(messages.offlineNickPlaceholder)"
-				:disabled="loginDisabled"
-				@keyup.enter="loginOffline()"
-			/>
-			<Button :disabled="loginDisabled || !canLoginOffline" @click="loginOffline()">
-				{{ formatMessage(messages.playOffline) }}
-			</Button>
-		</div>
+		<Button :disabled="loginDisabled" @click="addOffline()">
+			<PlusIcon />
+			{{ formatMessage(messages.addOfflineAccount) }}
+		</Button>
 	</div>
 	<Accordion
 		v-else
@@ -41,9 +31,17 @@
 					"
 				/>
 				<div class="flex flex-col items-start w-full min-w-0">
-					<span class="truncate w-full text-left">{{
-						selectedAccount ? selectedAccount.profile.name : formatMessage(messages.selectAccount)
-					}}</span>
+					<span class="flex items-center gap-2 truncate w-full text-left">
+						<span class="truncate">{{
+							selectedAccount ? selectedAccount.profile.name : formatMessage(messages.selectAccount)
+						}}</span>
+						<span
+							v-if="selectedAccount && isOfflineAccount(selectedAccount)"
+							class="shrink-0 rounded-full bg-surface-3 px-1.5 py-0.5 text-[0.65rem] font-semibold leading-none text-secondary"
+						>
+							{{ formatMessage(messages.nonPremium) }}
+						</span>
+					</span>
 					<span class="text-secondary text-xs">{{ formatMessage(messages.minecraftAccount) }}</span>
 				</div>
 			</div>
@@ -71,6 +69,12 @@
 						>
 							{{ account.profile.name }}
 						</p>
+						<span
+							v-if="isOfflineAccount(account)"
+							class="shrink-0 rounded-full bg-surface-3 px-1.5 py-0.5 text-[0.65rem] font-semibold leading-none text-secondary"
+						>
+							{{ formatMessage(messages.nonPremium) }}
+						</span>
 					</button>
 					<IconButton
 						v-tooltip="formatMessage(messages.removeAccount)"
@@ -86,7 +90,6 @@
 			</template>
 			<div class="flex flex-col gap-2 px-2 pt-2">
 				<Button
-					v-if="accounts.length > 0"
 					class="w-full !bg-button-bg !text-primary ![box-shadow:var(--shadow-button)]"
 					:disabled="loginDisabled"
 					@click="login()"
@@ -94,25 +97,18 @@
 					<PlusIcon />
 					{{ formatMessage(messages.addMicrosoftAccount) }}
 				</Button>
-				<Input
-					v-model="offlineName"
-					size="small"
-					maxlength="16"
-					:placeholder="formatMessage(messages.offlineNickPlaceholder)"
-					:disabled="loginDisabled"
-					@keyup.enter="loginOffline()"
-				/>
 				<Button
 					class="w-full !bg-button-bg !text-primary ![box-shadow:var(--shadow-button)]"
-					:disabled="loginDisabled || !canLoginOffline"
-					@click="loginOffline()"
+					:disabled="loginDisabled"
+					@click="addOffline()"
 				>
 					<PlusIcon />
-					{{ formatMessage(messages.playOffline) }}
+					{{ formatMessage(messages.addOfflineAccount) }}
 				</Button>
 			</div>
 		</div>
 	</Accordion>
+	<AddOfflineAccountModal ref="addOfflineModal" @added="onOfflineAdded" />
 </template>
 
 <script setup lang="ts">
@@ -130,20 +126,20 @@ import {
 	Button,
 	defineMessages,
 	IconButton,
-	Input,
 	injectNotificationManager,
 	useVIntl,
 } from '@modrinth/ui'
 import type { Ref } from 'vue'
 import { computed, ref } from 'vue'
 
+import AddOfflineAccountModal from '@/components/ui/AddOfflineAccountModal.vue'
 import { useAppEvent } from '@/composables/use-app-event'
 import { handleSevereError } from '@/composables/use-error.js'
 import { trackEvent } from '@/helpers/analytics'
 import {
 	get_default_user,
+	isOfflineAccount,
 	login as login_flow,
-	login_offline as login_offline_flow,
 	remove_user,
 	set_default_user,
 	users,
@@ -164,24 +160,16 @@ type MinecraftCredential = {
 		id: string
 		name: string
 	}
+	is_offline?: boolean
+	refresh_token?: string
 }
 
 const accounts: Ref<MinecraftCredential[]> = ref([])
 const loginDisabled = ref(false)
-const offlineName = ref('')
 const defaultUser = ref<string | undefined>()
 const equippedSkin = ref<Skin | null>(null)
 const headUrlCache = ref(new Map<string, string>())
-
-const canLoginOffline = computed(() => {
-	const name = offlineName.value.trim()
-	return (
-		name.length >= 1 &&
-		name.length <= 16 &&
-		!/\s/.test(name) &&
-		/^[A-Za-z0-9_]+$/.test(name)
-	)
-})
+const addOfflineModal = ref<InstanceType<typeof AddOfflineAccountModal>>()
 
 async function refreshValues() {
 	defaultUser.value = await get_default_user().catch(handleError)
@@ -224,11 +212,16 @@ function setLoginDisabled(value: boolean) {
 	loginDisabled.value = value
 }
 
+function addOffline() {
+	addOfflineModal.value?.show()
+}
+
 defineExpose({
 	refreshValues,
 	setEquippedSkin,
 	setLoginDisabled,
 	login,
+	addOffline,
 	loginDisabled,
 })
 
@@ -284,18 +277,11 @@ async function login() {
 	loginDisabled.value = false
 }
 
-async function loginOffline() {
-	if (!canLoginOffline.value) return
+async function onOfflineAdded(loggedIn: MinecraftCredential) {
 	loginDisabled.value = true
 	try {
-		const loggedIn = await login_offline_flow(offlineName.value.trim())
-		if (loggedIn) {
-			offlineName.value = ''
-			await setAccount(loggedIn)
-		}
+		await setAccount(loggedIn)
 		trackEvent('AccountLogIn', { source: 'offline' })
-	} catch (error) {
-		handleSevereError(error)
 	} finally {
 		loginDisabled.value = false
 	}
@@ -327,6 +313,10 @@ const messages = defineMessages({
 		id: 'minecraft-account.add-account',
 		defaultMessage: 'Add account',
 	},
+	addOfflineAccount: {
+		id: 'minecraft-account.add-offline',
+		defaultMessage: 'Add offline account',
+	},
 	removeAccount: {
 		id: 'minecraft-account.remove-account',
 		defaultMessage: 'Remove account',
@@ -347,17 +337,9 @@ const messages = defineMessages({
 		id: 'minecraft-account.add-microsoft',
 		defaultMessage: 'Add Microsoft account',
 	},
-	orPlayOffline: {
-		id: 'minecraft-account.or-play-offline',
-		defaultMessage: 'Or play offline',
-	},
-	offlineNickPlaceholder: {
-		id: 'minecraft-account.offline-nick',
-		defaultMessage: 'Offline nickname',
-	},
-	playOffline: {
-		id: 'minecraft-account.play-offline',
-		defaultMessage: 'Play offline',
+	nonPremium: {
+		id: 'minecraft-account.non-premium',
+		defaultMessage: 'Non-premium',
 	},
 })
 </script>

@@ -35,7 +35,7 @@ import VirtualSkinSectionList from '@/components/ui/skin/VirtualSkinSectionList.
 import { useAppSettings } from '@/composables/use-app-settings.ts'
 import { handleSevereError } from '@/composables/use-error.js'
 import { trackEvent } from '@/helpers/analytics'
-import { check_reachable, get_default_user, login as login_flow, users } from '@/helpers/auth'
+import { check_reachable, get_default_user, isOfflineAccount, login as login_flow, users } from '@/helpers/auth'
 import type { RenderResult } from '@/helpers/rendering/batch-skin-renderer.ts'
 import {
 	generateSkinPreviews,
@@ -227,10 +227,7 @@ const currentUser = ref(undefined)
 const currentUserId = ref<string | undefined>(undefined)
 
 const username = computed(() => currentUser.value?.profile?.name ?? undefined)
-const isOfflineMinecraftAccount = computed(() => {
-	const user = currentUser.value as { refresh_token?: string } | undefined
-	return user?.refresh_token === 'octra-offline'
-})
+const isOfflineMinecraftAccount = computed(() => isOfflineAccount(currentUser.value))
 const selectedSkin = ref<Skin | null>(null)
 const isApplyingSkin = ref(false)
 const earsFeaturesEnabled = ref(true)
@@ -315,6 +312,9 @@ const defaultSkinSections = computed(() => {
 })
 
 const currentCape = computed(() => {
+	if (isOfflineMinecraftAccount.value) {
+		return undefined
+	}
 	if (selectedSkin.value?.cape_id) {
 		const overrideCape = capes.value.find((c) => c.id === selectedSkin.value?.cape_id)
 		if (overrideCape) {
@@ -341,7 +341,9 @@ const skinTexture = computedAsync(async () => {
 		return ''
 	}
 })
-const capeTexture = computed(() => currentCape.value?.texture)
+const capeTexture = computed(() =>
+	isOfflineMinecraftAccount.value ? undefined : currentCape.value?.texture,
+)
 const skinVariant = computed(() => selectedSkin.value?.variant)
 const skinNametag = computed(() => (appSettings.hideNametagSkinsPage ? undefined : username.value))
 const isSkinManagementReadOnly = computed(
@@ -691,7 +693,11 @@ async function preserveExternalSkins(skinsToPersist: Skin[]) {
 		}
 
 		const textureBlob = await normalize_skin_texture(skin.texture)
-		const capeId = skin.cape_id ? capes.value.find((cape) => cape.id === skin.cape_id) : undefined
+		const capeId = isOfflineMinecraftAccount.value
+			? undefined
+			: skin.cape_id
+				? capes.value.find((cape) => cape.id === skin.cape_id)
+				: undefined
 		const savedSkin = await save_custom_skin(skin, textureBlob, skin.variant, capeId, false)
 		const preservedSkin: Skin = {
 			...savedSkin,
@@ -750,15 +756,19 @@ function schedulePendingSkinRefresh() {
 }
 
 async function applySelectedSkin() {
-	const skinToApply = selectedSkin.value
+	const selected = selectedSkin.value
 	if (
 		!currentUser.value ||
-		!skinToApply ||
+		!selected ||
 		!hasPendingSkinChange.value ||
 		isApplyingSkin.value ||
 		isSkinManagementReadOnly.value
 	)
 		return
+
+	const skinToApply = isOfflineMinecraftAccount.value
+		? { ...selected, cape_id: undefined }
+		: selected
 
 	isApplyingSkin.value = true
 	try {
@@ -1066,6 +1076,7 @@ await loadSkins()
 		ref="editSkinModal"
 		:capes="capes"
 		:demo="!currentUser"
+		:allow-capes="!isOfflineMinecraftAccount"
 		@saved="onSkinSaved"
 		@deleted="() => loadSkins()"
 	/>

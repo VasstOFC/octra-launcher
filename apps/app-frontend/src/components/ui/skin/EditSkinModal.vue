@@ -47,7 +47,7 @@
 					</RadioButtons>
 				</section>
 
-				<section>
+				<section v-if="allowCapes">
 					<h2 class="text-base font-semibold mb-2">{{ formatMessage(messages.capeSection) }}</h2>
 					<div class="relative w-fit max-w-full">
 						<Transition
@@ -248,9 +248,13 @@ const previewSkin = ref<string>('')
 
 const variant = ref<SkinModel>('CLASSIC')
 const selectedCape = ref<Cape | undefined>(undefined)
-const props = defineProps<{ capes?: Cape[]; demo?: boolean }>()
+const props = withDefaults(defineProps<{ capes?: Cape[]; demo?: boolean; allowCapes?: boolean }>(), {
+	allowCapes: true,
+})
 
-const selectedCapeTexture = computed(() => selectedCape.value?.texture)
+const selectedCapeTexture = computed(() =>
+	props.allowCapes ? selectedCape.value?.texture : undefined,
+)
 const canEditTextureAndModel = computed(() => currentSkin.value?.source !== 'default')
 const {
 	showTopFade: showCapeTopFade,
@@ -320,7 +324,11 @@ const hasEdits = computed(() => {
 	if (uploadedTextureUrl.value) return true
 	if (!currentSkin.value) return false
 	if (variant.value !== currentSkin.value.variant) return true
-	if ((selectedCape.value?.id || null) !== (currentSkin.value.cape_id || null)) return true
+	if (
+		props.allowCapes &&
+		(selectedCape.value?.id || null) !== (currentSkin.value.cape_id || null)
+	)
+		return true
 	return false
 })
 
@@ -362,7 +370,9 @@ async function show(e: MouseEvent, skin?: Skin) {
 	currentSkin.value = skin ?? null
 	if (skin) {
 		variant.value = skin.variant
-		selectedCape.value = props.capes?.find((c) => c.id === skin.cape_id)
+		selectedCape.value = props.allowCapes
+			? props.capes?.find((c) => c.id === skin.cape_id)
+			: undefined
 	} else {
 		variant.value = 'CLASSIC'
 		selectedCape.value = undefined
@@ -447,19 +457,21 @@ async function save() {
 
 		const bytes: Uint8Array = new Uint8Array(await (await fetch(textureUrl)).arrayBuffer())
 
+		const capeToSave = props.allowCapes ? selectedCape.value : undefined
+
 		if (mode.value === 'new') {
 			const addedSkin = await save_custom_skin(
 				{
 					texture_key: '',
 					variant: variant.value,
-					cape_id: selectedCape.value?.id,
+					cape_id: capeToSave?.id,
 					texture: textureUrl,
 					source: 'custom',
 					is_equipped: false,
 				},
 				bytes,
 				variant.value,
-				selectedCape.value,
+				capeToSave,
 				true,
 			)
 			emit('saved', {
@@ -467,11 +479,14 @@ async function save() {
 				skin: addedSkin,
 			})
 		} else {
+			const skinToSave = props.allowCapes
+				? currentSkin.value!
+				: { ...currentSkin.value!, cape_id: undefined }
 			const updatedSkin = await save_custom_skin(
-				currentSkin.value!,
+				skinToSave,
 				bytes,
 				variant.value,
-				selectedCape.value,
+				capeToSave,
 				!!uploadedTextureUrl.value && textureUrl !== currentSkin.value?.texture,
 			)
 

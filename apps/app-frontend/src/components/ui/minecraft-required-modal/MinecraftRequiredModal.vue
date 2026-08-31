@@ -84,6 +84,10 @@ import {
 const { formatMessage } = useVIntl()
 const accountsCard = inject('accountsCard') as Ref<InstanceType<typeof AccountsCard> | null>
 
+const emit = defineEmits<{
+	'accounts-changed': []
+}>()
+
 const messages = defineMessages({
 	header: {
 		id: 'minecraft-required.header',
@@ -149,6 +153,7 @@ async function signIn() {
 		await set_default_user(loggedIn.profile.id)
 		await accountsCard.value?.refreshValues()
 		await trackEvent('AccountLogIn', { source: 'MinecraftRequiredModal' })
+		emit('accounts-changed')
 		modal.value?.hide()
 	} catch (error) {
 		handleSevereError(error)
@@ -168,6 +173,7 @@ async function signInOffline() {
 		await set_default_user(loggedIn.profile.id)
 		await accountsCard.value?.refreshValues()
 		await trackEvent('AccountLogIn', { source: 'MinecraftRequiredModalOffline' })
+		emit('accounts-changed')
 		modal.value?.hide()
 	} catch (error) {
 		handleSevereError(error)
