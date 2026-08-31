@@ -1661,6 +1661,12 @@
   "app.settings.operating-system.macos": {
     "message": "macOS"
   },
+  "app.settings.operating-system.windows-10": {
+    "message": "Windows 10"
+  },
+  "app.settings.operating-system.windows-11": {
+    "message": "Windows 11"
+  },
   "app.settings.privacy.ads-consent.intro": {
     "message": "Reklamy pozwalają na dalsze działanie Modrinth i finansują dochody dla twórców. Nasi partnerzy mogą gromadzić albo uzyskiwać dostęp do plików cookies w celu personalizacji reklam i mierzenia skuteczności."
   },
@@ -1821,10 +1827,10 @@
     "message": "Zaloguj się, aby zastosować skórki."
   },
   "app.skins.demo.description": {
-    "message": "Zaloguj się na konto Minecraft, aby zapisywać i stosować skórki!"
+    "message": "Zaloguj się do Octry, aby zapisywać i stosować skórki."
   },
   "app.skins.demo.title": {
-    "message": "Edycja na koncie demo"
+    "message": "Nie wybrano konta"
   },
   "app.skins.dropped-file-error.text": {
     "message": "Nie udało się odczytać upuszczonego pliku."
@@ -1950,7 +1956,7 @@
     "message": "Tiny Takeover"
   },
   "app.skins.sign-in.button": {
-    "message": "Zaloguj się do Microsoft"
+    "message": "Logowanie do Octry"
   },
   "app.skins.title": {
     "message": "Wybór skórki"
@@ -2939,11 +2945,23 @@
   "minecraft-account.add-account": {
     "message": "Dodaj konto"
   },
+  "minecraft-account.add-microsoft": {
+    "message": "Dodaj konto Microsoft"
+  },
   "minecraft-account.label": {
     "message": "Konto Minecraft"
   },
   "minecraft-account.not-signed-in": {
     "message": "Nie zalogowano"
+  },
+  "minecraft-account.offline-nick": {
+    "message": "Nick offline"
+  },
+  "minecraft-account.or-play-offline": {
+    "message": "Albo graj offline"
+  },
+  "minecraft-account.play-offline": {
+    "message": "Graj offline"
   },
   "minecraft-account.remove-account": {
     "message": "Usuń konto"
@@ -2952,16 +2970,16 @@
     "message": "Wybierz konto"
   },
   "minecraft-account.sign-in": {
-    "message": "Zaloguj się do Minecraft"
+    "message": "Logowanie do Octry"
   },
   "minecraft-required.description": {
-    "message": "Potrzebujesz konto Microsoft, które posiada Minecraft, zanim będziesz mógł włączyć i zacząć grać."
+    "message": "Zaloguj się kontem Microsoft albo graj offline z nickiem. Skin będzie widoczny na singlu i na serwerach ze SkinsRestorer."
   },
   "minecraft-required.description-header": {
-    "message": "Zaloguj się do konta Microsoft"
+    "message": "Logowanie do Octry"
   },
   "minecraft-required.dont-have-account": {
-    "message": "Nie masz konta?"
+    "message": "Nie masz konta Microsoft?"
   },
   "minecraft-required.get-minecraft": {
     "message": "Zdobądź Minecraft"
@@ -2970,10 +2988,19 @@
     "message": "Zdobądź pomoc techniczną"
   },
   "minecraft-required.header": {
-    "message": "Minecraft wymagany"
+    "message": "Logowanie do Octry"
+  },
+  "minecraft-required.offline-nick": {
+    "message": "Nick offline"
+  },
+  "minecraft-required.or-play-offline": {
+    "message": "Albo graj offline"
+  },
+  "minecraft-required.play-offline": {
+    "message": "Graj offline"
   },
   "minecraft-required.sign-in": {
-    "message": "Zaloguj się do Microsoft"
+    "message": "Konto Microsoft"
   },
   "modal.modrinth-account-required.browser-description": {
     "message": "Nowa karta otwarta do zalogowania. Ukończ logowanie, a następnie wróć do aplikacji."
@@ -3012,7 +3039,7 @@
     "message": "Utwórz pierwszą instancję"
   },
   "onboarding-checklist.login-minecraft": {
-    "message": "Zaloguj się do Minecraft"
+    "message": "Zaloguj się do Octry"
   },
   "onboarding-checklist.login-modrinth": {
     "message": "Konto Octra (wkrótce)"

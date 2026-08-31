@@ -836,11 +836,18 @@ pub async fn launch_minecraft(
         content_set.loader_version.as_deref(),
     )
     .await?;
+    let (effective_loader, loader_version) =
+        crate::octra_skins::overlay_fabric_if_vanilla(
+            &content_set.game_version,
+            content_set.loader,
+            loader_version,
+        )
+        .await;
 
-    if content_set.loader != ModLoader::Vanilla && loader_version.is_none() {
+    if effective_loader != ModLoader::Vanilla && loader_version.is_none() {
         return Err(crate::ErrorKind::LauncherError(format!(
             "No loader version selected for {}",
-            content_set.loader.as_str()
+            effective_loader.as_str()
         ))
         .into());
     }
@@ -923,6 +930,18 @@ pub async fn launch_minecraft(
     };
 
     let env_args = Vec::from(env_args);
+    let mut java_args = Vec::from(java_args);
+    if let Err(e) = crate::octra_skins::prepare_launch(
+        &instance_path,
+        &content_set.game_version,
+        effective_loader,
+        credentials,
+        &mut java_args,
+    )
+    .await
+    {
+        tracing::warn!("Octra skins: {e}");
+    }
 
     let _instance_content_lock =
         state.lock_instance_content(&instance.id).await;
@@ -1009,7 +1028,7 @@ pub async fn launch_minecraft(
             &main_class_path,
             &version_jar,
             *memory,
-            Vec::from(java_args),
+            java_args,
             &java_version.architecture,
             &quick_play_type,
             quick_play_version,

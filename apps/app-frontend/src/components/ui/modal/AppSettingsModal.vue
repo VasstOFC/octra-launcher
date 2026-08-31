@@ -2,14 +2,11 @@
 import {
 	CoffeeIcon,
 	GaugeIcon,
-	HeartHandshakeIcon,
-	ModrinthIcon,
 	PaintbrushIcon,
 	RefreshCwIcon,
 	Settings2Icon,
 	ShieldIcon,
 	ToggleRightIcon,
-	UserIcon,
 } from '@modrinth/assets'
 import {
 	commonMessages,
@@ -25,9 +22,8 @@ import { getVersion } from '@tauri-apps/api/app'
 import { platform as getOsPlatform, version as getOsVersion } from '@tauri-apps/plugin-os'
 import { computed, provide, ref, watch } from 'vue'
 
+import OctraMark from '@/components/brand/OctraMark.vue'
 import PrivacySettings from '@/components/ui/settings/account/PrivacySettings.vue'
-import ProfileSettings from '@/components/ui/settings/account/ProfileSettings.vue'
-import SocialSettings from '@/components/ui/settings/account/SocialSettings.vue'
 import AppearanceSettings from '@/components/ui/settings/display/AppearanceSettings.vue'
 import BehaviorSettings from '@/components/ui/settings/display/BehaviorSettings.vue'
 import FeatureFlagSettings from '@/components/ui/settings/display/FeatureFlagSettings.vue'
@@ -94,18 +90,6 @@ const tabs = [
 		icon: ToggleRightIcon,
 		content: FeatureFlagSettings,
 		developerOnly: true,
-	},
-	{
-		name: commonSettingsMessages.profile,
-		category: tabCategories.account,
-		icon: UserIcon,
-		content: ProfileSettings,
-	},
-	{
-		name: commonSettingsMessages.social,
-		category: tabCategories.account,
-		icon: HeartHandshakeIcon,
-		content: SocialSettings,
 	},
 	{
 		name: defineMessage({
@@ -202,14 +186,6 @@ function show() {
 	modal.value?.show()
 }
 
-function showProfile(): void {
-	const profileTabIndex = availableTabs.value.findIndex((tab) => tab.content === ProfileSettings)
-	if (profileTabIndex >= 0) {
-		modal.value?.setTab(profileTabIndex)
-	}
-	modal.value?.show()
-}
-
 function showFeatureFlags(): void {
 	const featureFlagsTabIndex = availableTabs.value.findIndex(
 		(tab) => tab.content === FeatureFlagSettings,
@@ -230,7 +206,7 @@ function showSyncedOptions(): void {
 	modal.value?.show()
 }
 
-defineExpose({ show, showProfile, showFeatureFlags, showSyncedOptions })
+defineExpose({ show, showFeatureFlags, showSyncedOptions })
 
 const { progress, version: downloadingVersion } = injectAppUpdateDownloadProgress()
 
@@ -276,10 +252,35 @@ const messages = defineMessages({
 		id: 'app.settings.operating-system.macos',
 		defaultMessage: 'macOS',
 	},
+	windows10: {
+		id: 'app.settings.operating-system.windows-10',
+		defaultMessage: 'Windows 10',
+	},
+	windows11: {
+		id: 'app.settings.operating-system.windows-11',
+		defaultMessage: 'Windows 11',
+	},
 	developerModeButtonLabel: {
 		id: 'app.settings.developer-mode-button.label',
 		defaultMessage: 'Toggle developer mode',
 	},
+})
+
+function windowsBuildNumber(raw: string): number {
+	const build = Number.parseInt(raw.split('.')[2] ?? '', 10)
+	return Number.isFinite(build) ? build : 0
+}
+
+const osLabel = computed(() => {
+	if (osPlatform === 'macos') {
+		return formatMessage(messages.macos)
+	}
+	if (osPlatform === 'windows') {
+		return formatMessage(
+			windowsBuildNumber(osVersion) >= 22000 ? messages.windows11 : messages.windows10,
+		)
+	}
+	return osPlatform
 })
 </script>
 <template>
@@ -330,16 +331,14 @@ const messages = defineMessages({
 						}"
 						@click="devModeCount"
 					>
-						<ModrinthIcon aria-hidden="true" class="w-6 h-6" />
+						<OctraMark aria-hidden="true" class="h-6 w-6" />
 					</button>
 					<div class="max-w-[200px]">
 						<p class="m-0">
 							{{ formatMessage(messages.appVersion, { version }) }}
 						</p>
 						<p class="m-0">
-							<span v-if="osPlatform === 'macos'">{{ formatMessage(messages.macos) }}</span>
-							<span v-else class="capitalize">{{ osPlatform }}</span>
-							{{ osVersion }}
+							{{ osLabel }}
 						</p>
 					</div>
 				</div>

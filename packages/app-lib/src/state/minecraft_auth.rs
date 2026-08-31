@@ -197,6 +197,30 @@ pub async fn login_finish(
     Ok(credentials)
 }
 
+pub async fn login_offline(
+    username: &str,
+    exec: impl sqlx::Executor<'_, Database = sqlx::Sqlite> + Copy,
+) -> crate::Result<Credentials> {
+    let name = crate::octra_skins::validate_offline_name(username)?;
+    let id = crate::octra_skins::offline_player_uuid(&name);
+    let credentials = Credentials {
+        offline_profile: MinecraftProfile {
+            id,
+            name,
+            ..MinecraftProfile::default()
+        },
+        access_token: "0".into(),
+        refresh_token: crate::octra_skins::OFFLINE_REFRESH_TOKEN.into(),
+        expires: Utc
+            .timestamp_opt(4_102_444_800, 0)
+            .single()
+            .unwrap_or_else(|| Utc::now() + Duration::days(3650)),
+        active: true,
+    };
+    credentials.upsert(exec).await?;
+    Ok(credentials)
+}
+
 #[derive(Deserialize, Debug)]
 pub struct Credentials {
     /// The offline profile of the user these credentials are for.
@@ -265,12 +289,20 @@ impl OnlineProfileCacheIntent {
 }
 
 impl Credentials {
+    pub fn is_offline(&self) -> bool {
+        self.refresh_token == crate::octra_skins::OFFLINE_REFRESH_TOKEN
+    }
+
     /// Refreshes the authentication tokens for this user if they are expired, or
     /// very close to expiration.
     async fn refresh(
         &mut self,
         exec: impl sqlx::Executor<'_, Database = sqlx::Sqlite> + Copy,
     ) -> crate::Result<()> {
+        if self.is_offline() {
+            return Ok(());
+        }
+
         // Use a margin of 5 minutes to give e.g. Minecraft and potentially
         // other operations that depend on a fresh token 5 minutes to complete
         // from now, and deal with some classes of clock skew
@@ -351,6 +383,10 @@ impl Credentials {
         &self,
         cache_intent: OnlineProfileCacheIntent,
     ) -> Option<Arc<MinecraftProfile>> {
+        if self.is_offline() {
+            return None;
+        }
+
         let max_age = cache_intent.max_age();
         let stale_profile = {
             let mut profile_cache = PROFILE_CACHE.lock().await;
@@ -594,7 +630,13 @@ impl Credentials {
         &self,
         exec: impl sqlx::Executor<'_, Database = sqlx::Sqlite> + Copy,
     ) -> crate::Result<()> {
-        let profile = self.maybe_online_profile().await;
+        let offline_profile;
+        let profile = if self.is_offline() {
+            &self.offline_profile
+        } else {
+            offline_profile = self.maybe_online_profile().await;
+            &*offline_profile
+        };
         let expires = self.expires.timestamp();
         let uuid = profile.id.as_hyphenated().to_string();
 
@@ -660,6 +702,16 @@ impl Serialize for Credentials {
         // Opportunistically hydrate the profile with its online data if possible for frontend
         // consumption, transparently handling all the possible Tokio runtime states the current
         // thread may be in the most efficient way
+        if self.is_offline() {
+            let mut ser = serializer.serialize_struct("Credentials", 5)?;
+            ser.serialize_field("profile", &self.offline_profile)?;
+            ser.serialize_field("access_token", &self.access_token)?;
+            ser.serialize_field("refresh_token", &self.refresh_token)?;
+            ser.serialize_field("expires", &self.expires)?;
+            ser.serialize_field("active", &self.active)?;
+            return ser.end();
+        }
+
         let profile = match Handle::try_current().ok() {
             Some(runtime)
                 if runtime.runtime_flavor() == RuntimeFlavor::CurrentThread =>

@@ -933,7 +933,7 @@ const updateToPlayModal = ref()
 
 const modrinthLoginModal = ref()
 const appSettingsModal = ref()
-provide(appSettingsModalOpenProfileKey, () => appSettingsModal.value?.showProfile())
+provide(appSettingsModalOpenProfileKey, () => appSettingsModal.value?.show())
 provide(appSettingsModalOpenSyncedOptionsKey, () => appSettingsModal.value?.showSyncedOptions())
 
 watch(incompatibilityWarningModal, (modal) => {

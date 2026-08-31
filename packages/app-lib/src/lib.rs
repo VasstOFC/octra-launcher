@@ -17,6 +17,7 @@ pub mod install;
 mod launcher;
 mod logger;
 pub mod nervia;
+pub mod octra_skins;
 pub mod octra_sync;
 mod state;
 

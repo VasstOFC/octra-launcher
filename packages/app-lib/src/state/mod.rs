@@ -171,6 +171,10 @@ impl State {
             tracing::error!("Failed to sync Octra Launcher instances: {e}");
         }
 
+        if let Err(e) = crate::octra_skins::ensure_runtime().await {
+            tracing::warn!("Octra skins runtime: {e}");
+        }
+
         tokio::task::spawn(async move {
             instances::watcher::watch_instances_init(
                 &state.file_watcher,

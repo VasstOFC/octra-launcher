@@ -1272,7 +1272,7 @@
     "message": "Servers"
   },
   "app.nav.sign-in-to-modrinth-account": {
-    "message": "Sign into Modrinth"
+    "message": "Octra account — coming soon"
   },
   "app.nav.switch-account": {
     "message": "Switch account"
@@ -1661,6 +1661,12 @@
   "app.settings.operating-system.macos": {
     "message": "macOS"
   },
+  "app.settings.operating-system.windows-10": {
+    "message": "Windows 10"
+  },
+  "app.settings.operating-system.windows-11": {
+    "message": "Windows 11"
+  },
   "app.settings.privacy.ads-consent.intro": {
     "message": "Ads make Modrinth possible and fund creator payouts. Our partners may store or access cookies in the app to personalize ads and measure performance. You can opt out or manage your preferences below."
   },
@@ -1821,10 +1827,10 @@
     "message": "Sign in to apply skins."
   },
   "app.skins.demo.description": {
-    "message": "Sign in to your Minecraft account to save and apply skins!"
+    "message": "Log in to Octra to save and apply skins."
   },
   "app.skins.demo.title": {
-    "message": "Editing with a demo account"
+    "message": "No account selected"
   },
   "app.skins.dropped-file-error.text": {
     "message": "Failed to read the dropped file."
@@ -1950,7 +1956,7 @@
     "message": "Tiny Takeover"
   },
   "app.skins.sign-in.button": {
-    "message": "Sign in to Microsoft"
+    "message": "Log in to Octra"
   },
   "app.skins.title": {
     "message": "Skin selector"
@@ -2939,11 +2945,23 @@
   "minecraft-account.add-account": {
     "message": "Add account"
   },
+  "minecraft-account.add-microsoft": {
+    "message": "Add Microsoft account"
+  },
   "minecraft-account.label": {
     "message": "Minecraft account"
   },
   "minecraft-account.not-signed-in": {
     "message": "Not signed in"
+  },
+  "minecraft-account.offline-nick": {
+    "message": "Offline nickname"
+  },
+  "minecraft-account.or-play-offline": {
+    "message": "Or play offline"
+  },
+  "minecraft-account.play-offline": {
+    "message": "Play offline"
   },
   "minecraft-account.remove-account": {
     "message": "Remove account"
@@ -2952,16 +2970,16 @@
     "message": "Select account"
   },
   "minecraft-account.sign-in": {
-    "message": "Sign in to Minecraft"
+    "message": "Log in to Octra"
   },
   "minecraft-required.description": {
-    "message": "You need a Microsoft account that owns Minecraft before you can launch and play."
+    "message": "Sign in with Microsoft, or play offline with a nickname. Your skin is uploaded so it shows in singleplayer and on SkinsRestorer servers."
   },
   "minecraft-required.description-header": {
-    "message": "Sign in to a Microsoft account"
+    "message": "Log in to Octra"
   },
   "minecraft-required.dont-have-account": {
-    "message": "Don’t have an account?"
+    "message": "Don’t have a Microsoft account?"
   },
   "minecraft-required.get-minecraft": {
     "message": "Get Minecraft"
@@ -2970,10 +2988,19 @@
     "message": "Get support"
   },
   "minecraft-required.header": {
-    "message": "Minecraft required"
+    "message": "Log in to Octra"
+  },
+  "minecraft-required.offline-nick": {
+    "message": "Offline nickname"
+  },
+  "minecraft-required.or-play-offline": {
+    "message": "Or play offline"
+  },
+  "minecraft-required.play-offline": {
+    "message": "Play offline"
   },
   "minecraft-required.sign-in": {
-    "message": "Sign in to Microsoft"
+    "message": "Microsoft account"
   },
   "modal.modrinth-account-required.browser-description": {
     "message": "A new tab opened to sign in. Complete the sign in there, then return to the app."
@@ -3012,7 +3039,7 @@
     "message": "Create first instance"
   },
   "onboarding-checklist.login-minecraft": {
-    "message": "Sign in to Minecraft"
+    "message": "Sign in to Octra"
   },
   "onboarding-checklist.login-modrinth": {
     "message": "Sign in to Modrinth"

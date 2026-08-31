@@ -7,14 +7,28 @@
 		<Button type="colored" color="brand" :disabled="loginDisabled" @click="login()">
 			<LogInIcon v-if="!loginDisabled" />
 			<SpinnerIcon v-else class="animate-spin" />
-			{{ formatMessage(messages.signInToMinecraft) }}
+			{{ formatMessage(messages.signInToOctra) }}
 		</Button>
+		<div class="flex flex-col gap-2">
+			<span class="text-secondary text-xs">{{ formatMessage(messages.orPlayOffline) }}</span>
+			<Input
+				v-model="offlineName"
+				size="small"
+				maxlength="16"
+				:placeholder="formatMessage(messages.offlineNickPlaceholder)"
+				:disabled="loginDisabled"
+				@keyup.enter="loginOffline()"
+			/>
+			<Button :disabled="loginDisabled || !canLoginOffline" @click="loginOffline()">
+				{{ formatMessage(messages.playOffline) }}
+			</Button>
+		</div>
 	</div>
 	<Accordion
 		v-else
 		class="w-full mt-2 bg-button-bg border border-solid border-surface-5 rounded-xl overflow-clip"
 		button-class="button-base w-full bg-transparent px-3 py-2 border-0 cursor-pointer"
-		:open-by-default="false"
+		:open-by-default="true"
 	>
 		<template #title>
 			<div class="flex gap-2 w-full min-w-0">
@@ -78,7 +92,23 @@
 					@click="login()"
 				>
 					<PlusIcon />
-					{{ formatMessage(messages.addAccount) }}
+					{{ formatMessage(messages.addMicrosoftAccount) }}
+				</Button>
+				<Input
+					v-model="offlineName"
+					size="small"
+					maxlength="16"
+					:placeholder="formatMessage(messages.offlineNickPlaceholder)"
+					:disabled="loginDisabled"
+					@keyup.enter="loginOffline()"
+				/>
+				<Button
+					class="w-full !bg-button-bg !text-primary ![box-shadow:var(--shadow-button)]"
+					:disabled="loginDisabled || !canLoginOffline"
+					@click="loginOffline()"
+				>
+					<PlusIcon />
+					{{ formatMessage(messages.playOffline) }}
 				</Button>
 			</div>
 		</div>
@@ -100,6 +130,7 @@ import {
 	Button,
 	defineMessages,
 	IconButton,
+	Input,
 	injectNotificationManager,
 	useVIntl,
 } from '@modrinth/ui'
@@ -112,6 +143,7 @@ import { trackEvent } from '@/helpers/analytics'
 import {
 	get_default_user,
 	login as login_flow,
+	login_offline as login_offline_flow,
 	remove_user,
 	set_default_user,
 	users,
@@ -136,9 +168,20 @@ type MinecraftCredential = {
 
 const accounts: Ref<MinecraftCredential[]> = ref([])
 const loginDisabled = ref(false)
+const offlineName = ref('')
 const defaultUser = ref<string | undefined>()
 const equippedSkin = ref<Skin | null>(null)
 const headUrlCache = ref(new Map<string, string>())
+
+const canLoginOffline = computed(() => {
+	const name = offlineName.value.trim()
+	return (
+		name.length >= 1 &&
+		name.length <= 16 &&
+		!/\s/.test(name) &&
+		/^[A-Za-z0-9_]+$/.test(name)
+	)
+})
 
 async function refreshValues() {
 	defaultUser.value = await get_default_user().catch(handleError)
@@ -241,6 +284,23 @@ async function login() {
 	loginDisabled.value = false
 }
 
+async function loginOffline() {
+	if (!canLoginOffline.value) return
+	loginDisabled.value = true
+	try {
+		const loggedIn = await login_offline_flow(offlineName.value.trim())
+		if (loggedIn) {
+			offlineName.value = ''
+			await setAccount(loggedIn)
+		}
+		trackEvent('AccountLogIn', { source: 'offline' })
+	} catch (error) {
+		handleSevereError(error)
+	} finally {
+		loginDisabled.value = false
+	}
+}
+
 async function logout(id: string) {
 	await remove_user(id).catch(handleError)
 	await refreshValues()
@@ -279,9 +339,25 @@ const messages = defineMessages({
 		id: 'minecraft-account.label',
 		defaultMessage: 'Minecraft account',
 	},
-	signInToMinecraft: {
+	signInToOctra: {
 		id: 'minecraft-account.sign-in',
-		defaultMessage: 'Sign in to Minecraft',
+		defaultMessage: 'Log in to Octra',
+	},
+	addMicrosoftAccount: {
+		id: 'minecraft-account.add-microsoft',
+		defaultMessage: 'Add Microsoft account',
+	},
+	orPlayOffline: {
+		id: 'minecraft-account.or-play-offline',
+		defaultMessage: 'Or play offline',
+	},
+	offlineNickPlaceholder: {
+		id: 'minecraft-account.offline-nick',
+		defaultMessage: 'Offline nickname',
+	},
+	playOffline: {
+		id: 'minecraft-account.play-offline',
+		defaultMessage: 'Play offline',
 	},
 })
 </script>

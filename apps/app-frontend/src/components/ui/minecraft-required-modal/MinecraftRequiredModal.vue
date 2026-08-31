@@ -19,28 +19,38 @@
 			</div>
 		</div>
 
-		<div class="flex flex-col gap-6 px-6 pb-6">
-			<div class="grid grid-cols-2 gap-2">
-				<ButtonLink href="https://support.modrinth.com" @click="modal?.hide()">
-					<MessagesSquareIcon />
-					{{ formatMessage(messages.getSupport) }}
-				</ButtonLink>
-				<Button type="colored" color="brand" :disabled="loadingSignIn" @click="signIn">
-					<SpinnerIcon v-if="loadingSignIn" class="animate-spin" />
-					<svg
-						v-else
-						width="20"
-						height="20"
-						viewBox="0 0 20 20"
-						fill="none"
-						xmlns="http://www.w3.org/2000/svg"
-					>
-						<rect width="9.25" height="9.25" fill="black" fill-opacity="0.9" />
-						<rect x="10.75" width="9.25" height="9.25" fill="black" fill-opacity="0.9" />
-						<rect y="10.75" width="9.25" height="9.25" fill="black" fill-opacity="0.9" />
-						<rect x="10.75" y="10.75" width="9.25" height="9.25" fill="black" fill-opacity="0.9" />
-					</svg>
-					{{ formatMessage(messages.signIn) }}
+		<div class="flex flex-col gap-4 px-6 pb-6">
+			<Button type="colored" color="brand" :disabled="loading" @click="signIn">
+				<SpinnerIcon v-if="loadingSignIn" class="animate-spin" />
+				<svg
+					v-else
+					width="20"
+					height="20"
+					viewBox="0 0 20 20"
+					fill="none"
+					xmlns="http://www.w3.org/2000/svg"
+				>
+					<rect width="9.25" height="9.25" fill="black" fill-opacity="0.9" />
+					<rect x="10.75" width="9.25" height="9.25" fill="black" fill-opacity="0.9" />
+					<rect y="10.75" width="9.25" height="9.25" fill="black" fill-opacity="0.9" />
+					<rect x="10.75" y="10.75" width="9.25" height="9.25" fill="black" fill-opacity="0.9" />
+				</svg>
+				{{ formatMessage(messages.signIn) }}
+			</Button>
+			<div class="flex flex-col gap-2">
+				<div class="text-sm font-medium text-contrast">
+					{{ formatMessage(messages.orPlayOffline) }}
+				</div>
+				<Input
+					v-model="offlineName"
+					maxlength="16"
+					:placeholder="formatMessage(messages.offlineNickPlaceholder)"
+					:disabled="loading"
+					@keyup.enter="signInOffline"
+				/>
+				<Button :disabled="loading || !canLoginOffline" @click="signInOffline">
+					<SpinnerIcon v-if="loadingOffline" class="animate-spin" />
+					{{ formatMessage(messages.playOffline) }}
 				</Button>
 			</div>
 			<p class="m-0 text-center text-sm text-secondary">
@@ -57,15 +67,19 @@
 </template>
 
 <script setup lang="ts">
-import { MessagesSquareIcon, SpinnerIcon } from '@modrinth/assets'
-import { Button, ButtonLink, defineMessages, NewModal, useVIntl } from '@modrinth/ui'
-import { inject, type Ref, ref } from 'vue'
+import { SpinnerIcon } from '@modrinth/assets'
+import { Button, defineMessages, Input, NewModal, useVIntl } from '@modrinth/ui'
+import { computed, inject, type Ref, ref } from 'vue'
 
 import steveImage from '@/assets/steve-look-up-left.webp'
 import type AccountsCard from '@/components/ui/AccountsCard.vue'
 import { handleSevereError } from '@/composables/use-error.js'
 import { trackEvent } from '@/helpers/analytics'
-import { login as loginFlow, set_default_user } from '@/helpers/auth.js'
+import {
+	login as loginFlow,
+	login_offline as loginOfflineFlow,
+	set_default_user,
+} from '@/helpers/auth.js'
 
 const { formatMessage } = useVIntl()
 const accountsCard = inject('accountsCard') as Ref<InstanceType<typeof AccountsCard> | null>
@@ -73,28 +87,36 @@ const accountsCard = inject('accountsCard') as Ref<InstanceType<typeof AccountsC
 const messages = defineMessages({
 	header: {
 		id: 'minecraft-required.header',
-		defaultMessage: 'Minecraft required',
+		defaultMessage: 'Log in to Octra',
 	},
 	descriptionHeader: {
 		id: 'minecraft-required.description-header',
-		defaultMessage: 'Sign in to a Microsoft account',
+		defaultMessage: 'Log in to Octra',
 	},
 	description: {
 		id: 'minecraft-required.description',
 		defaultMessage:
-			'You need a Microsoft account that owns Minecraft before you can launch and play.',
-	},
-	getSupport: {
-		id: 'minecraft-required.get-support',
-		defaultMessage: 'Get support',
+			'Sign in with Microsoft, or play offline with a nickname. Your skin is uploaded so it shows in singleplayer and on SkinsRestorer servers.',
 	},
 	signIn: {
 		id: 'minecraft-required.sign-in',
-		defaultMessage: 'Sign in to Microsoft',
+		defaultMessage: 'Microsoft account',
+	},
+	orPlayOffline: {
+		id: 'minecraft-required.or-play-offline',
+		defaultMessage: 'Or play offline',
+	},
+	offlineNickPlaceholder: {
+		id: 'minecraft-required.offline-nick',
+		defaultMessage: 'Offline nickname',
+	},
+	playOffline: {
+		id: 'minecraft-required.play-offline',
+		defaultMessage: 'Play offline',
 	},
 	dontHaveAccount: {
 		id: 'minecraft-required.dont-have-account',
-		defaultMessage: 'Don’t have an account?',
+		defaultMessage: 'Don’t have a Microsoft account?',
 	},
 	getMinecraft: {
 		id: 'minecraft-required.get-minecraft',
@@ -104,6 +126,14 @@ const messages = defineMessages({
 
 const modal = ref<InstanceType<typeof NewModal>>()
 const loadingSignIn = ref(false)
+const loadingOffline = ref(false)
+const offlineName = ref('')
+
+const loading = computed(() => loadingSignIn.value || loadingOffline.value)
+const canLoginOffline = computed(() => {
+	const name = offlineName.value.trim()
+	return name.length >= 1 && name.length <= 16 && !/\s/.test(name) && /^[A-Za-z0-9_]+$/.test(name)
+})
 
 function show() {
 	modal.value?.show()
@@ -124,6 +154,25 @@ async function signIn() {
 		handleSevereError(error)
 	} finally {
 		loadingSignIn.value = false
+	}
+}
+
+async function signInOffline() {
+	if (!canLoginOffline.value) return
+	loadingOffline.value = true
+
+	try {
+		const loggedIn = await loginOfflineFlow(offlineName.value.trim())
+		if (!loggedIn) return
+
+		await set_default_user(loggedIn.profile.id)
+		await accountsCard.value?.refreshValues()
+		await trackEvent('AccountLogIn', { source: 'MinecraftRequiredModalOffline' })
+		modal.value?.hide()
+	} catch (error) {
+		handleSevereError(error)
+	} finally {
+		loadingOffline.value = false
 	}
 }
 

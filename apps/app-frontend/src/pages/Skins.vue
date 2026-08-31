@@ -195,15 +195,15 @@ const messages = defineMessages({
 	},
 	demoTitle: {
 		id: 'app.skins.demo.title',
-		defaultMessage: 'Editing with a demo account',
+		defaultMessage: 'No account selected',
 	},
 	demoDescription: {
 		id: 'app.skins.demo.description',
-		defaultMessage: 'Sign in to your Minecraft account to save and apply skins!',
+		defaultMessage: 'Log in to Octra to save and apply skins.',
 	},
 	signInButton: {
 		id: 'app.skins.sign-in.button',
-		defaultMessage: 'Sign in to Microsoft',
+		defaultMessage: 'Log in to Octra',
 	},
 })
 
@@ -227,6 +227,10 @@ const currentUser = ref(undefined)
 const currentUserId = ref<string | undefined>(undefined)
 
 const username = computed(() => currentUser.value?.profile?.name ?? undefined)
+const isOfflineMinecraftAccount = computed(() => {
+	const user = currentUser.value as { refresh_token?: string } | undefined
+	return user?.refresh_token === 'octra-offline'
+})
 const selectedSkin = ref<Skin | null>(null)
 const isApplyingSkin = ref(false)
 const earsFeaturesEnabled = ref(true)
@@ -343,6 +347,7 @@ const skinNametag = computed(() => (appSettings.hideNametagSkinsPage ? undefined
 const isSkinManagementReadOnly = computed(
 	() =>
 		!!currentUser.value &&
+		!isOfflineMinecraftAccount.value &&
 		(offline.value || (authServerQuery.isError.value && !authServerQuery.isLoading.value)),
 )
 const hasPendingSkinChange = computed(
