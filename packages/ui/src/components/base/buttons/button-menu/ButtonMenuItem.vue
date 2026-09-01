@@ -176,7 +176,7 @@ function handleFocus(event: FocusEvent) {
 			:class="trailingActionClasses"
 			:style="trailingActionStyle"
 			tabindex="-1"
-			@click="props.option.trailingAction.action($event)"
+			@click.stop="props.option.trailingAction.action($event)"
 			@keydown="handleTrailingKeydown"
 		>
 			<component :is="props.option.trailingAction.icon" aria-hidden="true" />

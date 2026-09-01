@@ -4,6 +4,7 @@ import { ContextMenu, defineMessages, injectNotificationManager, useVIntl } from
 import dayjs from 'dayjs'
 import { computed, inject, onActivated, ref } from 'vue'
 
+import FeaturedPackCard from '@/components/ui/FeaturedPackCard.vue'
 import LibrarySection from '@/components/ui/library/index.vue'
 import WelcomeScreen from '@/components/ui/WelcomeScreen.vue'
 import RecentWorldsList from '@/components/ui/world/RecentWorldsList.vue'
@@ -59,6 +60,10 @@ const recentInstances = computed(() =>
 		.sort((a, b) => dayjs(b.last_played ?? b.created).diff(dayjs(a.last_played ?? a.created))),
 )
 
+const hasFeaturedPack = computed(() =>
+	instances.value.some((instance) => instance.name.toLowerCase() === 'cobblemon vasst'),
+)
+
 async function fetchInstances() {
 	const fetchId = ++latestInstanceFetch
 	try {
@@ -109,6 +114,7 @@ function openPageContextMenu(event: MouseEvent) {
 		class="flex flex-col gap-3 p-6"
 		@contextmenu="openPageContextMenu"
 	>
+		<FeaturedPackCard :installed="hasFeaturedPack" @installed="fetchInstances" />
 		<RecentWorldsList
 			v-if="recentInstances?.length > 0 && appSettings.getFeatureFlag('worlds_in_home')"
 			:recent-instances="recentInstances"

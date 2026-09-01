@@ -320,6 +320,21 @@
   "app.export-modal.version-number-placeholder": {
     "message": "1.0.0"
   },
+  "app.featured-pack.blurb": {
+    "message": "Autorska paczka — parę kliknięć i możesz grać."
+  },
+  "app.featured-pack.install": {
+    "message": "Zainstaluj"
+  },
+  "app.featured-pack.installing": {
+    "message": "Instalowanie…"
+  },
+  "app.featured-pack.kicker": {
+    "message": "Polecana paczka"
+  },
+  "app.featured-pack.title": {
+    "message": "Cobblemon Vasst"
+  },
   "app.home.jump-back-in.actions.label": {
     "message": "Akcje instancji"
   },
@@ -1247,20 +1262,65 @@
   "app.nav.add-account": {
     "message": "Dodaj konto"
   },
+  "app.nav.brand-name": {
+    "message": "Octra"
+  },
+  "app.nav.brand-subtitle": {
+    "message": "Launcher"
+  },
+  "app.nav.collapse-rail": {
+    "message": "Zwiń menu"
+  },
   "app.nav.create-new-instance": {
     "message": "Utwórz instancję"
+  },
+  "app.nav.expand-rail": {
+    "message": "Rozwiń menu"
   },
   "app.nav.home": {
     "message": "Strona główna"
   },
+  "app.nav.library": {
+    "message": "Biblioteka"
+  },
+  "app.nav.library-count": {
+    "message": "{count, plural, one {# profil w bibliotece} few {# profile w bibliotece} many {# profilów w bibliotece} other {# profilu w bibliotece}}"
+  },
+  "app.nav.library-empty": {
+    "message": "Brak instancji"
+  },
   "app.nav.loading-profile": {
     "message": "Ładowanie profilu..."
+  },
+  "app.nav.locker": {
+    "message": "Szafka"
   },
   "app.nav.modrinth-account": {
     "message": "Konto Octra"
   },
   "app.nav.modrinth-hosting": {
     "message": "Modrinth Hosting"
+  },
+  "app.nav.pack-gallery": {
+    "message": "Galeria paczek"
+  },
+  "app.nav.playtime-hours": {
+    "message": "{h} godz."
+  },
+  "app.nav.playtime-hours-minutes": {
+    "message": "{h} godz. {m} min"
+  },
+  "app.nav.playtime-minutes": {
+    "message": "{m} min"
+  },
+  "app.nav.playtime-total": {
+    "message": "{time} łącznie"
+  },
+  "app.nav.playtime-under-minute": {
+    "message": "poniżej minuty"
+  },
+  "app.nav.quick-switch": {
+    "message": "Szybkie przełączanie"
   },
   "app.nav.remove-account": {
     "message": "Usuń konto"
@@ -1273,6 +1333,9 @@
   },
   "app.nav.sign-in-to-modrinth-account": {
     "message": "Konto Octra — wkrótce"
+  },
+  "app.nav.start": {
+    "message": "Start"
   },
   "app.nav.switch-account": {
     "message": "Przełącz konto"
@@ -2953,6 +3016,9 @@
   },
   "minecraft-account.label": {
     "message": "Konto Minecraft"
+  },
+  "minecraft-account.manage": {
+    "message": "Zarządzaj kontami"
   },
   "minecraft-account.non-premium": {
     "message": "Non-premium"

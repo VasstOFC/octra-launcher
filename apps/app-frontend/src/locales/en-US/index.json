@@ -320,6 +320,21 @@
   "app.export-modal.version-number-placeholder": {
     "message": "1.0.0"
   },
+  "app.featured-pack.blurb": {
+    "message": "Author pack — a couple of clicks and you can play."
+  },
+  "app.featured-pack.install": {
+    "message": "Install"
+  },
+  "app.featured-pack.installing": {
+    "message": "Installing…"
+  },
+  "app.featured-pack.kicker": {
+    "message": "Featured pack"
+  },
+  "app.featured-pack.title": {
+    "message": "Cobblemon Vasst"
+  },
   "app.home.jump-back-in.actions.label": {
     "message": "Instance actions"
   },
@@ -1247,20 +1262,65 @@
   "app.nav.add-account": {
     "message": "Add account"
   },
+  "app.nav.brand-name": {
+    "message": "Octra"
+  },
+  "app.nav.brand-subtitle": {
+    "message": "Launcher"
+  },
+  "app.nav.collapse-rail": {
+    "message": "Collapse menu"
+  },
   "app.nav.create-new-instance": {
     "message": "Create new instance"
+  },
+  "app.nav.expand-rail": {
+    "message": "Expand menu"
   },
   "app.nav.home": {
     "message": "Home"
   },
+  "app.nav.library": {
+    "message": "Library"
+  },
+  "app.nav.library-count": {
+    "message": "{count, plural, one {# profile in library} other {# profiles in library}}"
+  },
+  "app.nav.library-empty": {
+    "message": "No instances yet"
+  },
   "app.nav.loading-profile": {
     "message": "Loading profile..."
+  },
+  "app.nav.locker": {
+    "message": "Locker"
   },
   "app.nav.modrinth-account": {
     "message": "Modrinth account"
   },
   "app.nav.modrinth-hosting": {
     "message": "Modrinth Hosting"
+  },
+  "app.nav.pack-gallery": {
+    "message": "Pack gallery"
+  },
+  "app.nav.playtime-hours": {
+    "message": "{h} hr"
+  },
+  "app.nav.playtime-hours-minutes": {
+    "message": "{h} hr {m} min"
+  },
+  "app.nav.playtime-minutes": {
+    "message": "{m} min"
+  },
+  "app.nav.playtime-total": {
+    "message": "{time} total"
+  },
+  "app.nav.playtime-under-minute": {
+    "message": "under a minute"
+  },
+  "app.nav.quick-switch": {
+    "message": "Quick switch"
   },
   "app.nav.remove-account": {
     "message": "Remove account"
@@ -1273,6 +1333,9 @@
   },
   "app.nav.sign-in-to-modrinth-account": {
     "message": "Octra account — coming soon"
+  },
+  "app.nav.start": {
+    "message": "Start"
   },
   "app.nav.switch-account": {
     "message": "Switch account"
@@ -2953,6 +3016,9 @@
   },
   "minecraft-account.label": {
     "message": "Minecraft account"
+  },
+  "minecraft-account.manage": {
+    "message": "Manage accounts"
   },
   "minecraft-account.non-premium": {
     "message": "Non-premium"

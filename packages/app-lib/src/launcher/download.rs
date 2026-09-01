@@ -595,6 +595,56 @@ pub async fn download_client(
     Ok(())
 }
 
+/// Makes sure the client jar and loader libraries exist before launch.
+/// Vanilla instances may overlay Fabric for skins, which writes a merged version
+/// id (`{mc}-{loader}`) whose jar was never copied during install.
+pub async fn ensure_client_and_libraries_for_launch(
+    st: &State,
+    version_info: &GameVersionInfo,
+    vanilla_version_id: &str,
+    java_arch: &str,
+    minecraft_updated: bool,
+) -> crate::Result<()> {
+    let version = &version_info.id;
+    let path = st
+        .directories
+        .version_dir(version)
+        .join(format!("{version}.jar"));
+
+    if !path.exists() && version != vanilla_version_id {
+        let vanilla_path = st
+            .directories
+            .version_dir(vanilla_version_id)
+            .join(format!("{vanilla_version_id}.jar"));
+        if vanilla_path.exists() {
+            if let Some(parent) = path.parent() {
+                io::create_dir_all(parent).await?;
+            }
+            io::copy(&vanilla_path, &path).await?;
+            tracing::info!(
+                "Copied vanilla client {} -> {}",
+                vanilla_path.display(),
+                path.display()
+            );
+        }
+    }
+
+    download_client(st, version_info, None, false, None).await?;
+    download_libraries(
+        st,
+        version_info.libraries.as_slice(),
+        version,
+        None,
+        0.0,
+        java_arch,
+        false,
+        minecraft_updated,
+        None,
+    )
+    .await?;
+    Ok(())
+}
+
 #[tracing::instrument(skip_all)]
 
 pub async fn download_assets_index(

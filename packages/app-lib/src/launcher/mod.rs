@@ -902,6 +902,15 @@ pub async fn launch_minecraft(
     let java_version =
         crate::api::jre::check_jre(java_version.path.clone().into()).await?;
 
+    download::ensure_client_and_libraries_for_launch(
+        &state,
+        &version_info,
+        &version.id,
+        &java_version.architecture,
+        minecraft_updated,
+    )
+    .await?;
+
     let client_path = state
         .directories
         .version_dir(&version_jar)

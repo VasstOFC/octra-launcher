@@ -20,6 +20,8 @@ pub fn init<R: tauri::Runtime>() -> tauri::plugin::TauriPlugin<R> {
             install_get_modpack_preview,
             install_create_instance,
             install_create_modpack_instance,
+            install_get_featured_pack,
+            install_featured_pack,
             install_get_shared_instance_preview,
             install_accept_shared_instance_invite,
             install_get_shared_instance_update_preview,
@@ -110,6 +112,17 @@ pub async fn install_create_modpack_instance(
         post_install_edit.map(|edit| edit.into_core()).transpose()?,
     )
     .await?)
+}
+
+#[tauri::command]
+pub fn install_get_featured_pack() -> Result<theseus::pack::featured::FeaturedPackInfo>
+{
+    Ok(theseus::pack::featured::featured_pack_info())
+}
+
+#[tauri::command]
+pub async fn install_featured_pack() -> Result<InstallJobSnapshot> {
+    Ok(theseus::install::create_featured_pack_instance().await?)
 }
 
 #[tauri::command]

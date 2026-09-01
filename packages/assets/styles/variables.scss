@@ -449,8 +449,9 @@ html {
 	--color-text-default: #c3c4b3;
 	--color-text-tertiary: #9b9e98;
 
-	--color-brand: #4d9227;
-	--color-brand-highlight: #25421e;
+	--color-brand: #c47bc6;
+	--color-brand-highlight: rgba(196, 123, 198, 0.25);
+	--color-brand-shadow: rgba(196, 123, 198, 0.7);
 	--color-accent-contrast: #ffffff;
 	--color-ad: var(--color-brand-highlight);
 	--color-ad-raised: var(--color-brand);

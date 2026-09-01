@@ -175,6 +175,20 @@ export async function install_create_modpack_instance(
 	})
 }
 
+export interface FeaturedPackInfo {
+	enabled: boolean
+	title: string
+	blurb: string
+}
+
+export async function install_get_featured_pack() {
+	return await invoke<FeaturedPackInfo>('plugin:install|install_get_featured_pack')
+}
+
+export async function install_featured_pack() {
+	return await invoke<InstallJobSnapshot>('plugin:install|install_featured_pack')
+}
+
 export async function install_get_shared_instance_preview(sharedInstanceId: string, name: string) {
 	return await invoke<SharedInstanceInstallPreview>(
 		'plugin:install|install_get_shared_instance_preview',

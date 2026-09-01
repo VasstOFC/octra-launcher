@@ -1,6 +1,5 @@
 use crate::state::State;
 use crate::state::instances::adapters::sqlite::instance_rows;
-use crate::util::io;
 
 pub(crate) async fn remove_instance(
     instance_id: &str,
@@ -16,12 +15,12 @@ pub(crate) async fn remove_instance(
     crate::api::instance::remove_generated_instance_files(instance_id, state)
         .await?;
 
+    crate::octra_sync::remember_removed_octra_instance(&instance.path).await;
+
     delete_instance_row_and_locks(&instance.id, state).await?;
 
     let path = state.directories.instances_dir().join(&instance.path);
-    if path.exists() {
-        io::remove_dir_all(&path).await?;
-    }
+    crate::octra_sync::remove_instance_directory(&path).await?;
 
     Ok(())
 }

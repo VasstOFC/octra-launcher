@@ -64,6 +64,30 @@ pub async fn create_modpack_instance(
     .await
 }
 
+pub async fn create_featured_pack_instance() -> crate::Result<InstallJobSnapshot>
+{
+    let path = crate::api::pack::featured::resolve_featured_pack_path().await?;
+    create_modpack_instance(
+        CreatePackLocation::FromFile { path },
+        Some(InstallPostInstallEdit {
+            name: Some(crate::nervia::FEATURED_PACK_TITLE.to_string()),
+            icon_path: None,
+            link: Some(InstanceLink::ImportedModpack {
+                project_id: None,
+                version_id: None,
+                name: Some(crate::nervia::FEATURED_PACK_TITLE.to_string()),
+                version_number: Some(
+                    crate::nervia::FEATURED_PACK_VERSION.to_string(),
+                ),
+                filename: Some(
+                    crate::nervia::FEATURED_PACK_CACHE_NAME.to_string(),
+                ),
+            }),
+        }),
+    )
+    .await
+}
+
 pub async fn create_shared_instance(
     data: SharedInstanceInstallData,
 ) -> crate::Result<InstallJobSnapshot> {

@@ -213,13 +213,20 @@ fn register_player(
     players.insert(stored.name.to_ascii_lowercase(), stored);
 }
 
+fn registry_legacy_url(name: &str) -> String {
+    format!(
+        "{}/skins/MinecraftSkins/{name}.png",
+        nervia::SKINS_URL.trim_end_matches('/')
+    )
+}
+
 pub async fn publish_to_registry(
     credentials: &Credentials,
     variant: MinecraftSkinVariant,
     png: &[u8],
-) {
+) -> bool {
     if png.is_empty() {
-        return;
+        return false;
     }
     let model = match variant {
         MinecraftSkinVariant::Slim => "slim",
@@ -240,8 +247,87 @@ pub async fn publish_to_registry(
             .body(png.to_vec())
             .send()
     };
-    if send(reqwest::Method::PUT).await.is_err() {
-        let _ = send(reqwest::Method::POST).await;
+    match send(reqwest::Method::PUT).await {
+        Ok(resp) if resp.status().is_success() => {
+            tracing::info!(
+                "published skin for {name} to octra registry ({uuid})"
+            );
+            true
+        }
+        Ok(resp) => {
+            tracing::warn!(
+                "octra skin registry PUT for {name} failed: HTTP {}",
+                resp.status()
+            );
+            match send(reqwest::Method::POST).await {
+                Ok(resp) if resp.status().is_success() => {
+                    tracing::info!(
+                        "published skin for {name} to octra registry via POST ({uuid})"
+                    );
+                    true
+                }
+                Ok(resp) => {
+                    tracing::warn!(
+                        "octra skin registry POST for {name} failed: HTTP {}",
+                        resp.status()
+                    );
+                    false
+                }
+                Err(error) => {
+                    tracing::warn!(
+                        "octra skin registry POST for {name} failed: {error}"
+                    );
+                    false
+                }
+            }
+        }
+        Err(error) => {
+            tracing::warn!("octra skin registry PUT for {name} failed: {error}");
+            match send(reqwest::Method::POST).await {
+                Ok(resp) if resp.status().is_success() => {
+                    tracing::info!(
+                        "published skin for {name} to octra registry via POST ({uuid})"
+                    );
+                    true
+                }
+                Ok(resp) => {
+                    tracing::warn!(
+                        "octra skin registry POST for {name} failed: HTTP {}",
+                        resp.status()
+                    );
+                    false
+                }
+                Err(error) => {
+                    tracing::warn!(
+                        "octra skin registry POST for {name} failed: {error}"
+                    );
+                    false
+                }
+            }
+        }
+    }
+}
+
+/// Re-uploads equipped skins for every saved Minecraft account (startup + retry).
+pub async fn sync_all_equipped_skins() {
+    let Ok(state) = State::get().await else {
+        return;
+    };
+    let Ok(accounts) = Credentials::get_all(&state.pool).await else {
+        return;
+    };
+    for entry in accounts.iter() {
+        let credentials = entry.value().clone();
+        let Some(png) = load_equipped_png(credentials.offline_profile.id).await
+        else {
+            continue;
+        };
+        let variant = load_equipped(credentials.offline_profile.id)
+            .await
+            .map(|equipped| equipped.variant)
+            .unwrap_or(MinecraftSkinVariant::Classic);
+        register_player(&credentials, variant, &png);
+        publish_to_registry(&credentials, variant, &png).await;
     }
 }
 
@@ -259,6 +345,9 @@ pub async fn ensure_runtime() -> crate::Result<()> {
     }
     start_yggdrasil(hub).await?;
     *started = true;
+    tokio::spawn(async {
+        sync_all_equipped_skins().await;
+    });
     Ok(())
 }
 
@@ -489,9 +578,8 @@ fn player_profile_response(id: &str) -> Vec<u8> {
 }
 
 fn profile_json(skin: &StoredPlayerSkin) -> serde_json::Value {
-    let port = hub().ygg_port.load(Ordering::Relaxed);
     let mut skin_obj = json!({
-        "url": format!("http://127.0.0.1:{port}/textures/{}", skin.sha256),
+        "url": registry_legacy_url(&skin.name),
     });
     if skin.model == "slim" {
         skin_obj["metadata"] = json!({ "model": "slim" });
@@ -713,6 +801,11 @@ fn write_csl_config(instance_path: &Path) -> crate::Result<()> {
         "skin": "LocalSkin/skins/{USERNAME}.png",
         "model": "auto"
     })];
+    loadlist.push(json!({
+        "name": "OctraCloud",
+        "type": "Legacy",
+        "root": format!("{registry}/skins/MinecraftSkins/")
+    }));
     if let Some(root) = ygg_root() {
         loadlist.push(json!({
             "name": "OctraYgg",
@@ -720,11 +813,6 @@ fn write_csl_config(instance_path: &Path) -> crate::Result<()> {
             "root": format!("{}/skins/MinecraftSkins/", root.trim_end_matches('/'))
         }));
     }
-    loadlist.push(json!({
-        "name": "OctraCloud",
-        "type": "Legacy",
-        "root": format!("{registry}/skins/MinecraftSkins/")
-    }));
     loadlist.push(json!({
         "name": "Mojang",
         "type": "MojangAPI"

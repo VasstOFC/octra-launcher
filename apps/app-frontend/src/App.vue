@@ -25,6 +25,7 @@ import {
 	ShirtIcon,
 	SpinnerIcon,
 	ToggleRightIcon,
+	TrashIcon,
 	UserIcon,
 	UserPlusIcon,
 	XIcon,
@@ -67,7 +68,7 @@ import { openUrl } from '@tauri-apps/plugin-opener'
 import { type } from '@tauri-apps/plugin-os'
 import { saveWindowState, StateFlags } from '@tauri-apps/plugin-window-state'
 import { computed, nextTick, onMounted, onUnmounted, provide, ref, watch } from 'vue'
-import { RouterView, useRoute, useRouter } from 'vue-router'
+import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
 
 import AccountsCard from '@/components/ui/AccountsCard.vue'
 import AddOfflineAccountModal from '@/components/ui/AddOfflineAccountModal.vue'
@@ -86,6 +87,7 @@ import ModpackAlreadyInstalledModal from '@/components/ui/modal/ModpackAlreadyIn
 import ModrinthAccountRequiredModal from '@/components/ui/modal/ModrinthAccountRequiredModal.vue'
 import UpdateToPlayModal from '@/components/ui/modal/UpdateToPlayModal.vue'
 import NavButton from '@/components/ui/NavButton.vue'
+import OctraMark from '@/components/brand/OctraMark.vue'
 import OctraWordmark from '@/components/brand/OctraWordmark.vue'
 import NewIconEditorNotification from '@/components/ui/new-icon-editor-notification/index.vue'
 import { shouldShowNewIconEditorNotification } from '@/components/ui/new-icon-editor-notification/show-notification'
@@ -344,6 +346,8 @@ const creationIconEditorModal = ref(null)
 const creationGeneratedIcon = ref(null)
 const creationIconTarget = ref('creation-flow')
 
+const stateInitialized = ref(false)
+
 const {
 	installationModal,
 	unknownPackWarningModal,
@@ -361,6 +365,7 @@ const {
 	notificationManager,
 	popupNotificationManager,
 	appEvents,
+	stateInitialized,
 	(iconPath) =>
 		creationGeneratedIcon.value?.path === iconPath ? creationGeneratedIcon.value.config : null,
 )
@@ -420,7 +425,6 @@ const nativeDecorations = ref(false)
 const os = ref('')
 const isDevEnvironment = ref(false)
 
-const stateInitialized = ref(false)
 const globalSyncedOptionsQuery = useQuery({
 	queryKey: ['global-synced-options'],
 	queryFn: get_global_synced_options,
@@ -503,6 +507,12 @@ onUnmounted(async () => {
 const { formatMessage } = useVIntl()
 const formatBytes = useFormatBytes()
 
+const RAIL_STORAGE_KEY = 'octra.railExpanded'
+const railExpanded = ref(localStorage.getItem(RAIL_STORAGE_KEY) !== '0')
+watch(railExpanded, (value) => {
+	localStorage.setItem(RAIL_STORAGE_KEY, value ? '1' : '0')
+})
+
 const messages = defineMessages({
 	warning: { id: 'app.notification.warning', defaultMessage: 'Warning' },
 	goBack: { id: 'app.navigation.go-back', defaultMessage: 'Go back' },
@@ -553,6 +563,34 @@ const messages = defineMessages({
 	home: {
 		id: 'app.nav.home',
 		defaultMessage: 'Home',
+	},
+	railStart: {
+		id: 'app.nav.start',
+		defaultMessage: 'Start',
+	},
+	locker: {
+		id: 'app.nav.locker',
+		defaultMessage: 'Locker',
+	},
+	packGallery: {
+		id: 'app.nav.pack-gallery',
+		defaultMessage: 'Pack gallery',
+	},
+	collapseRail: {
+		id: 'app.nav.collapse-rail',
+		defaultMessage: 'Collapse menu',
+	},
+	expandRail: {
+		id: 'app.nav.expand-rail',
+		defaultMessage: 'Expand menu',
+	},
+	brandName: {
+		id: 'app.nav.brand-name',
+		defaultMessage: 'Octra',
+	},
+	brandSubtitle: {
+		id: 'app.nav.brand-subtitle',
+		defaultMessage: 'Launcher',
 	},
 	servers: {
 		id: 'app.nav.servers',
@@ -637,6 +675,10 @@ const messages = defineMessages({
 	playOffline: {
 		id: 'minecraft-account.play-offline',
 		defaultMessage: 'Play offline',
+	},
+	manageMinecraftAccounts: {
+		id: 'minecraft-account.manage',
+		defaultMessage: 'Manage accounts',
 	},
 })
 
@@ -1393,12 +1435,17 @@ async function onOfflineMinecraftAccountAdded(loggedIn) {
 	await accounts.value?.refreshValues?.()
 }
 
+async function removeMinecraftAccount(account) {
+	if (!account?.profile?.id) return
+	await remove_user(account.profile.id).catch(handleError)
+	await refreshMinecraftAccounts()
+	await accounts.value?.refreshValues?.()
+}
+
 async function signOutMinecraftAccount() {
 	const selected = selectedMinecraftAccount.value
 	if (!selected?.profile?.id) return
-	await remove_user(selected.profile.id).catch(handleError)
-	await refreshMinecraftAccounts()
-	await accounts.value?.refreshValues?.()
+	await removeMinecraftAccount(selected)
 }
 
 const minecraftAccountMenuOptions = computed(() => {
@@ -1407,14 +1454,24 @@ const minecraftAccountMenuOptions = computed(() => {
 		options.push({
 			type: 'heading',
 			id: 'minecraft-accounts-heading',
-			label: formatMessage(messages.minecraftAccount),
+			label: formatMessage(messages.manageMinecraftAccounts),
 		})
 		for (const account of minecraftAccountSwitcherAccounts.value) {
 			options.push({
 				id: account.optionId,
 				label: account.profile.name,
 				selected: account.profile.id === minecraftDefaultUser.value,
+				remainOpen: true,
 				action: () => setMinecraftAccount(account),
+				trailingAction: {
+					label: formatMessage(messages.removeAccount),
+					icon: TrashIcon,
+					color: 'red',
+					action: (event) => {
+						event.stopPropagation()
+						removeMinecraftAccount(account)
+					},
+				},
 			})
 		}
 		options.push({ type: 'divider' })
@@ -1444,9 +1501,15 @@ const minecraftAccountMenuOptions = computed(() => {
 	return options
 })
 
-onMounted(() => {
-	refreshMinecraftAccounts()
-})
+watch(
+	stateInitialized,
+	(value) => {
+		if (value) {
+			void refreshMinecraftAccounts()
+		}
+	},
+	{ immediate: true },
+)
 
 useAppEvent(
 	'process',
@@ -2019,7 +2082,10 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	<div
 		v-if="stateInitialized"
 		class="app-grid-layout relative"
-		:class="{ 'disable-advanced-rendering': !appTheme.advancedRendering }"
+		:class="{
+			'disable-advanced-rendering': !appTheme.advancedRendering,
+			'rail-expanded': railExpanded,
+		}"
 	>
 		<Transition name="fade">
 			<div
@@ -2063,66 +2129,99 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 		/>
 		<UnknownPackWarningModal ref="unknownPackWarningModal" />
 		<div
-			class="app-grid-navbar bg-bg-raised flex flex-col p-[0.5rem] pt-0 gap-[0.25rem] w-[--left-bar-width]"
+			class="app-grid-navbar bg-bg-raised flex flex-col p-2 gap-0.5 w-[--left-bar-width] overflow-hidden"
+			:class="railExpanded ? 'items-stretch' : 'items-center'"
 		>
+			<RouterLink
+				to="/"
+				active-class=""
+				exact-active-class=""
+				class="mb-1 flex shrink-0 items-center rounded-xl no-underline text-inherit hover:bg-button-bg"
+				:class="railExpanded ? 'h-12 w-full gap-3 px-2.5' : 'h-11 w-11 justify-center'"
+			>
+				<OctraMark class="size-8 shrink-0 text-brand" />
+				<div v-if="railExpanded" class="min-w-0 text-left">
+					<p class="m-0 truncate text-sm font-semibold leading-tight text-contrast">
+						{{ formatMessage(messages.brandName) }}
+					</p>
+					<p class="m-0 text-[10px] leading-tight text-secondary">
+						{{ formatMessage(messages.brandSubtitle) }}
+					</p>
+				</div>
+			</RouterLink>
 			<NavButton
-				v-tooltip.right="formatMessage(messages.home)"
+				v-tooltip.right="railExpanded ? undefined : formatMessage(messages.railStart)"
 				to="/"
 				:is-primary="(route) => route.path === '/'"
 				:is-subpage="
 					() =>
 						(route.path.startsWith('/browse') || route.path.startsWith('/project')) && route.query.i
 				"
+				:expanded="railExpanded"
+				:label="formatMessage(messages.railStart)"
 			>
-				<PlayIcon class="ml-0.5" />
+				<PlayIcon class="ml-0.5 size-5 shrink-0" />
 			</NavButton>
 			<NavButton
-				v-tooltip.right="formatMessage(commonMessages.discoverContentLabel)"
-				to="/browse/modpack"
-				:is-primary="() => route.path.startsWith('/browse') && !route.query.i && !route.query.sid"
-				:is-subpage="
-					(route) => route.path.startsWith('/project') && !route.query.i && !route.query.sid
-				"
+				v-tooltip.right="railExpanded ? undefined : formatMessage(appMessages.skinSelectorLabel)"
+				to="/skins"
+				:expanded="railExpanded"
+				:label="formatMessage(messages.locker)"
 			>
-				<CompassIcon />
+				<ShirtIcon class="size-5 shrink-0" />
 			</NavButton>
-			<NavButton v-tooltip.right="formatMessage(appMessages.skinSelectorLabel)" to="/skins">
-				<ShirtIcon />
-			</NavButton>
+			<div
+				class="my-1.5 h-px shrink-0 bg-surface-5"
+				:class="railExpanded ? 'mx-1' : 'w-8'"
+			/>
 			<NavButton
 				v-if="globalSyncedOptionsQuery.data.value?.screenshots"
-				v-tooltip.right="formatMessage(messages.screenshots)"
+				v-tooltip.right="railExpanded ? undefined : formatMessage(messages.screenshots)"
 				to="/screenshots"
+				:expanded="railExpanded"
+				:label="formatMessage(messages.screenshots)"
 			>
-				<ImagesIcon />
+				<ImagesIcon class="size-5 shrink-0" />
 			</NavButton>
 			<NavButton
-				v-tooltip.right="formatMessage(messages.servers)"
+				v-tooltip.right="railExpanded ? undefined : formatMessage(messages.servers)"
 				to="/servers"
 				:is-primary="(r) => r.path === '/servers' || r.path.startsWith('/servers/')"
+				:expanded="railExpanded"
+				:label="formatMessage(messages.servers)"
 			>
-				<GlobeIcon />
+				<GlobeIcon class="size-5 shrink-0" />
 			</NavButton>
-			<suspense>
-				<QuickInstanceSwitcher />
-			</suspense>
 			<NavButton
-				v-tooltip.right="formatMessage(messages.createNewInstance)"
+				v-tooltip.right="railExpanded ? undefined : formatMessage(messages.createNewInstance)"
 				:to="() => installationModal?.show()"
 				:disabled="offline"
+				:expanded="railExpanded"
+				:label="formatMessage(messages.createNewInstance)"
 			>
-				<PlusIcon />
+				<PlusIcon class="size-5 shrink-0" />
 			</NavButton>
-			<div class="flex flex-grow"></div>
-			<span v-tooltip.right="formatMessage(messages.minecraftAccount)" class="inline-flex">
+			<div class="flex min-h-0 flex-1 flex-col overflow-hidden">
+				<Suspense>
+					<QuickInstanceSwitcher :expanded="railExpanded" />
+				</Suspense>
+			</div>
+			<span
+				v-tooltip.right="railExpanded ? undefined : formatMessage(messages.minecraftAccount)"
+				class="inline-flex"
+				:class="{ 'w-full': railExpanded }"
+			>
 				<TeleportOverflowMenu
 					type="quiet"
 					size="xl"
+					:icon-only="!railExpanded"
+					:circular="!railExpanded"
 					:label="formatMessage(messages.minecraftAccount)"
 					:options="minecraftAccountMenuOptions"
 					placement="right-end"
 					:distance="4"
 					class="brightness-100 hover:!brightness-100 focus-visible:!brightness-100"
+					:class="railExpanded ? '!w-full justify-start gap-3 px-3' : ''"
 				>
 					<Avatar
 						:src="minecraftAccountAvatar"
@@ -2132,6 +2231,9 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 						no-shadow
 						class="pointer-events-none !size-8"
 					/>
+					<span v-if="railExpanded" class="min-w-0 truncate text-[13px] font-medium text-primary">
+						{{ selectedMinecraftAccount?.profile?.name ?? formatMessage(messages.minecraftAccount) }}
+					</span>
 					<template
 						v-for="account in minecraftAccountSwitcherAccounts"
 						:key="account.optionId"
@@ -2149,12 +2251,26 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 				</TeleportOverflowMenu>
 			</span>
 			<NavButton
-				v-tooltip.right="formatMessage(commonMessages.settingsLabel)"
-				:to="() => appSettingsModal?.show()"
+				v-tooltip.right="railExpanded ? undefined : formatMessage(commonMessages.discoverContentLabel)"
+				to="/browse/modpack"
+				:is-primary="() => route.path.startsWith('/browse') && !route.query.i && !route.query.sid"
+				:is-subpage="
+					(route) => route.path.startsWith('/project') && !route.query.i && !route.query.sid
+				"
+				:expanded="railExpanded"
+				:label="formatMessage(messages.packGallery)"
 			>
-				<SettingsIcon />
+				<CompassIcon class="size-5 shrink-0" />
 			</NavButton>
-			<span v-tooltip.right="profileButtonTooltip" class="inline-flex">
+			<NavButton
+				v-tooltip.right="railExpanded ? undefined : formatMessage(commonMessages.settingsLabel)"
+				:to="() => appSettingsModal?.show()"
+				:expanded="railExpanded"
+				:label="formatMessage(commonMessages.settingsLabel)"
+			>
+				<SettingsIcon class="size-5 shrink-0" />
+			</NavButton>
+			<span v-tooltip.right="railExpanded ? undefined : profileButtonTooltip" class="inline-flex" :class="{ 'w-full': railExpanded }">
 				<IconButton
 					v-if="credentials === undefined"
 					type="quiet"
@@ -2169,11 +2285,14 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 					v-else-if="credentials?.user"
 					type="quiet"
 					size="xl"
+					:icon-only="!railExpanded"
+					:circular="!railExpanded"
 					:label="formatMessage(messages.modrinthAccount)"
 					:options="modrinthAccountMenuOptions"
 					placement="right-end"
 					:distance="4"
 					class="brightness-100 hover:!brightness-100 focus-visible:!brightness-100"
+					:class="railExpanded ? '!w-full justify-start gap-3 px-3' : ''"
 				>
 					<Avatar
 						:src="credentials?.user?.avatar_url"
@@ -2183,6 +2302,9 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 						no-shadow
 						class="pointer-events-none !size-8"
 					/>
+					<span v-if="railExpanded" class="min-w-0 truncate text-[13px] font-medium text-primary">
+						{{ credentials?.user?.username }}
+					</span>
 					<template
 						v-for="account in accountSwitcherAccounts"
 						:key="account.user_id"
@@ -2197,12 +2319,18 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 					v-else-if="accountSwitcherAccounts.length > 0"
 					type="quiet"
 					size="xl"
+					:icon-only="!railExpanded"
+					:circular="!railExpanded"
 					:label="formatMessage(messages.signInToModrinthAccount)"
 					:options="accountSwitcherOptions"
 					placement="right-end"
 					:distance="4"
+					:class="railExpanded ? '!w-full justify-start gap-3 px-3' : ''"
 				>
-					<LogInIcon class="!text-brand" />
+					<LogInIcon class="!text-brand size-5 shrink-0" />
+					<span v-if="railExpanded" class="min-w-0 truncate text-[13px] font-medium text-primary">
+						{{ formatMessage(messages.signInToModrinthAccount) }}
+					</span>
 					<template
 						v-for="account in accountSwitcherAccounts"
 						:key="account.user_id"
@@ -2213,10 +2341,25 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 						<UserRoleIcon :role="account.user.role" />
 					</template>
 				</TeleportOverflowMenu>
-				<NavButton v-else disabled :to="() => {}">
-					<LogInIcon class="text-secondary" />
+				<NavButton v-else disabled :to="() => {}" :expanded="railExpanded" :label="formatMessage(messages.signInToModrinthAccount)">
+					<LogInIcon class="text-secondary size-5 shrink-0" />
 				</NavButton>
 			</span>
+			<div class="my-1 h-px shrink-0 bg-surface-5" :class="railExpanded ? 'mx-1' : 'w-8'" />
+			<button
+				type="button"
+				class="nav-rail-collapse flex items-center border-none bg-transparent text-secondary cursor-pointer hover:bg-button-bg hover:text-contrast"
+				:class="railExpanded ? 'h-11 w-full gap-3 rounded-xl px-3' : 'h-11 w-11 justify-center rounded-full'"
+				:aria-label="formatMessage(railExpanded ? messages.collapseRail : messages.expandRail)"
+				:title="formatMessage(railExpanded ? messages.collapseRail : messages.expandRail)"
+				@click="railExpanded = !railExpanded"
+			>
+				<ChevronLeftIcon v-if="railExpanded" class="size-5 shrink-0" />
+				<ChevronRightIcon v-else class="size-5 shrink-0" />
+				<span v-if="railExpanded" class="truncate text-[13px] font-medium">
+					{{ formatMessage(messages.collapseRail) }}
+				</span>
+			</button>
 		</div>
 		<div data-tauri-drag-region class="app-grid-statusbar bg-bg-raised h-[--top-bar-height] flex">
 			<div data-tauri-drag-region class="flex min-w-0 flex-1 items-center overflow-hidden p-2">
@@ -2263,6 +2406,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 		v-if="stateInitialized"
 		class="app-contents"
 		:class="{
+			'rail-expanded': railExpanded,
 			'sidebar-enabled': sidebarVisible,
 			'disable-advanced-rendering': !appTheme.advancedRendering,
 		}"
@@ -2418,6 +2562,10 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	--top-bar-height: 3rem;
 	--left-bar-width: 4rem;
 	--right-bar-width: 300px;
+
+	&.rail-expanded {
+		--left-bar-width: 15.5rem;
+	}
 }
 
 .app-grid-layout {
@@ -2426,7 +2574,6 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	grid-template-columns: auto 1fr;
 	grid-template-rows: auto 1fr;
 	position: relative;
-	//z-index: 0;
 	background-color: var(--color-raised-bg);
 	height: 100vh;
 }
@@ -2435,6 +2582,12 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	grid-area: nav;
 	position: relative;
 	z-index: 2;
+	transition: width 0.2s ease-out;
+	border-right: 1px solid var(--color-divider);
+
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
+	}
 }
 
 .app-grid-statusbar {
@@ -2461,7 +2614,6 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 
 	display: grid;
 	grid-template-columns: 1fr 0px;
-	// transition: grid-template-columns 0.4s ease-in-out;
 
 	&.sidebar-enabled {
 		grid-template-columns: 1fr 300px;

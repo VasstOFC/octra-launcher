@@ -1,5 +1,6 @@
 import type { AbstractModrinthClient } from '@modrinth/api-client'
 import type { AbstractPopupNotificationManager, AbstractWebNotificationManager } from '@modrinth/ui'
+import type { Ref } from 'vue'
 
 import type { InstanceIconConfig } from '@/helpers/types'
 
@@ -18,10 +19,11 @@ export function setupProviders(
 	notificationManager: AbstractWebNotificationManager,
 	_popupNotificationManager: AbstractPopupNotificationManager,
 	appEvents: AppEvents,
+	stateInitialized: Ref<boolean>,
 	getGeneratedIconConfig?: (iconPath: string) => InstanceIconConfig | null,
 ) {
 	setupUserCountryProvider(client)
-	setupTagsProvider(notificationManager)
+	setupTagsProvider(notificationManager, stateInitialized)
 	setupFileDropProvider()
 	setupFilePickerProvider()
 	setupImageViewerEditorProvider()

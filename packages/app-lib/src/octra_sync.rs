@@ -4,6 +4,7 @@
 //! so worlds, mods, and configs stay shared. The server list is read from the same
 //! `servers.json` file both launchers use.
 
+use std::collections::HashSet;
 use std::path::{Path, PathBuf};
 
 use chrono::{DateTime, Utc};
@@ -20,6 +21,14 @@ use crate::util::io;
 
 const OCTRA_DATA_DIR: &str = ".octralauncher";
 const OCTRA_DATA_DIR_DEV: &str = ".octralauncher-dev";
+const IMPORT_STATE_FILE: &str = "octra-import-state.json";
+const OCTRA_INSTANCE_PREFIX: &str = "octra-";
+
+#[derive(Debug, Default, Serialize, Deserialize)]
+struct ImportState {
+    #[serde(default)]
+    known_ids: Vec<String>,
+}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct OctraServerEntry {
@@ -120,6 +129,14 @@ async fn import_octra_instances(octra_dir: &Path) -> crate::Result<()> {
         .map(|m| m.instance.name.to_lowercase())
         .collect();
 
+    let mut known_ids = load_import_state(&state).await;
+    for path in &existing_paths {
+        if let Some(id) = path.strip_prefix(OCTRA_INSTANCE_PREFIX) {
+            known_ids.insert(id.to_string());
+        }
+    }
+    let _ = save_import_state(&state, &known_ids).await;
+
     let mut dir = match io::read_dir(&instances_root).await {
         Ok(dir) => dir,
         Err(error) => {
@@ -139,10 +156,14 @@ async fn import_octra_instances(octra_dir: &Path) -> crate::Result<()> {
             &state,
             &existing_paths,
             &existing_names,
+            &mut known_ids,
         )
         .await
         {
-            Ok(true) => imported += 1,
+            Ok(true) => {
+                imported += 1;
+                let _ = save_import_state(&state, &known_ids).await;
+            }
             Ok(false) => {}
             Err(error) => {
                 warn!(
@@ -165,11 +186,57 @@ async fn import_octra_instances(octra_dir: &Path) -> crate::Result<()> {
     Ok(())
 }
 
+pub async fn remember_removed_octra_instance(instance_path: &str) {
+    let Some(id) = instance_path.strip_prefix(OCTRA_INSTANCE_PREFIX) else {
+        return;
+    };
+    let Ok(state) = State::get().await else {
+        return;
+    };
+    let mut known_ids = load_import_state(&state).await;
+    if known_ids.insert(id.to_string()) {
+        let _ = save_import_state(&state, &known_ids).await;
+    }
+}
+
+pub async fn remove_instance_directory(path: &Path) -> crate::Result<()> {
+    if path.exists() {
+        remove_profile_placeholder(path).await?;
+    }
+    Ok(())
+}
+
+async fn load_import_state(state: &State) -> HashSet<String> {
+    let path = state.directories.settings_dir.join(IMPORT_STATE_FILE);
+    let Ok(raw) = io::read(&path).await else {
+        return HashSet::new();
+    };
+    serde_json::from_slice::<ImportState>(&raw)
+        .map(|state| state.known_ids.into_iter().collect())
+        .unwrap_or_default()
+}
+
+async fn save_import_state(
+    state: &State,
+    ids: &HashSet<String>,
+) -> crate::Result<()> {
+    let path = state.directories.settings_dir.join(IMPORT_STATE_FILE);
+    let mut known_ids: Vec<String> = ids.iter().cloned().collect();
+    known_ids.sort();
+    io::write(
+        &path,
+        serde_json::to_vec_pretty(&ImportState { known_ids })?,
+    )
+    .await?;
+    Ok(())
+}
+
 async fn import_one_instance(
     instance_dir: &Path,
     state: &State,
     existing_paths: &[String],
     existing_names: &[String],
+    known_ids: &mut HashSet<String>,
 ) -> crate::Result<bool> {
     let meta_path = instance_dir.join("instance.json");
     if !meta_path.exists() {
@@ -178,8 +245,16 @@ async fn import_one_instance(
     let raw = io::read(&meta_path).await?;
     let meta: OctraInstanceFile = serde_json::from_slice(&raw)?;
 
-    let linked_path = format!("octra-{}", meta.id);
+    let linked_path = format!("{OCTRA_INSTANCE_PREFIX}{}", meta.id);
     if existing_paths.iter().any(|p| p == &linked_path) {
+        known_ids.insert(meta.id.clone());
+        return Ok(false);
+    }
+    if known_ids.contains(&meta.id) {
+        let leftover = state.directories.instances_dir().join(&linked_path);
+        if leftover.exists() {
+            let _ = remove_profile_placeholder(&leftover).await;
+        }
         return Ok(false);
     }
     if existing_names
@@ -294,6 +369,7 @@ async fn import_one_instance(
     }
 
     let _ = emit_instance(&created.id, InstancePayloadType::Created).await;
+    known_ids.insert(meta.id.clone());
     info!(
         "Linked Octra instance '{}' ({}) -> {}",
         meta.name, meta.id, created.path

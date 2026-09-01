@@ -4,6 +4,7 @@ import { Button, defineMessages, IntlFormatted, useVIntl } from '@modrinth/ui'
 import { inject, onMounted, onUnmounted, ref } from 'vue'
 
 import OctraMark from '@/components/brand/OctraMark.vue'
+import FeaturedPackCard from '@/components/ui/FeaturedPackCard.vue'
 
 const showCreationModal = inject<() => void>('showCreationModal')
 const showImportModal = inject<() => void>('showImportModal')
@@ -100,6 +101,7 @@ onUnmounted(() => {
 					</p>
 				</div>
 				<div class="flex w-72 flex-col items-center gap-4">
+					<FeaturedPackCard compact />
 					<Button
 						type="colored"
 						color="brand"

@@ -16,9 +16,9 @@ pub use model::{
     SharedInstanceInstallModpack,
 };
 pub use runner::{
-    cancel_job, create_instance, create_modpack_instance,
-    create_shared_instance, dismiss_job, duplicate_instance, get_job,
-    import_instance, install_existing_instance,
+    cancel_job, create_featured_pack_instance, create_instance,
+    create_modpack_instance, create_shared_instance, dismiss_job,
+    duplicate_instance, get_job, import_instance, install_existing_instance,
     install_pack_to_existing_instance, job_support_details, list_jobs,
     retry_job, update_shared_instance,
 };

@@ -30,6 +30,18 @@
 
 Var /GLOBAL OldInstallDir
 
+!macro UninstallLegacyOctra hive
+    ReadRegStr $R8 ${hive} "Software\Microsoft\Windows\CurrentVersion\Uninstall\pl.octra.launcher" "QuietUninstallString"
+    ReadRegStr $R9 ${hive} "Software\Microsoft\Windows\CurrentVersion\Uninstall\pl.octra.launcher" "UninstallString"
+    ${If} $R8 != ""
+        DetailPrint "Uninstalling Octra Launcher ($R8)"
+        ExecWait '$R8'
+    ${ElseIf} $R9 != ""
+        DetailPrint "Uninstalling Octra Launcher ($R9)"
+        ExecWait '$R9 /S'
+    ${EndIf}
+!macroend
+
 !macro NSIS_HOOK_PREINSTALL
     SetShellVarContext all
     ${If} ${FileExists} "$SMPROGRAMS\${PRODUCTNAME}.lnk"
@@ -56,21 +68,24 @@ Var /GLOBAL OldInstallDir
     ${EndIf}
     SetShellVarContext current
 
-    ReadRegStr $R8 HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\pl.octra.launcher" "QuietUninstallString"
-    ReadRegStr $R9 HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\pl.octra.launcher" "UninstallString"
-    ${If} $R8 != ""
-        DetailPrint "Uninstalling Octra Launcher"
-        ExecWait '$R8'
-    ${ElseIf} $R9 != ""
-        DetailPrint "Uninstalling Octra Launcher"
-        ExecWait '"$R9" /P /S'
-    ${EndIf}
+    ExecWait 'taskkill /F /IM "Octra Launcher.exe"'
+    ExecWait 'taskkill /F /IM "octra-launcher.exe"'
+    Sleep 500
+
+    !insertmacro UninstallLegacyOctra "HKCU"
+    !insertmacro UninstallLegacyOctra "HKLM"
+
     Delete "$DESKTOP\Octra Launcher.lnk"
     Delete "$SMPROGRAMS\Octra Launcher.lnk"
     Delete "$SMPROGRAMS\Octra\Octra Launcher.lnk"
+    RMDir /r "$LOCALAPPDATA\Octra Launcher"
 !macroend
 
 !macro NSIS_HOOK_POSTINSTALL
+    SetShellVarContext current
+    CreateShortCut "$DESKTOP\Octra Launcher.lnk" "$INSTDIR\${MAINBINARYNAME}.exe"
+    CreateShortCut "$SMPROGRAMS\Octra Launcher.lnk" "$INSTDIR\${MAINBINARYNAME}.exe"
+
     !insertmacro IsShortcutTarget "$DESKTOP\${PRODUCTNAME}.lnk" "$OldInstallDir\${MAINBINARYNAME}.exe"
     Pop $0
     ${If} $0 = 1

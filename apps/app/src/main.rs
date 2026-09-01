@@ -59,6 +59,17 @@ async fn initialize_state(
 #[tauri::command]
 fn show_window(app: tauri::AppHandle) {
     let win = app.get_window("main").unwrap();
+
+    if let Ok(size) = win.outer_size() {
+        if size.width < 200 || size.height < 200 {
+            tracing::warn!(
+                "main window size {size:?} is too small; resetting to 1280x800"
+            );
+            let _ = win.set_size(tauri::PhysicalSize::new(1280, 800));
+            let _ = win.center();
+        }
+    }
+
     if let Err(e) = win.show() {
         DialogBuilder::message()
             .set_level(MessageLevel::Error)
@@ -251,6 +262,21 @@ fn main() {
             {
                 tracing::warn!("Failed to set window shadow: {e}");
             }
+
+            let handle = app.handle().clone();
+            tauri::async_runtime::spawn(async move {
+                tokio::time::sleep(std::time::Duration::from_secs(8)).await;
+                let Some(win) = handle.get_window("main") else {
+                    return;
+                };
+                if win.is_visible().unwrap_or(true) {
+                    return;
+                }
+                tracing::warn!(
+                    "frontend did not show the main window in time; showing from rust fallback"
+                );
+                show_window(handle);
+            });
 
             Ok(())
         });

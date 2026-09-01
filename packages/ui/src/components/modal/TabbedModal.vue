@@ -1,7 +1,7 @@
 <script lang="ts"></script>
 
 <script setup lang="ts">
-import { RightArrowIcon } from '@modrinth/assets'
+import { RightArrowIcon, SpinnerIcon } from '@modrinth/assets'
 import { type Component, type ComponentPublicInstance, computed, nextTick, ref } from 'vue'
 
 import { type MessageDescriptor, useVIntl } from '../../composables/i18n'
@@ -105,6 +105,7 @@ defineExpose({ show, hide, selectedTab, setTab })
 		:on-show="onShow"
 		:before-hide="beforeHide"
 		no-padding
+		noblur
 	>
 		<template v-if="$slots.title" #title>
 			<slot name="title" />
@@ -210,6 +211,11 @@ defineExpose({ show, hide, selectedTab, setTab })
 							:is="visibleTabs[selectedTab]?.content"
 							v-if="visibleTabs[selectedTab]?.content"
 						/>
+						<template #fallback>
+							<div class="flex h-full min-h-[12rem] items-center justify-center">
+								<SpinnerIcon class="size-8 animate-spin text-secondary" />
+							</div>
+						</template>
 					</Suspense>
 				</div>
 

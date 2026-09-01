@@ -171,6 +171,13 @@ impl State {
             tracing::error!("Failed to sync Octra Launcher instances: {e}");
         }
 
+        #[cfg(all(windows, not(debug_assertions)))]
+        {
+            tokio::task::spawn_blocking(|| {
+                crate::octra_legacy::uninstall_legacy_launcher();
+            });
+        }
+
         if let Err(e) = crate::octra_skins::ensure_runtime().await {
             tracing::warn!("Octra skins runtime: {e}");
         }

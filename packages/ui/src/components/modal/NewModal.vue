@@ -462,7 +462,11 @@ defineOptions({
 
 	// Fade variants
 	&.standard {
-		background: linear-gradient(to bottom, rgba(29, 48, 43, 0.52) 0%, rgba(14, 21, 26, 0.95) 100%);
+		background: linear-gradient(
+			to bottom,
+			rgba(48, 22, 52, 0.55) 0%,
+			rgba(16, 11, 22, 0.95) 100%
+		);
 	}
 
 	&.warning {
@@ -481,7 +485,6 @@ defineOptions({
 		opacity: 1;
 		visibility: visible;
 		pointer-events: auto;
-		backdrop-filter: blur(5px);
 	}
 
 	&.noblur {

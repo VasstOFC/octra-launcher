@@ -1,5 +1,13 @@
 <script setup>
-import { EyeIcon, FolderOpenIcon, PlayIcon, SpinnerIcon, StopCircleIcon } from '@modrinth/assets'
+import {
+	ClockIcon,
+	EyeIcon,
+	FolderOpenIcon,
+	PlayIcon,
+	SpinnerIcon,
+	StarIcon,
+	StopCircleIcon,
+} from '@modrinth/assets'
 import {
 	Avatar,
 	commonMessages,
@@ -22,6 +30,13 @@ import { get_all } from '@/helpers/process'
 import { showInstanceInFolder } from '@/helpers/utils'
 import { instanceKeys } from '@/pages/instance/query-options'
 
+const props = defineProps({
+	expanded: {
+		type: Boolean,
+		default: false,
+	},
+})
+
 const ITEM_SIZE = 52
 const APPROX_USED_VERTICAL_SPACE = 475 // doesn't need to be exact lol just close enough so there's a little gap and no overflow
 const STORAGE_KEY = 'modrinth-quick-instance-count'
@@ -33,6 +48,46 @@ const instanceOptions = ref()
 const runningInstances = ref([])
 
 const { formatMessage } = useVIntl()
+const railMessages = defineMessages({
+	library: { id: 'app.nav.library', defaultMessage: 'Library' },
+	libraryCount: {
+		id: 'app.nav.library-count',
+		defaultMessage: '{count, plural, one {# profile in library} other {# profiles in library}}',
+	},
+	playtimeTotal: { id: 'app.nav.playtime-total', defaultMessage: '{time} total' },
+	playtimeUnderMinute: { id: 'app.nav.playtime-under-minute', defaultMessage: 'under a minute' },
+	playtimeMinutes: { id: 'app.nav.playtime-minutes', defaultMessage: '{m} min' },
+	playtimeHours: { id: 'app.nav.playtime-hours', defaultMessage: '{h} hr' },
+	playtimeHoursMinutes: { id: 'app.nav.playtime-hours-minutes', defaultMessage: '{h} hr {m} min' },
+	quickSwitch: { id: 'app.nav.quick-switch', defaultMessage: 'Quick switch' },
+	emptyLibrary: {
+		id: 'app.nav.library-empty',
+		defaultMessage: 'No instances yet',
+	},
+})
+
+const totalPlaySeconds = computed(() =>
+	allInstances.value.reduce(
+		(sum, instance) =>
+			sum + (instance.submitted_time_played ?? 0) + (instance.recent_time_played ?? 0),
+		0,
+	),
+)
+
+function formatPlayTime(secs) {
+	if (!secs || secs < 60) {
+		return formatMessage(railMessages.playtimeUnderMinute)
+	}
+	const h = Math.floor(secs / 3600)
+	const m = Math.floor((secs % 3600) / 60)
+	if (h <= 0) {
+		return formatMessage(railMessages.playtimeMinutes, { m })
+	}
+	if (m <= 0) {
+		return formatMessage(railMessages.playtimeHours, { h })
+	}
+	return formatMessage(railMessages.playtimeHoursMinutes, { h, m })
+}
 
 const maxAuto = ref(0)
 const allInstances = ref([])
@@ -276,55 +331,114 @@ function openContextMenu(event, instance) {
 </script>
 
 <template>
-	<Transition name="top-divider">
-		<div
-			v-if="recentInstances.length > 0"
-			class="top-divider flex items-center justify-center overflow-hidden"
-		>
-			<div class="h-px w-8 bg-surface-5 shrink-0"></div>
-		</div>
-	</Transition>
-	<TransitionGroup name="quick-instance" tag="div" class="flex flex-col items-center">
-		<div
-			v-for="instance in recentInstances"
-			:key="instance.id"
-			v-tooltip.right="instance.name"
-			class="quick-instance-item"
-			@contextmenu.prevent.stop="(event) => openContextMenu(event, instance)"
-		>
-			<NavButton :to="`/instance/${encodeURIComponent(instance.id)}`" class="relative">
-				<Avatar
-					:src="getInstanceIconUrl(instance.icon_path)"
-					size="28px"
-					:tint-by="instance.id"
-					:class="`transition-all ${instance.install_stage !== 'installed' ? `brightness-[0.25] scale-[0.85]` : `group-hover:brightness-75`}`"
-					pad-transparent-corners
-				/>
-				<div
-					v-if="instance.install_stage !== 'installed'"
-					class="absolute inset-0 flex items-center justify-center z-10 pointer-events-none"
-				>
-					<SpinnerIcon class="animate-spin w-4 h-4" />
-				</div>
-			</NavButton>
-		</div>
-	</TransitionGroup>
-	<ContextMenu ref="instanceOptions" :label="formatMessage(messages.instanceActions)" />
 	<div
-		v-tooltip.right="dividerTooltip"
-		class="flex items-center justify-center py-2 select-none"
-		:class="canDrag ? 'cursor-ns-resize touch-none group' : ''"
-		@pointerdown="onDividerPointerDown"
-		@pointermove="onDividerPointerMove"
-		@pointerup="onDividerPointerUp"
-		@pointercancel="onDividerPointerUp"
+		class="flex min-h-0 w-full flex-1 flex-col"
+		:class="props.expanded ? 'overflow-hidden' : 'items-center'"
 	>
 		<div
-			class="h-px w-8 transition-colors duration-200"
-			:class="
-				showOverdrag ? 'bg-red' : canDrag ? 'bg-surface-5 group-hover:bg-secondary' : 'bg-surface-5'
-			"
-		></div>
+			v-if="props.expanded"
+			class="mb-2 shrink-0 rounded-xl border border-solid border-brand/20 bg-gradient-to-br from-brand/10 via-transparent to-transparent p-3"
+		>
+			<div class="flex items-center gap-2 text-brand">
+				<StarIcon class="size-3.5" />
+				<span class="text-[10px] font-bold uppercase tracking-wider">
+					{{ formatMessage(railMessages.library) }}
+				</span>
+			</div>
+			<p class="m-0 mt-2 text-lg font-extrabold leading-none text-contrast">
+				{{ allInstances.length }}
+			</p>
+			<p class="m-0 mt-1 text-[11px] leading-4 text-secondary">
+				{{ formatMessage(railMessages.libraryCount, { count: allInstances.length }) }}
+			</p>
+			<div class="mt-2 flex items-center gap-1.5 text-[10px] text-secondary">
+				<ClockIcon class="size-3" />
+				<span>{{
+					formatMessage(railMessages.playtimeTotal, { time: formatPlayTime(totalPlaySeconds) })
+				}}</span>
+			</div>
+		</div>
+
+		<p
+			v-if="props.expanded && recentInstances.length > 0"
+			class="mb-1.5 shrink-0 px-1 text-[9px] font-bold uppercase tracking-wider text-secondary"
+		>
+			{{ formatMessage(railMessages.quickSwitch) }}
+		</p>
+
+		<Transition name="top-divider">
+			<div
+				v-if="!props.expanded && recentInstances.length > 0"
+				class="top-divider flex items-center justify-center overflow-hidden"
+			>
+				<div class="h-px w-8 bg-surface-5 shrink-0"></div>
+			</div>
+		</Transition>
+		<TransitionGroup
+			name="quick-instance"
+			tag="div"
+			class="flex min-h-0 flex-col"
+			:class="props.expanded ? 'w-full overflow-y-auto' : 'items-center'"
+		>
+			<div
+				v-for="instance in recentInstances"
+				:key="instance.id"
+				v-tooltip.right="props.expanded ? undefined : instance.name"
+				class="quick-instance-item"
+				:class="{ 'w-full': props.expanded }"
+				@contextmenu.prevent.stop="(event) => openContextMenu(event, instance)"
+			>
+				<NavButton
+					:to="`/instance/${encodeURIComponent(instance.id)}`"
+					class="relative"
+					:expanded="props.expanded"
+					:label="props.expanded ? instance.name : undefined"
+				>
+					<Avatar
+						:src="getInstanceIconUrl(instance.icon_path)"
+						size="28px"
+						:tint-by="instance.id"
+						:class="`transition-all ${instance.install_stage !== 'installed' ? `brightness-[0.25] scale-[0.85]` : `group-hover:brightness-75`}`"
+						pad-transparent-corners
+					/>
+					<div
+						v-if="instance.install_stage !== 'installed'"
+						class="absolute inset-0 flex items-center justify-center z-10 pointer-events-none"
+						:class="props.expanded ? 'left-3 w-7' : ''"
+					>
+						<SpinnerIcon class="animate-spin w-4 h-4" />
+					</div>
+				</NavButton>
+			</div>
+		</TransitionGroup>
+		<p
+			v-if="props.expanded && allInstances.length === 0"
+			class="m-0 rounded-xl border border-dashed border-surface-5 px-3 py-4 text-center text-[11px] text-secondary"
+		>
+			{{ formatMessage(railMessages.emptyLibrary) }}
+		</p>
+		<ContextMenu ref="instanceOptions" :label="formatMessage(messages.instanceActions)" />
+		<div
+			v-tooltip.right="props.expanded ? undefined : dividerTooltip"
+			class="flex items-center justify-center py-2 select-none"
+			:class="canDrag ? 'cursor-ns-resize touch-none group' : ''"
+			@pointerdown="onDividerPointerDown"
+			@pointermove="onDividerPointerMove"
+			@pointerup="onDividerPointerUp"
+			@pointercancel="onDividerPointerUp"
+		>
+			<div
+				class="h-px transition-colors duration-200"
+				:class="[
+					props.expanded ? 'w-full' : 'w-8',
+					showOverdrag
+						? 'bg-red'
+						: canDrag
+							? 'bg-surface-5 group-hover:bg-secondary'
+							: 'bg-surface-5',
+				]"
+			></div>
+		</div>
 	</div>
 </template>
 
