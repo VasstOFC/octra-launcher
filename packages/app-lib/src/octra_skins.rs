@@ -172,7 +172,22 @@ pub async fn save_equipped(
         io::write(dir.join(format!("{uuid}.png")), png).await?;
     }
     register_player(credentials, variant, png);
-    publish_to_registry(credentials, variant, png).await;
+    let published = publish_to_registry(credentials, variant, png).await;
+    let name = credentials.offline_profile.name.clone();
+    if png.is_empty() {
+        return Ok(());
+    }
+    if !published {
+        tracing::warn!(
+            "nie udało się opublikować skina dla {name} na serwerze Octra ({})",
+            nervia::SKINS_URL
+        );
+    } else if !verify_registry_skin(&name).await {
+        tracing::warn!(
+            "skin dla {name} wysłany, ale {} nie odpowiada — znajomi mogą nie widzieć skina",
+            registry_skin_url(&name)
+        );
+    }
     Ok(())
 }
 
@@ -216,6 +231,22 @@ fn registry_legacy_url(name: &str) -> String {
         "{}/skins/MinecraftSkins/{name}.png",
         nervia::SKINS_URL.trim_end_matches('/')
     )
+}
+
+/// Public URL friends' CustomSkinLoader uses to fetch this player's skin.
+pub fn registry_skin_url(name: &str) -> String {
+    registry_legacy_url(name)
+}
+
+pub async fn verify_registry_skin(name: &str) -> bool {
+    let url = registry_legacy_url(name);
+    INSECURE_REQWEST_CLIENT
+        .get(&url)
+        .timeout(Duration::from_secs(8))
+        .send()
+        .await
+        .map(|response| response.status().is_success())
+        .unwrap_or(false)
 }
 
 pub async fn publish_to_registry(
@@ -345,6 +376,10 @@ pub async fn ensure_runtime() -> crate::Result<()> {
     *started = true;
     tokio::spawn(async {
         sync_all_equipped_skins().await;
+        loop {
+            tokio::time::sleep(Duration::from_secs(15 * 60)).await;
+            sync_all_equipped_skins().await;
+        }
     });
     Ok(())
 }
@@ -769,6 +804,13 @@ pub async fn prepare_launch(
             tracing::warn!("Octra skins: CustomSkinLoader: {e}");
         }
         write_csl_config(instance_path)?;
+        if let Err(e) = sync_username_skin_files(instance_path).await {
+            tracing::warn!("Octra skins: sync local skin files: {e}");
+        }
+    } else {
+        tracing::warn!(
+            "Octra skins: instancja vanilla bez Fabric — CustomSkinLoader nie zostanie zainstalowany; znajomi nie zobaczą skina w multiplayerze"
+        );
     }
 
     Ok(())
@@ -793,17 +835,10 @@ fn write_csl_config(instance_path: &Path) -> crate::Result<()> {
     std::fs::create_dir_all(&cfg_dir)?;
     let registry = nervia::SKINS_URL.trim_end_matches('/');
     let mut loadlist = vec![json!({
-        "name": "OctraLocal",
-        "type": "Legacy",
-        "checkPNG": false,
-        "skin": "LocalSkin/skins/{USERNAME}.png",
-        "model": "auto"
-    })];
-    loadlist.push(json!({
         "name": "OctraCloud",
         "type": "Legacy",
         "root": format!("{registry}/skins/MinecraftSkins/")
-    }));
+    })];
     if let Some(root) = ygg_root() {
         loadlist.push(json!({
             "name": "OctraYgg",
@@ -811,6 +846,13 @@ fn write_csl_config(instance_path: &Path) -> crate::Result<()> {
             "root": format!("{}/skins/MinecraftSkins/", root.trim_end_matches('/'))
         }));
     }
+    loadlist.push(json!({
+        "name": "OctraLocal",
+        "type": "Legacy",
+        "checkPNG": false,
+        "skin": "LocalSkin/skins/{USERNAME}.png",
+        "model": "auto"
+    }));
     loadlist.push(json!({
         "name": "Mojang",
         "type": "MojangAPI"
@@ -832,6 +874,28 @@ fn write_csl_config(instance_path: &Path) -> crate::Result<()> {
         ));
     }
     std::fs::write(cfg_dir.join("skinurls.txt"), skinurls)?;
+    Ok(())
+}
+
+async fn sync_username_skin_files(instance_path: &Path) -> crate::Result<()> {
+    let state = State::get().await?;
+    let accounts = Credentials::get_all(&state.pool).await?;
+    let dir = instance_path
+        .join("CustomSkinLoader")
+        .join("LocalSkin")
+        .join("skins");
+    io::create_dir_all(&dir).await?;
+    for entry in accounts.iter() {
+        let credentials = entry.value();
+        let name = credentials.offline_profile.name.trim();
+        if name.is_empty() {
+            continue;
+        }
+        let Some(png) = load_equipped_png(credentials.offline_profile.id).await else {
+            continue;
+        };
+        io::write(dir.join(format!("{name}.png")), &png).await?;
+    }
     Ok(())
 }
 
