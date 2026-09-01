@@ -440,7 +440,13 @@ fn main() {
             .plugin(
                 "octra",
                 InlinedPlugin::new()
-                    .commands(&["list_servers"])
+                    .commands(&[
+                        "list_servers",
+                        "octra_account_session",
+                        "octra_account_register",
+                        "octra_account_login",
+                        "octra_account_logout",
+                    ])
                     .default_permission(
                         DefaultPermissionRule::AllowAllCommands,
                     ),

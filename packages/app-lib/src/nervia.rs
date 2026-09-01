@@ -1,7 +1,7 @@
 //! Octra App identity (workspace folder is still "Nervia App").
 //!
 //! Minecraft sign-in uses the Xbox SISU flow. Catalog still talks to Modrinth.
-//! Octra accounts are not live yet — the UI shows them as coming soon.
+//! Octra accounts use the VPS at `SKINS_URL` (register/login + JWT skin uploads).
 
 /// Azure public client used by Octra (device-code / public-client flows).
 pub const AZURE_CLIENT_ID: &str = "bfe8ec3a-8e09-4be9-bbef-68f0fa0d1321";

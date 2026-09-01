@@ -271,16 +271,24 @@ pub async fn publish_to_registry(
     let name = &credentials.offline_profile.name;
     let url =
         format!("{}/skins/{uuid}", nervia::SKINS_URL.trim_end_matches('/'));
+    let bearer = crate::octra_accounts::bearer_token().await;
     let send = |method: reqwest::Method| {
-        INSECURE_REQWEST_CLIENT
+        let mut request = INSECURE_REQWEST_CLIENT
             .request(method, &url)
             .header(reqwest::header::CONTENT_TYPE, "image/png")
             .header("X-Lumen-Model", model)
             .header("X-Lumen-Name", name)
-            .header("X-Octra-Key", nervia::SKINS_API_KEY)
             .timeout(Duration::from_secs(12))
-            .body(png.to_vec())
-            .send()
+            .body(png.to_vec());
+        if let Some(token) = bearer.as_deref() {
+            request = request.header(
+                reqwest::header::AUTHORIZATION,
+                format!("Bearer {token}"),
+            );
+        } else {
+            request = request.header("X-Octra-Key", nervia::SKINS_API_KEY);
+        }
+        request.send()
     };
     match send(reqwest::Method::PUT).await {
         Ok(resp) if resp.status().is_success() => {

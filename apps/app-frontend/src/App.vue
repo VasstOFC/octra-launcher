@@ -72,6 +72,7 @@ import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
 
 import AccountsCard from '@/components/ui/AccountsCard.vue'
 import AddOfflineAccountModal from '@/components/ui/AddOfflineAccountModal.vue'
+import OctraAccountModal from '@/components/ui/OctraAccountModal.vue'
 import AppActionBar from '@/components/ui/AppActionBar.vue'
 import Breadcrumbs from '@/components/ui/Breadcrumbs.vue'
 import ErrorModal from '@/components/ui/ErrorModal.vue'
@@ -133,6 +134,7 @@ import {
 	removeUser,
 	setActive,
 } from '@/helpers/mr_auth.ts'
+import { octraAccountLogout, octraAccountSession } from '@/helpers/octra-account.js'
 import { mergeUrlQuery, parseModrinthLink } from '@/helpers/project-links.ts'
 import { get as getSettings, set as setSettings } from '@/helpers/settings.ts'
 import { get_opening_command, initialize_state } from '@/helpers/state'
@@ -611,7 +613,7 @@ const messages = defineMessages({
 	},
 	signInToModrinthAccount: {
 		id: 'app.nav.sign-in-to-modrinth-account',
-		defaultMessage: 'Octra account — coming soon',
+		defaultMessage: 'Log in to Octra',
 	},
 	loadingProfile: {
 		id: 'app.nav.loading-profile',
@@ -635,7 +637,11 @@ const messages = defineMessages({
 	},
 	upgradeToModrinthPlus: {
 		id: 'app.nav.upgrade-to-modrinth-plus',
-		defaultMessage: 'Octra account — coming soon',
+		defaultMessage: 'Register Octra account',
+	},
+	octraLogout: {
+		id: 'octra-account.logout',
+		defaultMessage: 'Log out',
 	},
 	news: {
 		id: 'app.news.title',
@@ -763,6 +769,7 @@ async function setupApp() {
 
 	get_opening_command().then(handleCommand)
 	fetchCredentials()
+	refreshOctraAccount()
 
 	try {
 		const skins = (await get_available_skins()) ?? []
@@ -1132,11 +1139,11 @@ async function fetchCredentials() {
 }
 
 async function signIn(_flow = 'sign-in', _addAccount = false) {
-	// Octra accounts are not available yet.
+	openOctraAccount('login')
 }
 
-async function requestSignIn(_flow = 'sign-in', _addAccount = false) {
-	// Octra accounts are not available yet.
+async function requestSignIn(_flow = 'sign-in', addAccount = false) {
+	openOctraAccount(addAccount ? 'register' : 'login')
 }
 
 async function requestModrinthAuth(flow = 'sign-in', addAccount = false) {
@@ -1177,10 +1184,19 @@ const accountSwitcherAccounts = computed(() => {
 })
 
 const profileButtonTooltip = computed(() => {
-	if (credentials.value === undefined) return formatMessage(messages.loadingProfile)
-	if (credentials.value?.user) return formatMessage(messages.modrinthAccount)
+	if (octraSessionLoading.value) return formatMessage(messages.loadingProfile)
+	if (octraSession.value) return octraSession.value.username
 	return formatMessage(messages.signInToModrinthAccount)
 })
+
+const octraAccountMenuOptions = computed(() => [
+	{
+		id: 'octra-logout',
+		label: formatMessage(messages.octraLogout),
+		icon: LogOutIcon,
+		action: () => logoutOctraAccount(),
+	},
+])
 
 const accountSwitcherOptions = computed(() => [
 	...accountSwitcherAccounts.value.map((account) => ({
@@ -1202,8 +1218,7 @@ const accountSwitcherOptions = computed(() => [
 		id: 'add-account',
 		label: formatMessage(messages.upgradeToModrinthPlus),
 		icon: PlusIcon,
-		disabled: true,
-		action: () => {},
+		action: () => openOctraAccount('register'),
 	},
 ])
 
@@ -1362,6 +1377,35 @@ onMounted(() => {
 })
 
 const accounts = ref(null)
+const octraAccountModal = ref(null)
+const octraSession = ref(null)
+const octraSessionLoading = ref(true)
+
+async function refreshOctraAccount() {
+	octraSessionLoading.value = true
+	try {
+		octraSession.value = await octraAccountSession()
+	} catch {
+		octraSession.value = null
+	} finally {
+		octraSessionLoading.value = false
+	}
+}
+
+function openOctraAccount(mode = 'login') {
+	octraAccountModal.value?.show(mode)
+}
+
+async function onOctraAccountSuccess() {
+	await refreshOctraAccount()
+	await accounts.value?.refreshValues?.()
+}
+
+async function logoutOctraAccount() {
+	await octraAccountLogout().catch(handleError)
+	octraSession.value = null
+	await accounts.value?.refreshValues?.()
+}
 provide('accountsCard', accounts)
 
 const {
@@ -2271,7 +2315,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 			</NavButton>
 			<span v-tooltip.right="railExpanded ? undefined : profileButtonTooltip" class="inline-flex" :class="{ 'w-full': railExpanded }">
 				<IconButton
-					v-if="credentials === undefined"
+					v-if="octraSessionLoading"
 					type="quiet"
 					size="xl"
 					disabled
@@ -2281,67 +2325,30 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 					<SpinnerIcon class="animate-spin" />
 				</IconButton>
 				<TeleportOverflowMenu
-					v-else-if="credentials?.user"
+					v-else-if="octraSession"
 					type="quiet"
 					size="xl"
 					:icon-only="!railExpanded"
 					:circular="!railExpanded"
 					:label="formatMessage(messages.modrinthAccount)"
-					:options="modrinthAccountMenuOptions"
+					:options="octraAccountMenuOptions"
 					placement="right-end"
 					:distance="4"
 					class="brightness-100 hover:!brightness-100 focus-visible:!brightness-100"
 					:class="railExpanded ? '!w-full justify-start gap-3 px-3' : ''"
 				>
-					<Avatar
-						:src="credentials?.user?.avatar_url"
-						alt=""
-						size="32px"
-						circle
-						no-shadow
-						class="pointer-events-none !size-8"
-					/>
+					<UserIcon class="!text-brand size-5 shrink-0" />
 					<span v-if="railExpanded" class="min-w-0 truncate text-[13px] font-medium text-primary">
-						{{ credentials?.user?.username }}
+						{{ octraSession.username }}
 					</span>
-					<template
-						v-for="account in accountSwitcherAccounts"
-						:key="account.user_id"
-						#[account.optionId]
-					>
-						<Avatar :src="account.user.avatar_url" size="1.25rem" aria-hidden="true" circle />
-						{{ account.user.username }}
-						<UserRoleIcon :role="account.user.role" />
-					</template>
 				</TeleportOverflowMenu>
-				<TeleportOverflowMenu
-					v-else-if="accountSwitcherAccounts.length > 0"
-					type="quiet"
-					size="xl"
-					:icon-only="!railExpanded"
-					:circular="!railExpanded"
+				<NavButton
+					v-else
+					:to="() => openOctraAccount('login')"
+					:expanded="railExpanded"
 					:label="formatMessage(messages.signInToModrinthAccount)"
-					:options="accountSwitcherOptions"
-					placement="right-end"
-					:distance="4"
-					:class="railExpanded ? '!w-full justify-start gap-3 px-3' : ''"
 				>
-					<LogInIcon class="!text-brand size-5 shrink-0" />
-					<span v-if="railExpanded" class="min-w-0 truncate text-[13px] font-medium text-primary">
-						{{ formatMessage(messages.signInToModrinthAccount) }}
-					</span>
-					<template
-						v-for="account in accountSwitcherAccounts"
-						:key="account.user_id"
-						#[account.optionId]
-					>
-						<Avatar :src="account.user.avatar_url" size="1.25rem" aria-hidden="true" circle />
-						{{ account.user.username }}
-						<UserRoleIcon :role="account.user.role" />
-					</template>
-				</TeleportOverflowMenu>
-				<NavButton v-else disabled :to="() => {}" :expanded="railExpanded" :label="formatMessage(messages.signInToModrinthAccount)">
-					<LogInIcon class="text-secondary size-5 shrink-0" />
+					<LogInIcon class="text-brand size-5 shrink-0" />
 				</NavButton>
 			</span>
 			<div class="my-1 h-px shrink-0 bg-surface-5" :class="railExpanded ? 'mx-1' : 'w-8'" />
@@ -2505,6 +2512,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 		@accounts-changed="refreshMinecraftAccounts"
 	/>
 	<AddOfflineAccountModal ref="addOfflineAccountModal" @added="onOfflineMinecraftAccountAdded" />
+	<OctraAccountModal ref="octraAccountModal" @success="onOctraAccountSuccess" />
 	<ContentInstallModal
 		ref="modInstallModal"
 		:instances="contentInstallInstances"

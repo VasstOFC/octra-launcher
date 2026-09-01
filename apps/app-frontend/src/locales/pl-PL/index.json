@@ -1329,7 +1329,7 @@
     "message": "Serwery"
   },
   "app.nav.sign-in-to-modrinth-account": {
-    "message": "Konto Octra — wkrótce"
+    "message": "Zaloguj się do Octra"
   },
   "app.nav.start": {
     "message": "Start"
@@ -1338,7 +1338,7 @@
     "message": "Przełącz konto"
   },
   "app.nav.upgrade-to-modrinth-plus": {
-    "message": "Konto Octra — wkrótce"
+    "message": "Zarejestruj konto Octra"
   },
   "app.nav.view-profile": {
     "message": "Zobacz profil"
@@ -3121,6 +3121,39 @@
   },
   "minecraft-account.sign-in": {
     "message": "Logowanie do Octry"
+  },
+  "octra-account.hint": {
+    "message": "Zarejestruj się, żeby synchronizować skiny z innymi graczami Octra"
+  },
+  "octra-account.label": {
+    "message": "Konto Octra"
+  },
+  "octra-account.login": {
+    "message": "Zaloguj się"
+  },
+  "octra-account.login-success": {
+    "message": "Zalogowano do Octra"
+  },
+  "octra-account.logout": {
+    "message": "Wyloguj"
+  },
+  "octra-account.minecraft-nick": {
+    "message": "Nick Minecraft"
+  },
+  "octra-account.password": {
+    "message": "Hasło"
+  },
+  "octra-account.register": {
+    "message": "Zarejestruj się"
+  },
+  "octra-account.register-success": {
+    "message": "Utworzono konto Octra"
+  },
+  "octra-account.title": {
+    "message": "Konto Octra"
+  },
+  "octra-account.username": {
+    "message": "Nazwa użytkownika"
   },
   "minecraft-required.description": {
     "message": "Zaloguj się kontem Microsoft albo graj offline z nickiem. Skin będzie widoczny na singlu i na serwerach ze SkinsRestorer."

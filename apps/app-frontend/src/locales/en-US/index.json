@@ -1329,7 +1329,7 @@
     "message": "Servers"
   },
   "app.nav.sign-in-to-modrinth-account": {
-    "message": "Octra account — coming soon"
+    "message": "Log in to Octra"
   },
   "app.nav.start": {
     "message": "Start"
@@ -1338,7 +1338,7 @@
     "message": "Switch account"
   },
   "app.nav.upgrade-to-modrinth-plus": {
-    "message": "Upgrade to Modrinth+"
+    "message": "Register Octra account"
   },
   "app.nav.view-profile": {
     "message": "View profile"
@@ -3073,6 +3073,39 @@
   },
   "minecraft-account.sign-in": {
     "message": "Log in to Octra"
+  },
+  "octra-account.hint": {
+    "message": "Register to sync skins with other Octra players"
+  },
+  "octra-account.label": {
+    "message": "Octra account"
+  },
+  "octra-account.login": {
+    "message": "Log in"
+  },
+  "octra-account.login-success": {
+    "message": "Logged in to Octra"
+  },
+  "octra-account.logout": {
+    "message": "Log out"
+  },
+  "octra-account.minecraft-nick": {
+    "message": "Minecraft nickname"
+  },
+  "octra-account.password": {
+    "message": "Password"
+  },
+  "octra-account.register": {
+    "message": "Register"
+  },
+  "octra-account.register-success": {
+    "message": "Octra account created"
+  },
+  "octra-account.title": {
+    "message": "Octra account"
+  },
+  "octra-account.username": {
+    "message": "Username"
   },
   "minecraft-required.description": {
     "message": "Sign in with Microsoft, or play offline with a nickname. Your skin is uploaded so it shows in singleplayer and on SkinsRestorer servers."

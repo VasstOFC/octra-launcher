@@ -1,0 +1,16 @@
+[Unit]
+Description=Octra API (skins + accounts)
+After=network.target
+
+[Service]
+Type=simple
+User=octra
+Group=octra
+WorkingDirectory=/opt/octra-api
+EnvironmentFile=/etc/octra/octra.env
+ExecStart=/opt/octra-api/venv/bin/uvicorn octra_api.main:app --host 127.0.0.1 --port 8787
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

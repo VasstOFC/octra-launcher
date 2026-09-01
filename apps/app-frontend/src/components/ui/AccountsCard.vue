@@ -1,5 +1,49 @@
 <template>
 	<div
+		class="flex flex-col gap-2 bg-button-bg border border-solid border-surface-5 rounded-xl p-3 mt-2"
+	>
+		<div class="flex items-center justify-between gap-2 min-w-0">
+			<div class="flex flex-col min-w-0">
+				<span class="text-contrast font-semibold truncate">
+					{{ formatMessage(messages.octraAccount) }}
+				</span>
+				<span v-if="octraSession" class="text-secondary text-xs truncate">
+					{{ octraSession.username }} · {{ octraSession.minecraft_nick }}
+				</span>
+				<span v-else class="text-secondary text-xs">
+					{{ formatMessage(messages.octraAccountHint) }}
+				</span>
+			</div>
+			<Button
+				v-if="octraSession"
+				type="outlined"
+				:disabled="octraLoading"
+				@click="logoutOctra"
+			>
+				{{ formatMessage(messages.octraLogout) }}
+			</Button>
+			<Button
+				v-else
+				type="colored"
+				color="brand"
+				:disabled="octraLoading"
+				@click="openOctraAccount('login')"
+			>
+				<LogInIcon />
+				{{ formatMessage(messages.octraLogin) }}
+			</Button>
+		</div>
+		<Button
+			v-if="!octraSession"
+			class="w-full"
+			:disabled="octraLoading"
+			@click="openOctraAccount('register')"
+		>
+			<PlusIcon />
+			{{ formatMessage(messages.octraRegister) }}
+		</Button>
+	</div>
+	<div
 		v-if="accounts.length === 0"
 		class="flex flex-col gap-3 bg-button-bg border border-solid border-surface-5 rounded-xl p-3 mt-2"
 	>
@@ -109,6 +153,7 @@
 		</div>
 	</Accordion>
 	<AddOfflineAccountModal ref="addOfflineModal" @added="onOfflineAdded" />
+	<OctraAccountModal ref="octraAccountModal" @success="onOctraAccountSuccess" />
 </template>
 
 <script setup lang="ts">
@@ -133,6 +178,7 @@ import type { Ref } from 'vue'
 import { computed, ref } from 'vue'
 
 import AddOfflineAccountModal from '@/components/ui/AddOfflineAccountModal.vue'
+import OctraAccountModal from '@/components/ui/OctraAccountModal.vue'
 import { useAppEvent } from '@/composables/use-app-event'
 import { handleSevereError } from '@/composables/use-error.js'
 import { trackEvent } from '@/helpers/analytics'
@@ -144,6 +190,7 @@ import {
 	set_default_user,
 	users,
 } from '@/helpers/auth'
+import { octraAccountLogout, octraAccountSession } from '@/helpers/octra-account.js'
 import type { Skin } from '@/helpers/skins'
 import { useMinecraftAccountAvatar } from '@/composables/use-minecraft-account-avatar.ts'
 
@@ -165,8 +212,14 @@ type MinecraftCredential = {
 
 const accounts: Ref<MinecraftCredential[]> = ref([])
 const loginDisabled = ref(false)
+const octraLoading = ref(false)
+const octraSession = ref<{
+	username: string
+	minecraft_nick: string
+} | null>(null)
 const defaultUser = ref<string | undefined>()
 const addOfflineModal = ref<InstanceType<typeof AddOfflineAccountModal>>()
+const octraAccountModal = ref<InstanceType<typeof OctraAccountModal>>()
 
 const { refreshEquippedSkinAvatar, setEquippedSkinAvatar, getAccountAvatarUrl } =
 	useMinecraftAccountAvatar()
@@ -176,6 +229,7 @@ async function refreshValues() {
 	const userList = await users().catch(handleError)
 	accounts.value = Array.isArray(userList) ? [...userList] : []
 	accounts.value.sort((a, b) => (a.profile?.name ?? '').localeCompare(b.profile?.name ?? ''))
+	octraSession.value = await octraAccountSession().catch(() => null)
 	await refreshEquippedSkinAvatar()
 }
 
@@ -189,6 +243,32 @@ function setLoginDisabled(value: boolean) {
 
 function addOffline() {
 	addOfflineModal.value?.show()
+}
+
+function openOctraAccount(mode: 'login' | 'register') {
+	octraAccountModal.value?.show(mode)
+}
+
+async function onOctraAccountSuccess() {
+	octraLoading.value = true
+	try {
+		await refreshValues()
+		emit('change')
+	} finally {
+		octraLoading.value = false
+	}
+}
+
+async function logoutOctra() {
+	octraLoading.value = true
+	try {
+		await octraAccountLogout()
+		octraSession.value = null
+	} catch (error) {
+		handleError(error)
+	} finally {
+		octraLoading.value = false
+	}
 }
 
 defineExpose({
@@ -299,6 +379,26 @@ const messages = defineMessages({
 	nonPremium: {
 		id: 'minecraft-account.non-premium',
 		defaultMessage: 'Non-premium',
+	},
+	octraAccount: {
+		id: 'octra-account.label',
+		defaultMessage: 'Octra account',
+	},
+	octraAccountHint: {
+		id: 'octra-account.hint',
+		defaultMessage: 'Register to sync skins with other Octra players',
+	},
+	octraLogin: {
+		id: 'octra-account.login',
+		defaultMessage: 'Log in',
+	},
+	octraRegister: {
+		id: 'octra-account.register',
+		defaultMessage: 'Register',
+	},
+	octraLogout: {
+		id: 'octra-account.logout',
+		defaultMessage: 'Log out',
 	},
 })
 </script>
