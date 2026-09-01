@@ -111,6 +111,11 @@ fn resolve_payload(app: &AppHandle) -> Result<PathBuf, InstallError> {
 		}
 	}
 
+	#[cfg(has_payload)]
+	if let Some(path) = materialize_embedded_payload()? {
+		return Ok(path);
+	}
+
 	let resource = app
 		.path()
 		.resource_dir()
@@ -139,6 +144,19 @@ fn resolve_payload(app: &AppHandle) -> Result<PathBuf, InstallError> {
 	Err(InstallError::PayloadMissing(
 		"brak paczki instalacyjnej (app.zip). Zbuduj najpierw Octra App.".into(),
 	))
+}
+
+#[cfg(has_payload)]
+fn materialize_embedded_payload() -> Result<Option<PathBuf>, InstallError> {
+	const PAYLOAD: &[u8] =
+		include_bytes!(concat!(env!("CARGO_MANIFEST_DIR"), "/resources/payload/app.zip"));
+	if PAYLOAD.is_empty() {
+		return Ok(None);
+	}
+
+	let path = std::env::temp_dir().join("octra-installer-payload.zip");
+	fs::write(&path, PAYLOAD)?;
+	Ok(Some(path))
 }
 
 fn create_zip_from_exe(exe: &Path, zip_path: &Path) -> Result<(), InstallError> {

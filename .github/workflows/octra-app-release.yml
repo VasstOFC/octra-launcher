@@ -80,10 +80,28 @@ jobs:
           Push-Location $appExe.DirectoryName
           Compress-Archive -Path $appExe.Name -DestinationPath $payloadZip -Force
           Pop-Location
+          if (-not (Test-Path $payloadZip)) { throw 'app.zip was not created' }
+          $payloadSize = (Get-Item $payloadZip).Length
+          if ($payloadSize -lt 1MB) { throw "app.zip is too small ($payloadSize bytes)" }
+          Write-Host "Prepared app.zip ($([math]::Round($payloadSize / 1MB, 2)) MB)"
 
       - name: Build Octra Setup (custom installer UI)
         working-directory: apps/installer
         run: pnpm run build
+
+      - name: Verify Octra Setup payload
+        shell: pwsh
+        run: |
+          $setup = Get-ChildItem 'target/release' -Filter 'Octra Setup.exe' -ErrorAction SilentlyContinue | Select-Object -First 1
+          if (-not $setup) {
+            $setup = Get-ChildItem 'apps/installer/target/release' -Filter 'Octra Setup.exe' | Select-Object -First 1
+          }
+          if (-not $setup) { throw 'Octra Setup.exe not found after build' }
+          $setupSize = $setup.Length
+          if ($setupSize -lt 15MB) {
+            throw "Octra Setup.exe is too small ($setupSize bytes) — app.zip was not embedded"
+          }
+          Write-Host "Octra Setup.exe size OK ($([math]::Round($setupSize / 1MB, 2)) MB)"
 
       - name: Pack release assets
         shell: pwsh
@@ -131,4 +149,10 @@ jobs:
             'dist-installer/Octra-setup.nsis.zip.sig',
             'dist-installer/latest.json'
           ) | Where-Object { Test-Path $_ }
-          gh release create $tag @files --title "Octra App $tag" --notes "Octra App $($env:VERSION) replaces Octra Launcher. Instances import from .octralauncher on first launch." --latest
+          $notes = "Octra App $($env:VERSION) replaces Octra Launcher. Instances import from .octralauncher on first launch."
+          gh release view $tag 2>$null
+          if ($LASTEXITCODE -eq 0) {
+            gh release upload $tag @files --clobber
+          } else {
+            gh release create $tag @files --title "Octra App $tag" --notes $notes --latest
+          }
