@@ -48,7 +48,7 @@ Var /GLOBAL OldInstallDir
         UserInfo::GetAccountType
         Pop $0
         ${If} $0 != "Admin"
-            MessageBox MB_ICONINFORMATION|MB_OK "An old installation of the Modrinth App was detected that requires administrator permission to update from. You will be prompted with an admin prompt shortly."
+            MessageBox MB_ICONINFORMATION|MB_OK "An old installation of Octra App was detected that requires administrator permission to update from. You will be prompted with an admin prompt shortly."
         ${EndIf}
 
         ReadRegStr $4 SHCTX "${MANUPRODUCTKEY}" ""
@@ -83,8 +83,8 @@ Var /GLOBAL OldInstallDir
 
 !macro NSIS_HOOK_POSTINSTALL
     SetShellVarContext current
-    CreateShortCut "$DESKTOP\Octra Launcher.lnk" "$INSTDIR\${MAINBINARYNAME}.exe"
-    CreateShortCut "$SMPROGRAMS\Octra Launcher.lnk" "$INSTDIR\${MAINBINARYNAME}.exe"
+    CreateShortCut "$DESKTOP\${PRODUCTNAME}.lnk" "$INSTDIR\${MAINBINARYNAME}.exe"
+    CreateShortCut "$SMPROGRAMS\${PRODUCTNAME}.lnk" "$INSTDIR\${MAINBINARYNAME}.exe"
 
     !insertmacro IsShortcutTarget "$DESKTOP\${PRODUCTNAME}.lnk" "$OldInstallDir\${MAINBINARYNAME}.exe"
     Pop $0

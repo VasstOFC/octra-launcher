@@ -457,6 +457,59 @@ importers:
         specifier: ^4.115.0
         version: 4.116.0
 
+  apps/installer:
+    dependencies:
+      '@modrinth/installer-frontend':
+        specifier: workspace:*
+        version: link:../installer-frontend
+    devDependencies:
+      '@tauri-apps/cli':
+        specifier: 2.5.0
+        version: 2.5.0
+
+  apps/installer-frontend:
+    dependencies:
+      '@modrinth/assets':
+        specifier: workspace:*
+        version: link:../../packages/assets
+      '@tauri-apps/api':
+        specifier: ^2.5.0
+        version: 2.10.1
+      '@tauri-apps/plugin-dialog':
+        specifier: ^2.2.1
+        version: 2.6.0
+      vue:
+        specifier: ^3.5.13
+        version: 3.5.27(typescript@5.9.3)
+    devDependencies:
+      '@modrinth/tooling-config':
+        specifier: workspace:*
+        version: link:../../packages/tooling-config
+      '@vitejs/plugin-vue':
+        specifier: ^6.0.3
+        version: 6.0.4(vite@8.0.3(@types/node@24.12.2)(esbuild@0.27.3)(jiti@2.6.1)(sass@1.97.3)(terser@5.46.0)(yaml@2.8.2))(vue@3.5.27(typescript@5.9.3))
+      autoprefixer:
+        specifier: ^10.4.19
+        version: 10.4.24(postcss@8.5.8)
+      postcss:
+        specifier: ^8.4.39
+        version: 8.5.8
+      sass:
+        specifier: ^1.74.1
+        version: 1.97.3
+      tailwindcss:
+        specifier: ^3.4.4
+        version: 3.4.19(yaml@2.8.2)
+      typescript:
+        specifier: ^5.5.4
+        version: 5.9.3
+      vite:
+        specifier: ^8.0.0
+        version: 8.0.3(@types/node@24.12.2)(esbuild@0.27.3)(jiti@2.6.1)(sass@1.97.3)(terser@5.46.0)(yaml@2.8.2)
+      vite-svg-loader:
+        specifier: ^5.1.0
+        version: 5.1.0(vue@3.5.27(typescript@5.9.3))
+
   apps/labrinth: {}
 
   packages/api-client:
@@ -15129,7 +15182,7 @@ snapshots:
       '@vue/shared': 3.5.27
       estree-walker: 2.0.2
       magic-string: 0.30.21
-      postcss: 8.5.6
+      postcss: 8.5.8
       source-map-js: 1.2.1
 
   '@vue/compiler-ssr@3.5.27':
@@ -21339,7 +21392,7 @@ snapshots:
   vite@5.4.21(@types/node@24.12.2)(lightningcss@1.32.0)(sass@1.97.3)(terser@5.46.0):
     dependencies:
       esbuild: 0.21.5
-      postcss: 8.5.6
+      postcss: 8.5.8
       rollup: 4.57.1
     optionalDependencies:
       '@types/node': 24.12.2
@@ -21353,7 +21406,7 @@ snapshots:
       esbuild: 0.25.12
       fdir: 6.5.0(picomatch@4.0.3)
       picomatch: 4.0.3
-      postcss: 8.5.6
+      postcss: 8.5.8
       rollup: 4.57.1
       tinyglobby: 0.2.15
     optionalDependencies:

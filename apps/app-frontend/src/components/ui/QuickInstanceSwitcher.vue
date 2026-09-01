@@ -5,7 +5,6 @@ import {
 	FolderOpenIcon,
 	PlayIcon,
 	SpinnerIcon,
-	StarIcon,
 	StopCircleIcon,
 } from '@modrinth/assets'
 import {
@@ -49,11 +48,6 @@ const runningInstances = ref([])
 
 const { formatMessage } = useVIntl()
 const railMessages = defineMessages({
-	library: { id: 'app.nav.library', defaultMessage: 'Library' },
-	libraryCount: {
-		id: 'app.nav.library-count',
-		defaultMessage: '{count, plural, one {# profile in library} other {# profiles in library}}',
-	},
 	playtimeTotal: { id: 'app.nav.playtime-total', defaultMessage: '{time} total' },
 	playtimeUnderMinute: { id: 'app.nav.playtime-under-minute', defaultMessage: 'under a minute' },
 	playtimeMinutes: { id: 'app.nav.playtime-minutes', defaultMessage: '{m} min' },
@@ -335,35 +329,20 @@ function openContextMenu(event, instance) {
 		class="flex min-h-0 w-full flex-1 flex-col"
 		:class="props.expanded ? 'overflow-hidden' : 'items-center'"
 	>
-		<div
-			v-if="props.expanded"
-			class="mb-2 shrink-0 rounded-xl border border-solid border-brand/20 bg-gradient-to-br from-brand/10 via-transparent to-transparent p-3"
-		>
-			<div class="flex items-center gap-2 text-brand">
-				<StarIcon class="size-3.5" />
-				<span class="text-[10px] font-bold uppercase tracking-wider">
-					{{ formatMessage(railMessages.library) }}
-				</span>
-			</div>
-			<p class="m-0 mt-2 text-lg font-extrabold leading-none text-contrast">
-				{{ allInstances.length }}
-			</p>
-			<p class="m-0 mt-1 text-[11px] leading-4 text-secondary">
-				{{ formatMessage(railMessages.libraryCount, { count: allInstances.length }) }}
-			</p>
-			<div class="mt-2 flex items-center gap-1.5 text-[10px] text-secondary">
-				<ClockIcon class="size-3" />
-				<span>{{
-					formatMessage(railMessages.playtimeTotal, { time: formatPlayTime(totalPlaySeconds) })
-				}}</span>
-			</div>
-		</div>
-
 		<p
 			v-if="props.expanded && recentInstances.length > 0"
-			class="mb-1.5 shrink-0 px-1 text-[9px] font-bold uppercase tracking-wider text-secondary"
+			class="mb-1 shrink-0 px-1 text-[9px] font-bold uppercase tracking-wider text-secondary"
 		>
 			{{ formatMessage(railMessages.quickSwitch) }}
+		</p>
+		<p
+			v-if="props.expanded && totalPlaySeconds > 0"
+			class="mb-2 flex shrink-0 items-center gap-1 px-1 text-[10px] leading-4 text-secondary"
+		>
+			<ClockIcon class="size-3 shrink-0 opacity-70" aria-hidden="true" />
+			<span>{{
+				formatMessage(railMessages.playtimeTotal, { time: formatPlayTime(totalPlaySeconds) })
+			}}</span>
 		</p>
 
 		<Transition name="top-divider">

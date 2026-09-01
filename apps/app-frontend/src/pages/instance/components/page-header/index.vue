@@ -14,18 +14,18 @@
 			<PageHeaderBadgeItem
 				v-if="instance.quarantined"
 				:icon="LockIcon"
-				aria-label="Locked instance information"
+				:aria-label="formatMessage(messages.lockedBadgeAria)"
 				class="!border-orange !bg-highlight-orange !text-orange"
 			>
-				Locked
+				{{ formatMessage(messages.lockedBadge) }}
 			</PageHeaderBadgeItem>
 			<PageHeaderBadgeItem
 				v-else
 				:tooltip="sharedInstanceTooltip"
-				aria-label="Shared instance information"
+				:aria-label="formatMessage(messages.sharedBadgeAria)"
 				class="!border-blue !bg-highlight-blue !text-blue"
 			>
-				Shared
+				{{ formatMessage(messages.sharedBadge) }}
 				<UnknownIcon class="block size-4 shrink-0 text-current" aria-hidden="true" />
 			</PageHeaderBadgeItem>
 		</template>
@@ -39,20 +39,21 @@
 				:ping="ping"
 				:minecraft-server="minecraftServer"
 				:show-instance-play-time="showInstancePlayTime"
-				:playtime-label="playtimeLabel ?? formatMessage(messages.neverPlayed)"
+				:playtime-label="playtimeLabel"
+				:playtime-tooltip="formatMessage(messages.playtimeTooltip)"
 			/>
 			<PageHeaderMetadata v-else>
 				<PageHeaderMetadataItem
 					:icon="TagIcon"
 					:icon-props="{ tag: loaderDisplayName, enforceType: 'loader' }"
-					tooltip="Mod loader and Minecraft version"
+					:tooltip="formatMessage(messages.loaderTooltip)"
 				>
 					{{ loaderLabel }}
 				</PageHeaderMetadataItem>
 				<PageHeaderMetadataItem
 					v-if="showInstancePlayTime && playtimeLabel"
 					:icon="TimerIcon"
-					tooltip="Total playtime"
+					:tooltip="formatMessage(messages.playtimeTooltip)"
 				>
 					{{ playtimeLabel }}
 				</PageHeaderMetadataItem>
@@ -62,7 +63,11 @@
 					:date="instance.last_played"
 					:label="formatMessage(messages.lastPlayed)"
 				/>
-				<PageHeaderMetadataItem v-else :icon="ClockIcon" tooltip="Last played">
+				<PageHeaderMetadataItem
+					v-else
+					:icon="ClockIcon"
+					:tooltip="formatMessage(messages.lastPlayedTooltip)"
+				>
 					{{ formatMessage(messages.neverPlayed) }}
 				</PageHeaderMetadataItem>
 			</PageHeaderMetadata>
@@ -204,6 +209,7 @@ import {
 import { computed } from 'vue'
 
 import type { GameInstance } from '@/helpers/types'
+import { formatPlaytime } from '@/helpers/format-playtime.ts'
 
 import InstanceHeaderServerMetadata from './instance-page-header-server-metadata.vue'
 
@@ -231,6 +237,34 @@ const messages = defineMessages({
 	neverPlayed: {
 		id: 'instance.playtime.never-played',
 		defaultMessage: 'Never played',
+	},
+	loaderTooltip: {
+		id: 'instance.metadata.loader-tooltip',
+		defaultMessage: 'Mod loader and Minecraft version',
+	},
+	playtimeTooltip: {
+		id: 'instance.metadata.playtime-tooltip',
+		defaultMessage: 'Total playtime',
+	},
+	lastPlayedTooltip: {
+		id: 'instance.metadata.last-played-tooltip',
+		defaultMessage: 'Last played',
+	},
+	lockedBadge: {
+		id: 'instance.badge.locked',
+		defaultMessage: 'Locked',
+	},
+	sharedBadge: {
+		id: 'instance.badge.shared',
+		defaultMessage: 'Shared',
+	},
+	lockedBadgeAria: {
+		id: 'instance.badge.locked-aria',
+		defaultMessage: 'Locked instance information',
+	},
+	sharedBadgeAria: {
+		id: 'instance.badge.shared-aria',
+		defaultMessage: 'Shared instance information',
 	},
 	lastPlayed: {
 		id: 'instance.last-played',
@@ -332,24 +366,7 @@ const sharedInstanceTooltip = computed(() =>
 			: messages.sharedInstanceTooltip,
 	),
 )
-const playtimeLabel = computed(() => {
-	const seconds = Math.floor(props.timePlayed)
-	if (seconds <= 0) {
-		return undefined
-	}
-
-	const hours = Math.floor(seconds / 3600)
-	if (hours >= 1) {
-		return `${hours} hour${hours > 1 ? 's' : ''}`
-	}
-
-	const minutes = Math.floor(seconds / 60)
-	if (minutes >= 1) {
-		return `${minutes} minute${minutes > 1 ? 's' : ''}`
-	}
-
-	return `${seconds} second${seconds === 1 ? '' : 's'}`
-})
+const playtimeLabel = computed(() => formatPlaytime(props.timePlayed, formatMessage))
 const serverPlayOptions = computed<ButtonMenuOption[]>(() => [
 	{
 		id: 'launch_instance',

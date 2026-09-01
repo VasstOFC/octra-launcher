@@ -6811,6 +6811,26 @@ dependencies = [
 ]
 
 [[package]]
+name = "octra-installer"
+version = "1.0.0-local"
+dependencies = [
+ "directories",
+ "serde",
+ "serde_json",
+ "tauri",
+ "tauri-build",
+ "tauri-plugin-dialog",
+ "tauri-plugin-opener",
+ "thiserror 2.0.17",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+ "windows",
+ "winreg 0.55.0",
+ "zip 6.0.0",
+]
+
+[[package]]
 name = "oid-registry"
 version = "0.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"

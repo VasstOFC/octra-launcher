@@ -5814,7 +5814,7 @@
     "defaultMessage": "Używaj tego motywu wszędzie, gdzie jesteś zalogowany. Wyłącz, aby zachować osobny motyw na tym urządzeniu."
   },
   "settings.display.theme.sync-across-devices.sign-in-tooltip": {
-    "defaultMessage": "Zaloguj się na Modrinth, aby synchronizować motyw"
+    "defaultMessage": "Zaloguj się na Octra, aby synchronizować motyw"
   },
   "settings.display.theme.system": {
     "defaultMessage": "Synchronizuj z systemem"

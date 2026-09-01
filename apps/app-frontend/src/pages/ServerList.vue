@@ -35,11 +35,11 @@ const messages = defineMessages({
 	},
 	subtitle: {
 		id: 'app.servers.subtitle',
-		defaultMessage: 'Your multiplayer server list, shared with Octra Launcher.',
+		defaultMessage: 'Your multiplayer server list, shared with Octra App.',
 	},
 	empty: {
 		id: 'app.servers.empty',
-		defaultMessage: 'No servers yet. Servers added in Octra Launcher will show up here.',
+		defaultMessage: 'No servers yet. Servers added in Octra App will show up here.',
 	},
 	refresh: {
 		id: 'app.servers.refresh',

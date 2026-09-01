@@ -1,0 +1,214 @@
+.installer-shell {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+	overflow: hidden;
+	color: var(--color-contrast);
+	background: var(--color-bg);
+}
+
+.installer-shell__bg {
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	background:
+		radial-gradient(circle at 20% 0%, rgba(196, 123, 198, 0.18), transparent 45%),
+		radial-gradient(circle at 80% 100%, rgba(160, 81, 162, 0.12), transparent 40%),
+		linear-gradient(180deg, #110915 0%, #17131c 100%);
+}
+
+.installer-shell__cube {
+	display: none;
+}
+
+.installer-shell__header {
+	position: relative;
+	z-index: 2;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 1rem 1.25rem;
+	border-bottom: 1px solid var(--color-divider);
+}
+
+.installer-shell__brand {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+}
+
+.installer-shell__logo {
+	width: 2rem;
+	height: 2rem;
+	color: var(--color-brand);
+}
+
+.installer-shell__title {
+	margin: 0;
+	font-size: 1rem;
+	font-weight: 700;
+}
+
+.installer-shell__subtitle {
+	margin: 0;
+	font-size: 0.75rem;
+	color: var(--color-secondary);
+}
+
+.installer-shell__content {
+	position: relative;
+	z-index: 2;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	padding: 2rem 2.5rem;
+}
+
+.installer-shell__footer {
+	position: relative;
+	z-index: 2;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	padding: 1rem 1.25rem;
+	border-top: 1px solid var(--color-divider);
+}
+
+.installer-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 7rem;
+	padding: 0.65rem 1.1rem;
+	border: none;
+	border-radius: var(--radius-lg);
+	font-size: 0.875rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background-color 0.15s ease, opacity 0.15s ease;
+}
+
+.installer-btn:disabled {
+	opacity: 0.45;
+	cursor: not-allowed;
+}
+
+.installer-btn--primary {
+	color: white;
+	background: var(--color-brand);
+}
+
+.installer-btn--primary:hover:not(:disabled) {
+	filter: brightness(1.08);
+}
+
+.installer-btn--ghost {
+	color: var(--color-secondary);
+	background: transparent;
+}
+
+.installer-btn--ghost:hover:not(:disabled) {
+	color: var(--color-contrast);
+	background: var(--color-button-bg);
+}
+
+.installer-field {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	margin-top: 1.25rem;
+}
+
+.installer-field label {
+	font-size: 0.8125rem;
+	font-weight: 600;
+	color: var(--color-secondary);
+}
+
+.installer-field__row {
+	display: flex;
+	gap: 0.5rem;
+}
+
+.installer-field input[type='text'] {
+	flex: 1;
+	padding: 0.65rem 0.75rem;
+	border: 1px solid var(--color-divider);
+	border-radius: var(--radius-lg);
+	background: var(--color-raised-bg);
+	color: var(--color-contrast);
+	font-size: 0.875rem;
+}
+
+.installer-option {
+	display: flex;
+	align-items: center;
+	gap: 0.65rem;
+	margin-top: 0.85rem;
+	font-size: 0.875rem;
+}
+
+.installer-error {
+	margin-top: 1rem;
+	padding: 0.75rem 0.85rem;
+	border-radius: var(--radius-lg);
+	background: var(--color-red-highlight);
+	color: var(--color-red);
+	font-size: 0.8125rem;
+}
+
+.installer-step-title {
+	margin: 0;
+	font-size: 1.5rem;
+	font-weight: 700;
+}
+
+.installer-step-desc {
+	margin: 0.5rem 0 0;
+	max-width: 32rem;
+	color: var(--color-secondary);
+	line-height: 1.5;
+}
+
+.installer-progress-copy {
+	margin-top: 1rem;
+	font-size: 0.875rem;
+	color: var(--color-secondary);
+}
+
+.installer-done-icon {
+	width: 3rem;
+	height: 3rem;
+	margin-bottom: 1rem;
+	color: var(--color-green);
+}
+
+html,
+body,
+#app {
+	height: 100%;
+	margin: 0;
+	background: var(--color-bg);
+}
+
+body {
+	font-family: inter, system-ui, sans-serif;
+}
+
+.dark-mode,
+:root {
+	--color-bg: #110915;
+	--color-raised-bg: #17131c;
+	--color-divider: #2a2230;
+	--color-contrast: #f5eef8;
+	--color-secondary: #b8a8c0;
+	--color-brand: #c47bc6;
+	--color-button-bg: rgba(255, 255, 255, 0.06);
+	--color-red: #ff6b6b;
+	--color-red-highlight: rgba(255, 107, 107, 0.15);
+	--color-green: #57d657;
+	--radius-lg: 0.75rem;
+}

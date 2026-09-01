@@ -7,7 +7,7 @@ export const appearanceSettingsMessages = defineMessages({
 	},
 	colorThemeDescription: {
 		id: 'settings.display.theme.description',
-		defaultMessage: 'Select your preferred color theme across Modrinth.',
+		defaultMessage: 'Select your preferred color theme for Octra App.',
 	},
 	syncAcrossDevicesTitle: {
 		id: 'settings.display.theme.sync-across-devices',
@@ -20,7 +20,7 @@ export const appearanceSettingsMessages = defineMessages({
 	},
 	syncAcrossDevicesSignedOutTooltip: {
 		id: 'settings.display.theme.sync-across-devices.sign-in-tooltip',
-		defaultMessage: 'Sign into Modrinth to sync theme',
+		defaultMessage: 'Sign into Octra to sync theme',
 	},
 	projectListLayoutsTitle: {
 		id: 'settings.display.project-list-layouts.title',

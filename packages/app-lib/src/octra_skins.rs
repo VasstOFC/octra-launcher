@@ -43,11 +43,10 @@ static HUB: OnceLock<SkinHub> = OnceLock::new();
 
 #[derive(Clone)]
 struct StoredPlayerSkin {
-    uuid: Uuid,
-    name: String,
-    model: String,
-    sha256: String,
-    png: Vec<u8>,
+	uuid: Uuid,
+	name: String,
+	model: String,
+	png: Vec<u8>,
 }
 
 struct SkinHub {
@@ -203,7 +202,6 @@ fn register_player(
         uuid: credentials.offline_profile.id,
         name: credentials.offline_profile.name.clone(),
         model: model.to_string(),
-        sha256: sha.clone(),
         png: png.to_vec(),
     };
     let hub = hub();
@@ -317,7 +315,7 @@ pub async fn sync_all_equipped_skins() {
         return;
     };
     for entry in accounts.iter() {
-        let credentials = entry.value().clone();
+        let credentials = entry.value();
         let Some(png) = load_equipped_png(credentials.offline_profile.id).await
         else {
             continue;

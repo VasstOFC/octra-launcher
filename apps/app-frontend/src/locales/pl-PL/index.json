@@ -1263,10 +1263,7 @@
     "message": "Dodaj konto"
   },
   "app.nav.brand-name": {
-    "message": "Octra"
-  },
-  "app.nav.brand-subtitle": {
-    "message": "Launcher"
+    "message": "Octra App"
   },
   "app.nav.collapse-rail": {
     "message": "Zwiń menu"
@@ -1590,7 +1587,7 @@
     "message": "Kopiuj adres"
   },
   "app.servers.empty": {
-    "message": "Brak serwerów. Serwery dodane w Octra Launcher pojawią się tutaj."
+    "message": "Brak serwerów. Serwery dodane w Octra App pojawią się tutaj."
   },
   "app.servers.loading": {
     "message": "Ładowanie…"
@@ -1617,7 +1614,7 @@
     "message": "Odśwież"
   },
   "app.servers.subtitle": {
-    "message": "Twoja lista serwerów multiplayer, wspólna z Octra Launcher."
+    "message": "Twoja lista serwerów multiplayer, wspólna z Octra App."
   },
   "app.servers.title": {
     "message": "Serwery"
@@ -1864,6 +1861,36 @@
   },
   "app.settings.tabs.appearance": {
     "message": "Wygląd"
+  },
+  "app.settings.accent.title": {
+    "message": "Kolor akcentu"
+  },
+  "app.settings.accent.description": {
+    "message": "Zmienia kolor akcentu używany w przyciskach, podświetleniach i poświatach."
+  },
+  "app.settings.accent.custom": {
+    "message": "Własny"
+  },
+  "app.settings.accent.custom-color-label": {
+    "message": "Własny kolor akcentu"
+  },
+  "app.settings.accent.preset.octra": {
+    "message": "Octra"
+  },
+  "app.settings.accent.preset.cobalt": {
+    "message": "Kobalt"
+  },
+  "app.settings.accent.preset.ember": {
+    "message": "Ember"
+  },
+  "app.settings.accent.preset.mint": {
+    "message": "Mięta"
+  },
+  "app.settings.accent.preset.rose": {
+    "message": "Róż"
+  },
+  "app.settings.accent.preset.aurora": {
+    "message": "Aurora"
   },
   "app.settings.tabs.behavior": {
     "message": "Zachowanie"
@@ -2569,6 +2596,39 @@
   },
   "instance.playtime.never-played": {
     "message": "Nigdy nie grano"
+  },
+  "instance.playtime.hours": {
+    "message": "{count, plural, one {# godzina} few {# godziny} many {# godzin} other {# godzin}}"
+  },
+  "instance.playtime.minutes": {
+    "message": "{count, plural, one {# minuta} few {# minuty} many {# minut} other {# minut}}"
+  },
+  "instance.playtime.seconds": {
+    "message": "{count, plural, one {# sekunda} few {# sekundy} many {# sekund} other {# sekund}}"
+  },
+  "instance.metadata.loader-tooltip": {
+    "message": "Loader modów i wersja Minecrafta"
+  },
+  "instance.metadata.playtime-tooltip": {
+    "message": "Całkowity czas gry"
+  },
+  "instance.metadata.last-played-tooltip": {
+    "message": "Ostatnio grane"
+  },
+  "instance.badge.locked": {
+    "message": "Zablokowana"
+  },
+  "instance.badge.shared": {
+    "message": "Udostępniona"
+  },
+  "instance.badge.locked-aria": {
+    "message": "Informacje o zablokowanej instancji"
+  },
+  "instance.badge.shared-aria": {
+    "message": "Informacje o udostępnionej instancji"
+  },
+  "instance.backup.name-prefix": {
+    "message": "{name} - Kopia #"
   },
   "instance.server-modal.address": {
     "message": "Adres"

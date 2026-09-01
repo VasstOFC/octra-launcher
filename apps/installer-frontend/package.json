@@ -1,0 +1,28 @@
+{
+	"name": "@modrinth/installer-frontend",
+	"private": true,
+	"version": "1.0.0-local",
+	"type": "module",
+	"scripts": {
+		"dev": "vite --port 1421",
+		"build": "vite build",
+		"lint": "eslint . && prettier --check ."
+	},
+	"dependencies": {
+		"@modrinth/assets": "workspace:*",
+		"@tauri-apps/api": "^2.5.0",
+		"@tauri-apps/plugin-dialog": "^2.2.1",
+		"vue": "^3.5.13"
+	},
+	"devDependencies": {
+		"@modrinth/tooling-config": "workspace:*",
+		"@vitejs/plugin-vue": "^6.0.3",
+		"autoprefixer": "^10.4.19",
+		"postcss": "^8.4.39",
+		"sass": "^1.74.1",
+		"tailwindcss": "^3.4.4",
+		"typescript": "^5.5.4",
+		"vite": "^8.0.0",
+		"vite-svg-loader": "^5.1.0"
+	}
+}

@@ -1263,10 +1263,7 @@
     "message": "Add account"
   },
   "app.nav.brand-name": {
-    "message": "Octra"
-  },
-  "app.nav.brand-subtitle": {
-    "message": "Launcher"
+    "message": "Octra App"
   },
   "app.nav.collapse-rail": {
     "message": "Collapse menu"
@@ -1590,7 +1587,7 @@
     "message": "Copy address"
   },
   "app.servers.empty": {
-    "message": "No servers yet. Servers added in Octra Launcher will show up here."
+    "message": "No servers yet. Servers added in Octra App will show up here."
   },
   "app.servers.loading": {
     "message": "Loading…"
@@ -1617,7 +1614,7 @@
     "message": "Refresh"
   },
   "app.servers.subtitle": {
-    "message": "Your multiplayer server list, shared with Octra Launcher."
+    "message": "Your multiplayer server list, shared with Octra App."
   },
   "app.servers.title": {
     "message": "Servers"
@@ -2551,6 +2548,39 @@
   },
   "instance.playtime.never-played": {
     "message": "Never played"
+  },
+  "instance.playtime.hours": {
+    "message": "{count, plural, one {# hour} other {# hours}}"
+  },
+  "instance.playtime.minutes": {
+    "message": "{count, plural, one {# minute} other {# minutes}}"
+  },
+  "instance.playtime.seconds": {
+    "message": "{count, plural, one {# second} other {# seconds}}"
+  },
+  "instance.metadata.loader-tooltip": {
+    "message": "Mod loader and Minecraft version"
+  },
+  "instance.metadata.playtime-tooltip": {
+    "message": "Total playtime"
+  },
+  "instance.metadata.last-played-tooltip": {
+    "message": "Last played"
+  },
+  "instance.badge.locked": {
+    "message": "Locked"
+  },
+  "instance.badge.shared": {
+    "message": "Shared"
+  },
+  "instance.badge.locked-aria": {
+    "message": "Locked instance information"
+  },
+  "instance.badge.shared-aria": {
+    "message": "Shared instance information"
+  },
+  "instance.backup.name-prefix": {
+    "message": "{name} - Backup #"
   },
   "instance.server-modal.address": {
     "message": "Address"

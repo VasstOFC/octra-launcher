@@ -16,7 +16,7 @@
 		<PageHeaderMetadataItem
 			v-if="showInstancePlayTime && playtimeLabel"
 			:icon="TimerIcon"
-			tooltip="Total playtime"
+			:tooltip="playtimeTooltip"
 		>
 			{{ playtimeLabel }}
 		</PageHeaderMetadataItem>
@@ -42,5 +42,6 @@ defineProps<{
 	minecraftServer?: Labrinth.Projects.v3.Project['minecraft_server']
 	showInstancePlayTime?: boolean
 	playtimeLabel?: string
+	playtimeTooltip?: string
 }>()
 </script>

@@ -87,7 +87,6 @@ import ModpackAlreadyInstalledModal from '@/components/ui/modal/ModpackAlreadyIn
 import ModrinthAccountRequiredModal from '@/components/ui/modal/ModrinthAccountRequiredModal.vue'
 import UpdateToPlayModal from '@/components/ui/modal/UpdateToPlayModal.vue'
 import NavButton from '@/components/ui/NavButton.vue'
-import OctraMark from '@/components/brand/OctraMark.vue'
 import OctraWordmark from '@/components/brand/OctraWordmark.vue'
 import NewIconEditorNotification from '@/components/ui/new-icon-editor-notification/index.vue'
 import { shouldShowNewIconEditorNotification } from '@/components/ui/new-icon-editor-notification/show-notification'
@@ -176,6 +175,7 @@ import { setupAppUserPreferencesProvider } from '@/providers/setup/user-preferen
 import { appMessages } from '@/utils/app-messages'
 
 import { useMinecraftAccountAvatar } from '@/composables/use-minecraft-account-avatar.ts'
+import { bootstrapAccent } from '@/composables/use-accent.ts'
 import { generateSkinPreviews } from './helpers/rendering/batch-skin-renderer'
 import { get_available_capes, get_available_skins } from './helpers/skins'
 import { AppNotificationManager } from './providers/app-notifications'
@@ -585,14 +585,6 @@ const messages = defineMessages({
 		id: 'app.nav.expand-rail',
 		defaultMessage: 'Expand menu',
 	},
-	brandName: {
-		id: 'app.nav.brand-name',
-		defaultMessage: 'Octra',
-	},
-	brandSubtitle: {
-		id: 'app.nav.brand-subtitle',
-		defaultMessage: 'Launcher',
-	},
 	servers: {
 		id: 'app.nav.servers',
 		defaultMessage: 'Servers',
@@ -738,6 +730,7 @@ async function setupApp() {
 	appTheme.preferred = theme
 	appTheme.advancedRendering = advanced_rendering
 	appTheme.syncAcrossDevices = sync_theme_across_devices
+	bootstrapAccent()
 	appSettings.syncBehaviorAcrossDevices = sync_behavior_across_devices
 	appSettings.hideNametagSkinsPage = hide_nametag_skins_page
 	appSettings.devMode = developer_mode
@@ -2155,23 +2148,6 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 			class="app-grid-navbar bg-bg-raised flex flex-col p-2 gap-0.5 w-[--left-bar-width] overflow-hidden"
 			:class="railExpanded ? 'items-stretch' : 'items-center'"
 		>
-			<RouterLink
-				to="/"
-				active-class=""
-				exact-active-class=""
-				class="mb-1 flex shrink-0 items-center rounded-xl no-underline text-inherit hover:bg-button-bg"
-				:class="railExpanded ? 'h-12 w-full gap-3 px-2.5' : 'h-11 w-11 justify-center'"
-			>
-				<OctraMark class="size-8 shrink-0 text-brand" />
-				<div v-if="railExpanded" class="min-w-0 text-left">
-					<p class="m-0 truncate text-sm font-semibold leading-tight text-contrast">
-						{{ formatMessage(messages.brandName) }}
-					</p>
-					<p class="m-0 text-[10px] leading-tight text-secondary">
-						{{ formatMessage(messages.brandSubtitle) }}
-					</p>
-				</div>
-			</RouterLink>
 			<NavButton
 				v-tooltip.right="railExpanded ? undefined : formatMessage(messages.railStart)"
 				to="/"
