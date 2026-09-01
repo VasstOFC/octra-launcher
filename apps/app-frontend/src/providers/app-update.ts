@@ -20,10 +20,13 @@ interface UpdatePromptState {
 
 export type AppUpdatePromptStage = 'available' | 'downloaded'
 
+export type ManualUpdateCheckResult = 'disabled' | 'latest' | 'available' | 'error'
+
 interface AppUpdateActions {
 	download?: () => Promise<void> | void
 	install?: () => Promise<void> | void
 	changelog?: () => Promise<void> | void
+	check?: () => Promise<ManualUpdateCheckResult>
 }
 
 const progress = ref(0)
@@ -168,4 +171,12 @@ export async function installAvailableAppUpdate(): Promise<void> {
 export async function openAppUpdateChangelog(): Promise<void> {
 	recordAppUpdateUserAction()
 	await actions.changelog?.()
+}
+
+export async function checkForAppUpdatesManually(): Promise<ManualUpdateCheckResult> {
+	if (!actions.check) {
+		return 'error'
+	}
+
+	return actions.check()
 }

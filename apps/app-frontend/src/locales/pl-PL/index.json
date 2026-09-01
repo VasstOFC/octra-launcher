@@ -1625,6 +1625,24 @@
   "app.settings.app-version": {
     "message": "Octra App {version}"
   },
+  "app.settings.check-for-updates": {
+    "message": "Sprawdź aktualizacje"
+  },
+  "app.settings.checking-for-updates": {
+    "message": "Sprawdzanie aktualizacji…"
+  },
+  "app.settings.updates-disabled": {
+    "message": "Automatyczne aktualizacje działają tylko w wersji release."
+  },
+  "app.settings.update-already-latest": {
+    "message": "Masz najnowszą wersję."
+  },
+  "app.settings.update-available": {
+    "message": "Dostępna wersja {version}."
+  },
+  "app.settings.update-check-failed": {
+    "message": "Nie udało się sprawdzić aktualizacji. Spróbuj ponownie później."
+  },
   "app.settings.default-instance-options.environment-variables.description": {
     "message": "Zmienne środowiskowe ustawione podczas uruchamiania instancji."
   },

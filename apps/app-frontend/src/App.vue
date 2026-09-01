@@ -175,6 +175,7 @@ import { setupLoadingStateProvider } from '@/providers/setup/loading-state'
 import { setupAppUserPreferencesProvider } from '@/providers/setup/user-preferences.ts'
 import { appMessages } from '@/utils/app-messages'
 
+import { useMinecraftAccountAvatar } from '@/composables/use-minecraft-account-avatar.ts'
 import { generateSkinPreviews } from './helpers/rendering/batch-skin-renderer'
 import { get_available_capes, get_available_skins } from './helpers/skins'
 import { AppNotificationManager } from './providers/app-notifications'
@@ -1370,7 +1371,10 @@ onMounted(() => {
 const accounts = ref(null)
 provide('accountsCard', accounts)
 
-const STEVE_HEAD = 'https://launcher-files.modrinth.com/assets/steve_head.png'
+const {
+	refreshEquippedSkinAvatar,
+	getAccountAvatarUrl,
+} = useMinecraftAccountAvatar()
 const minecraftAccounts = ref([])
 const minecraftDefaultUser = ref()
 
@@ -1382,6 +1386,7 @@ async function refreshMinecraftAccounts() {
 		minecraftAccounts.value.sort((a, b) =>
 			(a.profile?.name ?? '').localeCompare(b.profile?.name ?? ''),
 		)
+		await refreshEquippedSkinAvatar()
 	} catch {
 		minecraftAccounts.value = []
 	}
@@ -1391,17 +1396,19 @@ const selectedMinecraftAccount = computed(() =>
 	minecraftAccounts.value.find((account) => account.profile?.id === minecraftDefaultUser.value),
 )
 
-const minecraftAccountAvatar = computed(() => {
-	const id = selectedMinecraftAccount.value?.profile?.id
-	return id ? `https://mc-heads.net/avatar/${id}/128` : STEVE_HEAD
-})
+const minecraftAccountAvatar = computed(() =>
+	getAccountAvatarUrl(selectedMinecraftAccount.value?.profile?.id, true),
+)
 
 const minecraftAccountSwitcherAccounts = computed(() =>
 	minecraftAccounts.value.map((account) => ({
 		...account,
 		optionId: `mc-account-${account.profile.id}`,
 		offline: isOfflineAccount(account),
-		avatarUrl: `https://mc-heads.net/avatar/${account.profile.id}/128`,
+		avatarUrl: getAccountAvatarUrl(
+			account.profile.id,
+			account.profile.id === minecraftDefaultUser.value,
+		),
 	})),
 )
 
@@ -1841,49 +1848,64 @@ async function checkUpdates() {
 		return
 	}
 
-	async function performCheck() {
-		const update = await invoke('plugin:updater|check')
-		if (!update) {
-			console.log('No update available')
-			return
-		}
-
-		const isExistingUpdate = update.version === availableUpdate.value?.version
-
-		if (isExistingUpdate) {
-			console.log('Update is already known')
-			scheduleDelayedUpdatePopup()
-			return
-		}
-
-		appUpdateDownload.progress.value = 0
-		finishedDownloading.value = false
-		downloading.value = false
-		updateSize.value = null
-		availableUpdate.value = update
-
-		console.log(`Update ${update.version} is available.`)
-
-		metered.value = await isNetworkMetered()
-		if (!metered.value) {
-			console.log('Starting download of update')
-			downloadUpdate(update)
-		} else {
-			console.log(`Metered connection detected, not auto-downloading update.`)
-			markAppUpdateActionable(update.version)
-			scheduleDelayedUpdatePopup()
-		}
-
-		getUpdateSize(update.rid).then((size) => (updateSize.value = size))
-	}
-
-	await performCheck()
+	await performUpdateCheck()
 	setTimeout(
 		() => {
 			checkUpdates()
 		},
 		5 /* min */ * 60 /* sec */ * 1000 /* ms */,
 	)
+}
+
+async function performUpdateCheck(): Promise<boolean> {
+	const update = await invoke('plugin:updater|check')
+	if (!update) {
+		console.log('No update available')
+		return false
+	}
+
+	const isExistingUpdate = update.version === availableUpdate.value?.version
+
+	if (isExistingUpdate) {
+		console.log('Update is already known')
+		scheduleDelayedUpdatePopup()
+		return true
+	}
+
+	appUpdateDownload.progress.value = 0
+	finishedDownloading.value = false
+	downloading.value = false
+	updateSize.value = null
+	availableUpdate.value = update
+
+	console.log(`Update ${update.version} is available.`)
+
+	metered.value = await isNetworkMetered()
+	if (!metered.value) {
+		console.log('Starting download of update')
+		downloadUpdate(update)
+	} else {
+		console.log(`Metered connection detected, not auto-downloading update.`)
+		markAppUpdateActionable(update.version)
+		scheduleDelayedUpdatePopup()
+	}
+
+	getUpdateSize(update.rid).then((size) => (updateSize.value = size))
+	return true
+}
+
+async function manualCheckForUpdates() {
+	if (!(await areUpdatesEnabled())) {
+		return 'disabled'
+	}
+
+	try {
+		const hasUpdate = await performUpdateCheck()
+		return hasUpdate ? 'available' : 'latest'
+	} catch (error) {
+		console.error('Failed to check for updates manually:', error)
+		return 'error'
+	}
 }
 
 async function checkLinuxUpdates() {
@@ -1978,7 +2000,8 @@ async function installUpdate() {
 setAppUpdateActions({
 	download: downloadAvailableUpdate,
 	install: installUpdate,
-	changelog: () => openUrl('https://modrinth.com/news/changelog?filter=app'),
+	changelog: () => openUrl('https://github.com/VasstOFC/octra-launcher/releases'),
+	check: manualCheckForUpdates,
 })
 
 async function openModrinthProjectLinkInApp(parsed) {

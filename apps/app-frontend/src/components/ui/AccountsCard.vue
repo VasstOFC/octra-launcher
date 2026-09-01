@@ -58,7 +58,7 @@
 							class="w-5 h-5 text-brand shrink-0"
 						/>
 						<RadioButtonIcon v-else class="w-5 h-5 text-secondary shrink-0" />
-						<Avatar :src="getAccountAvatarUrl(account)" size="24px" />
+						<Avatar :src="getAccountAvatarUrlForList(account)" size="24px" />
 						<p
 							class="m-0 truncate min-w-0"
 							:class="
@@ -144,9 +144,8 @@ import {
 	set_default_user,
 	users,
 } from '@/helpers/auth'
-import { getPlayerHeadUrl } from '@/helpers/rendering/batch-skin-renderer.ts'
 import type { Skin } from '@/helpers/skins'
-import { get_available_skins } from '@/helpers/skins'
+import { useMinecraftAccountAvatar } from '@/composables/use-minecraft-account-avatar.ts'
 
 const { formatMessage } = useVIntl()
 const { handleError } = injectNotificationManager()
@@ -167,45 +166,21 @@ type MinecraftCredential = {
 const accounts: Ref<MinecraftCredential[]> = ref([])
 const loginDisabled = ref(false)
 const defaultUser = ref<string | undefined>()
-const equippedSkin = ref<Skin | null>(null)
-const headUrlCache = ref(new Map<string, string>())
 const addOfflineModal = ref<InstanceType<typeof AddOfflineAccountModal>>()
+
+const { refreshEquippedSkinAvatar, setEquippedSkinAvatar, getAccountAvatarUrl } =
+	useMinecraftAccountAvatar()
 
 async function refreshValues() {
 	defaultUser.value = await get_default_user().catch(handleError)
 	const userList = await users().catch(handleError)
 	accounts.value = Array.isArray(userList) ? [...userList] : []
 	accounts.value.sort((a, b) => (a.profile?.name ?? '').localeCompare(b.profile?.name ?? ''))
-
-	try {
-		const skins = await get_available_skins()
-		equippedSkin.value = skins.find((skin) => skin.is_equipped) ?? null
-
-		if (equippedSkin.value) {
-			try {
-				const headUrl = await getPlayerHeadUrl(equippedSkin.value)
-				headUrlCache.value = new Map(headUrlCache.value).set(
-					equippedSkin.value.texture_key,
-					headUrl,
-				)
-			} catch (error) {
-				console.warn('Failed to get head render for equipped skin:', error)
-			}
-		}
-	} catch {
-		equippedSkin.value = null
-	}
+	await refreshEquippedSkinAvatar()
 }
 
 async function setEquippedSkin(skin: Skin) {
-	equippedSkin.value = skin
-
-	try {
-		const headUrl = await getPlayerHeadUrl(skin)
-		headUrlCache.value = new Map(headUrlCache.value).set(skin.texture_key, headUrl)
-	} catch (error) {
-		console.warn('Failed to get head render for equipped skin:', error)
-	}
+	await setEquippedSkinAvatar(skin)
 }
 
 function setLoginDisabled(value: boolean) {
@@ -231,31 +206,15 @@ const selectedAccount = computed(() =>
 	accounts.value.find((account) => account.profile.id === defaultUser.value),
 )
 
-const avatarUrl = computed(() => {
-	if (equippedSkin.value?.texture_key) {
-		const cachedUrl = headUrlCache.value.get(equippedSkin.value.texture_key)
-		if (cachedUrl) {
-			return cachedUrl
-		}
-		return `https://mc-heads.net/avatar/${equippedSkin.value.texture_key}/128`
-	}
-	if (selectedAccount.value?.profile?.id) {
-		return `https://mc-heads.net/avatar/${selectedAccount.value.profile.id}/128`
-	}
-	return 'https://launcher-files.modrinth.com/assets/steve_head.png'
-})
+const avatarUrl = computed(() =>
+	getAccountAvatarUrl(selectedAccount.value?.profile?.id, true),
+)
 
-function getAccountAvatarUrl(account: MinecraftCredential) {
-	if (
-		account.profile.id === selectedAccount.value?.profile?.id &&
-		equippedSkin.value?.texture_key
-	) {
-		const cachedUrl = headUrlCache.value.get(equippedSkin.value.texture_key)
-		if (cachedUrl) {
-			return cachedUrl
-		}
-	}
-	return `https://mc-heads.net/avatar/${account.profile.id}/128`
+function getAccountAvatarUrlForList(account: MinecraftCredential) {
+	return getAccountAvatarUrl(
+		account.profile.id,
+		account.profile.id === selectedAccount.value?.profile?.id,
+	)
 }
 
 async function setAccount(account: MinecraftCredential) {

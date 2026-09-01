@@ -9,10 +9,12 @@ import {
 	ToggleRightIcon,
 } from '@modrinth/assets'
 import {
+	Button,
 	commonMessages,
 	commonSettingsMessages,
 	defineMessage,
 	defineMessages,
+	injectNotificationManager,
 	ProgressBar,
 	TabbedModal,
 	UnsavedChangesPopup,
@@ -37,6 +39,11 @@ import {
 	type UnsavedChangesController,
 } from '@/providers/app-settings-modal'
 import { injectAppUpdateDownloadProgress } from '@/providers/download-progress.ts'
+import {
+	appUpdateState,
+	checkForAppUpdatesManually,
+	type ManualUpdateCheckResult,
+} from '@/providers/app-update.ts'
 
 // TODO: Apply COMPONENT_STRUCTURE.md here and extract out common setting option components
 const appSettings = useAppSettings()
@@ -209,11 +216,14 @@ function showSyncedOptions(): void {
 defineExpose({ show, showFeatureFlags, showSyncedOptions })
 
 const { progress, version: downloadingVersion } = injectAppUpdateDownloadProgress()
+const { handleError, addNotification } = injectNotificationManager()
+const { availableUpdate } = appUpdateState
 
 const version = await getVersion()
 const osPlatform = getOsPlatform()
 const osVersion = getOsVersion()
 const settings = ref(await get())
+const checkingForUpdates = ref(false)
 
 watch(
 	settings,
@@ -264,6 +274,30 @@ const messages = defineMessages({
 		id: 'app.settings.developer-mode-button.label',
 		defaultMessage: 'Toggle developer mode',
 	},
+	checkForUpdates: {
+		id: 'app.settings.check-for-updates',
+		defaultMessage: 'Check for updates',
+	},
+	checkingForUpdates: {
+		id: 'app.settings.checking-for-updates',
+		defaultMessage: 'Checking for updates…',
+	},
+	updatesDisabled: {
+		id: 'app.settings.updates-disabled',
+		defaultMessage: 'Automatic updates are only available in release builds.',
+	},
+	updateAlreadyLatest: {
+		id: 'app.settings.update-already-latest',
+		defaultMessage: 'You are on the latest version.',
+	},
+	updateAvailable: {
+		id: 'app.settings.update-available',
+		defaultMessage: 'Version {version} is available.',
+	},
+	updateCheckFailed: {
+		id: 'app.settings.update-check-failed',
+		defaultMessage: 'Could not check for updates. Try again later.',
+	},
 })
 
 function windowsBuildNumber(raw: string): number {
@@ -282,6 +316,55 @@ const osLabel = computed(() => {
 	}
 	return osPlatform
 })
+
+async function handleCheckForUpdates() {
+	if (checkingForUpdates.value) {
+		return
+	}
+
+	checkingForUpdates.value = true
+	let result: ManualUpdateCheckResult = 'error'
+
+	try {
+		result = await checkForAppUpdatesManually()
+	} catch (error) {
+		handleError(error)
+	} finally {
+		checkingForUpdates.value = false
+	}
+
+	if (result === 'disabled') {
+		addNotification({
+			type: 'info',
+			title: formatMessage(messages.checkForUpdates),
+			text: formatMessage(messages.updatesDisabled),
+		})
+		return
+	}
+
+	if (result === 'latest') {
+		addNotification({
+			type: 'success',
+			title: formatMessage(messages.checkForUpdates),
+			text: formatMessage(messages.updateAlreadyLatest),
+		})
+		return
+	}
+
+	if (result === 'error') {
+		handleError(formatMessage(messages.updateCheckFailed))
+		return
+	}
+
+	const updateVersion = availableUpdate.value?.version
+	if (updateVersion) {
+		addNotification({
+			type: 'info',
+			title: formatMessage(messages.checkForUpdates),
+			text: formatMessage(messages.updateAvailable, { version: updateVersion }),
+		})
+	}
+}
 </script>
 <template>
 	<TabbedModal
@@ -321,7 +404,7 @@ const osLabel = computed(() => {
 				<p v-if="appSettings.devMode" class="text-brand font-semibold m-0 mb-2">
 					{{ formatMessage(developerModeEnabled) }}
 				</p>
-				<div class="flex items-center gap-3">
+				<div class="flex flex-wrap items-center gap-3">
 					<button
 						:aria-label="formatMessage(messages.developerModeButtonLabel)"
 						class="p-0 m-0 bg-transparent border-none cursor-pointer button-animation"
@@ -333,7 +416,7 @@ const osLabel = computed(() => {
 					>
 						<OctraMark aria-hidden="true" class="h-6 w-6" />
 					</button>
-					<div class="max-w-[200px]">
+					<div class="min-w-0">
 						<p class="m-0">
 							{{ formatMessage(messages.appVersion, { version }) }}
 						</p>
@@ -341,6 +424,19 @@ const osLabel = computed(() => {
 							{{ osLabel }}
 						</p>
 					</div>
+					<Button
+						size="sm"
+						type="outlined"
+						:disabled="checkingForUpdates"
+						@click="handleCheckForUpdates"
+					>
+						<RefreshCwIcon :class="{ 'animate-spin': checkingForUpdates }" />
+						{{
+							checkingForUpdates
+								? formatMessage(messages.checkingForUpdates)
+								: formatMessage(messages.checkForUpdates)
+						}}
+					</Button>
 				</div>
 			</div>
 		</template>
