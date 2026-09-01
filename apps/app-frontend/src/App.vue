@@ -1857,7 +1857,7 @@ async function checkUpdates() {
 	)
 }
 
-async function performUpdateCheck(): Promise<boolean> {
+async function performUpdateCheck() {
 	const update = await invoke('plugin:updater|check')
 	if (!update) {
 		console.log('No update available')
