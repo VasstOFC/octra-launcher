@@ -929,6 +929,8 @@ impl Process {
 
         state.process_manager.remove(uuid);
         clear_persisted_process(&state, persisted_process).await;
+        let instance_full_path = state.directories.instances_dir().join(&instance_path);
+        crate::octra_skins::cleanup_ephemeral_csl(&instance_full_path).await;
         emit_process(
             &instance_id,
             uuid,

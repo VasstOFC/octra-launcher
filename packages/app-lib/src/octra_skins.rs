@@ -2,6 +2,10 @@
 //!
 //! Other players on 1.21+ see skins via CustomSkinLoader + `http://92.5.186.6`.
 //! SkinsRestorer uses the same legacy URL: `/skins/MinecraftSkins/{nick}.png`.
+//!
+//! CustomSkinLoader is injected at launch (not copied into instance modpacks):
+//! - Fabric / Quilt: `-Dfabric.addMods=<launcher cache>/CustomSkinLoader.jar`
+//! - Forge / NeoForge: ephemeral hardlink in `mods/.octra-customskinloader.jar` (removed on exit)
 
 use std::collections::HashMap;
 use std::net::SocketAddr;
@@ -38,6 +42,8 @@ const AUTHLIB_URL: &str =
 const AUTHLIB_FALLBACK: &str = "https://github.com/yushijinhun/authlib-injector/releases/download/v1.2.8/authlib-injector-1.2.8.jar";
 
 const CSL_SLUG: &str = "customskinloader";
+const OCTRA_CSL_CACHE_DIR: &str = "octra-csl";
+const OCTRA_CSL_EPHEMERAL_MOD: &str = ".octra-customskinloader.jar";
 
 static HUB: OnceLock<SkinHub> = OnceLock::new();
 
@@ -798,10 +804,26 @@ pub async fn prepare_launch(
             | ModLoader::Forge
             | ModLoader::NeoForge
     ) {
-        if let Err(e) =
-            ensure_custom_skin_loader(instance_path, game_version, loader).await
-        {
-            tracing::warn!("Octra skins: CustomSkinLoader: {e}");
+        remove_legacy_csl_from_mods(instance_path).await;
+        match resolve_custom_skin_loader_jar(game_version, loader).await {
+            Ok(jar) => {
+                if let Err(e) = inject_custom_skin_loader(
+                    instance_path,
+                    &jar,
+                    loader,
+                    java_args,
+                )
+                .await
+                {
+                    tracing::warn!("Octra skins: CustomSkinLoader inject: {e}");
+                } else {
+                    tracing::info!(
+                        "Octra skins: injected CustomSkinLoader for {game_version} ({})",
+                        loader.as_str()
+                    );
+                }
+            }
+            Err(e) => tracing::warn!("Octra skins: CustomSkinLoader: {e}"),
         }
         write_csl_config(instance_path)?;
         if let Err(e) = sync_username_skin_files(instance_path).await {
@@ -809,11 +831,74 @@ pub async fn prepare_launch(
         }
     } else {
         tracing::warn!(
-            "Octra skins: instancja vanilla bez Fabric — CustomSkinLoader nie zostanie zainstalowany; znajomi nie zobaczą skina w multiplayerze"
+            "Octra skins: instancja vanilla bez Fabric — CustomSkinLoader nie zostanie wstrzyknięty; znajomi nie zobaczą skina w multiplayerze"
         );
     }
 
     Ok(())
+}
+
+/// Removes ephemeral Forge/NeoForge CSL hardlink after Minecraft exits.
+pub async fn cleanup_ephemeral_csl(instance_path: &Path) {
+    let ephemeral = ephemeral_csl_mod_path(instance_path);
+    if ephemeral.exists() {
+        let _ = tokio::fs::remove_file(ephemeral).await;
+    }
+}
+
+fn ephemeral_csl_mod_path(instance_path: &Path) -> PathBuf {
+    instance_path.join("mods").join(OCTRA_CSL_EPHEMERAL_MOD)
+}
+
+async fn remove_legacy_csl_from_mods(instance_path: &Path) {
+    let mods = instance_path.join("mods");
+    let Ok(mut dir) = tokio::fs::read_dir(&mods).await else {
+        return;
+    };
+    while let Ok(Some(entry)) = dir.next_entry().await {
+        let name = entry.file_name().to_string_lossy().to_ascii_lowercase();
+        if name.contains("customskinloader")
+            && name != OCTRA_CSL_EPHEMERAL_MOD.to_ascii_lowercase()
+        {
+            let _ = tokio::fs::remove_file(entry.path()).await;
+        }
+    }
+}
+
+async fn inject_custom_skin_loader(
+    instance_path: &Path,
+    jar: &Path,
+    loader: ModLoader,
+    java_args: &mut Vec<String>,
+) -> crate::Result<()> {
+    let jar_path = dunce::canonicalize(jar).unwrap_or_else(|_| jar.to_path_buf());
+
+    match loader {
+        ModLoader::Fabric | ModLoader::Quilt => {
+            java_args.push(format!(
+                "-Dfabric.addMods={}",
+                jar_path.display()
+            ));
+            Ok(())
+        }
+        ModLoader::Forge | ModLoader::NeoForge => {
+            cleanup_ephemeral_csl(instance_path).await;
+            let mods = instance_path.join("mods");
+            io::create_dir_all(&mods).await?;
+            let dest = ephemeral_csl_mod_path(instance_path);
+            if dest.exists() {
+                let _ = tokio::fs::remove_file(&dest).await;
+            }
+            match std::fs::hard_link(&jar_path, &dest) {
+                Ok(()) => Ok(()),
+                Err(_) => {
+                    tokio::fs::copy(&jar_path, &dest).await?;
+                    Ok(())
+                }
+            }
+        }
+        _ => Ok(()),
+    }
 }
 
 async fn write_local_csl_skin(
@@ -913,24 +998,10 @@ struct ModrinthFile {
     is_primary: bool,
 }
 
-async fn ensure_custom_skin_loader(
-    instance_path: &Path,
+async fn resolve_custom_skin_loader_jar(
     game_version: &str,
     loader: ModLoader,
-) -> crate::Result<()> {
-    let mods = instance_path.join("mods");
-    io::create_dir_all(&mods).await?;
-    let already = tokio::fs::read_dir(&mods).await;
-    if let Ok(mut dir) = already {
-        while let Ok(Some(entry)) = dir.next_entry().await {
-            let name = entry.file_name();
-            let name = name.to_string_lossy().to_ascii_lowercase();
-            if name.contains("customskinloader") {
-                return Ok(());
-            }
-        }
-    }
-
+) -> crate::Result<PathBuf> {
     let loader_param = match loader {
         ModLoader::Quilt => "quilt",
         ModLoader::Forge => "forge",
@@ -981,11 +1052,18 @@ async fn ensure_custom_skin_loader(
         })?;
 
     let state = State::get().await?;
-    let cache = state.directories.caches_dir().join("octra-csl");
+    let cache = state
+        .directories
+        .caches_dir()
+        .join(OCTRA_CSL_CACHE_DIR)
+        .join(loader_param)
+        .join(game_version);
     io::create_dir_all(&cache).await?;
     let cached = cache.join(&file.filename);
     if !cached.exists() {
-        tracing::info!("Octra skins: downloading CustomSkinLoader");
+        tracing::info!(
+            "Octra skins: downloading CustomSkinLoader for {game_version} ({loader_param})"
+        );
         let bytes = INSECURE_REQWEST_CLIENT
             .get(&file.url)
             .timeout(Duration::from_secs(60))
@@ -1005,9 +1083,5 @@ async fn ensure_custom_skin_loader(
             })?;
         io::write(&cached, &bytes).await?;
     }
-    let dest = mods.join(&file.filename);
-    if !dest.exists() {
-        tokio::fs::copy(&cached, &dest).await?;
-    }
-    Ok(())
+    Ok(cached)
 }
