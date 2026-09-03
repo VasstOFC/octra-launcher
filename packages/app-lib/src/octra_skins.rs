@@ -1,6 +1,6 @@
 //! Offline accounts, CustomSkinLoader, authlib-injector, and the Octra skin VPS.
 //!
-//! Other players on 1.21+ see skins via CustomSkinLoader + `http://92.5.186.6`.
+//! Other players on 1.21+ see skins via CustomSkinLoader + [`crate::nervia::skins_url`].
 //! SkinsRestorer uses the same legacy URL: `/skins/MinecraftSkins/{nick}.png`.
 //!
 //! CustomSkinLoader is injected at launch (not copied into instance modpacks):
@@ -49,10 +49,10 @@ static HUB: OnceLock<SkinHub> = OnceLock::new();
 
 #[derive(Clone)]
 struct StoredPlayerSkin {
-	uuid: Uuid,
-	name: String,
-	model: String,
-	png: Vec<u8>,
+    uuid: Uuid,
+    name: String,
+    model: String,
+    png: Vec<u8>,
 }
 
 struct SkinHub {
@@ -174,6 +174,13 @@ pub async fn save_equipped(
         serde_json::to_vec_pretty(&record)?,
     )
     .await?;
+    let owned_png;
+    let png = if png.is_empty() {
+        owned_png = load_equipped_png(uuid).await.unwrap_or_default();
+        owned_png.as_slice()
+    } else {
+        png
+    };
     if !png.is_empty() {
         io::write(dir.join(format!("{uuid}.png")), png).await?;
     }
@@ -186,7 +193,7 @@ pub async fn save_equipped(
     if !published {
         tracing::warn!(
             "nie udało się opublikować skina dla {name} na serwerze Octra ({})",
-            nervia::SKINS_URL
+            nervia::skins_url()
         );
     } else if !verify_registry_skin(&name).await {
         tracing::warn!(
@@ -233,10 +240,7 @@ fn register_player(
 }
 
 fn registry_legacy_url(name: &str) -> String {
-    format!(
-        "{}/skins/MinecraftSkins/{name}.png",
-        nervia::SKINS_URL.trim_end_matches('/')
-    )
+    format!("{}/skins/MinecraftSkins/{name}.png", nervia::skins_url())
 }
 
 /// Public URL friends' CustomSkinLoader uses to fetch this player's skin.
@@ -269,8 +273,7 @@ pub async fn publish_to_registry(
     };
     let uuid = hyphenated_uuid(&credentials.offline_profile.id);
     let name = &credentials.offline_profile.name;
-    let url =
-        format!("{}/skins/{uuid}", nervia::SKINS_URL.trim_end_matches('/'));
+    let url = format!("{}/skins/{uuid}", nervia::skins_url());
     let bearer = crate::octra_accounts::bearer_token().await;
     let send = |method: reqwest::Method| {
         let mut request = INSECURE_REQWEST_CLIENT
@@ -325,7 +328,9 @@ pub async fn publish_to_registry(
             }
         }
         Err(error) => {
-            tracing::warn!("octra skin registry PUT for {name} failed: {error}");
+            tracing::warn!(
+                "octra skin registry PUT for {name} failed: {error}"
+            );
             match send(reqwest::Method::POST).await {
                 Ok(resp) if resp.status().is_success() => {
                     tracing::info!(
@@ -374,10 +379,14 @@ pub async fn sync_all_equipped_skins() {
     }
 }
 
-async fn load_equipped_png(uuid: Uuid) -> Option<Vec<u8>> {
+pub async fn load_equipped_png(uuid: Uuid) -> Option<Vec<u8>> {
     let state = State::get().await.ok()?;
     let path = skin_dir(&state.directories).join(format!("{uuid}.png"));
-    tokio::fs::read(path).await.ok()
+    let bytes = tokio::fs::read(path).await.ok()?;
+    if bytes.len() < 8 {
+        return None;
+    }
+    Some(bytes)
 }
 
 pub async fn ensure_runtime() -> crate::Result<()> {
@@ -480,7 +489,7 @@ async fn dispatch_ygg(
                 "skinDomains": [
                     "127.0.0.1",
                     "localhost",
-                    "92.5.186.6"
+                    nervia::skins_host()
                 ],
             }),
         );
@@ -649,10 +658,8 @@ async fn skin_png_for_name(name: &str) -> Option<Vec<u8>> {
     if let Some(skin) = find_player(name) {
         return Some(skin.png);
     }
-    let url = format!(
-        "{}/skins/MinecraftSkins/{name}.png",
-        nervia::SKINS_URL.trim_end_matches('/')
-    );
+    let url =
+        format!("{}/skins/MinecraftSkins/{name}.png", nervia::skins_url());
     let resp = INSECURE_REQWEST_CLIENT
         .get(&url)
         .timeout(Duration::from_secs(8))
@@ -879,14 +886,12 @@ async fn inject_custom_skin_loader(
     loader: ModLoader,
     java_args: &mut Vec<String>,
 ) -> crate::Result<()> {
-    let jar_path = dunce::canonicalize(jar).unwrap_or_else(|_| jar.to_path_buf());
+    let jar_path =
+        dunce::canonicalize(jar).unwrap_or_else(|_| jar.to_path_buf());
 
     match loader {
         ModLoader::Fabric | ModLoader::Quilt => {
-            java_args.push(format!(
-                "-Dfabric.addMods={}",
-                jar_path.display()
-            ));
+            java_args.push(format!("-Dfabric.addMods={}", jar_path.display()));
             Ok(())
         }
         ModLoader::Forge | ModLoader::NeoForge => {
@@ -926,7 +931,7 @@ async fn write_local_csl_skin(
 fn write_csl_config(instance_path: &Path) -> crate::Result<()> {
     let cfg_dir = instance_path.join("CustomSkinLoader");
     std::fs::create_dir_all(&cfg_dir)?;
-    let registry = nervia::SKINS_URL.trim_end_matches('/');
+    let registry = nervia::skins_url();
     let mut loadlist = vec![json!({
         "name": "OctraCloud",
         "type": "Legacy",
@@ -984,7 +989,8 @@ async fn sync_username_skin_files(instance_path: &Path) -> crate::Result<()> {
         if name.is_empty() {
             continue;
         }
-        let Some(png) = load_equipped_png(credentials.offline_profile.id).await else {
+        let Some(png) = load_equipped_png(credentials.offline_profile.id).await
+        else {
             continue;
         };
         io::write(dir.join(format!("{name}.png")), &png).await?;

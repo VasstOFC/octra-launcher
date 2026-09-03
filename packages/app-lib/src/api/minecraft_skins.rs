@@ -217,6 +217,14 @@ pub struct Cape {
     pub is_equipped: bool,
 }
 
+/// Equipped skin texture for any Minecraft profile, including offline accounts.
+#[derive(Clone, Deserialize, Serialize, Debug)]
+pub struct EquippedSkinTexture {
+    pub texture_key: String,
+    pub variant: MinecraftSkinVariant,
+    pub texture_blob: Bytes,
+}
+
 #[derive(Clone, Deserialize, Serialize, Debug)]
 pub struct Skin {
     /// A key used to recognize this skin texture.
@@ -527,10 +535,80 @@ pub async fn get_available_skins() -> crate::Result<Vec<Skin>> {
                 source: SkinSource::CustomExternal,
                 is_equipped: true,
             });
+        } else if selected_credentials.is_offline()
+            && let Some(png) = crate::octra_skins::load_equipped_png(
+                selected_credentials.offline_profile.id,
+            )
+            .await
+            && let Some(texture) = png_util::blob_to_data_url(&png)
+        {
+            available_skins.push(Skin {
+                texture_key: current_skin_texture_key,
+                name: None,
+                section: None,
+                variant: current_skin_variant,
+                cape_id: None,
+                texture,
+                source: SkinSource::Custom,
+                is_equipped: true,
+            });
         }
     }
 
     Ok(available_skins)
+}
+
+/// Loads the equipped skin PNG for any profile id.
+///
+/// Prefers the on-disk Octra equipped files (`{uuid}.png` + `{uuid}.json`),
+/// then the saved custom skin row that matches the equipped texture key.
+#[tracing::instrument]
+pub async fn get_profile_equipped_skin_texture(
+    profile_id: Uuid,
+) -> crate::Result<Option<EquippedSkinTexture>> {
+    let equipped = crate::octra_skins::load_equipped(profile_id).await;
+    if let Some(png) = crate::octra_skins::load_equipped_png(profile_id).await
+        && png_util::is_png(&png)
+    {
+        let (texture_key, variant) = match &equipped {
+            Some(record) => (record.texture_key.clone(), record.variant),
+            None => (
+                local_skin_texture_key(&png).to_string(),
+                MinecraftSkinVariant::Classic,
+            ),
+        };
+        return Ok(Some(EquippedSkinTexture {
+            texture_key,
+            variant,
+            texture_blob: Bytes::from(png),
+        }));
+    }
+
+    let Some(equipped) = equipped else {
+        return Ok(None);
+    };
+
+    let state = State::get().await?;
+    let Some(saved) = CustomMinecraftSkin::get_by_texture(
+        profile_id,
+        &equipped.texture_key,
+        &state.pool,
+    )
+    .await?
+    else {
+        return Ok(None);
+    };
+
+    let texture_blob = saved.texture_blob(&state.pool).await?;
+    if texture_blob.is_empty() || !png_util::is_png(&texture_blob) {
+        return Ok(None);
+    }
+
+    Ok(Some(EquippedSkinTexture {
+        texture_key: equipped.texture_key,
+        variant: equipped.variant,
+        texture_blob: Bytes::from(texture_blob),
+    }))
 }
 
 /// Adds or updates a skin in the app database and equips it for the current profile.
@@ -1287,13 +1365,12 @@ async fn execute_offline_skin_change(
             selected_credentials,
             skin,
         } => {
-            let png = png_util::url_to_data_stream(&skin.texture)
-                .await?
-                .try_fold(Vec::new(), |mut texture, chunk| async move {
-                    texture.extend_from_slice(&chunk);
-                    Ok(texture)
-                })
-                .await?;
+            let png = png_bytes_for_offline_skin(
+                selected_credentials,
+                &skin.texture_key,
+                &skin.texture,
+            )
+            .await;
             crate::octra_skins::save_equipped(
                 selected_credentials,
                 &skin.texture_key,
@@ -1306,6 +1383,45 @@ async fn execute_offline_skin_change(
             selected_credentials,
         } => crate::octra_skins::clear_equipped(selected_credentials).await,
     }
+}
+
+async fn png_bytes_for_offline_skin(
+    credentials: &Credentials,
+    texture_key: &str,
+    texture: &Url,
+) -> Vec<u8> {
+    if let Ok(stream) = png_util::url_to_data_stream(texture).await
+        && let Ok(png) = stream
+            .try_fold(Vec::new(), |mut texture, chunk| async move {
+                texture.extend_from_slice(&chunk);
+                Ok(texture)
+            })
+            .await
+        && !png.is_empty()
+        && png_util::is_png(&png)
+    {
+        return png;
+    }
+
+    let Ok(state) = State::get().await else {
+        return Vec::new();
+    };
+    let Ok(Some(saved)) = CustomMinecraftSkin::get_by_texture(
+        credentials.offline_profile.id,
+        texture_key,
+        &state.pool,
+    )
+    .await
+    else {
+        return Vec::new();
+    };
+    let Ok(blob) = saved.texture_blob(&state.pool).await else {
+        return Vec::new();
+    };
+    if blob.is_empty() || !png_util::is_png(&blob) {
+        return Vec::new();
+    }
+    blob
 }
 
 /// Reads and validates a skin texture file from the given path.

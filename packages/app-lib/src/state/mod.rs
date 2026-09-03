@@ -229,6 +229,7 @@ impl State {
                     &state.process_manager,
                 )
                 .await;
+            crate::octra_accounts::spawn_presence_heartbeat();
             let _ = FriendsSocket::socket_loop().await;
         });
 

@@ -28,6 +28,7 @@ import {
 	TrashIcon,
 	UserIcon,
 	UserPlusIcon,
+	UsersIcon,
 	XIcon,
 } from '@modrinth/assets'
 import {
@@ -71,6 +72,7 @@ import { computed, nextTick, onMounted, onUnmounted, provide, ref, watch } from 
 import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
 
 import AccountsCard from '@/components/ui/AccountsCard.vue'
+import OctraCommunityList from '@/components/ui/friends/OctraCommunityList.vue'
 import AddOfflineAccountModal from '@/components/ui/AddOfflineAccountModal.vue'
 import OctraAccountModal from '@/components/ui/OctraAccountModal.vue'
 import AppActionBar from '@/components/ui/AppActionBar.vue'
@@ -233,7 +235,14 @@ let credentialsRefreshId = 0
 const forceSidebar = computed(
 	() => route.path.startsWith('/browse') || route.path.startsWith('/project'),
 )
-const sidebarVisible = forceSidebar
+const SIDEBAR_STORAGE_KEY = 'octra.sidebarExpanded'
+const sidebarExpandedPreference = ref(localStorage.getItem(SIDEBAR_STORAGE_KEY) === '1')
+watch(sidebarExpandedPreference, (value) => {
+	localStorage.setItem(SIDEBAR_STORAGE_KEY, value ? '1' : '0')
+})
+const sidebarVisible = computed(() => forceSidebar.value || sidebarExpandedPreference.value)
+const canToggleSidebar = computed(() => !forceSidebar.value)
+const showFriendsFab = computed(() => canToggleSidebar.value && !sidebarVisible.value)
 const hostingRouteActive = computed(() => route.path.startsWith('/hosting'))
 const hostingUpdateRequired = computed(
 	() =>
@@ -587,6 +596,14 @@ const messages = defineMessages({
 		id: 'app.nav.expand-rail',
 		defaultMessage: 'Expand menu',
 	},
+	collapseSidebar: {
+		id: 'app.nav.collapse-sidebar',
+		defaultMessage: 'Hide sidebar',
+	},
+	expandSidebar: {
+		id: 'app.nav.expand-sidebar',
+		defaultMessage: 'Show friends',
+	},
 	servers: {
 		id: 'app.nav.servers',
 		defaultMessage: 'Servers',
@@ -637,7 +654,7 @@ const messages = defineMessages({
 	},
 	upgradeToModrinthPlus: {
 		id: 'app.nav.upgrade-to-modrinth-plus',
-		defaultMessage: 'Register Octra account',
+		defaultMessage: 'Connect Octra account',
 	},
 	octraLogout: {
 		id: 'octra-account.logout',
@@ -1423,7 +1440,7 @@ async function refreshMinecraftAccounts() {
 		minecraftAccounts.value.sort((a, b) =>
 			(a.profile?.name ?? '').localeCompare(b.profile?.name ?? ''),
 		)
-		await refreshEquippedSkinAvatar()
+		await refreshEquippedSkinAvatar(minecraftAccounts.value)
 	} catch {
 		minecraftAccounts.value = []
 	}
@@ -1434,7 +1451,11 @@ const selectedMinecraftAccount = computed(() =>
 )
 
 const minecraftAccountAvatar = computed(() =>
-	getAccountAvatarUrl(selectedMinecraftAccount.value?.profile?.id, true),
+	getAccountAvatarUrl(
+		selectedMinecraftAccount.value?.profile?.id,
+		true,
+		selectedMinecraftAccount.value ? isOfflineAccount(selectedMinecraftAccount.value) : false,
+	),
 )
 
 const minecraftAccountSwitcherAccounts = computed(() =>
@@ -1445,6 +1466,7 @@ const minecraftAccountSwitcherAccounts = computed(() =>
 		avatarUrl: getAccountAvatarUrl(
 			account.profile.id,
 			account.profile.id === minecraftDefaultUser.value,
+			isOfflineAccount(account),
 		),
 	})),
 )
@@ -2417,7 +2439,10 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 			'disable-advanced-rendering': !appTheme.advancedRendering,
 		}"
 	>
-		<div class="app-viewport flex-grow router-view">
+		<div
+			class="app-viewport flex-grow router-view"
+			:class="{ 'sidebar-open': sidebarVisible }"
+		>
 			<SurveyPopup />
 			<div
 				class="loading-indicator-container h-8 fixed z-50 pointer-events-none"
@@ -2472,9 +2497,10 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 				</template>
 			</RouterView>
 		</div>
-		<div
-			class="app-sidebar mt-px shrink-0 flex flex-col border-0 border-l-[1px] border-[--brand-gradient-border] border-solid"
-			:class="{ 'has-plus': hasPlus }"
+		<aside
+			class="app-sidebar mt-px flex flex-col border-0 border-l-[1px] border-solid border-surface-5"
+			:class="{ 'has-plus': hasPlus, open: sidebarVisible }"
+			:aria-hidden="sidebarVisible ? undefined : 'true'"
 		>
 			<div
 				v-overlay-scrollbars="sidebarOverlayScrollbarsOptions"
@@ -2488,7 +2514,28 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 					</Suspense>
 				</div>
 				<div id="sidebar-teleport-target" class="sidebar-teleport-content"></div>
+				<div class="px-3 py-3">
+					<OctraCommunityList
+						:session="octraSession"
+						:loading-session="octraSessionLoading"
+						@sign-in="openOctraAccount('login')"
+						@register="openOctraAccount('register')"
+					/>
+				</div>
 			</div>
+			<button
+				v-if="canToggleSidebar"
+				type="button"
+				class="nav-rail-collapse m-2 flex items-center border-none bg-transparent text-secondary cursor-pointer hover:bg-button-bg hover:text-contrast h-11 w-[calc(100%-1rem)] gap-3 rounded-xl px-3"
+				:aria-label="formatMessage(messages.collapseSidebar)"
+				:title="formatMessage(messages.collapseSidebar)"
+				@click="sidebarExpandedPreference = false"
+			>
+				<ChevronRightIcon class="size-5 shrink-0" />
+				<span class="truncate text-[13px] font-medium">
+					{{ formatMessage(messages.collapseSidebar) }}
+				</span>
+			</button>
 			<template v-if="false">
 				<a
 					href="https://modrinth.plus?app"
@@ -2500,8 +2547,20 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 				</a>
 				<PromotionWrapper />
 			</template>
-		</div>
+		</aside>
 	</div>
+	<Transition name="friends-fab">
+		<button
+			v-if="stateInitialized && showFriendsFab"
+			type="button"
+			class="friends-fab fixed z-40 flex size-12 items-center justify-center rounded-full border-none bg-button-bg text-secondary shadow-raised cursor-pointer hover:bg-button-bg hover:text-contrast hover:brightness-[--hover-brightness]"
+			:aria-label="formatMessage(messages.expandSidebar)"
+			:title="formatMessage(messages.expandSidebar)"
+			@click="sidebarExpandedPreference = true"
+		>
+			<UsersIcon class="size-5" />
+		</button>
+	</Transition>
 	<I18nDebugPanel />
 	<NotificationPanel :has-sidebar="sidebarVisible" />
 	<PopupNotificationPanel :has-sidebar="sidebarVisible" />
@@ -2568,11 +2627,15 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 .app-contents {
 	--top-bar-height: 3rem;
 	--left-bar-width: 4rem;
-	--right-bar-width: 300px;
+	--right-bar-width: 0px;
 
 	&.rail-expanded {
 		--left-bar-width: 15.5rem;
 	}
+}
+
+.app-contents.sidebar-enabled {
+	--right-bar-width: 300px;
 }
 
 .app-grid-layout {
@@ -2618,13 +2681,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	height: calc(100vh - var(--top-bar-height));
 	background-color: var(--color-bg);
 	border-top-left-radius: var(--radius-xl);
-
-	display: grid;
-	grid-template-columns: 1fr 0px;
-
-	&.sidebar-enabled {
-		grid-template-columns: 1fr 300px;
-	}
+	overflow: hidden;
 }
 
 .loading-indicator-container {
@@ -2632,19 +2689,45 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	overflow: hidden;
 }
 
-.app-sidebar {
-	overflow: visible;
-	width: 300px;
-	position: relative;
-	height: calc(100vh - var(--top-bar-height));
-	background: var(--brand-gradient-bg);
+.app-viewport {
+	flex-grow: 1;
+	height: 100%;
+	overflow: auto;
+	overflow-x: hidden;
+	scrollbar-gutter: stable;
+	transition: margin-right 0.28s cubic-bezier(0.32, 0.72, 0, 1);
 
-	--color-button-bg: var(--brand-gradient-button);
-	--surface-4: var(--brand-gradient-button);
-	--color-button-bg-hover: var(--brand-gradient-border);
-	--surface-5: var(--brand-gradient-border);
-	--color-divider: var(--brand-gradient-border);
-	--color-divider-dark: var(--brand-gradient-border);
+	&.sidebar-open {
+		margin-right: 300px;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
+	}
+}
+
+.app-sidebar {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 5;
+	overflow: hidden;
+	width: 300px;
+	height: 100%;
+	background: var(--color-raised-bg);
+	transform: translateX(100%);
+	pointer-events: none;
+	transition: transform 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+
+	&.open {
+		transform: translateX(0);
+		pointer-events: auto;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
+	}
 }
 
 .app-sidebar::after {
@@ -2660,6 +2743,47 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 
 .app-sidebar.has-plus::after {
 	display: none;
+}
+
+.friends-fab {
+	right: 1.25rem;
+	bottom: 1.25rem;
+}
+
+.friends-fab-enter-active,
+.friends-fab-leave-active {
+	transition:
+		opacity 0.2s ease,
+		transform 0.2s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.friends-fab-enter-from,
+.friends-fab-leave-to {
+	opacity: 0;
+	transform: scale(0.82);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.friends-fab {
+		transition:
+			transform 0.15s ease,
+			filter 0.15s ease;
+	}
+
+	.friends-fab:hover {
+		transform: scale(1.05);
+	}
+
+	.friends-fab:active {
+		transform: scale(0.96);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.friends-fab-enter-active,
+	.friends-fab-leave-active {
+		transition: none;
+	}
 }
 
 .disable-advanced-rendering {
@@ -2687,14 +2811,6 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	width: 2rem;
 	position: absolute;
 	pointer-events: none;
-}
-
-.app-viewport {
-	flex-grow: 1;
-	height: 100%;
-	overflow: auto;
-	overflow-x: hidden;
-	scrollbar-gutter: stable;
 }
 
 .app-contents::before {

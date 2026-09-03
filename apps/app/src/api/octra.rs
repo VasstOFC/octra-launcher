@@ -1,6 +1,6 @@
 use crate::api::Result;
 use serde::{Deserialize, Serialize};
-use theseus::octra_accounts::{self, OctraAccountSession};
+use theseus::octra_accounts::{self, OctraAccountSession, OctraCommunitySnapshot};
 use theseus::octra_sync::{self, OctraServerEntry};
 
 pub fn init<R: tauri::Runtime>() -> tauri::plugin::TauriPlugin<R> {
@@ -11,6 +11,7 @@ pub fn init<R: tauri::Runtime>() -> tauri::plugin::TauriPlugin<R> {
 			octra_account_register,
 			octra_account_login,
 			octra_account_logout,
+			octra_community,
 		])
 		.build()
 }
@@ -38,12 +39,8 @@ pub async fn octra_account_session() -> Result<Option<OctraAccountSession>> {
 }
 
 #[tauri::command]
-pub async fn octra_account_register(
-	username: &str,
-	password: &str,
-	minecraft_nick: &str,
-) -> Result<OctraAccountSession> {
-	Ok(octra_accounts::register(username, password, minecraft_nick).await?)
+pub async fn octra_account_register(password: &str) -> Result<OctraAccountSession> {
+	Ok(octra_accounts::register(password).await?)
 }
 
 #[tauri::command]
@@ -58,4 +55,9 @@ pub async fn octra_account_login(
 pub async fn octra_account_logout() -> Result<()> {
 	octra_accounts::logout().await?;
 	Ok(())
+}
+
+#[tauri::command]
+pub async fn octra_community() -> Result<OctraCommunitySnapshot> {
+	Ok(octra_accounts::community().await?)
 }

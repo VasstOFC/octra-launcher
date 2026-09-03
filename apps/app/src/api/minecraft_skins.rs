@@ -2,7 +2,8 @@ use crate::api::Result;
 
 use std::path::Path;
 use theseus::minecraft_skins::{
-    self, Bytes, Cape, MinecraftSkinVariant, Skin, UrlOrBlob,
+    self, Bytes, Cape, EquippedSkinTexture, MinecraftSkinVariant, Skin,
+    UrlOrBlob,
 };
 
 pub fn init<R: tauri::Runtime>() -> tauri::plugin::TauriPlugin<R> {
@@ -10,6 +11,7 @@ pub fn init<R: tauri::Runtime>() -> tauri::plugin::TauriPlugin<R> {
         .invoke_handler(tauri::generate_handler![
             get_available_capes,
             get_available_skins,
+            get_profile_equipped_skin_texture,
             add_and_equip_custom_skin,
             equip_skin,
             remove_custom_skin,
@@ -38,6 +40,16 @@ pub async fn get_available_capes() -> Result<Vec<Cape>> {
 #[tauri::command]
 pub async fn get_available_skins() -> Result<Vec<Skin>> {
     Ok(minecraft_skins::get_available_skins().await?)
+}
+
+/// `invoke('plugin:minecraft-skins|get_profile_equipped_skin_texture', profile_id)`
+///
+/// See also: [minecraft_skins::get_profile_equipped_skin_texture]
+#[tauri::command]
+pub async fn get_profile_equipped_skin_texture(
+    profile_id: uuid::Uuid,
+) -> Result<Option<EquippedSkinTexture>> {
+    Ok(minecraft_skins::get_profile_equipped_skin_texture(profile_id).await?)
 }
 
 /// `invoke('plugin:minecraft-skins|add_and_equip_custom_skin', texture_blob, variant, cape)`

@@ -1168,6 +1168,8 @@ pub async fn launch_minecraft(
         .friends_socket
         .update_status(Some(instance.name.clone()))
         .await;
+    let _ = crate::octra_accounts::publish_presence("ingame", Some(&instance.name))
+        .await;
 
     // Create Minecraft child by inserting it into the state
     // This also spawns the process and prepares the subsequent processes

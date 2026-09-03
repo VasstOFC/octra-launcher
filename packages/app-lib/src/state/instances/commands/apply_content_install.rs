@@ -630,6 +630,13 @@ pub(crate) async fn toggle_disable_project(
     state: &State,
 ) -> crate::Result<String> {
     let _content_lock = state.lock_instance_content(instance_id).await;
+    if crate::state::instance_has_running_process(instance_id, state).await? {
+        return Err(crate::ErrorKind::LauncherError(
+            "cannot change mods while the instance is running — close minecraft first"
+                .to_string(),
+        )
+        .into());
+    }
     let scope = resolve_content_scope(instance_id, None, state).await?;
     let base = instance_full_path(state, &scope.instance);
     let trimmed = project_path.trim_end_matches(".disabled");

@@ -230,7 +230,7 @@ async function refreshValues() {
 	accounts.value = Array.isArray(userList) ? [...userList] : []
 	accounts.value.sort((a, b) => (a.profile?.name ?? '').localeCompare(b.profile?.name ?? ''))
 	octraSession.value = await octraAccountSession().catch(() => null)
-	await refreshEquippedSkinAvatar()
+	await refreshEquippedSkinAvatar(accounts.value)
 }
 
 async function setEquippedSkin(skin: Skin) {
@@ -287,13 +287,18 @@ const selectedAccount = computed(() =>
 )
 
 const avatarUrl = computed(() =>
-	getAccountAvatarUrl(selectedAccount.value?.profile?.id, true),
+	getAccountAvatarUrl(
+		selectedAccount.value?.profile?.id,
+		true,
+		selectedAccount.value ? isOfflineAccount(selectedAccount.value) : false,
+	),
 )
 
 function getAccountAvatarUrlForList(account: MinecraftCredential) {
 	return getAccountAvatarUrl(
 		account.profile.id,
 		account.profile.id === selectedAccount.value?.profile?.id,
+		isOfflineAccount(account),
 	)
 }
 
@@ -386,7 +391,8 @@ const messages = defineMessages({
 	},
 	octraAccountHint: {
 		id: 'octra-account.hint',
-		defaultMessage: 'Register to sync skins with other Octra players',
+		defaultMessage:
+			'Octra links skins to your Minecraft account — it does not create one. Add Microsoft or offline first.',
 	},
 	octraLogin: {
 		id: 'octra-account.login',
@@ -394,7 +400,7 @@ const messages = defineMessages({
 	},
 	octraRegister: {
 		id: 'octra-account.register',
-		defaultMessage: 'Register',
+		defaultMessage: 'Connect',
 	},
 	octraLogout: {
 		id: 'octra-account.logout',

@@ -1,6 +1,6 @@
 {
 	"identifier": "plugins",
-	"description": "",
+	"description": "Octra skins HTTP allowlist: keep http://92.5.186.6/* until a real HTTPS domain is live. When ready, add a second entry https://<your-domain>/* (do not invent a placeholder domain). Also update CSP in tauri.conf.json and SKINS_URL in packages/app-lib/src/nervia.rs — see services/octra-api/deploy/README.md.",
 	"local": true,
 	"windows": [
 		"main"

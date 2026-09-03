@@ -118,6 +118,35 @@ export async function get_available_skins(): Promise<Skin[]> {
 	return invoke('plugin:minecraft-skins|get_available_skins', {})
 }
 
+export interface EquippedSkinTexture {
+	texture_key: string
+	variant: SkinModel
+	texture_blob: number[] | Uint8Array
+}
+
+export async function get_profile_equipped_skin_texture(
+	profileId: string,
+): Promise<EquippedSkinTexture | null> {
+	return invoke('plugin:minecraft-skins|get_profile_equipped_skin_texture', {
+		profileId,
+	})
+}
+
+export function skin_from_equipped_texture(equipped: EquippedSkinTexture): Skin {
+	const bytes =
+		equipped.texture_blob instanceof Uint8Array
+			? equipped.texture_blob
+			: new Uint8Array(equipped.texture_blob)
+	const base64 = arrayBufferToBase64(bytes)
+	return {
+		texture_key: equipped.texture_key,
+		variant: equipped.variant,
+		texture: `data:image/png;base64,${base64}`,
+		source: 'custom',
+		is_equipped: true,
+	}
+}
+
 export async function add_and_equip_custom_skin(
 	textureBlob: Uint8Array,
 	variant: SkinModel,

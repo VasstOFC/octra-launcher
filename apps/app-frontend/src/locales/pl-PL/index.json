@@ -1268,11 +1268,17 @@
   "app.nav.collapse-rail": {
     "message": "Zwiń menu"
   },
+  "app.nav.collapse-sidebar": {
+    "message": "Ukryj panel"
+  },
   "app.nav.create-new-instance": {
     "message": "Utwórz instancję"
   },
   "app.nav.expand-rail": {
     "message": "Rozwiń menu"
+  },
+  "app.nav.expand-sidebar": {
+    "message": "Pokaż znajomych"
   },
   "app.nav.home": {
     "message": "Strona główna"
@@ -1338,7 +1344,7 @@
     "message": "Przełącz konto"
   },
   "app.nav.upgrade-to-modrinth-plus": {
-    "message": "Zarejestruj konto Octra"
+    "message": "Połącz konto Octra"
   },
   "app.nav.view-profile": {
     "message": "Zobacz profil"
@@ -3123,7 +3129,7 @@
     "message": "Logowanie do Octry"
   },
   "octra-account.hint": {
-    "message": "Zarejestruj się, żeby synchronizować skiny z innymi graczami Octra"
+    "message": "Octra łączy skiny z kontem Minecraft — nie tworzy konta MC. Najpierw dodaj Microsoft lub offline."
   },
   "octra-account.label": {
     "message": "Konto Octra"
@@ -3137,23 +3143,80 @@
   "octra-account.logout": {
     "message": "Wyloguj"
   },
+  "octra-account.linked-minecraft": {
+    "message": "Konto Minecraft"
+  },
   "octra-account.minecraft-nick": {
     "message": "Nick Minecraft"
+  },
+  "octra-account.no-minecraft": {
+    "message": "Najpierw dodaj konto Microsoft lub offline Minecraft."
   },
   "octra-account.password": {
     "message": "Hasło"
   },
   "octra-account.register": {
-    "message": "Zarejestruj się"
+    "message": "Połącz"
+  },
+  "octra-account.register-hint": {
+    "message": "Octra łączy się z aktualnym kontem Minecraft do skinów. Nie tworzy konta Minecraft."
   },
   "octra-account.register-success": {
-    "message": "Utworzono konto Octra"
+    "message": "Połączono konto Octra"
   },
   "octra-account.title": {
     "message": "Konto Octra"
   },
   "octra-account.username": {
-    "message": "Nazwa użytkownika"
+    "message": "Nick Minecraft"
+  },
+  "octra.community.count": {
+    "message": "{count, plural, one {# gracz} few {# graczy} many {# graczy} other {# gracza}}"
+  },
+  "octra.community.connected": {
+    "message": "Połączono"
+  },
+  "octra.community.disconnected": {
+    "message": "Rozłączono"
+  },
+  "octra.community.empty": {
+    "message": "Nie masz jeszcze nikogo znajomego :("
+  },
+  "octra.community.heading": {
+    "message": "Znajomi"
+  },
+  "octra.community.in-game": {
+    "message": "Gra w {name}"
+  },
+  "octra.community.in-game-unknown": {
+    "message": "W grze"
+  },
+  "octra.community.in-launcher": {
+    "message": "W launcherze"
+  },
+  "octra.community.last-seen": {
+    "message": "Ostatnio {time}"
+  },
+  "octra.community.load-error": {
+    "message": "Nie udało się wczytać znajomych. Sprawdź, czy jesteś zalogowany na Octra."
+  },
+  "octra.community.no-match": {
+    "message": "Nie znaleziono znajomych pasujących do zapytania \"{query}\""
+  },
+  "octra.community.offline": {
+    "message": "Offline"
+  },
+  "octra.community.register-action": {
+    "message": "Połącz konto"
+  },
+  "octra.community.search": {
+    "message": "Szukaj znajomych..."
+  },
+  "octra.community.sign-in": {
+    "message": "Zaloguj się na Octra, żeby zobaczyć wszystkich z tego launchera."
+  },
+  "octra.community.sign-in-action": {
+    "message": "Zaloguj się"
   },
   "minecraft-required.description": {
     "message": "Zaloguj się kontem Microsoft albo graj offline z nickiem. Skin będzie widoczny na singlu i na serwerach ze SkinsRestorer."

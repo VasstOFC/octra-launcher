@@ -113,6 +113,7 @@ fn main() {
                     .commands(&[
                         "get_available_capes",
                         "get_available_skins",
+                        "get_profile_equipped_skin_texture",
                         "add_and_equip_custom_skin",
                         "equip_skin",
                         "remove_custom_skin",
@@ -446,6 +447,7 @@ fn main() {
                         "octra_account_register",
                         "octra_account_login",
                         "octra_account_logout",
+                        "octra_community",
                     ])
                     .default_permission(
                         DefaultPermissionRule::AllowAllCommands,

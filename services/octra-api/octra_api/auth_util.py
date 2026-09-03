@@ -44,6 +44,14 @@ def validate_username(username: str) -> str:
 	return username
 
 
+def validate_login_name(name: str) -> str:
+	"""Login accepts Minecraft nick (1–16) or legacy username (3–24)."""
+	name = name.strip()
+	if NICK_RE.fullmatch(name) or USERNAME_RE.fullmatch(name):
+		return name
+	raise ValueError("login: 1–24 znaki, litery, cyfry, podkreślenie")
+
+
 def validate_password(password: str) -> None:
 	if len(password) < 8:
 		raise ValueError("hasło musi mieć co najmniej 8 znaków")
@@ -54,6 +62,13 @@ def validate_minecraft_nick(nick: str) -> str:
 	if not NICK_RE.fullmatch(nick):
 		raise ValueError("nick minecraft: 1–16 znaków, litery, cyfry, podkreślenie")
 	return nick
+
+
+def validate_account_type(account_type: Optional[str]) -> str:
+	value = (account_type or "offline").strip().lower()
+	if value not in ("premium", "offline"):
+		raise ValueError("account_type musi być premium lub offline")
+	return value
 
 
 def create_access_token(user_id: int, secret: str, days: int = 30) -> str:

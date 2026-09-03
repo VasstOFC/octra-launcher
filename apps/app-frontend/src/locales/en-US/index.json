@@ -1268,11 +1268,17 @@
   "app.nav.collapse-rail": {
     "message": "Collapse menu"
   },
+  "app.nav.collapse-sidebar": {
+    "message": "Hide sidebar"
+  },
   "app.nav.create-new-instance": {
     "message": "Create new instance"
   },
   "app.nav.expand-rail": {
     "message": "Expand menu"
+  },
+  "app.nav.expand-sidebar": {
+    "message": "Show friends"
   },
   "app.nav.home": {
     "message": "Home"
@@ -1338,7 +1344,7 @@
     "message": "Switch account"
   },
   "app.nav.upgrade-to-modrinth-plus": {
-    "message": "Register Octra account"
+    "message": "Connect Octra account"
   },
   "app.nav.view-profile": {
     "message": "View profile"
@@ -3075,7 +3081,7 @@
     "message": "Log in to Octra"
   },
   "octra-account.hint": {
-    "message": "Register to sync skins with other Octra players"
+    "message": "Octra links skins to your Minecraft account — it does not create one. Add Microsoft or offline first."
   },
   "octra-account.label": {
     "message": "Octra account"
@@ -3089,23 +3095,80 @@
   "octra-account.logout": {
     "message": "Log out"
   },
+  "octra-account.linked-minecraft": {
+    "message": "Minecraft account"
+  },
   "octra-account.minecraft-nick": {
     "message": "Minecraft nickname"
+  },
+  "octra-account.no-minecraft": {
+    "message": "Add a Microsoft or offline Minecraft account first."
   },
   "octra-account.password": {
     "message": "Password"
   },
   "octra-account.register": {
-    "message": "Register"
+    "message": "Connect"
+  },
+  "octra-account.register-hint": {
+    "message": "Octra links to your current Minecraft account for skins. It does not create a Minecraft account."
   },
   "octra-account.register-success": {
-    "message": "Octra account created"
+    "message": "Octra account linked"
   },
   "octra-account.title": {
     "message": "Octra account"
   },
   "octra-account.username": {
-    "message": "Username"
+    "message": "Minecraft nickname"
+  },
+  "octra.community.count": {
+    "message": "{count, plural, one {# player} other {# players}}"
+  },
+  "octra.community.connected": {
+    "message": "Connected"
+  },
+  "octra.community.disconnected": {
+    "message": "Disconnected"
+  },
+  "octra.community.empty": {
+    "message": "You don't have any friends yet :("
+  },
+  "octra.community.heading": {
+    "message": "Friends"
+  },
+  "octra.community.in-game": {
+    "message": "Playing {name}"
+  },
+  "octra.community.in-game-unknown": {
+    "message": "In game"
+  },
+  "octra.community.in-launcher": {
+    "message": "In the launcher"
+  },
+  "octra.community.last-seen": {
+    "message": "Last seen {time}"
+  },
+  "octra.community.load-error": {
+    "message": "Could not load friends. Check that you are signed in to Octra."
+  },
+  "octra.community.no-match": {
+    "message": "No friends matching ''{query}''"
+  },
+  "octra.community.offline": {
+    "message": "Offline"
+  },
+  "octra.community.register-action": {
+    "message": "Connect account"
+  },
+  "octra.community.search": {
+    "message": "Search friends..."
+  },
+  "octra.community.sign-in": {
+    "message": "Sign in to Octra to see everyone who plays with this launcher."
+  },
+  "octra.community.sign-in-action": {
+    "message": "Log in"
   },
   "minecraft-required.description": {
     "message": "Sign in with Microsoft, or play offline with a nickname. Your skin is uploaded so it shows in singleplayer and on SkinsRestorer servers."
