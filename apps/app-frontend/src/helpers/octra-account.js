@@ -20,6 +20,8 @@ import { invoke } from '@tauri-apps/api/core'
  * @property {string} [presence]
  * @property {string | null} [instance_name]
  * @property {string | null} [join_address]
+ * @property {string | null} [pack_project_id]
+ * @property {string | null} [pack_version_id]
  * @property {string | null} [last_seen]
  */
 

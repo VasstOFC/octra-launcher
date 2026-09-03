@@ -10,6 +10,11 @@ import {
 import { inject, onBeforeUnmount, onMounted, ref } from 'vue'
 
 import {
+	SettingsGroup,
+	SettingsPanelHeader,
+	SettingsRow,
+} from '@/components/ui/settings/_shared'
+import {
 	DEFAULT_FEATURE_FLAGS,
 	type FeatureFlag,
 	useAppSettings,
@@ -30,6 +35,14 @@ const skipUnknownPackWarningFlag: FeatureFlag = 'skip_unknown_pack_warning'
 const showPlayTimeFlag: FeatureFlag = 'show_instance_play_time'
 
 const messages = defineMessages({
+	panelTitle: {
+		id: 'app.settings.behavior.panel.title',
+		defaultMessage: 'Behavior',
+	},
+	panelDescription: {
+		id: 'app.settings.behavior.panel.description',
+		defaultMessage: 'Startup, home content, confirmations, and Discord status.',
+	},
 	syncAcrossDevicesTitle: {
 		id: 'app.behavior-settings.sync-across-devices.title',
 		defaultMessage: 'Sync behavior across devices',
@@ -43,6 +56,10 @@ const messages = defineMessages({
 		id: 'app.behavior-settings.sync-across-devices.signed-out-tooltip',
 		defaultMessage: "Octra accounts are coming later. You'll be able to sync settings then.",
 	},
+	syncGroup: {
+		id: 'app.behavior-settings.group.sync',
+		defaultMessage: 'Sync',
+	},
 	startupAndNavigationTitle: {
 		id: 'app.behavior-settings.startup-and-navigation.title',
 		defaultMessage: 'Startup and navigation',
@@ -54,6 +71,10 @@ const messages = defineMessages({
 	confirmationsTitle: {
 		id: 'app.behavior-settings.confirmations.title',
 		defaultMessage: 'Confirmations',
+	},
+	integrationsTitle: {
+		id: 'app.behavior-settings.integrations.title',
+		defaultMessage: 'Integrations',
 	},
 	minimizeLauncherTitle: {
 		id: 'app.appearance-settings.minimize-launcher.title',
@@ -74,11 +95,12 @@ const messages = defineMessages({
 	},
 	compactModeTitle: {
 		id: 'app.appearance-settings.compact-mode.title',
-		defaultMessage: 'Compact mode',
+		defaultMessage: 'List layout',
 	},
 	compactModeDescription: {
 		id: 'app.appearance-settings.compact-mode.description',
-		defaultMessage: 'Display library instances in a compact row layout.',
+		defaultMessage:
+			'Show library instances as compact list rows. Turn off for a quieter card grid.',
 	},
 	showPlayTimeTitle: {
 		id: 'app.appearance-settings.show-play-time.title',
@@ -114,6 +136,15 @@ const messages = defineMessages({
 		defaultMessage:
 			'Skip confirmations for low-risk actions such as duplicate installs, normal content deletion, bulk updates, unlinking, and repairs. Warnings for dangerous actions are always shown.',
 	},
+	discordRichPresenceTitle: {
+		id: 'app.settings.privacy.discord-rich-presence.title',
+		defaultMessage: 'Discord Rich Presence',
+	},
+	discordRichPresenceDescription: {
+		id: 'app.settings.privacy.discord-rich-presence.description',
+		defaultMessage:
+			'Show Octra App as your current activity on Discord. This does not affect Rich Presence added to instances by mods. Requires an app restart.',
+	},
 })
 
 type BehaviorSettingsState = {
@@ -125,6 +156,7 @@ type BehaviorSettingsState = {
 	hideNametag: boolean
 	warnOnUnknownModpacks: boolean
 	skipNonEssentialWarnings: boolean
+	discordRpc: boolean
 }
 
 const persistedSettings = ref(await get())
@@ -147,6 +179,7 @@ function getBehaviorSettingsState(settings: AppSettings): BehaviorSettingsState 
 		skipNonEssentialWarnings:
 			settings.feature_flags[skipNonEssentialWarningsFlag] ??
 			DEFAULT_FEATURE_FLAGS[skipNonEssentialWarningsFlag],
+		discordRpc: settings.discord_rpc,
 	}
 }
 
@@ -175,6 +208,7 @@ const { saved, current, changes, saving, hasChanges, reset, save } = useSavable(
 			hide_on_process_start: value.minimizeApp,
 			toggle_sidebar: true,
 			hide_nametag_skins_page: value.hideNametag,
+			discord_rpc: value.discordRpc,
 			feature_flags: {
 				...persistedSettings.value.feature_flags,
 				[worldsInHomeFlag]: value.showJumpIn,
@@ -220,133 +254,159 @@ onBeforeUnmount(() => {
 	settingsModal?.registerUnsavedChangesController(null)
 })
 </script>
+
 <template>
-	<section class="border-0 border-b border-solid border-divider pb-6">
-		<div class="flex items-center justify-between gap-4">
-			<div>
-				<h2 id="sync-behavior-across-devices-label" class="m-0 text-lg font-semibold text-contrast">
-					{{ formatMessage(messages.syncAcrossDevicesTitle) }}
-				</h2>
-				<p class="m-0 mt-1 text-secondary">
-					{{ formatMessage(messages.syncAcrossDevicesDescription) }}
-				</p>
-			</div>
-			<span
-				v-tooltip="
-					!auth.user.value ? formatMessage(messages.syncAcrossDevicesSignedOutTooltip) : undefined
-				"
-				class="inline-flex shrink-0"
+	<div class="flex flex-col">
+		<SettingsPanelHeader
+			:title="formatMessage(messages.panelTitle)"
+			:description="formatMessage(messages.panelDescription)"
+		/>
+
+		<SettingsGroup :label="formatMessage(messages.syncGroup)">
+			<SettingsRow
+				control-id="sync-behavior-across-devices"
+				:title="formatMessage(messages.syncAcrossDevicesTitle)"
+				:description="formatMessage(messages.syncAcrossDevicesDescription)"
 			>
-				<Toggle
-					id="sync-behavior-across-devices"
-					:model-value="Boolean(auth.user.value) && current.syncBehaviorAcrossDevices"
-					:disabled="!auth.user.value"
-					aria-labelledby="sync-behavior-across-devices-label"
-					@update:model-value="current.syncBehaviorAcrossDevices = $event"
-				/>
-			</span>
-		</div>
-	</section>
+				<template #default="{ labelledBy, controlId }">
+					<span
+						v-tooltip="
+							!auth.user.value
+								? formatMessage(messages.syncAcrossDevicesSignedOutTooltip)
+								: undefined
+						"
+						class="inline-flex shrink-0"
+					>
+						<Toggle
+							:id="controlId"
+							:model-value="Boolean(auth.user.value) && current.syncBehaviorAcrossDevices"
+							:disabled="!auth.user.value"
+							:aria-labelledby="labelledBy"
+							@update:model-value="current.syncBehaviorAcrossDevices = $event"
+						/>
+					</span>
+				</template>
+			</SettingsRow>
+		</SettingsGroup>
 
-	<section class="mt-6">
-		<h2 class="m-0 text-xl font-semibold text-contrast">
-			{{ formatMessage(messages.startupAndNavigationTitle) }}
-		</h2>
-		<div class="mt-4 flex flex-col gap-6">
-			<div class="flex items-center justify-between gap-4">
-				<div>
-					<h3 class="m-0 text-lg font-semibold text-contrast">
-						{{ formatMessage(messages.minimizeLauncherTitle) }}
-					</h3>
-					<p class="m-0 mt-1">
-						{{ formatMessage(messages.minimizeLauncherDescription) }}
-					</p>
-				</div>
-				<Toggle id="minimize-launcher" v-model="current.minimizeApp" />
-			</div>
-		</div>
-	</section>
+		<SettingsGroup :label="formatMessage(messages.startupAndNavigationTitle)">
+			<SettingsRow
+				control-id="minimize-launcher"
+				:title="formatMessage(messages.minimizeLauncherTitle)"
+				:description="formatMessage(messages.minimizeLauncherDescription)"
+			>
+				<template #default="{ labelledBy, controlId }">
+					<Toggle
+						:id="controlId"
+						v-model="current.minimizeApp"
+						:aria-labelledby="labelledBy"
+					/>
+				</template>
+			</SettingsRow>
+		</SettingsGroup>
 
-	<section class="mt-8 border-0 border-t border-solid border-divider pt-6">
-		<h2 class="m-0 text-xl font-semibold text-contrast">
-			{{ formatMessage(messages.contentTitle) }}
-		</h2>
-		<div class="mt-4 flex flex-col gap-6">
-			<div class="flex items-center justify-between gap-4">
-				<div>
-					<h3 class="m-0 text-lg font-semibold text-contrast">
-						{{ formatMessage(messages.jumpBackIntoWorldsTitle) }}
-					</h3>
-					<p class="m-0 mt-1">
-						{{ formatMessage(messages.jumpBackIntoWorldsDescription) }}
-					</p>
-				</div>
-				<Toggle id="jump-back-into-worlds" v-model="current.showJumpIn" />
-			</div>
+		<SettingsGroup :label="formatMessage(messages.contentTitle)">
+			<SettingsRow
+				control-id="jump-back-into-worlds"
+				:title="formatMessage(messages.jumpBackIntoWorldsTitle)"
+				:description="formatMessage(messages.jumpBackIntoWorldsDescription)"
+			>
+				<template #default="{ labelledBy, controlId }">
+					<Toggle
+						:id="controlId"
+						v-model="current.showJumpIn"
+						:aria-labelledby="labelledBy"
+					/>
+				</template>
+			</SettingsRow>
 
-			<div class="flex items-center justify-between gap-4">
-				<div>
-					<h3 class="m-0 text-lg font-semibold text-contrast">
-						{{ formatMessage(messages.compactModeTitle) }}
-					</h3>
-					<p class="m-0 mt-1">{{ formatMessage(messages.compactModeDescription) }}</p>
-				</div>
-				<Toggle id="compact-mode" v-model="current.compactInstanceCards" />
-			</div>
+			<SettingsRow
+				control-id="compact-mode"
+				:title="formatMessage(messages.compactModeTitle)"
+				:description="formatMessage(messages.compactModeDescription)"
+			>
+				<template #default="{ labelledBy, controlId }">
+					<Toggle
+						:id="controlId"
+						v-model="current.compactInstanceCards"
+						:aria-labelledby="labelledBy"
+					/>
+				</template>
+			</SettingsRow>
 
-			<div class="flex items-center justify-between gap-4">
-				<div>
-					<h3 class="m-0 text-lg font-semibold text-contrast">
-						{{ formatMessage(messages.showPlayTimeTitle) }}
-					</h3>
-					<p class="m-0 mt-1">{{ formatMessage(messages.showPlayTimeDescription) }}</p>
-				</div>
-				<Toggle id="show-play-time" v-model="current.showPlayTime" />
-			</div>
+			<SettingsRow
+				control-id="show-play-time"
+				:title="formatMessage(messages.showPlayTimeTitle)"
+				:description="formatMessage(messages.showPlayTimeDescription)"
+			>
+				<template #default="{ labelledBy, controlId }">
+					<Toggle
+						:id="controlId"
+						v-model="current.showPlayTime"
+						:aria-labelledby="labelledBy"
+					/>
+				</template>
+			</SettingsRow>
 
-			<div class="flex items-center justify-between gap-4">
-				<div>
-					<h3 class="m-0 text-lg font-semibold text-contrast">
-						{{ formatMessage(messages.hideNametagTitle) }}
-					</h3>
-					<p class="m-0 mt-1">{{ formatMessage(messages.hideNametagDescription) }}</p>
-				</div>
-				<Toggle id="hide-nametag-skins-page" v-model="current.hideNametag" />
-			</div>
-		</div>
-	</section>
+			<SettingsRow
+				control-id="hide-nametag-skins-page"
+				:title="formatMessage(messages.hideNametagTitle)"
+				:description="formatMessage(messages.hideNametagDescription)"
+			>
+				<template #default="{ labelledBy, controlId }">
+					<Toggle
+						:id="controlId"
+						v-model="current.hideNametag"
+						:aria-labelledby="labelledBy"
+					/>
+				</template>
+			</SettingsRow>
+		</SettingsGroup>
 
-	<section class="mt-8 border-0 border-t border-solid border-divider pt-6">
-		<h2 class="m-0 text-xl font-semibold text-contrast">
-			{{ formatMessage(messages.confirmationsTitle) }}
-		</h2>
-		<div class="mt-4 flex flex-col gap-6">
-			<div class="flex items-center justify-between gap-4">
-				<div>
-					<h3 class="m-0 text-lg font-semibold text-contrast">
-						{{ formatMessage(messages.unknownPackWarningTitle) }}
-					</h3>
-					<p class="m-0 mt-1">
-						{{ formatMessage(messages.unknownPackWarningDescription) }}
-					</p>
-				</div>
-				<Toggle
-					id="warn-before-installing-unknown-modpacks"
-					v-model="current.warnOnUnknownModpacks"
-				/>
-			</div>
+		<SettingsGroup :label="formatMessage(messages.confirmationsTitle)">
+			<SettingsRow
+				control-id="warn-before-installing-unknown-modpacks"
+				:title="formatMessage(messages.unknownPackWarningTitle)"
+				:description="formatMessage(messages.unknownPackWarningDescription)"
+			>
+				<template #default="{ labelledBy, controlId }">
+					<Toggle
+						:id="controlId"
+						v-model="current.warnOnUnknownModpacks"
+						:aria-labelledby="labelledBy"
+					/>
+				</template>
+			</SettingsRow>
 
-			<div class="flex items-center justify-between gap-4">
-				<div>
-					<h3 class="m-0 text-lg font-semibold text-contrast">
-						{{ formatMessage(messages.skipNonEssentialWarningsTitle) }}
-					</h3>
-					<p class="m-0 mt-1">
-						{{ formatMessage(messages.skipNonEssentialWarningsDescription) }}
-					</p>
-				</div>
-				<Toggle id="skip-non-essential-warnings" v-model="current.skipNonEssentialWarnings" />
-			</div>
-		</div>
-	</section>
+			<SettingsRow
+				control-id="skip-non-essential-warnings"
+				:title="formatMessage(messages.skipNonEssentialWarningsTitle)"
+				:description="formatMessage(messages.skipNonEssentialWarningsDescription)"
+			>
+				<template #default="{ labelledBy, controlId }">
+					<Toggle
+						:id="controlId"
+						v-model="current.skipNonEssentialWarnings"
+						:aria-labelledby="labelledBy"
+					/>
+				</template>
+			</SettingsRow>
+		</SettingsGroup>
+
+		<SettingsGroup :label="formatMessage(messages.integrationsTitle)">
+			<SettingsRow
+				control-id="disable-discord-rpc"
+				:title="formatMessage(messages.discordRichPresenceTitle)"
+				:description="formatMessage(messages.discordRichPresenceDescription)"
+			>
+				<template #default="{ labelledBy, controlId }">
+					<Toggle
+						:id="controlId"
+						v-model="current.discordRpc"
+						:aria-labelledby="labelledBy"
+					/>
+				</template>
+			</SettingsRow>
+		</SettingsGroup>
+	</div>
 </template>

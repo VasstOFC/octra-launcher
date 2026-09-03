@@ -443,6 +443,7 @@ fn main() {
                 InlinedPlugin::new()
                     .commands(&[
                         "list_servers",
+                        "remove_server",
                         "octra_account_session",
                         "octra_account_register",
                         "octra_account_login",

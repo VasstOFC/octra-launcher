@@ -1,14 +1,32 @@
-<script setup>
+<script setup lang="ts">
 import { defineMessages, injectNotificationManager, useVIntl } from '@modrinth/ui'
 import { ref } from 'vue'
 
 import JavaSelector from '@/components/ui/JavaSelector.vue'
+import {
+	SettingsGroup,
+	SettingsPanelHeader,
+	SettingsStack,
+	SettingsTwoCol,
+} from '@/components/ui/settings/_shared'
 import { get_java_versions, set_java_version } from '@/helpers/jre'
 
 const { handleError } = injectNotificationManager()
 const { formatMessage } = useVIntl()
 
 const messages = defineMessages({
+	panelTitle: {
+		id: 'app.settings.java-installations.title',
+		defaultMessage: 'Java',
+	},
+	panelDescription: {
+		id: 'app.settings.java-installations.description',
+		defaultMessage: 'Choose which Java installations Octra uses for each major version.',
+	},
+	installationsGroup: {
+		id: 'app.settings.java-installations.group',
+		defaultMessage: 'Installations',
+	},
 	javaLocation: {
 		id: 'app.settings.java-installations.location.title',
 		defaultMessage: 'Java {version, number} location',
@@ -16,7 +34,13 @@ const messages = defineMessages({
 })
 
 const javaVersions = ref(await get_java_versions().catch(handleError))
-async function updateJavaVersion(version) {
+
+const javaPairs: Array<[number, number]> = [
+	[25, 21],
+	[17, 8],
+]
+
+async function updateJavaVersion(version: { path?: string } | null | undefined) {
 	if (version?.path === '') {
 		version.path = undefined
 	}
@@ -28,22 +52,47 @@ async function updateJavaVersion(version) {
 	await set_java_version(version).catch(handleError)
 }
 </script>
+
 <template>
-	<div class="flex flex-col gap-6">
-		<div
-			v-for="(javaVersion, index) in [25, 21, 17, 8]"
-			:key="`java-${javaVersion}`"
-			class="flex flex-col gap-2.5"
-		>
-			<h2 class="m-0 text-lg font-semibold text-contrast" :class="{ 'mt-4': index !== 0 }">
-				{{ formatMessage(messages.javaLocation, { version: javaVersion }) }}
-			</h2>
-			<JavaSelector
-				:id="'java-selector-' + javaVersion"
-				v-model="javaVersions[javaVersion]"
-				:version="javaVersion"
-				@update:model-value="updateJavaVersion"
-			/>
-		</div>
+	<div>
+		<SettingsPanelHeader
+			:title="formatMessage(messages.panelTitle)"
+			:description="formatMessage(messages.panelDescription)"
+		/>
+
+		<SettingsGroup :label="formatMessage(messages.installationsGroup)">
+			<SettingsTwoCol v-for="([leftVersion, rightVersion], pairIndex) in javaPairs" :key="pairIndex">
+				<template #left>
+					<SettingsStack
+						:control-id="`java-selector-${leftVersion}`"
+						:title="formatMessage(messages.javaLocation, { version: leftVersion })"
+					>
+						<template #default="{ controlId }">
+							<JavaSelector
+								:id="controlId"
+								v-model="javaVersions[leftVersion]"
+								:version="leftVersion"
+								@update:model-value="updateJavaVersion"
+							/>
+						</template>
+					</SettingsStack>
+				</template>
+				<template #right>
+					<SettingsStack
+						:control-id="`java-selector-${rightVersion}`"
+						:title="formatMessage(messages.javaLocation, { version: rightVersion })"
+					>
+						<template #default="{ controlId }">
+							<JavaSelector
+								:id="controlId"
+								v-model="javaVersions[rightVersion]"
+								:version="rightVersion"
+								@update:model-value="updateJavaVersion"
+							/>
+						</template>
+					</SettingsStack>
+				</template>
+			</SettingsTwoCol>
+		</SettingsGroup>
 	</div>
 </template>

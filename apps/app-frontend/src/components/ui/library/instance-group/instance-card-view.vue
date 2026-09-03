@@ -26,22 +26,23 @@ const versionRef = ref<HTMLElement | null>(null)
 
 <template>
 	<div
-		class="relative flex w-full min-w-0 select-none overflow-clip border border-solid bg-surface-3 text-left transition-all"
+		class="instance-card-view relative flex w-full min-w-0 select-none overflow-clip text-left transition-colors"
 		:class="{
-			'flex-row items-center justify-start gap-2.5 rounded-xl p-2.5': compactMode,
-			'flex-col items-start justify-end gap-3 rounded-[20px] p-3': !compactMode,
-			'[border-color:color-mix(in_srgb,var(--color-text-primary)_40%,transparent)] brightness-110':
+			'flex-row items-center justify-start gap-3 rounded-lg px-2.5 py-2': compactMode,
+			'flex-col items-start justify-end gap-2.5 rounded-xl bg-surface-2 p-2.5': !compactMode,
+			'bg-surface-3': selected,
+			'bg-transparent hover:bg-surface-3': compactMode && !selected,
+			'hover:bg-surface-3': !compactMode && !selected,
+			'ring-1 ring-inset ring-[color-mix(in_srgb,var(--color-contrast)_30%,transparent)]':
 				selected,
-			'border-surface-4': !selected,
 		}"
 	>
 		<div
 			class="relative flex shrink-0 items-center overflow-clip"
-			:class="compactMode ? 'size-10 rounded-lg' : 'aspect-square min-w-full rounded-2xl'"
+			:class="compactMode ? 'size-11 rounded-lg' : 'aspect-square min-w-full rounded-lg'"
 		>
 			<Avatar
-				class="pointer-events-none outline-none"
-				:class="compactMode ? '!rounded-lg' : '!rounded-2xl'"
+				class="pointer-events-none outline-none !rounded-lg"
 				size="100%"
 				:src="iconSrc"
 				:tint-by="instance.id"
@@ -51,16 +52,13 @@ const versionRef = ref<HTMLElement | null>(null)
 			/>
 			<slot name="loading" :compact="compactMode" />
 			<div
-				class="absolute z-[1] flex items-center justify-center"
-				:class="compactMode ? 'inset-0' : 'bottom-1.5 right-1.5 size-12'"
+				v-if="!compactMode"
+				class="absolute bottom-1.5 right-1.5 z-[1] flex size-11 items-center justify-center"
 			>
 				<slot name="leading" :compact="compactMode" />
 			</div>
 		</div>
-		<div
-			class="flex min-w-0 w-full flex-col items-start justify-center gap-1 px-0.5"
-			:class="{ 'pr-10': compactMode }"
-		>
+		<div class="flex min-w-0 flex-1 flex-col items-start justify-center gap-0.5 px-0.5">
 			<p
 				ref="nameRef"
 				v-tooltip="truncatedTooltip(nameRef, instance.name)"
@@ -75,6 +73,9 @@ const versionRef = ref<HTMLElement | null>(null)
 			>
 				{{ instance.loader }} {{ instance.game_version }}
 			</p>
+		</div>
+		<div v-if="compactMode" class="relative flex shrink-0 items-center justify-center">
+			<slot name="leading" :compact="compactMode" />
 		</div>
 		<slot name="overlay" :compact="compactMode" />
 	</div>

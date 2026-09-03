@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import {
 	CoffeeIcon,
-	GaugeIcon,
+	FolderOpenIcon,
 	PaintbrushIcon,
 	RefreshCwIcon,
+	RocketIcon,
 	Settings2Icon,
 	ShieldIcon,
 	ToggleRightIcon,
+	UserIcon,
 } from '@modrinth/assets'
 import {
 	Button,
@@ -25,12 +27,14 @@ import { platform as getOsPlatform, version as getOsVersion } from '@tauri-apps/
 import { computed, provide, ref, watch } from 'vue'
 
 import OctraMark from '@/components/brand/OctraMark.vue'
+import OctraAccountSettings from '@/components/ui/settings/account/OctraAccountSettings.vue'
 import PrivacySettings from '@/components/ui/settings/account/PrivacySettings.vue'
 import AppearanceSettings from '@/components/ui/settings/display/AppearanceSettings.vue'
 import BehaviorSettings from '@/components/ui/settings/display/BehaviorSettings.vue'
 import FeatureFlagSettings from '@/components/ui/settings/display/FeatureFlagSettings.vue'
 import InstancesSyncedSettings from '@/components/ui/settings/instances/InstancesSyncedSettings.vue'
 import JavaSettings from '@/components/ui/settings/instances/JavaSettings.vue'
+import LaunchDefaultsSettings from '@/components/ui/settings/instances/LaunchDefaultsSettings.vue'
 import ResourceManagementSettings from '@/components/ui/settings/instances/ResourceManagementSettings.vue'
 import { useAppSettings } from '@/composables/use-app-settings.ts'
 import { get, set } from '@/helpers/settings.ts'
@@ -58,17 +62,21 @@ const developerModeEnabled = defineMessage({
 })
 
 const tabCategories = defineMessages({
-	display: {
-		id: 'settings.sidebar.label.display',
-		defaultMessage: 'Display',
+	lookAndFeel: {
+		id: 'app.settings.sidebar.label.look-and-feel',
+		defaultMessage: 'Look & feel',
 	},
-	account: {
-		id: 'settings.sidebar.label.account',
-		defaultMessage: 'Account',
+	app: {
+		id: 'app.settings.sidebar.label.app',
+		defaultMessage: 'App',
 	},
-	instances: {
-		id: 'app.settings.sidebar.label.instances',
-		defaultMessage: 'Instances',
+	gameDefaults: {
+		id: 'app.settings.sidebar.label.game-defaults',
+		defaultMessage: 'Game defaults',
+	},
+	system: {
+		id: 'app.settings.sidebar.label.system',
+		defaultMessage: 'System',
 	},
 })
 
@@ -78,7 +86,7 @@ const tabs = [
 			id: 'app.settings.tabs.appearance',
 			defaultMessage: 'Appearance',
 		}),
-		category: tabCategories.display,
+		category: tabCategories.lookAndFeel,
 		icon: PaintbrushIcon,
 		content: AppearanceSettings,
 	},
@@ -87,52 +95,70 @@ const tabs = [
 			id: 'app.settings.tabs.behavior',
 			defaultMessage: 'Behavior',
 		}),
-		category: tabCategories.display,
+		category: tabCategories.lookAndFeel,
 		icon: Settings2Icon,
 		content: BehaviorSettings,
 	},
 	{
-		name: commonSettingsMessages.featureFlags,
-		category: tabCategories.display,
-		icon: ToggleRightIcon,
-		content: FeatureFlagSettings,
-		developerOnly: true,
+		name: defineMessage({
+			id: 'app.settings.tabs.account',
+			defaultMessage: 'Account',
+		}),
+		category: tabCategories.app,
+		icon: UserIcon,
+		content: OctraAccountSettings,
 	},
 	{
 		name: defineMessage({
 			id: 'app.settings.tabs.privacy',
 			defaultMessage: 'Privacy',
 		}),
-		category: tabCategories.account,
+		category: tabCategories.app,
 		icon: ShieldIcon,
 		content: PrivacySettings,
 	},
 	{
 		name: defineMessage({
-			id: 'app.settings.tabs.synced-options',
-			defaultMessage: 'Synced settings',
+			id: 'app.settings.tabs.launch',
+			defaultMessage: 'Launch',
 		}),
-		category: tabCategories.instances,
+		category: tabCategories.gameDefaults,
+		icon: RocketIcon,
+		content: LaunchDefaultsSettings,
+	},
+	{
+		name: defineMessage({
+			id: 'app.settings.tabs.sync',
+			defaultMessage: 'Sync',
+		}),
+		category: tabCategories.gameDefaults,
 		icon: RefreshCwIcon,
 		content: InstancesSyncedSettings,
 	},
 	{
 		name: defineMessage({
 			id: 'app.settings.tabs.java-installations',
-			defaultMessage: 'Java installations',
+			defaultMessage: 'Java',
 		}),
-		category: tabCategories.instances,
+		category: tabCategories.system,
 		icon: CoffeeIcon,
 		content: JavaSettings,
 	},
 	{
 		name: defineMessage({
-			id: 'app.settings.tabs.resource-management',
-			defaultMessage: 'Resource management',
+			id: 'app.settings.tabs.storage',
+			defaultMessage: 'Storage',
 		}),
-		category: tabCategories.instances,
-		icon: GaugeIcon,
+		category: tabCategories.system,
+		icon: FolderOpenIcon,
 		content: ResourceManagementSettings,
+	},
+	{
+		name: commonSettingsMessages.featureFlags,
+		category: tabCategories.system,
+		icon: ToggleRightIcon,
+		content: FeatureFlagSettings,
+		developerOnly: true,
 	},
 ]
 
@@ -189,31 +215,41 @@ function saveUnsavedChanges(): void {
 	void unsavedChangesController.value?.save()
 }
 
+function showTab(content: (typeof tabs)[number]['content']): void {
+	const tabIndex = availableTabs.value.findIndex((tab) => tab.content === content)
+	if (tabIndex >= 0) {
+		modal.value?.setTab(tabIndex)
+	}
+	modal.value?.show()
+}
+
 function show() {
 	modal.value?.show()
 }
 
 function showFeatureFlags(): void {
-	const featureFlagsTabIndex = availableTabs.value.findIndex(
-		(tab) => tab.content === FeatureFlagSettings,
-	)
-	if (featureFlagsTabIndex >= 0) {
-		modal.value?.setTab(featureFlagsTabIndex)
-	}
-	modal.value?.show()
+	showTab(FeatureFlagSettings)
+}
+
+function showAccount(): void {
+	showTab(OctraAccountSettings)
 }
 
 function showSyncedOptions(): void {
-	const syncedOptionsTabIndex = availableTabs.value.findIndex(
-		(tab) => tab.content === InstancesSyncedSettings,
-	)
-	if (syncedOptionsTabIndex >= 0) {
-		modal.value?.setTab(syncedOptionsTabIndex)
-	}
-	modal.value?.show()
+	showTab(InstancesSyncedSettings)
 }
 
-defineExpose({ show, showFeatureFlags, showSyncedOptions })
+function showLaunchDefaults(): void {
+	showTab(LaunchDefaultsSettings)
+}
+
+defineExpose({
+	show,
+	showFeatureFlags,
+	showAccount,
+	showSyncedOptions,
+	showLaunchDefaults,
+})
 
 const { progress, version: downloadingVersion } = injectAppUpdateDownloadProgress()
 const { handleError, addNotification } = injectNotificationManager()
@@ -375,6 +411,7 @@ async function handleCheckForUpdates() {
 		:before-tab-change="canLeaveCurrentTab"
 		:floating-action-bar-shown="hasUnsavedChanges"
 		variant="emberslot"
+		nav-layout="top"
 	>
 		<template #title>
 			<span class="text-2xl font-semibold text-contrast">
@@ -393,7 +430,7 @@ async function handleCheckForUpdates() {
 			/>
 		</template>
 		<template #footer>
-			<div class="mt-auto text-secondary text-sm">
+			<div class="app-settings-modal__footer mt-auto text-secondary text-sm">
 				<div class="mb-3">
 					<template v-if="progress > 0 && progress < 1">
 						<p class="m-0 mb-2">
@@ -443,3 +480,12 @@ async function handleCheckForUpdates() {
 		</template>
 	</TabbedModal>
 </template>
+
+<style lang="scss" scoped>
+.app-settings-modal__footer {
+	border-top: 1px solid var(--surface-5);
+	margin-top: 0.75rem;
+	padding-top: 0.75rem;
+	background: transparent;
+}
+</style>

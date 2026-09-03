@@ -80,7 +80,7 @@ defineOptions({
 	&.expanded {
 		width: 100%;
 		height: 2.5rem;
-		border-radius: 0.75rem;
+		border-radius: var(--radius-md);
 		justify-content: flex-start;
 		gap: 0.75rem;
 		padding: 0 0.75rem;
@@ -102,15 +102,14 @@ defineOptions({
 .router-link-active {
 	color: var(--color-brand);
 	background: var(--surface-3);
-	box-shadow: inset 0 0 0 1px var(--surface-5);
-	transform: translateX(2px);
+	box-shadow: none;
 }
 
 .router-link-active.expanded,
 button.expanded.router-link-active {
 	color: var(--color-brand);
 	background: var(--surface-3);
-	box-shadow: inset 0 0 0 1px var(--surface-5);
+	box-shadow: none;
 }
 
 .subpage-active {
@@ -120,27 +119,23 @@ button.expanded.router-link-active {
 .router-link-active::before {
 	content: '';
 	position: absolute;
-	left: 0.15rem;
+	left: 0;
 	top: 50%;
 	transform: translateY(-50%);
 	height: 1.25rem;
-	width: 0.22rem;
-	border-radius: 999px;
+	width: 2px;
+	border-radius: 1px;
 	background: var(--color-brand);
 	opacity: 1;
 	transition: opacity var(--shell-motion, 0.28s cubic-bezier(0.32, 0.72, 0, 1));
 }
 
 .router-link-active.expanded::before {
-	left: 0.2rem;
+	left: 0;
 	height: 1.15rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.router-link-active {
-		transform: none;
-	}
-
 	.router-link-active::before {
 		transition: none;
 	}

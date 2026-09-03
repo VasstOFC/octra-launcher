@@ -89,7 +89,7 @@ onUnmounted(() => {
 					class="dot-pattern pointer-events-none absolute left-1/2 -top-52 -z-10 h-[29.875rem] w-[min(25.9375rem,80vw)] -translate-x-1/2 rounded-2xl [@media(max-height:700px)]:h-[23rem]"
 					aria-hidden="true"
 				/>
-				<div class="size-[6.25rem] text-brand">
+				<div class="size-[6.25rem]">
 					<OctraMark class="pointer-events-none size-full" />
 				</div>
 				<div class="flex flex-col items-center gap-2">

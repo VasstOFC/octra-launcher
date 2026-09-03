@@ -5,10 +5,16 @@ import { computed } from 'vue'
 
 import { ACCENT_PRESETS, type AccentPresetId, normalizeHexColor } from '@/helpers/accent-colors.ts'
 
-const props = defineProps<{
-	preset: AccentPresetId
-	customHex: string
-}>()
+const props = withDefaults(
+	defineProps<{
+		preset: AccentPresetId
+		customHex: string
+		embedded?: boolean
+	}>(),
+	{
+		embedded: false,
+	},
+)
 
 const emit = defineEmits<{
 	'update:preset': [value: AccentPresetId]
@@ -96,8 +102,8 @@ function presetPreviewStyle(preset: Exclude<AccentPresetId, 'custom'>) {
 </script>
 
 <template>
-	<section class="border-0 border-b border-solid border-divider pb-8">
-		<div class="flex flex-col gap-1">
+	<section :class="embedded ? undefined : 'border-0 border-b border-solid border-divider pb-8'">
+		<div v-if="!embedded" class="flex flex-col gap-1">
 			<h2 class="m-0 text-xl font-semibold text-contrast">
 				{{ formatMessage(messages.title) }}
 			</h2>
@@ -106,7 +112,12 @@ function presetPreviewStyle(preset: Exclude<AccentPresetId, 'custom'>) {
 			</p>
 		</div>
 
-		<div class="accent-options mt-4" role="group" :aria-label="formatMessage(messages.title)">
+		<div
+			class="accent-options"
+			:class="{ 'mt-4': !embedded }"
+			role="group"
+			:aria-label="formatMessage(messages.title)"
+		>
 			<button
 				v-for="presetOption in ACCENT_PRESETS"
 				:key="presetOption.id"

@@ -100,22 +100,23 @@ async function install() {
 		</Button>
 		<div
 			v-else
-			class="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-solid border-surface-5 bg-surface-4 p-4"
+			class="featured-strip flex items-center justify-between gap-3 rounded-lg bg-surface-3 px-3 py-2"
 		>
-			<div class="min-w-0 flex flex-col gap-1">
-				<div class="text-xs font-bold uppercase tracking-wide text-brand">
+			<div class="min-w-0 flex items-baseline gap-2">
+				<span class="shrink-0 text-xs font-semibold uppercase tracking-wide text-brand">
 					{{ formatMessage(messages.kicker) }}
-				</div>
-				<h3 class="m-0 text-lg font-semibold text-contrast">
+				</span>
+				<span class="truncate text-sm font-medium text-contrast">
 					{{ pack.title || formatMessage(messages.title) }}
-				</h3>
-				<p class="m-0 text-sm leading-5 text-secondary">
+				</span>
+				<span class="hidden truncate text-sm text-secondary sm:inline">
 					{{ pack.blurb || formatMessage(messages.blurb) }}
-				</p>
+				</span>
 			</div>
 			<Button
-				type="colored"
+				type="quiet"
 				color="brand"
+				size="sm"
 				class="!shadow-none shrink-0"
 				:loading="installing"
 				@click="install"

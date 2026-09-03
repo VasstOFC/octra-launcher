@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { BoxIcon, FolderOpenIcon, FolderSearchIcon, TrashIcon } from '@modrinth/assets'
 import {
 	Button,
@@ -14,6 +14,12 @@ import { open } from '@tauri-apps/plugin-dialog'
 import { ref, watch } from 'vue'
 
 import ConfirmModalWrapper from '@/components/ui/modal/ConfirmModalWrapper.vue'
+import {
+	SettingsGroup,
+	SettingsPanelHeader,
+	SettingsRow,
+	SettingsStack,
+} from '@/components/ui/settings/_shared'
 import { useAppSettings } from '@/composables/use-app-settings.ts'
 import { purge_cache_types } from '@/helpers/cache.js'
 import { get, set } from '@/helpers/settings.ts'
@@ -27,6 +33,26 @@ const purgeCacheConfirmModal = ref(null)
 const alwaysShowCopyDetailsFlag = 'always_show_copy_details'
 
 const messages = defineMessages({
+	panelTitle: {
+		id: 'app.settings.resource-management.title',
+		defaultMessage: 'Storage',
+	},
+	panelDescription: {
+		id: 'app.settings.resource-management.description',
+		defaultMessage: 'Manage where Octra stores files, cache, and download concurrency.',
+	},
+	locationGroup: {
+		id: 'app.settings.resource-management.location.group',
+		defaultMessage: 'Location',
+	},
+	performanceGroup: {
+		id: 'app.settings.resource-management.performance.group',
+		defaultMessage: 'Downloads and writes',
+	},
+	maintenanceGroup: {
+		id: 'app.settings.resource-management.maintenance.group',
+		defaultMessage: 'Maintenance',
+	},
 	appDirectoryTitle: {
 		id: 'app.settings.resource-management.app-directory.title',
 		defaultMessage: 'App directory',
@@ -171,121 +197,135 @@ async function findLauncherDir() {
 </script>
 
 <template>
-	<div class="flex flex-col gap-6">
-		<div class="flex flex-col gap-2.5">
-			<h2 class="m-0 text-lg font-semibold text-contrast">
-				{{ formatMessage(messages.appDirectoryTitle) }}
-			</h2>
-			<Input
-				id="appDir"
-				v-model="settings.custom_dir"
-				:icon="BoxIcon"
-				type="text"
-				wrapper-class="w-full"
+	<div>
+		<ConfirmModalWrapper
+			ref="purgeCacheConfirmModal"
+			:title="formatMessage(messages.purgeCacheConfirmTitle)"
+			:description="formatMessage(messages.purgeCacheConfirmDescription)"
+			:has-to-type="false"
+			:proceed-label="formatMessage(messages.purgeCache)"
+			:show-ad-on-close="false"
+			@proceed="purgeCache"
+		/>
+
+		<SettingsPanelHeader
+			:title="formatMessage(messages.panelTitle)"
+			:description="formatMessage(messages.panelDescription)"
+		/>
+
+		<SettingsGroup :label="formatMessage(messages.locationGroup)">
+			<SettingsStack
+				control-id="appDir"
+				:title="formatMessage(messages.appDirectoryTitle)"
+				:description="formatMessage(messages.appDirectoryDescription)"
 			>
-				<template #right>
-					<IconButton
-						v-tooltip="formatMessage(messages.browseAppDirectory)"
-						:label="formatMessage(messages.browseAppDirectory)"
-						class="ml-1.5"
-						@click="findLauncherDir"
+				<template #default="{ labelledBy, controlId }">
+					<Input
+						:id="controlId"
+						v-model="settings.custom_dir"
+						:aria-labelledby="labelledBy"
+						:icon="BoxIcon"
+						type="text"
+						wrapper-class="w-full"
 					>
-						<FolderSearchIcon aria-hidden="true" />
-					</IconButton>
+						<template #right>
+							<IconButton
+								v-tooltip="formatMessage(messages.browseAppDirectory)"
+								:label="formatMessage(messages.browseAppDirectory)"
+								class="ml-1.5"
+								@click="findLauncherDir"
+							>
+								<FolderSearchIcon aria-hidden="true" />
+							</IconButton>
+						</template>
+					</Input>
 				</template>
-			</Input>
-			<p class="m-0 leading-tight text-secondary">
-				{{ formatMessage(messages.appDirectoryDescription) }}
-			</p>
-		</div>
+			</SettingsStack>
+		</SettingsGroup>
 
-		<div class="flex items-center justify-between gap-4">
-			<div>
-				<h2 class="m-0 text-lg font-semibold text-contrast">
-					{{ formatMessage(messages.alwaysShowCopyDetailsTitle) }}
-				</h2>
-				<p class="m-0 mt-1">
-					{{ formatMessage(messages.alwaysShowCopyDetailsDescription) }}
-				</p>
-			</div>
-			<Toggle
-				id="always-show-copy-details"
-				:model-value="appSettings.getFeatureFlag(alwaysShowCopyDetailsFlag)"
-				@update:model-value="
-					() => {
-						const newValue = !appSettings.getFeatureFlag(alwaysShowCopyDetailsFlag)
-						appSettings.featureFlags[alwaysShowCopyDetailsFlag] = newValue
-						settings.feature_flags[alwaysShowCopyDetailsFlag] = newValue
-					}
-				"
-			/>
-		</div>
+		<SettingsGroup :label="formatMessage(messages.performanceGroup)">
+			<SettingsStack
+				control-id="max-downloads"
+				:title="formatMessage(messages.maximumConcurrentDownloadsTitle)"
+				:description="formatMessage(messages.maximumConcurrentDownloadsDescription)"
+			>
+				<template #default="{ labelledBy, controlId }">
+					<Slider
+						:id="controlId"
+						v-model="settings.max_concurrent_downloads"
+						:aria-labelledby="labelledBy"
+						:min="1"
+						:max="10"
+						:step="1"
+					/>
+				</template>
+			</SettingsStack>
 
-		<div class="flex flex-col gap-2.5">
-			<ConfirmModalWrapper
-				ref="purgeCacheConfirmModal"
-				:title="formatMessage(messages.purgeCacheConfirmTitle)"
-				:description="formatMessage(messages.purgeCacheConfirmDescription)"
-				:has-to-type="false"
-				:proceed-label="formatMessage(messages.purgeCache)"
-				:show-ad-on-close="false"
-				@proceed="purgeCache"
-			/>
-			<h2 class="m-0 text-lg font-semibold text-contrast">
-				{{ formatMessage(messages.appCacheTitle) }}
-			</h2>
-			<Button id="purge-cache" class="w-fit" @click="handlePurgeCacheClick">
-				<TrashIcon aria-hidden="true" />
-				{{ formatMessage(messages.purgeCache) }}
-			</Button>
-			<p class="m-0 leading-tight text-secondary">
-				{{ formatMessage(messages.appCacheDescription) }}
-			</p>
-		</div>
+			<SettingsStack
+				control-id="max-writes"
+				:title="formatMessage(messages.maximumConcurrentWritesTitle)"
+				:description="formatMessage(messages.maximumConcurrentWritesDescription)"
+			>
+				<template #default="{ labelledBy, controlId }">
+					<Slider
+						:id="controlId"
+						v-model="settings.max_concurrent_writes"
+						:aria-labelledby="labelledBy"
+						:min="1"
+						:max="50"
+						:step="1"
+					/>
+				</template>
+			</SettingsStack>
 
-		<div class="flex flex-col gap-2.5">
-			<h2 class="m-0 text-lg font-semibold text-contrast mt-4">
-				{{ formatMessage(messages.maximumConcurrentDownloadsTitle) }}
-			</h2>
-			<Slider
-				id="max-downloads"
-				v-model="settings.max_concurrent_downloads"
-				:min="1"
-				:max="10"
-				:step="1"
-			/>
-			<p class="m-0 leading-tight text-secondary">
-				{{ formatMessage(messages.maximumConcurrentDownloadsDescription) }}
-			</p>
-		</div>
+			<SettingsRow
+				control-id="always-show-copy-details"
+				:title="formatMessage(messages.alwaysShowCopyDetailsTitle)"
+				:description="formatMessage(messages.alwaysShowCopyDetailsDescription)"
+			>
+				<template #default="{ labelledBy, controlId }">
+					<Toggle
+						:id="controlId"
+						:model-value="appSettings.getFeatureFlag(alwaysShowCopyDetailsFlag)"
+						:aria-labelledby="labelledBy"
+						@update:model-value="
+							() => {
+								const newValue = !appSettings.getFeatureFlag(alwaysShowCopyDetailsFlag)
+								appSettings.featureFlags[alwaysShowCopyDetailsFlag] = newValue
+								settings.feature_flags[alwaysShowCopyDetailsFlag] = newValue
+							}
+						"
+					/>
+				</template>
+			</SettingsRow>
+		</SettingsGroup>
 
-		<div class="flex flex-col gap-2.5">
-			<h2 class="mt-0 m-0 text-lg font-semibold text-contrast">
-				{{ formatMessage(messages.maximumConcurrentWritesTitle) }}
-			</h2>
-			<Slider
-				id="max-writes"
-				v-model="settings.max_concurrent_writes"
-				:min="1"
-				:max="50"
-				:step="1"
-			/>
-			<p class="m-0 leading-tight text-secondary">
-				{{ formatMessage(messages.maximumConcurrentWritesDescription) }}
-			</p>
-		</div>
+		<SettingsGroup :label="formatMessage(messages.maintenanceGroup)">
+			<SettingsStack
+				control-id="purge-cache"
+				:title="formatMessage(messages.appCacheTitle)"
+				:description="formatMessage(messages.appCacheDescription)"
+			>
+				<template #default="{ controlId }">
+					<Button :id="controlId" class="w-fit" @click="handlePurgeCacheClick">
+						<TrashIcon aria-hidden="true" />
+						{{ formatMessage(messages.purgeCache) }}
+					</Button>
+				</template>
+			</SettingsStack>
 
-		<div class="flex flex-col gap-2.5">
-			<h2 class="mt-0 m-0 text-lg font-semibold text-contrast">
-				{{ formatMessage(messages.appDatabaseBackupsTitle) }}
-			</h2>
-			<Button id="open-db-backups-folder" class="w-fit" @click="openDbBackupsFolder">
-				<FolderOpenIcon aria-hidden="true" />
-				{{ formatMessage(messages.openBackupsFolder) }}
-			</Button>
-			<p class="m-0 leading-tight text-secondary">
-				{{ formatMessage(messages.appDatabaseBackupsDescription) }}
-			</p>
-		</div>
+			<SettingsStack
+				control-id="open-db-backups-folder"
+				:title="formatMessage(messages.appDatabaseBackupsTitle)"
+				:description="formatMessage(messages.appDatabaseBackupsDescription)"
+			>
+				<template #default="{ controlId }">
+					<Button :id="controlId" class="w-fit" @click="openDbBackupsFolder">
+						<FolderOpenIcon aria-hidden="true" />
+						{{ formatMessage(messages.openBackupsFolder) }}
+					</Button>
+				</template>
+			</SettingsStack>
+		</SettingsGroup>
 	</div>
 </template>

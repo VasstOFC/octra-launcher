@@ -262,11 +262,11 @@ onMounted(() => {
 <template>
 	<InstanceCardView
 		ref="instanceCardElement"
-		class="group/card cursor-pointer -outline-offset-2 focus-visible:!outline-2 hover:brightness-110"
+		class="group/card cursor-pointer -outline-offset-2 focus-visible:!outline-2"
 		:class="{
 			'!scale-100': isDragging,
 			'opacity-50': isPartOfActiveDrag,
-			'scale-[0.95]': isPrimaryPointerDown && !isLibraryInstanceSelectionActive,
+			'scale-[0.98]': isPrimaryPointerDown && !isLibraryInstanceSelectionActive,
 		}"
 		:instance="instance"
 		:selected="selected"
@@ -333,7 +333,11 @@ onMounted(() => {
 						type="colored"
 						color="brand"
 						:size="compact ? 'md' : 'lg'"
-						class="origin-bottom scale-75 opacity-0 transition-opacity group-hover/card:scale-100 group-hover/card:opacity-100"
+						:class="
+							compact
+								? ''
+								: 'origin-bottom scale-75 opacity-0 transition-opacity group-hover/card:scale-100 group-hover/card:opacity-100'
+						"
 						@click="(e) => repair(e)"
 					>
 						<DownloadIcon />
@@ -350,7 +354,11 @@ onMounted(() => {
 						type="colored"
 						color="brand"
 						:size="compact ? 'md' : 'lg'"
-						class="origin-bottom scale-75 opacity-0 transition-opacity group-hover/card:scale-100 group-hover/card:opacity-100"
+						:class="
+							compact
+								? ''
+								: 'origin-bottom scale-75 opacity-0 transition-opacity group-hover/card:scale-100 group-hover/card:opacity-100'
+						"
 						@click="(e) => play(e, 'InstanceCard')"
 						@mouseenter="checkProcess"
 					>
@@ -362,15 +370,15 @@ onMounted(() => {
 		<template #overlay="{ compact }">
 			<button
 				type="button"
-				class="selection-button group/selection absolute z-[2] flex size-[50px] cursor-pointer items-start pt-4 justify-center border-0 bg-transparent p-0"
-				:class="compact ? '-right-1 -top-1' : 'right-2 top-1.5'"
+				class="selection-button group/selection absolute z-[2] flex size-[50px] cursor-pointer items-start justify-center border-0 bg-transparent p-0"
+				:class="compact ? 'left-0 top-0 pt-2.5 pl-2' : 'right-2 top-1.5 pt-4'"
 				:aria-label="formatMessage(selected ? messages.deselect : messages.select)"
 				:aria-pressed="selected"
 				@click.stop="toggleSelection"
 			>
 				<span
 					v-tooltip="formatMessage(selected ? messages.deselect : messages.select)"
-					class="relative flex items-center justify-center rounded-full opacity-0 transition-opacity duration-200 ease-out group-hover/card:opacity-100 group-hover/selection:brightness-125"
+					class="relative flex items-center justify-center rounded-full opacity-0 transition-opacity duration-200 ease-out group-hover/card:opacity-100"
 					:class="{
 						'size-[20px]': compact,
 						'size-[24px]': !compact,

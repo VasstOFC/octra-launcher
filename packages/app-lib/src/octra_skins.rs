@@ -1,27 +1,34 @@
-//! Octra skins via authlib-injector + remote Yggdrasil ([`crate::nervia::skins_url`]).
+//! Octra skins via authlib-injector + a client-side Fabric overlay mod.
 //!
-//! Design (HMCL / Ely.by style):
 //! - Every launch gets `-javaagent:authlib-injector.jar=<ygg_root>`.
-//! - The VPS Yggdrasil serves **offline** skins from the Octra registry and
-//!   **premium** profiles by proxying Mojang (signed textures).
-//! - No CustomSkinLoader, no Fabric overlay for skins.
+//! - Fabric / Quilt: `-Dfabric.addMods=<octra-client-skins.jar>` (not copied into packs).
+//! - Vanilla 1.20.1: overlay Fabric loader so the client mod can load.
 //! - Legacy PNG URLs (`/skins/MinecraftSkins/{nick}.png`) remain for SkinsRestorer.
 
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::time::Duration;
 
+use daedalus::modded::LoaderVersion;
 use md5::Md5;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use uuid::Uuid;
 
 use crate::nervia;
-use crate::state::{Credentials, DirectoryInfo, MinecraftSkinVariant, State};
+use crate::state::{
+	Credentials, DirectoryInfo, MinecraftSkinVariant, ModLoader, State,
+};
 use crate::util::fetch::INSECURE_REQWEST_CLIENT;
 use crate::util::io;
 
 pub const OFFLINE_REFRESH_TOKEN: &str = "octra-offline";
+
+const CLIENT_SKINS_EPHEMERAL: &str = ".octra-client-skins.jar";
+const CLIENT_SKINS_1_20_1: &[u8] = include_bytes!(concat!(
+	env!("CARGO_MANIFEST_DIR"),
+	"/assets/octra-client-skins-1.20.1.jar"
+));
 
 const AUTHLIB_VERSION: &str = "1.2.8";
 const AUTHLIB_SHA256: &str =
@@ -325,9 +332,45 @@ async fn authlib_jar_path() -> crate::Result<PathBuf> {
 	.into())
 }
 
-/// Before Minecraft starts: publish equipped skin, inject authlib for every account.
+/// Overlay Fabric onto vanilla when we have a client-skins jar for this MC version.
+pub async fn overlay_fabric_if_vanilla(
+	game_version: &str,
+	loader: ModLoader,
+	loader_version: Option<LoaderVersion>,
+) -> (ModLoader, Option<LoaderVersion>) {
+	if loader != ModLoader::Vanilla || !supports_client_skins(game_version) {
+		return (loader, loader_version);
+	}
+	match crate::launcher::get_loader_version_from_profile(
+		game_version,
+		ModLoader::Fabric,
+		Some("stable"),
+	)
+	.await
+	{
+		Ok(Some(fabric)) => {
+			tracing::info!(
+				"Octra skins: overlaying Fabric {} on vanilla {game_version}",
+				fabric.id
+			);
+			(ModLoader::Fabric, Some(fabric))
+		}
+		Ok(None) => {
+			tracing::debug!("Octra skins: no Fabric loader for {game_version}");
+			(loader, loader_version)
+		}
+		Err(error) => {
+			tracing::warn!("Octra skins: Fabric overlay failed: {error}");
+			(loader, loader_version)
+		}
+	}
+}
+
+/// Before Minecraft starts: publish equipped skin, inject authlib + client skins mod.
 pub async fn prepare_launch(
-	_instance_path: &Path,
+	instance_path: &Path,
+	game_version: &str,
+	loader: ModLoader,
 	credentials: &Credentials,
 	java_args: &mut Vec<String>,
 ) -> crate::Result<()> {
@@ -351,12 +394,95 @@ pub async fn prepare_launch(
 	let jar = authlib_jar_path().await?;
 	let jar = dunce::canonicalize(&jar).unwrap_or(jar);
 	let root = ygg_root();
-	// Always inject. Offline skins resolve from Octra; premium from Mojang via VPS proxy.
 	java_args.insert(0, format!("-javaagent:{}={}", jar.display(), root));
 	java_args.insert(1, "-Dauthlibinjector.side=client".to_string());
+	java_args.insert(2, format!("-Doctra.skins.url={root}"));
 	tracing::info!(
 		"Octra skins: authlib-injector → {root} ({})",
 		credentials.offline_profile.name
 	);
+
+	if let Err(error) =
+		inject_client_skins(instance_path, game_version, loader, java_args)
+			.await
+	{
+		tracing::warn!("Octra skins: client mod inject: {error}");
+	}
 	Ok(())
+}
+
+pub async fn cleanup_ephemeral_client_skins(instance_path: &Path) {
+	let ephemeral = ephemeral_client_skins_path(instance_path);
+	if ephemeral.exists() {
+		let _ = tokio::fs::remove_file(ephemeral).await;
+	}
+}
+
+fn supports_client_skins(game_version: &str) -> bool {
+	game_version == "1.20.1"
+}
+
+fn client_skins_bytes(game_version: &str) -> Option<&'static [u8]> {
+	match game_version {
+		"1.20.1" => Some(CLIENT_SKINS_1_20_1),
+		_ => None,
+	}
+}
+
+fn ephemeral_client_skins_path(instance_path: &Path) -> PathBuf {
+	instance_path.join("mods").join(CLIENT_SKINS_EPHEMERAL)
+}
+
+async fn client_skins_jar_path(game_version: &str) -> crate::Result<PathBuf> {
+	let bytes = client_skins_bytes(game_version).ok_or_else(|| {
+		crate::ErrorKind::OtherError(format!(
+			"no octra-client-skins for Minecraft {game_version}"
+		))
+	})?;
+	let state = State::get().await?;
+	let dest = state
+		.directories
+		.metadata_dir()
+		.join(format!("octra-client-skins-{game_version}.jar"));
+	if dest.exists()
+		&& let Ok(existing) = tokio::fs::read(&dest).await
+		&& existing.as_slice() == bytes
+	{
+		return Ok(dest);
+	}
+	io::create_dir_all(state.directories.metadata_dir()).await?;
+	io::write(&dest, bytes).await?;
+	Ok(dest)
+}
+
+async fn inject_client_skins(
+	_instance_path: &Path,
+	game_version: &str,
+	loader: ModLoader,
+	java_args: &mut Vec<String>,
+) -> crate::Result<()> {
+	if !supports_client_skins(game_version) {
+		tracing::debug!(
+			"Octra skins: no client mod for {game_version} yet"
+		);
+		return Ok(());
+	}
+	let jar = client_skins_jar_path(game_version).await?;
+	let jar = dunce::canonicalize(&jar).unwrap_or(jar);
+	match loader {
+		ModLoader::Fabric | ModLoader::Quilt => {
+			java_args.push(format!("-Dfabric.addMods={}", jar.display()));
+			tracing::info!(
+				"Octra skins: injected client mod via fabric.addMods ({game_version})"
+			);
+			Ok(())
+		}
+		ModLoader::Forge | ModLoader::NeoForge | ModLoader::Vanilla => {
+			tracing::info!(
+				"Octra skins: client mod skipped for {} {game_version} (Fabric/Quilt only for now)",
+				loader.as_str()
+			);
+			Ok(())
+		}
+	}
 }

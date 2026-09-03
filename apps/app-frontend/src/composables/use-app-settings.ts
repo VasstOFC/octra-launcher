@@ -13,7 +13,7 @@ export const DEFAULT_FEATURE_FLAGS = {
 	pride_fundraiser: true,
 	i18n_debug: false,
 	show_instance_play_time: true,
-	compact_instance_cards: false,
+	compact_instance_cards: true,
 	advanced_filters_collapsed: true,
 	always_show_copy_details: false,
 	hide_installed_modpacks: false,

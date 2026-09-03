@@ -323,6 +323,33 @@
   "app.featured-pack.title": {
     "message": "Cobblemon Vasst"
   },
+  "app.home.continue.empty": {
+    "message": "Utwórz instancję, aby zacząć grać."
+  },
+  "app.home.continue.loading": {
+    "message": "Uruchamianie…"
+  },
+  "app.home.continue.never-played": {
+    "message": "Gotowe do gry"
+  },
+  "app.home.continue.open": {
+    "message": "Otwórz {name}"
+  },
+  "app.home.continue.play": {
+    "message": "Graj"
+  },
+  "app.home.continue.played": {
+    "message": "Ostatnio grane {relativeTime}"
+  },
+  "app.home.continue.stop": {
+    "message": "Zatrzymaj"
+  },
+  "app.home.continue.title": {
+    "message": "Kontynuuj"
+  },
+  "app.home.hero.tagline": {
+    "message": "Twoje światy. Twoja ekipa. Jeden launcher."
+  },
   "app.home.jump-back-in.actions.label": {
     "message": "Akcje instancji"
   },
@@ -349,9 +376,6 @@
   },
   "app.home.jump-back-in.view-instance": {
     "message": "Pokaż instancję"
-  },
-  "app.home.hero.tagline": {
-    "message": "Twoje światy. Twoja ekipa. Jeden launcher."
   },
   "app.hosting.update-required.description": {
     "message": "Aby korzystać z Modrinth Hosting w Octra App, musisz zaktualizować aplikację"
@@ -1250,6 +1274,9 @@
   "app.nav.add-account": {
     "message": "Dodaj konto"
   },
+  "app.nav.chat": {
+    "message": "Czat"
+  },
   "app.nav.collapse-rail": {
     "message": "Zwiń menu"
   },
@@ -1267,6 +1294,12 @@
   },
   "app.nav.home": {
     "message": "Strona główna"
+  },
+  "app.nav.identity-in-game": {
+    "message": "W grze · {name}"
+  },
+  "app.nav.identity-in-game-unknown": {
+    "message": "W grze"
   },
   "app.nav.identity-minecraft-section": {
     "message": "Minecraft"
@@ -1583,6 +1616,27 @@
   "app.servers.empty": {
     "message": "Brak serwerów. Serwery dodane w Octra App pojawią się tutaj."
   },
+  "app.servers.friends-ingame.empty": {
+    "message": "Nikt z Octra nie jest teraz w grze z adresem do dołączenia."
+  },
+  "app.servers.friends-ingame.play-with": {
+    "message": "Dołącz"
+  },
+  "app.servers.friends-ingame.playing": {
+    "message": "Gra: {name}"
+  },
+  "app.servers.friends-ingame.playing-unknown": {
+    "message": "W grze"
+  },
+  "app.servers.friends-ingame.sign-in": {
+    "message": "Zaloguj się do Octra w panelu znajomych, żeby zobaczyć kto gra."
+  },
+  "app.servers.friends-ingame.title": {
+    "message": "Znajomi w grze"
+  },
+  "app.servers.friends-ingame.view-pack": {
+    "message": "Zobacz paczkę"
+  },
   "app.servers.loading": {
     "message": "Ładowanie…"
   },
@@ -1604,35 +1658,125 @@
   "app.servers.players": {
     "message": "{online}/{max} graczy"
   },
+  "app.servers.quick-join": {
+    "message": "Szybkie dołączenie"
+  },
+  "app.servers.quick-join.action": {
+    "message": "Dołącz"
+  },
+  "app.servers.quick-join.instance": {
+    "message": "Instancja"
+  },
+  "app.servers.quick-join.placeholder": {
+    "message": "play.example.com:25565"
+  },
   "app.servers.refresh": {
     "message": "Odśwież"
   },
+  "app.servers.saved.delete": {
+    "message": "Usuń serwer"
+  },
+  "app.servers.saved.deleted": {
+    "message": "Usunięto serwer"
+  },
+  "app.servers.saved.empty": {
+    "message": "Brak zapisanych serwerów. Dodaj współdzielone w zakładce Serwery w panelu znajomych."
+  },
+  "app.servers.saved.shared-badge": {
+    "message": "Współdzielony"
+  },
+  "app.servers.saved.title": {
+    "message": "Zapisane serwery"
+  },
   "app.servers.subtitle": {
-    "message": "Twoja lista serwerów multiplayer, wspólna z Octra App."
+    "message": "Dołącz do znajomych w grze albo wejdź na zapisany adres."
   },
   "app.servers.title": {
     "message": "Serwery"
   },
+  "app.settings.accent.custom": {
+    "message": "Własny"
+  },
+  "app.settings.accent.custom-color-label": {
+    "message": "Własny kolor akcentu"
+  },
+  "app.settings.accent.description": {
+    "message": "Zmienia kolor akcentu używany w przyciskach, podświetleniach i poświatach."
+  },
+  "app.settings.accent.preset.aurora": {
+    "message": "Aurora"
+  },
+  "app.settings.accent.preset.cobalt": {
+    "message": "Kobalt"
+  },
+  "app.settings.accent.preset.ember": {
+    "message": "Ember"
+  },
+  "app.settings.accent.preset.mint": {
+    "message": "Mięta"
+  },
+  "app.settings.accent.preset.octra": {
+    "message": "Octra"
+  },
+  "app.settings.accent.preset.rose": {
+    "message": "Róż"
+  },
+  "app.settings.accent.title": {
+    "message": "Kolor akcentu"
+  },
+  "app.settings.account.manage": {
+    "message": "Zarządzaj"
+  },
+  "app.settings.account.panel.description": {
+    "message": "Zaloguj się do Octra, aby korzystać ze skinów, społeczności i czatu."
+  },
+  "app.settings.account.panel.title": {
+    "message": "Konto"
+  },
+  "app.settings.account.session.group": {
+    "message": "Sesja Octra"
+  },
+  "app.settings.account.session.signed-in": {
+    "message": "Zalogowano"
+  },
+  "app.settings.account.session.signed-in-description": {
+    "message": "{username} · {minecraftNick}"
+  },
+  "app.settings.account.session.signed-out": {
+    "message": "Niezalogowano"
+  },
   "app.settings.app-version": {
     "message": "Octra App {version}"
+  },
+  "app.settings.appearance.group.accent": {
+    "message": "Akcent"
+  },
+  "app.settings.appearance.group.accent.description": {
+    "message": "Kolor marki w całym launcherze."
+  },
+  "app.settings.appearance.group.language": {
+    "message": "Język"
+  },
+  "app.settings.appearance.group.language.description": {
+    "message": "Język interfejsu Octra App."
+  },
+  "app.settings.appearance.panel.description": {
+    "message": "Motyw, kolor akcentu, język i układ biblioteki."
+  },
+  "app.settings.appearance.panel.title": {
+    "message": "Wygląd"
+  },
+  "app.settings.behavior.panel.description": {
+    "message": "Start, treść ekranu głównego, potwierdzenia i status Discord."
+  },
+  "app.settings.behavior.panel.title": {
+    "message": "Zachowanie"
   },
   "app.settings.check-for-updates": {
     "message": "Sprawdź aktualizacje"
   },
   "app.settings.checking-for-updates": {
     "message": "Sprawdzanie aktualizacji…"
-  },
-  "app.settings.updates-disabled": {
-    "message": "Automatyczne aktualizacje działają tylko w wersji release."
-  },
-  "app.settings.update-already-latest": {
-    "message": "Masz najnowszą wersję."
-  },
-  "app.settings.update-available": {
-    "message": "Dostępna wersja {version}."
-  },
-  "app.settings.update-check-failed": {
-    "message": "Nie udało się sprawdzić aktualizacji. Spróbuj ponownie później."
   },
   "app.settings.default-instance-options.environment-variables.description": {
     "message": "Zmienne środowiskowe ustawione podczas uruchamiania instancji."
@@ -1727,8 +1871,23 @@
   "app.settings.downloading": {
     "message": "Pobieranie v{version}"
   },
+  "app.settings.java-installations.description": {
+    "message": "Wybierz instalacje Java używane do uruchamiania gry."
+  },
+  "app.settings.java-installations.group": {
+    "message": "Wersje Java"
+  },
   "app.settings.java-installations.location.title": {
     "message": "Ścieżka do Java {version, number}"
+  },
+  "app.settings.java-installations.title": {
+    "message": "Instalacje Java"
+  },
+  "app.settings.launch-defaults.description": {
+    "message": "Domyślny rozmiar okna, pamięć, argumenty Java i hooki dla nowych instancji."
+  },
+  "app.settings.launch-defaults.title": {
+    "message": "Uruchamianie"
   },
   "app.settings.operating-system.macos": {
     "message": "macOS"
@@ -1742,11 +1901,29 @@
   "app.settings.privacy.ads-consent.intro": {
     "message": "Reklamy pozwalają na dalsze działanie Modrinth i finansują dochody dla twórców. Nasi partnerzy mogą gromadzić albo uzyskiwać dostęp do plików cookies w celu personalizacji reklam i mierzenia skuteczności."
   },
+  "app.settings.privacy.ads.group": {
+    "message": "Reklamy"
+  },
+  "app.settings.privacy.data.group": {
+    "message": "Dane"
+  },
   "app.settings.privacy.discord-rich-presence.description": {
     "message": "Pokazuj Octra App jako aktywność na Discordzie. Nie wpływa to na Rich Presence dodane do instancji przez mody. Wymaga ponownego uruchomienia aplikacji."
   },
   "app.settings.privacy.discord-rich-presence.title": {
     "message": "Discord Rich Presence"
+  },
+  "app.settings.privacy.panel.description": {
+    "message": "Preferencje reklam i zbieranie danych."
+  },
+  "app.settings.privacy.panel.title": {
+    "message": "Prywatność"
+  },
+  "app.settings.privacy.telemetry.description": {
+    "message": "Analityka użycia pozostaje wyłączona w Octra App."
+  },
+  "app.settings.privacy.telemetry.title": {
+    "message": "Telemetria"
   },
   "app.settings.resource-management.always-show-copy-details.description": {
     "message": "Pokazuj akcję „Kopiuj szczegóły”, gdy instalacja czeka w kolejce lub trwa. Przy nieudanych lub przerwanych instalacjach jest zawsze dostępna."
@@ -1790,6 +1967,15 @@
   "app.settings.resource-management.app-directory.title": {
     "message": "Katalog aplikacji"
   },
+  "app.settings.resource-management.description": {
+    "message": "Katalog aplikacji, limity pobierania i konserwacja."
+  },
+  "app.settings.resource-management.location.group": {
+    "message": "Lokalizacja"
+  },
+  "app.settings.resource-management.maintenance.group": {
+    "message": "Konserwacja"
+  },
   "app.settings.resource-management.maximum-concurrent-downloads.description": {
     "message": "Ilość plików, które aplikacja może pobierać na raz. Zmniejsz tę wartość, jeśli pobieranie jest niestabilne. Wymaga ponownego uruchomienia aplikacji."
   },
@@ -1802,8 +1988,26 @@
   "app.settings.resource-management.maximum-concurrent-writes.title": {
     "message": "Maksymalna liczba jednoczesnych zapisów"
   },
+  "app.settings.resource-management.performance.group": {
+    "message": "Pobieranie i zapis"
+  },
+  "app.settings.resource-management.title": {
+    "message": "Pamięć i pliki"
+  },
+  "app.settings.sidebar.label.app": {
+    "message": "Aplikacja"
+  },
+  "app.settings.sidebar.label.game-defaults": {
+    "message": "Domyślne gry"
+  },
   "app.settings.sidebar.label.instances": {
     "message": "Instancje"
+  },
+  "app.settings.sidebar.label.look-and-feel": {
+    "message": "Wygląd i styl"
+  },
+  "app.settings.sidebar.label.system": {
+    "message": "System"
   },
   "app.settings.synced-options.command-history": {
     "message": "Historia poleceń"
@@ -1819,6 +2023,12 @@
   },
   "app.settings.synced-options.creative-hotbars.description": {
     "message": "Synchronizuj zapisane paski kreatywne między instancjami."
+  },
+  "app.settings.synced-options.description": {
+    "message": "Ustawienia współdzielone między Twoimi instancjami."
+  },
+  "app.settings.synced-options.group": {
+    "message": "Opcje synchronizacji"
   },
   "app.settings.synced-options.multiplayer-servers": {
     "message": "Serwery wieloosobowe"
@@ -1847,38 +2057,14 @@
   "app.settings.synced-options.screenshots.description": {
     "message": "Przeglądaj zrzuty ekranu ze swoich instancji w jednym miejscu."
   },
+  "app.settings.synced-options.title": {
+    "message": "Synchronizacja"
+  },
+  "app.settings.tabs.account": {
+    "message": "Konto"
+  },
   "app.settings.tabs.appearance": {
     "message": "Wygląd"
-  },
-  "app.settings.accent.title": {
-    "message": "Kolor akcentu"
-  },
-  "app.settings.accent.description": {
-    "message": "Zmienia kolor akcentu używany w przyciskach, podświetleniach i poświatach."
-  },
-  "app.settings.accent.custom": {
-    "message": "Własny"
-  },
-  "app.settings.accent.custom-color-label": {
-    "message": "Własny kolor akcentu"
-  },
-  "app.settings.accent.preset.octra": {
-    "message": "Octra"
-  },
-  "app.settings.accent.preset.cobalt": {
-    "message": "Kobalt"
-  },
-  "app.settings.accent.preset.ember": {
-    "message": "Ember"
-  },
-  "app.settings.accent.preset.mint": {
-    "message": "Mięta"
-  },
-  "app.settings.accent.preset.rose": {
-    "message": "Róż"
-  },
-  "app.settings.accent.preset.aurora": {
-    "message": "Aurora"
   },
   "app.settings.tabs.behavior": {
     "message": "Zachowanie"
@@ -1886,20 +2072,38 @@
   "app.settings.tabs.java-installations": {
     "message": "Instalacje Java"
   },
+  "app.settings.tabs.launch": {
+    "message": "Uruchamianie"
+  },
   "app.settings.tabs.privacy": {
     "message": "Prywatność"
   },
   "app.settings.tabs.resource-management": {
     "message": "Zarządzanie zasobami"
   },
+  "app.settings.tabs.storage": {
+    "message": "Pamięć"
+  },
+  "app.settings.tabs.sync": {
+    "message": "Synchronizacja"
+  },
   "app.settings.tabs.synced-options": {
     "message": "Ustawienia synchronizacji"
   },
+  "app.settings.update-already-latest": {
+    "message": "Masz najnowszą wersję."
+  },
+  "app.settings.update-available": {
+    "message": "Dostępna wersja {version}."
+  },
+  "app.settings.update-check-failed": {
+    "message": "Nie udało się sprawdzić aktualizacji. Spróbuj ponownie później."
+  },
+  "app.settings.updates-disabled": {
+    "message": "Automatyczne aktualizacje działają tylko w wersji release."
+  },
   "app.sidebar.playing-as": {
     "message": "Graj jako"
-  },
-  "app.splash.tagline": {
-    "message": "Gotowe, kiedy Ty jesteś"
   },
   "app.skins.add-button": {
     "message": "Dodaj skórkę"
@@ -2062,6 +2266,9 @@
   },
   "app.skins.toggle-ears-features-on": {
     "message": "Włącz"
+  },
+  "app.splash.tagline": {
+    "message": "Gotowe, kiedy Ty jesteś"
   },
   "app.survey.body": {
     "message": "Czy chcesz odpowiedzieć na kilka pytań o doświadczenia z Octra App?"
@@ -2336,6 +2543,18 @@
   "instance.add-server.title": {
     "message": "Dodaj serwer"
   },
+  "instance.badge.locked": {
+    "message": "Zablokowana"
+  },
+  "instance.badge.locked-aria": {
+    "message": "Informacje o zablokowanej instancji"
+  },
+  "instance.badge.shared": {
+    "message": "Udostępniona"
+  },
+  "instance.badge.shared-aria": {
+    "message": "Informacje o udostępnionej instancji"
+  },
   "instance.edit-server.title": {
     "message": "Edytuj serwer"
   },
@@ -2582,17 +2801,8 @@
   "instance.locked.play-tooltip": {
     "message": "Ta instancja została zablokowana"
   },
-  "instance.playtime.never-played": {
-    "message": "Nigdy nie grano"
-  },
-  "instance.playtime.hours": {
-    "message": "{count, plural, one {# godzina} few {# godziny} many {# godzin} other {# godzin}}"
-  },
-  "instance.playtime.minutes": {
-    "message": "{count, plural, one {# minuta} few {# minuty} many {# minut} other {# minut}}"
-  },
-  "instance.playtime.seconds": {
-    "message": "{count, plural, one {# sekunda} few {# sekundy} many {# sekund} other {# sekund}}"
+  "instance.metadata.last-played-tooltip": {
+    "message": "Ostatnio grane"
   },
   "instance.metadata.loader-tooltip": {
     "message": "Loader modów i wersja Minecrafta"
@@ -2600,20 +2810,17 @@
   "instance.metadata.playtime-tooltip": {
     "message": "Całkowity czas gry"
   },
-  "instance.metadata.last-played-tooltip": {
-    "message": "Ostatnio grane"
+  "instance.playtime.hours": {
+    "message": "{count, plural, one {# godzina} few {# godziny} many {# godzin} other {# godzin}}"
   },
-  "instance.badge.locked": {
-    "message": "Zablokowana"
+  "instance.playtime.minutes": {
+    "message": "{count, plural, one {# minuta} few {# minuty} many {# minut} other {# minut}}"
   },
-  "instance.badge.shared": {
-    "message": "Udostępniona"
+  "instance.playtime.never-played": {
+    "message": "Nigdy nie grano"
   },
-  "instance.badge.locked-aria": {
-    "message": "Informacje o zablokowanej instancji"
-  },
-  "instance.badge.shared-aria": {
-    "message": "Informacje o udostępnionej instancji"
+  "instance.playtime.seconds": {
+    "message": "{count, plural, one {# sekunda} few {# sekundy} many {# sekund} other {# sekund}}"
   },
   "instance.server-modal.address": {
     "message": "Adres"
@@ -3101,168 +3308,6 @@
   "minecraft-account.sign-in": {
     "message": "Logowanie do Octry"
   },
-  "octra-account.hint": {
-    "message": "Octra łączy skiny z kontem Minecraft — nie tworzy konta MC. Najpierw dodaj Microsoft lub offline."
-  },
-  "octra-account.label": {
-    "message": "Konto Octra"
-  },
-  "octra-account.login": {
-    "message": "Zaloguj się"
-  },
-  "octra-account.login-success": {
-    "message": "Zalogowano do Octra"
-  },
-  "octra-account.logout": {
-    "message": "Wyloguj"
-  },
-  "octra-account.linked-minecraft": {
-    "message": "Konto Minecraft"
-  },
-  "octra-account.no-minecraft": {
-    "message": "Najpierw dodaj konto Microsoft lub offline Minecraft."
-  },
-  "octra-account.password": {
-    "message": "Hasło"
-  },
-  "octra-account.register": {
-    "message": "Połącz"
-  },
-  "octra-account.register-hint": {
-    "message": "Octra łączy się z aktualnym kontem Minecraft do skinów. Nie tworzy konta Minecraft."
-  },
-  "octra-account.register-success": {
-    "message": "Połączono konto Octra"
-  },
-  "octra-account.title": {
-    "message": "Konto Octra"
-  },
-  "octra-account.username": {
-    "message": "Nick Minecraft"
-  },
-  "octra.community.count": {
-    "message": "{count, plural, one {# gracz} few {# graczy} many {# graczy} other {# gracza}}"
-  },
-  "octra.community.connected": {
-    "message": "Połączono"
-  },
-  "octra.community.disconnected": {
-    "message": "Rozłączono"
-  },
-  "octra.community.empty": {
-    "message": "Nie masz jeszcze nikogo znajomego :("
-  },
-  "octra.community.heading": {
-    "message": "Znajomi"
-  },
-  "octra.community.in-game": {
-    "message": "Gra: {name}"
-  },
-  "octra.community.in-game-unknown": {
-    "message": "W grze"
-  },
-  "octra.community.in-launcher": {
-    "message": "W launcherze"
-  },
-  "octra.community.last-seen": {
-    "message": "Ostatnio {time}"
-  },
-  "octra.community.no-match": {
-    "message": "Nie znaleziono znajomych pasujących do zapytania \"{query}\""
-  },
-  "octra.community.offline": {
-    "message": "Offline"
-  },
-  "octra.community.register-action": {
-    "message": "Połącz konto"
-  },
-  "octra.community.search": {
-    "message": "Szukaj znajomych..."
-  },
-  "octra.community.sign-in": {
-    "message": "Zaloguj się na Octra, żeby zobaczyć wszystkich z tego launchera."
-  },
-  "octra.community.sign-in-action": {
-    "message": "Zaloguj się"
-  },
-  "octra.community.join": {
-    "message": "Dołącz"
-  },
-  "octra.community.play-with": {
-    "message": "Graj z"
-  },
-  "octra.community.play-with-toast": {
-    "message": "Dołączanie do {nick}…"
-  },
-  "octra.community.friend-in-game": {
-    "message": "{nick} jest w grze"
-  },
-  "octra.community.share-ip": {
-    "message": "Udostępnij IP serwera…"
-  },
-  "octra.community.share-ip-placeholder": {
-    "message": "play.example.com:25565"
-  },
-  "octra.community.share-ip-action": {
-    "message": "Udostępnij IP"
-  },
-  "octra.community.share-ip-success": {
-    "message": "Twój adres dołączenia jest udostępniony znajomym."
-  },
-  "octra.community.no-instance": {
-    "message": "Utwórz lub zainstaluj instancję, zanim dołączysz do znajomego."
-  },
-  "octra.community.message-player": {
-    "message": "Napisz wiadomość do gracza"
-  },
-  "octra.community.actions.label": {
-    "message": "Akcje znajomego"
-  },
-  "octra.community.shared-heading": {
-    "message": "Wspólne serwery"
-  },
-  "octra.community.shared-empty": {
-    "message": "Brak wspólnych serwerów."
-  },
-  "octra.community.shared-name": {
-    "message": "Nazwa"
-  },
-  "octra.community.shared-address": {
-    "message": "Adres"
-  },
-  "octra.community.shared-add": {
-    "message": "Dodaj serwer"
-  },
-  "octra.community.shared-add-success": {
-    "message": "Dodano wspólny serwer."
-  },
-  "octra.community.shared-join": {
-    "message": "Dołącz do serwera"
-  },
-  "octra.community.shared-delete": {
-    "message": "Usuń serwer"
-  },
-  "octra.chat.new-message-toast": {
-    "message": "Nowa wiadomość na czacie"
-  },
-  "octra.whats-new.title": {
-    "message": "Nowości w Octra {version}"
-  },
-  "octra.whats-new.intro": {
-    "message": "Społecznościowe nowości w tej wersji:"
-  },
-  "octra.whats-new.dismiss": {
-    "message": "Rozumiem"
-  },
-  "app.nav.chat": {
-    "message": "Czat"
-  },
-  "app.nav.identity-in-game": {
-    "message": "W grze · {name}"
-  },
-  "app.nav.identity-in-game-unknown": {
-    "message": "W grze"
-  },
   "minecraft-required.description": {
     "message": "Zaloguj się kontem Microsoft albo graj offline z nickiem. Skin jest publikowany w chmurze Octra — Ty i znajomi zobaczycie go w grze bez dodatkowych modów. SkinsRestorer pozostaje opcjonalny na serwerach dedykowanych."
   },
@@ -3322,6 +3367,207 @@
   },
   "modal.modrinth-account-required.waiting-for-browser": {
     "message": "Oczekiwanie na twoje potwierdzenie..."
+  },
+  "octra-account.hint": {
+    "message": "Octra łączy skiny z kontem Minecraft — nie tworzy konta MC. Najpierw dodaj Microsoft lub offline."
+  },
+  "octra-account.label": {
+    "message": "Konto Octra"
+  },
+  "octra-account.linked-minecraft": {
+    "message": "Konto Minecraft"
+  },
+  "octra-account.login": {
+    "message": "Zaloguj się"
+  },
+  "octra-account.login-success": {
+    "message": "Zalogowano do Octra"
+  },
+  "octra-account.logout": {
+    "message": "Wyloguj"
+  },
+  "octra-account.no-minecraft": {
+    "message": "Najpierw dodaj konto Microsoft lub offline Minecraft."
+  },
+  "octra-account.password": {
+    "message": "Hasło"
+  },
+  "octra-account.register": {
+    "message": "Połącz"
+  },
+  "octra-account.register-hint": {
+    "message": "Octra łączy się z aktualnym kontem Minecraft do skinów. Nie tworzy konta Minecraft."
+  },
+  "octra-account.register-success": {
+    "message": "Połączono konto Octra"
+  },
+  "octra-account.title": {
+    "message": "Konto Octra"
+  },
+  "octra-account.username": {
+    "message": "Nick Minecraft"
+  },
+  "octra.chat.new-message-toast": {
+    "message": "Nowa wiadomość na czacie"
+  },
+  "octra.community.actions.label": {
+    "message": "Akcje znajomego"
+  },
+  "octra.community.connected": {
+    "message": "Połączono"
+  },
+  "octra.community.count": {
+    "message": "{count, plural, one {# gracz} few {# graczy} many {# graczy} other {# gracza}}"
+  },
+  "octra.community.disconnected": {
+    "message": "Rozłączono"
+  },
+  "octra.community.empty": {
+    "message": "Nie masz jeszcze nikogo znajomego :("
+  },
+  "octra.community.friend-in-game": {
+    "message": "{nick} jest w grze"
+  },
+  "octra.community.friend-pack-install-failed": {
+    "message": "Paczka zainstalowana, ale nie udało się otworzyć nowej instancji."
+  },
+  "octra.community.friend-pack-missing": {
+    "message": "Nie znaleziono tej paczki online. Wybierz zamiast tego jedną ze swoich instancji."
+  },
+  "octra.community.heading": {
+    "message": "Znajomi"
+  },
+  "octra.community.in-game": {
+    "message": "Gra: {name}"
+  },
+  "octra.community.in-game-unknown": {
+    "message": "W grze"
+  },
+  "octra.community.in-launcher": {
+    "message": "W launcherze"
+  },
+  "octra.community.join": {
+    "message": "Dołącz"
+  },
+  "octra.community.last-seen": {
+    "message": "Ostatnio {time}"
+  },
+  "octra.community.message-player": {
+    "message": "Napisz wiadomość do gracza"
+  },
+  "octra.community.no-instance": {
+    "message": "Utwórz lub zainstaluj instancję, zanim dołączysz do znajomego."
+  },
+  "octra.community.no-match": {
+    "message": "Nie znaleziono znajomych pasujących do zapytania \"{query}\""
+  },
+  "octra.community.offline": {
+    "message": "Offline"
+  },
+  "octra.community.play-back": {
+    "message": "Wstecz"
+  },
+  "octra.community.play-busy": {
+    "message": "Instalowanie paczki i dołączanie…"
+  },
+  "octra.community.play-cancel": {
+    "message": "Anuluj"
+  },
+  "octra.community.play-friend-pack": {
+    "message": "Pobierz paczkę znajomego"
+  },
+  "octra.community.play-friend-pack-hint": {
+    "message": "Zainstaluj {name}, jeśli jeszcze jej nie masz, a potem dołącz."
+  },
+  "octra.community.play-friend-pack-unknown": {
+    "message": "ich paczkę"
+  },
+  "octra.community.play-join": {
+    "message": "Dołącz"
+  },
+  "octra.community.play-own-pack": {
+    "message": "Użyj mojej paczki"
+  },
+  "octra.community.play-own-pack-hint": {
+    "message": "Wybierz jedną ze swoich zainstalowanych instancji i dołącz do tego samego serwera."
+  },
+  "octra.community.play-pick-instance": {
+    "message": "Wybierz instancję"
+  },
+  "octra.community.play-with": {
+    "message": "Graj z"
+  },
+  "octra.community.play-with-hint": {
+    "message": "Dołącz z paczką, którą już masz, albo pobierz tę, której używa {nick}."
+  },
+  "octra.community.play-with-title": {
+    "message": "Graj z {nick}"
+  },
+  "octra.community.play-with-toast": {
+    "message": "Dołączanie do {nick}…"
+  },
+  "octra.community.register-action": {
+    "message": "Połącz konto"
+  },
+  "octra.community.search": {
+    "message": "Szukaj znajomych..."
+  },
+  "octra.community.share-ip": {
+    "message": "Udostępnij IP serwera…"
+  },
+  "octra.community.share-ip-action": {
+    "message": "Udostępnij IP"
+  },
+  "octra.community.share-ip-placeholder": {
+    "message": "play.example.com:25565"
+  },
+  "octra.community.share-ip-success": {
+    "message": "Twój adres dołączenia jest udostępniony znajomym."
+  },
+  "octra.community.shared-add": {
+    "message": "Dodaj serwer"
+  },
+  "octra.community.shared-add-success": {
+    "message": "Dodano wspólny serwer."
+  },
+  "octra.community.shared-address": {
+    "message": "Adres"
+  },
+  "octra.community.shared-delete": {
+    "message": "Usuń serwer"
+  },
+  "octra.community.shared-empty": {
+    "message": "Brak wspólnych serwerów."
+  },
+  "octra.community.shared-heading": {
+    "message": "Wspólne serwery"
+  },
+  "octra.community.shared-join": {
+    "message": "Dołącz do serwera"
+  },
+  "octra.community.shared-name": {
+    "message": "Nazwa"
+  },
+  "octra.community.sign-in": {
+    "message": "Zaloguj się na Octra, żeby zobaczyć wszystkich z tego launchera."
+  },
+  "octra.community.sign-in-action": {
+    "message": "Zaloguj się"
+  },
+  "octra.community.tab.friends": {
+    "message": "Znajomi"
+  },
+  "octra.community.tab.servers": {
+    "message": "Serwery"
+  },
+  "octra.whats-new.dismiss": {
+    "message": "Rozumiem"
+  },
+  "octra.whats-new.intro": {
+    "message": "Społecznościowe nowości w tej wersji:"
+  },
+  "octra.whats-new.title": {
+    "message": "Nowości w Octra {version}"
   },
   "onboarding-checklist.create-instance": {
     "message": "Utwórz pierwszą instancję"

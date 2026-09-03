@@ -323,6 +323,30 @@
   "app.featured-pack.title": {
     "message": "Cobblemon Vasst"
   },
+  "app.home.continue.empty": {
+    "message": "Create an instance to start playing."
+  },
+  "app.home.continue.loading": {
+    "message": "Starting…"
+  },
+  "app.home.continue.never-played": {
+    "message": "Ready to play"
+  },
+  "app.home.continue.open": {
+    "message": "Open {name}"
+  },
+  "app.home.continue.play": {
+    "message": "Play"
+  },
+  "app.home.continue.played": {
+    "message": "Last played {relativeTime}"
+  },
+  "app.home.continue.stop": {
+    "message": "Stop"
+  },
+  "app.home.continue.title": {
+    "message": "Continue"
+  },
   "app.home.hero.tagline": {
     "message": "Your worlds. Your crew. One launcher."
   },
@@ -1598,6 +1622,27 @@
   "app.servers.empty": {
     "message": "No servers yet. Servers added in Octra App will show up here."
   },
+  "app.servers.friends-ingame.empty": {
+    "message": "Nobody from Octra is in game with a join address right now."
+  },
+  "app.servers.friends-ingame.play-with": {
+    "message": "Join"
+  },
+  "app.servers.friends-ingame.playing": {
+    "message": "Playing: {name}"
+  },
+  "app.servers.friends-ingame.playing-unknown": {
+    "message": "In game"
+  },
+  "app.servers.friends-ingame.sign-in": {
+    "message": "Sign in to Octra in the friends panel to see who is playing."
+  },
+  "app.servers.friends-ingame.title": {
+    "message": "Friends in game"
+  },
+  "app.servers.friends-ingame.view-pack": {
+    "message": "View pack"
+  },
   "app.servers.loading": {
     "message": "Loading…"
   },
@@ -1619,11 +1664,38 @@
   "app.servers.players": {
     "message": "{online}/{max} players"
   },
+  "app.servers.quick-join": {
+    "message": "Quick join"
+  },
+  "app.servers.quick-join.action": {
+    "message": "Join"
+  },
+  "app.servers.quick-join.instance": {
+    "message": "Instance"
+  },
+  "app.servers.quick-join.placeholder": {
+    "message": "play.example.com:25565"
+  },
   "app.servers.refresh": {
     "message": "Refresh"
   },
+  "app.servers.saved.delete": {
+    "message": "Remove server"
+  },
+  "app.servers.saved.deleted": {
+    "message": "Server removed"
+  },
+  "app.servers.saved.empty": {
+    "message": "No saved servers yet. Add shared ones from the friends panel Servers tab."
+  },
+  "app.servers.saved.shared-badge": {
+    "message": "Shared"
+  },
+  "app.servers.saved.title": {
+    "message": "Saved servers"
+  },
   "app.servers.subtitle": {
-    "message": "Your multiplayer server list, shared with Octra App."
+    "message": "Join friends in game, or hop onto a saved address."
   },
   "app.servers.title": {
     "message": "Servers"
@@ -1658,8 +1730,53 @@
   "app.settings.accent.title": {
     "message": "Accent color"
   },
+  "app.settings.account.manage": {
+    "message": "Manage"
+  },
+  "app.settings.account.panel.description": {
+    "message": "Sign in to Octra for skins, community, and chat."
+  },
+  "app.settings.account.panel.title": {
+    "message": "Account"
+  },
+  "app.settings.account.session.group": {
+    "message": "Octra session"
+  },
+  "app.settings.account.session.signed-in": {
+    "message": "Signed in"
+  },
+  "app.settings.account.session.signed-in-description": {
+    "message": "{username} · {minecraftNick}"
+  },
+  "app.settings.account.session.signed-out": {
+    "message": "Not signed in"
+  },
   "app.settings.app-version": {
     "message": "Octra App {version}"
+  },
+  "app.settings.appearance.group.accent": {
+    "message": "Accent"
+  },
+  "app.settings.appearance.group.accent.description": {
+    "message": "Brand color across the launcher."
+  },
+  "app.settings.appearance.group.language": {
+    "message": "Language"
+  },
+  "app.settings.appearance.group.language.description": {
+    "message": "Octra App interface language."
+  },
+  "app.settings.appearance.panel.description": {
+    "message": "Theme, accent color, language, and library layout."
+  },
+  "app.settings.appearance.panel.title": {
+    "message": "Appearance"
+  },
+  "app.settings.behavior.panel.description": {
+    "message": "Startup, home content, confirmations, and Discord status."
+  },
+  "app.settings.behavior.panel.title": {
+    "message": "Behavior"
   },
   "app.settings.check-for-updates": {
     "message": "Check for updates"
@@ -1760,8 +1877,23 @@
   "app.settings.downloading": {
     "message": "Downloading v{version}"
   },
+  "app.settings.java-installations.description": {
+    "message": "Choose Java installations used to launch the game."
+  },
+  "app.settings.java-installations.group": {
+    "message": "Java versions"
+  },
   "app.settings.java-installations.location.title": {
     "message": "Java {version, number} location"
+  },
+  "app.settings.java-installations.title": {
+    "message": "Java installations"
+  },
+  "app.settings.launch-defaults.description": {
+    "message": "Default window size, memory, Java arguments, and launch hooks for new instances."
+  },
+  "app.settings.launch-defaults.title": {
+    "message": "Launch"
   },
   "app.settings.operating-system.macos": {
     "message": "macOS"
@@ -1775,11 +1907,29 @@
   "app.settings.privacy.ads-consent.intro": {
     "message": "Ads make Modrinth possible and fund creator payouts. Our partners may store or access cookies in the app to personalize ads and measure performance. You can opt out or manage your preferences below."
   },
+  "app.settings.privacy.ads.group": {
+    "message": "Ads"
+  },
+  "app.settings.privacy.data.group": {
+    "message": "Data"
+  },
   "app.settings.privacy.discord-rich-presence.description": {
     "message": "Show Octra App as your current activity on Discord. This does not affect Rich Presence added to instances by mods. Requires an app restart."
   },
   "app.settings.privacy.discord-rich-presence.title": {
     "message": "Discord Rich Presence"
+  },
+  "app.settings.privacy.panel.description": {
+    "message": "Ads preferences and data collection."
+  },
+  "app.settings.privacy.panel.title": {
+    "message": "Privacy"
+  },
+  "app.settings.privacy.telemetry.description": {
+    "message": "Usage analytics stay off in Octra App."
+  },
+  "app.settings.privacy.telemetry.title": {
+    "message": "Telemetry"
   },
   "app.settings.resource-management.always-show-copy-details.description": {
     "message": "Show the Copy details action while an install is queued or running. It is always available for failed or interrupted installs."
@@ -1823,6 +1973,15 @@
   "app.settings.resource-management.app-directory.title": {
     "message": "App directory"
   },
+  "app.settings.resource-management.description": {
+    "message": "App directory, download limits, and maintenance."
+  },
+  "app.settings.resource-management.location.group": {
+    "message": "Location"
+  },
+  "app.settings.resource-management.maintenance.group": {
+    "message": "Maintenance"
+  },
   "app.settings.resource-management.maximum-concurrent-downloads.description": {
     "message": "Number of files the app can download at once. Lower this if downloads are unreliable on your connection. Requires an app restart."
   },
@@ -1835,8 +1994,26 @@
   "app.settings.resource-management.maximum-concurrent-writes.title": {
     "message": "Maximum concurrent writes"
   },
+  "app.settings.resource-management.performance.group": {
+    "message": "Downloads and writes"
+  },
+  "app.settings.resource-management.title": {
+    "message": "Storage"
+  },
+  "app.settings.sidebar.label.app": {
+    "message": "App"
+  },
+  "app.settings.sidebar.label.game-defaults": {
+    "message": "Game defaults"
+  },
   "app.settings.sidebar.label.instances": {
     "message": "Instances"
+  },
+  "app.settings.sidebar.label.look-and-feel": {
+    "message": "Look & feel"
+  },
+  "app.settings.sidebar.label.system": {
+    "message": "System"
   },
   "app.settings.synced-options.command-history": {
     "message": "Command history"
@@ -1852,6 +2029,12 @@
   },
   "app.settings.synced-options.creative-hotbars.description": {
     "message": "Sync saved creative hotbars across your instances."
+  },
+  "app.settings.synced-options.description": {
+    "message": "Options shared across your instances."
+  },
+  "app.settings.synced-options.group": {
+    "message": "Sync options"
   },
   "app.settings.synced-options.multiplayer-servers": {
     "message": "Multiplayer servers"
@@ -1880,6 +2063,12 @@
   "app.settings.synced-options.screenshots.description": {
     "message": "View screenshots from your instances in one place."
   },
+  "app.settings.synced-options.title": {
+    "message": "Sync"
+  },
+  "app.settings.tabs.account": {
+    "message": "Account"
+  },
   "app.settings.tabs.appearance": {
     "message": "Appearance"
   },
@@ -1889,11 +2078,20 @@
   "app.settings.tabs.java-installations": {
     "message": "Java installations"
   },
+  "app.settings.tabs.launch": {
+    "message": "Launch"
+  },
   "app.settings.tabs.privacy": {
     "message": "Privacy"
   },
   "app.settings.tabs.resource-management": {
     "message": "Resource management"
+  },
+  "app.settings.tabs.storage": {
+    "message": "Storage"
+  },
+  "app.settings.tabs.sync": {
+    "message": "Sync"
   },
   "app.settings.tabs.synced-options": {
     "message": "Synced settings"
@@ -3020,6 +3218,9 @@
   "instance.worlds.create_shortcut": {
     "message": "Create shortcut"
   },
+  "instance.worlds.desync_server": {
+    "message": "Desync"
+  },
   "instance.worlds.desync-server.description": {
     "message": "Do you want to keep this server in other synced instances, or remove it from them?"
   },
@@ -3031,9 +3232,6 @@
   },
   "instance.worlds.desync-server.title": {
     "message": "Desync server"
-  },
-  "instance.worlds.desync_server": {
-    "message": "Desync"
   },
   "instance.worlds.dont_show_on_home": {
     "message": "Don't show on Home"
@@ -3323,6 +3521,12 @@
   "octra.community.friend-in-game": {
     "message": "{nick} is in game"
   },
+  "octra.community.friend-pack-install-failed": {
+    "message": "Pack installed, but the new instance could not be opened."
+  },
+  "octra.community.friend-pack-missing": {
+    "message": "Couldn't find that pack online. Pick one of your instances instead."
+  },
   "octra.community.heading": {
     "message": "Friends"
   },
@@ -3353,8 +3557,44 @@
   "octra.community.offline": {
     "message": "Offline"
   },
+  "octra.community.play-back": {
+    "message": "Back"
+  },
+  "octra.community.play-busy": {
+    "message": "Installing pack and joining…"
+  },
+  "octra.community.play-cancel": {
+    "message": "Cancel"
+  },
+  "octra.community.play-friend-pack": {
+    "message": "Download friend's pack"
+  },
+  "octra.community.play-friend-pack-hint": {
+    "message": "Install {name} if you don’t have it yet, then join."
+  },
+  "octra.community.play-friend-pack-unknown": {
+    "message": "their pack"
+  },
+  "octra.community.play-join": {
+    "message": "Join"
+  },
+  "octra.community.play-own-pack": {
+    "message": "Use my pack"
+  },
+  "octra.community.play-own-pack-hint": {
+    "message": "Pick one of your installed instances and join the same server."
+  },
+  "octra.community.play-pick-instance": {
+    "message": "Choose an instance"
+  },
   "octra.community.play-with": {
     "message": "Play with"
+  },
+  "octra.community.play-with-hint": {
+    "message": "Join with a pack you already have, or download the one {nick} is using."
+  },
+  "octra.community.play-with-title": {
+    "message": "Play with {nick}"
   },
   "octra.community.play-with-toast": {
     "message": "Joining {nick}…"
@@ -3406,6 +3646,12 @@
   },
   "octra.community.sign-in-action": {
     "message": "Log in"
+  },
+  "octra.community.tab.friends": {
+    "message": "Friends"
+  },
+  "octra.community.tab.servers": {
+    "message": "Servers"
   },
   "octra.whats-new.dismiss": {
     "message": "Got it"

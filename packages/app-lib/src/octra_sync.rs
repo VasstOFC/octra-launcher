@@ -36,7 +36,7 @@ pub struct OctraServerEntry {
     pub address: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 struct OctraServerListFile {
     #[serde(default)]
     servers: Vec<OctraServerEntry>,
@@ -93,6 +93,42 @@ pub fn list_octra_servers() -> Vec<OctraServerEntry> {
         .into_iter()
         .filter(|s| !s.address.trim().is_empty())
         .collect()
+}
+
+pub fn remove_octra_server(address: &str) -> crate::Result<bool> {
+    let trimmed = address.trim();
+    if trimmed.is_empty() {
+        return Ok(false);
+    }
+    let Some(dir) = octra_launcher_dir() else {
+        return Ok(false);
+    };
+    let path = dir.join("servers.json");
+    let raw = match std::fs::read_to_string(&path) {
+        Ok(raw) => raw,
+        Err(_) => return Ok(false),
+    };
+    let mut parsed: OctraServerListFile =
+        serde_json::from_str(&raw).unwrap_or_default();
+    let before = parsed.servers.len();
+    let wanted = trimmed.to_ascii_lowercase();
+    parsed.servers.retain(|server| {
+        server.address.trim().to_ascii_lowercase() != wanted
+    });
+    if parsed.servers.len() == before {
+        return Ok(false);
+    }
+    let encoded = serde_json::to_vec_pretty(&parsed).map_err(|error| {
+        crate::ErrorKind::OtherError(format!(
+            "failed to serialize octra servers.json: {error}"
+        ))
+    })?;
+    std::fs::write(&path, encoded).map_err(|error| {
+        crate::ErrorKind::FSError(format!(
+            "failed to write octra servers.json: {error}"
+        ))
+    })?;
+    Ok(true)
 }
 
 impl Default for OctraServerListFile {

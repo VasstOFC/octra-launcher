@@ -768,18 +768,23 @@ fn link_project_and_version(
         } => (Some(project_id), Some(version_id)),
         InstanceLink::ServerProject { project_id } => (Some(project_id), None),
         InstanceLink::ServerProjectModpack {
-            server_project_id,
+            content_project_id,
             content_version_id,
             ..
-        } => (Some(server_project_id), Some(content_version_id)),
-        InstanceLink::ImportedModpack {
-            project_id,
-            version_id,
-            ..
-        } => (project_id.as_ref(), version_id.as_ref()),
-        InstanceLink::Unmanaged
-        | InstanceLink::ModrinthHosting { .. }
-        | InstanceLink::SharedInstance { .. } => (None, None),
+        } => (Some(content_project_id), Some(content_version_id)),
+		InstanceLink::ImportedModpack {
+			project_id,
+			version_id,
+			..
+		} => (project_id.as_ref(), version_id.as_ref()),
+		InstanceLink::SharedInstance {
+			modpack_project_id,
+			modpack_version_id,
+			..
+		} => (modpack_project_id.as_ref(), modpack_version_id.as_ref()),
+		InstanceLink::Unmanaged | InstanceLink::ModrinthHosting { .. } => {
+			(None, None)
+		}
     }
 }
 
@@ -836,7 +841,13 @@ pub async fn launch_minecraft(
         content_set.loader_version.as_deref(),
     )
     .await?;
-    let effective_loader = content_set.loader;
+    let (effective_loader, loader_version) =
+        crate::octra_skins::overlay_fabric_if_vanilla(
+            &content_set.game_version,
+            content_set.loader,
+            loader_version,
+        )
+        .await;
 
     if effective_loader != ModLoader::Vanilla && loader_version.is_none() {
         return Err(crate::ErrorKind::LauncherError(format!(
@@ -936,6 +947,8 @@ pub async fn launch_minecraft(
     let mut java_args = Vec::from(java_args);
     if let Err(e) = crate::octra_skins::prepare_launch(
         &instance_path,
+        &content_set.game_version,
+        effective_loader,
         credentials,
         &mut java_args,
     )
@@ -1179,10 +1192,15 @@ pub async fn launch_minecraft(
         _ => None,
     };
 
+    let (link_project_id, link_version_id) =
+        link_project_and_version(&context.link);
+
     let _ = crate::octra_accounts::publish_presence(
         "ingame",
         Some(&instance.name),
         join_address.as_deref(),
+        link_project_id.map(|value| value.as_str()),
+        link_version_id.map(|value| value.as_str()),
     )
     .await;
 

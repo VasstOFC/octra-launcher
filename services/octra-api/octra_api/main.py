@@ -114,6 +114,8 @@ class CommunityMember(BaseModel):
 	presence: Literal["launcher", "ingame", "offline"] = "offline"
 	instance_name: Optional[str] = None
 	join_address: Optional[str] = None
+	pack_project_id: Optional[str] = None
+	pack_version_id: Optional[str] = None
 	last_seen: Optional[str] = None
 
 
@@ -121,6 +123,8 @@ class PresenceBody(BaseModel):
 	status: Literal["launcher", "ingame", "offline"]
 	instance_name: Optional[str] = None
 	join_address: Optional[str] = None
+	pack_project_id: Optional[str] = None
+	pack_version_id: Optional[str] = None
 
 
 class ChatMember(BaseModel):
@@ -277,22 +281,26 @@ def parse_iso(value: Optional[str]) -> Optional[datetime]:
 
 def effective_presence(
 	row: dict,
-) -> tuple[str, Optional[str], Optional[str], Optional[str]]:
+) -> tuple[str, Optional[str], Optional[str], Optional[str], Optional[str], Optional[str]]:
 	last_seen = row.get("last_seen") or None
 	raw = (row.get("presence_status") or "offline").strip().lower()
 	instance = row.get("presence_instance") or None
 	join_address = row.get("presence_join_address") or None
+	pack_project_id = row.get("presence_pack_project_id") or None
+	pack_version_id = row.get("presence_pack_version_id") or None
 	seen_at = parse_iso(last_seen)
 	stale = seen_at is None or datetime.now(timezone.utc) - seen_at > PRESENCE_TTL
 	if stale or raw not in ("launcher", "ingame"):
-		return "offline", None, None, last_seen
+		return "offline", None, None, None, None, last_seen
 	if raw != "ingame":
-		return raw, None, None, last_seen
-	return raw, instance, join_address, last_seen
+		return raw, None, None, None, None, last_seen
+	return raw, instance, join_address, pack_project_id, pack_version_id, last_seen
 
 
 def community_member_from_row(row: dict) -> CommunityMember:
-	presence, instance_name, join_address, last_seen = effective_presence(row)
+	presence, instance_name, join_address, pack_project_id, pack_version_id, last_seen = (
+		effective_presence(row)
+	)
 	return CommunityMember(
 		id=int(row["id"]),
 		minecraft_nick=row["minecraft_nick"],
@@ -302,6 +310,8 @@ def community_member_from_row(row: dict) -> CommunityMember:
 		presence=presence,  # type: ignore[arg-type]
 		instance_name=instance_name,
 		join_address=join_address,
+		pack_project_id=pack_project_id,
+		pack_version_id=pack_version_id,
 		last_seen=last_seen,
 	)
 
@@ -472,13 +482,23 @@ async def presence(
 ) -> JSONResponse:
 	instance = (body.instance_name or "").strip() or None
 	join_address = (body.join_address or "").strip() or None
+	pack_project_id = (body.pack_project_id or "").strip() or None
+	pack_version_id = (body.pack_version_id or "").strip() or None
 	if body.status != "ingame":
 		instance = None
 		join_address = None
+		pack_project_id = None
+		pack_version_id = None
 	elif join_address and len(join_address) > 255:
 		raise HTTPException(status_code=400, detail="join_address too long")
 	db.set_presence(
-		int(user["id"]), body.status, instance, join_address, utcnow_iso()
+		int(user["id"]),
+		body.status,
+		instance,
+		join_address,
+		pack_project_id,
+		pack_version_id,
+		utcnow_iso(),
 	)
 	return JSONResponse({"ok": True})
 

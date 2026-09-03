@@ -414,27 +414,33 @@ html {
 .oled-mode {
 	@extend .dark-mode;
 	--surface-1: #000000;
-	--surface-1-5: #050506;
-	--surface-2: #09090a;
-	--surface-2-5: #0c0d11;
-	--surface-3: #101013;
-	--surface-4: #1b1b20;
-	--surface-5: #25262b;
+	--surface-1-5: #000000;
+	--surface-2: #000000;
+	--surface-2-5: #050505;
+	--surface-3: #0a0a0a;
+	--surface-4: #121212;
+	--surface-5: #1c1c1c;
 
-	--color-ad: #0d1828;
+	--color-bg: #000000;
+	--color-raised-bg: #000000;
+	--color-super-raised-bg: #0a0a0a;
+	--color-button-bg: #0a0a0a;
+	--color-scrollbar: #1c1c1c;
+
+	--color-ad: #000000;
 
 	--brand-gradient-bg: linear-gradient(
 		0deg,
-		rgba(66, 34, 14, 0.15) 0%,
-		rgba(201, 107, 53, 0.1) 100%
+		rgba(66, 34, 14, 0.12) 0%,
+		rgba(201, 107, 53, 0.08) 100%
 	);
 	--brand-gradient-strong-bg: linear-gradient(
 		270deg,
-		rgba(18, 12, 9, 0.6) 10%,
-		rgba(31, 22, 16, 0.5) 100%
+		rgba(0, 0, 0, 0.85) 10%,
+		rgba(12, 12, 12, 0.7) 100%
 	);
 
-	--color-gradient-button-bg: linear-gradient(180deg, #1b1b20 0%, #25262b 100%);
+	--color-gradient-button-bg: linear-gradient(180deg, #0a0a0a 0%, #121212 100%);
 }
 
 .retro-mode {

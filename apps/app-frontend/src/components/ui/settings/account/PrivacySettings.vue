@@ -10,6 +10,11 @@ import {
 } from '@modrinth/ui'
 import { ref, watch } from 'vue'
 
+import {
+	SettingsGroup,
+	SettingsPanelHeader,
+	SettingsRow,
+} from '@/components/ui/settings/_shared'
 import { open_ads_consent_preferences } from '@/helpers/ads.js'
 import { get, set } from '@/helpers/settings.ts'
 
@@ -23,6 +28,18 @@ if (settings.value.telemetry) {
 }
 
 const messages = defineMessages({
+	panelTitle: {
+		id: 'app.settings.privacy.panel.title',
+		defaultMessage: 'Privacy',
+	},
+	panelDescription: {
+		id: 'app.settings.privacy.panel.description',
+		defaultMessage: 'Ads preferences and data collection.',
+	},
+	adsGroup: {
+		id: 'app.settings.privacy.ads.group',
+		defaultMessage: 'Ads',
+	},
 	adsConsentTitle: {
 		id: 'app.ads-consent.title',
 		defaultMessage: 'Your privacy and how ads support Modrinth',
@@ -36,14 +53,17 @@ const messages = defineMessages({
 		id: 'app.ads-consent.manage',
 		defaultMessage: 'Manage preferences',
 	},
-	discordRichPresenceTitle: {
-		id: 'app.settings.privacy.discord-rich-presence.title',
-		defaultMessage: 'Discord Rich Presence',
+	dataGroup: {
+		id: 'app.settings.privacy.data.group',
+		defaultMessage: 'Data',
 	},
-	discordRichPresenceDescription: {
-		id: 'app.settings.privacy.discord-rich-presence.description',
-		defaultMessage:
-			'Show Octra App as your current activity on Discord. This does not affect Rich Presence added to instances by mods. Requires an app restart.',
+	telemetryTitle: {
+		id: 'app.settings.privacy.telemetry.title',
+		defaultMessage: 'Telemetry',
+	},
+	telemetryDescription: {
+		id: 'app.settings.privacy.telemetry.description',
+		defaultMessage: 'Usage analytics stay off in Octra App.',
 	},
 })
 
@@ -61,30 +81,42 @@ watch(
 </script>
 
 <template>
-	<div v-if="adConsentAvailable">
-		<h2 class="m-0 text-lg font-semibold text-contrast">
-			{{ formatMessage(messages.adsConsentTitle) }}
-		</h2>
-		<div class="mt-2 flex flex-col gap-2.5 items-start">
-			<Button @click="manageAdsPreferences">
-				<Settings2Icon aria-hidden="true" />
-				{{ formatMessage(messages.adsConsentManage) }}
-			</Button>
-			<div>
-				{{ formatMessage(messages.adsConsentIntro) }}
-			</div>
-		</div>
-	</div>
+	<div>
+		<SettingsPanelHeader
+			:title="formatMessage(messages.panelTitle)"
+			:description="formatMessage(messages.panelDescription)"
+		/>
 
-	<div class="first:mt-0 flex items-center justify-between gap-4">
-		<div>
-			<h2 class="m-0 text-lg font-semibold text-contrast">
-				{{ formatMessage(messages.discordRichPresenceTitle) }}
-			</h2>
-			<p class="m-0 mt-1">
-				{{ formatMessage(messages.discordRichPresenceDescription) }}
-			</p>
-		</div>
-		<Toggle id="disable-discord-rpc" v-model="settings.discord_rpc" />
+		<SettingsGroup
+			v-if="adConsentAvailable"
+			:label="formatMessage(messages.adsGroup)"
+		>
+			<SettingsRow
+				:title="formatMessage(messages.adsConsentTitle)"
+				:description="formatMessage(messages.adsConsentIntro)"
+			>
+				<Button @click="manageAdsPreferences">
+					<Settings2Icon aria-hidden="true" />
+					{{ formatMessage(messages.adsConsentManage) }}
+				</Button>
+			</SettingsRow>
+		</SettingsGroup>
+
+		<SettingsGroup :label="formatMessage(messages.dataGroup)">
+			<SettingsRow
+				control-id="telemetry"
+				:title="formatMessage(messages.telemetryTitle)"
+				:description="formatMessage(messages.telemetryDescription)"
+			>
+				<template #default="{ labelledBy, controlId }">
+					<Toggle
+						:id="controlId"
+						:model-value="false"
+						disabled
+						:aria-labelledby="labelledBy"
+					/>
+				</template>
+			</SettingsRow>
+		</SettingsGroup>
 	</div>
 </template>

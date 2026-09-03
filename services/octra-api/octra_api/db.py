@@ -16,6 +16,8 @@ CREATE TABLE IF NOT EXISTS users (
 	presence_status TEXT NOT NULL DEFAULT 'offline',
 	presence_instance TEXT,
 	presence_join_address TEXT,
+	presence_pack_project_id TEXT,
+	presence_pack_version_id TEXT,
 	last_seen TEXT
 );
 
@@ -49,11 +51,13 @@ CREATE INDEX IF NOT EXISTS idx_chat_channel_members_user ON chat_channel_members
 
 USER_PUBLIC_SELECT = (
 	"SELECT id, username, minecraft_nick, profile_uuid, account_type, created_at, "
-	"presence_status, presence_instance, presence_join_address, last_seen FROM users"
+	"presence_status, presence_instance, presence_join_address, "
+	"presence_pack_project_id, presence_pack_version_id, last_seen FROM users"
 )
 USER_AUTH_SELECT = (
 	"SELECT id, username, password_hash, minecraft_nick, profile_uuid, account_type, created_at, "
-	"presence_status, presence_instance, presence_join_address, last_seen FROM users"
+	"presence_status, presence_instance, presence_join_address, "
+	"presence_pack_project_id, presence_pack_version_id, last_seen FROM users"
 )
 
 
@@ -87,6 +91,10 @@ class Database:
 				conn.execute("ALTER TABLE users ADD COLUMN presence_instance TEXT")
 			if "presence_join_address" not in cols:
 				conn.execute("ALTER TABLE users ADD COLUMN presence_join_address TEXT")
+			if "presence_pack_project_id" not in cols:
+				conn.execute("ALTER TABLE users ADD COLUMN presence_pack_project_id TEXT")
+			if "presence_pack_version_id" not in cols:
+				conn.execute("ALTER TABLE users ADD COLUMN presence_pack_version_id TEXT")
 			if "last_seen" not in cols:
 				conn.execute("ALTER TABLE users ADD COLUMN last_seen TEXT")
 			conn.executescript(
@@ -282,16 +290,27 @@ class Database:
 		status: str,
 		instance_name: Optional[str],
 		join_address: Optional[str],
+		pack_project_id: Optional[str],
+		pack_version_id: Optional[str],
 		last_seen: str,
 	) -> None:
 		with self._connect() as conn:
 			conn.execute(
 				"""
 				UPDATE users
-				SET presence_status = ?, presence_instance = ?, presence_join_address = ?, last_seen = ?
+				SET presence_status = ?, presence_instance = ?, presence_join_address = ?,
+					presence_pack_project_id = ?, presence_pack_version_id = ?, last_seen = ?
 				WHERE id = ?
 				""",
-				(status, instance_name, join_address, last_seen, user_id),
+				(
+					status,
+					instance_name,
+					join_address,
+					pack_project_id,
+					pack_version_id,
+					last_seen,
+					user_id,
+				),
 			)
 
 	def list_channels_for_user(self, user_id: int) -> list[dict[str, Any]]:

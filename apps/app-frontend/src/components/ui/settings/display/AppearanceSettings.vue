@@ -1,14 +1,21 @@
 <script setup lang="ts">
 import {
 	AppearanceSettingsLayout,
+	defineMessages,
 	injectAuth,
 	injectUserPreferences,
 	provideAppearanceSettings,
 	useSavable,
+	useVIntl,
 } from '@modrinth/ui'
 import { computed, inject, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 import AccentColorSettings from '@/components/ui/settings/display/AccentColorSettings.vue'
+import LanguageSettings from '@/components/ui/settings/display/LanguageSettings.vue'
+import {
+	SettingsGroup,
+	SettingsPanelHeader,
+} from '@/components/ui/settings/_shared'
 import { useAccent } from '@/composables/use-accent.ts'
 import { type ColorTheme, isDarkTheme, useTheme } from '@/composables/use-theme.ts'
 import type { AccentPresetId } from '@/helpers/accent-colors.ts'
@@ -16,6 +23,7 @@ import { type AppSettings, get, set } from '@/helpers/settings.ts'
 import { getOS } from '@/helpers/utils'
 import { appSettingsModalContextKey } from '@/providers/app-settings-modal'
 
+const { formatMessage } = useVIntl()
 const theme = useTheme()
 const accent = useAccent()
 const auth = injectAuth()
@@ -23,6 +31,34 @@ const { updatePreferences } = injectUserPreferences()
 const settingsModal = inject(appSettingsModalContextKey, null)
 const os = await getOS()
 const settings = ref(await get())
+const languageSettings = ref<InstanceType<typeof LanguageSettings> | null>(null)
+
+const messages = defineMessages({
+	panelTitle: {
+		id: 'app.settings.appearance.panel.title',
+		defaultMessage: 'Appearance',
+	},
+	panelDescription: {
+		id: 'app.settings.appearance.panel.description',
+		defaultMessage: 'Theme, accent color, window chrome, and language.',
+	},
+	accentGroup: {
+		id: 'app.settings.appearance.group.accent',
+		defaultMessage: 'Accent',
+	},
+	accentGroupDescription: {
+		id: 'app.settings.appearance.group.accent.description',
+		defaultMessage: 'Change the accent color used for buttons, highlights, and selection.',
+	},
+	languageGroup: {
+		id: 'app.settings.appearance.group.language',
+		defaultMessage: 'Language',
+	},
+	languageGroupDescription: {
+		id: 'app.settings.appearance.group.language.description',
+		defaultMessage: 'Choose the language used across Octra App.',
+	},
+})
 
 type AppearanceSettingsState = {
 	theme: ColorTheme
@@ -174,14 +210,50 @@ async function saveAppearanceSettings(): Promise<void> {
 	}
 }
 
+function combinedHasChanges(): boolean {
+	return hasChanges.value || Boolean(languageSettings.value?.hasChanges)
+}
+
+function combinedIsSaving(): boolean {
+	return saving.value || Boolean(languageSettings.value?.saving)
+}
+
+function getCombinedOriginal(): Record<string, unknown> {
+	const result: Record<string, unknown> = { ...saved.value }
+	if (languageSettings.value?.hasChanges) {
+		Object.assign(result, languageSettings.value.originalState ?? {})
+	}
+	return result
+}
+
+function getCombinedModified(): Record<string, unknown> {
+	const result: Record<string, unknown> = { ...changes.value }
+	if (languageSettings.value?.hasChanges) {
+		Object.assign(result, languageSettings.value.modifiedState ?? {})
+	}
+	return result
+}
+
+function resetAppearanceAndLanguage(): void {
+	reset()
+	languageSettings.value?.reset()
+}
+
+async function saveAppearanceAndLanguage(): Promise<void> {
+	await saveAppearanceSettings()
+	if (languageSettings.value?.hasChanges) {
+		await languageSettings.value.save()
+	}
+}
+
 onMounted(() => {
 	settingsModal?.registerUnsavedChangesController({
-		hasChanges: () => hasChanges.value,
-		getOriginal: () => saved.value,
-		getModified: () => changes.value,
-		isSaving: () => saving.value,
-		reset,
-		save: saveAppearanceSettings,
+		hasChanges: combinedHasChanges,
+		getOriginal: getCombinedOriginal,
+		getModified: getCombinedModified,
+		isSaving: combinedIsSaving,
+		reset: resetAppearanceAndLanguage,
+		save: saveAppearanceAndLanguage,
 	})
 })
 
@@ -221,13 +293,36 @@ provideAppearanceSettings({
 </script>
 
 <template>
-	<div class="flex flex-col gap-8">
-		<AccentColorSettings
-			:preset="current.accentPreset"
-			:custom-hex="current.accentCustomHex"
-			@update:preset="setAccentPreset"
-			@update:custom-hex="setAccentCustomHex"
+	<div class="flex flex-col">
+		<SettingsPanelHeader
+			:title="formatMessage(messages.panelTitle)"
+			:description="formatMessage(messages.panelDescription)"
 		/>
-		<AppearanceSettingsLayout />
+
+		<SettingsGroup
+			:label="formatMessage(messages.accentGroup)"
+			:description="formatMessage(messages.accentGroupDescription)"
+		>
+			<AccentColorSettings
+				embedded
+				:preset="current.accentPreset"
+				:custom-hex="current.accentCustomHex"
+				@update:preset="setAccentPreset"
+				@update:custom-hex="setAccentCustomHex"
+			/>
+		</SettingsGroup>
+
+		<section
+			class="settings-group border-0 border-solid border-surface-5 pt-6 mt-6 border-t"
+		>
+			<AppearanceSettingsLayout />
+		</section>
+
+		<SettingsGroup
+			:label="formatMessage(messages.languageGroup)"
+			:description="formatMessage(messages.languageGroupDescription)"
+		>
+			<LanguageSettings ref="languageSettings" embedded />
+		</SettingsGroup>
 	</div>
 </template>

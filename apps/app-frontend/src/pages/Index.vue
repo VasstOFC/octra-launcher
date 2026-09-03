@@ -8,9 +8,7 @@ import FeaturedPackCard from '@/components/ui/FeaturedPackCard.vue'
 import HomeHeroBand from '@/components/ui/home/HomeHeroBand.vue'
 import LibrarySection from '@/components/ui/library/index.vue'
 import WelcomeScreen from '@/components/ui/WelcomeScreen.vue'
-import RecentWorldsList from '@/components/ui/world/RecentWorldsList.vue'
 import { useAppEvent } from '@/composables/use-app-event'
-import { useAppSettings } from '@/composables/use-app-settings.ts'
 import { toError } from '@/helpers/errors'
 import { list } from '@/helpers/instance'
 import type { GameInstance } from '@/helpers/types'
@@ -26,7 +24,6 @@ const { formatMessage } = useVIntl()
 const { hasCreatedInstance, isReady } = injectOnboardingChecklist()
 const showCreationModal = inject<() => void>('showCreationModal')
 const pageOptions = ref<InstanceType<typeof ContextMenu>>()
-const appSettings = useAppSettings()
 
 const messages = defineMessages({
 	home: {
@@ -55,11 +52,12 @@ onActivated(homeBreadcrumb.reset)
 const instances = ref<GameInstance[]>([])
 let latestInstanceFetch = 0
 
-const recentInstances = computed(() =>
-	instances.value
+const continueInstance = computed(() => {
+	if (instances.value.length === 0) return null
+	return instances.value
 		.slice()
-		.sort((a, b) => dayjs(b.last_played ?? b.created).diff(dayjs(a.last_played ?? a.created))),
-)
+		.sort((a, b) => dayjs(b.last_played ?? b.created).diff(dayjs(a.last_played ?? a.created)))[0]
+})
 
 const hasFeaturedPack = computed(() =>
 	instances.value.some((instance) => instance.name.toLowerCase() === 'cobblemon vasst'),
@@ -112,15 +110,11 @@ function openPageContextMenu(event: MouseEvent) {
 	<div
 		v-else-if="isReady"
 		data-library-page-background
-		class="flex flex-col gap-3 p-6"
+		class="flex flex-col gap-4 p-6"
 		@contextmenu="openPageContextMenu"
 	>
-		<HomeHeroBand />
+		<HomeHeroBand :instance="continueInstance" />
 		<FeaturedPackCard :installed="hasFeaturedPack" @installed="fetchInstances" />
-		<RecentWorldsList
-			v-if="recentInstances?.length > 0 && appSettings.getFeatureFlag('worlds_in_home')"
-			:recent-instances="recentInstances"
-		/>
 		<LibrarySection :instances="instances" />
 		<ContextMenu ref="pageOptions" :label="formatMessage(messages.libraryActionsLabel)" />
 	</div>

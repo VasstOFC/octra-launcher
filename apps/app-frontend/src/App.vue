@@ -177,6 +177,7 @@ import { get_available_capes, get_available_skins } from './helpers/skins'
 import { AppNotificationManager } from './providers/app-notifications'
 import { AppPopupNotificationManager } from './providers/app-popup-notifications'
 import {
+	appSettingsModalOpenLaunchDefaultsKey,
 	appSettingsModalOpenProfileKey,
 	appSettingsModalOpenSyncedOptionsKey,
 } from './providers/app-settings-modal'
@@ -1153,8 +1154,9 @@ const updateToPlayModal = ref()
 
 const modrinthLoginModal = ref()
 const appSettingsModal = ref()
-provide(appSettingsModalOpenProfileKey, () => appSettingsModal.value?.show())
+provide(appSettingsModalOpenProfileKey, () => appSettingsModal.value?.showAccount())
 provide(appSettingsModalOpenSyncedOptionsKey, () => appSettingsModal.value?.showSyncedOptions())
+provide(appSettingsModalOpenLaunchDefaultsKey, () => appSettingsModal.value?.showLaunchDefaults())
 
 watch(incompatibilityWarningModal, (modal) => {
 	if (modal) {
@@ -2297,7 +2299,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 				class="nav-button nav-rail-slot flex items-center border-none cursor-pointer relative"
 				:class="[
 					railExpanded
-						? 'h-10 w-full gap-3 rounded-xl px-3'
+						? 'h-10 w-full gap-3 rounded-lg px-3'
 						: 'h-10 w-10 justify-center rounded-full',
 					chatPanelOpen
 						? 'nav-rail-slot--active text-brand'
@@ -2439,7 +2441,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 				class="nav-rail-collapse flex items-center border-none bg-transparent text-secondary cursor-pointer hover:bg-button-bg hover:text-contrast"
 				:class="
 					railExpanded
-						? 'h-10 w-full gap-3 rounded-xl px-3'
+						? 'h-10 w-full gap-3 rounded-lg px-3'
 						: 'h-10 w-10 justify-center rounded-full'
 				"
 				:aria-label="formatMessage(railExpanded ? messages.collapseRail : messages.expandRail)"
@@ -2453,7 +2455,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 				</span>
 			</button>
 		</div>
-		<div data-tauri-drag-region class="app-grid-statusbar bg-bg-raised h-[--top-bar-height] flex">
+		<div data-tauri-drag-region class="app-grid-statusbar h-[--top-bar-height] flex">
 			<div data-tauri-drag-region class="flex min-w-0 flex-1 items-center overflow-hidden p-2">
 				<OctraWordmark class="h-7 w-auto shrink-0 pointer-events-none" />
 				<div data-tauri-drag-region class="ml-2 flex shrink-0 items-center gap-2">
@@ -2535,7 +2537,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 			</div>
 			<div
 				id="background-teleport-target"
-				class="absolute h-full -z-10 rounded-tl-[--radius-xl] overflow-hidden"
+				class="absolute h-full -z-10 rounded-tl-[--radius-lg] overflow-hidden"
 				:style="{
 					width: 'calc(100% - var(--right-bar-width))',
 				}"
@@ -2600,7 +2602,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 			<button
 				v-if="canToggleSidebar"
 				type="button"
-				class="nav-rail-collapse m-2 flex items-center border-none bg-transparent text-secondary cursor-pointer hover:bg-button-bg hover:text-contrast h-11 w-[calc(100%-1rem)] gap-3 rounded-xl px-3"
+				class="nav-rail-collapse m-2 flex items-center border-none bg-transparent text-secondary cursor-pointer hover:bg-button-bg hover:text-contrast h-11 w-[calc(100%-1rem)] gap-3 rounded-lg px-3"
 				:aria-label="formatMessage(messages.collapseSidebar)"
 				:title="formatMessage(messages.collapseSidebar)"
 				@click="sidebarExpandedPreference = false"
@@ -2731,7 +2733,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	z-index: 2;
 	transition: width var(--shell-motion);
 	border-right: 1px solid var(--color-divider);
-	background: linear-gradient(180deg, var(--surface-2) 0%, var(--surface-1-5) 100%);
+	background: var(--surface-2);
 
 	@media (prefers-reduced-motion: reduce) {
 		transition: none;
@@ -2752,23 +2754,18 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 
 .nav-rail-slot--active {
 	background: var(--surface-3);
-	box-shadow: inset 0 0 0 1px var(--surface-5);
-	transform: translateX(2px);
+	box-shadow: none;
 
 	&::before {
 		content: '';
 		position: absolute;
-		left: 0.15rem;
+		left: 0;
 		top: 50%;
 		transform: translateY(-50%);
 		height: 1.25rem;
-		width: 0.22rem;
-		border-radius: 999px;
+		width: 2px;
+		border-radius: 1px;
 		background: var(--color-brand);
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		transform: none;
 	}
 }
 
@@ -2802,7 +2799,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	}
 
 	&.nav-rail-account--expanded {
-		border-radius: 0.75rem !important;
+		border-radius: var(--radius-md) !important;
 	}
 
 	@media (prefers-reduced-motion: reduce) {
@@ -2816,7 +2813,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 		min-height: 2.75rem !important;
 		padding-top: 0.375rem !important;
 		padding-bottom: 0.375rem !important;
-		border-radius: 0.75rem !important;
+		border-radius: var(--radius-md) !important;
 	}
 }
 
@@ -2825,6 +2822,9 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	padding-right: var(--window-controls-width, 0px);
 	position: relative;
 	z-index: 2;
+	background: var(--color-raised-bg);
+	border-bottom: 1px solid var(--surface-5);
+	box-shadow: none;
 }
 
 [data-tauri-drag-region-exclude] {
@@ -2839,13 +2839,13 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	right: 0;
 	bottom: 0;
 	height: calc(100vh - var(--top-bar-height));
-	background-color: var(--color-bg);
-	border-top-left-radius: var(--radius-xl);
+	background-color: var(--surface-1);
+	border-top-left-radius: var(--radius-lg);
 	overflow: hidden;
 }
 
 .loading-indicator-container {
-	border-top-left-radius: var(--radius-xl);
+	border-top-left-radius: var(--radius-lg);
 	overflow: hidden;
 }
 
@@ -2856,6 +2856,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	overflow-x: hidden;
 	scrollbar-gutter: stable;
 	position: relative;
+	background: var(--surface-1);
 	transition: margin-right var(--shell-motion);
 
 	&.sidebar-open {
@@ -2865,32 +2866,6 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	@media (prefers-reduced-motion: reduce) {
 		transition: none;
 	}
-}
-
-.app-viewport::after {
-	content: '';
-	pointer-events: none;
-	position: fixed;
-	left: var(--left-bar-width);
-	top: var(--top-bar-height);
-	right: var(--right-bar-width);
-	bottom: 0;
-	z-index: 15;
-	border-top-left-radius: var(--radius-xl);
-	opacity: 0.32;
-	background:
-		radial-gradient(
-			ellipse at center,
-			transparent 45%,
-			color-mix(in srgb, var(--color-brand) 25%, rgba(0, 0, 0, 1) 75%) 100%
-		),
-		url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.22'/%3E%3C/svg%3E");
-	background-size:
-		100% 100%,
-		180px 180px;
-	backdrop-filter: blur(10px);
-	filter: blur(14px);
-	mix-blend-mode: multiply;
 }
 
 .app-sidebar {
@@ -2939,10 +2914,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 
 .friends-fab--presence {
 	color: var(--color-brand);
-	box-shadow:
-		0 0 0 2px color-mix(in srgb, var(--color-brand) 45%, transparent),
-		0 0 0 6px color-mix(in srgb, var(--color-brand) 14%, transparent),
-		var(--shadow-raised);
+	box-shadow: inset 0 0 0 2px var(--color-brand);
 }
 
 .friends-fab-enter-active,
@@ -2962,39 +2934,17 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	.friends-fab {
 		transition:
 			transform 0.15s ease,
-			filter 0.15s ease,
-			box-shadow 0.28s cubic-bezier(0.32, 0.72, 0, 1),
-			color 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+			background-color var(--shell-motion),
+			color var(--shell-motion),
+			box-shadow var(--shell-motion);
 	}
 
 	.friends-fab:hover {
-		transform: scale(1.05);
+		transform: scale(1.03);
 	}
 
 	.friends-fab:active {
-		transform: scale(0.96);
-	}
-
-	.friends-fab--presence::after {
-		content: '';
-		position: absolute;
-		inset: -3px;
-		border-radius: 9999px;
-		border: 1px solid color-mix(in srgb, var(--color-brand) 40%, transparent);
-		opacity: 0.7;
-		animation: presence-ring 2.4s ease-out infinite;
-		pointer-events: none;
-	}
-}
-
-@keyframes presence-ring {
-	0% {
-		transform: scale(1);
-		opacity: 0.65;
-	}
-	100% {
-		transform: scale(1.28);
-		opacity: 0;
+		transform: scale(0.97);
 	}
 }
 
@@ -3002,11 +2952,6 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	.friends-fab-enter-active,
 	.friends-fab-leave-active {
 		transition: none;
-	}
-
-	.friends-fab--presence::after {
-		animation: none;
-		display: none;
 	}
 }
 
@@ -3027,14 +2972,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 }
 
 .app-sidebar::before {
-	content: '';
-	box-shadow: -15px 0 15px -15px rgba(0, 0, 0, 0.1) inset;
-	top: 0;
-	bottom: 0;
-	left: -2rem;
-	width: 2rem;
-	position: absolute;
-	pointer-events: none;
+	content: none;
 }
 
 .app-contents::before {
@@ -3045,8 +2983,8 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	top: var(--top-bar-height);
 	right: calc(-1 * var(--left-bar-width));
 	bottom: calc(-1 * var(--left-bar-width));
-	border-radius: var(--radius-xl);
-	box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.1) inset;
+	border-radius: var(--radius-lg);
+	box-shadow: none;
 	border-color: var(--surface-5);
 	border-width: 1px;
 	border-style: solid;

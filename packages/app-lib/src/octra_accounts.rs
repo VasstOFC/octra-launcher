@@ -44,6 +44,10 @@ pub struct OctraCommunityMember {
 	#[serde(default)]
 	pub join_address: Option<String>,
 	#[serde(default)]
+	pub pack_project_id: Option<String>,
+	#[serde(default)]
+	pub pack_version_id: Option<String>,
+	#[serde(default)]
 	pub last_seen: Option<String>,
 }
 
@@ -85,6 +89,10 @@ struct CommunityMemberApi {
 	instance_name: Option<String>,
 	#[serde(default)]
 	join_address: Option<String>,
+	#[serde(default)]
+	pack_project_id: Option<String>,
+	#[serde(default)]
+	pack_version_id: Option<String>,
 	#[serde(default)]
 	last_seen: Option<String>,
 }
@@ -159,7 +167,7 @@ pub async fn login(username: &str, password: &str) -> crate::Result<OctraAccount
 }
 
 pub async fn logout() -> crate::Result<()> {
-	let _ = publish_presence("offline", None, None).await;
+	let _ = publish_presence("offline", None, None, None, None).await;
 	let state = State::get().await?;
 	for key in [
 		TOKEN_KEY,
@@ -244,6 +252,8 @@ pub async fn community() -> crate::Result<OctraCommunitySnapshot> {
 					presence: member.presence,
 					instance_name: member.instance_name,
 					join_address: member.join_address,
+					pack_project_id: member.pack_project_id,
+					pack_version_id: member.pack_version_id,
 					last_seen: member.last_seen,
 				}
 			})
@@ -255,6 +265,8 @@ pub async fn publish_presence(
 	status: &str,
 	instance_name: Option<&str>,
 	join_address: Option<&str>,
+	pack_project_id: Option<&str>,
+	pack_version_id: Option<&str>,
 ) -> crate::Result<()> {
 	let Some(session) = session().await? else {
 		return Ok(());
@@ -265,6 +277,8 @@ pub async fn publish_presence(
 		"status": status,
 		"instance_name": instance_name,
 		"join_address": join_address,
+		"pack_project_id": pack_project_id,
+		"pack_version_id": pack_version_id,
 	});
 	let response = INSECURE_REQWEST_CLIENT
 		.post(&url)
@@ -286,6 +300,41 @@ pub async fn publish_presence(
 	Ok(())
 }
 
+async fn pack_ids_for_instance(
+	instance_id: &str,
+) -> (Option<String>, Option<String>) {
+	let Ok(Some(meta)) = crate::api::instance::get(instance_id).await else {
+		return (None, None);
+	};
+	let (project, version) = match &meta.link {
+		crate::state::InstanceLink::ModrinthModpack {
+			project_id,
+			version_id,
+		} => (Some(project_id.clone()), Some(version_id.clone())),
+		crate::state::InstanceLink::ServerProject { project_id } => {
+			(Some(project_id.clone()), None)
+		}
+		crate::state::InstanceLink::ServerProjectModpack {
+			content_project_id,
+			content_version_id,
+			..
+		} => (Some(content_project_id.clone()), Some(content_version_id.clone())),
+		crate::state::InstanceLink::ImportedModpack {
+			project_id,
+			version_id,
+			..
+		} => (project_id.clone(), version_id.clone()),
+		crate::state::InstanceLink::SharedInstance {
+			modpack_project_id,
+			modpack_version_id,
+			..
+		} => (modpack_project_id.clone(), modpack_version_id.clone()),
+		crate::state::InstanceLink::Unmanaged
+		| crate::state::InstanceLink::ModrinthHosting { .. } => (None, None),
+	};
+	(project, version)
+}
+
 pub async fn sync_presence() -> crate::Result<()> {
 	if session().await?.is_none() {
 		return Ok(());
@@ -299,15 +348,19 @@ pub async fn sync_presence() -> crate::Result<()> {
 			.clone()
 			.or(shared)
 			.filter(|value| !value.trim().is_empty());
+		let (pack_project_id, pack_version_id) =
+			pack_ids_for_instance(&process.instance_id).await;
 		publish_presence(
 			"ingame",
 			Some(&process.instance_name),
 			join.as_deref(),
+			pack_project_id.as_deref(),
+			pack_version_id.as_deref(),
 		)
 		.await
 	} else {
 		let _ = set_metadata(&state, SHARED_JOIN_ADDRESS_KEY, "").await;
-		publish_presence("launcher", None, None).await
+		publish_presence("launcher", None, None, None, None).await
 	}
 }
 
@@ -607,7 +660,19 @@ pub async fn share_join_address(address: &str) -> crate::Result<()> {
 		.into());
 	}
 	set_metadata(&state, SHARED_JOIN_ADDRESS_KEY, trimmed).await?;
-	publish_presence("ingame", instance_name.as_deref(), Some(trimmed)).await
+	let (pack_project_id, pack_version_id) = if let Some(process) = processes.first() {
+		pack_ids_for_instance(&process.instance_id).await
+	} else {
+		(None, None)
+	};
+	publish_presence(
+		"ingame",
+		instance_name.as_deref(),
+		Some(trimmed),
+		pack_project_id.as_deref(),
+		pack_version_id.as_deref(),
+	)
+	.await
 }
 
 pub async fn shared_servers_list() -> crate::Result<Vec<OctraSharedServer>> {

@@ -11,6 +11,7 @@ pub fn init<R: tauri::Runtime>() -> tauri::plugin::TauriPlugin<R> {
 	tauri::plugin::Builder::new("octra")
 		.invoke_handler(tauri::generate_handler![
 			list_servers,
+			remove_server,
 			octra_account_session,
 			octra_account_register,
 			octra_account_login,
@@ -50,6 +51,11 @@ pub fn list_servers() -> Result<Vec<ListedServer>> {
 			address,
 		})
 		.collect())
+}
+
+#[tauri::command]
+pub fn remove_server(address: &str) -> Result<bool> {
+	Ok(octra_sync::remove_octra_server(address)?)
 }
 
 #[tauri::command]

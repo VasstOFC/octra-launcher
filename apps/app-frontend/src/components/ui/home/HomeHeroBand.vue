@@ -1,62 +1,267 @@
 <script setup lang="ts">
-import { defineMessages, useVIntl } from '@modrinth/ui'
+import { PlayIcon, SpinnerIcon, StopCircleIcon } from '@modrinth/assets'
+import {
+	Avatar,
+	Button,
+	defineMessages,
+	injectNotificationManager,
+	useRelativeTime,
+	useVIntl,
+} from '@modrinth/ui'
+import dayjs from 'dayjs'
+import { computed, onMounted, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 
-import OctraWordmark from '@/components/brand/OctraWordmark.vue'
+import { useAppEvent } from '@/composables/use-app-event'
+import { handleSevereError } from '@/composables/use-error.js'
+import { trackEvent } from '@/helpers/analytics'
+import { getInstanceIconUrl, kill, run } from '@/helpers/instance'
+import { get_by_instance_id } from '@/helpers/process'
+import type { GameInstance } from '@/helpers/types'
 
+const props = defineProps<{
+	instance: GameInstance | null
+}>()
+
+const { handleError } = injectNotificationManager()
 const { formatMessage } = useVIntl()
+const formatRelativeTime = useRelativeTime({ numeric: 'auto', style: 'short' })
+const router = useRouter()
+
+const playing = ref(false)
+const loading = ref(false)
+const currentEvent = ref<'installing' | 'launched' | 'finished' | null>(null)
 
 const messages = defineMessages({
-	tagline: {
-		id: 'app.home.hero.tagline',
-		defaultMessage: 'Your worlds. Your crew. One launcher.',
+	continue: {
+		id: 'app.home.continue.title',
+		defaultMessage: 'Continue',
 	},
+	play: {
+		id: 'app.home.continue.play',
+		defaultMessage: 'Play',
+	},
+	stop: {
+		id: 'app.home.continue.stop',
+		defaultMessage: 'Stop',
+	},
+	loading: {
+		id: 'app.home.continue.loading',
+		defaultMessage: 'Starting…',
+	},
+	played: {
+		id: 'app.home.continue.played',
+		defaultMessage: 'Last played {relativeTime}',
+	},
+	neverPlayed: {
+		id: 'app.home.continue.never-played',
+		defaultMessage: 'Ready to play',
+	},
+	openInstance: {
+		id: 'app.home.continue.open',
+		defaultMessage: 'Open {name}',
+	},
+	empty: {
+		id: 'app.home.continue.empty',
+		defaultMessage: 'Create an instance to start playing.',
+	},
+})
+
+const iconSrc = computed(() =>
+	props.instance ? getInstanceIconUrl(props.instance.icon_path) : undefined,
+)
+const installing = computed(() => props.instance?.install_stage.includes('installing') ?? false)
+const modLoading = computed(
+	() =>
+		loading.value ||
+		currentEvent.value === 'installing' ||
+		(currentEvent.value === 'launched' && !playing.value),
+)
+const statusLine = computed(() => {
+	if (!props.instance) return formatMessage(messages.empty)
+	if (props.instance.last_played) {
+		return formatMessage(messages.played, {
+			relativeTime: formatRelativeTime(dayjs(props.instance.last_played).toISOString()),
+		})
+	}
+	return formatMessage(messages.neverPlayed)
+})
+const metaLine = computed(() => {
+	if (!props.instance) return ''
+	return `${props.instance.loader} ${props.instance.game_version}`
+})
+
+async function checkProcess() {
+	if (!props.instance) {
+		playing.value = false
+		return
+	}
+	const runningProcesses = (await get_by_instance_id(props.instance.id).catch(handleError)) ?? []
+	playing.value = runningProcesses.length > 0
+}
+
+async function play() {
+	if (!props.instance || props.instance.quarantined) return
+	loading.value = true
+	await run(props.instance.id)
+		.catch((err) => handleSevereError(err, { instanceId: props.instance!.id }))
+		.finally(() => {
+			trackEvent('InstanceStart', {
+				loader: props.instance!.loader,
+				game_version: props.instance!.game_version,
+				source: 'HomeContinue',
+			})
+		})
+	loading.value = false
+}
+
+async function stop() {
+	if (!props.instance) return
+	playing.value = false
+	await kill(props.instance.id).catch(handleError)
+	trackEvent('InstanceStop', {
+		loader: props.instance.loader,
+		game_version: props.instance.game_version,
+		source: 'HomeContinue',
+	})
+}
+
+function openInstance() {
+	if (!props.instance) return
+	void router.push(`/instance/${encodeURIComponent(props.instance.id)}`)
+}
+
+useAppEvent('process', (event) => {
+	if (props.instance && event.instance_id === props.instance.id) {
+		currentEvent.value = event.event
+		playing.value = event.event === 'launched'
+	}
+})
+
+watch(
+	() => props.instance?.id,
+	() => {
+		currentEvent.value = null
+		void checkProcess()
+	},
+)
+
+onMounted(() => {
+	void checkProcess()
 })
 </script>
 
 <template>
-	<section class="home-hero relative isolate overflow-hidden" aria-label="Octra">
-		<div class="home-hero__glow" aria-hidden="true" />
-		<div class="relative z-[1] min-w-0 px-6 py-5">
-			<OctraWordmark class="h-7 w-auto text-contrast" />
-			<p class="home-hero__tagline mt-2 mb-0 font-minecraft text-sm text-secondary">
-				{{ formatMessage(messages.tagline) }}
-			</p>
+	<section class="continue-band" :aria-label="formatMessage(messages.continue)">
+		<div v-if="instance" class="continue-band__row">
+			<button
+				type="button"
+				class="continue-band__identity"
+				:aria-label="formatMessage(messages.openInstance, { name: instance.name })"
+				@click="openInstance"
+			>
+				<Avatar
+					class="!rounded-lg shrink-0"
+					size="48px"
+					:src="iconSrc"
+					:tint-by="instance.id"
+					alt=""
+					no-shadow
+					pad-transparent-corners
+				/>
+				<div class="min-w-0 flex flex-col gap-0.5 text-left">
+					<p class="m-0 truncate text-xs font-semibold uppercase tracking-wide text-secondary">
+						{{ formatMessage(messages.continue) }}
+					</p>
+					<h2 class="m-0 truncate text-xl font-semibold leading-6 text-contrast">
+						{{ instance.name }}
+					</h2>
+					<p class="m-0 truncate text-sm capitalize leading-5 text-primary">
+						{{ metaLine }}
+						<span class="text-secondary"> · {{ statusLine }}</span>
+					</p>
+				</div>
+			</button>
+			<div class="continue-band__actions">
+				<Button
+					v-if="playing"
+					type="colored"
+					color="red"
+					size="lg"
+					class="!shadow-none"
+					@click="stop"
+				>
+					<StopCircleIcon />
+					{{ formatMessage(messages.stop) }}
+				</Button>
+				<Button
+					v-else-if="modLoading || installing"
+					type="colored"
+					color="brand"
+					size="lg"
+					class="!shadow-none"
+					disabled
+				>
+					<SpinnerIcon class="animate-spin" />
+					{{ formatMessage(messages.loading) }}
+				</Button>
+				<Button
+					v-else-if="!instance.quarantined"
+					type="colored"
+					color="brand"
+					size="lg"
+					class="!shadow-none"
+					@click="play"
+					@mouseenter="checkProcess"
+				>
+					<PlayIcon class="translate-x-px" />
+					{{ formatMessage(messages.play) }}
+				</Button>
+			</div>
 		</div>
+		<p v-else class="m-0 text-sm text-secondary">
+			{{ formatMessage(messages.empty) }}
+		</p>
 	</section>
 </template>
 
 <style scoped lang="scss">
-.home-hero {
-	margin: -1.5rem -1.5rem 0;
+.continue-band {
 	border-bottom: 1px solid var(--color-divider);
-	background:
-		linear-gradient(
-			105deg,
-			color-mix(in srgb, var(--color-brand) 18%, transparent) 0%,
-			transparent 48%
-		),
-		linear-gradient(
-			180deg,
-			color-mix(in srgb, var(--color-brand) 10%, var(--color-raised-bg)) 0%,
-			var(--color-bg) 100%
-		);
+	margin: -1.5rem -1.5rem 0;
+	padding: 1.25rem 1.5rem;
+	background: var(--color-raised-bg);
 }
 
-.home-hero__glow {
-	pointer-events: none;
-	position: absolute;
-	inset: auto -10% -60% 40%;
-	height: 140%;
-	background: radial-gradient(
-		ellipse at center,
-		color-mix(in srgb, var(--color-brand) 22%, transparent) 0%,
-		transparent 70%
-	);
-	opacity: 0.55;
+.continue-band__row {
+	align-items: center;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+	justify-content: space-between;
+	min-width: 0;
 }
 
-.home-hero__tagline {
-	letter-spacing: 0.02em;
-	line-height: 1.35;
+.continue-band__identity {
+	align-items: center;
+	background: transparent;
+	border: 0;
+	cursor: pointer;
+	display: flex;
+	gap: 0.875rem;
+	min-width: 0;
+	padding: 0;
+	text-align: left;
+}
+
+.continue-band__identity:focus-visible {
+	outline: 2px solid var(--color-brand);
+	outline-offset: 2px;
+}
+
+.continue-band__actions {
+	display: flex;
+	flex-shrink: 0;
+	gap: 0.5rem;
 }
 </style>

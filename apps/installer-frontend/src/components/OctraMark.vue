@@ -1,6 +1,17 @@
 <template>
-	<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-		<rect width="64" height="64" rx="14" fill="#120c14" stroke="currentColor" stroke-width="2" />
-		<circle cx="32" cy="32" r="14" fill="none" stroke="currentColor" stroke-width="6" />
-	</svg>
+	<img
+		src="@/assets/octra-mark.png"
+		alt=""
+		aria-hidden="true"
+		draggable="false"
+		class="octra-mark"
+	/>
 </template>
+
+<style scoped>
+.octra-mark {
+	display: block;
+	object-fit: contain;
+	user-select: none;
+}
+</style>

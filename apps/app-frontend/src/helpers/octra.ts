@@ -8,3 +8,7 @@ export type OctraServer = {
 export async function listOctraServers(): Promise<OctraServer[]> {
 	return await invoke('plugin:octra|list_servers')
 }
+
+export async function removeOctraServer(address: string): Promise<boolean> {
+	return await invoke('plugin:octra|remove_server', { address })
+}

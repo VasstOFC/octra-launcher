@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {
 	MessageIcon,
+	PackageSearchIcon,
 	PlayIcon,
 	PlusIcon,
 	SearchIcon,
@@ -23,6 +24,11 @@ import {
 import { useQuery } from '@tanstack/vue-query'
 import { computed, ref, useTemplateRef, watch } from 'vue'
 
+import PlayWithFriendModal from '@/components/ui/friends/PlayWithFriendModal.vue'
+import {
+	canPlayWithFriend,
+	canViewFriendPack,
+} from '@/composables/play-with-friend'
 import { handleSevereError } from '@/composables/use-error.js'
 import { useOctraCommunityAvatars } from '@/composables/use-octra-community-avatars'
 import { list } from '@/helpers/instance'
@@ -33,7 +39,6 @@ import {
 	octraSharedServersList,
 	octraShareJoinAddress,
 } from '@/helpers/octra-account.js'
-import type { GameInstance } from '@/helpers/types'
 import { start_join_server } from '@/helpers/worlds'
 
 type OctraAccountSession = {
@@ -54,6 +59,8 @@ type OctraCommunityMember = {
 	presence?: string
 	instance_name?: string | null
 	join_address?: string | null
+	pack_project_id?: string | null
+	pack_version_id?: string | null
 	last_seen?: string | null
 }
 
@@ -81,6 +88,7 @@ const { formatMessage } = useVIntl()
 const { handleError, addNotification } = injectNotificationManager()
 const formatRelativeTime = useRelativeTime({ numeric: 'auto', style: 'short' })
 const search = ref('')
+const panelTab = ref<'friends' | 'servers'>('friends')
 const joiningId = ref<number | null>(null)
 const joiningSharedId = ref<number | null>(null)
 const shareAddress = ref('')
@@ -92,6 +100,7 @@ const addingShared = ref(false)
 const previousPresence = ref<Map<number, string>>(new Map())
 const presenceReady = ref(false)
 const memberOptions = useTemplateRef('memberOptions')
+const playWithModal = useTemplateRef<InstanceType<typeof PlayWithFriendModal>>('playWithModal')
 
 /** Strip markup so API nick/status never render as HTML (text-only sidebar). */
 function plainText(value: string | null | undefined): string {
@@ -171,6 +180,7 @@ watch(
 	() => {
 		previousPresence.value = new Map()
 		presenceReady.value = false
+		panelTab.value = 'friends'
 		void refreshSharedServers()
 	},
 )
@@ -228,7 +238,15 @@ function createContextMenuOptions(member: OctraCommunityMember): ButtonMenuOptio
 			id: 'play-with',
 			label: formatMessage(messages.playWith),
 			icon: PlayIcon,
-			action: () => void joinFriend(member),
+			action: () => void openPlayWith(member),
+		})
+	}
+	if (canViewPack(member)) {
+		options.push({
+			id: 'view-pack',
+			label: formatMessage(messages.viewPack),
+			icon: PackageSearchIcon,
+			action: () => void viewFriendPack(member),
 		})
 	}
 	return options
@@ -239,49 +257,45 @@ function openMemberContextMenu(event: MouseEvent, member: OctraCommunityMember) 
 }
 
 function canJoin(member: OctraCommunityMember) {
-	return member.presence === 'ingame' && !!member.join_address?.trim()
+	return canPlayWithFriend(member)
+}
+
+function canViewPack(member: OctraCommunityMember) {
+	return canViewFriendPack(member)
+}
+
+async function viewFriendPack(member: OctraCommunityMember) {
+	await playWithModal.value?.viewPack(member)
 }
 
 function pickInstance(
-	instances: GameInstance[],
+	instances: Awaited<ReturnType<typeof list>>,
 	preferredName: string | null | undefined,
-): GameInstance | null {
+) {
 	if (instances.length === 0) return null
 	const preferred = preferredName?.trim().toLowerCase()
 	if (preferred) {
 		const byName = instances.find((instance) => instance.name.toLowerCase() === preferred)
 		if (byName) return byName
 	}
-	const sorted = [...instances].sort((a, b) => {
+	return [...instances].sort((a, b) => {
 		const aTime = a.last_played ? new Date(a.last_played).getTime() : 0
 		const bTime = b.last_played ? new Date(b.last_played).getTime() : 0
 		return bTime - aTime
-	})
-	return sorted[0] ?? null
+	})[0] ?? null
+}
+
+async function openPlayWith(member: OctraCommunityMember) {
+	joiningId.value = member.id
+	await playWithModal.value?.open(member)
+}
+
+function onPlayWithClosed() {
+	joiningId.value = null
 }
 
 async function joinFriend(member: OctraCommunityMember) {
-	const address = member.join_address?.trim()
-	if (!address) return
-	joiningId.value = member.id
-	try {
-		const instances = await list()
-		const instance = pickInstance(instances, member.instance_name)
-		if (!instance) {
-			handleError(formatMessage(messages.noInstance))
-			return
-		}
-		await start_join_server(instance.id, address)
-		addNotification({
-			title: formatMessage(messages.playWithToast, { nick: member.minecraft_nick }),
-			text: '',
-			type: 'success',
-		})
-	} catch (error) {
-		handleSevereError(error, handleError)
-	} finally {
-		joiningId.value = null
-	}
+	await openPlayWith(member)
 }
 
 async function shareMyIp() {
@@ -356,6 +370,14 @@ const messages = defineMessages({
 		id: 'octra.community.heading',
 		defaultMessage: 'Friends',
 	},
+	tabFriends: {
+		id: 'octra.community.tab.friends',
+		defaultMessage: 'Friends',
+	},
+	tabServers: {
+		id: 'octra.community.tab.servers',
+		defaultMessage: 'Servers',
+	},
 	search: {
 		id: 'octra.community.search',
 		defaultMessage: 'Search friends...',
@@ -420,10 +442,6 @@ const messages = defineMessages({
 		id: 'octra.community.play-with',
 		defaultMessage: 'Play with',
 	},
-	playWithToast: {
-		id: 'octra.community.play-with-toast',
-		defaultMessage: 'Joining {nick}…',
-	},
 	friendInGame: {
 		id: 'octra.community.friend-in-game',
 		defaultMessage: '{nick} is in game',
@@ -451,6 +469,10 @@ const messages = defineMessages({
 	messagePlayer: {
 		id: 'octra.community.message-player',
 		defaultMessage: 'Message player',
+	},
+	viewPack: {
+		id: 'octra.community.view-pack',
+		defaultMessage: 'Zobacz paczkę',
 	},
 	memberActionsLabel: {
 		id: 'octra.community.actions.label',
@@ -494,6 +516,7 @@ const messages = defineMessages({
 <template>
 	<div class="flex flex-col gap-3">
 		<ContextMenu ref="memberOptions" :label="formatMessage(messages.memberActionsLabel)" />
+		<PlayWithFriendModal ref="playWithModal" @closed="onPlayWithClosed" />
 		<div class="flex items-start justify-between gap-2">
 			<div class="min-w-0">
 				<h3 class="m-0 text-base font-medium text-primary">
@@ -541,156 +564,206 @@ const messages = defineMessages({
 		</template>
 
 		<template v-else>
-			<div class="flex flex-col gap-1.5 rounded-xl bg-button-bg/40 p-2">
-				<span class="text-[11px] font-medium text-secondary">
-					{{ formatMessage(messages.shareIpLabel) }}
-				</span>
-				<div class="flex items-center gap-1.5">
-					<input
-						v-model="shareAddress"
-						type="text"
-						class="min-h-8 w-full rounded-lg border border-solid border-surface-5 bg-bg-raised px-2 py-1 text-xs text-primary placeholder:text-secondary"
-						:placeholder="formatMessage(messages.shareIpPlaceholder)"
-						:disabled="sharingAddress"
-						@keydown.enter.prevent="shareMyIp"
-					/>
-					<IconButton
-						v-tooltip="formatMessage(messages.shareIpAction)"
-						type="standard"
-						color="brand"
-						:label="formatMessage(messages.shareIpAction)"
-						:disabled="sharingAddress || !shareAddress.trim()"
-						@click="shareMyIp"
+			<div
+				class="grid grid-cols-2 gap-0.5 rounded-lg bg-surface-2 p-0.5"
+				role="tablist"
+				:aria-label="formatMessage(messages.heading)"
+			>
+				<button
+					type="button"
+					role="tab"
+					class="rounded-md px-2 py-1.5 text-xs font-medium transition-colors"
+					:class="
+						panelTab === 'friends'
+							? 'bg-surface-3 text-contrast'
+							: 'text-secondary hover:text-primary'
+					"
+					:aria-selected="panelTab === 'friends'"
+					@click="panelTab = 'friends'"
+				>
+					{{ formatMessage(messages.tabFriends) }}
+				</button>
+				<button
+					type="button"
+					role="tab"
+					class="rounded-md px-2 py-1.5 text-xs font-medium transition-colors"
+					:class="
+						panelTab === 'servers'
+							? 'bg-surface-3 text-contrast'
+							: 'text-secondary hover:text-primary'
+					"
+					:aria-selected="panelTab === 'servers'"
+					@click="panelTab = 'servers'"
+				>
+					{{ formatMessage(messages.tabServers) }}
+					<span
+						v-if="sharedServers.length > 0"
+						class="ml-1 text-[10px] text-secondary"
 					>
-						<ShareIcon />
-					</IconButton>
-				</div>
+						{{ sharedServers.length }}
+					</span>
+				</button>
 			</div>
 
-			<template v-if="members.length === 0">
-				<p class="m-0 font-minecraft text-sm text-secondary">
-					{{ formatMessage(messages.empty) }}
-				</p>
+			<template v-if="panelTab === 'friends'">
+				<template v-if="members.length === 0">
+					<p class="m-0 text-sm text-secondary">
+						{{ formatMessage(messages.empty) }}
+					</p>
+				</template>
+
+				<template v-else>
+					<Input
+						v-if="members.length > 5"
+						v-model="search"
+						:icon="SearchIcon"
+						type="text"
+						appearance="transparent"
+						:placeholder="formatMessage(messages.search)"
+						clearable
+						input-class="!text-primary !placeholder:text-primary"
+						wrapper-class="!border-button-bg [&>span:first-child]:!text-primary [&>span:first-child]:!opacity-100"
+						@keyup.esc="search = ''"
+					/>
+					<div class="community-list flex flex-col gap-0.5">
+						<div
+							v-for="(member, index) in filtered"
+							:key="member.id"
+							class="community-row grid grid-cols-[auto_1fr_auto] items-center gap-2 rounded-lg px-1 py-1.5 select-none hover:bg-surface-3"
+							:style="{ '--stagger': `${Math.min(index, 8) * 28}ms` }"
+							@contextmenu.prevent.stop="(event) => openMemberContextMenu(event, member)"
+						>
+							<div class="relative shrink-0">
+								<Avatar
+									:src="avatarFor(member)"
+									:alt="member.minecraft_nick"
+									size="32px"
+									circle
+								/>
+								<span
+									class="absolute bottom-0 right-0 size-2 rounded-full ring-2 ring-[var(--color-raised-bg)]"
+									:class="presenceDotClass(member.presence)"
+								/>
+							</div>
+							<div class="flex min-w-0 flex-col">
+								<span class="truncate text-sm text-contrast">{{ member.minecraft_nick }}</span>
+								<span class="truncate text-xs text-secondary">
+									{{ presenceLabel(member) }}
+								</span>
+							</div>
+							<IconButton
+								v-if="canJoin(member)"
+								v-tooltip="formatMessage(messages.playWith)"
+								type="standard"
+								color="brand"
+								:label="formatMessage(messages.playWith)"
+								:disabled="joiningId === member.id"
+								@click="joinFriend(member)"
+							>
+								<PlayIcon />
+							</IconButton>
+						</div>
+					</div>
+					<p v-if="filtered.length === 0 && search" class="m-0 text-sm text-secondary">
+						{{ formatMessage(messages.noMatch, { query: plainText(search) }) }}
+					</p>
+				</template>
 			</template>
 
 			<template v-else>
-				<Input
-					v-if="members.length > 5"
-					v-model="search"
-					:icon="SearchIcon"
-					type="text"
-					appearance="transparent"
-					:placeholder="formatMessage(messages.search)"
-					clearable
-					input-class="!text-primary !placeholder:text-primary"
-					wrapper-class="!border-button-bg [&>span:first-child]:!text-primary [&>span:first-child]:!opacity-100"
-					@keyup.esc="search = ''"
-				/>
-				<div class="community-list flex flex-col gap-0.5">
-					<div
-						v-for="(member, index) in filtered"
-						:key="member.id"
-						class="community-row grid grid-cols-[auto_1fr_auto] items-center gap-2 rounded-xl px-1 py-1.5 select-none"
-						:style="{ '--stagger': `${Math.min(index, 8) * 28}ms` }"
-						@contextmenu.prevent.stop="(event) => openMemberContextMenu(event, member)"
-					>
-						<div class="relative shrink-0">
-							<Avatar :src="avatarFor(member)" :alt="member.minecraft_nick" size="32px" circle />
-							<span
-								class="absolute bottom-0 right-0 size-2 rounded-full ring-2 ring-[var(--color-raised-bg)]"
-								:class="presenceDotClass(member.presence)"
-							/>
-						</div>
-						<div class="flex min-w-0 flex-col">
-							<span class="truncate text-sm text-contrast">{{ member.minecraft_nick }}</span>
-							<span class="truncate text-xs text-secondary">
-								{{ presenceLabel(member) }}
-							</span>
-						</div>
+				<div class="flex flex-col gap-1.5 rounded-lg bg-surface-2 p-2">
+					<span class="text-[11px] font-medium text-secondary">
+						{{ formatMessage(messages.shareIpLabel) }}
+					</span>
+					<div class="flex items-center gap-1.5">
+						<input
+							v-model="shareAddress"
+							type="text"
+							class="min-h-8 w-full rounded-md border border-solid border-surface-5 bg-surface-3 px-2 py-1 text-xs text-primary placeholder:text-secondary"
+							:placeholder="formatMessage(messages.shareIpPlaceholder)"
+							:disabled="sharingAddress"
+							@keydown.enter.prevent="shareMyIp"
+						/>
 						<IconButton
-							v-if="canJoin(member)"
-							v-tooltip="formatMessage(messages.playWith)"
+							v-tooltip="formatMessage(messages.shareIpAction)"
 							type="standard"
 							color="brand"
-							:label="formatMessage(messages.playWith)"
-							:disabled="joiningId === member.id"
-							@click="joinFriend(member)"
+							:label="formatMessage(messages.shareIpAction)"
+							:disabled="sharingAddress || !shareAddress.trim()"
+							@click="shareMyIp"
 						>
-							<PlayIcon />
+							<ShareIcon />
 						</IconButton>
 					</div>
 				</div>
-				<p v-if="filtered.length === 0 && search" class="m-0 text-sm text-secondary">
-					{{ formatMessage(messages.noMatch, { query: plainText(search) }) }}
-				</p>
-			</template>
 
-			<div class="mt-2 flex flex-col gap-2 border-0 border-t border-solid border-surface-5 pt-3">
-				<div class="flex items-center gap-1.5 text-primary">
-					<ServerIcon class="size-3.5 shrink-0 text-secondary" />
-					<h4 class="m-0 text-sm font-medium">
-						{{ formatMessage(messages.sharedHeading) }}
-					</h4>
-				</div>
-				<p v-if="sharedServers.length === 0" class="m-0 text-xs text-secondary">
-					{{ formatMessage(messages.sharedEmpty) }}
-				</p>
-				<div
-					v-for="server in sharedServers"
-					:key="server.id"
-					class="grid grid-cols-[1fr_auto] items-center gap-1 rounded-xl px-1 py-1"
-				>
-					<div class="min-w-0">
-						<span class="block truncate text-sm text-contrast">{{ server.name }}</span>
-						<span class="block truncate text-[11px] text-secondary">{{ server.address }}</span>
+				<div class="flex flex-col gap-2">
+					<div class="flex items-center gap-1.5 text-primary">
+						<ServerIcon class="size-3.5 shrink-0 text-secondary" />
+						<h4 class="m-0 text-sm font-medium">
+							{{ formatMessage(messages.sharedHeading) }}
+						</h4>
 					</div>
-					<div class="flex items-center gap-0.5">
-						<IconButton
-							v-tooltip="formatMessage(messages.sharedJoin)"
-							type="quiet"
-							color="brand"
-							:label="formatMessage(messages.sharedJoin)"
-							:disabled="joiningSharedId === server.id"
-							@click="joinSharedServer(server)"
-						>
-							<PlayIcon />
-						</IconButton>
-						<IconButton
-							v-tooltip="formatMessage(messages.sharedDelete)"
-							type="quiet"
-							:label="formatMessage(messages.sharedDelete)"
-							@click="deleteSharedServer(server)"
-						>
-							<TrashIcon />
-						</IconButton>
-					</div>
-				</div>
-				<div class="flex flex-col gap-1.5">
-					<input
-						v-model="sharedName"
-						type="text"
-						class="min-h-8 w-full rounded-lg border border-solid border-surface-5 bg-button-bg px-2 py-1 text-xs text-primary placeholder:text-secondary"
-						:placeholder="formatMessage(messages.sharedNamePlaceholder)"
-					/>
-					<input
-						v-model="sharedAddress"
-						type="text"
-						class="min-h-8 w-full rounded-lg border border-solid border-surface-5 bg-button-bg px-2 py-1 text-xs text-primary placeholder:text-secondary"
-						:placeholder="formatMessage(messages.sharedAddressPlaceholder)"
-						@keydown.enter.prevent="addSharedServer"
-					/>
-					<Button
-						type="colored"
-						color="brand"
-						class="w-full"
-						:disabled="addingShared || !sharedName.trim() || !sharedAddress.trim()"
-						@click="addSharedServer"
+					<p v-if="sharedServers.length === 0" class="m-0 text-xs text-secondary">
+						{{ formatMessage(messages.sharedEmpty) }}
+					</p>
+					<div
+						v-for="server in sharedServers"
+						:key="server.id"
+						class="grid grid-cols-[1fr_auto] items-center gap-1 rounded-lg px-1 py-1 hover:bg-surface-3"
 					>
-						<PlusIcon />
-						{{ formatMessage(messages.sharedAdd) }}
-					</Button>
+						<div class="min-w-0">
+							<span class="block truncate text-sm text-contrast">{{ server.name }}</span>
+							<span class="block truncate text-[11px] text-secondary">{{ server.address }}</span>
+						</div>
+						<div class="flex items-center gap-0.5">
+							<IconButton
+								v-tooltip="formatMessage(messages.sharedJoin)"
+								type="quiet"
+								color="brand"
+								:label="formatMessage(messages.sharedJoin)"
+								:disabled="joiningSharedId === server.id"
+								@click="joinSharedServer(server)"
+							>
+								<PlayIcon />
+							</IconButton>
+							<IconButton
+								v-tooltip="formatMessage(messages.sharedDelete)"
+								type="quiet"
+								:label="formatMessage(messages.sharedDelete)"
+								@click="deleteSharedServer(server)"
+							>
+								<TrashIcon />
+							</IconButton>
+						</div>
+					</div>
+					<div class="flex flex-col gap-1.5">
+						<input
+							v-model="sharedName"
+							type="text"
+							class="min-h-8 w-full rounded-md border border-solid border-surface-5 bg-surface-3 px-2 py-1 text-xs text-primary placeholder:text-secondary"
+							:placeholder="formatMessage(messages.sharedNamePlaceholder)"
+						/>
+						<input
+							v-model="sharedAddress"
+							type="text"
+							class="min-h-8 w-full rounded-md border border-solid border-surface-5 bg-surface-3 px-2 py-1 text-xs text-primary placeholder:text-secondary"
+							:placeholder="formatMessage(messages.sharedAddressPlaceholder)"
+							@keydown.enter.prevent="addSharedServer"
+						/>
+						<Button
+							type="colored"
+							color="brand"
+							class="w-full"
+							:disabled="addingShared || !sharedName.trim() || !sharedAddress.trim()"
+							@click="addSharedServer"
+						>
+							<PlusIcon />
+							{{ formatMessage(messages.sharedAdd) }}
+						</Button>
+					</div>
 				</div>
-			</div>
+			</template>
 		</template>
 	</div>
 </template>
