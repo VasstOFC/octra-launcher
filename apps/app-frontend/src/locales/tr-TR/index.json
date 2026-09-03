@@ -155,12 +155,6 @@
   "app.appearance-settings.compact-mode.title": {
     "message": "Kompakt mod"
   },
-  "app.appearance-settings.default-landing-page.home": {
-    "message": "Ana Sayfa"
-  },
-  "app.appearance-settings.default-landing-page.library": {
-    "message": "Kitaplık"
-  },
   "app.appearance-settings.hide-nametag.description": {
     "message": "Dış görünüm seçici sayfasında oyuncu önizlemesinin üzerindeki kullanıcı adınızı gizleyin."
   },
@@ -190,12 +184,6 @@
   },
   "app.appearance-settings.skip-non-essential-warnings.title": {
     "message": "Gerekli olmayan uyarıları atla"
-  },
-  "app.appearance-settings.toggle-sidebar.description": {
-    "message": "Sağ kenar çubuğunu varsayılan olarak gizleyin ve onu göstermek ya da gizlemek için bir düğme ekleyin."
-  },
-  "app.appearance-settings.toggle-sidebar.title": {
-    "message": "Sağ kenar çubuğunu gizle"
   },
   "app.appearance-settings.unknown-pack-warning.description": {
     "message": "Modrinth'te yayınlanmayan bir Modrinth Pack (.mrpack) kurulmadan önce bir güvenlik uyarısı göster."
@@ -1226,9 +1214,6 @@
   "app.nav.modrinth-account": {
     "message": "Modrinth hesabı"
   },
-  "app.nav.modrinth-hosting": {
-    "message": "Modrinth Hosting"
-  },
   "app.nav.sign-in-to-modrinth-account": {
     "message": "Bir Modrinth hesabıyla oturum açın"
   },
@@ -1409,12 +1394,6 @@
   "app.settings.privacy.discord-rich-presence.title": {
     "message": "Discord Rich Presence"
   },
-  "app.settings.privacy.telemetry.description": {
-    "message": "Modrinth kullanıcı deneyimimizi geliştirmek için ve deneyiminizi kişiselleştirmek için anonimleştirilmiş analiz ve kullanım verilerini toplar. Bu seçeneği devre dışı bırakarak, bundan vazgeçmiş olursunuz ve verileriniz artık toplanmayacaktır."
-  },
-  "app.settings.privacy.telemetry.title": {
-    "message": "Telemetri"
-  },
   "app.settings.resource-management.always-show-copy-details.description": {
     "message": "Bir yükleme işlemi kuyrukta beklerken veya devam ederken Ayrıntıları Kopyala eylemini gösterir. Bu eylem, başarısız olan veya kesintiye uğrayan yüklemeler için her zaman kullanılabilir."
   },
@@ -1480,9 +1459,6 @@
   },
   "app.settings.tabs.java-installations": {
     "message": "Java kurulumları"
-  },
-  "app.settings.tabs.language": {
-    "message": "Dil"
   },
   "app.settings.tabs.privacy": {
     "message": "Gizlilik"
@@ -1834,9 +1810,6 @@
   },
   "friends.section.heading": {
     "message": "{title} - {count}"
-  },
-  "friends.sign-in-to-add-friends": {
-    "message": "Arkadaş eklemek ve ne oynadıklarını görmek için bir <link>Modrinth hesabına giriş yap</link>!"
   },
   "installation-settings.shared-instance.linked-title": {
     "message": "Bağlantılı paylaşımlı örnek"
@@ -2575,9 +2548,6 @@
   },
   "minecraft-required.get-minecraft": {
     "message": "Minecraft al"
-  },
-  "minecraft-required.get-support": {
-    "message": "Destek al"
   },
   "minecraft-required.header": {
     "message": "Minecraft gereklidir"

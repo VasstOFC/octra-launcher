@@ -155,12 +155,6 @@
   "app.appearance-settings.compact-mode.title": {
     "message": "Összetett mód"
   },
-  "app.appearance-settings.default-landing-page.home": {
-    "message": "Kezdőlap"
-  },
-  "app.appearance-settings.default-landing-page.library": {
-    "message": "Könyvtár"
-  },
   "app.appearance-settings.hide-nametag.description": {
     "message": "Elrejti a játékosod előnézete felett megjelenő névcímkét a Kinézetváltó oldalon."
   },
@@ -190,12 +184,6 @@
   },
   "app.appearance-settings.skip-non-essential-warnings.title": {
     "message": "Lényegtelen figyelmeztetések kihagyása"
-  },
-  "app.appearance-settings.toggle-sidebar.description": {
-    "message": "Alapértelmezés szerint elrejti a jobb oldalsávot, és hozzáad egy gombot a megjelenítéséhez vagy elrejtéséhez."
-  },
-  "app.appearance-settings.toggle-sidebar.title": {
-    "message": "Jobb oldalsáv elrejtése"
   },
   "app.appearance-settings.unknown-pack-warning.description": {
     "message": "Biztonsági figyelmeztetést jelenít meg, mielőtt olyan Modrinth Csomagfájlt (.mrpack) telepítenél, amely nem a Modrinthról származik."
@@ -977,9 +965,6 @@
   "app.nav.modrinth-account": {
     "message": "Modrinth fiók"
   },
-  "app.nav.modrinth-hosting": {
-    "message": "Modrinth Hosting"
-  },
   "app.nav.sign-in-to-modrinth-account": {
     "message": "Bejelentkezés egy Modrinth-fiókba"
   },
@@ -1145,12 +1130,6 @@
   "app.settings.privacy.discord-rich-presence.title": {
     "message": "Discord Rich Presence"
   },
-  "app.settings.privacy.telemetry.description": {
-    "message": "A Modrinth névtelen használati és telemetriai adatokat gyűjt a felhasználói élmény javítása és személyre szabása érdekében. Ha kikapcsolod ezt a beállítást, leiratkozol erről, és a rendszer többé nem gyűjti az adataidat."
-  },
-  "app.settings.privacy.telemetry.title": {
-    "message": "Telemetria"
-  },
   "app.settings.resource-management.always-show-copy-details.description": {
     "message": "A „Részletek másolása” művelet megjelenítése, amíg a telepítés várólistán van vagy fut. A művelet mindig elérhető a sikertelen vagy megszakított telepítések esetén."
   },
@@ -1216,9 +1195,6 @@
   },
   "app.settings.tabs.java-installations": {
     "message": "Telepített Java példányok"
-  },
-  "app.settings.tabs.language": {
-    "message": "Nyelv"
   },
   "app.settings.tabs.privacy": {
     "message": "Adatvédelem"
@@ -1534,9 +1510,6 @@
   },
   "friends.section.heading": {
     "message": "{title} - {count}"
-  },
-  "friends.sign-in-to-add-friends": {
-    "message": "<link>Lépj be Modrinth fiókodba</link>, hogy felvehess barátokat és lásd mivel játszanak!"
   },
   "installation-settings.shared-instance.linked-title": {
     "message": "Összekapcsolt megosztott példány"
@@ -2068,9 +2041,6 @@
   },
   "minecraft-required.get-minecraft": {
     "message": "Szerezd be a Minecraftot!"
-  },
-  "minecraft-required.get-support": {
-    "message": "Segítség kérése"
   },
   "minecraft-required.header": {
     "message": "Minecraft szükséges"

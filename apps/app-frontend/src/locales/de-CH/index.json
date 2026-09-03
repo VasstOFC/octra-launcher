@@ -155,12 +155,6 @@
   "app.appearance-settings.compact-mode.title": {
     "message": "Kompakter Modus"
   },
-  "app.appearance-settings.default-landing-page.home": {
-    "message": "Start"
-  },
-  "app.appearance-settings.default-landing-page.library": {
-    "message": "Bibliothek"
-  },
   "app.appearance-settings.hide-nametag.description": {
     "message": "Verbirgt deinen Benutzernamen über der Spielervorschau auf der Skin-Auswahlseite."
   },
@@ -190,12 +184,6 @@
   },
   "app.appearance-settings.skip-non-essential-warnings.title": {
     "message": "Unwichtige Warnungen überspringen"
-  },
-  "app.appearance-settings.toggle-sidebar.description": {
-    "message": "Blendet die rechte Seitenleiste standardmäßig aus und fügt einen Button zum Ein- oder Ausblenden hinzu."
-  },
-  "app.appearance-settings.toggle-sidebar.title": {
-    "message": "Rechte Seitenleiste ausblenden"
   },
   "app.appearance-settings.unknown-pack-warning.description": {
     "message": "Zeige eine Sicherheitswarnung an, bevor ein Modrinth-Paket (.mrpack) installiert wird, welches nicht auf Modrinth gehostet wird."
@@ -1226,9 +1214,6 @@
   "app.nav.modrinth-account": {
     "message": "Modrinth-Konto"
   },
-  "app.nav.modrinth-hosting": {
-    "message": "Modrinth Hosting"
-  },
   "app.nav.sign-in-to-modrinth-account": {
     "message": "Bei einem Modrinth-Konto anmelden"
   },
@@ -1409,12 +1394,6 @@
   "app.settings.privacy.discord-rich-presence.title": {
     "message": "Discord Rich Presence"
   },
-  "app.settings.privacy.telemetry.description": {
-    "message": "Modrinth sammelt anonymisierte Analyse- und Nutzungsdaten, um unsere Nutzererfahrung zu verbessern und deine Erfahrung anzupassen. Wenn du diese Option deaktivierst, entscheidest du dich dagegen und deine Daten werden nicht mehr gesammelt."
-  },
-  "app.settings.privacy.telemetry.title": {
-    "message": "Telemetrie"
-  },
   "app.settings.resource-management.always-show-copy-details.description": {
     "message": "Zeigt die Aktion \"Details kopieren\" an, während eine Installation in der Warteschlange steht oder ausgeführt wird. Bei fehlgeschlagenen oder abgebrochenen Installationen ist sie immer verfügbar."
   },
@@ -1480,9 +1459,6 @@
   },
   "app.settings.tabs.java-installations": {
     "message": "Java Installationen"
-  },
-  "app.settings.tabs.language": {
-    "message": "Sprache"
   },
   "app.settings.tabs.privacy": {
     "message": "Datenschutz"
@@ -1834,9 +1810,6 @@
   },
   "friends.section.heading": {
     "message": "{title} - {count}"
-  },
-  "friends.sign-in-to-add-friends": {
-    "message": "<link>Logge dich in ein Modrinth Konto ein</link>, um Freunde hinzuzufügen und zu sehen, was sie spielen!"
   },
   "installation-settings.shared-instance.linked-title": {
     "message": "Verknüpfte geteilte Instanz"
@@ -2575,9 +2548,6 @@
   },
   "minecraft-required.get-minecraft": {
     "message": "Minecraft holen"
-  },
-  "minecraft-required.get-support": {
-    "message": "Hilfe erhalten"
   },
   "minecraft-required.header": {
     "message": "Minecraft erforderlich"

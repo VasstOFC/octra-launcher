@@ -836,13 +836,7 @@ pub async fn launch_minecraft(
         content_set.loader_version.as_deref(),
     )
     .await?;
-    let (effective_loader, loader_version) =
-        crate::octra_skins::overlay_fabric_if_vanilla(
-            &content_set.game_version,
-            content_set.loader,
-            loader_version,
-        )
-        .await;
+    let effective_loader = content_set.loader;
 
     if effective_loader != ModLoader::Vanilla && loader_version.is_none() {
         return Err(crate::ErrorKind::LauncherError(format!(
@@ -942,8 +936,6 @@ pub async fn launch_minecraft(
     let mut java_args = Vec::from(java_args);
     if let Err(e) = crate::octra_skins::prepare_launch(
         &instance_path,
-        &content_set.game_version,
-        effective_loader,
         credentials,
         &mut java_args,
     )

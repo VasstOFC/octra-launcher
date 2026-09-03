@@ -155,12 +155,6 @@
   "app.appearance-settings.compact-mode.title": {
     "message": "컴팩트 모드"
   },
-  "app.appearance-settings.default-landing-page.home": {
-    "message": "홈"
-  },
-  "app.appearance-settings.default-landing-page.library": {
-    "message": "라이브러리"
-  },
   "app.appearance-settings.hide-nametag.description": {
     "message": "스킨 페이지의 플레이어 미리보기 위에 있는 사용자 이름을 숨깁니다."
   },
@@ -190,12 +184,6 @@
   },
   "app.appearance-settings.skip-non-essential-warnings.title": {
     "message": "중요하지 않은 경고 넘기기"
-  },
-  "app.appearance-settings.toggle-sidebar.description": {
-    "message": "기본 상태에서 오른쪽 사이드바를 숨기고, 이를 표시하거나 숨기는 버튼을 추가합니다."
-  },
-  "app.appearance-settings.toggle-sidebar.title": {
-    "message": "오른쪽 사이드바 숨기기"
   },
   "app.appearance-settings.unknown-pack-warning.description": {
     "message": "Modrinth에 호스팅되지 않은 Modrinth Pack(.mrpack)을 설치하기 전에 안전 경고를 표시합니다."
@@ -1169,9 +1157,6 @@
   "app.nav.modrinth-account": {
     "message": "Modrinth 계정"
   },
-  "app.nav.modrinth-hosting": {
-    "message": "Modrinth 호스팅"
-  },
   "app.nav.sign-in-to-modrinth-account": {
     "message": "Modrinth 계정으로 로그인"
   },
@@ -1328,12 +1313,6 @@
   "app.settings.privacy.discord-rich-presence.title": {
     "message": "Discord 활동 상태"
   },
-  "app.settings.privacy.telemetry.description": {
-    "message": "Modrinth는 사용자 경험 향상 및 맞춤 설정을 위해 익명화된 분석 데이터와 사용 데이터를 수집합니다. 이 옵션을 비활성화하면 데이터 수집을 거부하게 되며, 더 이상 데이터가 수집되지 않습니다."
-  },
-  "app.settings.privacy.telemetry.title": {
-    "message": "원격 분석"
-  },
   "app.settings.resource-management.always-show-copy-details.description": {
     "message": "설치가 대기 중이거나 진행 중일 때 '상세 정보 복사' 버튼을 표시합니다. 실패했거나 중단된 설치 건에서는 항상 사용할 수 있습니다."
   },
@@ -1399,9 +1378,6 @@
   },
   "app.settings.tabs.java-installations": {
     "message": "Java 설치"
-  },
-  "app.settings.tabs.language": {
-    "message": "언어"
   },
   "app.settings.tabs.privacy": {
     "message": "개인정보"
@@ -1711,9 +1687,6 @@
   },
   "friends.section.heading": {
     "message": "{title} - {count}"
-  },
-  "friends.sign-in-to-add-friends": {
-    "message": "<link>Modrinth 계정으로 로그인</link>하여 친구를 추가하고 무엇을 플레이 중인지 확인하세요!"
   },
   "installation-settings.shared-instance.linked-title": {
     "message": "연동된 공유 인스턴스"
@@ -2197,9 +2170,6 @@
   },
   "minecraft-required.get-minecraft": {
     "message": "마인크래프트 얻기"
-  },
-  "minecraft-required.get-support": {
-    "message": "지원 받기"
   },
   "minecraft-required.header": {
     "message": "마인크래프트 필요"

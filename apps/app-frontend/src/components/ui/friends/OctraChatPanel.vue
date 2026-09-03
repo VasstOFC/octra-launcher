@@ -2,14 +2,17 @@
 import {
 	DownloadIcon,
 	MessageIcon,
+	PinIcon,
 	PlusIcon,
 	SendIcon,
+	TrashIcon,
 	UsersIcon,
 	XIcon,
 } from '@modrinth/assets'
 import {
 	Avatar,
 	Button,
+	commonMessages,
 	defineMessages,
 	IconButton,
 	injectNotificationManager,
@@ -17,26 +20,32 @@ import {
 } from '@modrinth/ui'
 import { computed, nextTick, onUnmounted, ref, watch } from 'vue'
 
+import { handleSevereError } from '@/composables/use-error.js'
 import {
 	OCTRA_COMMUNITY_STEVE_HEAD,
 	useOctraCommunityAvatars,
 } from '@/composables/use-octra-community-avatars'
-import { handleSevereError } from '@/composables/use-error.js'
+import {
+	install_create_modpack_instance,
+	install_get_modpack_preview,
+	type InstallModpackPreview,
+} from '@/helpers/install'
 import {
 	channelTitle,
 	extractMrpackUrls,
 	octraCacheMrpackUrl,
+	octraChatAddMembers,
 	octraChatChannels,
 	octraChatCreateGroup,
+	octraChatDeleteMessage,
 	octraChatList,
+	octraChatMarkRead,
 	octraChatOpenDm,
+	octraChatPinMessage,
 	octraChatPost,
+	octraChatReactMessage,
 	octraCommunity,
 } from '@/helpers/octra-account.js'
-import {
-	install_create_modpack_instance,
-	install_get_modpack_preview,
-} from '@/helpers/install'
 
 type OctraAccountSession = {
 	token: string
@@ -51,6 +60,12 @@ type ChatMember = {
 	profile_uuid: string
 }
 
+type ChatReaction = {
+	emoji: string
+	count: number
+	user_ids?: number[]
+}
+
 type ChatChannel = {
 	id: number
 	kind: string
@@ -58,6 +73,9 @@ type ChatChannel = {
 	created_at: string
 	last_body?: string | null
 	last_at?: string | null
+	last_id?: number | null
+	last_read_id?: number
+	unread_count?: number
 	members?: ChatMember[]
 }
 
@@ -68,6 +86,9 @@ type ChatMessage = {
 	minecraft_nick: string
 	body: string
 	created_at: string
+	pinned?: boolean
+	deleted?: boolean
+	reactions?: ChatReaction[]
 }
 
 type CommunityMember = {
@@ -91,6 +112,15 @@ type BubbleRow = {
 	clustered: boolean
 }
 
+type MrpackPreviewState = {
+	url: string
+	path: string
+	preview: InstallModpackPreview | null
+	loading: boolean
+}
+
+const REACTION_EMOJIS = ['👍', '❤️', '😂', '🔥', '🎉', '👀'] as const
+
 const props = defineProps<{
 	session: OctraAccountSession | null
 	open: boolean
@@ -99,6 +129,7 @@ const props = defineProps<{
 const emit = defineEmits<{
 	close: []
 	signIn: []
+	unreadChanged: [total: number]
 }>()
 
 const { formatMessage } = useVIntl()
@@ -111,23 +142,36 @@ const messagesList = ref<ChatMessage[]>([])
 const draft = ref('')
 const sending = ref(false)
 const installingUrl = ref<string | null>(null)
+const mrpackPreview = ref<MrpackPreviewState | null>(null)
 const scrollEl = ref<HTMLElement | null>(null)
 const showNewDm = ref(false)
 const showNewGroup = ref(false)
+const showInvite = ref(false)
 const groupName = ref('')
 const groupPick = ref<number[]>([])
+const invitePick = ref<number[]>([])
+const hoveredMessageId = ref<number | null>(null)
 let pollTimer: ReturnType<typeof setInterval> | null = null
 
 const SKINS_FALLBACK_ORIGIN = 'http://92.5.186.6'
 
-const selected = computed(
-	() => channels.value.find((c) => c.id === selectedId.value) ?? null,
+const selected = computed(() => channels.value.find((c) => c.id === selectedId.value) ?? null)
+
+const unreadTotal = computed(() =>
+	channels.value.reduce((sum, channel) => sum + (channel.unread_count ?? 0), 0),
 )
 
+const canInvite = computed(
+	() => !!selected.value && selected.value.kind === 'group' && selected.value.name !== 'Everyone',
+)
+
+const inviteCandidates = computed(() => {
+	const memberIds = new Set((selected.value?.members || []).map((m) => m.id))
+	return community.value.filter((m) => !memberIds.has(m.id))
+})
+
 const lastId = computed(() =>
-	messagesList.value.length > 0
-		? messagesList.value[messagesList.value.length - 1]!.id
-		: 0,
+	messagesList.value.length > 0 ? messagesList.value[messagesList.value.length - 1]!.id : 0,
 )
 
 const skinsOrigin = computed(() => {
@@ -151,9 +195,7 @@ const avatarPeople = computed<AvatarPerson[]>(() => {
 		byNick.set(key, {
 			minecraft_nick: nick,
 			profile_uuid: uuid,
-			avatar_url:
-				avatarUrl ||
-				`${origin}/skins/MinecraftSkins/${encodeURIComponent(nick)}.png`,
+			avatar_url: avatarUrl || `${origin}/skins/MinecraftSkins/${encodeURIComponent(nick)}.png`,
 		})
 	}
 
@@ -225,15 +267,36 @@ async function scrollToBottom() {
 	}
 }
 
+function emitUnread() {
+	emit('unreadChanged', unreadTotal.value)
+}
+
+async function markChannelRead(channelId: number, maxId: number) {
+	if (maxId <= 0) return
+	try {
+		await octraChatMarkRead(channelId, maxId)
+		const channel = channels.value.find((c) => c.id === channelId)
+		if (channel) {
+			channel.unread_count = 0
+			channel.last_read_id = maxId
+		}
+		emitUnread()
+	} catch {
+		// ignore mark-read failures
+	}
+}
+
 async function refreshChannels() {
 	if (!props.session) {
 		channels.value = []
+		emitUnread()
 		return
 	}
 	channels.value = await octraChatChannels()
 	if (selectedId.value == null && channels.value.length > 0) {
 		selectedId.value = channels.value[0]!.id
 	}
+	emitUnread()
 }
 
 async function refreshCommunity() {
@@ -250,18 +313,22 @@ async function loadMessages(reset = false) {
 		messagesList.value = []
 		return
 	}
-	const rows = await octraChatList(selectedId.value, reset ? 0 : lastId.value)
+	const channelId = selectedId.value
+	const rows = await octraChatList(channelId, reset ? 0 : lastId.value)
 	if (reset) {
 		messagesList.value = rows
 		await scrollToBottom()
-		return
+	} else if (rows.length > 0) {
+		const known = new Set(messagesList.value.map((m) => m.id))
+		const appended = rows.filter((m) => !known.has(m.id))
+		if (appended.length > 0) {
+			messagesList.value = [...messagesList.value, ...appended]
+			await scrollToBottom()
+		}
 	}
-	if (rows.length === 0) return
-	const known = new Set(messagesList.value.map((m) => m.id))
-	const appended = rows.filter((m) => !known.has(m.id))
-	if (appended.length > 0) {
-		messagesList.value = [...messagesList.value, ...appended]
-		await scrollToBottom()
+	const maxId = messagesList.value.reduce((max, m) => Math.max(max, m.id), 0)
+	if (maxId > 0) {
+		await markChannelRead(channelId, maxId)
 	}
 }
 
@@ -301,6 +368,9 @@ watch(
 
 watch(selectedId, async () => {
 	if (!props.open || !props.session || selectedId.value == null) return
+	showInvite.value = false
+	invitePick.value = []
+	mrpackPreview.value = null
 	try {
 		await loadMessages(true)
 	} catch (error) {
@@ -322,6 +392,7 @@ async function send() {
 		draft.value = ''
 		await refreshChannels()
 		await scrollToBottom()
+		await markChannelRead(selectedId.value, posted.id)
 	} catch (error) {
 		handleSevereError(error, handleError)
 	} finally {
@@ -342,7 +413,7 @@ async function openDm(userId: number) {
 	}
 }
 
-defineExpose({ openDm })
+defineExpose({ openDm, unreadTotal })
 
 async function createGroup() {
 	const name = groupName.value.trim()
@@ -360,6 +431,16 @@ async function createGroup() {
 	}
 }
 
+function toggleNewDmPanel() {
+	showNewDm.value = !showNewDm.value
+	showNewGroup.value = false
+}
+
+function toggleNewGroupPanel() {
+	showNewGroup.value = !showNewGroup.value
+	showNewDm.value = false
+}
+
 function toggleGroupMember(id: number) {
 	if (groupPick.value.includes(id)) {
 		groupPick.value = groupPick.value.filter((x) => x !== id)
@@ -368,17 +449,84 @@ function toggleGroupMember(id: number) {
 	}
 }
 
-async function installMrpack(url: string) {
-	installingUrl.value = url
+function toggleInviteMember(id: number) {
+	if (invitePick.value.includes(id)) {
+		invitePick.value = invitePick.value.filter((x) => x !== id)
+	} else {
+		invitePick.value = [...invitePick.value, id]
+	}
+}
+
+async function inviteMembers() {
+	if (!selectedId.value || invitePick.value.length === 0) return
+	try {
+		await octraChatAddMembers(selectedId.value, invitePick.value)
+		invitePick.value = []
+		showInvite.value = false
+		await refreshChannels()
+	} catch (error) {
+		handleSevereError(error, handleError)
+	}
+}
+
+async function reactToMessage(message: ChatMessage, emoji: string) {
+	try {
+		await octraChatReactMessage(message.id, emoji)
+		await loadMessages(true)
+	} catch (error) {
+		handleSevereError(error, handleError)
+	}
+}
+
+async function togglePin(message: ChatMessage) {
+	try {
+		await octraChatPinMessage(message.id, !message.pinned)
+		message.pinned = !message.pinned
+	} catch (error) {
+		handleSevereError(error, handleError)
+	}
+}
+
+async function deleteMessage(message: ChatMessage) {
+	if (!isMine(message)) return
+	try {
+		await octraChatDeleteMessage(message.id)
+		message.deleted = true
+		message.body = ''
+	} catch (error) {
+		handleSevereError(error, handleError)
+	}
+}
+
+async function beginMrpackInstall(url: string) {
+	if (installingUrl.value || mrpackPreview.value?.loading) return
+	mrpackPreview.value = { url, path: '', preview: null, loading: true }
 	try {
 		const path = await octraCacheMrpackUrl(url)
-		await install_get_modpack_preview({ type: 'fromFile', path })
-		await install_create_modpack_instance({ type: 'fromFile', path })
+		const preview = await install_get_modpack_preview({ type: 'fromFile', path })
+		mrpackPreview.value = { url, path, preview, loading: false }
+	} catch (error) {
+		mrpackPreview.value = null
+		handleSevereError(error, handleError)
+	}
+}
+
+async function confirmMrpackInstall() {
+	const state = mrpackPreview.value
+	if (!state?.path || state.loading) return
+	installingUrl.value = state.url
+	try {
+		await install_create_modpack_instance({ type: 'fromFile', path: state.path })
+		mrpackPreview.value = null
 	} catch (error) {
 		handleSevereError(error, handleError)
 	} finally {
 		installingUrl.value = null
 	}
+}
+
+function cancelMrpackInstall() {
+	mrpackPreview.value = null
 }
 
 function onKeydown(event: KeyboardEvent) {
@@ -397,6 +545,26 @@ const messages = defineMessages({
 	},
 	send: { id: 'octra.chat.send', defaultMessage: 'Send' },
 	installPack: { id: 'octra.chat.install-pack', defaultMessage: 'Install pack' },
+	installConfirm: {
+		id: 'octra.chat.install-confirm',
+		defaultMessage: 'Install',
+	},
+	installCancel: {
+		id: 'octra.chat.install-cancel',
+		defaultMessage: 'Cancel',
+	},
+	installPreviewLoading: {
+		id: 'octra.chat.install-preview-loading',
+		defaultMessage: 'Loading pack preview…',
+	},
+	installPreviewTitle: {
+		id: 'octra.chat.install-preview-title',
+		defaultMessage: 'Install {name}?',
+	},
+	installPreviewMeta: {
+		id: 'octra.chat.install-preview-meta',
+		defaultMessage: '{gameVersion} · {modloader}',
+	},
 	signInHint: {
 		id: 'octra.chat.sign-in-hint',
 		defaultMessage: 'Sign in to Octra to use chat.',
@@ -426,13 +594,33 @@ const messages = defineMessages({
 		id: 'octra.chat.select-conversation',
 		defaultMessage: 'Select a conversation',
 	},
+	messageDeleted: {
+		id: 'octra.chat.message-deleted',
+		defaultMessage: 'Message deleted',
+	},
+	pin: { id: 'octra.chat.pin', defaultMessage: 'Pin' },
+	unpin: { id: 'octra.chat.unpin', defaultMessage: 'Unpin' },
+	delete: { id: 'octra.chat.delete', defaultMessage: 'Delete' },
+	pinnedBadge: { id: 'octra.chat.pinned', defaultMessage: 'Pinned' },
+	inviteMembers: {
+		id: 'octra.chat.invite-members',
+		defaultMessage: 'Invite members',
+	},
+	inviteConfirm: {
+		id: 'octra.chat.invite-confirm',
+		defaultMessage: 'Add to group',
+	},
+	unreadBadge: {
+		id: 'octra.chat.unread',
+		defaultMessage: '{count} unread',
+	},
 })
 </script>
 
 <template>
 	<aside
 		v-if="open"
-		class="octra-chat-rail relative flex h-full min-h-0 w-[min(440px,46vw)] shrink-0 flex-col border-0 border-r border-solid border-surface-5 bg-bg-raised"
+		class="octra-chat-rail relative flex h-full min-h-0 w-[min(560px,52vw)] shrink-0 flex-col border-0 border-r border-solid border-surface-5 bg-bg-raised"
 	>
 		<div class="octra-chat-rail__accent" aria-hidden="true" />
 		<div
@@ -442,11 +630,7 @@ const messages = defineMessages({
 				<MessageIcon class="size-4 shrink-0 text-brand" />
 				<span class="text-sm font-semibold">{{ formatMessage(messages.heading) }}</span>
 			</div>
-			<IconButton
-				type="quiet"
-				:label="formatMessage(messages.close)"
-				@click="emit('close')"
-			>
+			<IconButton type="quiet" :label="formatMessage(messages.close)" @click="emit('close')">
 				<XIcon />
 			</IconButton>
 		</div>
@@ -463,14 +647,14 @@ const messages = defineMessages({
 		<template v-else>
 			<div class="flex min-h-0 flex-1">
 				<div
-					class="flex w-[40%] min-w-[9.5rem] shrink-0 flex-col border-0 border-r border-solid border-surface-5"
+					class="flex w-[38%] min-w-[9.5rem] max-w-[15rem] shrink-0 flex-col border-0 border-r border-solid border-surface-5"
 				>
 					<div class="flex gap-1 p-2">
 						<IconButton
 							v-tooltip="formatMessage(messages.newDm)"
 							type="quiet"
 							:label="formatMessage(messages.newDm)"
-							@click="showNewDm = !showNewDm; showNewGroup = false"
+							@click="toggleNewDmPanel"
 						>
 							<MessageIcon />
 						</IconButton>
@@ -478,7 +662,7 @@ const messages = defineMessages({
 							v-tooltip="formatMessage(messages.newGroup)"
 							type="quiet"
 							:label="formatMessage(messages.newGroup)"
-							@click="showNewGroup = !showNewGroup; showNewDm = false"
+							@click="toggleNewGroupPanel"
 						>
 							<PlusIcon />
 						</IconButton>
@@ -532,10 +716,7 @@ const messages = defineMessages({
 						</Button>
 					</div>
 
-					<p
-						v-if="channels.length === 0"
-						class="m-0 px-3 py-2 text-xs text-secondary"
-					>
+					<p v-if="channels.length === 0" class="m-0 px-3 py-2 text-xs text-secondary">
 						{{ formatMessage(messages.emptyChannels) }}
 					</p>
 					<div class="min-h-0 flex-1 overflow-y-auto px-1 pb-2">
@@ -566,20 +747,109 @@ const messages = defineMessages({
 									{{ channel.last_body || '—' }}
 								</span>
 							</div>
+							<span
+								v-if="(channel.unread_count ?? 0) > 0"
+								class="shrink-0 rounded-full bg-brand px-1.5 py-0.5 text-[10px] font-semibold leading-none text-[var(--color-accent-contrast)]"
+								:title="formatMessage(messages.unreadBadge, { count: channel.unread_count ?? 0 })"
+							>
+								{{ channel.unread_count }}
+							</span>
 						</button>
 					</div>
 				</div>
 
-				<div class="flex min-w-0 flex-1 flex-col bg-[color-mix(in_srgb,var(--color-bg)_70%,transparent)]">
+				<div
+					class="flex min-w-0 flex-1 flex-col bg-[color-mix(in_srgb,var(--color-bg)_70%,transparent)]"
+				>
 					<div
-						class="border-0 border-b border-solid border-surface-5 px-3 py-2.5 text-sm font-semibold text-contrast"
+						class="flex items-center justify-between gap-2 border-0 border-b border-solid border-surface-5 px-3 py-2.5"
 					>
-						{{ selected ? titleFor(selected) : formatMessage(messages.selectConversation) }}
+						<span class="min-w-0 truncate text-sm font-semibold text-contrast">
+							{{ selected ? titleFor(selected) : formatMessage(messages.selectConversation) }}
+						</span>
+						<IconButton
+							v-if="canInvite"
+							v-tooltip="formatMessage(messages.inviteMembers)"
+							type="quiet"
+							:label="formatMessage(messages.inviteMembers)"
+							@click="showInvite = !showInvite"
+						>
+							<UsersIcon />
+						</IconButton>
 					</div>
+
 					<div
-						ref="scrollEl"
-						class="flex min-h-0 flex-1 flex-col overflow-y-auto px-3 py-3"
+						v-if="showInvite && canInvite"
+						class="flex flex-col gap-2 border-0 border-b border-solid border-surface-5 px-3 py-2"
 					>
+						<p class="m-0 text-[11px] text-secondary">{{ formatMessage(messages.pickMembers) }}</p>
+						<div class="max-h-28 overflow-y-auto">
+							<label
+								v-for="member in inviteCandidates"
+								:key="member.id"
+								class="flex cursor-pointer items-center gap-2 rounded-lg px-1 py-1 text-sm text-primary hover:bg-button-bg"
+							>
+								<input
+									type="checkbox"
+									:checked="invitePick.includes(member.id)"
+									@change="toggleInviteMember(member.id)"
+								/>
+								<Avatar :src="headForNick(member.minecraft_nick)" size="18px" circle />
+								<span class="truncate">{{ member.minecraft_nick }}</span>
+							</label>
+						</div>
+						<Button
+							type="colored"
+							color="brand"
+							class="w-full"
+							:disabled="invitePick.length === 0"
+							@click="inviteMembers"
+						>
+							{{ formatMessage(messages.inviteConfirm) }}
+						</Button>
+					</div>
+
+					<div
+						v-if="mrpackPreview"
+						class="mx-3 mt-2 rounded-xl border border-solid border-surface-5 bg-button-bg p-3"
+					>
+						<p v-if="mrpackPreview.loading" class="m-0 text-sm text-secondary">
+							{{ formatMessage(messages.installPreviewLoading) }}
+						</p>
+						<template v-else-if="mrpackPreview.preview">
+							<p class="m-0 text-sm font-medium text-contrast">
+								{{
+									formatMessage(messages.installPreviewTitle, {
+										name: mrpackPreview.preview.name || 'modpack',
+									})
+								}}
+							</p>
+							<p class="mt-1 mb-0 text-xs text-secondary">
+								{{
+									formatMessage(messages.installPreviewMeta, {
+										gameVersion: mrpackPreview.preview.gameVersion || '—',
+										modloader: mrpackPreview.preview.modloader || '—',
+									})
+								}}
+							</p>
+							<div class="mt-2 flex gap-2">
+								<Button
+									type="colored"
+									color="brand"
+									:disabled="!!installingUrl"
+									@click="confirmMrpackInstall"
+								>
+									<DownloadIcon />
+									{{ formatMessage(messages.installConfirm) }}
+								</Button>
+								<Button @click="cancelMrpackInstall">
+									{{ formatMessage(commonMessages.cancelButton) }}
+								</Button>
+							</div>
+						</template>
+					</div>
+
+					<div ref="scrollEl" class="flex min-h-0 flex-1 flex-col overflow-y-auto px-3 py-3">
 						<p
 							v-if="selected && messagesList.length === 0"
 							class="m-auto max-w-[16rem] text-center text-sm text-secondary"
@@ -589,11 +859,10 @@ const messages = defineMessages({
 						<div
 							v-for="row in bubbles"
 							:key="row.message.id"
-							class="flex gap-2"
-							:class="[
-								row.mine ? 'flex-row-reverse' : 'flex-row',
-								row.clustered ? 'mt-1' : 'mt-3',
-							]"
+							class="group flex gap-2"
+							:class="[row.mine ? 'flex-row-reverse' : 'flex-row', row.clustered ? 'mt-1' : 'mt-3']"
+							@mouseenter="hoveredMessageId = row.message.id"
+							@mouseleave="hoveredMessageId = null"
 						>
 							<div class="flex w-8 shrink-0 items-end justify-center">
 								<Avatar
@@ -605,13 +874,10 @@ const messages = defineMessages({
 								/>
 							</div>
 							<div
-								class="flex max-w-[78%] flex-col"
+								class="relative flex max-w-[78%] flex-col"
 								:class="row.mine ? 'items-end' : 'items-start'"
 							>
-								<span
-									v-if="row.showName"
-									class="mb-1 px-1 text-[11px] font-medium text-secondary"
-								>
+								<span v-if="row.showName" class="mb-1 px-1 text-[11px] font-medium text-secondary">
 									{{ row.message.minecraft_nick }}
 								</span>
 								<div
@@ -622,28 +888,84 @@ const messages = defineMessages({
 											: 'rounded-2xl rounded-bl-md bg-button-bg text-primary'
 									"
 								>
-									{{ row.message.body }}
-									<div
-										v-if="extractMrpackUrls(row.message.body).length > 0"
-										class="mt-2 flex flex-col gap-1"
+									<span
+										v-if="row.message.pinned"
+										class="mb-1 flex items-center gap-1 text-[10px] font-medium opacity-80"
 									>
-										<button
-											v-for="url in extractMrpackUrls(row.message.body)"
-											:key="url"
-											type="button"
-											class="inline-flex items-center gap-1.5 rounded-lg border-0 px-2 py-1 text-xs font-medium cursor-pointer"
-											:class="
-												row.mine
-													? 'bg-black/20 text-[var(--color-accent-contrast)] hover:bg-black/30'
-													: 'bg-surface-3 text-primary hover:bg-surface-4'
-											"
-											:disabled="installingUrl === url"
-											@click="installMrpack(url)"
+										<PinIcon class="size-3" />
+										{{ formatMessage(messages.pinnedBadge) }}
+									</span>
+									<template v-if="row.message.deleted">
+										<span class="italic opacity-70">{{
+											formatMessage(messages.messageDeleted)
+										}}</span>
+									</template>
+									<template v-else>
+										{{ row.message.body }}
+										<div
+											v-if="extractMrpackUrls(row.message.body).length > 0"
+											class="mt-2 flex flex-col gap-1"
 										>
-											<DownloadIcon class="size-3.5" />
-											{{ formatMessage(messages.installPack) }}
-										</button>
+											<button
+												v-for="url in extractMrpackUrls(row.message.body)"
+												:key="url"
+												type="button"
+												class="inline-flex items-center gap-1.5 rounded-lg border-0 px-2 py-1 text-xs font-medium cursor-pointer"
+												:class="
+													row.mine
+														? 'bg-black/20 text-[var(--color-accent-contrast)] hover:bg-black/30'
+														: 'bg-surface-3 text-primary hover:bg-surface-4'
+												"
+												:disabled="installingUrl === url || mrpackPreview?.loading"
+												@click="beginMrpackInstall(url)"
+											>
+												<DownloadIcon class="size-3.5" />
+												{{ formatMessage(messages.installPack) }}
+											</button>
+										</div>
+									</template>
+									<div v-if="row.message.reactions?.length" class="mt-1.5 flex flex-wrap gap-1">
+										<span
+											v-for="reaction in row.message.reactions"
+											:key="reaction.emoji"
+											class="inline-flex items-center gap-0.5 rounded-full bg-black/15 px-1.5 py-0.5 text-[11px]"
+										>
+											{{ reaction.emoji }}
+											<span class="opacity-80">{{ reaction.count }}</span>
+										</span>
 									</div>
+								</div>
+								<div
+									v-if="!row.message.deleted && hoveredMessageId === row.message.id"
+									class="absolute -top-3 z-10 flex items-center gap-0.5 rounded-lg border border-solid border-surface-5 bg-bg-raised px-1 py-0.5 shadow-sm"
+									:class="row.mine ? 'right-0' : 'left-0'"
+								>
+									<button
+										v-for="emoji in REACTION_EMOJIS"
+										:key="emoji"
+										type="button"
+										class="border-0 bg-transparent px-0.5 text-sm leading-none cursor-pointer hover:scale-110"
+										@click="reactToMessage(row.message, emoji)"
+									>
+										{{ emoji }}
+									</button>
+									<button
+										type="button"
+										class="inline-flex size-5 items-center justify-center rounded border-0 bg-transparent text-secondary cursor-pointer hover:bg-button-bg hover:text-contrast"
+										:title="formatMessage(row.message.pinned ? messages.unpin : messages.pin)"
+										@click="togglePin(row.message)"
+									>
+										<PinIcon class="size-3" />
+									</button>
+									<button
+										v-if="row.mine"
+										type="button"
+										class="inline-flex size-5 items-center justify-center rounded border-0 bg-transparent text-secondary cursor-pointer hover:bg-button-bg hover:text-contrast"
+										:title="formatMessage(messages.delete)"
+										@click="deleteMessage(row.message)"
+									>
+										<TrashIcon class="size-3" />
+									</button>
 								</div>
 								<span class="mt-0.5 px-1 text-[10px] text-secondary opacity-80">
 									{{ formatTime(row.message.created_at) }}

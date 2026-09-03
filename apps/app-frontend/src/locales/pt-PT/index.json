@@ -143,12 +143,6 @@
   "app.ads-consent.title": {
     "message": "A sua privacidade e como os anúncios são financiados pela Modrinth"
   },
-  "app.appearance-settings.default-landing-page.home": {
-    "message": "Início"
-  },
-  "app.appearance-settings.default-landing-page.library": {
-    "message": "Biblioteca"
-  },
   "app.appearance-settings.hide-nametag.description": {
     "message": "Esconde o teu nome de utilizador acima da pré-visualização na página de seleção de Skin."
   },
@@ -172,12 +166,6 @@
   },
   "app.appearance-settings.skip-non-essential-warnings.title": {
     "message": "Ignorar avisos não essenciais"
-  },
-  "app.appearance-settings.toggle-sidebar.description": {
-    "message": "Esconde a barra lateral direita por defeito e adiciona uma barra para mostrar ou escondê-la."
-  },
-  "app.appearance-settings.toggle-sidebar.title": {
-    "message": "Esconder barra lateral direita"
   },
   "app.appearance-settings.unknown-pack-warning.description": {
     "message": "Mostrar um aviso de segurança antes de instalar um Modrinth Pack (.mrpack) que não está hospedado no Modrinth."
@@ -533,9 +521,6 @@
   "app.settings.tabs.java-installations": {
     "message": "Instalações Java"
   },
-  "app.settings.tabs.language": {
-    "message": "Linguagem"
-  },
   "app.settings.tabs.privacy": {
     "message": "Privacidade"
   },
@@ -694,9 +679,6 @@
   },
   "friends.section.heading": {
     "message": "{title} - {count}"
-  },
-  "friends.sign-in-to-add-friends": {
-    "message": "<link>Inicia a sessão com uma conta Modrinth</link> para adicionar amigos e ver o que estão a jogar!"
   },
   "instance.add-server.add-and-play": {
     "message": "Adicionar e jogar"

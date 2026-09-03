@@ -248,9 +248,12 @@ const previewSkin = ref<string>('')
 
 const variant = ref<SkinModel>('CLASSIC')
 const selectedCape = ref<Cape | undefined>(undefined)
-const props = withDefaults(defineProps<{ capes?: Cape[]; demo?: boolean; allowCapes?: boolean }>(), {
-	allowCapes: true,
-})
+const props = withDefaults(
+	defineProps<{ capes?: Cape[]; demo?: boolean; allowCapes?: boolean }>(),
+	{
+		allowCapes: true,
+	},
+)
 
 const selectedCapeTexture = computed(() =>
 	props.allowCapes ? selectedCape.value?.texture : undefined,
@@ -324,10 +327,7 @@ const hasEdits = computed(() => {
 	if (uploadedTextureUrl.value) return true
 	if (!currentSkin.value) return false
 	if (variant.value !== currentSkin.value.variant) return true
-	if (
-		props.allowCapes &&
-		(selectedCape.value?.id || null) !== (currentSkin.value.cape_id || null)
-	)
+	if (props.allowCapes && (selectedCape.value?.id || null) !== (currentSkin.value.cape_id || null))
 		return true
 	return false
 })

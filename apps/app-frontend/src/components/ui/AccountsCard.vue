@@ -14,12 +14,7 @@
 					{{ formatMessage(messages.octraAccountHint) }}
 				</span>
 			</div>
-			<Button
-				v-if="octraSession"
-				type="outlined"
-				:disabled="octraLoading"
-				@click="logoutOctra"
-			>
+			<Button v-if="octraSession" type="outlined" :disabled="octraLoading" @click="logoutOctra">
 				{{ formatMessage(messages.octraLogout) }}
 			</Button>
 			<Button
@@ -181,6 +176,7 @@ import AddOfflineAccountModal from '@/components/ui/AddOfflineAccountModal.vue'
 import OctraAccountModal from '@/components/ui/OctraAccountModal.vue'
 import { useAppEvent } from '@/composables/use-app-event'
 import { handleSevereError } from '@/composables/use-error.js'
+import { useMinecraftAccountAvatar } from '@/composables/use-minecraft-account-avatar.ts'
 import { trackEvent } from '@/helpers/analytics'
 import {
 	get_default_user,
@@ -192,7 +188,6 @@ import {
 } from '@/helpers/auth'
 import { octraAccountLogout, octraAccountSession } from '@/helpers/octra-account.js'
 import type { Skin } from '@/helpers/skins'
-import { useMinecraftAccountAvatar } from '@/composables/use-minecraft-account-avatar.ts'
 
 const { formatMessage } = useVIntl()
 const { handleError } = injectNotificationManager()

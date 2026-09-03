@@ -77,12 +77,6 @@
   "app.action-bar.view-logs": {
     "message": "Tignan ang logs"
   },
-  "app.appearance-settings.default-landing-page.home": {
-    "message": "Tahanan"
-  },
-  "app.appearance-settings.default-landing-page.library": {
-    "message": "Librarya"
-  },
   "app.appearance-settings.hide-nametag.title": {
     "message": "Itago ang nametag"
   },
@@ -248,9 +242,6 @@
   "app.settings.tabs.java-installations": {
     "message": "Mga instalasyon ng Java"
   },
-  "app.settings.tabs.language": {
-    "message": "Wika"
-  },
   "app.settings.tabs.privacy": {
     "message": "Pribasiya"
   },
@@ -388,9 +379,6 @@
   },
   "friends.section.heading": {
     "message": "{title} - {count}"
-  },
-  "friends.sign-in-to-add-friends": {
-    "message": "<link>Mag-sign in sa Modrinth account</link> upang maidagdag ang mga kaibigan at malaman ang kanilang nilalaro!"
   },
   "instance.add-server.add-and-play": {
     "message": "Idagdag at laruin"

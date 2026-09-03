@@ -137,12 +137,6 @@
   "app.ads-consent.title": {
     "message": "Dit privatliv og hvordan reklamer hjælper Modrinth"
   },
-  "app.appearance-settings.default-landing-page.home": {
-    "message": "Hjem"
-  },
-  "app.appearance-settings.default-landing-page.library": {
-    "message": "Bibliotek"
-  },
   "app.appearance-settings.hide-nametag.title": {
     "message": "Gem nametag"
   },
@@ -154,9 +148,6 @@
   },
   "app.appearance-settings.skip-non-essential-warnings.title": {
     "message": "Spring ikke nødvendige advarseler over"
-  },
-  "app.appearance-settings.toggle-sidebar.title": {
-    "message": "Gem højre sidebar"
   },
   "app.appearance-settings.unknown-pack-warning.title": {
     "message": "Advar mig før jeg installere en ukendt modpacks"
@@ -497,9 +488,6 @@
   "app.settings.tabs.java-installations": {
     "message": "Javainstallationer"
   },
-  "app.settings.tabs.language": {
-    "message": "Sprog"
-  },
   "app.settings.tabs.privacy": {
     "message": "Privatliv"
   },
@@ -745,9 +733,6 @@
   },
   "friends.section.heading": {
     "message": "{title} - {count}"
-  },
-  "friends.sign-in-to-add-friends": {
-    "message": "<link>Log ind på en Modrinth konto</link> for at tilføje venner og se hvad de spiller!"
   },
   "instance.action.create-shortcut": {
     "message": "Opret genvej"
@@ -1069,9 +1054,6 @@
   },
   "minecraft-required.get-minecraft": {
     "message": "Få Minecraft"
-  },
-  "minecraft-required.get-support": {
-    "message": "Få hjælp"
   },
   "minecraft-required.header": {
     "message": "Minecraft påkrævet"

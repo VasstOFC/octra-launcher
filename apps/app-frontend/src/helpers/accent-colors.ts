@@ -129,7 +129,10 @@ export function buildBrandCssVariables(brandHex: string, isDark: boolean): Recor
 			? `linear-gradient(to bottom, rgba(24, 30, 31, 0), ${rgba(deep, 0.85)} 80%)`
 			: `linear-gradient(to bottom, ${rgba(fade, 0)}, ${rgba(fade, 0.95)} 70%)`,
 		'--loading-bar-gradient': `linear-gradient(to right, ${brandHex} 0%, ${secondary} 100%)`,
-		'--splash-tint-top': rgba(isDark ? lightenHex(brandHex, 0.08) : lightenHex(brandHex, 0.35), isDark ? 0.28 : 0.46),
+		'--splash-tint-top': rgba(
+			isDark ? lightenHex(brandHex, 0.08) : lightenHex(brandHex, 0.35),
+			isDark ? 0.28 : 0.46,
+		),
 		'--splash-tint-bottom': rgba(isDark ? deep : lightenHex(brandHex, 0.2), isDark ? 0.5 : 0.56),
 		'--splash-overlay': rgba(isDark ? deep : lightenHex(brandHex, 0.35), isDark ? 0.64 : 0.32),
 		'--color-purple-highlight': rgba(brandHex, 0.25),

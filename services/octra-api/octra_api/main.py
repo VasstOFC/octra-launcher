@@ -42,7 +42,7 @@ MAX_BODY = int(os.environ.get("MAX_BODY", str(1024 * 1024)))
 # Keep in sync with packages/app-lib/src/nervia.rs SKINS_URL until HTTPS cutover.
 DEFAULT_PUBLIC_BASE = os.environ.get("PUBLIC_BASE_URL", "http://92.5.186.6").strip().rstrip("/")
 
-app = FastAPI(title="Octra API", version="1.6.0")
+app = FastAPI(title="Octra API", version="1.8.0")
 PRESENCE_TTL = timedelta(seconds=60)
 CHAT_MAX_LEN = 1000
 CHAT_MIN_INTERVAL = timedelta(seconds=2)
@@ -136,7 +136,16 @@ class ChatChannel(BaseModel):
 	created_at: str
 	last_body: Optional[str] = None
 	last_at: Optional[str] = None
+	last_id: Optional[int] = None
+	last_read_id: int = 0
+	unread_count: int = 0
 	members: list[ChatMember] = Field(default_factory=list)
+
+
+class ChatReaction(BaseModel):
+	emoji: str
+	count: int
+	user_ids: list[int] = Field(default_factory=list)
 
 
 class ChatMessage(BaseModel):
@@ -146,6 +155,9 @@ class ChatMessage(BaseModel):
 	minecraft_nick: str
 	body: str
 	created_at: str
+	pinned: bool = False
+	deleted: bool = False
+	reactions: list[ChatReaction] = Field(default_factory=list)
 
 
 class ChatPostBody(BaseModel):
@@ -159,6 +171,87 @@ class ChatDmBody(BaseModel):
 class ChatGroupBody(BaseModel):
 	name: str = Field(min_length=1, max_length=64)
 	member_ids: list[int] = Field(default_factory=list)
+
+
+class ChatGroupMembersBody(BaseModel):
+	member_ids: list[int] = Field(default_factory=list)
+
+
+class ChatReadBody(BaseModel):
+	last_read_id: int = 0
+
+
+class ChatReactionBody(BaseModel):
+	emoji: str = Field(min_length=1, max_length=16)
+
+
+class ChatPinBody(BaseModel):
+	pinned: bool = True
+
+
+class SharedServer(BaseModel):
+	id: int
+	name: str
+	address: str
+	created_by: int
+	created_by_nick: Optional[str] = None
+	created_at: str
+
+
+class SharedServerBody(BaseModel):
+	name: str = Field(min_length=1, max_length=64)
+	address: str = Field(min_length=1, max_length=255)
+
+
+ALLOWED_REACTION_EMOJIS = {"👍", "❤️", "😂", "🔥", "🎉", "👀"}
+
+
+def chat_message_from_row(row: dict) -> ChatMessage:
+	return ChatMessage(
+		id=int(row["id"]),
+		channel_id=int(row["channel_id"]),
+		user_id=int(row["user_id"]),
+		minecraft_nick=row["minecraft_nick"],
+		body="" if row.get("deleted_at") else row["body"],
+		created_at=row["created_at"],
+		pinned=bool(row.get("pinned")),
+		deleted=bool(row.get("deleted_at")),
+		reactions=[
+			ChatReaction(
+				emoji=r["emoji"],
+				count=int(r["count"]),
+				user_ids=[int(uid) for uid in r.get("user_ids") or []],
+			)
+			for r in row.get("reactions") or []
+		],
+	)
+
+
+def chat_channel_from_row(row: dict) -> ChatChannel:
+	last_id = row.get("last_id")
+	last_read_id = int(row.get("last_read_id") or 0)
+	unread = 0
+	if last_id is not None and int(last_id) > last_read_id:
+		unread = 1
+	return ChatChannel(
+		id=int(row["id"]),
+		kind=row["kind"],  # type: ignore[arg-type]
+		name=row.get("name"),
+		created_at=row["created_at"],
+		last_body=row.get("last_body"),
+		last_at=row.get("last_at"),
+		last_id=int(last_id) if last_id is not None else None,
+		last_read_id=last_read_id,
+		unread_count=unread,
+		members=[
+			ChatMember(
+				id=int(m["id"]),
+				minecraft_nick=m["minecraft_nick"],
+				profile_uuid=m["profile_uuid"],
+			)
+			for m in row.get("members") or []
+		],
+	)
 
 
 def utcnow_iso() -> str:
@@ -223,6 +316,17 @@ def session_from_user(user: dict, token: str = "") -> SessionResponse:
 	)
 
 
+def normalize_stored_model(model: Optional[str]) -> str:
+	"""Persist Steve/Alex as Yggdrasil values: `default` or `slim`."""
+	raw = str(model or "").strip().lower()
+	return "slim" if raw == "slim" else "default"
+
+
+def yggdrasil_texture_model(model: Optional[str]) -> str:
+	"""Authlib / Mojang texture metadata: `default` (Steve) or `slim` (Alex)."""
+	return normalize_stored_model(model)
+
+
 def write_skin(uuid: str, png: bytes, model: str, name: str) -> None:
 	by_uuid = DATA_DIR / "by-uuid"
 	by_name = DATA_DIR / "by-name"
@@ -230,7 +334,7 @@ def write_skin(uuid: str, png: bytes, model: str, name: str) -> None:
 	by_name.mkdir(parents=True, exist_ok=True)
 
 	(by_uuid / f"{uuid}.png").write_bytes(png)
-	meta = {"model": model or "classic", "name": name or ""}
+	meta = {"model": normalize_stored_model(model), "name": name or ""}
 	(by_uuid / f"{uuid}.json").write_text(
 		json.dumps(meta, ensure_ascii=False), encoding="utf-8"
 	)
@@ -385,25 +489,7 @@ async def chat_channels(
 ) -> list[ChatChannel]:
 	db.ensure_user_in_everyone(int(user["id"]))
 	rows = db.list_channels_for_user(int(user["id"]))
-	return [
-		ChatChannel(
-			id=int(row["id"]),
-			kind=row["kind"],  # type: ignore[arg-type]
-			name=row.get("name"),
-			created_at=row["created_at"],
-			last_body=row.get("last_body"),
-			last_at=row.get("last_at"),
-			members=[
-				ChatMember(
-					id=int(m["id"]),
-					minecraft_nick=m["minecraft_nick"],
-					profile_uuid=m["profile_uuid"],
-				)
-				for m in row.get("members") or []
-			],
-		)
-		for row in rows
-	]
+	return [chat_channel_from_row(row) for row in rows]
 
 
 @app.post("/api/v1/chat/channels/dm", response_model=ChatChannel)
@@ -419,20 +505,10 @@ async def chat_open_dm(
 	except ValueError as exc:
 		raise HTTPException(status_code=400, detail=str(exc)) from exc
 	members = db.channel_member_rows(int(channel["id"]))
-	return ChatChannel(
-		id=int(channel["id"]),
-		kind="dm",
-		name=None,
-		created_at=channel["created_at"],
-		members=[
-			ChatMember(
-				id=int(m["id"]),
-				minecraft_nick=m["minecraft_nick"],
-				profile_uuid=m["profile_uuid"],
-			)
-			for m in members
-		],
-	)
+	channel["members"] = members
+	channel["last_read_id"] = 0
+	channel["unread_count"] = 0
+	return chat_channel_from_row(channel)
 
 
 @app.post("/api/v1/chat/channels/group", response_model=ChatChannel)
@@ -453,20 +529,49 @@ async def chat_create_group(
 		member_ids.append(uid)
 	channel = db.create_group(name, int(user["id"]), member_ids, utcnow_iso())
 	members = db.channel_member_rows(int(channel["id"]))
-	return ChatChannel(
-		id=int(channel["id"]),
-		kind="group",
-		name=channel.get("name"),
-		created_at=channel["created_at"],
-		members=[
-			ChatMember(
-				id=int(m["id"]),
-				minecraft_nick=m["minecraft_nick"],
-				profile_uuid=m["profile_uuid"],
-			)
-			for m in members
-		],
-	)
+	channel["members"] = members
+	channel["last_read_id"] = 0
+	channel["unread_count"] = 0
+	return chat_channel_from_row(channel)
+
+
+@app.post("/api/v1/chat/channels/{channel_id}/members", response_model=ChatChannel)
+async def chat_add_group_members(
+	channel_id: int,
+	body: ChatGroupMembersBody,
+	user: Annotated[dict, Depends(bearer_user)],
+) -> ChatChannel:
+	channel = db.get_channel(channel_id)
+	if not channel or channel.get("kind") != "group":
+		raise HTTPException(status_code=404, detail="group not found")
+	if channel.get("name") == "Everyone":
+		raise HTTPException(status_code=400, detail="cannot edit Everyone membership")
+	if not db.is_channel_member(channel_id, int(user["id"])):
+		raise HTTPException(status_code=403, detail="not a channel member")
+	member_ids: list[int] = []
+	for raw_id in body.member_ids:
+		uid = int(raw_id)
+		if not db.get_user_by_id(uid):
+			raise HTTPException(status_code=404, detail=f"user {uid} not found")
+		member_ids.append(uid)
+	db.add_group_members(channel_id, member_ids)
+	rows = db.list_channels_for_user(int(user["id"]))
+	updated = next((r for r in rows if int(r["id"]) == channel_id), None)
+	if not updated:
+		raise HTTPException(status_code=404, detail="channel not found")
+	return chat_channel_from_row(updated)
+
+
+@app.post("/api/v1/chat/channels/{channel_id}/read")
+async def chat_mark_read(
+	channel_id: int,
+	body: ChatReadBody,
+	user: Annotated[dict, Depends(bearer_user)],
+) -> JSONResponse:
+	if not db.is_channel_member(channel_id, int(user["id"])):
+		raise HTTPException(status_code=403, detail="not a channel member")
+	db.mark_channel_read(channel_id, int(user["id"]), int(body.last_read_id))
+	return JSONResponse({"ok": True})
 
 
 @app.get("/api/v1/chat/channels/{channel_id}/messages", response_model=list[ChatMessage])
@@ -478,17 +583,7 @@ async def chat_channel_messages(
 	if not db.is_channel_member(channel_id, int(user["id"])):
 		raise HTTPException(status_code=403, detail="not a channel member")
 	rows = db.list_chat_messages(channel_id, after_id=max(0, after_id), limit=80)
-	return [
-		ChatMessage(
-			id=int(row["id"]),
-			channel_id=int(row["channel_id"]),
-			user_id=int(row["user_id"]),
-			minecraft_nick=row["minecraft_nick"],
-			body=row["body"],
-			created_at=row["created_at"],
-		)
-		for row in rows
-	]
+	return [chat_message_from_row(row) for row in rows]
 
 
 @app.post("/api/v1/chat/channels/{channel_id}/messages", response_model=ChatMessage)
@@ -513,14 +608,115 @@ async def chat_channel_post(
 		text,
 		utcnow_iso(),
 	)
-	return ChatMessage(
+	db.mark_channel_read(channel_id, user_id, int(row["id"]))
+	return chat_message_from_row(row)
+
+
+@app.delete("/api/v1/chat/messages/{message_id}", response_model=ChatMessage)
+async def chat_delete_message(
+	message_id: int,
+	user: Annotated[dict, Depends(bearer_user)],
+) -> ChatMessage:
+	message = db.get_chat_message(message_id)
+	if not message or message.get("deleted_at"):
+		raise HTTPException(status_code=404, detail="message not found")
+	if int(message["user_id"]) != int(user["id"]):
+		raise HTTPException(status_code=403, detail="not your message")
+	if not db.is_channel_member(int(message["channel_id"]), int(user["id"])):
+		raise HTTPException(status_code=403, detail="not a channel member")
+	updated = db.soft_delete_message(message_id, utcnow_iso())
+	if not updated:
+		raise HTTPException(status_code=404, detail="message not found")
+	return chat_message_from_row(updated)
+
+
+@app.post("/api/v1/chat/messages/{message_id}/pin", response_model=ChatMessage)
+async def chat_pin_message(
+	message_id: int,
+	body: ChatPinBody,
+	user: Annotated[dict, Depends(bearer_user)],
+) -> ChatMessage:
+	message = db.get_chat_message(message_id)
+	if not message or message.get("deleted_at"):
+		raise HTTPException(status_code=404, detail="message not found")
+	if not db.is_channel_member(int(message["channel_id"]), int(user["id"])):
+		raise HTTPException(status_code=403, detail="not a channel member")
+	updated = db.set_message_pinned(message_id, body.pinned)
+	if not updated:
+		raise HTTPException(status_code=404, detail="message not found")
+	return chat_message_from_row(updated)
+
+
+@app.post("/api/v1/chat/messages/{message_id}/reactions", response_model=ChatMessage)
+async def chat_react_message(
+	message_id: int,
+	body: ChatReactionBody,
+	user: Annotated[dict, Depends(bearer_user)],
+) -> ChatMessage:
+	emoji = body.emoji.strip()
+	if emoji not in ALLOWED_REACTION_EMOJIS:
+		raise HTTPException(status_code=400, detail="unsupported emoji")
+	message = db.get_chat_message(message_id)
+	if not message or message.get("deleted_at"):
+		raise HTTPException(status_code=404, detail="message not found")
+	if not db.is_channel_member(int(message["channel_id"]), int(user["id"])):
+		raise HTTPException(status_code=403, detail="not a channel member")
+	updated = db.toggle_reaction(message_id, int(user["id"]), emoji, utcnow_iso())
+	if not updated:
+		raise HTTPException(status_code=404, detail="message not found")
+	return chat_message_from_row(updated)
+
+
+@app.get("/api/v1/servers", response_model=list[SharedServer])
+async def list_shared_servers(
+	user: Annotated[dict, Depends(bearer_user)],
+) -> list[SharedServer]:
+	_ = user
+	return [
+		SharedServer(
+			id=int(row["id"]),
+			name=row["name"],
+			address=row["address"],
+			created_by=int(row["created_by"]),
+			created_by_nick=row.get("created_by_nick"),
+			created_at=row["created_at"],
+		)
+		for row in db.list_shared_servers()
+	]
+
+
+@app.post("/api/v1/servers", response_model=SharedServer)
+async def add_shared_server(
+	body: SharedServerBody,
+	user: Annotated[dict, Depends(bearer_user)],
+) -> SharedServer:
+	name = body.name.strip()
+	address = body.address.strip()
+	if not name or not address:
+		raise HTTPException(status_code=400, detail="name and address required")
+	try:
+		row = db.add_shared_server(name, address, int(user["id"]), utcnow_iso())
+	except Exception as exc:
+		raise HTTPException(status_code=409, detail="server address already exists") from exc
+	return SharedServer(
 		id=int(row["id"]),
-		channel_id=int(row["channel_id"]),
-		user_id=int(row["user_id"]),
-		minecraft_nick=row["minecraft_nick"],
-		body=row["body"],
+		name=row["name"],
+		address=row["address"],
+		created_by=int(row["created_by"]),
+		created_by_nick=row.get("created_by_nick"),
 		created_at=row["created_at"],
 	)
+
+
+@app.delete("/api/v1/servers/{server_id}")
+async def delete_shared_server(
+	server_id: int,
+	user: Annotated[dict, Depends(bearer_user)],
+) -> JSONResponse:
+	_ = user
+	if not db.delete_shared_server(server_id):
+		raise HTTPException(status_code=404, detail="server not found")
+	return JSONResponse({"ok": True})
 
 
 # Legacy global chat endpoints kept as thin wrappers onto the Everyone group.
@@ -566,7 +762,7 @@ async def get_skin_by_uuid(uuid: str) -> Response:
 		raise HTTPException(status_code=404, detail="not found")
 	meta = read_meta(normalized)
 	headers = {
-		"X-Lumen-Model": str(meta.get("model", "classic")),
+		"X-Lumen-Model": normalize_stored_model(meta.get("model")),
 		"X-Lumen-Name": str(meta.get("name", "")),
 	}
 	return Response(content=png_path.read_bytes(), media_type="image/png", headers=headers)
@@ -578,7 +774,7 @@ async def put_skin_by_uuid(
 	request: Request,
 	authorization: Annotated[Optional[str], Header()] = None,
 	x_octra_key: Annotated[Optional[str], Header()] = None,
-	x_lumen_model: Annotated[Optional[str], Header()] = "classic",
+	x_lumen_model: Annotated[Optional[str], Header()] = "default",
 	x_lumen_name: Annotated[Optional[str], Header()] = None,
 ) -> JSONResponse:
 	normalized = norm_uuid(uuid)
@@ -614,13 +810,13 @@ async def put_skin_by_uuid(
 	if not allowed:
 		raise HTTPException(status_code=401, detail="unauthorized")
 
-	model = (x_lumen_model or "classic").strip() or "classic"
+	model = normalize_stored_model(x_lumen_model)
 	write_skin(normalized, body, model, skin_name)
 	return JSONResponse({"uuid": normalized, "ok": True})
 
 
-@app.get("/skins/MinecraftSkins/{nick}.png")
-async def get_skin_by_nick(nick: str) -> Response:
+@app.api_route("/skins/MinecraftSkins/{nick}.png", methods=["GET", "HEAD"])
+async def get_skin_by_nick(nick: str, request: Request) -> Response:
 	nick = nick.removesuffix(".png")
 	if not re.fullmatch(r"^[a-zA-Z0-9_]{1,16}$", nick):
 		raise HTTPException(status_code=400, detail="bad nick")
@@ -629,9 +825,13 @@ async def get_skin_by_nick(nick: str) -> Response:
 		raise HTTPException(status_code=404, detail="not found")
 	_, png, meta = resolved
 	headers = {
-		"X-Lumen-Model": str(meta.get("model", "classic")),
+		"X-Lumen-Model": normalize_stored_model(meta.get("model")),
 		"X-Lumen-Name": str(meta.get("name", nick)),
+		"Content-Length": str(len(png)),
 	}
+	# MineSkin probes with HEAD before downloading — must not 405.
+	if request.method == "HEAD":
+		return Response(status_code=200, media_type="image/png", headers=headers)
 	return Response(content=png, media_type="image/png", headers=headers)
 
 
@@ -695,7 +895,7 @@ def resolve_player_from_registry(key: str) -> Optional[dict[str, Any]]:
 			return {
 				"uuid": normalized,
 				"name": name,
-				"model": str(meta.get("model") or "classic"),
+				"model": normalize_stored_model(meta.get("model")),
 			}
 		user = db.get_user_by_profile_uuid(normalized)
 		if user:
@@ -706,12 +906,12 @@ def resolve_player_from_registry(key: str) -> Optional[dict[str, Any]]:
 				return {
 					"uuid": uuid_r if "-" in uuid_r else (norm_uuid(uuid_r) or normalized),
 					"name": str(meta.get("name") or nick),
-					"model": str(meta.get("model") or "classic"),
+					"model": normalize_stored_model(meta.get("model")),
 				}
 			return {
 				"uuid": normalized,
 				"name": nick,
-				"model": "classic",
+				"model": "default",
 			}
 
 	if re.fullmatch(r"^[a-zA-Z0-9_]{1,16}$", raw):
@@ -722,26 +922,48 @@ def resolve_player_from_registry(key: str) -> Optional[dict[str, Any]]:
 			return {
 				"uuid": uuid_h,
 				"name": str(meta.get("name") or raw),
-				"model": str(meta.get("model") or "classic"),
+				"model": normalize_stored_model(meta.get("model")),
 			}
 		user = db.get_user_by_minecraft_nick(raw)
 		if user:
 			return {
 				"uuid": user["profile_uuid"],
 				"name": user["minecraft_nick"],
-				"model": "classic",
+				"model": "default",
 			}
 
 	return None
 
 
+def is_offline_uuid(uuid_key: str) -> bool:
+	"""UUID v3 = offline-player namespace; v4 = Mojang premium."""
+	compact = (norm_uuid(uuid_key) or uuid_key).replace("-", "").lower()
+	return len(compact) == 32 and compact[12] == "3"
+
+
+def registry_png_exists(player: dict[str, Any]) -> bool:
+	uuid_h = player["uuid"]
+	name = str(player.get("name") or "")
+	if (DATA_DIR / "by-uuid" / f"{uuid_h}.png").is_file():
+		return True
+	if name and (DATA_DIR / "by-name" / f"{name.lower()}.png").is_file():
+		return True
+	return False
+
+
 def profile_json(player: dict[str, Any], base: str) -> dict[str, Any]:
+	"""Unsigned Octra registry profile (offline / custom skins).
+
+	Texture host must be listed in `skinDomains`. Model is Yggdrasil
+	`default` (Steve) or `slim` (Alex) — never `classic`.
+	"""
 	uuid_h = player["uuid"]
 	name = player["name"]
-	model = player.get("model") or "classic"
-	skin_obj: dict[str, Any] = {"url": legacy_skin_url(base, name)}
-	if model == "slim":
-		skin_obj["metadata"] = {"model": "slim"}
+	model = yggdrasil_texture_model(player.get("model"))
+	skin_obj: dict[str, Any] = {
+		"url": legacy_skin_url(base, name),
+		"metadata": {"model": model},
+	}
 	textures = {
 		"timestamp": int(time.time() * 1000),
 		"profileId": plain_uuid(uuid_h),
@@ -769,15 +991,12 @@ def empty_profile(uuid_key: str, name: str = "Player") -> dict[str, Any]:
 
 
 def fetch_mojang_profile(uuid_plain: str) -> Optional[dict[str, Any]]:
-	"""Fall through to Mojang so premium skins keep working under authlib-injector."""
+	"""Signed Mojang session profile (keep Mojang signature for authlib)."""
 	uid = uuid_plain.replace("-", "").lower()
 	if len(uid) != 32:
 		return None
-	url = (
-		f"https://sessionserver.mojang.com/session/minecraft/profile/{uid}"
-		"?unsigned=true"
-	)
-	req = urllib.request.Request(url, headers={"User-Agent": "Octra-API/1.4"})
+	url = f"https://sessionserver.mojang.com/session/minecraft/profile/{uid}?unsigned=false"
+	req = urllib.request.Request(url, headers={"User-Agent": "Octra-API/1.8"})
 	try:
 		with urllib.request.urlopen(req, timeout=6) as resp:
 			if resp.status != 200:
@@ -794,7 +1013,7 @@ def fetch_mojang_uuid_for_name(name: str) -> Optional[str]:
 	if not re.fullmatch(r"^[a-zA-Z0-9_]{1,16}$", name):
 		return None
 	url = f"https://api.mojang.com/users/profiles/minecraft/{name}"
-	req = urllib.request.Request(url, headers={"User-Agent": "Octra-API/1.4"})
+	req = urllib.request.Request(url, headers={"User-Agent": "Octra-API/1.8"})
 	try:
 		with urllib.request.urlopen(req, timeout=6) as resp:
 			if resp.status != 200:
@@ -806,10 +1025,51 @@ def fetch_mojang_uuid_for_name(name: str) -> Optional[str]:
 		return None
 
 
+def resolve_authlib_profile(key: str, base: str) -> Optional[dict[str, Any]]:
+	"""Single resolution path for authlib-injector clients.
+
+	1. Premium UUID → Mojang signed profile only (never Octra PNG shadow).
+	2. Offline / registry nick with PNG → Octra profile_json.
+	3. Else Mojang by name / UUID fallthrough.
+	"""
+	plain = key.replace("-", "")
+	normalized = norm_uuid(key)
+
+	# Premium UUID: Mojang wins. Never serve local registry over it.
+	if normalized and not is_offline_uuid(normalized):
+		mojang = fetch_mojang_profile(plain_uuid(normalized))
+		if mojang:
+			return mojang
+
+	player = resolve_player_from_registry(key)
+	if player:
+		if not is_offline_uuid(player["uuid"]):
+			mojang = fetch_mojang_profile(plain_uuid(player["uuid"]))
+			if mojang:
+				return mojang
+		if registry_png_exists(player):
+			return profile_json(player, base)
+
+	if normalized:
+		mojang = fetch_mojang_profile(plain_uuid(normalized))
+		if mojang:
+			return mojang
+
+	if re.fullmatch(r"^[a-zA-Z0-9_]{1,16}$", (key or "").strip()):
+		mojang_id = fetch_mojang_uuid_for_name(key.strip())
+		if mojang_id:
+			mojang = fetch_mojang_profile(mojang_id)
+			if mojang:
+				return mojang
+
+	if player:
+		return empty_profile(player["uuid"], player["name"])
+	return None
+
+
 def ygg_index(base: str) -> dict[str, Any]:
 	host = public_host(base)
-	domains = [host, "127.0.0.1", "localhost"]
-	# Deduplicate while preserving order
+	domains = [host, "127.0.0.1", "localhost", "textures.minecraft.net", ".minecraft.net"]
 	seen: set[str] = set()
 	skin_domains: list[str] = []
 	for d in domains:
@@ -837,21 +1097,9 @@ async def ygg_root(request: Request) -> JSONResponse:
 @app.get("/sessionserver/session/minecraft/profile/{profile_id}")
 async def ygg_profile(profile_id: str, request: Request) -> Response:
 	base = public_base(request)
-	player = resolve_player_from_registry(profile_id)
-	if player and (DATA_DIR / "by-uuid" / f"{player['uuid']}.png").is_file():
-		return JSONResponse(profile_json(player, base))
-	if player:
-		# Registered Octra account without uploaded skin — still return name/id
-		png_ok = (DATA_DIR / "by-name" / f"{player['name'].lower()}.png").is_file()
-		if png_ok:
-			return JSONResponse(profile_json(player, base))
-
-	mojang = fetch_mojang_profile(profile_id.replace("-", ""))
-	if mojang:
-		return JSONResponse(mojang)
-
-	if player:
-		return JSONResponse(empty_profile(player["uuid"], player["name"]))
+	resolved = resolve_authlib_profile(profile_id, base)
+	if resolved:
+		return JSONResponse(resolved)
 	return JSONResponse(empty_profile(profile_id))
 
 
@@ -863,21 +1111,9 @@ async def ygg_has_joined(
 ) -> Response:
 	_ = serverId
 	base = public_base(request)
-	player = resolve_player_from_registry(username)
-	if player and (
-		(DATA_DIR / "by-uuid" / f"{player['uuid']}.png").is_file()
-		or (DATA_DIR / "by-name" / f"{player['name'].lower()}.png").is_file()
-	):
-		return JSONResponse(profile_json(player, base))
-
-	mojang_id = fetch_mojang_uuid_for_name(username)
-	if mojang_id:
-		mojang = fetch_mojang_profile(mojang_id)
-		if mojang:
-			return JSONResponse(mojang)
-
-	if player:
-		return JSONResponse(profile_json(player, base))
+	resolved = resolve_authlib_profile(username, base)
+	if resolved:
+		return JSONResponse(resolved)
 	return Response(status_code=204)
 
 

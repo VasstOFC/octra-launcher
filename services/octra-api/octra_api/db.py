@@ -126,6 +126,42 @@ class Database:
 			conn.execute(
 				"CREATE INDEX IF NOT EXISTS idx_chat_messages_channel ON chat_messages(channel_id, id)"
 			)
+			msg_cols = {
+				row["name"] if isinstance(row, sqlite3.Row) else row[1]
+				for row in conn.execute("PRAGMA table_info(chat_messages)").fetchall()
+			}
+			if "pinned" not in msg_cols:
+				conn.execute(
+					"ALTER TABLE chat_messages ADD COLUMN pinned INTEGER NOT NULL DEFAULT 0"
+				)
+			if "deleted_at" not in msg_cols:
+				conn.execute("ALTER TABLE chat_messages ADD COLUMN deleted_at TEXT")
+			conn.executescript(
+				"""
+				CREATE TABLE IF NOT EXISTS chat_reactions (
+					message_id INTEGER NOT NULL,
+					user_id INTEGER NOT NULL,
+					emoji TEXT NOT NULL,
+					created_at TEXT NOT NULL,
+					PRIMARY KEY (message_id, user_id, emoji)
+				);
+				CREATE TABLE IF NOT EXISTS chat_channel_reads (
+					channel_id INTEGER NOT NULL,
+					user_id INTEGER NOT NULL,
+					last_read_id INTEGER NOT NULL DEFAULT 0,
+					PRIMARY KEY (channel_id, user_id)
+				);
+				CREATE TABLE IF NOT EXISTS shared_servers (
+					id INTEGER PRIMARY KEY AUTOINCREMENT,
+					name TEXT NOT NULL,
+					address TEXT NOT NULL,
+					created_by INTEGER NOT NULL,
+					created_at TEXT NOT NULL,
+					UNIQUE(address)
+				);
+				CREATE INDEX IF NOT EXISTS idx_chat_reactions_message ON chat_reactions(message_id);
+				"""
+			)
 			self._ensure_everyone_channel(conn)
 
 	def _ensure_everyone_channel(self, conn: sqlite3.Connection) -> None:
@@ -270,20 +306,32 @@ class Database:
 					c.created_at,
 					(
 						SELECT body FROM chat_messages m
-						WHERE m.channel_id = c.id
+						WHERE m.channel_id = c.id AND m.deleted_at IS NULL
 						ORDER BY m.id DESC LIMIT 1
 					) AS last_body,
 					(
 						SELECT created_at FROM chat_messages m
-						WHERE m.channel_id = c.id
+						WHERE m.channel_id = c.id AND m.deleted_at IS NULL
 						ORDER BY m.id DESC LIMIT 1
-					) AS last_at
+					) AS last_at,
+					(
+						SELECT m.id FROM chat_messages m
+						WHERE m.channel_id = c.id AND m.deleted_at IS NULL
+						ORDER BY m.id DESC LIMIT 1
+					) AS last_id,
+					COALESCE(
+						(
+							SELECT last_read_id FROM chat_channel_reads r
+							WHERE r.channel_id = c.id AND r.user_id = ?
+						),
+						0
+					) AS last_read_id
 				FROM chat_channels c
 				INNER JOIN chat_channel_members cm ON cm.channel_id = c.id
 				WHERE cm.user_id = ?
 				ORDER BY COALESCE(last_at, c.created_at) DESC, c.id DESC
 				""",
-				(user_id,),
+				(user_id, user_id),
 			).fetchall()
 			channels: list[dict[str, Any]] = []
 			for row in rows:
@@ -411,7 +459,8 @@ class Database:
 			if after_id > 0:
 				rows = conn.execute(
 					"""
-					SELECT id, channel_id, user_id, minecraft_nick, body, created_at
+					SELECT id, channel_id, user_id, minecraft_nick, body, created_at,
+						COALESCE(pinned, 0) AS pinned, deleted_at
 					FROM chat_messages
 					WHERE channel_id = ? AND id > ?
 					ORDER BY id ASC
@@ -422,9 +471,11 @@ class Database:
 			else:
 				rows = conn.execute(
 					"""
-					SELECT id, channel_id, user_id, minecraft_nick, body, created_at
+					SELECT id, channel_id, user_id, minecraft_nick, body, created_at,
+						pinned, deleted_at
 					FROM (
-						SELECT id, channel_id, user_id, minecraft_nick, body, created_at
+						SELECT id, channel_id, user_id, minecraft_nick, body, created_at,
+							COALESCE(pinned, 0) AS pinned, deleted_at
 						FROM chat_messages
 						WHERE channel_id = ?
 						ORDER BY id DESC
@@ -434,14 +485,198 @@ class Database:
 					""",
 					(channel_id, limit),
 				).fetchall()
+			messages: list[dict[str, Any]] = []
+			for row in rows:
+				message = dict(row)
+				if message.get("deleted_at"):
+					message["body"] = ""
+				message["reactions"] = self._reactions_for_message(conn, int(message["id"]))
+				messages.append(message)
+			return messages
+
+	def _reactions_for_message(
+		self, conn: sqlite3.Connection, message_id: int
+	) -> list[dict[str, Any]]:
+		rows = conn.execute(
+			"""
+			SELECT emoji, COUNT(*) AS count,
+				GROUP_CONCAT(user_id) AS user_ids
+			FROM chat_reactions
+			WHERE message_id = ?
+			GROUP BY emoji
+			ORDER BY emoji
+			""",
+			(message_id,),
+		).fetchall()
+		out: list[dict[str, Any]] = []
+		for row in rows:
+			ids_raw = row["user_ids"] or ""
+			user_ids = [int(x) for x in str(ids_raw).split(",") if x]
+			out.append(
+				{
+					"emoji": row["emoji"],
+					"count": int(row["count"]),
+					"user_ids": user_ids,
+				}
+			)
+		return out
+
+	def get_chat_message(self, message_id: int) -> Optional[dict[str, Any]]:
+		with self._connect() as conn:
+			row = conn.execute(
+				"""
+				SELECT id, channel_id, user_id, minecraft_nick, body, created_at,
+					COALESCE(pinned, 0) AS pinned, deleted_at
+				FROM chat_messages WHERE id = ?
+				""",
+				(message_id,),
+			).fetchone()
+			if not row:
+				return None
+			message = dict(row)
+			message["reactions"] = self._reactions_for_message(conn, int(message["id"]))
+			return message
+
+	def soft_delete_message(self, message_id: int, deleted_at: str) -> Optional[dict[str, Any]]:
+		with self._connect() as conn:
+			conn.execute(
+				"""
+				UPDATE chat_messages
+				SET deleted_at = ?, body = '', pinned = 0
+				WHERE id = ? AND deleted_at IS NULL
+				""",
+				(deleted_at, message_id),
+			)
+			conn.execute("DELETE FROM chat_reactions WHERE message_id = ?", (message_id,))
+		return self.get_chat_message(message_id)
+
+	def set_message_pinned(self, message_id: int, pinned: bool) -> Optional[dict[str, Any]]:
+		with self._connect() as conn:
+			conn.execute(
+				"""
+				UPDATE chat_messages SET pinned = ?
+				WHERE id = ? AND deleted_at IS NULL
+				""",
+				(1 if pinned else 0, message_id),
+			)
+		return self.get_chat_message(message_id)
+
+	def toggle_reaction(
+		self,
+		message_id: int,
+		user_id: int,
+		emoji: str,
+		created_at: str,
+	) -> Optional[dict[str, Any]]:
+		with self._connect() as conn:
+			existing = conn.execute(
+				"""
+				SELECT 1 FROM chat_reactions
+				WHERE message_id = ? AND user_id = ? AND emoji = ?
+				""",
+				(message_id, user_id, emoji),
+			).fetchone()
+			if existing:
+				conn.execute(
+					"""
+					DELETE FROM chat_reactions
+					WHERE message_id = ? AND user_id = ? AND emoji = ?
+					""",
+					(message_id, user_id, emoji),
+				)
+			else:
+				conn.execute(
+					"""
+					INSERT INTO chat_reactions (message_id, user_id, emoji, created_at)
+					VALUES (?, ?, ?, ?)
+					""",
+					(message_id, user_id, emoji, created_at),
+				)
+		return self.get_chat_message(message_id)
+
+	def mark_channel_read(self, channel_id: int, user_id: int, last_read_id: int) -> None:
+		last_read_id = max(0, int(last_read_id))
+		with self._connect() as conn:
+			row = conn.execute(
+				"""
+				SELECT last_read_id FROM chat_channel_reads
+				WHERE channel_id = ? AND user_id = ?
+				""",
+				(channel_id, user_id),
+			).fetchone()
+			current = int(row["last_read_id"]) if row else 0
+			next_id = max(current, last_read_id)
+			conn.execute(
+				"""
+				INSERT INTO chat_channel_reads (channel_id, user_id, last_read_id)
+				VALUES (?, ?, ?)
+				ON CONFLICT(channel_id, user_id) DO UPDATE SET last_read_id = excluded.last_read_id
+				""",
+				(channel_id, user_id, next_id),
+			)
+
+	def add_group_members(self, channel_id: int, member_ids: list[int]) -> None:
+		with self._connect() as conn:
+			for uid in member_ids:
+				conn.execute(
+					"""
+					INSERT OR IGNORE INTO chat_channel_members (channel_id, user_id)
+					VALUES (?, ?)
+					""",
+					(channel_id, uid),
+				)
+
+	def list_shared_servers(self) -> list[dict[str, Any]]:
+		with self._connect() as conn:
+			rows = conn.execute(
+				"""
+				SELECT s.id, s.name, s.address, s.created_by, s.created_at,
+					u.minecraft_nick AS created_by_nick
+				FROM shared_servers s
+				LEFT JOIN users u ON u.id = s.created_by
+				ORDER BY s.name COLLATE NOCASE, s.id
+				"""
+			).fetchall()
 			return [dict(row) for row in rows]
+
+	def add_shared_server(
+		self,
+		name: str,
+		address: str,
+		created_by: int,
+		created_at: str,
+	) -> dict[str, Any]:
+		with self._connect() as conn:
+			cur = conn.execute(
+				"""
+				INSERT INTO shared_servers (name, address, created_by, created_at)
+				VALUES (?, ?, ?, ?)
+				""",
+				(name, address, created_by, created_at),
+			)
+			row = conn.execute(
+				"""
+				SELECT s.id, s.name, s.address, s.created_by, s.created_at,
+					u.minecraft_nick AS created_by_nick
+				FROM shared_servers s
+				LEFT JOIN users u ON u.id = s.created_by
+				WHERE s.id = ?
+				""",
+				(cur.lastrowid,),
+			).fetchone()
+			return dict(row)
+
+	def delete_shared_server(self, server_id: int) -> bool:
+		with self._connect() as conn:
+			cur = conn.execute("DELETE FROM shared_servers WHERE id = ?", (server_id,))
+			return cur.rowcount > 0
 
 	def last_chat_message_at(self, user_id: int, channel_id: int) -> Optional[str]:
 		with self._connect() as conn:
 			row = conn.execute(
 				"""
 				SELECT created_at FROM chat_messages
-				WHERE user_id = ? AND channel_id = ?
+				WHERE user_id = ? AND channel_id = ? AND deleted_at IS NULL
 				ORDER BY id DESC
 				LIMIT 1
 				""",
@@ -467,9 +702,13 @@ class Database:
 			)
 			row = conn.execute(
 				"""
-				SELECT id, channel_id, user_id, minecraft_nick, body, created_at
+				SELECT id, channel_id, user_id, minecraft_nick, body, created_at,
+					COALESCE(pinned, 0) AS pinned, deleted_at
 				FROM chat_messages WHERE id = ?
 				""",
 				(cur.lastrowid,),
 			).fetchone()
-			return dict(row)
+			message = dict(row)
+			message["reactions"] = []
+			return message
+

@@ -1,5 +1,13 @@
 <script setup lang="ts">
-import { MessageIcon, PlayIcon, SearchIcon } from '@modrinth/assets'
+import {
+	MessageIcon,
+	PlayIcon,
+	PlusIcon,
+	SearchIcon,
+	ServerIcon,
+	ShareIcon,
+	TrashIcon,
+} from '@modrinth/assets'
 import type { ButtonMenuOption } from '@modrinth/ui'
 import {
 	Avatar,
@@ -7,18 +15,24 @@ import {
 	ContextMenu,
 	defineMessages,
 	IconButton,
-	Input,
 	injectNotificationManager,
+	Input,
 	useRelativeTime,
 	useVIntl,
 } from '@modrinth/ui'
 import { useQuery } from '@tanstack/vue-query'
-import { computed, ref, useTemplateRef } from 'vue'
+import { computed, ref, useTemplateRef, watch } from 'vue'
 
-import { useOctraCommunityAvatars } from '@/composables/use-octra-community-avatars'
 import { handleSevereError } from '@/composables/use-error.js'
+import { useOctraCommunityAvatars } from '@/composables/use-octra-community-avatars'
 import { list } from '@/helpers/instance'
-import { octraCommunity } from '@/helpers/octra-account.js'
+import {
+	octraCommunity,
+	octraSharedServersAdd,
+	octraSharedServersDelete,
+	octraSharedServersList,
+	octraShareJoinAddress,
+} from '@/helpers/octra-account.js'
 import type { GameInstance } from '@/helpers/types'
 import { start_join_server } from '@/helpers/worlds'
 
@@ -43,6 +57,15 @@ type OctraCommunityMember = {
 	last_seen?: string | null
 }
 
+type OctraSharedServer = {
+	id: number
+	name: string
+	address: string
+	created_by: number
+	created_by_nick?: string | null
+	created_at: string
+}
+
 const props = defineProps<{
 	session: OctraAccountSession | null
 	loadingSession?: boolean
@@ -55,10 +78,19 @@ const emit = defineEmits<{
 }>()
 
 const { formatMessage } = useVIntl()
-const { handleError } = injectNotificationManager()
+const { handleError, addNotification } = injectNotificationManager()
 const formatRelativeTime = useRelativeTime({ numeric: 'auto', style: 'short' })
 const search = ref('')
 const joiningId = ref<number | null>(null)
+const joiningSharedId = ref<number | null>(null)
+const shareAddress = ref('')
+const sharingAddress = ref(false)
+const sharedServers = ref<OctraSharedServer[]>([])
+const sharedName = ref('')
+const sharedAddress = ref('')
+const addingShared = ref(false)
+const previousPresence = ref<Map<number, string>>(new Map())
+const presenceReady = ref(false)
 const memberOptions = useTemplateRef('memberOptions')
 
 /** Strip markup so API nick/status never render as HTML (text-only sidebar). */
@@ -82,7 +114,8 @@ const members = computed<OctraCommunityMember[]>(() => {
 	return raw.map((member) => ({
 		...member,
 		minecraft_nick: plainText(member.minecraft_nick),
-		instance_name: member.instance_name != null ? plainText(member.instance_name) : member.instance_name,
+		instance_name:
+			member.instance_name != null ? plainText(member.instance_name) : member.instance_name,
 	}))
 })
 const listLoading = computed(
@@ -106,6 +139,55 @@ const filtered = computed(() => {
 })
 
 const { avatarFor } = useOctraCommunityAvatars(members)
+
+watch(
+	members,
+	(nextMembers) => {
+		const nextMap = new Map<number, string>()
+		for (const member of nextMembers) {
+			nextMap.set(member.id, member.presence ?? 'offline')
+		}
+		if (presenceReady.value) {
+			for (const member of nextMembers) {
+				const prev = previousPresence.value.get(member.id)
+				const next = member.presence ?? 'offline'
+				if (prev && prev !== 'ingame' && next === 'ingame') {
+					addNotification({
+						title: formatMessage(messages.friendInGame, { nick: member.minecraft_nick }),
+						text: '',
+						type: 'success',
+					})
+				}
+			}
+		}
+		previousPresence.value = nextMap
+		presenceReady.value = true
+	},
+	{ deep: true },
+)
+
+watch(
+	() => props.session?.username ?? null,
+	() => {
+		previousPresence.value = new Map()
+		presenceReady.value = false
+		void refreshSharedServers()
+	},
+)
+
+async function refreshSharedServers() {
+	if (!props.session) {
+		sharedServers.value = []
+		return
+	}
+	try {
+		sharedServers.value = await octraSharedServersList()
+	} catch {
+		sharedServers.value = []
+	}
+}
+
+void refreshSharedServers()
 
 function presenceDotClass(presence?: string) {
 	if (presence === 'ingame') return 'bg-brand-green'
@@ -133,7 +215,7 @@ function presenceLabel(member: OctraCommunityMember) {
 }
 
 function createContextMenuOptions(member: OctraCommunityMember): ButtonMenuOption[] {
-	return [
+	const options: ButtonMenuOption[] = [
 		{
 			id: 'message-player',
 			label: formatMessage(messages.messagePlayer),
@@ -141,6 +223,15 @@ function createContextMenuOptions(member: OctraCommunityMember): ButtonMenuOptio
 			action: () => emit('messagePlayer', member.id),
 		},
 	]
+	if (canJoin(member)) {
+		options.unshift({
+			id: 'play-with',
+			label: formatMessage(messages.playWith),
+			icon: PlayIcon,
+			action: () => void joinFriend(member),
+		})
+	}
+	return options
 }
 
 function openMemberContextMenu(event: MouseEvent, member: OctraCommunityMember) {
@@ -181,10 +272,82 @@ async function joinFriend(member: OctraCommunityMember) {
 			return
 		}
 		await start_join_server(instance.id, address)
+		addNotification({
+			title: formatMessage(messages.playWithToast, { nick: member.minecraft_nick }),
+			text: '',
+			type: 'success',
+		})
 	} catch (error) {
 		handleSevereError(error, handleError)
 	} finally {
 		joiningId.value = null
+	}
+}
+
+async function shareMyIp() {
+	const address = shareAddress.value.trim()
+	if (!address || sharingAddress.value) return
+	sharingAddress.value = true
+	try {
+		await octraShareJoinAddress(address)
+		addNotification({
+			title: formatMessage(messages.shareIpSuccess),
+			text: '',
+			type: 'success',
+		})
+		shareAddress.value = ''
+	} catch (error) {
+		handleSevereError(error, handleError)
+	} finally {
+		sharingAddress.value = false
+	}
+}
+
+async function addSharedServer() {
+	const name = sharedName.value.trim()
+	const address = sharedAddress.value.trim()
+	if (!name || !address || addingShared.value) return
+	addingShared.value = true
+	try {
+		await octraSharedServersAdd(name, address)
+		sharedName.value = ''
+		sharedAddress.value = ''
+		await refreshSharedServers()
+		addNotification({
+			title: formatMessage(messages.sharedAddSuccess),
+			text: '',
+			type: 'success',
+		})
+	} catch (error) {
+		handleSevereError(error, handleError)
+	} finally {
+		addingShared.value = false
+	}
+}
+
+async function deleteSharedServer(server: OctraSharedServer) {
+	try {
+		await octraSharedServersDelete(server.id)
+		await refreshSharedServers()
+	} catch (error) {
+		handleSevereError(error, handleError)
+	}
+}
+
+async function joinSharedServer(server: OctraSharedServer) {
+	joiningSharedId.value = server.id
+	try {
+		const instances = await list()
+		const instance = pickInstance(instances, null)
+		if (!instance) {
+			handleError(formatMessage(messages.noInstance))
+			return
+		}
+		await start_join_server(instance.id, server.address)
+	} catch (error) {
+		handleSevereError(error, handleError)
+	} finally {
+		joiningSharedId.value = null
 	}
 }
 
@@ -253,6 +416,34 @@ const messages = defineMessages({
 		id: 'octra.community.join',
 		defaultMessage: 'Join',
 	},
+	playWith: {
+		id: 'octra.community.play-with',
+		defaultMessage: 'Play with',
+	},
+	playWithToast: {
+		id: 'octra.community.play-with-toast',
+		defaultMessage: 'Joining {nick}…',
+	},
+	friendInGame: {
+		id: 'octra.community.friend-in-game',
+		defaultMessage: '{nick} is in game',
+	},
+	shareIpLabel: {
+		id: 'octra.community.share-ip',
+		defaultMessage: 'Share my server IP…',
+	},
+	shareIpPlaceholder: {
+		id: 'octra.community.share-ip-placeholder',
+		defaultMessage: 'play.example.com:25565',
+	},
+	shareIpAction: {
+		id: 'octra.community.share-ip-action',
+		defaultMessage: 'Share IP',
+	},
+	shareIpSuccess: {
+		id: 'octra.community.share-ip-success',
+		defaultMessage: 'Your join address is shared with friends.',
+	},
 	noInstance: {
 		id: 'octra.community.no-instance',
 		defaultMessage: 'Create or install an instance before joining a friend.',
@@ -264,6 +455,38 @@ const messages = defineMessages({
 	memberActionsLabel: {
 		id: 'octra.community.actions.label',
 		defaultMessage: 'Friend actions',
+	},
+	sharedHeading: {
+		id: 'octra.community.shared-heading',
+		defaultMessage: 'Shared servers',
+	},
+	sharedEmpty: {
+		id: 'octra.community.shared-empty',
+		defaultMessage: 'No shared servers yet.',
+	},
+	sharedNamePlaceholder: {
+		id: 'octra.community.shared-name',
+		defaultMessage: 'Name',
+	},
+	sharedAddressPlaceholder: {
+		id: 'octra.community.shared-address',
+		defaultMessage: 'Address',
+	},
+	sharedAdd: {
+		id: 'octra.community.shared-add',
+		defaultMessage: 'Add server',
+	},
+	sharedAddSuccess: {
+		id: 'octra.community.shared-add-success',
+		defaultMessage: 'Shared server added.',
+	},
+	sharedJoin: {
+		id: 'octra.community.shared-join',
+		defaultMessage: 'Join server',
+	},
+	sharedDelete: {
+		id: 'octra.community.shared-delete',
+		defaultMessage: 'Delete server',
 	},
 })
 </script>
@@ -283,9 +506,7 @@ const messages = defineMessages({
 					/>
 					<span>
 						{{
-							connected
-								? formatMessage(messages.connected)
-								: formatMessage(messages.disconnected)
+							connected ? formatMessage(messages.connected) : formatMessage(messages.disconnected)
 						}}
 					</span>
 				</div>
@@ -319,67 +540,157 @@ const messages = defineMessages({
 			</div>
 		</template>
 
-		<template v-else-if="members.length === 0">
-			<p class="m-0 font-minecraft text-sm text-secondary">
-				{{ formatMessage(messages.empty) }}
-			</p>
-		</template>
-
 		<template v-else>
-			<Input
-				v-if="members.length > 5"
-				v-model="search"
-				:icon="SearchIcon"
-				type="text"
-				appearance="transparent"
-				:placeholder="formatMessage(messages.search)"
-				clearable
-				input-class="!text-primary !placeholder:text-primary"
-				wrapper-class="!border-button-bg [&>span:first-child]:!text-primary [&>span:first-child]:!opacity-100"
-				@keyup.esc="search = ''"
-			/>
-			<div class="community-list flex flex-col gap-0.5">
-				<div
-					v-for="(member, index) in filtered"
-					:key="member.id"
-					class="community-row grid grid-cols-[auto_1fr_auto] items-center gap-2 rounded-xl px-1 py-1.5 select-none"
-					:style="{ '--stagger': `${Math.min(index, 8) * 28}ms` }"
-					@contextmenu.prevent.stop="(event) => openMemberContextMenu(event, member)"
-				>
-					<div class="relative shrink-0">
-						<Avatar
-							:src="avatarFor(member)"
-							:alt="member.minecraft_nick"
-							size="32px"
-							circle
-						/>
-						<span
-							class="absolute bottom-0 right-0 size-2 rounded-full ring-2 ring-[var(--color-raised-bg)]"
-							:class="presenceDotClass(member.presence)"
-						/>
-					</div>
-					<div class="flex min-w-0 flex-col">
-						<span class="truncate text-sm text-contrast">{{ member.minecraft_nick }}</span>
-						<span class="truncate text-xs text-secondary">
-							{{ presenceLabel(member) }}
-						</span>
-					</div>
+			<div class="flex flex-col gap-1.5 rounded-xl bg-button-bg/40 p-2">
+				<span class="text-[11px] font-medium text-secondary">
+					{{ formatMessage(messages.shareIpLabel) }}
+				</span>
+				<div class="flex items-center gap-1.5">
+					<input
+						v-model="shareAddress"
+						type="text"
+						class="min-h-8 w-full rounded-lg border border-solid border-surface-5 bg-bg-raised px-2 py-1 text-xs text-primary placeholder:text-secondary"
+						:placeholder="formatMessage(messages.shareIpPlaceholder)"
+						:disabled="sharingAddress"
+						@keydown.enter.prevent="shareMyIp"
+					/>
 					<IconButton
-						v-if="canJoin(member)"
-						v-tooltip="formatMessage(messages.join)"
+						v-tooltip="formatMessage(messages.shareIpAction)"
 						type="standard"
 						color="brand"
-						:label="formatMessage(messages.join)"
-						:disabled="joiningId === member.id"
-						@click="joinFriend(member)"
+						:label="formatMessage(messages.shareIpAction)"
+						:disabled="sharingAddress || !shareAddress.trim()"
+						@click="shareMyIp"
 					>
-						<PlayIcon />
+						<ShareIcon />
 					</IconButton>
 				</div>
 			</div>
-			<p v-if="filtered.length === 0 && search" class="m-0 text-sm text-secondary">
-				{{ formatMessage(messages.noMatch, { query: plainText(search) }) }}
-			</p>
+
+			<template v-if="members.length === 0">
+				<p class="m-0 font-minecraft text-sm text-secondary">
+					{{ formatMessage(messages.empty) }}
+				</p>
+			</template>
+
+			<template v-else>
+				<Input
+					v-if="members.length > 5"
+					v-model="search"
+					:icon="SearchIcon"
+					type="text"
+					appearance="transparent"
+					:placeholder="formatMessage(messages.search)"
+					clearable
+					input-class="!text-primary !placeholder:text-primary"
+					wrapper-class="!border-button-bg [&>span:first-child]:!text-primary [&>span:first-child]:!opacity-100"
+					@keyup.esc="search = ''"
+				/>
+				<div class="community-list flex flex-col gap-0.5">
+					<div
+						v-for="(member, index) in filtered"
+						:key="member.id"
+						class="community-row grid grid-cols-[auto_1fr_auto] items-center gap-2 rounded-xl px-1 py-1.5 select-none"
+						:style="{ '--stagger': `${Math.min(index, 8) * 28}ms` }"
+						@contextmenu.prevent.stop="(event) => openMemberContextMenu(event, member)"
+					>
+						<div class="relative shrink-0">
+							<Avatar :src="avatarFor(member)" :alt="member.minecraft_nick" size="32px" circle />
+							<span
+								class="absolute bottom-0 right-0 size-2 rounded-full ring-2 ring-[var(--color-raised-bg)]"
+								:class="presenceDotClass(member.presence)"
+							/>
+						</div>
+						<div class="flex min-w-0 flex-col">
+							<span class="truncate text-sm text-contrast">{{ member.minecraft_nick }}</span>
+							<span class="truncate text-xs text-secondary">
+								{{ presenceLabel(member) }}
+							</span>
+						</div>
+						<IconButton
+							v-if="canJoin(member)"
+							v-tooltip="formatMessage(messages.playWith)"
+							type="standard"
+							color="brand"
+							:label="formatMessage(messages.playWith)"
+							:disabled="joiningId === member.id"
+							@click="joinFriend(member)"
+						>
+							<PlayIcon />
+						</IconButton>
+					</div>
+				</div>
+				<p v-if="filtered.length === 0 && search" class="m-0 text-sm text-secondary">
+					{{ formatMessage(messages.noMatch, { query: plainText(search) }) }}
+				</p>
+			</template>
+
+			<div class="mt-2 flex flex-col gap-2 border-0 border-t border-solid border-surface-5 pt-3">
+				<div class="flex items-center gap-1.5 text-primary">
+					<ServerIcon class="size-3.5 shrink-0 text-secondary" />
+					<h4 class="m-0 text-sm font-medium">
+						{{ formatMessage(messages.sharedHeading) }}
+					</h4>
+				</div>
+				<p v-if="sharedServers.length === 0" class="m-0 text-xs text-secondary">
+					{{ formatMessage(messages.sharedEmpty) }}
+				</p>
+				<div
+					v-for="server in sharedServers"
+					:key="server.id"
+					class="grid grid-cols-[1fr_auto] items-center gap-1 rounded-xl px-1 py-1"
+				>
+					<div class="min-w-0">
+						<span class="block truncate text-sm text-contrast">{{ server.name }}</span>
+						<span class="block truncate text-[11px] text-secondary">{{ server.address }}</span>
+					</div>
+					<div class="flex items-center gap-0.5">
+						<IconButton
+							v-tooltip="formatMessage(messages.sharedJoin)"
+							type="quiet"
+							color="brand"
+							:label="formatMessage(messages.sharedJoin)"
+							:disabled="joiningSharedId === server.id"
+							@click="joinSharedServer(server)"
+						>
+							<PlayIcon />
+						</IconButton>
+						<IconButton
+							v-tooltip="formatMessage(messages.sharedDelete)"
+							type="quiet"
+							:label="formatMessage(messages.sharedDelete)"
+							@click="deleteSharedServer(server)"
+						>
+							<TrashIcon />
+						</IconButton>
+					</div>
+				</div>
+				<div class="flex flex-col gap-1.5">
+					<input
+						v-model="sharedName"
+						type="text"
+						class="min-h-8 w-full rounded-lg border border-solid border-surface-5 bg-button-bg px-2 py-1 text-xs text-primary placeholder:text-secondary"
+						:placeholder="formatMessage(messages.sharedNamePlaceholder)"
+					/>
+					<input
+						v-model="sharedAddress"
+						type="text"
+						class="min-h-8 w-full rounded-lg border border-solid border-surface-5 bg-button-bg px-2 py-1 text-xs text-primary placeholder:text-secondary"
+						:placeholder="formatMessage(messages.sharedAddressPlaceholder)"
+						@keydown.enter.prevent="addSharedServer"
+					/>
+					<Button
+						type="colored"
+						color="brand"
+						class="w-full"
+						:disabled="addingShared || !sharedName.trim() || !sharedAddress.trim()"
+						@click="addSharedServer"
+					>
+						<PlusIcon />
+						{{ formatMessage(messages.sharedAdd) }}
+					</Button>
+				</div>
+			</div>
 		</template>
 	</div>
 </template>
@@ -403,4 +714,3 @@ const messages = defineMessages({
 	}
 }
 </style>
-

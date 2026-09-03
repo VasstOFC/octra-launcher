@@ -1,10 +1,10 @@
 import { provideAppBackup } from '@modrinth/ui'
 import { type MaybeRefOrGetter, toValue } from 'vue'
 
-import i18n from '@/i18n.config'
 import { install_duplicate_instance, installJobInstanceId } from '@/helpers/install'
 import { edit, list } from '@/helpers/instance'
 import type { GameInstance } from '@/helpers/types'
+import i18n from '@/i18n.config'
 
 export function provideInstanceBackup(instance: MaybeRefOrGetter<GameInstance>) {
 	provideAppBackup({

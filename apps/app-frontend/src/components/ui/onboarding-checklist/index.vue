@@ -12,13 +12,8 @@ const emit = defineEmits<{
 }>()
 
 const { formatMessage } = useVIntl()
-const {
-	hasCreatedInstance,
-	hasLoggedIntoMinecraft,
-	hasLoggedIntoModrinth,
-	isReady,
-	showChecklist,
-} = injectOnboardingChecklist()
+const { hasCreatedInstance, hasLoggedIntoMinecraft, isReady, showChecklist } =
+	injectOnboardingChecklist()
 const collapsedCornersVisible = ref(false)
 let collapseTimer: ReturnType<typeof setTimeout> | undefined
 

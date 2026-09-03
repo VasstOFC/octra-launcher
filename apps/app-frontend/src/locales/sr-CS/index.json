@@ -143,12 +143,6 @@
   "app.ads-consent.title": {
     "message": "Tvoja bezbednost i kako reklame pomažu Modrinth-u"
   },
-  "app.appearance-settings.default-landing-page.home": {
-    "message": "Početna stranica"
-  },
-  "app.appearance-settings.default-landing-page.library": {
-    "message": "Biblioteka"
-  },
   "app.appearance-settings.hide-nametag.description": {
     "message": "Sakrij svoje korisničko ime iznad pregleda igrača na stranici Skin birača."
   },
@@ -172,12 +166,6 @@
   },
   "app.appearance-settings.skip-non-essential-warnings.title": {
     "message": "Preskači nebitna upozorenja"
-  },
-  "app.appearance-settings.toggle-sidebar.description": {
-    "message": "Sakrij desnu bočnu traku podrazumevano i dodaj dugme da se prikaže i sakrije."
-  },
-  "app.appearance-settings.toggle-sidebar.title": {
-    "message": "Sakrij desnu bočnu traku"
   },
   "app.appearance-settings.unknown-pack-warning.title": {
     "message": "Upozoti me prije instalacije nepoznatih modpackova"
@@ -473,9 +461,6 @@
   "app.settings.tabs.java-installations": {
     "message": "Java instalacije"
   },
-  "app.settings.tabs.language": {
-    "message": "Jezik"
-  },
   "app.settings.tabs.privacy": {
     "message": "Privatnost"
   },
@@ -724,9 +709,6 @@
   },
   "friends.section.heading": {
     "message": "{title} - {count}"
-  },
-  "friends.sign-in-to-add-friends": {
-    "message": "<link>Prijavi se na Modrinth račun</link> da bi dodao prijatelje i vidio šta igraju!"
   },
   "instance.add-server.add-and-play": {
     "message": "Dodaj i igraj"

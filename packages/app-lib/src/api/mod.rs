@@ -7,7 +7,6 @@ pub mod jre;
 pub mod logs;
 pub mod metadata;
 pub mod minecraft_auth;
-pub mod octra_accounts;
 pub mod minecraft_skins;
 pub mod mr_auth;
 pub mod onboarding_checklist;

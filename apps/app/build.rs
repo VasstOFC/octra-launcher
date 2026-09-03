@@ -451,8 +451,17 @@ fn main() {
                         "octra_chat_channels",
                         "octra_chat_open_dm",
                         "octra_chat_create_group",
+                        "octra_chat_add_members",
                         "octra_chat_list",
                         "octra_chat_post",
+                        "octra_chat_mark_read",
+                        "octra_chat_delete_message",
+                        "octra_chat_pin_message",
+                        "octra_chat_react_message",
+                        "octra_share_join_address",
+                        "octra_shared_servers_list",
+                        "octra_shared_servers_add",
+                        "octra_shared_servers_delete",
                         "octra_cache_mrpack_url",
                     ])
                     .default_permission(

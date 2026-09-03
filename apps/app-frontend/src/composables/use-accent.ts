@@ -1,6 +1,7 @@
 import { prepareThemeColorTransition } from '@modrinth/ui'
 import { reactive, ref, watch } from 'vue'
 
+import { isDarkTheme, useTheme } from '@/composables/use-theme.ts'
 import {
 	type AccentPreference,
 	type AccentPresetId,
@@ -8,7 +9,6 @@ import {
 	DEFAULT_ACCENT,
 	normalizeHexColor,
 } from '@/helpers/accent-colors.ts'
-import { isDarkTheme, useTheme } from '@/composables/use-theme.ts'
 
 const ACCENT_STORAGE_KEY = 'octra.accent'
 

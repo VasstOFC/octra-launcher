@@ -1,23 +1,21 @@
-//! Offline accounts, authlib-injector, and the Octra skin VPS.
+//! Octra skins via authlib-injector + remote Yggdrasil ([`crate::nervia::skins_url`]).
 //!
-//! Friends see offline skins via authlib-injector pointed at the shared remote
-//! Yggdrasil root ([`crate::nervia::skins_url`]) — no CustomSkinLoader and no
-//! Fabric overlay solely for skins. Texture URLs in profile JSON point at
-//! `/skins/MinecraftSkins/{nick}.png` on the same host.
-//!
-//! SkinsRestorer on dedicated servers can still use the same legacy URL.
+//! Design (HMCL / Ely.by style):
+//! - Every launch gets `-javaagent:authlib-injector.jar=<ygg_root>`.
+//! - The VPS Yggdrasil serves **offline** skins from the Octra registry and
+//!   **premium** profiles by proxying Mojang (signed textures).
+//! - No CustomSkinLoader, no Fabric overlay for skins.
+//! - Legacy PNG URLs (`/skins/MinecraftSkins/{nick}.png`) remain for SkinsRestorer.
 
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::time::Duration;
 
-use daedalus::modded::LoaderVersion;
 use md5::Md5;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use uuid::Uuid;
 
-use crate::data::ModLoader;
 use crate::nervia;
 use crate::state::{Credentials, DirectoryInfo, MinecraftSkinVariant, State};
 use crate::util::fetch::INSECURE_REQWEST_CLIENT;
@@ -31,9 +29,6 @@ const AUTHLIB_SHA256: &str =
 const AUTHLIB_URL: &str =
 	"https://authlib-injector.yushi.moe/artifact/56/authlib-injector-1.2.8.jar";
 const AUTHLIB_FALLBACK: &str = "https://github.com/yushijinhun/authlib-injector/releases/download/v1.2.8/authlib-injector-1.2.8.jar";
-
-/// Leftover Forge/NeoForge CSL hardlink from older Octra builds — cleaned on exit.
-const OCTRA_CSL_EPHEMERAL_MOD: &str = ".octra-customskinloader.jar";
 
 static RUNTIME_STARTED: AtomicBool = AtomicBool::new(false);
 
@@ -49,8 +44,7 @@ pub fn offline_player_uuid(name: &str) -> Uuid {
 
 pub fn validate_offline_name(name: &str) -> crate::Result<String> {
 	let name = name.trim();
-	if name.is_empty() || name.len() > 16 || name.contains(char::is_whitespace)
-	{
+	if name.is_empty() || name.len() > 16 || name.contains(char::is_whitespace) {
 		return Err(crate::ErrorKind::InputError(
 			"nick offline: 1–16 znaków, bez spacji".to_string(),
 		)
@@ -65,7 +59,7 @@ pub fn validate_offline_name(name: &str) -> crate::Result<String> {
 	Ok(name.to_string())
 }
 
-/// Shared remote Yggdrasil / authlib-injector API root (same host as skin registry).
+/// Shared remote Yggdrasil / authlib-injector API root.
 pub fn ygg_root() -> String {
 	nervia::skins_url().trim_end_matches('/').to_string()
 }
@@ -83,6 +77,13 @@ fn hyphenated_uuid(id: &Uuid) -> String {
 
 fn skin_dir(directories: &DirectoryInfo) -> PathBuf {
 	directories.settings_dir.join("octra-skins")
+}
+
+fn ygg_model(variant: MinecraftSkinVariant) -> &'static str {
+	match variant {
+		MinecraftSkinVariant::Slim => "slim",
+		_ => "default",
+	}
 }
 
 #[derive(Serialize, Deserialize)]
@@ -107,6 +108,13 @@ pub async fn load_equipped(uuid: Uuid) -> Option<EquippedSkin> {
 	})
 }
 
+pub async fn load_equipped_png(uuid: Uuid) -> Option<Vec<u8>> {
+	let state = State::get().await.ok()?;
+	let path = skin_dir(&state.directories).join(format!("{uuid}.png"));
+	let bytes = tokio::fs::read(path).await.ok()?;
+	(bytes.len() >= 8).then_some(bytes)
+}
+
 pub async fn save_equipped(
 	credentials: &Credentials,
 	texture_key: &str,
@@ -126,6 +134,7 @@ pub async fn save_equipped(
 		serde_json::to_vec_pretty(&record)?,
 	)
 	.await?;
+
 	let owned_png;
 	let png = if png.is_empty() {
 		owned_png = load_equipped_png(uuid).await.unwrap_or_default();
@@ -136,25 +145,27 @@ pub async fn save_equipped(
 	if !png.is_empty() {
 		io::write(dir.join(format!("{uuid}.png")), png).await?;
 	}
-	let published = publish_to_registry(credentials, variant, png).await;
-	let name = credentials.offline_profile.name.clone();
 	if png.is_empty() {
 		return Ok(());
 	}
-	if !published {
-		tracing::warn!(
-			"nie udało się opublikować skina dla {name} na serwerze Octra ({})",
-			nervia::skins_url()
-		);
-	} else if !verify_registry_skin(&name).await {
-		tracing::warn!(
-			"skin dla {name} wysłany, ale {} nie odpowiada — znajomi mogą nie widzieć skina",
-			registry_skin_url(&name)
-		);
+
+	let name = credentials.offline_profile.name.clone();
+	if publish_to_registry(credentials, variant, png).await {
+		if verify_registry_skin(&name).await {
+			tracing::info!(
+				"Octra skins: {name} live at {}",
+				registry_skin_url(&name)
+			);
+		} else {
+			tracing::warn!(
+				"Octra skins: {name} uploaded but GET {} failed",
+				registry_skin_url(&name)
+			);
+		}
 	} else {
-		tracing::info!(
-			"skin dla {name} dostępny przez authlib + chmurę Octra ({})",
-			registry_skin_url(&name)
+		tracing::warn!(
+			"Octra skins: failed to publish {name} to {}",
+			nervia::skins_url()
 		);
 	}
 	Ok(())
@@ -169,19 +180,14 @@ pub async fn clear_equipped(credentials: &Credentials) -> crate::Result<()> {
 	Ok(())
 }
 
-fn registry_legacy_url(name: &str) -> String {
+/// Public legacy skin URL (authlib textures + SkinsRestorer).
+pub fn registry_skin_url(name: &str) -> String {
 	format!("{}/skins/MinecraftSkins/{name}.png", nervia::skins_url())
 }
 
-/// Public legacy skin URL (authlib profile textures + optional SkinsRestorer).
-pub fn registry_skin_url(name: &str) -> String {
-	registry_legacy_url(name)
-}
-
 pub async fn verify_registry_skin(name: &str) -> bool {
-	let url = registry_legacy_url(name);
 	INSECURE_REQWEST_CLIENT
-		.get(&url)
+		.get(registry_skin_url(name))
 		.timeout(Duration::from_secs(8))
 		.send()
 		.await
@@ -197,14 +203,12 @@ pub async fn publish_to_registry(
 	if png.is_empty() {
 		return false;
 	}
-	let model = match variant {
-		MinecraftSkinVariant::Slim => "slim",
-		_ => "classic",
-	};
+	let model = ygg_model(variant);
 	let uuid = hyphenated_uuid(&credentials.offline_profile.id);
 	let name = &credentials.offline_profile.name;
 	let url = format!("{}/skins/{uuid}", nervia::skins_url());
 	let bearer = crate::octra_accounts::bearer_token().await;
+
 	let send = |method: reqwest::Method| {
 		let mut request = INSECURE_REQWEST_CLIENT
 			.request(method, &url)
@@ -223,70 +227,25 @@ pub async fn publish_to_registry(
 		}
 		request.send()
 	};
-	match send(reqwest::Method::PUT).await {
-		Ok(resp) if resp.status().is_success() => {
-			tracing::info!(
-				"published skin for {name} to octra registry ({uuid})"
-			);
-			true
-		}
-		Ok(resp) => {
-			tracing::warn!(
-				"octra skin registry PUT for {name} failed: HTTP {}",
-				resp.status()
-			);
-			match send(reqwest::Method::POST).await {
-				Ok(resp) if resp.status().is_success() => {
-					tracing::info!(
-						"published skin for {name} to octra registry via POST ({uuid})"
-					);
-					true
-				}
-				Ok(resp) => {
-					tracing::warn!(
-						"octra skin registry POST for {name} failed: HTTP {}",
-						resp.status()
-					);
-					false
-				}
-				Err(error) => {
-					tracing::warn!(
-						"octra skin registry POST for {name} failed: {error}"
-					);
-					false
-				}
+
+	for method in [reqwest::Method::PUT, reqwest::Method::POST] {
+		match send(method.clone()).await {
+			Ok(resp) if resp.status().is_success() => {
+				tracing::info!("Octra skins: published {name} ({uuid})");
+				return true;
 			}
-		}
-		Err(error) => {
-			tracing::warn!(
-				"octra skin registry PUT for {name} failed: {error}"
-			);
-			match send(reqwest::Method::POST).await {
-				Ok(resp) if resp.status().is_success() => {
-					tracing::info!(
-						"published skin for {name} to octra registry via POST ({uuid})"
-					);
-					true
-				}
-				Ok(resp) => {
-					tracing::warn!(
-						"octra skin registry POST for {name} failed: HTTP {}",
-						resp.status()
-					);
-					false
-				}
-				Err(error) => {
-					tracing::warn!(
-						"octra skin registry POST for {name} failed: {error}"
-					);
-					false
-				}
+			Ok(resp) => tracing::warn!(
+				"Octra skins: {method} {name} → HTTP {}",
+				resp.status()
+			),
+			Err(error) => {
+				tracing::warn!("Octra skins: {method} {name} → {error}")
 			}
 		}
 	}
+	false
 }
 
-/// Re-uploads equipped skins for every saved Minecraft account (startup + retry).
 pub async fn sync_all_equipped_skins() {
 	let Ok(state) = State::get().await else {
 		return;
@@ -308,25 +267,13 @@ pub async fn sync_all_equipped_skins() {
 	}
 }
 
-pub async fn load_equipped_png(uuid: Uuid) -> Option<Vec<u8>> {
-	let state = State::get().await.ok()?;
-	let path = skin_dir(&state.directories).join(format!("{uuid}.png"));
-	let bytes = tokio::fs::read(path).await.ok()?;
-	if bytes.len() < 8 {
-		return None;
-	}
-	Some(bytes)
-}
-
-/// Starts background skin sync to the VPS registry (no local Yggdrasil hub).
+/// Download authlib-injector once; periodically re-publish equipped skins.
 pub async fn ensure_runtime() -> crate::Result<()> {
 	if RUNTIME_STARTED.swap(true, Ordering::SeqCst) {
 		return Ok(());
 	}
-	tracing::info!(
-		"Octra skins: authlib-injector → remote Yggdrasil {}",
-		ygg_root()
-	);
+	let _ = authlib_jar_path().await?;
+	tracing::info!("Octra skins: Yggdrasil root {}", ygg_root());
 	tokio::spawn(async {
 		sync_all_equipped_skins().await;
 		loop {
@@ -351,12 +298,12 @@ async fn authlib_jar_path() -> crate::Result<PathBuf> {
 	}
 	io::create_dir_all(state.directories.metadata_dir()).await?;
 	for url in [AUTHLIB_URL, AUTHLIB_FALLBACK] {
-		let resp = INSECURE_REQWEST_CLIENT
+		let Ok(resp) = INSECURE_REQWEST_CLIENT
 			.get(url)
 			.timeout(Duration::from_secs(30))
 			.send()
-			.await;
-		let Ok(resp) = resp else {
+			.await
+		else {
 			continue;
 		};
 		if !resp.status().is_success() {
@@ -366,7 +313,7 @@ async fn authlib_jar_path() -> crate::Result<PathBuf> {
 			continue;
 		};
 		if sha256_hex(&bytes) != AUTHLIB_SHA256 {
-			tracing::warn!("authlib-injector SHA-256 mismatch from {url}");
+			tracing::warn!("Octra skins: authlib SHA-256 mismatch from {url}");
 			continue;
 		}
 		io::write(&dest, &bytes).await?;
@@ -378,36 +325,22 @@ async fn authlib_jar_path() -> crate::Result<PathBuf> {
 	.into())
 }
 
-/// Previously overlaid Fabric on vanilla solely for CustomSkinLoader.
-/// Skins now use authlib-injector only — loader is left unchanged.
-pub async fn overlay_fabric_if_vanilla(
-	_game_version: &str,
-	loader: ModLoader,
-	loader_version: Option<LoaderVersion>,
-) -> (ModLoader, Option<LoaderVersion>) {
-	(loader, loader_version)
-}
-
+/// Before Minecraft starts: publish equipped skin, inject authlib for every account.
 pub async fn prepare_launch(
-	instance_path: &Path,
-	_game_version: &str,
-	_loader: ModLoader,
+	_instance_path: &Path,
 	credentials: &Credentials,
 	java_args: &mut Vec<String>,
 ) -> crate::Result<()> {
-	if let Err(e) = ensure_runtime().await {
-		tracing::warn!("Octra skins runtime: {e}");
+	if let Err(error) = ensure_runtime().await {
+		tracing::warn!("Octra skins: runtime {error}");
 	}
 
-	// Publish equipped skin so friends' authlib clients can resolve it on the VPS.
 	if let Some(png) = load_equipped_png(credentials.offline_profile.id).await {
 		let variant = load_equipped(credentials.offline_profile.id)
 			.await
-			.map(|e| e.variant)
+			.map(|equipped| equipped.variant)
 			.unwrap_or(MinecraftSkinVariant::Classic);
-		let published =
-			publish_to_registry(credentials, variant, &png).await;
-		if published {
+		if publish_to_registry(credentials, variant, &png).await {
 			tracing::info!(
 				"Octra skins: published {} before launch",
 				credentials.offline_profile.name
@@ -415,56 +348,15 @@ pub async fn prepare_launch(
 		}
 	}
 
-	// Always inject authlib-injector for Octra launches. The remote Yggdrasil
-	// falls through to Mojang for unknown (premium) profiles so online skins
-	// keep working; offline registry skins resolve from the VPS.
-	match authlib_jar_path().await {
-		Ok(jar) => {
-			let jar = dunce::canonicalize(&jar).unwrap_or(jar);
-			let root = ygg_root();
-			java_args.insert(
-				0,
-				format!("-javaagent:{}={}", jar.display(), root),
-			);
-			tracing::info!(
-				"Octra skins: authlib-injector → {root} (vanilla-compatible, no CSL)"
-			);
-		}
-		Err(e) => {
-			tracing::warn!(
-				"Octra skins: authlib-injector unavailable ({e}) — friends may not see offline skins"
-			);
-		}
-	}
-
-	// Best-effort cleanup of leftover CSL artifacts from older Octra versions.
-	remove_legacy_csl_from_mods(instance_path).await;
-	cleanup_ephemeral_csl(instance_path).await;
-
+	let jar = authlib_jar_path().await?;
+	let jar = dunce::canonicalize(&jar).unwrap_or(jar);
+	let root = ygg_root();
+	// Always inject. Offline skins resolve from Octra; premium from Mojang via VPS proxy.
+	java_args.insert(0, format!("-javaagent:{}={}", jar.display(), root));
+	java_args.insert(1, "-Dauthlibinjector.side=client".to_string());
+	tracing::info!(
+		"Octra skins: authlib-injector → {root} ({})",
+		credentials.offline_profile.name
+	);
 	Ok(())
-}
-
-/// Removes ephemeral Forge/NeoForge CSL hardlink after Minecraft exits (legacy).
-pub async fn cleanup_ephemeral_csl(instance_path: &Path) {
-	let ephemeral = instance_path.join("mods").join(OCTRA_CSL_EPHEMERAL_MOD);
-	if ephemeral.exists() {
-		let _ = tokio::fs::remove_file(ephemeral).await;
-	}
-}
-
-async fn remove_legacy_csl_from_mods(instance_path: &Path) {
-	let mods = instance_path.join("mods");
-	let Ok(mut dir) = tokio::fs::read_dir(&mods).await else {
-		return;
-	};
-	while let Ok(Some(entry)) = dir.next_entry().await {
-		let name = entry.file_name().to_string_lossy().to_ascii_lowercase();
-		if name.contains("customskinloader") {
-			let _ = tokio::fs::remove_file(entry.path()).await;
-			tracing::info!(
-				"Octra skins: removed leftover CustomSkinLoader {}",
-				entry.file_name().to_string_lossy()
-			);
-		}
-	}
 }

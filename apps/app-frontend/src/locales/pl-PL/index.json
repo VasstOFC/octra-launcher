@@ -155,12 +155,6 @@
   "app.appearance-settings.compact-mode.title": {
     "message": "Tryb zwarty"
   },
-  "app.appearance-settings.default-landing-page.home": {
-    "message": "Strona główna"
-  },
-  "app.appearance-settings.default-landing-page.library": {
-    "message": "Biblioteka"
-  },
   "app.appearance-settings.hide-nametag.description": {
     "message": "Ukryj nazwę użytkownika pokazaną nad podglądem wyglądu gracza na stronie wyboru skórki."
   },
@@ -190,12 +184,6 @@
   },
   "app.appearance-settings.skip-non-essential-warnings.title": {
     "message": "Pomiń mało znaczące ostrzeżenia"
-  },
-  "app.appearance-settings.toggle-sidebar.description": {
-    "message": "Domyślnie ukrywa prawy pasek boczny i dodaje guzik pozwalający go pokazywać lub ukrywać."
-  },
-  "app.appearance-settings.toggle-sidebar.title": {
-    "message": "Ukryj prawy pasek boczny"
   },
   "app.appearance-settings.unknown-pack-warning.description": {
     "message": "Pokaż ostrzeżenie o bezpieczeństwie przed zainstalowaniem Pakietu Modrinth (.mrpack), które nie jest hostowane na Modrinth."
@@ -361,9 +349,6 @@
   },
   "app.home.jump-back-in.view-instance": {
     "message": "Pokaż instancję"
-  },
-  "app.home.hero.cta": {
-    "message": "Nowa instancja"
   },
   "app.home.hero.tagline": {
     "message": "Twoje światy. Twoja ekipa. Jeden launcher."
@@ -634,9 +619,6 @@
   },
   "app.instance.mods.project-was-added": {
     "message": "Dodano \"{name}\""
-  },
-  "app.instance.mods.projects-were-added": {
-    "message": "{count, plural, one {Dodano # projekt} few {Dodano # projekty} many {Dodano # projektów} other {Dodano # projektu}}"
   },
   "app.instance.mods.share-text": {
     "message": "Sprawdź projekty, których używam w mojej paczce modów!"
@@ -1268,9 +1250,6 @@
   "app.nav.add-account": {
     "message": "Dodaj konto"
   },
-  "app.nav.brand-name": {
-    "message": "Octra App"
-  },
   "app.nav.collapse-rail": {
     "message": "Zwiń menu"
   },
@@ -1304,12 +1283,6 @@
   "app.nav.identity-tooltip": {
     "message": "MC · {minecraft} · Octra · {octra}"
   },
-  "app.nav.library": {
-    "message": "Biblioteka"
-  },
-  "app.nav.library-count": {
-    "message": "{count, plural, one {# profil w bibliotece} few {# profile w bibliotece} many {# profilów w bibliotece} other {# profilu w bibliotece}}"
-  },
   "app.nav.library-empty": {
     "message": "Brak instancji"
   },
@@ -1321,9 +1294,6 @@
   },
   "app.nav.modrinth-account": {
     "message": "Konto Octra"
-  },
-  "app.nav.modrinth-hosting": {
-    "message": "Modrinth Hosting"
   },
   "app.nav.pack-gallery": {
     "message": "Galeria paczek"
@@ -1586,9 +1556,6 @@
   "app.screenshots.selection.remove-from-group": {
     "message": "Usuń z grupy"
   },
-  "app.screenshots.selection.selected-count": {
-    "message": "{count, plural, one {# zaznaczony} few {# zaznaczone} many {# zaznaczonych} other {# zaznaczonego}}"
-  },
   "app.screenshots.selection.zip-archive": {
     "message": "Archiwum ZIP"
   },
@@ -1781,12 +1748,6 @@
   "app.settings.privacy.discord-rich-presence.title": {
     "message": "Discord Rich Presence"
   },
-  "app.settings.privacy.telemetry.description": {
-    "message": "Octra zbiera zanonimizowane dane analityczne i o użytkowaniu, aby ulepszać aplikację i dopasowywać ją do Ciebie. Wyłączenie tej opcji oznacza rezygnację — Twoje dane nie będą już zbierane."
-  },
-  "app.settings.privacy.telemetry.title": {
-    "message": "Telemetria"
-  },
   "app.settings.resource-management.always-show-copy-details.description": {
     "message": "Pokazuj akcję „Kopiuj szczegóły”, gdy instalacja czeka w kolejce lub trwa. Przy nieudanych lub przerwanych instalacjach jest zawsze dostępna."
   },
@@ -1924,9 +1885,6 @@
   },
   "app.settings.tabs.java-installations": {
     "message": "Instalacje Java"
-  },
-  "app.settings.tabs.language": {
-    "message": "Język"
   },
   "app.settings.tabs.privacy": {
     "message": "Prywatność"
@@ -2657,9 +2615,6 @@
   "instance.badge.shared-aria": {
     "message": "Informacje o udostępnionej instancji"
   },
-  "instance.backup.name-prefix": {
-    "message": "{name} - Kopia #"
-  },
   "instance.server-modal.address": {
     "message": "Adres"
   },
@@ -3125,9 +3080,6 @@
   "minecraft-account.label": {
     "message": "Konto Minecraft"
   },
-  "minecraft-account.manage": {
-    "message": "Zarządzaj kontami"
-  },
   "minecraft-account.non-premium": {
     "message": "Non-premium"
   },
@@ -3136,9 +3088,6 @@
   },
   "minecraft-account.offline-nick": {
     "message": "Nick offline"
-  },
-  "minecraft-account.or-play-offline": {
-    "message": "Albo graj offline"
   },
   "minecraft-account.play-offline": {
     "message": "Graj offline"
@@ -3169,9 +3118,6 @@
   },
   "octra-account.linked-minecraft": {
     "message": "Konto Minecraft"
-  },
-  "octra-account.minecraft-nick": {
-    "message": "Nick Minecraft"
   },
   "octra-account.no-minecraft": {
     "message": "Najpierw dodaj konto Microsoft lub offline Minecraft."
@@ -3221,9 +3167,6 @@
   "octra.community.last-seen": {
     "message": "Ostatnio {time}"
   },
-  "octra.community.load-error": {
-    "message": "Nie udało się wczytać znajomych. Sprawdź, czy jesteś zalogowany na Octra."
-  },
   "octra.community.no-match": {
     "message": "Nie znaleziono znajomych pasujących do zapytania \"{query}\""
   },
@@ -3245,6 +3188,27 @@
   "octra.community.join": {
     "message": "Dołącz"
   },
+  "octra.community.play-with": {
+    "message": "Graj z"
+  },
+  "octra.community.play-with-toast": {
+    "message": "Dołączanie do {nick}…"
+  },
+  "octra.community.friend-in-game": {
+    "message": "{nick} jest w grze"
+  },
+  "octra.community.share-ip": {
+    "message": "Udostępnij IP serwera…"
+  },
+  "octra.community.share-ip-placeholder": {
+    "message": "play.example.com:25565"
+  },
+  "octra.community.share-ip-action": {
+    "message": "Udostępnij IP"
+  },
+  "octra.community.share-ip-success": {
+    "message": "Twój adres dołączenia jest udostępniony znajomym."
+  },
   "octra.community.no-instance": {
     "message": "Utwórz lub zainstaluj instancję, zanim dołączysz do znajomego."
   },
@@ -3254,56 +3218,50 @@
   "octra.community.actions.label": {
     "message": "Akcje znajomego"
   },
-  "octra.chat.heading": {
-    "message": "Czat"
+  "octra.community.shared-heading": {
+    "message": "Wspólne serwery"
   },
-  "octra.chat.placeholder": {
-    "message": "Napisz wiadomość…"
+  "octra.community.shared-empty": {
+    "message": "Brak wspólnych serwerów."
   },
-  "octra.chat.send": {
-    "message": "Wyślij"
+  "octra.community.shared-name": {
+    "message": "Nazwa"
   },
-  "octra.chat.install-pack": {
-    "message": "Zainstaluj paczkę"
+  "octra.community.shared-address": {
+    "message": "Adres"
   },
-  "octra.chat.sign-in-hint": {
-    "message": "Zaloguj się na Octra, żeby korzystać z czatu."
+  "octra.community.shared-add": {
+    "message": "Dodaj serwer"
   },
-  "octra.chat.sign-in-action": {
-    "message": "Zaloguj się"
+  "octra.community.shared-add-success": {
+    "message": "Dodano wspólny serwer."
   },
-  "octra.chat.empty": {
-    "message": "Brak wiadomości. Napisz coś albo wklej link do paczki."
+  "octra.community.shared-join": {
+    "message": "Dołącz do serwera"
   },
-  "octra.chat.empty-channels": {
-    "message": "Brak rozmów."
+  "octra.community.shared-delete": {
+    "message": "Usuń serwer"
   },
-  "octra.chat.close": {
-    "message": "Zamknij czat"
+  "octra.chat.new-message-toast": {
+    "message": "Nowa wiadomość na czacie"
   },
-  "octra.chat.new-dm": {
-    "message": "Napisz do kogoś"
+  "octra.whats-new.title": {
+    "message": "Nowości w Octra {version}"
   },
-  "octra.chat.new-group": {
-    "message": "Nowa grupa"
+  "octra.whats-new.intro": {
+    "message": "Społecznościowe nowości w tej wersji:"
   },
-  "octra.chat.group-name": {
-    "message": "Nazwa grupy"
-  },
-  "octra.chat.create-group": {
-    "message": "Utwórz grupę"
-  },
-  "octra.chat.pick-members": {
-    "message": "Dodaj członków"
-  },
-  "octra.chat.conversations": {
-    "message": "Rozmowy"
-  },
-  "octra.chat.select-conversation": {
-    "message": "Wybierz rozmowę"
+  "octra.whats-new.dismiss": {
+    "message": "Rozumiem"
   },
   "app.nav.chat": {
     "message": "Czat"
+  },
+  "app.nav.identity-in-game": {
+    "message": "W grze · {name}"
+  },
+  "app.nav.identity-in-game-unknown": {
+    "message": "W grze"
   },
   "minecraft-required.description": {
     "message": "Zaloguj się kontem Microsoft albo graj offline z nickiem. Skin jest publikowany w chmurze Octra — Ty i znajomi zobaczycie go w grze bez dodatkowych modów. SkinsRestorer pozostaje opcjonalny na serwerach dedykowanych."
@@ -3316,9 +3274,6 @@
   },
   "minecraft-required.get-minecraft": {
     "message": "Zdobądź Minecraft"
-  },
-  "minecraft-required.get-support": {
-    "message": "Zdobądź pomoc techniczną"
   },
   "minecraft-required.header": {
     "message": "Logowanie do Octry"

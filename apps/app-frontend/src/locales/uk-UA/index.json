@@ -152,12 +152,6 @@
   "app.appearance-settings.compact-mode.title": {
     "message": "Компактний режим"
   },
-  "app.appearance-settings.default-landing-page.home": {
-    "message": "Головна"
-  },
-  "app.appearance-settings.default-landing-page.library": {
-    "message": "Бібліотека"
-  },
   "app.appearance-settings.hide-nametag.description": {
     "message": "Приховати ім'я користувача над попереднім переглядом у меню «Вибір скіна»."
   },
@@ -181,12 +175,6 @@
   },
   "app.appearance-settings.skip-non-essential-warnings.title": {
     "message": "Пропускати несуттєві попередження"
-  },
-  "app.appearance-settings.toggle-sidebar.description": {
-    "message": "Приховати праву бічну панель і додати кнопку для її перемикання."
-  },
-  "app.appearance-settings.toggle-sidebar.title": {
-    "message": "Приховати праву бічну панель"
   },
   "app.appearance-settings.unknown-pack-warning.description": {
     "message": "Показувати попередження про безпеку перед встановленням Modrinth Pack (.mrpack), який не розміщено на Modrinth."
@@ -1016,9 +1004,6 @@
   "app.nav.modrinth-account": {
     "message": "Обліковий запис Modrinth"
   },
-  "app.nav.modrinth-hosting": {
-    "message": "Modrinth Hosting"
-  },
   "app.nav.sign-in-to-modrinth-account": {
     "message": "Увійти в обліковий запис Modrinth"
   },
@@ -1184,12 +1169,6 @@
   "app.settings.privacy.discord-rich-presence.title": {
     "message": "Discord Rich Presence"
   },
-  "app.settings.privacy.telemetry.description": {
-    "message": "Modrinth збирає анонімізовану аналітику та дані про використання для покращення зручності та адаптації сервісу. Вимкнувши цю опцію, ви відмовляєтеся від збору, і ваші дані більше не збиратимуться."
-  },
-  "app.settings.privacy.telemetry.title": {
-    "message": "Телеметрія"
-  },
   "app.settings.resource-management.always-show-copy-details.description": {
     "message": "Показувати кнопку «Копіювати деталі», коли встановлення перебуває в черзі або виконується. Вона завжди доступна для невдалих або перерваних встановлень."
   },
@@ -1255,9 +1234,6 @@
   },
   "app.settings.tabs.java-installations": {
     "message": "Інсталяції Java"
-  },
-  "app.settings.tabs.language": {
-    "message": "Мова"
   },
   "app.settings.tabs.privacy": {
     "message": "Конфіденційність"
@@ -1579,9 +1555,6 @@
   },
   "friends.section.heading": {
     "message": "{title} — {count}"
-  },
-  "friends.sign-in-to-add-friends": {
-    "message": "<link>Увійдіть в обліковий запис Modrinth</link>, щоб додати друзів і бачити, у що вони грають!"
   },
   "installation-settings.shared-instance.linked-title": {
     "message": "Пов'язана спільна збірка"
@@ -2263,9 +2236,6 @@
   },
   "minecraft-required.get-minecraft": {
     "message": "Отримати Minecraft"
-  },
-  "minecraft-required.get-support": {
-    "message": "Отримати підтримку"
   },
   "minecraft-required.header": {
     "message": "Потрібний Minecraft"

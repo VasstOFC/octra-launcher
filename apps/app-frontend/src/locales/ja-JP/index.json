@@ -149,12 +149,6 @@
   "app.ads-consent.title": {
     "message": "プライバシーと広告がModrinthを支える仕組み"
   },
-  "app.appearance-settings.default-landing-page.home": {
-    "message": "ホーム"
-  },
-  "app.appearance-settings.default-landing-page.library": {
-    "message": "ライブラリ"
-  },
   "app.appearance-settings.hide-nametag.description": {
     "message": "スキン選択画面のプレイヤープレビュー上にあるユーザー名を非表示にします。"
   },
@@ -178,12 +172,6 @@
   },
   "app.appearance-settings.skip-non-essential-warnings.title": {
     "message": "重要でない警告をスキップ"
-  },
-  "app.appearance-settings.toggle-sidebar.description": {
-    "message": "右サイドバーをデフォルトで非表示にし、表示／非表示を切り替えるボタンを追加します。"
-  },
-  "app.appearance-settings.toggle-sidebar.title": {
-    "message": "右のサイドバーを隠す"
   },
   "app.appearance-settings.unknown-pack-warning.description": {
     "message": "Modrinth以外でホストされているModrinthパック（.mrpack）をインストールする前に、安全警告を表示します。"
@@ -770,9 +758,6 @@
   "app.nav.modrinth-account": {
     "message": "Modrinthアカウント"
   },
-  "app.nav.modrinth-hosting": {
-    "message": "Modrinth Hosting"
-  },
   "app.nav.sign-in-to-modrinth-account": {
     "message": "Modrinthアカウントにサインイン"
   },
@@ -920,12 +905,6 @@
   "app.settings.privacy.discord-rich-presence.title": {
     "message": "Discord Rich Presence"
   },
-  "app.settings.privacy.telemetry.description": {
-    "message": "Modrinthはユーザー体験の向上および最適化のために、匿名化されたアナリティクスと利用データを収集しています。このオプションをオフにすることで無効化（オプトアウト）され、以降データの収集は行われません。"
-  },
-  "app.settings.privacy.telemetry.title": {
-    "message": "テレメトリ"
-  },
   "app.settings.resource-management.always-show-copy-details.description": {
     "message": "インストールの保留中または実行中に「詳細をコピー」アクションを表示します。失敗または中断されたインストールでは常に利用可能です。"
   },
@@ -991,9 +970,6 @@
   },
   "app.settings.tabs.java-installations": {
     "message": "Javaのインストール設定"
-  },
-  "app.settings.tabs.language": {
-    "message": "言語"
   },
   "app.settings.tabs.privacy": {
     "message": "プライバシー設定"
@@ -1306,9 +1282,6 @@
   },
   "friends.section.heading": {
     "message": "{title} - {count}"
-  },
-  "friends.sign-in-to-add-friends": {
-    "message": "<link>Modrinthアカウントにサインイン</link>して友達を追加し、彼らがプレイしているゲームをチェックしよう！"
   },
   "installation-settings.shared-instance.linked-title": {
     "message": "リンク済の共有された起動構成"
@@ -1942,9 +1915,6 @@
   },
   "minecraft-required.get-minecraft": {
     "message": "Minecraft を入手する"
-  },
-  "minecraft-required.get-support": {
-    "message": "サポートを受ける"
   },
   "minecraft-required.header": {
     "message": "Minecraft が必要です"

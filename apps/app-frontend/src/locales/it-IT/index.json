@@ -155,12 +155,6 @@
   "app.appearance-settings.compact-mode.title": {
     "message": "Modalità compatta"
   },
-  "app.appearance-settings.default-landing-page.home": {
-    "message": "Home"
-  },
-  "app.appearance-settings.default-landing-page.library": {
-    "message": "Libreria"
-  },
   "app.appearance-settings.hide-nametag.description": {
     "message": "Nasconde il tuo nome dall'anteprima nella pagina del selettore skin."
   },
@@ -190,12 +184,6 @@
   },
   "app.appearance-settings.skip-non-essential-warnings.title": {
     "message": "Salta conferme meno importanti"
-  },
-  "app.appearance-settings.toggle-sidebar.description": {
-    "message": "Nasconde la barra laterale destra e aggiunge un pulsante per mostrarla."
-  },
-  "app.appearance-settings.toggle-sidebar.title": {
-    "message": "Barra laterale destra nascosta"
   },
   "app.appearance-settings.unknown-pack-warning.description": {
     "message": "Mostra un avviso prima di installare un Modrinth Pack (.mrpack) non proveniente da Modrinth."
@@ -1220,9 +1208,6 @@
   "app.nav.modrinth-account": {
     "message": "Account Modrinth"
   },
-  "app.nav.modrinth-hosting": {
-    "message": "Modrinth Hosting"
-  },
   "app.nav.sign-in-to-modrinth-account": {
     "message": "Accedi a un account Modrinth"
   },
@@ -1403,12 +1388,6 @@
   "app.settings.privacy.discord-rich-presence.title": {
     "message": "Rich Presence su Discord"
   },
-  "app.settings.privacy.telemetry.description": {
-    "message": "Modrinth raccoglie analitiche e dati anonimi per migliorare l'esperienza utente e personalizzarne la tua. Disabilitando questa opzione, i tuoi dati non saranno più raccolti."
-  },
-  "app.settings.privacy.telemetry.title": {
-    "message": "Telemetria"
-  },
   "app.settings.resource-management.always-show-copy-details.description": {
     "message": "Mostra il pulsante Copia info mentre un'installazione è in coda o in esecuzione. Verrà sempre mostrato dopo un errore o un'interruzione."
   },
@@ -1474,9 +1453,6 @@
   },
   "app.settings.tabs.java-installations": {
     "message": "Installazioni Java"
-  },
-  "app.settings.tabs.language": {
-    "message": "Lingua"
   },
   "app.settings.tabs.privacy": {
     "message": "Privacy"
@@ -1828,9 +1804,6 @@
   },
   "friends.section.heading": {
     "message": "{title} - {count}"
-  },
-  "friends.sign-in-to-add-friends": {
-    "message": "<link>Accedi a un account Modrinth</link> per stringere amicizie e sapere a cosa stanno giocando!"
   },
   "installation-settings.shared-instance.linked-title": {
     "message": "Istanza condivisa collegata"
@@ -2569,9 +2542,6 @@
   },
   "minecraft-required.get-minecraft": {
     "message": "Scarica Minecraft"
-  },
-  "minecraft-required.get-support": {
-    "message": "Assistenza"
   },
   "minecraft-required.header": {
     "message": "Minecraft richiesto"

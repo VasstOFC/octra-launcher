@@ -149,12 +149,6 @@
   "app.appearance-settings.compact-mode.title": {
     "message": "Kompakt läge"
   },
-  "app.appearance-settings.default-landing-page.home": {
-    "message": "Hem"
-  },
-  "app.appearance-settings.default-landing-page.library": {
-    "message": "Bibliotek"
-  },
   "app.appearance-settings.hide-nametag.title": {
     "message": "Dölj namnskylt"
   },
@@ -178,12 +172,6 @@
   },
   "app.appearance-settings.skip-non-essential-warnings.title": {
     "message": "Hoppa över icke nödvändiga varningar"
-  },
-  "app.appearance-settings.toggle-sidebar.description": {
-    "message": "Dölj det högra sidofältet och lägg till en knapp för att visa eller dölja det."
-  },
-  "app.appearance-settings.toggle-sidebar.title": {
-    "message": "Dölj högra sidofält"
   },
   "app.appearance-settings.unknown-pack-warning.description": {
     "message": "Visa en säkerhetsvarning innan du installerar ett Modrinth Pack (.mrpack) som inte finns på Modrinth."
@@ -1172,9 +1160,6 @@
   "app.nav.modrinth-account": {
     "message": "Modrinth-konto"
   },
-  "app.nav.modrinth-hosting": {
-    "message": "Modrinth Hosting"
-  },
   "app.nav.sign-in-to-modrinth-account": {
     "message": "Logga in till ett Modrinth-konto"
   },
@@ -1319,12 +1304,6 @@
   "app.settings.privacy.discord-rich-presence.description": {
     "message": "Visa Modrinth App som din nuvarande aktivitet på Discord. Detta påverkar inte Rich Presence som lagts till i instanser av moddar. Kräver en app omstart."
   },
-  "app.settings.privacy.telemetry.description": {
-    "message": "Modrinth samlar in anonymiserad statistik och användningsdata för att förbättra vår användarupplevelse och anpassa din upplevelse. Genom att inaktivera det här alternativet avanmäler du dig och din data kommer inte längre samlas in."
-  },
-  "app.settings.privacy.telemetry.title": {
-    "message": "Telemetri"
-  },
   "app.settings.resource-management.always-show-copy-details.title": {
     "message": "Visa alltid kopieringsdetaljer"
   },
@@ -1375,9 +1354,6 @@
   },
   "app.settings.tabs.java-installations": {
     "message": "Java-installationer"
-  },
-  "app.settings.tabs.language": {
-    "message": "Språk"
   },
   "app.settings.tabs.privacy": {
     "message": "Integritet"
@@ -1705,9 +1681,6 @@
   },
   "friends.section.heading": {
     "message": "{title} - {count}"
-  },
-  "friends.sign-in-to-add-friends": {
-    "message": "<link>Logga in på ett Modrinth-konto</link> för att lägga till vänner och se vad de spelar!"
   },
   "installation-settings.shared-instance.linked-title": {
     "message": "Länkad delad instans"
@@ -2401,9 +2374,6 @@
   },
   "minecraft-required.get-minecraft": {
     "message": "Skaffa Minecraft"
-  },
-  "minecraft-required.get-support": {
-    "message": "Få stöd"
   },
   "minecraft-required.header": {
     "message": "Minecraft behövs"

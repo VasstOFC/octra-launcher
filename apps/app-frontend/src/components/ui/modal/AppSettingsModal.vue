@@ -38,12 +38,12 @@ import {
 	appSettingsModalContextKey,
 	type UnsavedChangesController,
 } from '@/providers/app-settings-modal'
-import { injectAppUpdateDownloadProgress } from '@/providers/download-progress.ts'
 import {
 	appUpdateState,
 	checkForAppUpdatesManually,
 	type ManualUpdateCheckResult,
 } from '@/providers/app-update.ts'
+import { injectAppUpdateDownloadProgress } from '@/providers/download-progress.ts'
 
 // TODO: Apply COMPONENT_STRUCTURE.md here and extract out common setting option components
 const appSettings = useAppSettings()

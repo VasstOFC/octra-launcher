@@ -1,11 +1,8 @@
 <script setup lang="ts">
-import { PlusIcon } from '@modrinth/assets'
-import { Button, defineMessages, useVIntl } from '@modrinth/ui'
-import { inject } from 'vue'
+import { defineMessages, useVIntl } from '@modrinth/ui'
 
 import OctraWordmark from '@/components/brand/OctraWordmark.vue'
 
-const showCreationModal = inject<() => void>('showCreationModal')
 const { formatMessage } = useVIntl()
 
 const messages = defineMessages({
@@ -13,32 +10,17 @@ const messages = defineMessages({
 		id: 'app.home.hero.tagline',
 		defaultMessage: 'Your worlds. Your crew. One launcher.',
 	},
-	cta: {
-		id: 'app.home.hero.cta',
-		defaultMessage: 'New instance',
-	},
 })
 </script>
 
 <template>
 	<section class="home-hero relative isolate overflow-hidden" aria-label="Octra">
 		<div class="home-hero__glow" aria-hidden="true" />
-		<div class="relative z-[1] flex flex-wrap items-end justify-between gap-4 px-6 py-5">
-			<div class="min-w-0">
-				<OctraWordmark class="h-7 w-auto text-contrast" />
-				<p class="home-hero__tagline mt-2 mb-0 font-minecraft text-sm text-secondary">
-					{{ formatMessage(messages.tagline) }}
-				</p>
-			</div>
-			<Button
-				type="colored"
-				color="brand"
-				class="!shadow-none"
-				@click="showCreationModal?.()"
-			>
-				<PlusIcon />
-				{{ formatMessage(messages.cta) }}
-			</Button>
+		<div class="relative z-[1] min-w-0 px-6 py-5">
+			<OctraWordmark class="h-7 w-auto text-contrast" />
+			<p class="home-hero__tagline mt-2 mb-0 font-minecraft text-sm text-secondary">
+				{{ formatMessage(messages.tagline) }}
+			</p>
 		</div>
 	</section>
 </template>

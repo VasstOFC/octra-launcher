@@ -5,8 +5,8 @@ import { getPlayerHeadUrl } from '@/helpers/rendering/batch-skin-renderer'
 import {
 	get_available_skins,
 	get_profile_equipped_skin_texture,
-	skin_from_equipped_texture,
 	type Skin,
+	skin_from_equipped_texture,
 } from '@/helpers/skins'
 
 const STEVE_HEAD = 'https://launcher-files.modrinth.com/assets/steve_head.png'

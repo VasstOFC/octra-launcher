@@ -155,12 +155,6 @@
   "app.appearance-settings.compact-mode.title": {
     "message": "紧凑模式"
   },
-  "app.appearance-settings.default-landing-page.home": {
-    "message": "首页"
-  },
-  "app.appearance-settings.default-landing-page.library": {
-    "message": "库"
-  },
   "app.appearance-settings.hide-nametag.description": {
     "message": "在皮肤选择器页面的玩家预览上隐藏用户名。"
   },
@@ -190,12 +184,6 @@
   },
   "app.appearance-settings.skip-non-essential-warnings.title": {
     "message": "跳过非必要的警告"
-  },
-  "app.appearance-settings.toggle-sidebar.description": {
-    "message": "默认隐藏右侧边栏，并添加一个按钮来显示或隐藏它。"
-  },
-  "app.appearance-settings.toggle-sidebar.title": {
-    "message": "隐藏右侧边栏"
   },
   "app.appearance-settings.unknown-pack-warning.description": {
     "message": "在安装非 Modrinth 托管的 Modrinth 整合包文件 (.mrpack) 前显示安全警告。"
@@ -1226,9 +1214,6 @@
   "app.nav.modrinth-account": {
     "message": "Modrinth账户"
   },
-  "app.nav.modrinth-hosting": {
-    "message": "Modrinth Hosting"
-  },
   "app.nav.sign-in-to-modrinth-account": {
     "message": "登录Modrinth账户"
   },
@@ -1409,12 +1394,6 @@
   "app.settings.privacy.discord-rich-presence.title": {
     "message": "Discord Rich Presence"
   },
-  "app.settings.privacy.telemetry.description": {
-    "message": "Modrinth 收集匿名分析和使用数据，以提升用户体验并为您提供个性化服务。若禁用此选项，即表示您选择退出，您的数据将不再被收集。"
-  },
-  "app.settings.privacy.telemetry.title": {
-    "message": "遥测"
-  },
   "app.settings.resource-management.always-show-copy-details.description": {
     "message": "在安装排队或运行时显示“复制详细信息”选项。对于失败或中断的安装，该选项始终可用。"
   },
@@ -1480,9 +1459,6 @@
   },
   "app.settings.tabs.java-installations": {
     "message": "Java 管理"
-  },
-  "app.settings.tabs.language": {
-    "message": "语言"
   },
   "app.settings.tabs.privacy": {
     "message": "隐私"
@@ -1834,9 +1810,6 @@
   },
   "friends.section.heading": {
     "message": "{title} - {count}"
-  },
-  "friends.sign-in-to-add-friends": {
-    "message": "登录你的 <link>Modrinth 账号</link>，添加好友，看看他们在玩什么！"
   },
   "installation-settings.shared-instance.linked-title": {
     "message": "已关联的共享实例"
@@ -2575,9 +2548,6 @@
   },
   "minecraft-required.get-minecraft": {
     "message": "获取 Minecraft"
-  },
-  "minecraft-required.get-support": {
-    "message": "获取支持"
   },
   "minecraft-required.header": {
     "message": "需要 Minecraft"

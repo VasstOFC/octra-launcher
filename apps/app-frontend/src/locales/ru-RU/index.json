@@ -155,12 +155,6 @@
   "app.appearance-settings.compact-mode.title": {
     "message": "Компактный вид"
   },
-  "app.appearance-settings.default-landing-page.home": {
-    "message": "Главная"
-  },
-  "app.appearance-settings.default-landing-page.library": {
-    "message": "Библиотека"
-  },
   "app.appearance-settings.hide-nametag.description": {
     "message": "Скрывать имя над игроком на странице выбора скина."
   },
@@ -190,12 +184,6 @@
   },
   "app.appearance-settings.skip-non-essential-warnings.title": {
     "message": "Только опасные предупреждения"
-  },
-  "app.appearance-settings.toggle-sidebar.description": {
-    "message": "По умолчанию скрыть правую боковую панель и добавить кнопку, чтобы показать или скрыть ее."
-  },
-  "app.appearance-settings.toggle-sidebar.title": {
-    "message": "Скрытие панели справа"
   },
   "app.appearance-settings.unknown-pack-warning.description": {
     "message": "Предупреждать о рисках перед установкой файлов (.mrpack), не размещённых на Modrinth."
@@ -1205,9 +1193,6 @@
   "app.nav.modrinth-account": {
     "message": "Аккаунт Modrinth"
   },
-  "app.nav.modrinth-hosting": {
-    "message": "Modrinth Hosting"
-  },
   "app.nav.sign-in-to-modrinth-account": {
     "message": "Войти в аккаунт Modrinth"
   },
@@ -1388,12 +1373,6 @@
   "app.settings.privacy.discord-rich-presence.title": {
     "message": "Discord Rich Presence"
   },
-  "app.settings.privacy.telemetry.description": {
-    "message": "Modrinth собирает анонимные данные об использовании для персонализации и улучшения сервиса. Отключите этот параметр, чтобы отказаться от сбора данных."
-  },
-  "app.settings.privacy.telemetry.title": {
-    "message": "Телеметрия"
-  },
   "app.settings.resource-management.always-show-copy-details.description": {
     "message": "Показывать кнопку «Получить отчёт» во время установки. Для прерванных установок кнопка видна всегда."
   },
@@ -1459,9 +1438,6 @@
   },
   "app.settings.tabs.java-installations": {
     "message": "Расположение Java"
-  },
-  "app.settings.tabs.language": {
-    "message": "Язык"
   },
   "app.settings.tabs.privacy": {
     "message": "Конфиденциальность"
@@ -1813,9 +1789,6 @@
   },
   "friends.section.heading": {
     "message": "{title} — {count}"
-  },
-  "friends.sign-in-to-add-friends": {
-    "message": "<link>Войдите в аккаунт Modrinth</link>, чтобы добавлять друзей и следить за ними!"
   },
   "installation-settings.shared-instance.linked-title": {
     "message": "Отвязка совместной сборки"
@@ -2551,9 +2524,6 @@
   },
   "minecraft-required.get-minecraft": {
     "message": "Приобрести Minecraft"
-  },
-  "minecraft-required.get-support": {
-    "message": "Поддержка"
   },
   "minecraft-required.header": {
     "message": "Требуется Minecraft"

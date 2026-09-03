@@ -53,12 +53,6 @@
   "app.action-bar.view-logs": {
     "message": "Lihat log"
   },
-  "app.appearance-settings.default-landing-page.home": {
-    "message": "Laman utama"
-  },
-  "app.appearance-settings.default-landing-page.library": {
-    "message": "Pustaka"
-  },
   "app.appearance-settings.hide-nametag.title": {
     "message": "Sembunyikan tanda nama"
   },
@@ -323,9 +317,6 @@
   "app.settings.tabs.java-installations": {
     "message": "Pemasangan Java"
   },
-  "app.settings.tabs.language": {
-    "message": "Bahasa"
-  },
   "app.settings.tabs.privacy": {
     "message": "Privasi"
   },
@@ -526,9 +517,6 @@
   },
   "friends.section.heading": {
     "message": "{title} - {count}"
-  },
-  "friends.sign-in-to-add-friends": {
-    "message": "<link>Log masuk ke akaun Modrinth</link> untuk menambah rakan dan melihat apa yang mereka mainkan!"
   },
   "instance.add-server.add-and-play": {
     "message": "Tambah dan main"

@@ -462,11 +462,7 @@ defineOptions({
 
 	// Fade variants
 	&.standard {
-		background: linear-gradient(
-			to bottom,
-			rgba(48, 22, 52, 0.55) 0%,
-			rgba(16, 11, 22, 0.95) 100%
-		);
+		background: linear-gradient(to bottom, rgba(48, 22, 52, 0.55) 0%, rgba(16, 11, 22, 0.95) 100%);
 	}
 
 	&.warning {

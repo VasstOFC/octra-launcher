@@ -208,8 +208,8 @@ import {
 } from '@modrinth/ui'
 import { computed } from 'vue'
 
-import type { GameInstance } from '@/helpers/types'
 import { formatPlaytime } from '@/helpers/format-playtime.ts'
+import type { GameInstance } from '@/helpers/types'
 
 import InstanceHeaderServerMetadata from './instance-page-header-server-metadata.vue'
 

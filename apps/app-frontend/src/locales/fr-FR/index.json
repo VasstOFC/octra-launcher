@@ -155,12 +155,6 @@
   "app.appearance-settings.compact-mode.title": {
     "message": "Mode compact"
   },
-  "app.appearance-settings.default-landing-page.home": {
-    "message": "Accueil"
-  },
-  "app.appearance-settings.default-landing-page.library": {
-    "message": "Bibliothèque"
-  },
   "app.appearance-settings.hide-nametag.description": {
     "message": "Cache votre nom d'utilisateur au-dessus de la prévisualisation du joueur sur la page de sélection de Skins."
   },
@@ -190,12 +184,6 @@
   },
   "app.appearance-settings.skip-non-essential-warnings.title": {
     "message": "Cacher les alertes non essentielles"
-  },
-  "app.appearance-settings.toggle-sidebar.description": {
-    "message": "Cache la barre à droite par défaut et ajouter un bouton pour la montrer ou cacher."
-  },
-  "app.appearance-settings.toggle-sidebar.title": {
-    "message": "Cache la barre latérale droite"
   },
   "app.appearance-settings.unknown-pack-warning.description": {
     "message": "Montre un avertissement de sécurité avant d'installer un Modrinth Pack (.mrpack) qui n'est pas sur Modrinth."
@@ -1190,9 +1178,6 @@
   "app.nav.modrinth-account": {
     "message": "Compte Modrinth"
   },
-  "app.nav.modrinth-hosting": {
-    "message": "Modrinth Hosting"
-  },
   "app.nav.sign-in-to-modrinth-account": {
     "message": "Se connecter à un compte Modrinth"
   },
@@ -1370,12 +1355,6 @@
   "app.settings.privacy.discord-rich-presence.title": {
     "message": "Discord Rich Presence"
   },
-  "app.settings.privacy.telemetry.description": {
-    "message": "Modrinth collecte des données d'analyse et d'utilisation anonymes afin d'améliorer l'expérience utilisateur et de personnaliser votre expérience. En désactivant cette option, vous choisissez de ne plus participer et vos données ne seront plus collectées."
-  },
-  "app.settings.privacy.telemetry.title": {
-    "message": "Télémétrie"
-  },
   "app.settings.resource-management.always-show-copy-details.description": {
     "message": "Afficher l’action Copier les détails lorsqu’une installation est en attente ou en cours. Elle est toujours disponible pour les installations échouées ou interrompues."
   },
@@ -1441,9 +1420,6 @@
   },
   "app.settings.tabs.java-installations": {
     "message": "Installations de Java"
-  },
-  "app.settings.tabs.language": {
-    "message": "Langue"
   },
   "app.settings.tabs.privacy": {
     "message": "Confidentialité"
@@ -1774,9 +1750,6 @@
   },
   "friends.section.heading": {
     "message": "{title} - {count}"
-  },
-  "friends.sign-in-to-add-friends": {
-    "message": "<link>Créer un compte Modrinth</link> pour ajouter des amis et voir à quoi ils jouent !"
   },
   "installation-settings.shared-instance.linked-title": {
     "message": "Instance partagée liée"
@@ -2428,9 +2401,6 @@
   },
   "minecraft-required.get-minecraft": {
     "message": "Obtenir Minecraft"
-  },
-  "minecraft-required.get-support": {
-    "message": "Obtenir de l'aide"
   },
   "minecraft-required.header": {
     "message": "Minecraft requis"

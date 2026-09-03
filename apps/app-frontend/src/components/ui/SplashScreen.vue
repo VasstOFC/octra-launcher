@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import { injectLoadingState, defineMessages, useVIntl } from '@modrinth/ui'
+import { defineMessages, injectLoadingState, useVIntl } from '@modrinth/ui'
 import { ref, watch } from 'vue'
 
 import OctraMark from '@/components/brand/OctraMark.vue'

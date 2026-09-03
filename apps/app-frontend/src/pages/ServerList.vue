@@ -8,8 +8,8 @@ import {
 } from '@modrinth/assets'
 import {
 	Button,
-	IconButton,
 	defineMessages,
+	IconButton,
 	injectNotificationManager,
 	useVIntl,
 } from '@modrinth/ui'

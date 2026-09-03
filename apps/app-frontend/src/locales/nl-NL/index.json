@@ -149,12 +149,6 @@
   "app.ads-consent.title": {
     "message": "Je privacy en hoe advertenties Modrinth ondersteunen"
   },
-  "app.appearance-settings.default-landing-page.home": {
-    "message": "Start"
-  },
-  "app.appearance-settings.default-landing-page.library": {
-    "message": "Bibliotheek"
-  },
   "app.appearance-settings.hide-nametag.description": {
     "message": "Verberg je gebruikersnaam boven het voorbeeld van de speler op de Skinkiezer-pagina."
   },
@@ -178,12 +172,6 @@
   },
   "app.appearance-settings.skip-non-essential-warnings.title": {
     "message": "Niet-essentiële waarschuwingen overslaan"
-  },
-  "app.appearance-settings.toggle-sidebar.description": {
-    "message": "Verberg de rechterzijbalk standaard en voeg een knop toe om deze weer te geven of te verbergen."
-  },
-  "app.appearance-settings.toggle-sidebar.title": {
-    "message": "Rechterzijbalk verbergen"
   },
   "app.appearance-settings.unknown-pack-warning.description": {
     "message": "Geef een veiligheidswaarschuwing weer voordat een Modrinth-pakket (.mrpack) wordt geïnstalleerd dat niet op Modrinth wordt gehost."
@@ -752,9 +740,6 @@
   "app.nav.modrinth-account": {
     "message": "Modrinth-account"
   },
-  "app.nav.modrinth-hosting": {
-    "message": "Modrinth Hosting"
-  },
   "app.nav.sign-in-to-modrinth-account": {
     "message": "Meld je aan bij een Modrinth-account"
   },
@@ -902,12 +887,6 @@
   "app.settings.privacy.discord-rich-presence.title": {
     "message": "Discord Rich Presence"
   },
-  "app.settings.privacy.telemetry.description": {
-    "message": "Modrinth verzamelt geanonimiseerde analyse- en gebruiksgegevens om de gebruikerservaring te verbeteren en uw ervaring te personaliseren. Door deze optie uit te schakelen, meldt u zich af en worden uw gegevens niet langer verzameld."
-  },
-  "app.settings.privacy.telemetry.title": {
-    "message": "Telemetrie"
-  },
   "app.settings.resource-management.always-show-copy-details.description": {
     "message": "Geef de knop 'Details kopiëren' weer terwijl een installatie in de wachtrij staat of wordt uitgevoerd. Deze actie is altijd beschikbaar voor mislukte of onderbroken installaties."
   },
@@ -973,9 +952,6 @@
   },
   "app.settings.tabs.java-installations": {
     "message": "Java installaties"
-  },
-  "app.settings.tabs.language": {
-    "message": "Taal"
   },
   "app.settings.tabs.privacy": {
     "message": "Privacy"
@@ -1288,9 +1264,6 @@
   },
   "friends.section.heading": {
     "message": "{title} - {count}"
-  },
-  "friends.sign-in-to-add-friends": {
-    "message": "<link>Log in op een Modrinth-account</link> om vrienden toe te voegen en te zien wat zij spelen!"
   },
   "installation-settings.shared-instance.linked-title": {
     "message": "Gekoppelde gedeelde instantie"
@@ -1792,9 +1765,6 @@
   },
   "minecraft-required.get-minecraft": {
     "message": "Minecraft kopen"
-  },
-  "minecraft-required.get-support": {
-    "message": "Hulp krijgen"
   },
   "minecraft-required.header": {
     "message": "Minecraft vereist"

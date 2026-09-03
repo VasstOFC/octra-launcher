@@ -155,12 +155,6 @@
   "app.appearance-settings.compact-mode.title": {
     "message": "Modo compacto"
   },
-  "app.appearance-settings.default-landing-page.home": {
-    "message": "Inicio"
-  },
-  "app.appearance-settings.default-landing-page.library": {
-    "message": "Biblioteca"
-  },
   "app.appearance-settings.hide-nametag.description": {
     "message": "Oculta tu nombre de usuario por encima de la vista previa del jugador en la página de selector de skin."
   },
@@ -190,12 +184,6 @@
   },
   "app.appearance-settings.skip-non-essential-warnings.title": {
     "message": "Omitir advertencias no esenciales"
-  },
-  "app.appearance-settings.toggle-sidebar.description": {
-    "message": "Ocultar la barra lateral derecha por defecto y añadir un botón para mostrarla u ocultarla."
-  },
-  "app.appearance-settings.toggle-sidebar.title": {
-    "message": "Ocultar barra lateral derecha"
   },
   "app.appearance-settings.unknown-pack-warning.description": {
     "message": "Mostrar un aviso de seguridad antes de instalar un paquete Modrinth (.mrpack) que no esté alojado en el Modrinth."
@@ -1196,9 +1184,6 @@
   "app.nav.modrinth-account": {
     "message": "Cuenta Modrinth"
   },
-  "app.nav.modrinth-hosting": {
-    "message": "Modrinth Hosting"
-  },
   "app.nav.sign-in-to-modrinth-account": {
     "message": "Iniciar sesión en una cuenta de Modrinth"
   },
@@ -1349,9 +1334,6 @@
   "app.settings.privacy.discord-rich-presence.title": {
     "message": "Estado de la actividad en Discord"
   },
-  "app.settings.privacy.telemetry.title": {
-    "message": "Telemetría"
-  },
   "app.settings.resource-management.always-show-copy-details.title": {
     "message": "Mostrar siempre los detalles de la copia"
   },
@@ -1414,9 +1396,6 @@
   },
   "app.settings.tabs.java-installations": {
     "message": "Instalaciones de Java"
-  },
-  "app.settings.tabs.language": {
-    "message": "Idioma"
   },
   "app.settings.tabs.privacy": {
     "message": "Privacidad"
@@ -1768,9 +1747,6 @@
   },
   "friends.section.heading": {
     "message": "{title}: {count}"
-  },
-  "friends.sign-in-to-add-friends": {
-    "message": "<link>Inicia sesión en una cuenta Modrinth</link> para añadir amigos y ver a qué están jugando!"
   },
   "installation-settings.shared-instance.linked-title": {
     "message": "Instancia compartida enlazada"
@@ -2497,9 +2473,6 @@
   },
   "minecraft-required.get-minecraft": {
     "message": "Obtener Minecraft"
-  },
-  "minecraft-required.get-support": {
-    "message": "Obtener ayuda"
   },
   "minecraft-required.header": {
     "message": "Minecraft requerido"

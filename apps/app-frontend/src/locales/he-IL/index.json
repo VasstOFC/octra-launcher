@@ -38,9 +38,6 @@
   "app.action-bar.stop-instance": {
     "message": ""
   },
-  "app.appearance-settings.default-landing-page.library": {
-    "message": "ספרייה"
-  },
   "app.auth-servers.unreachable.body": {
     "message": "ייתכן ששרתי האימות של Minecraft מושבתים כרגע. יש לבדוק את חיבור האינטרנט שלך ולנסות שוב מאוחר יותר."
   },
@@ -179,9 +176,6 @@
   "app.settings.tabs.java-installations": {
     "message": "התקנות ג'אווה"
   },
-  "app.settings.tabs.language": {
-    "message": "שפה"
-  },
   "app.settings.tabs.privacy": {
     "message": "פרטיות"
   },
@@ -289,9 +283,6 @@
   },
   "friends.section.heading": {
     "message": "{title} - {count}"
-  },
-  "friends.sign-in-to-add-friends": {
-    "message": "אפשר <link>להתחבר לחשבון Modrinth</link> כדי להוסיף חברים ולראות במה הם משחקים!"
   },
   "instance.add-server.add-and-play": {
     "message": "הוסף ושחק"

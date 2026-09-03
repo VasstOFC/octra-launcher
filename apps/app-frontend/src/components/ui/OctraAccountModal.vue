@@ -78,12 +78,7 @@
 				<Button type="outlined" :disabled="loading" @click="hide">
 					{{ formatMessage(commonMessages.cancelButton) }}
 				</Button>
-				<Button
-					type="colored"
-					color="brand"
-					:disabled="loading || !canSubmit"
-					@click="submit"
-				>
+				<Button type="colored" color="brand" :disabled="loading || !canSubmit" @click="submit">
 					<SpinnerIcon v-if="loading" class="animate-spin" />
 					<LogInIcon v-else />
 					{{ formatMessage(mode === 'login' ? messages.loginTab : messages.registerTab) }}
@@ -99,23 +94,16 @@ import {
 	Button,
 	commonMessages,
 	defineMessages,
-	Input,
 	injectNotificationManager,
+	Input,
 	NewModal,
 	useVIntl,
 } from '@modrinth/ui'
 import { computed, ref } from 'vue'
 
 import { handleSevereError } from '@/composables/use-error.js'
-import {
-	get_default_user,
-	isOfflineAccount,
-	users,
-} from '@/helpers/auth'
-import {
-	octraAccountLogin,
-	octraAccountRegister,
-} from '@/helpers/octra-account.js'
+import { get_default_user, isOfflineAccount, users } from '@/helpers/auth'
+import { octraAccountLogin, octraAccountRegister } from '@/helpers/octra-account.js'
 
 const { formatMessage } = useVIntl()
 const { handleError, addNotification } = injectNotificationManager()
@@ -194,8 +182,7 @@ async function loadLinkedMinecraft() {
 		const defaultId = await get_default_user()
 		const userList = await users()
 		const list = Array.isArray(userList) ? userList : []
-		const selected =
-			list.find((account) => account?.profile?.id === defaultId) || list[0] || null
+		const selected = list.find((account) => account?.profile?.id === defaultId) || list[0] || null
 		if (selected?.profile?.name) {
 			linkedNick.value = selected.profile.name
 			linkedIsOffline.value = isOfflineAccount(selected)

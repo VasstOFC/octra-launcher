@@ -16,6 +16,7 @@ const USERNAME_KEY: &str = "octra_account_username";
 const MINECRAFT_NICK_KEY: &str = "octra_account_minecraft_nick";
 const PROFILE_UUID_KEY: &str = "octra_account_profile_uuid";
 const ACCOUNT_TYPE_KEY: &str = "octra_account_account_type";
+const SHARED_JOIN_ADDRESS_KEY: &str = "octra_shared_join_address";
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct OctraAccountSession {
@@ -292,13 +293,20 @@ pub async fn sync_presence() -> crate::Result<()> {
 	let state = State::get().await?;
 	let processes = state.process_manager.get_all();
 	if let Some(process) = processes.first() {
+		let shared = get_metadata(&state, SHARED_JOIN_ADDRESS_KEY).await?;
+		let join = process
+			.join_address
+			.clone()
+			.or(shared)
+			.filter(|value| !value.trim().is_empty());
 		publish_presence(
 			"ingame",
 			Some(&process.instance_name),
-			process.join_address.as_deref(),
+			join.as_deref(),
 		)
 		.await
 	} else {
+		let _ = set_metadata(&state, SHARED_JOIN_ADDRESS_KEY, "").await;
 		publish_presence("launcher", None, None).await
 	}
 }
@@ -332,7 +340,21 @@ pub struct OctraChatChannel {
 	#[serde(default)]
 	pub last_at: Option<String>,
 	#[serde(default)]
+	pub last_id: Option<i64>,
+	#[serde(default)]
+	pub last_read_id: i64,
+	#[serde(default)]
+	pub unread_count: i64,
+	#[serde(default)]
 	pub members: Vec<OctraChatMember>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct OctraChatReaction {
+	pub emoji: String,
+	pub count: i64,
+	#[serde(default)]
+	pub user_ids: Vec<i64>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -343,6 +365,23 @@ pub struct OctraChatMessage {
 	pub user_id: i64,
 	pub minecraft_nick: String,
 	pub body: String,
+	pub created_at: String,
+	#[serde(default)]
+	pub pinned: bool,
+	#[serde(default)]
+	pub deleted: bool,
+	#[serde(default)]
+	pub reactions: Vec<OctraChatReaction>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct OctraSharedServer {
+	pub id: i64,
+	pub name: String,
+	pub address: String,
+	pub created_by: i64,
+	#[serde(default)]
+	pub created_by_nick: Option<String>,
 	pub created_at: String,
 }
 
@@ -380,6 +419,25 @@ async fn chat_auth_post(
 		.post(&url)
 		.header("Authorization", format!("Bearer {}", session.token))
 		.json(body)
+		.timeout(Duration::from_secs(15))
+		.send()
+		.await
+		.map_err(|e| {
+			crate::ErrorKind::OtherError(format!("octra chat request failed: {e}")).into()
+		})
+}
+
+async fn chat_auth_delete(path: &str) -> crate::Result<reqwest::Response> {
+	let Some(session) = session().await? else {
+		return Err(crate::ErrorKind::OtherError(
+			"not signed in to Octra".to_string(),
+		)
+		.into());
+	};
+	let url = format!("{}{}", nervia::skins_url(), path);
+	INSECURE_REQWEST_CLIENT
+		.delete(&url)
+		.header("Authorization", format!("Bearer {}", session.token))
 		.timeout(Duration::from_secs(15))
 		.send()
 		.await
@@ -471,6 +529,114 @@ pub async fn chat_post(channel_id: i64, text: &str) -> crate::Result<OctraChatMe
 	serde_json::from_str(&text_body).map_err(|e| {
 		crate::ErrorKind::OtherError(format!("octra chat post parse failed: {e}")).into()
 	})
+}
+
+pub async fn chat_add_group_members(
+	channel_id: i64,
+	member_ids: &[i64],
+) -> crate::Result<OctraChatChannel> {
+	let response = chat_auth_post(
+		&format!("/api/v1/chat/channels/{channel_id}/members"),
+		&serde_json::json!({ "member_ids": member_ids }),
+	)
+	.await?;
+	let text = read_chat_error(response).await?;
+	serde_json::from_str(&text).map_err(|e| {
+		crate::ErrorKind::OtherError(format!("octra chat add members parse failed: {e}")).into()
+	})
+}
+
+pub async fn chat_mark_read(channel_id: i64, last_read_id: i64) -> crate::Result<()> {
+	let response = chat_auth_post(
+		&format!("/api/v1/chat/channels/{channel_id}/read"),
+		&serde_json::json!({ "last_read_id": last_read_id }),
+	)
+	.await?;
+	let _ = read_chat_error(response).await?;
+	Ok(())
+}
+
+pub async fn chat_delete_message(message_id: i64) -> crate::Result<OctraChatMessage> {
+	let response =
+		chat_auth_delete(&format!("/api/v1/chat/messages/{message_id}")).await?;
+	let text = read_chat_error(response).await?;
+	serde_json::from_str(&text).map_err(|e| {
+		crate::ErrorKind::OtherError(format!("octra chat delete parse failed: {e}")).into()
+	})
+}
+
+pub async fn chat_pin_message(message_id: i64, pinned: bool) -> crate::Result<OctraChatMessage> {
+	let response = chat_auth_post(
+		&format!("/api/v1/chat/messages/{message_id}/pin"),
+		&serde_json::json!({ "pinned": pinned }),
+	)
+	.await?;
+	let text = read_chat_error(response).await?;
+	serde_json::from_str(&text).map_err(|e| {
+		crate::ErrorKind::OtherError(format!("octra chat pin parse failed: {e}")).into()
+	})
+}
+
+pub async fn chat_react_message(
+	message_id: i64,
+	emoji: &str,
+) -> crate::Result<OctraChatMessage> {
+	let response = chat_auth_post(
+		&format!("/api/v1/chat/messages/{message_id}/reactions"),
+		&serde_json::json!({ "emoji": emoji }),
+	)
+	.await?;
+	let text = read_chat_error(response).await?;
+	serde_json::from_str(&text).map_err(|e| {
+		crate::ErrorKind::OtherError(format!("octra chat react parse failed: {e}")).into()
+	})
+}
+
+pub async fn share_join_address(address: &str) -> crate::Result<()> {
+	let trimmed = address.trim();
+	if trimmed.is_empty() {
+		return Err(crate::ErrorKind::OtherError("address required".into()).into());
+	}
+	let state = State::get().await?;
+	let processes = state.process_manager.get_all();
+	let instance_name = processes.first().map(|p| p.instance_name.clone());
+	if instance_name.is_none() {
+		return Err(crate::ErrorKind::OtherError(
+			"start minecraft before sharing an address".into(),
+		)
+		.into());
+	}
+	set_metadata(&state, SHARED_JOIN_ADDRESS_KEY, trimmed).await?;
+	publish_presence("ingame", instance_name.as_deref(), Some(trimmed)).await
+}
+
+pub async fn shared_servers_list() -> crate::Result<Vec<OctraSharedServer>> {
+	if session().await?.is_none() {
+		return Ok(Vec::new());
+	}
+	let response = chat_auth_get("/api/v1/servers").await?;
+	let text = read_chat_error(response).await?;
+	serde_json::from_str(&text).map_err(|e| {
+		crate::ErrorKind::OtherError(format!("octra servers parse failed: {e}")).into()
+	})
+}
+
+pub async fn shared_servers_add(name: &str, address: &str) -> crate::Result<OctraSharedServer> {
+	let response = chat_auth_post(
+		"/api/v1/servers",
+		&serde_json::json!({ "name": name, "address": address }),
+	)
+	.await?;
+	let text = read_chat_error(response).await?;
+	serde_json::from_str(&text).map_err(|e| {
+		crate::ErrorKind::OtherError(format!("octra servers add parse failed: {e}")).into()
+	})
+}
+
+pub async fn shared_servers_delete(server_id: i64) -> crate::Result<()> {
+	let response = chat_auth_delete(&format!("/api/v1/servers/{server_id}")).await?;
+	let _ = read_chat_error(response).await?;
+	Ok(())
 }
 
 pub async fn bearer_token() -> Option<String> {

@@ -35,7 +35,13 @@ import VirtualSkinSectionList from '@/components/ui/skin/VirtualSkinSectionList.
 import { useAppSettings } from '@/composables/use-app-settings.ts'
 import { handleSevereError } from '@/composables/use-error.js'
 import { trackEvent } from '@/helpers/analytics'
-import { check_reachable, get_default_user, isOfflineAccount, login as login_flow, users } from '@/helpers/auth'
+import {
+	check_reachable,
+	get_default_user,
+	isOfflineAccount,
+	login as login_flow,
+	users,
+} from '@/helpers/auth'
 import type { RenderResult } from '@/helpers/rendering/batch-skin-renderer.ts'
 import {
 	generateSkinPreviews,

@@ -99,3 +99,7 @@ packages/app-lib/java/bin/
 /test_result.md
 
 packages/tooling-config/script-utils/import-sort.js
+
+# Local Fabric skin experiment (not shipped)
+services/octra-skins-mod/
+

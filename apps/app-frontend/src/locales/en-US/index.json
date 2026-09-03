@@ -155,12 +155,6 @@
   "app.appearance-settings.compact-mode.title": {
     "message": "Compact mode"
   },
-  "app.appearance-settings.default-landing-page.home": {
-    "message": "Home"
-  },
-  "app.appearance-settings.default-landing-page.library": {
-    "message": "Library"
-  },
   "app.appearance-settings.hide-nametag.description": {
     "message": "Hide your username above the player preview on the Skin selector page."
   },
@@ -191,12 +185,6 @@
   "app.appearance-settings.skip-non-essential-warnings.title": {
     "message": "Skip non-essential warnings"
   },
-  "app.appearance-settings.toggle-sidebar.description": {
-    "message": "Hide the right sidebar by default and add a button to show or hide it."
-  },
-  "app.appearance-settings.toggle-sidebar.title": {
-    "message": "Hide right sidebar"
-  },
   "app.appearance-settings.unknown-pack-warning.description": {
     "message": "Show a safety warning before installing a Modrinth Pack (.mrpack) that isn't hosted on Modrinth."
   },
@@ -222,7 +210,7 @@
     "message": "Use these behavior settings everywhere you're signed in. Turn this off to keep separate settings on this device."
   },
   "app.behavior-settings.sync-across-devices.signed-out-tooltip": {
-    "message": "Sign into a Modrinth account to sync settings."
+    "message": "Octra accounts are coming later. You'll be able to sync settings then."
   },
   "app.behavior-settings.sync-across-devices.title": {
     "message": "Sync behavior across devices"
@@ -335,6 +323,9 @@
   "app.featured-pack.title": {
     "message": "Cobblemon Vasst"
   },
+  "app.home.hero.tagline": {
+    "message": "Your worlds. Your crew. One launcher."
+  },
   "app.home.jump-back-in.actions.label": {
     "message": "Instance actions"
   },
@@ -362,14 +353,8 @@
   "app.home.jump-back-in.view-instance": {
     "message": "View instance"
   },
-  "app.home.hero.cta": {
-    "message": "New instance"
-  },
-  "app.home.hero.tagline": {
-    "message": "Your worlds. Your crew. One launcher."
-  },
   "app.hosting.update-required.description": {
-    "message": "You need to update to use Modrinth Hosting through the Octra App"
+    "message": "You need to update to use Modrinth Hosting through the Modrinth App"
   },
   "app.hosting.update-required.download": {
     "message": "Download to update"
@@ -378,7 +363,7 @@
     "message": "Excited Modrinth Bot"
   },
   "app.hosting.update-required.title": {
-    "message": "Octra App update required"
+    "message": "Modrinth App update required"
   },
   "app.icon-editor.apply-icons-modal.apply-error": {
     "message": "Failed to apply random icons to instances."
@@ -393,7 +378,7 @@
     "message": "Close"
   },
   "app.icon-editor.apply-icons-modal.description": {
-    "message": "Create custom icons for your instances right in the Octra App. Mix and match backgrounds with symbols from Minecraft and popular mods!"
+    "message": "Create custom icons for your instances right in the Modrinth App. Mix and match backgrounds with symbols from Minecraft and popular mods!"
   },
   "app.icon-editor.apply-icons-modal.instances-without-icons": {
     "message": "{count, plural, one {# instance doesn’t} other {# instances don’t}} have icons yet. Want us to give {count, plural, one {it} other {them}} random ones to get started?"
@@ -1268,8 +1253,8 @@
   "app.nav.add-account": {
     "message": "Add account"
   },
-  "app.nav.brand-name": {
-    "message": "Octra App"
+  "app.nav.chat": {
+    "message": "Chat"
   },
   "app.nav.collapse-rail": {
     "message": "Collapse menu"
@@ -1289,6 +1274,12 @@
   "app.nav.home": {
     "message": "Home"
   },
+  "app.nav.identity-in-game": {
+    "message": "In game · {name}"
+  },
+  "app.nav.identity-in-game-unknown": {
+    "message": "In game"
+  },
   "app.nav.identity-minecraft-section": {
     "message": "Minecraft"
   },
@@ -1304,12 +1295,6 @@
   "app.nav.identity-tooltip": {
     "message": "MC · {minecraft} · Octra · {octra}"
   },
-  "app.nav.library": {
-    "message": "Library"
-  },
-  "app.nav.library-count": {
-    "message": "{count, plural, one {# profile in library} other {# profiles in library}}"
-  },
   "app.nav.library-empty": {
     "message": "No instances yet"
   },
@@ -1320,10 +1305,7 @@
     "message": "Locker"
   },
   "app.nav.modrinth-account": {
-    "message": "Modrinth account"
-  },
-  "app.nav.modrinth-hosting": {
-    "message": "Modrinth Hosting"
+    "message": "Octra account"
   },
   "app.nav.pack-gallery": {
     "message": "Pack gallery"
@@ -1646,8 +1628,44 @@
   "app.servers.title": {
     "message": "Servers"
   },
+  "app.settings.accent.custom": {
+    "message": "Custom"
+  },
+  "app.settings.accent.custom-color-label": {
+    "message": "Custom accent color"
+  },
+  "app.settings.accent.description": {
+    "message": "Change the accent color used for buttons, highlights, and glow effects."
+  },
+  "app.settings.accent.preset.aurora": {
+    "message": "Aurora"
+  },
+  "app.settings.accent.preset.cobalt": {
+    "message": "Cobalt"
+  },
+  "app.settings.accent.preset.ember": {
+    "message": "Ember"
+  },
+  "app.settings.accent.preset.mint": {
+    "message": "Mint"
+  },
+  "app.settings.accent.preset.octra": {
+    "message": "Octra"
+  },
+  "app.settings.accent.preset.rose": {
+    "message": "Rose"
+  },
+  "app.settings.accent.title": {
+    "message": "Accent color"
+  },
   "app.settings.app-version": {
     "message": "Octra App {version}"
+  },
+  "app.settings.check-for-updates": {
+    "message": "Check for updates"
+  },
+  "app.settings.checking-for-updates": {
+    "message": "Checking for updates…"
   },
   "app.settings.default-instance-options.environment-variables.description": {
     "message": "Environment variables set when launching an instance."
@@ -1763,12 +1781,6 @@
   "app.settings.privacy.discord-rich-presence.title": {
     "message": "Discord Rich Presence"
   },
-  "app.settings.privacy.telemetry.description": {
-    "message": "Modrinth collects anonymized analytics and usage data to improve our user experience and customize your experience. By disabling this option, you opt out and your data will no longer be collected."
-  },
-  "app.settings.privacy.telemetry.title": {
-    "message": "Telemetry"
-  },
   "app.settings.resource-management.always-show-copy-details.description": {
     "message": "Show the Copy details action while an install is queued or running. It is always available for failed or interrupted installs."
   },
@@ -1877,9 +1889,6 @@
   "app.settings.tabs.java-installations": {
     "message": "Java installations"
   },
-  "app.settings.tabs.language": {
-    "message": "Language"
-  },
   "app.settings.tabs.privacy": {
     "message": "Privacy"
   },
@@ -1889,11 +1898,20 @@
   "app.settings.tabs.synced-options": {
     "message": "Synced settings"
   },
+  "app.settings.update-already-latest": {
+    "message": "You are on the latest version."
+  },
+  "app.settings.update-available": {
+    "message": "Version {version} is available."
+  },
+  "app.settings.update-check-failed": {
+    "message": "Could not check for updates. Try again later."
+  },
+  "app.settings.updates-disabled": {
+    "message": "Automatic updates are only available in release builds."
+  },
   "app.sidebar.playing-as": {
     "message": "Playing as"
-  },
-  "app.splash.tagline": {
-    "message": "Ready when you are"
   },
   "app.skins.add-button": {
     "message": "Add skin"
@@ -2057,8 +2075,11 @@
   "app.skins.toggle-ears-features-on": {
     "message": "Toggle on"
   },
+  "app.splash.tagline": {
+    "message": "Ready when you are"
+  },
   "app.survey.body": {
-    "message": "Would you mind answering a few questions about your experience with Octra App?"
+    "message": "Would you mind answering a few questions about your experience with Modrinth App?"
   },
   "app.survey.footer": {
     "message": "This feedback will go directly to the Modrinth team and help guide future updates!"
@@ -2241,7 +2262,7 @@
     "message": "{title} - {count}"
   },
   "friends.sign-in-to-add-friends": {
-    "message": "<link>Sign in to a Modrinth account</link> to add friends and see what they're playing!"
+    "message": "Octra accounts are coming later. Friends will be available then."
   },
   "installation-settings.shared-instance.linked-title": {
     "message": "Linked shared instance"
@@ -2277,7 +2298,7 @@
     "message": "Unlink shared instance"
   },
   "installation-settings.unpublish-shared-instance.modal.admonition-body": {
-    "message": "This deletes the shared instance from Modrinth's servers. People using it in the Octra App will stop receiving updates, but your local instance and its content will stay on this device."
+    "message": "This deletes the shared instance from Modrinth's servers. People using it in the Modrinth App will stop receiving updates, but your local instance and its content will stay on this device."
   },
   "installation-settings.unpublish-shared-instance.modal.admonition-header": {
     "message": "Unpublishing shared instance"
@@ -2329,6 +2350,18 @@
   },
   "instance.add-server.title": {
     "message": "Add a server"
+  },
+  "instance.badge.locked": {
+    "message": "Locked"
+  },
+  "instance.badge.locked-aria": {
+    "message": "Locked instance information"
+  },
+  "instance.badge.shared": {
+    "message": "Shared"
+  },
+  "instance.badge.shared-aria": {
+    "message": "Shared instance information"
   },
   "instance.edit-server.title": {
     "message": "Edit server"
@@ -2576,17 +2609,8 @@
   "instance.locked.play-tooltip": {
     "message": "This instance has been locked"
   },
-  "instance.playtime.never-played": {
-    "message": "Never played"
-  },
-  "instance.playtime.hours": {
-    "message": "{count, plural, one {# hour} other {# hours}}"
-  },
-  "instance.playtime.minutes": {
-    "message": "{count, plural, one {# minute} other {# minutes}}"
-  },
-  "instance.playtime.seconds": {
-    "message": "{count, plural, one {# second} other {# seconds}}"
+  "instance.metadata.last-played-tooltip": {
+    "message": "Last played"
   },
   "instance.metadata.loader-tooltip": {
     "message": "Mod loader and Minecraft version"
@@ -2594,23 +2618,17 @@
   "instance.metadata.playtime-tooltip": {
     "message": "Total playtime"
   },
-  "instance.metadata.last-played-tooltip": {
-    "message": "Last played"
+  "instance.playtime.hours": {
+    "message": "{count, plural, one {# hour} other {# hours}}"
   },
-  "instance.badge.locked": {
-    "message": "Locked"
+  "instance.playtime.minutes": {
+    "message": "{count, plural, one {# minute} other {# minutes}}"
   },
-  "instance.badge.shared": {
-    "message": "Shared"
+  "instance.playtime.never-played": {
+    "message": "Never played"
   },
-  "instance.badge.locked-aria": {
-    "message": "Locked instance information"
-  },
-  "instance.badge.shared-aria": {
-    "message": "Shared instance information"
-  },
-  "instance.backup.name-prefix": {
-    "message": "{name} - Backup #"
+  "instance.playtime.seconds": {
+    "message": "{count, plural, one {# second} other {# seconds}}"
   },
   "instance.server-modal.address": {
     "message": "Address"
@@ -3077,9 +3095,6 @@
   "minecraft-account.label": {
     "message": "Minecraft account"
   },
-  "minecraft-account.manage": {
-    "message": "Manage accounts"
-  },
   "minecraft-account.non-premium": {
     "message": "Non-premium"
   },
@@ -3088,9 +3103,6 @@
   },
   "minecraft-account.offline-nick": {
     "message": "Offline nickname"
-  },
-  "minecraft-account.or-play-offline": {
-    "message": "Or play offline"
   },
   "minecraft-account.play-offline": {
     "message": "Play offline"
@@ -3104,159 +3116,6 @@
   "minecraft-account.sign-in": {
     "message": "Log in to Octra"
   },
-  "octra-account.hint": {
-    "message": "Octra links skins to your Minecraft account — it does not create one. Add Microsoft or offline first."
-  },
-  "octra-account.label": {
-    "message": "Octra account"
-  },
-  "octra-account.login": {
-    "message": "Log in"
-  },
-  "octra-account.login-success": {
-    "message": "Logged in to Octra"
-  },
-  "octra-account.logout": {
-    "message": "Log out"
-  },
-  "octra-account.linked-minecraft": {
-    "message": "Minecraft account"
-  },
-  "octra-account.minecraft-nick": {
-    "message": "Minecraft nickname"
-  },
-  "octra-account.no-minecraft": {
-    "message": "Add a Microsoft or offline Minecraft account first."
-  },
-  "octra-account.password": {
-    "message": "Password"
-  },
-  "octra-account.register": {
-    "message": "Connect"
-  },
-  "octra-account.register-hint": {
-    "message": "Octra links to your current Minecraft account for skins. It does not create a Minecraft account."
-  },
-  "octra-account.register-success": {
-    "message": "Octra account linked"
-  },
-  "octra-account.title": {
-    "message": "Octra account"
-  },
-  "octra-account.username": {
-    "message": "Minecraft nickname"
-  },
-  "octra.community.count": {
-    "message": "{count, plural, one {# player} other {# players}}"
-  },
-  "octra.community.connected": {
-    "message": "Connected"
-  },
-  "octra.community.disconnected": {
-    "message": "Disconnected"
-  },
-  "octra.community.empty": {
-    "message": "You don't have any friends yet :("
-  },
-  "octra.community.heading": {
-    "message": "Friends"
-  },
-  "octra.community.in-game": {
-    "message": "Playing: {name}"
-  },
-  "octra.community.in-game-unknown": {
-    "message": "In game"
-  },
-  "octra.community.in-launcher": {
-    "message": "In the launcher"
-  },
-  "octra.community.last-seen": {
-    "message": "Last seen {time}"
-  },
-  "octra.community.load-error": {
-    "message": "Could not load friends. Check that you are signed in to Octra."
-  },
-  "octra.community.no-match": {
-    "message": "No friends matching ''{query}''"
-  },
-  "octra.community.offline": {
-    "message": "Offline"
-  },
-  "octra.community.register-action": {
-    "message": "Connect account"
-  },
-  "octra.community.search": {
-    "message": "Search friends..."
-  },
-  "octra.community.sign-in": {
-    "message": "Sign in to Octra to see everyone who plays with this launcher."
-  },
-  "octra.community.sign-in-action": {
-    "message": "Log in"
-  },
-  "octra.community.join": {
-    "message": "Join"
-  },
-  "octra.community.no-instance": {
-    "message": "Create or install an instance before joining a friend."
-  },
-  "octra.community.message-player": {
-    "message": "Message player"
-  },
-  "octra.community.actions.label": {
-    "message": "Friend actions"
-  },
-  "octra.chat.heading": {
-    "message": "Chat"
-  },
-  "octra.chat.placeholder": {
-    "message": "Write a message…"
-  },
-  "octra.chat.send": {
-    "message": "Send"
-  },
-  "octra.chat.install-pack": {
-    "message": "Install pack"
-  },
-  "octra.chat.sign-in-hint": {
-    "message": "Sign in to Octra to use chat."
-  },
-  "octra.chat.sign-in-action": {
-    "message": "Log in"
-  },
-  "octra.chat.empty": {
-    "message": "No messages yet. Say hi or share a pack link."
-  },
-  "octra.chat.empty-channels": {
-    "message": "No conversations yet."
-  },
-  "octra.chat.close": {
-    "message": "Close chat"
-  },
-  "octra.chat.new-dm": {
-    "message": "Message someone"
-  },
-  "octra.chat.new-group": {
-    "message": "New group"
-  },
-  "octra.chat.group-name": {
-    "message": "Group name"
-  },
-  "octra.chat.create-group": {
-    "message": "Create group"
-  },
-  "octra.chat.pick-members": {
-    "message": "Add members"
-  },
-  "octra.chat.conversations": {
-    "message": "Conversations"
-  },
-  "octra.chat.select-conversation": {
-    "message": "Select a conversation"
-  },
-  "app.nav.chat": {
-    "message": "Chat"
-  },
   "minecraft-required.description": {
     "message": "Sign in with Microsoft, or play offline with a nickname. Your skin is published to the Octra cloud so you and friends see it in-game — no extra mods required. SkinsRestorer remains optional for dedicated servers."
   },
@@ -3268,9 +3127,6 @@
   },
   "minecraft-required.get-minecraft": {
     "message": "Get Minecraft"
-  },
-  "minecraft-required.get-support": {
-    "message": "Get support"
   },
   "minecraft-required.header": {
     "message": "Log in to Octra"
@@ -3320,6 +3176,246 @@
   "modal.modrinth-account-required.waiting-for-browser": {
     "message": "Waiting for browser confirmation..."
   },
+  "octra-account.hint": {
+    "message": "Octra links skins to your Minecraft account — it does not create one. Add Microsoft or offline first."
+  },
+  "octra-account.label": {
+    "message": "Octra account"
+  },
+  "octra-account.linked-minecraft": {
+    "message": "Minecraft account"
+  },
+  "octra-account.login": {
+    "message": "Log in"
+  },
+  "octra-account.login-success": {
+    "message": "Logged in to Octra"
+  },
+  "octra-account.logout": {
+    "message": "Log out"
+  },
+  "octra-account.no-minecraft": {
+    "message": "Add a Microsoft or offline Minecraft account first."
+  },
+  "octra-account.password": {
+    "message": "Password"
+  },
+  "octra-account.register": {
+    "message": "Connect"
+  },
+  "octra-account.register-hint": {
+    "message": "Octra links to your current Minecraft account for skins. It does not create a Minecraft account."
+  },
+  "octra-account.register-success": {
+    "message": "Octra account linked"
+  },
+  "octra-account.title": {
+    "message": "Octra account"
+  },
+  "octra-account.username": {
+    "message": "Minecraft nickname"
+  },
+  "octra.chat.close": {
+    "message": "Close chat"
+  },
+  "octra.chat.conversations": {
+    "message": "Conversations"
+  },
+  "octra.chat.create-group": {
+    "message": "Create group"
+  },
+  "octra.chat.delete": {
+    "message": "Delete"
+  },
+  "octra.chat.empty": {
+    "message": "No messages yet. Say hi or share a pack link."
+  },
+  "octra.chat.empty-channels": {
+    "message": "No conversations yet."
+  },
+  "octra.chat.group-name": {
+    "message": "Group name"
+  },
+  "octra.chat.heading": {
+    "message": "Chat"
+  },
+  "octra.chat.install-cancel": {
+    "message": "Cancel"
+  },
+  "octra.chat.install-confirm": {
+    "message": "Install"
+  },
+  "octra.chat.install-pack": {
+    "message": "Install pack"
+  },
+  "octra.chat.install-preview-loading": {
+    "message": "Loading pack preview…"
+  },
+  "octra.chat.install-preview-meta": {
+    "message": "{gameVersion} · {modloader}"
+  },
+  "octra.chat.install-preview-title": {
+    "message": "Install {name}?"
+  },
+  "octra.chat.invite-confirm": {
+    "message": "Add to group"
+  },
+  "octra.chat.invite-members": {
+    "message": "Invite members"
+  },
+  "octra.chat.message-deleted": {
+    "message": "Message deleted"
+  },
+  "octra.chat.new-dm": {
+    "message": "Message someone"
+  },
+  "octra.chat.new-group": {
+    "message": "New group"
+  },
+  "octra.chat.new-message-toast": {
+    "message": "New chat message"
+  },
+  "octra.chat.pick-members": {
+    "message": "Add members"
+  },
+  "octra.chat.pin": {
+    "message": "Pin"
+  },
+  "octra.chat.pinned": {
+    "message": "Pinned"
+  },
+  "octra.chat.placeholder": {
+    "message": "Write a message…"
+  },
+  "octra.chat.select-conversation": {
+    "message": "Select a conversation"
+  },
+  "octra.chat.send": {
+    "message": "Send"
+  },
+  "octra.chat.sign-in-action": {
+    "message": "Log in"
+  },
+  "octra.chat.sign-in-hint": {
+    "message": "Sign in to Octra to use chat."
+  },
+  "octra.chat.unpin": {
+    "message": "Unpin"
+  },
+  "octra.chat.unread": {
+    "message": "{count} unread"
+  },
+  "octra.community.actions.label": {
+    "message": "Friend actions"
+  },
+  "octra.community.connected": {
+    "message": "Connected"
+  },
+  "octra.community.count": {
+    "message": "{count, plural, one {# player} other {# players}}"
+  },
+  "octra.community.disconnected": {
+    "message": "Disconnected"
+  },
+  "octra.community.empty": {
+    "message": "You don't have any friends yet :("
+  },
+  "octra.community.friend-in-game": {
+    "message": "{nick} is in game"
+  },
+  "octra.community.heading": {
+    "message": "Friends"
+  },
+  "octra.community.in-game": {
+    "message": "Playing: {name}"
+  },
+  "octra.community.in-game-unknown": {
+    "message": "In game"
+  },
+  "octra.community.in-launcher": {
+    "message": "In the launcher"
+  },
+  "octra.community.join": {
+    "message": "Join"
+  },
+  "octra.community.last-seen": {
+    "message": "Last seen {time}"
+  },
+  "octra.community.message-player": {
+    "message": "Message player"
+  },
+  "octra.community.no-instance": {
+    "message": "Create or install an instance before joining a friend."
+  },
+  "octra.community.no-match": {
+    "message": "No friends matching ''{query}''"
+  },
+  "octra.community.offline": {
+    "message": "Offline"
+  },
+  "octra.community.play-with": {
+    "message": "Play with"
+  },
+  "octra.community.play-with-toast": {
+    "message": "Joining {nick}…"
+  },
+  "octra.community.register-action": {
+    "message": "Connect account"
+  },
+  "octra.community.search": {
+    "message": "Search friends..."
+  },
+  "octra.community.share-ip": {
+    "message": "Share my server IP…"
+  },
+  "octra.community.share-ip-action": {
+    "message": "Share IP"
+  },
+  "octra.community.share-ip-placeholder": {
+    "message": "play.example.com:25565"
+  },
+  "octra.community.share-ip-success": {
+    "message": "Your join address is shared with friends."
+  },
+  "octra.community.shared-add": {
+    "message": "Add server"
+  },
+  "octra.community.shared-add-success": {
+    "message": "Shared server added."
+  },
+  "octra.community.shared-address": {
+    "message": "Address"
+  },
+  "octra.community.shared-delete": {
+    "message": "Delete server"
+  },
+  "octra.community.shared-empty": {
+    "message": "No shared servers yet."
+  },
+  "octra.community.shared-heading": {
+    "message": "Shared servers"
+  },
+  "octra.community.shared-join": {
+    "message": "Join server"
+  },
+  "octra.community.shared-name": {
+    "message": "Name"
+  },
+  "octra.community.sign-in": {
+    "message": "Sign in to Octra to see everyone who plays with this launcher."
+  },
+  "octra.community.sign-in-action": {
+    "message": "Log in"
+  },
+  "octra.whats-new.dismiss": {
+    "message": "Got it"
+  },
+  "octra.whats-new.intro": {
+    "message": "Social sprint highlights in this build:"
+  },
+  "octra.whats-new.title": {
+    "message": "What's new in Octra {version}"
+  },
   "onboarding-checklist.create-instance": {
     "message": "Create first instance"
   },
@@ -3327,7 +3423,7 @@
     "message": "Sign in to Octra"
   },
   "onboarding-checklist.login-modrinth": {
-    "message": "Sign in to Modrinth"
+    "message": "Octra account (coming soon)"
   },
   "onboarding-checklist.title": {
     "message": "Getting started"

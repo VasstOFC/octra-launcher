@@ -10,7 +10,6 @@ import {
 } from '@modrinth/api-client'
 import {
 	ArrowBigUpDashIcon,
-	ArrowLeftRightIcon,
 	ChevronLeftIcon,
 	ChevronRightIcon,
 	CompassIcon,
@@ -24,19 +23,16 @@ import {
 	RefreshCwIcon,
 	SettingsIcon,
 	ShirtIcon,
-	ToggleRightIcon,
 	TrashIcon,
 	UserIcon,
 	UserPlusIcon,
 	UsersIcon,
-	XIcon,
 } from '@modrinth/assets'
 import {
 	AccountSwitchOverlay,
 	Admonition,
 	Avatar,
 	commonMessages,
-	commonSettingsMessages,
 	ContentInstallModal,
 	ContentUpdaterModal,
 	CreationFlowModal,
@@ -55,7 +51,6 @@ import {
 	useDebugLogger,
 	useFormatBytes,
 	useHostingIntercom,
-	UserRoleIcon,
 	useVIntl,
 } from '@modrinth/ui'
 import { renderString } from '@modrinth/utils'
@@ -69,16 +64,16 @@ import { openUrl } from '@tauri-apps/plugin-opener'
 import { type } from '@tauri-apps/plugin-os'
 import { saveWindowState, StateFlags } from '@tauri-apps/plugin-window-state'
 import { computed, nextTick, onMounted, onUnmounted, provide, ref, watch } from 'vue'
-import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
+import { RouterView, useRoute, useRouter } from 'vue-router'
 
+import OctraWordmark from '@/components/brand/OctraWordmark.vue'
 import AccountsCard from '@/components/ui/AccountsCard.vue'
-import OctraCommunityList from '@/components/ui/friends/OctraCommunityList.vue'
-import OctraChatPanel from '@/components/ui/friends/OctraChatPanel.vue'
 import AddOfflineAccountModal from '@/components/ui/AddOfflineAccountModal.vue'
-import OctraAccountModal from '@/components/ui/OctraAccountModal.vue'
 import AppActionBar from '@/components/ui/AppActionBar.vue'
 import Breadcrumbs from '@/components/ui/Breadcrumbs.vue'
 import ErrorModal from '@/components/ui/ErrorModal.vue'
+import OctraChatPanel from '@/components/ui/friends/OctraChatPanel.vue'
+import OctraCommunityList from '@/components/ui/friends/OctraCommunityList.vue'
 import HostingUpdateRequired from '@/components/ui/HostingUpdateRequired.vue'
 import AddServerToInstanceModal from '@/components/ui/install_flow/AddServerToInstanceModal.vue'
 import UnknownPackWarningModal from '@/components/ui/install_flow/UnknownPackWarningModal.vue'
@@ -91,27 +86,26 @@ import ModpackAlreadyInstalledModal from '@/components/ui/modal/ModpackAlreadyIn
 import ModrinthAccountRequiredModal from '@/components/ui/modal/ModrinthAccountRequiredModal.vue'
 import UpdateToPlayModal from '@/components/ui/modal/UpdateToPlayModal.vue'
 import NavButton from '@/components/ui/NavButton.vue'
-import OctraWordmark from '@/components/brand/OctraWordmark.vue'
 import NewIconEditorNotification from '@/components/ui/new-icon-editor-notification/index.vue'
 import { shouldShowNewIconEditorNotification } from '@/components/ui/new-icon-editor-notification/show-notification'
+import OctraAccountModal from '@/components/ui/OctraAccountModal.vue'
 import PromotionWrapper from '@/components/ui/PromotionWrapper.vue'
 import QuickInstanceSwitcher from '@/components/ui/QuickInstanceSwitcher.vue'
 import SharedInstanceInviteHandler from '@/components/ui/shared-instances/shared-instance-invite-handler/index.vue'
 import SplashScreen from '@/components/ui/SplashScreen.vue'
 import SurveyPopup from '@/components/ui/SurveyPopup.vue'
+import WhatsNewModal from '@/components/ui/WhatsNewModal.vue'
 import WindowControls from '@/components/ui/WindowControls.vue'
 import { useCheckDisableMouseover } from '@/composables/macCssFix.js'
+import { bootstrapAccent } from '@/composables/use-accent.ts'
 import { useAppEvent } from '@/composables/use-app-event'
 import { useAppSettings } from '@/composables/use-app-settings.ts'
 import { useError } from '@/composables/use-error.js'
+import { useMinecraftAccountAvatar } from '@/composables/use-minecraft-account-avatar.ts'
 import { isDarkTheme, useTheme } from '@/composables/use-theme.ts'
 import { config } from '@/config'
-import { getAccountAppearance, rememberAccountAppearance } from '@/helpers/account-appearance.ts'
-import {
-	hide_ads_window,
-	release_ads_window_hold,
-	take_ads_window_hold,
-} from '@/helpers/ads.js'
+import { rememberAccountAppearance } from '@/helpers/account-appearance.ts'
+import { hide_ads_window, release_ads_window_hold, take_ads_window_hold } from '@/helpers/ads.js'
 import { trackEvent } from '@/helpers/analytics'
 import {
 	check_reachable,
@@ -122,26 +116,25 @@ import {
 	set_default_user,
 	users as listMinecraftUsers,
 } from '@/helpers/auth.js'
-import { get_user, get_user_many, get_version } from '@/helpers/cache.js'
+import { get_user, get_version } from '@/helpers/cache.js'
 import { install_create_modpack_instance, install_get_modpack_preview } from '@/helpers/install'
 import {
 	can_current_user_use_shared_instances,
 	get as getInstance,
 	get_global_synced_options,
+	list as listInstances,
 	run,
 } from '@/helpers/instance'
+import { get as getCreds, removeUser } from '@/helpers/mr_auth.ts'
 import {
-	get as getCreds,
-	getAll as getAllCreds,
-	logout,
-	removeUser,
-	setActive,
-} from '@/helpers/mr_auth.ts'
-import { octraAccountLogout, octraAccountSession } from '@/helpers/octra-account.js'
+	octraAccountLogout,
+	octraAccountSession,
+	octraChatChannels,
+} from '@/helpers/octra-account.js'
+import { get_all as getAllProcesses } from '@/helpers/process'
 import { mergeUrlQuery, parseModrinthLink } from '@/helpers/project-links.ts'
 import { get as getSettings, set as setSettings } from '@/helpers/settings.ts'
 import { get_opening_command, initialize_state } from '@/helpers/state'
-import { get_user_preferences } from '@/helpers/user-preferences.ts'
 import { parse_modrinth_user_link } from '@/helpers/users'
 import {
 	areUpdatesEnabled,
@@ -179,8 +172,6 @@ import { setupLoadingStateProvider } from '@/providers/setup/loading-state'
 import { setupAppUserPreferencesProvider } from '@/providers/setup/user-preferences.ts'
 import { appMessages } from '@/utils/app-messages'
 
-import { useMinecraftAccountAvatar } from '@/composables/use-minecraft-account-avatar.ts'
-import { bootstrapAccent } from '@/composables/use-accent.ts'
 import { generateSkinPreviews } from './helpers/rendering/batch-skin-renderer'
 import { get_available_capes, get_available_skins } from './helpers/skins'
 import { AppNotificationManager } from './providers/app-notifications'
@@ -231,7 +222,6 @@ const APP_LEFT_NAV_WIDTH = '4rem'
 const APP_SIDEBAR_WIDTH = 300
 const INTERCOM_BUBBLE_DEFAULT_PADDING = 20
 const credentials = ref()
-const storedModrinthAccounts = ref([])
 let credentialsRefreshId = 0
 const forceSidebar = computed(
 	() => route.path.startsWith('/browse') || route.path.startsWith('/project'),
@@ -244,11 +234,97 @@ watch(sidebarExpandedPreference, (value) => {
 const sidebarVisible = computed(() => forceSidebar.value || sidebarExpandedPreference.value)
 const chatPanelOpen = ref(false)
 const octraChatPanel = ref(null)
+const chatUnreadTotal = ref(0)
+const lastPolledUnreadTotal = ref(0)
+const chatUnreadReady = ref(false)
+let chatUnreadPollTimer = null
+const runningInstanceName = ref(null)
+const whatsNewModal = ref(null)
+const displayedAppVersion = ref('')
 
 async function openOctraChatDm(userId) {
 	chatPanelOpen.value = true
 	await nextTick()
 	await octraChatPanel.value?.openDm?.(userId)
+}
+
+function dismissChatPanelFromViewport() {
+	if (chatPanelOpen.value) {
+		chatPanelOpen.value = false
+	}
+}
+
+function onChatUnreadChanged(total) {
+	const next = Number(total) || 0
+	if (!chatPanelOpen.value && chatUnreadReady.value && next > chatUnreadTotal.value) {
+		addNotification({
+			title: formatMessage(messages.chatNewMessage),
+			text: '',
+			type: 'success',
+		})
+	}
+	chatUnreadTotal.value = next
+	lastPolledUnreadTotal.value = next
+	chatUnreadReady.value = true
+}
+
+async function pollChatUnread() {
+	if (!octraSession.value) {
+		chatUnreadTotal.value = 0
+		lastPolledUnreadTotal.value = 0
+		return
+	}
+	try {
+		const channels = await octraChatChannels()
+		const total = (channels || []).reduce((sum, channel) => sum + (channel.unread_count ?? 0), 0)
+		if (!chatPanelOpen.value && chatUnreadReady.value && total > lastPolledUnreadTotal.value) {
+			addNotification({
+				title: formatMessage(messages.chatNewMessage),
+				text: '',
+				type: 'success',
+			})
+		}
+		chatUnreadTotal.value = total
+		lastPolledUnreadTotal.value = total
+		chatUnreadReady.value = true
+	} catch {
+		// ignore transient chat poll failures
+	}
+}
+
+function stopChatUnreadPoll() {
+	if (chatUnreadPollTimer) {
+		clearInterval(chatUnreadPollTimer)
+		chatUnreadPollTimer = null
+	}
+}
+
+function startChatUnreadPoll() {
+	stopChatUnreadPoll()
+	void pollChatUnread()
+	chatUnreadPollTimer = setInterval(() => {
+		void pollChatUnread()
+	}, 15_000)
+}
+
+async function refreshRunningInstancePresence() {
+	try {
+		const processes = (await getAllProcesses().catch(() => [])) ?? []
+		if (!Array.isArray(processes) || processes.length === 0) {
+			runningInstanceName.value = null
+			return
+		}
+		const instanceId = processes[0]?.instance_id
+		if (!instanceId) {
+			runningInstanceName.value = null
+			return
+		}
+		const instances = (await listInstances().catch(() => [])) ?? []
+		const match = instances.find((instance) => instance.id === instanceId)
+		runningInstanceName.value = match?.name || ''
+	} catch {
+		runningInstanceName.value = null
+	}
 }
 
 const canToggleSidebar = computed(() => !forceSidebar.value)
@@ -323,7 +399,7 @@ const tauriApiClient = new TauriModrinthClient({
 	],
 })
 provideModrinthClient(tauriApiClient)
-const { data: authenticatedModrinthUser } = useQuery({
+useQuery({
 	queryKey: computed(() => ['authenticated-user', 'campaigns', credentials.value?.user?.id]),
 	queryFn: () => tauriApiClient.labrinth.users_v3.getAuthenticated(),
 	enabled: () => !!credentials.value?.session,
@@ -518,6 +594,7 @@ onUnmounted(async () => {
 	document.removeEventListener('fullscreenchange', handleFullscreenChange)
 	unlistenEditMenu?.()
 	clearDelayedUpdatePopup()
+	stopChatUnreadPoll()
 
 	if (fullscreenAdsWindowHold) {
 		fullscreenAdsWindowHold = false
@@ -734,6 +811,18 @@ const messages = defineMessages({
 		id: 'octra-account.register',
 		defaultMessage: 'Connect',
 	},
+	chatNewMessage: {
+		id: 'octra.chat.new-message-toast',
+		defaultMessage: 'New chat message',
+	},
+	identityInGame: {
+		id: 'app.nav.identity-in-game',
+		defaultMessage: 'In game · {name}',
+	},
+	identityInGameUnknown: {
+		id: 'app.nav.identity-in-game-unknown',
+		defaultMessage: 'In game',
+	},
 })
 
 function handleAdsConsentRequired(_required) {
@@ -825,6 +914,10 @@ async function setupApp() {
 	get_opening_command().then(handleCommand)
 	fetchCredentials()
 	refreshOctraAccount()
+	void refreshRunningInstancePresence()
+	displayedAppVersion.value = version
+	await nextTick()
+	whatsNewModal.value?.show?.()
 
 	try {
 		const skins = (await get_available_skins()) ?? []
@@ -1182,7 +1275,6 @@ async function fetchCredentials() {
 
 			credentials.value = null
 			liveNotificationsEnabled = false
-			await fetchStoredModrinthAccounts()
 			return
 		}
 		creds.user = await get_user(creds.user_id, 'bypass').catch(handleError)
@@ -1190,7 +1282,6 @@ async function fetchCredentials() {
 	}
 	credentials.value = creds ?? null
 	liveNotificationsEnabled = !!creds?.session
-	await fetchStoredModrinthAccounts()
 }
 
 async function signIn(_flow = 'sign-in', _addAccount = false) {
@@ -1205,38 +1296,6 @@ async function requestModrinthAuth(flow = 'sign-in', addAccount = false) {
 	await signIn(flow, addAccount)
 	return !!credentials.value?.session
 }
-
-async function logOut() {
-	if (!credentials.value?.user) return
-	await completeAccountSwitch(() => logout())
-}
-
-async function fetchStoredModrinthAccounts() {
-	const all = (await getAllCreds().catch(handleError)) ?? []
-	const ids = all.map((account) => account.user_id)
-	const users = ids.length ? ((await get_user_many(ids).catch(handleError)) ?? []) : []
-	const usersById = new Map(users.map((user) => [user.id, user]))
-
-	storedModrinthAccounts.value = all.map((account) => ({
-		...account,
-		user: usersById.get(account.user_id) ?? {
-			id: account.user_id,
-			username: account.user_id,
-			avatar_url: null,
-			role: 'developer',
-		},
-	}))
-}
-
-const accountSwitcherAccounts = computed(() => {
-	const currentId = credentials.value?.session ? credentials.value.user_id : null
-
-	return storedModrinthAccounts.value.map((account) => ({
-		...account,
-		optionId: `account-${account.user_id}`,
-		current: account.user_id === currentId,
-	}))
-})
 
 const identityOctraLabel = computed(() => {
 	if (octraSessionLoading.value) return formatMessage(messages.loadingProfile)
@@ -1261,133 +1320,7 @@ const identityAccountTooltip = computed(() => {
 	})
 })
 
-const accountSwitcherOptions = computed(() => [
-	...accountSwitcherAccounts.value.map((account) => ({
-		id: account.optionId,
-		label: account.user.username,
-		selected: account.current,
-		action: () => switchModrinthAccount(account),
-		trailingAction: {
-			label: formatMessage(messages.removeAccount),
-			icon: XIcon,
-			color: 'red',
-			action: () => forgetModrinthAccount(account.user_id),
-		},
-	})),
-	{
-		type: 'divider',
-	},
-	{
-		id: 'add-account',
-		label: formatMessage(messages.upgradeToModrinthPlus),
-		icon: PlusIcon,
-		action: () => openOctraAccount('register'),
-	},
-])
-
 const isSwitchingAccount = ref(false)
-
-async function persistAppearanceTheme(appearance) {
-	const selectedTheme = appearance.auto ? 'system' : appearance.theme
-	appTheme.applyAccountAppearance(appearance)
-	const settings = await getSettings()
-	if (settings.theme !== selectedTheme) {
-		settings.theme = selectedTheme
-		await setSettings(settings)
-	}
-}
-
-async function completeAccountSwitch(task) {
-	isSwitchingAccount.value = true
-	await nextTick()
-	try {
-		await task()
-		window.location.reload()
-	} catch (error) {
-		isSwitchingAccount.value = false
-		handleError(error)
-	}
-}
-
-async function switchModrinthAccount(account) {
-	if (account.current) return
-
-	const cached = getAccountAppearance(account.user_id)
-	if (cached) await persistAppearanceTheme(cached)
-	await nextTick()
-
-	await completeAccountSwitch(async () => {
-		await setActive(account.user_id)
-		if (cached) return
-
-		try {
-			const preferences = await get_user_preferences(account.user_id)
-			rememberAccountAppearance(account.user_id, preferences.appearance)
-			await persistAppearanceTheme(preferences.appearance)
-			await nextTick()
-		} catch {
-			// no saved appearance for this account
-		}
-	})
-}
-
-async function forgetModrinthAccount(userId) {
-	const isCurrent = credentials.value?.user_id === userId && !!credentials.value?.session
-	if (isCurrent) {
-		await completeAccountSwitch(() => removeUser(userId))
-		return
-	}
-
-	await removeUser(userId).catch(handleError)
-	await fetchStoredModrinthAccounts()
-}
-
-const modrinthAccountMenuOptions = computed(() => [
-	{
-		id: 'view-profile',
-		label: formatMessage(messages.viewProfile),
-		icon: UserIcon,
-		action: () => router.push(`/user/${encodeURIComponent(credentials.value.user.username)}`),
-	},
-	{
-		id: 'plus',
-		label: formatMessage(messages.upgradeToModrinthPlus),
-		icon: ArrowBigUpDashIcon,
-		disabled: true,
-		action: () => {},
-		shown: true,
-	},
-	{
-		id: 'add-friend',
-		label: formatMessage(messages.addFriend),
-		icon: UserPlusIcon,
-		action: () => {},
-	},
-	{
-		id: 'flags',
-		label: formatMessage(commonSettingsMessages.featureFlags),
-		icon: ToggleRightIcon,
-		shown: appSettings.devMode,
-		action: () => appSettingsModal.value?.showFeatureFlags(),
-	},
-	{
-		type: 'divider',
-	},
-	{
-		id: 'switch-account',
-		label: formatMessage(messages.switchAccount),
-		icon: ArrowLeftRightIcon,
-		type: 'submenu',
-		options: accountSwitcherOptions.value,
-	},
-	{
-		id: 'sign-out',
-		label: formatMessage(commonMessages.signOutButton),
-		icon: LogOutIcon,
-		tone: 'red',
-		action: () => logOut(),
-	},
-])
 
 async function fetchIntercomToken() {
 	const creds = await getCreds()
@@ -1471,10 +1404,32 @@ async function logoutOctraAccount() {
 }
 provide('accountsCard', accounts)
 
-const {
-	refreshEquippedSkinAvatar,
-	getAccountAvatarUrl,
-} = useMinecraftAccountAvatar()
+watch(
+	() => octraSession.value?.username ?? null,
+	(username) => {
+		chatUnreadReady.value = false
+		if (username) {
+			startChatUnreadPoll()
+		} else {
+			stopChatUnreadPoll()
+			chatUnreadTotal.value = 0
+			lastPolledUnreadTotal.value = 0
+		}
+	},
+	{ immediate: true },
+)
+
+watch(chatPanelOpen, (open) => {
+	if (open) {
+		chatUnreadTotal.value = 0
+	} else {
+		void pollChatUnread()
+	}
+})
+
+void refreshRunningInstancePresence()
+
+const { refreshEquippedSkinAvatar, getAccountAvatarUrl } = useMinecraftAccountAvatar()
 const minecraftAccounts = ref([])
 const minecraftDefaultUser = ref()
 
@@ -1665,6 +1620,7 @@ useAppEvent(
 		if (e.event === 'launched') {
 			await refreshMinecraftAccounts()
 		}
+		void refreshRunningInstancePresence()
 	},
 	appEvents,
 )
@@ -2317,10 +2273,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 			>
 				<ShirtIcon class="size-5 shrink-0" />
 			</NavButton>
-			<div
-				class="my-1.5 h-px shrink-0 bg-surface-5"
-				:class="railExpanded ? 'mx-1' : 'w-8'"
-			/>
+			<div class="my-1.5 h-px shrink-0 bg-surface-5" :class="railExpanded ? 'mx-1' : 'w-8'" />
 			<NavButton
 				v-if="globalSyncedOptionsQuery.data.value?.screenshots"
 				v-tooltip.right="railExpanded ? undefined : formatMessage(messages.screenshots)"
@@ -2358,6 +2311,13 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 				<MessageIcon class="size-5 shrink-0" />
 				<span v-if="railExpanded" class="truncate text-[13px] font-medium">
 					{{ formatMessage(messages.chat) }}
+				</span>
+				<span
+					v-if="chatUnreadTotal > 0 && !chatPanelOpen"
+					class="absolute top-1 right-1 flex min-w-[1rem] items-center justify-center rounded-full bg-brand px-1 text-[10px] font-semibold leading-4 text-[var(--color-accent-contrast)]"
+					:class="railExpanded ? '!right-2' : ''"
+				>
+					{{ chatUnreadTotal > 99 ? '99+' : chatUnreadTotal }}
 				</span>
 			</button>
 			<NavButton
@@ -2414,9 +2374,24 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 									formatMessage(messages.minecraftAccount)
 								}}
 							</span>
-							<span class="flex min-w-0 items-center gap-1 text-[11px] leading-tight text-secondary">
+							<span
+								class="flex min-w-0 items-center gap-1 text-[11px] leading-tight text-secondary"
+							>
 								<UserIcon class="size-3 shrink-0 opacity-80" />
 								<span class="min-w-0 truncate">{{ identityOctraRowText }}</span>
+							</span>
+							<span
+								v-if="runningInstanceName !== null"
+								class="flex min-w-0 items-center gap-1 text-[10px] leading-tight text-brand-green"
+							>
+								<span class="size-1.5 shrink-0 rounded-full bg-brand-green" />
+								<span class="min-w-0 truncate">
+									{{
+										runningInstanceName
+											? formatMessage(messages.identityInGame, { name: runningInstanceName })
+											: formatMessage(messages.identityInGameUnknown)
+									}}
+								</span>
 							</span>
 						</span>
 						<template
@@ -2462,7 +2437,11 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 			<button
 				type="button"
 				class="nav-rail-collapse flex items-center border-none bg-transparent text-secondary cursor-pointer hover:bg-button-bg hover:text-contrast"
-				:class="railExpanded ? 'h-10 w-full gap-3 rounded-xl px-3' : 'h-10 w-10 justify-center rounded-full'"
+				:class="
+					railExpanded
+						? 'h-10 w-full gap-3 rounded-xl px-3'
+						: 'h-10 w-10 justify-center rounded-full'
+				"
 				:aria-label="formatMessage(railExpanded ? messages.collapseRail : messages.expandRail)"
 				:title="formatMessage(railExpanded ? messages.collapseRail : messages.expandRail)"
 				@click="railExpanded = !railExpanded"
@@ -2530,10 +2509,12 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 			:open="chatPanelOpen"
 			@close="chatPanelOpen = false"
 			@sign-in="openOctraAccount('login')"
+			@unread-changed="onChatUnreadChanged"
 		/>
 		<div
 			class="app-viewport flex-grow router-view min-w-0"
 			:class="{ 'sidebar-open': sidebarVisible }"
+			@pointerdown.capture="dismissChatPanelFromViewport"
 		>
 			<SurveyPopup />
 			<div
@@ -2666,6 +2647,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	/>
 	<AddOfflineAccountModal ref="addOfflineAccountModal" @added="onOfflineMinecraftAccountAdded" />
 	<OctraAccountModal ref="octraAccountModal" @success="onOctraAccountSuccess" />
+	<WhatsNewModal ref="whatsNewModal" :version="displayedAppVersion" />
 	<ContentInstallModal
 		ref="modInstallModal"
 		:instances="contentInstallInstances"
@@ -2895,14 +2877,20 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	bottom: 0;
 	z-index: 15;
 	border-top-left-radius: var(--radius-xl);
-	opacity: 0.4;
+	opacity: 0.32;
 	background:
-		radial-gradient(ellipse at center, transparent 45%, rgba(0, 0, 0, 0.22) 100%),
-		url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.45'/%3E%3C/svg%3E");
+		radial-gradient(
+			ellipse at center,
+			transparent 45%,
+			color-mix(in srgb, var(--color-brand) 25%, rgba(0, 0, 0, 1) 75%) 100%
+		),
+		url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.22'/%3E%3C/svg%3E");
 	background-size:
 		100% 100%,
 		180px 180px;
-	mix-blend-mode: soft-light;
+	backdrop-filter: blur(10px);
+	filter: blur(14px);
+	mix-blend-mode: multiply;
 }
 
 .app-sidebar {

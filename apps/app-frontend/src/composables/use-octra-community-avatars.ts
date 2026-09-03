@@ -1,4 +1,4 @@
-import { ref, watch, type Ref } from 'vue'
+import { type Ref, ref, watch } from 'vue'
 
 import { getPlayerHeadUrl } from '@/helpers/rendering/batch-skin-renderer'
 import type { Skin } from '@/helpers/skins'

@@ -149,12 +149,6 @@
   "app.ads-consent.title": {
     "message": "خصوصيتك وكيف تساهم الإعلانات في دعم Modrinth"
   },
-  "app.appearance-settings.default-landing-page.home": {
-    "message": "الصفحة الرئيسية"
-  },
-  "app.appearance-settings.default-landing-page.library": {
-    "message": "المكتبة"
-  },
   "app.appearance-settings.hide-nametag.description": {
     "message": "إخفاء اسم المستخدم فوق معاينة اللاعب في صفحة اختيار الـ Skin."
   },
@@ -184,12 +178,6 @@
   },
   "app.appearance-settings.skip-non-essential-warnings.title": {
     "message": "تخطي التحذيرات غير الضرورية"
-  },
-  "app.appearance-settings.toggle-sidebar.description": {
-    "message": "قم بإخفاء الشريط الجانبي الأيمن افتراضيًا وأضف زرًا لإظهاره أو إخفائه."
-  },
-  "app.appearance-settings.toggle-sidebar.title": {
-    "message": "قم بإخفاء الشريط الجانبي الأيمن"
   },
   "app.appearance-settings.unknown-pack-warning.description": {
     "message": "إظهار تحذير أمان قبل تثبيت مودباك Modrinth (.mrpack) غير المستضاف على Modrinth."
@@ -1148,9 +1136,6 @@
   "app.nav.modrinth-account": {
     "message": "حساب Modrinth"
   },
-  "app.nav.modrinth-hosting": {
-    "message": "استضافة Modrinth"
-  },
   "app.nav.sign-in-to-modrinth-account": {
     "message": "تسجيل الدخول إلى حساب Modrinth"
   },
@@ -1331,12 +1316,6 @@
   "app.settings.privacy.discord-rich-presence.title": {
     "message": "Discord Rich Presence"
   },
-  "app.settings.privacy.telemetry.description": {
-    "message": "يجمع Modrinth بيانات تحليلات واستخدام مجهولة الهوية لتحسين تجربة المستخدم وتخصيص تجربتك. عند تعطيل هذا الخيار، فإنك تلغي الاشتراك ولن يتم جمع بياناتك بعد الآن."
-  },
-  "app.settings.privacy.telemetry.title": {
-    "message": "بيانات قياس الاستخدام"
-  },
   "app.settings.resource-management.always-show-copy-details.description": {
     "message": "إظهار إجراء \"نسخ التفاصيل\" أثناء إدراج التثبيت في قائمة الانتظار أو تشغيله. يكون متاحاً دائماً للتثبيتات الفاشلة أو المقاطعة."
   },
@@ -1402,9 +1381,6 @@
   },
   "app.settings.tabs.java-installations": {
     "message": "تثبيتات جافا"
-  },
-  "app.settings.tabs.language": {
-    "message": "اللغة"
   },
   "app.settings.tabs.privacy": {
     "message": "الخصوصية"
@@ -1750,9 +1726,6 @@
   },
   "friends.section.heading": {
     "message": "{title} - {count}"
-  },
-  "friends.sign-in-to-add-friends": {
-    "message": "<link>سجّل الدخول إلى حساب Modrinth</link> لإضافة الأصدقاء ومعرفة ما الذي يلعبونه!"
   },
   "installation-settings.shared-instance.linked-title": {
     "message": "النسخة المشتركة المرتبطة"
@@ -2482,9 +2455,6 @@
   },
   "minecraft-required.get-minecraft": {
     "message": "احصل على ماين كرافت"
-  },
-  "minecraft-required.get-support": {
-    "message": "الحصول على الدعم"
   },
   "minecraft-required.header": {
     "message": "ماين كرافت مطلوبة"

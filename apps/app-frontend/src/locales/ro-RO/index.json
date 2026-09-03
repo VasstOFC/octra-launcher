@@ -155,9 +155,6 @@
   "app.settings.tabs.java-installations": {
     "message": "Instalări Java"
   },
-  "app.settings.tabs.language": {
-    "message": "Limbă"
-  },
   "app.settings.tabs.privacy": {
     "message": "Confidențialitate"
   },
@@ -253,9 +250,6 @@
   },
   "friends.section.heading": {
     "message": "{title} - {count}"
-  },
-  "friends.sign-in-to-add-friends": {
-    "message": "<link>Conectează-te la un cont Modrinth</link> pentru a adăuga prieteni și a vedea ce joacă!"
   },
   "instance.add-server.add-and-play": {
     "message": "Adaugă și joacă"

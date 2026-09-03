@@ -155,12 +155,6 @@
   "app.appearance-settings.compact-mode.title": {
     "message": "Chế độ nhỏ gọn"
   },
-  "app.appearance-settings.default-landing-page.home": {
-    "message": "Trang chủ"
-  },
-  "app.appearance-settings.default-landing-page.library": {
-    "message": "Thư viện"
-  },
   "app.appearance-settings.hide-nametag.description": {
     "message": "Ẩn tên người dùng của bạn phía trên phần xem trước nhân vật tại trang chọn giao diện skin."
   },
@@ -190,12 +184,6 @@
   },
   "app.appearance-settings.skip-non-essential-warnings.title": {
     "message": "Bỏ qua các cảnh báo không quan trọng"
-  },
-  "app.appearance-settings.toggle-sidebar.description": {
-    "message": "Ẩn thanh bên phải theo mặc định và thêm nút để hiển thị hoặc ẩn nó."
-  },
-  "app.appearance-settings.toggle-sidebar.title": {
-    "message": "Ẩn thanh bên"
   },
   "app.appearance-settings.unknown-pack-warning.description": {
     "message": "Hiển thị cảnh báo an toàn trước khi cài đặt một gói Modrinth (.mrpack) không được lưu trữ trên Modrinth."
@@ -563,9 +551,6 @@
   "app.settings.tabs.java-installations": {
     "message": "Các bản cài Java"
   },
-  "app.settings.tabs.language": {
-    "message": "Ngôn ngữ"
-  },
   "app.settings.tabs.privacy": {
     "message": "Quyền riêng tư"
   },
@@ -814,9 +799,6 @@
   },
   "friends.section.heading": {
     "message": "{title} - {count}"
-  },
-  "friends.sign-in-to-add-friends": {
-    "message": "<link>Đăng nhập bằng tài khoản Modrinth</link> để kết bạn và xem họ đang chơi gì!"
   },
   "instance.add-server.add-and-play": {
     "message": "Thêm và chơi"

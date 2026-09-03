@@ -196,8 +196,7 @@ const messages = defineMessages({
 	},
 	signInToAddFriends: {
 		id: 'friends.sign-in-to-add-friends',
-		defaultMessage:
-			'Octra accounts are coming later. Friends will be available then.',
+		defaultMessage: 'Octra accounts are coming later. Friends will be available then.',
 	},
 	addFriendsToShare: {
 		id: 'friends.add-friends-to-share',
@@ -335,9 +334,9 @@ const messages = defineMessages({
 		</template>
 		<template v-else-if="sortedFriends.length === 0">
 			<div class="text-sm">
-					<div v-if="!userCredentials">
-						{{ formatMessage(messages.signInToAddFriends) }}
-					</div>
+				<div v-if="!userCredentials">
+					{{ formatMessage(messages.signInToAddFriends) }}
+				</div>
 				<div v-else>
 					<IntlFormatted :message-id="messages.addFriendsToShare">
 						<template #link="{ children }">

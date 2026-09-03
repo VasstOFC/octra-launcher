@@ -155,12 +155,6 @@
   "app.appearance-settings.compact-mode.title": {
     "message": "Kompaktní režim"
   },
-  "app.appearance-settings.default-landing-page.home": {
-    "message": "Domů"
-  },
-  "app.appearance-settings.default-landing-page.library": {
-    "message": "Knihovna"
-  },
   "app.appearance-settings.hide-nametag.description": {
     "message": "Skrýt vaše uživatelské jméno nad náhledem hráče na stránce výběru skinu."
   },
@@ -190,12 +184,6 @@
   },
   "app.appearance-settings.skip-non-essential-warnings.title": {
     "message": "Přeskočit nedůležitá upozornění"
-  },
-  "app.appearance-settings.toggle-sidebar.description": {
-    "message": "Ve výchozím nastavení skrýt pravý postranní panel a přidat tlačítko pro jeho zobrazení nebo skrývání."
-  },
-  "app.appearance-settings.toggle-sidebar.title": {
-    "message": "Skrýt pravý postranní panel"
   },
   "app.appearance-settings.unknown-pack-warning.description": {
     "message": "Zobrazit bezpečnostní varování před instalací Modrinth Pack (.mrpack), který není hostován v Modrinth."
@@ -1145,9 +1133,6 @@
   "app.nav.modrinth-account": {
     "message": "Modrinth účet"
   },
-  "app.nav.modrinth-hosting": {
-    "message": "Modrinth Hosting"
-  },
   "app.nav.sign-in-to-modrinth-account": {
     "message": "Přihlásit se do Modrinth účtu"
   },
@@ -1273,9 +1258,6 @@
   },
   "app.settings.tabs.java-installations": {
     "message": "Instalace Javy"
-  },
-  "app.settings.tabs.language": {
-    "message": "Jazyk"
   },
   "app.settings.tabs.privacy": {
     "message": "Soukromí"
@@ -1567,9 +1549,6 @@
   },
   "friends.section.heading": {
     "message": "{title} - {count}"
-  },
-  "friends.sign-in-to-add-friends": {
-    "message": "<link>Přihlas se k Modrinth účtu</link>, abys mohl přidávat přátele a vidět, co hrají!"
   },
   "instance.add-server.add-and-play": {
     "message": "Přidat a hrát"

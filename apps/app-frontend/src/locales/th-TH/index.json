@@ -59,12 +59,6 @@
   "app.action-bar.view-logs": {
     "message": "ดู Log"
   },
-  "app.appearance-settings.default-landing-page.home": {
-    "message": "หน้าหลัก"
-  },
-  "app.appearance-settings.default-landing-page.library": {
-    "message": "ไลบรารี"
-  },
   "app.appearance-settings.hide-nametag.title": {
     "message": "ซ่อนป้ายชื่อ"
   },
@@ -235,9 +229,6 @@
   },
   "app.settings.tabs.java-installations": {
     "message": "การจัดการ Java ที่ติดตั้ง"
-  },
-  "app.settings.tabs.language": {
-    "message": "ภาษา"
   },
   "app.settings.tabs.privacy": {
     "message": "ความเป็นส่วนตัว"
@@ -478,9 +469,6 @@
   },
   "friends.section.heading": {
     "message": "{title} - {count}"
-  },
-  "friends.sign-in-to-add-friends": {
-    "message": "<link>ล็อกอินเข้าบัญชี Modrinth</link> เพื่อเพิ่มเพื่อนและเห็นว่าพวกเขากำลังเล่นอะไรอยู่!"
   },
   "instance.add-server.add-and-play": {
     "message": "เพิ่มและเล่นทันที"

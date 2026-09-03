@@ -2,6 +2,7 @@ use crate::api::Result;
 use serde::{Deserialize, Serialize};
 use theseus::octra_accounts::{
 	self, OctraAccountSession, OctraChatChannel, OctraChatMessage, OctraCommunitySnapshot,
+	OctraSharedServer,
 };
 use theseus::octra_sync::{self, OctraServerEntry};
 use theseus::pack::featured;
@@ -18,8 +19,17 @@ pub fn init<R: tauri::Runtime>() -> tauri::plugin::TauriPlugin<R> {
 			octra_chat_channels,
 			octra_chat_open_dm,
 			octra_chat_create_group,
+			octra_chat_add_members,
 			octra_chat_list,
 			octra_chat_post,
+			octra_chat_mark_read,
+			octra_chat_delete_message,
+			octra_chat_pin_message,
+			octra_chat_react_message,
+			octra_share_join_address,
+			octra_shared_servers_list,
+			octra_shared_servers_add,
+			octra_shared_servers_delete,
 			octra_cache_mrpack_url,
 		])
 		.build()
@@ -90,6 +100,14 @@ pub async fn octra_chat_create_group(
 }
 
 #[tauri::command]
+pub async fn octra_chat_add_members(
+	channel_id: i64,
+	member_ids: Vec<i64>,
+) -> Result<OctraChatChannel> {
+	Ok(octra_accounts::chat_add_group_members(channel_id, &member_ids).await?)
+}
+
+#[tauri::command]
 pub async fn octra_chat_list(channel_id: i64, after_id: i64) -> Result<Vec<OctraChatMessage>> {
 	Ok(octra_accounts::chat_list(channel_id, after_id).await?)
 }
@@ -100,7 +118,55 @@ pub async fn octra_chat_post(channel_id: i64, text: &str) -> Result<OctraChatMes
 }
 
 #[tauri::command]
+pub async fn octra_chat_mark_read(channel_id: i64, last_read_id: i64) -> Result<()> {
+	octra_accounts::chat_mark_read(channel_id, last_read_id).await?;
+	Ok(())
+}
+
+#[tauri::command]
+pub async fn octra_chat_delete_message(message_id: i64) -> Result<OctraChatMessage> {
+	Ok(octra_accounts::chat_delete_message(message_id).await?)
+}
+
+#[tauri::command]
+pub async fn octra_chat_pin_message(message_id: i64, pinned: bool) -> Result<OctraChatMessage> {
+	Ok(octra_accounts::chat_pin_message(message_id, pinned).await?)
+}
+
+#[tauri::command]
+pub async fn octra_chat_react_message(
+	message_id: i64,
+	emoji: &str,
+) -> Result<OctraChatMessage> {
+	Ok(octra_accounts::chat_react_message(message_id, emoji).await?)
+}
+
+#[tauri::command]
+pub async fn octra_share_join_address(address: &str) -> Result<()> {
+	octra_accounts::share_join_address(address).await?;
+	Ok(())
+}
+
+#[tauri::command]
+pub async fn octra_shared_servers_list() -> Result<Vec<OctraSharedServer>> {
+	Ok(octra_accounts::shared_servers_list().await?)
+}
+
+#[tauri::command]
+pub async fn octra_shared_servers_add(name: &str, address: &str) -> Result<OctraSharedServer> {
+	Ok(octra_accounts::shared_servers_add(name, address).await?)
+}
+
+#[tauri::command]
+pub async fn octra_shared_servers_delete(server_id: i64) -> Result<()> {
+	octra_accounts::shared_servers_delete(server_id).await?;
+	Ok(())
+}
+
+#[tauri::command]
 pub async fn octra_cache_mrpack_url(url: &str) -> Result<String> {
 	let path = featured::cache_mrpack_from_url(url).await?;
 	Ok(path.to_string_lossy().into_owned())
 }
+
+

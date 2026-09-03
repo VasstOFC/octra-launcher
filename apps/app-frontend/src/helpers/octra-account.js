@@ -44,7 +44,17 @@ import { invoke } from '@tauri-apps/api/core'
  * @property {string} created_at
  * @property {string|null} [last_body]
  * @property {string|null} [last_at]
+ * @property {number|null} [last_id]
+ * @property {number} [last_read_id]
+ * @property {number} [unread_count]
  * @property {OctraChatMember[]} [members]
+ */
+
+/**
+ * @typedef {Object} OctraChatReaction
+ * @property {string} emoji
+ * @property {number} count
+ * @property {number[]} [user_ids]
  */
 
 /**
@@ -54,6 +64,19 @@ import { invoke } from '@tauri-apps/api/core'
  * @property {number} user_id
  * @property {string} minecraft_nick
  * @property {string} body
+ * @property {string} created_at
+ * @property {boolean} [pinned]
+ * @property {boolean} [deleted]
+ * @property {OctraChatReaction[]} [reactions]
+ */
+
+/**
+ * @typedef {Object} OctraSharedServer
+ * @property {number} id
+ * @property {string} name
+ * @property {string} address
+ * @property {number} created_by
+ * @property {string|null} [created_by_nick]
  * @property {string} created_at
  */
 
@@ -122,6 +145,66 @@ export async function octraChatList(channelId, afterId = 0) {
  */
 export async function octraChatPost(channelId, text) {
 	return await invoke('plugin:octra|octra_chat_post', { channelId, text })
+}
+
+/**
+ * @param {number} channelId
+ * @param {number[]} memberIds
+ */
+export async function octraChatAddMembers(channelId, memberIds) {
+	return await invoke('plugin:octra|octra_chat_add_members', { channelId, memberIds })
+}
+
+/**
+ * @param {number} channelId
+ * @param {number} lastReadId
+ */
+export async function octraChatMarkRead(channelId, lastReadId) {
+	return await invoke('plugin:octra|octra_chat_mark_read', { channelId, lastReadId })
+}
+
+/** @param {number} messageId */
+export async function octraChatDeleteMessage(messageId) {
+	return await invoke('plugin:octra|octra_chat_delete_message', { messageId })
+}
+
+/**
+ * @param {number} messageId
+ * @param {boolean} pinned
+ */
+export async function octraChatPinMessage(messageId, pinned) {
+	return await invoke('plugin:octra|octra_chat_pin_message', { messageId, pinned })
+}
+
+/**
+ * @param {number} messageId
+ * @param {string} emoji
+ */
+export async function octraChatReactMessage(messageId, emoji) {
+	return await invoke('plugin:octra|octra_chat_react_message', { messageId, emoji })
+}
+
+/** @param {string} address */
+export async function octraShareJoinAddress(address) {
+	return await invoke('plugin:octra|octra_share_join_address', { address })
+}
+
+/** @returns {Promise<OctraSharedServer[]>} */
+export async function octraSharedServersList() {
+	return await invoke('plugin:octra|octra_shared_servers_list')
+}
+
+/**
+ * @param {string} name
+ * @param {string} address
+ */
+export async function octraSharedServersAdd(name, address) {
+	return await invoke('plugin:octra|octra_shared_servers_add', { name, address })
+}
+
+/** @param {number} serverId */
+export async function octraSharedServersDelete(serverId) {
+	return await invoke('plugin:octra|octra_shared_servers_delete', { serverId })
 }
 
 /**

@@ -3,11 +3,7 @@ import { RadioButtonCheckedIcon, RadioButtonIcon } from '@modrinth/assets'
 import { defineMessages, useVIntl } from '@modrinth/ui'
 import { computed } from 'vue'
 
-import {
-	ACCENT_PRESETS,
-	type AccentPresetId,
-	normalizeHexColor,
-} from '@/helpers/accent-colors.ts'
+import { ACCENT_PRESETS, type AccentPresetId, normalizeHexColor } from '@/helpers/accent-colors.ts'
 
 const props = defineProps<{
 	preset: AccentPresetId
