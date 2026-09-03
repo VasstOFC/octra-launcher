@@ -45,6 +45,7 @@
 	color-scheme: dark;
 	--view-width: calc(100% - 5rem);
 	--expanded-view-width: calc(100% - 13rem);
+	--shell-motion: 0.28s cubic-bezier(0.32, 0.72, 0, 1);
 	--medal-promotion-bg: #000;
 	--medal-promotion-bg-orange: rgba(208, 246, 255, 0.25);
 	--medal-promotion-text-orange: #42abff;

@@ -10,7 +10,7 @@
 			disabled: disabled,
 			expanded: expanded,
 		}"
-		class="nav-button relative text-primary flex items-center transition-all bg-transparent hover:bg-button-bg hover:text-contrast"
+		class="nav-button relative text-primary flex items-center bg-transparent hover:bg-button-bg hover:text-contrast"
 	>
 		<slot />
 		<span v-if="expanded && label" class="min-w-0 truncate text-[13px] font-medium leading-none">
@@ -20,7 +20,7 @@
 	<button
 		v-else
 		v-bind="$attrs"
-		class="nav-button button-animation relative border-none text-primary cursor-pointer flex items-center transition-all bg-transparent hover:bg-button-bg hover:text-contrast"
+		class="nav-button button-animation relative border-none text-primary cursor-pointer flex items-center bg-transparent hover:bg-button-bg hover:text-contrast"
 		:class="{ disabled: disabled, expanded: expanded }"
 		:disabled="disabled"
 		@click="to"
@@ -64,54 +64,85 @@ defineOptions({
 
 <style lang="scss" scoped>
 .nav-button {
-	width: 3rem;
-	height: 3rem;
+	width: 2.5rem;
+	height: 2.5rem;
 	border-radius: 9999px;
 	justify-content: center;
 	font-size: 1.5rem;
+	transition:
+		background-color var(--shell-motion, 0.28s cubic-bezier(0.32, 0.72, 0, 1)),
+		color var(--shell-motion, 0.28s cubic-bezier(0.32, 0.72, 0, 1)),
+		box-shadow var(--shell-motion, 0.28s cubic-bezier(0.32, 0.72, 0, 1)),
+		width var(--shell-motion, 0.28s cubic-bezier(0.32, 0.72, 0, 1)),
+		border-radius var(--shell-motion, 0.28s cubic-bezier(0.32, 0.72, 0, 1)),
+		transform var(--shell-motion, 0.28s cubic-bezier(0.32, 0.72, 0, 1));
 
 	&.expanded {
 		width: 100%;
-		height: 2.75rem;
+		height: 2.5rem;
 		border-radius: 0.75rem;
 		justify-content: flex-start;
 		gap: 0.75rem;
 		padding: 0 0.75rem;
 		font-size: 1.25rem;
 	}
+
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
+	}
 }
 
 .router-link-active,
 .subpage-active {
 	svg {
-		filter: drop-shadow(0 0 0.5rem black);
+		filter: none;
 	}
 }
 
 .router-link-active {
-	@apply text-[--color-button-text-selected] bg-[--color-button-bg-selected];
+	color: var(--color-brand);
+	background: var(--surface-3);
+	box-shadow: inset 0 0 0 1px var(--surface-5);
+	transform: translateX(2px);
 }
 
 .router-link-active.expanded,
 button.expanded.router-link-active {
 	color: var(--color-brand);
-	background: var(--color-brand-highlight);
-	box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-brand) 28%, transparent);
+	background: var(--surface-3);
+	box-shadow: inset 0 0 0 1px var(--surface-5);
 }
 
 .subpage-active {
 	@apply text-contrast bg-button-bg;
 }
 
-.router-link-active:not(.expanded)::before {
+.router-link-active::before {
 	content: '';
 	position: absolute;
 	left: 0.15rem;
 	top: 50%;
 	transform: translateY(-50%);
-	height: 1.35rem;
-	width: 0.15rem;
+	height: 1.25rem;
+	width: 0.22rem;
 	border-radius: 999px;
 	background: var(--color-brand);
+	opacity: 1;
+	transition: opacity var(--shell-motion, 0.28s cubic-bezier(0.32, 0.72, 0, 1));
+}
+
+.router-link-active.expanded::before {
+	left: 0.2rem;
+	height: 1.15rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.router-link-active {
+		transform: none;
+	}
+
+	.router-link-active::before {
+		transition: none;
+	}
 }
 </style>

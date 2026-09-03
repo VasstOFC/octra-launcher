@@ -4,6 +4,7 @@ use crate::state::State;
 use crate::util::fetch::INSECURE_NO_TIMEOUT_REQWEST_CLIENT;
 use futures::StreamExt;
 use serde::Serialize;
+use sha2::{Digest, Sha256};
 use std::path::{Path, PathBuf};
 use tokio::io::AsyncWriteExt;
 
@@ -67,6 +68,50 @@ pub async fn resolve_featured_pack_path() -> crate::Result<PathBuf> {
         },
     ))
     .into())
+}
+
+/// Download an arbitrary `.mrpack` URL into the launcher cache and return its path.
+pub async fn cache_mrpack_from_url(url: &str) -> crate::Result<PathBuf> {
+    let url = url.trim();
+    if !(url.starts_with("http://") || url.starts_with("https://")) {
+        return Err(crate::ErrorKind::InputError(
+            "modpack url must start with http:// or https://".to_string(),
+        )
+        .into());
+    }
+    if !url.to_ascii_lowercase().contains(".mrpack") {
+        return Err(crate::ErrorKind::InputError(
+            "url must point to a .mrpack file".to_string(),
+        )
+        .into());
+    }
+
+    let state = State::get().await?;
+    let cache_dir = state.directories.caches_dir().join("octra-chat-packs");
+    tokio::fs::create_dir_all(&cache_dir).await?;
+
+    let hash = {
+        let digest = Sha256::digest(url.as_bytes());
+        digest
+            .iter()
+            .take(8)
+            .map(|b| format!("{b:02x}"))
+            .collect::<String>()
+    };
+    let cache_path = cache_dir.join(format!("{hash}.mrpack"));
+    if is_usable_mrpack(&cache_path).await {
+        return Ok(cache_path);
+    }
+
+    download_pack_url(url, &cache_path).await?;
+    if !is_usable_mrpack(&cache_path).await {
+        let _ = tokio::fs::remove_file(&cache_path).await;
+        return Err(crate::ErrorKind::InputError(
+            "downloaded file is not a valid .mrpack".to_string(),
+        )
+        .into());
+    }
+    Ok(cache_path)
 }
 
 fn cached_pack_filename() -> String {

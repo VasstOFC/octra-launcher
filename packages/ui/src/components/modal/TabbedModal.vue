@@ -32,6 +32,7 @@ const props = withDefaults(
 		beforeHide?: () => boolean
 		beforeTabChange?: (fromIndex: number, toIndex: number) => boolean
 		floatingActionBarShown?: boolean
+		variant?: 'default' | 'emberslot'
 	}>(),
 	{
 		header: undefined,
@@ -43,7 +44,22 @@ const props = withDefaults(
 		beforeHide: undefined,
 		beforeTabChange: undefined,
 		floatingActionBarShown: false,
+		variant: 'default',
 	},
+)
+
+const isEmberslot = computed(() => props.variant === 'emberslot')
+
+const selectedTabClasses = computed(() =>
+	isEmberslot.value
+		? 'emberslot-tab emberslot-tab--active text-brand'
+		: 'bg-button-bgSelected text-button-textSelected',
+)
+
+const idleTabClasses = computed(() =>
+	isEmberslot.value
+		? 'emberslot-tab bg-transparent text-button-text hover:bg-button-bg hover:text-contrast'
+		: 'bg-transparent text-button-text hover:bg-button-bg hover:text-contrast',
 )
 
 const visibleTabs = computed(() => props.tabs.filter((tab) => tab.shown !== false))
@@ -110,9 +126,13 @@ defineExpose({ show, hide, selectedTab, setTab })
 		<template v-if="$slots.title" #title>
 			<slot name="title" />
 		</template>
-		<div class="grid grid-cols-[minmax(12.5rem,18rem)_minmax(0,1fr)] p-6 pb-3 pr-0">
+		<div
+			class="grid grid-cols-[minmax(12.5rem,18rem)_minmax(0,1fr)] p-6 pb-3 pr-0"
+			:class="{ 'emberslot-panel': isEmberslot }"
+		>
 			<div
 				class="flex min-w-0 max-h-[min(65vh,600px)] flex-col border-0 border-r-[1px] border-solid border-divider pr-4"
+				:class="{ 'emberslot-sidebar -ml-6 -mt-6 mb-0 rounded-l-xl pl-6 pt-6': isEmberslot }"
 			>
 				<div class="relative min-h-0 flex-1">
 					<Transition
@@ -125,7 +145,8 @@ defineExpose({ show, hide, selectedTab, setTab })
 					>
 						<div
 							v-if="showSidebarTopFade"
-							class="pointer-events-none absolute left-0 right-0 top-0 z-10 h-4 bg-gradient-to-b from-bg-raised to-transparent"
+							class="pointer-events-none absolute left-0 right-0 top-0 z-10 h-4 bg-gradient-to-b to-transparent"
+							:class="isEmberslot ? 'from-surface-2' : 'from-bg-raised'"
 						/>
 					</Transition>
 
@@ -146,7 +167,7 @@ defineExpose({ show, hide, selectedTab, setTab })
 								:href="tab.href ?? undefined"
 								:target="tab.href ? '_blank' : undefined"
 								:rel="tab.href ? 'noopener noreferrer' : undefined"
-								:class="`flex min-w-0 shrink-0 gap-2 items-center text-left rounded-xl px-4 py-2 border-none font-semibold cursor-pointer active:scale-[0.97] transition-all no-underline ${!tab.href && selectedTab === index ? 'bg-button-bgSelected text-button-textSelected' : 'bg-transparent text-button-text hover:bg-button-bg hover:text-contrast'}`"
+								:class="`relative flex min-w-0 shrink-0 gap-2 items-center text-left rounded-xl px-4 py-2 border-none font-semibold cursor-pointer active:scale-[0.97] transition-all no-underline ${!tab.href && selectedTab === index ? selectedTabClasses : idleTabClasses}`"
 								@click="!tab.href && setTab(index)"
 							>
 								<component :is="tab.icon" class="w-4 h-4 flex-shrink-0" />
@@ -178,14 +199,18 @@ defineExpose({ show, hide, selectedTab, setTab })
 					>
 						<div
 							v-if="showSidebarBottomFade"
-							class="pointer-events-none absolute bottom-0 left-0 right-0 z-10 h-16 bg-gradient-to-t from-bg-raised to-transparent"
+							class="pointer-events-none absolute bottom-0 left-0 right-0 z-10 h-16 bg-gradient-to-t to-transparent"
+							:class="isEmberslot ? 'from-surface-2' : 'from-bg-raised'"
 						/>
 					</Transition>
 				</div>
 
 				<slot name="footer" />
 			</div>
-			<div class="relative min-h-[min(65vh,600px)]">
+			<div
+				class="relative min-h-[min(65vh,600px)]"
+				:class="{ 'emberslot-content -mr-0 rounded-r-xl': isEmberslot }"
+			>
 				<Transition
 					enter-active-class="transition-all duration-200 ease-out"
 					enter-from-class="opacity-0 max-h-0"
@@ -196,7 +221,8 @@ defineExpose({ show, hide, selectedTab, setTab })
 				>
 					<div
 						v-if="showTopFade"
-						class="pointer-events-none absolute left-0 right-0 top-0 z-10 h-4 bg-gradient-to-b from-bg-raised to-transparent"
+						class="pointer-events-none absolute left-0 right-0 top-0 z-10 h-4 bg-gradient-to-b to-transparent"
+						:class="isEmberslot ? 'from-surface-1' : 'from-bg-raised'"
 					/>
 				</Transition>
 
@@ -229,7 +255,8 @@ defineExpose({ show, hide, selectedTab, setTab })
 				>
 					<div
 						v-if="showBottomFade"
-						class="pointer-events-none absolute bottom-0 left-0 right-0 z-10 h-16 bg-gradient-to-t from-bg-raised to-transparent"
+						class="pointer-events-none absolute bottom-0 left-0 right-0 z-10 h-16 bg-gradient-to-t to-transparent"
+						:class="isEmberslot ? 'from-surface-1' : 'from-bg-raised'"
 					/>
 				</Transition>
 
@@ -242,3 +269,47 @@ defineExpose({ show, hide, selectedTab, setTab })
 		</div>
 	</NewModal>
 </template>
+
+<style lang="scss" scoped>
+.emberslot-sidebar {
+	background: var(--surface-2);
+}
+
+.emberslot-content {
+	background: var(--surface-1);
+}
+
+.emberslot-tab {
+	transition:
+		background-color var(--shell-motion, 0.28s cubic-bezier(0.32, 0.72, 0, 1)),
+		color var(--shell-motion, 0.28s cubic-bezier(0.32, 0.72, 0, 1)),
+		box-shadow var(--shell-motion, 0.28s cubic-bezier(0.32, 0.72, 0, 1)),
+		transform var(--shell-motion, 0.28s cubic-bezier(0.32, 0.72, 0, 1));
+
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
+	}
+}
+
+.emberslot-tab--active {
+	background: var(--surface-3);
+	box-shadow: inset 0 0 0 1px var(--surface-5);
+	transform: translateX(2px);
+
+	&::before {
+		content: '';
+		position: absolute;
+		left: 0.35rem;
+		top: 50%;
+		transform: translateY(-50%);
+		height: 1rem;
+		width: 0.2rem;
+		border-radius: 999px;
+		background: var(--color-brand);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		transform: none;
+	}
+}
+</style>

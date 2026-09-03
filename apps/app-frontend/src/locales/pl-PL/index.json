@@ -362,6 +362,12 @@
   "app.home.jump-back-in.view-instance": {
     "message": "Pokaż instancję"
   },
+  "app.home.hero.cta": {
+    "message": "Nowa instancja"
+  },
+  "app.home.hero.tagline": {
+    "message": "Twoje światy. Twoja ekipa. Jeden launcher."
+  },
   "app.hosting.update-required.description": {
     "message": "Aby korzystać z Modrinth Hosting w Octra App, musisz zaktualizować aplikację"
   },
@@ -1283,6 +1289,21 @@
   "app.nav.home": {
     "message": "Strona główna"
   },
+  "app.nav.identity-minecraft-section": {
+    "message": "Minecraft"
+  },
+  "app.nav.identity-octra-row": {
+    "message": "Octra · {name}"
+  },
+  "app.nav.identity-octra-section": {
+    "message": "Octra"
+  },
+  "app.nav.identity-octra-sign-in": {
+    "message": "Zaloguj do Octra"
+  },
+  "app.nav.identity-tooltip": {
+    "message": "MC · {minecraft} · Octra · {octra}"
+  },
   "app.nav.library": {
     "message": "Biblioteka"
   },
@@ -1918,6 +1939,9 @@
   },
   "app.sidebar.playing-as": {
     "message": "Graj jako"
+  },
+  "app.splash.tagline": {
+    "message": "Gotowe, kiedy Ty jesteś"
   },
   "app.skins.add-button": {
     "message": "Dodaj skórkę"
@@ -3186,7 +3210,7 @@
     "message": "Znajomi"
   },
   "octra.community.in-game": {
-    "message": "Gra w {name}"
+    "message": "Gra: {name}"
   },
   "octra.community.in-game-unknown": {
     "message": "W grze"
@@ -3218,8 +3242,71 @@
   "octra.community.sign-in-action": {
     "message": "Zaloguj się"
   },
+  "octra.community.join": {
+    "message": "Dołącz"
+  },
+  "octra.community.no-instance": {
+    "message": "Utwórz lub zainstaluj instancję, zanim dołączysz do znajomego."
+  },
+  "octra.community.message-player": {
+    "message": "Napisz wiadomość do gracza"
+  },
+  "octra.community.actions.label": {
+    "message": "Akcje znajomego"
+  },
+  "octra.chat.heading": {
+    "message": "Czat"
+  },
+  "octra.chat.placeholder": {
+    "message": "Napisz wiadomość…"
+  },
+  "octra.chat.send": {
+    "message": "Wyślij"
+  },
+  "octra.chat.install-pack": {
+    "message": "Zainstaluj paczkę"
+  },
+  "octra.chat.sign-in-hint": {
+    "message": "Zaloguj się na Octra, żeby korzystać z czatu."
+  },
+  "octra.chat.sign-in-action": {
+    "message": "Zaloguj się"
+  },
+  "octra.chat.empty": {
+    "message": "Brak wiadomości. Napisz coś albo wklej link do paczki."
+  },
+  "octra.chat.empty-channels": {
+    "message": "Brak rozmów."
+  },
+  "octra.chat.close": {
+    "message": "Zamknij czat"
+  },
+  "octra.chat.new-dm": {
+    "message": "Napisz do kogoś"
+  },
+  "octra.chat.new-group": {
+    "message": "Nowa grupa"
+  },
+  "octra.chat.group-name": {
+    "message": "Nazwa grupy"
+  },
+  "octra.chat.create-group": {
+    "message": "Utwórz grupę"
+  },
+  "octra.chat.pick-members": {
+    "message": "Dodaj członków"
+  },
+  "octra.chat.conversations": {
+    "message": "Rozmowy"
+  },
+  "octra.chat.select-conversation": {
+    "message": "Wybierz rozmowę"
+  },
+  "app.nav.chat": {
+    "message": "Czat"
+  },
   "minecraft-required.description": {
-    "message": "Zaloguj się kontem Microsoft albo graj offline z nickiem. Skin będzie widoczny na singlu i na serwerach ze SkinsRestorer."
+    "message": "Zaloguj się kontem Microsoft albo graj offline z nickiem. Skin jest publikowany w chmurze Octra — Ty i znajomi zobaczycie go w grze bez dodatkowych modów. SkinsRestorer pozostaje opcjonalny na serwerach dedykowanych."
   },
   "minecraft-required.description-header": {
     "message": "Logowanie do Octry"

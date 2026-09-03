@@ -18,12 +18,12 @@ import {
 	ImagesIcon,
 	LogInIcon,
 	LogOutIcon,
+	MessageIcon,
 	PlayIcon,
 	PlusIcon,
 	RefreshCwIcon,
 	SettingsIcon,
 	ShirtIcon,
-	SpinnerIcon,
 	ToggleRightIcon,
 	TrashIcon,
 	UserIcon,
@@ -73,6 +73,7 @@ import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
 
 import AccountsCard from '@/components/ui/AccountsCard.vue'
 import OctraCommunityList from '@/components/ui/friends/OctraCommunityList.vue'
+import OctraChatPanel from '@/components/ui/friends/OctraChatPanel.vue'
 import AddOfflineAccountModal from '@/components/ui/AddOfflineAccountModal.vue'
 import OctraAccountModal from '@/components/ui/OctraAccountModal.vue'
 import AppActionBar from '@/components/ui/AppActionBar.vue'
@@ -241,6 +242,15 @@ watch(sidebarExpandedPreference, (value) => {
 	localStorage.setItem(SIDEBAR_STORAGE_KEY, value ? '1' : '0')
 })
 const sidebarVisible = computed(() => forceSidebar.value || sidebarExpandedPreference.value)
+const chatPanelOpen = ref(false)
+const octraChatPanel = ref(null)
+
+async function openOctraChatDm(userId) {
+	chatPanelOpen.value = true
+	await nextTick()
+	await octraChatPanel.value?.openDm?.(userId)
+}
+
 const canToggleSidebar = computed(() => !forceSidebar.value)
 const showFriendsFab = computed(() => canToggleSidebar.value && !sidebarVisible.value)
 const hostingRouteActive = computed(() => route.path.startsWith('/hosting'))
@@ -604,6 +614,10 @@ const messages = defineMessages({
 		id: 'app.nav.expand-sidebar',
 		defaultMessage: 'Show friends',
 	},
+	chat: {
+		id: 'app.nav.chat',
+		defaultMessage: 'Chat',
+	},
 	servers: {
 		id: 'app.nav.servers',
 		defaultMessage: 'Servers',
@@ -692,9 +706,33 @@ const messages = defineMessages({
 		id: 'minecraft-account.play-offline',
 		defaultMessage: 'Play offline',
 	},
-	manageMinecraftAccounts: {
-		id: 'minecraft-account.manage',
-		defaultMessage: 'Manage accounts',
+	identityMinecraftSection: {
+		id: 'app.nav.identity-minecraft-section',
+		defaultMessage: 'Minecraft',
+	},
+	identityOctraSection: {
+		id: 'app.nav.identity-octra-section',
+		defaultMessage: 'Octra',
+	},
+	identityOctraRow: {
+		id: 'app.nav.identity-octra-row',
+		defaultMessage: 'Octra · {name}',
+	},
+	identityOctraSignIn: {
+		id: 'app.nav.identity-octra-sign-in',
+		defaultMessage: 'Sign in to Octra',
+	},
+	identityTooltip: {
+		id: 'app.nav.identity-tooltip',
+		defaultMessage: 'MC · {minecraft} · Octra · {octra}',
+	},
+	octraLogin: {
+		id: 'octra-account.login',
+		defaultMessage: 'Log in',
+	},
+	octraRegister: {
+		id: 'octra-account.register',
+		defaultMessage: 'Connect',
 	},
 })
 
@@ -1200,20 +1238,28 @@ const accountSwitcherAccounts = computed(() => {
 	}))
 })
 
-const profileButtonTooltip = computed(() => {
+const identityOctraLabel = computed(() => {
 	if (octraSessionLoading.value) return formatMessage(messages.loadingProfile)
 	if (octraSession.value) return octraSession.value.username
-	return formatMessage(messages.signInToModrinthAccount)
+	return formatMessage(messages.identityOctraSignIn)
 })
 
-const octraAccountMenuOptions = computed(() => [
-	{
-		id: 'octra-logout',
-		label: formatMessage(messages.octraLogout),
-		icon: LogOutIcon,
-		action: () => logoutOctraAccount(),
-	},
-])
+const identityOctraRowText = computed(() => {
+	if (octraSessionLoading.value) return formatMessage(messages.loadingProfile)
+	if (octraSession.value) {
+		return formatMessage(messages.identityOctraRow, { name: octraSession.value.username })
+	}
+	return formatMessage(messages.identityOctraSignIn)
+})
+
+const identityAccountTooltip = computed(() => {
+	const minecraft =
+		selectedMinecraftAccount.value?.profile?.name ?? formatMessage(messages.minecraftAccount)
+	return formatMessage(messages.identityTooltip, {
+		minecraft,
+		octra: identityOctraLabel.value,
+	})
+})
 
 const accountSwitcherOptions = computed(() => [
 	...accountSwitcherAccounts.value.map((account) => ({
@@ -1514,34 +1560,38 @@ async function signOutMinecraftAccount() {
 	await removeMinecraftAccount(selected)
 }
 
-const minecraftAccountMenuOptions = computed(() => {
-	const options = []
-	if (minecraftAccountSwitcherAccounts.value.length > 0) {
-		options.push({
+const identityAccountMenuOptions = computed(() => {
+	const options = [
+		{
 			type: 'heading',
-			id: 'minecraft-accounts-heading',
-			label: formatMessage(messages.manageMinecraftAccounts),
-		})
-		for (const account of minecraftAccountSwitcherAccounts.value) {
-			options.push({
-				id: account.optionId,
-				label: account.profile.name,
-				selected: account.profile.id === minecraftDefaultUser.value,
-				remainOpen: true,
-				action: () => setMinecraftAccount(account),
-				trailingAction: {
-					label: formatMessage(messages.removeAccount),
-					icon: TrashIcon,
-					color: 'red',
-					action: (event) => {
-						event.stopPropagation()
-						removeMinecraftAccount(account)
-					},
+			id: 'identity-minecraft-heading',
+			label: formatMessage(messages.identityMinecraftSection),
+		},
+	]
+
+	for (const account of minecraftAccountSwitcherAccounts.value) {
+		options.push({
+			id: account.optionId,
+			label: account.profile.name,
+			selected: account.profile.id === minecraftDefaultUser.value,
+			remainOpen: true,
+			action: () => setMinecraftAccount(account),
+			trailingAction: {
+				label: formatMessage(messages.removeAccount),
+				icon: TrashIcon,
+				color: 'red',
+				action: (event) => {
+					event.stopPropagation()
+					removeMinecraftAccount(account)
 				},
-			})
-		}
+			},
+		})
+	}
+
+	if (minecraftAccountSwitcherAccounts.value.length > 0) {
 		options.push({ type: 'divider' })
 	}
+
 	options.push({
 		id: 'add-microsoft',
 		label: formatMessage(messages.addMicrosoftAccount),
@@ -1554,6 +1604,7 @@ const minecraftAccountMenuOptions = computed(() => {
 		icon: PlusIcon,
 		action: () => addOfflineAccountModal.value?.show(),
 	})
+
 	if (selectedMinecraftAccount.value?.profile?.id) {
 		options.push({ type: 'divider' })
 		options.push({
@@ -1564,6 +1615,37 @@ const minecraftAccountMenuOptions = computed(() => {
 			action: () => signOutMinecraftAccount(),
 		})
 	}
+
+	options.push({ type: 'divider' })
+	options.push({
+		type: 'heading',
+		id: 'identity-octra-heading',
+		label: formatMessage(messages.identityOctraSection),
+	})
+
+	if (octraSession.value) {
+		options.push({
+			id: 'octra-logout',
+			label: formatMessage(messages.octraLogout),
+			icon: LogOutIcon,
+			tone: 'red',
+			action: () => logoutOctraAccount(),
+		})
+	} else {
+		options.push({
+			id: 'octra-login',
+			label: formatMessage(messages.octraLogin),
+			icon: LogInIcon,
+			action: () => openOctraAccount('login'),
+		})
+		options.push({
+			id: 'octra-register',
+			label: formatMessage(messages.octraRegister),
+			icon: UserPlusIcon,
+			action: () => openOctraAccount('register'),
+		})
+	}
+
 	return options
 })
 
@@ -2211,7 +2293,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 		/>
 		<UnknownPackWarningModal ref="unknownPackWarningModal" />
 		<div
-			class="app-grid-navbar bg-bg-raised flex flex-col p-2 gap-0.5 w-[--left-bar-width] overflow-hidden"
+			class="app-grid-navbar flex flex-col p-2 gap-1 w-[--left-bar-width] overflow-hidden"
 			:class="railExpanded ? 'items-stretch' : 'items-center'"
 		>
 			<NavButton
@@ -2257,6 +2339,27 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 			>
 				<GlobeIcon class="size-5 shrink-0" />
 			</NavButton>
+			<button
+				type="button"
+				class="nav-button nav-rail-slot flex items-center border-none cursor-pointer relative"
+				:class="[
+					railExpanded
+						? 'h-10 w-full gap-3 rounded-xl px-3'
+						: 'h-10 w-10 justify-center rounded-full',
+					chatPanelOpen
+						? 'nav-rail-slot--active text-brand'
+						: 'text-secondary hover:bg-button-bg hover:text-contrast bg-transparent',
+				]"
+				:aria-label="formatMessage(messages.chat)"
+				:title="formatMessage(messages.chat)"
+				:aria-pressed="chatPanelOpen"
+				@click="chatPanelOpen = !chatPanelOpen"
+			>
+				<MessageIcon class="size-5 shrink-0" />
+				<span v-if="railExpanded" class="truncate text-[13px] font-medium">
+					{{ formatMessage(messages.chat) }}
+				</span>
+			</button>
 			<NavButton
 				v-tooltip.right="railExpanded ? undefined : formatMessage(messages.createNewInstance)"
 				:to="() => installationModal?.show()"
@@ -2271,113 +2374,95 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 					<QuickInstanceSwitcher :expanded="railExpanded" />
 				</Suspense>
 			</div>
-			<span
-				v-tooltip.right="railExpanded ? undefined : formatMessage(messages.minecraftAccount)"
-				class="inline-flex"
-				:class="{ 'w-full': railExpanded }"
-			>
-				<TeleportOverflowMenu
-					type="quiet"
-					size="xl"
-					:icon-only="!railExpanded"
-					:circular="!railExpanded"
-					:label="formatMessage(messages.minecraftAccount)"
-					:options="minecraftAccountMenuOptions"
-					placement="right-end"
-					:distance="4"
-					class="brightness-100 hover:!brightness-100 focus-visible:!brightness-100"
-					:class="railExpanded ? '!w-full justify-start gap-3 px-3' : ''"
+			<div class="nav-rail-footer flex w-full flex-col gap-1">
+				<span
+					v-tooltip.right="railExpanded ? undefined : identityAccountTooltip"
+					class="inline-flex"
+					:class="{ 'w-full': railExpanded }"
 				>
-					<Avatar
-						:src="minecraftAccountAvatar"
-						alt=""
-						size="32px"
-						circle
-						no-shadow
-						class="pointer-events-none !size-8"
-					/>
-					<span v-if="railExpanded" class="min-w-0 truncate text-[13px] font-medium text-primary">
-						{{ selectedMinecraftAccount?.profile?.name ?? formatMessage(messages.minecraftAccount) }}
-					</span>
-					<template
-						v-for="account in minecraftAccountSwitcherAccounts"
-						:key="account.optionId"
-						#[account.optionId]
+					<TeleportOverflowMenu
+						type="quiet"
+						size="xl"
+						:icon-only="!railExpanded"
+						:circular="!railExpanded"
+						:label="identityAccountTooltip"
+						:options="identityAccountMenuOptions"
+						placement="right-end"
+						:distance="4"
+						class="nav-rail-account nav-rail-identity brightness-100 hover:!brightness-100 focus-visible:!brightness-100"
+						:class="
+							railExpanded
+								? 'nav-rail-account--expanded nav-rail-identity--expanded !w-full justify-start gap-3 px-3'
+								: ''
+						"
 					>
-						<Avatar :src="account.avatarUrl" size="1.25rem" aria-hidden="true" circle />
-						<span class="min-w-0 truncate">{{ account.profile.name }}</span>
+						<Avatar
+							:src="minecraftAccountAvatar"
+							alt=""
+							size="24px"
+							circle
+							no-shadow
+							class="pointer-events-none !size-6 shrink-0"
+						/>
 						<span
-							v-if="account.offline"
-							class="shrink-0 rounded-full bg-surface-3 px-1.5 py-0.5 text-[0.65rem] font-semibold leading-none text-secondary"
+							v-if="railExpanded"
+							class="nav-rail-identity-text flex min-w-0 flex-1 flex-col items-start gap-0.5"
 						>
-							{{ formatMessage(messages.nonPremium) }}
+							<span class="min-w-0 truncate text-[13px] font-medium text-primary">
+								{{
+									selectedMinecraftAccount?.profile?.name ??
+									formatMessage(messages.minecraftAccount)
+								}}
+							</span>
+							<span class="flex min-w-0 items-center gap-1 text-[11px] leading-tight text-secondary">
+								<UserIcon class="size-3 shrink-0 opacity-80" />
+								<span class="min-w-0 truncate">{{ identityOctraRowText }}</span>
+							</span>
 						</span>
-					</template>
-				</TeleportOverflowMenu>
-			</span>
-			<NavButton
-				v-tooltip.right="railExpanded ? undefined : formatMessage(commonMessages.discoverContentLabel)"
-				to="/browse/modpack"
-				:is-primary="() => route.path.startsWith('/browse') && !route.query.i && !route.query.sid"
-				:is-subpage="
-					(route) => route.path.startsWith('/project') && !route.query.i && !route.query.sid
-				"
-				:expanded="railExpanded"
-				:label="formatMessage(messages.packGallery)"
-			>
-				<CompassIcon class="size-5 shrink-0" />
-			</NavButton>
-			<NavButton
-				v-tooltip.right="railExpanded ? undefined : formatMessage(commonMessages.settingsLabel)"
-				:to="() => appSettingsModal?.show()"
-				:expanded="railExpanded"
-				:label="formatMessage(commonMessages.settingsLabel)"
-			>
-				<SettingsIcon class="size-5 shrink-0" />
-			</NavButton>
-			<span v-tooltip.right="railExpanded ? undefined : profileButtonTooltip" class="inline-flex" :class="{ 'w-full': railExpanded }">
-				<IconButton
-					v-if="octraSessionLoading"
-					type="quiet"
-					size="xl"
-					disabled
-					class="pointer-events-none"
-					:label="formatMessage(messages.loadingProfile)"
-				>
-					<SpinnerIcon class="animate-spin" />
-				</IconButton>
-				<TeleportOverflowMenu
-					v-else-if="octraSession"
-					type="quiet"
-					size="xl"
-					:icon-only="!railExpanded"
-					:circular="!railExpanded"
-					:label="formatMessage(messages.modrinthAccount)"
-					:options="octraAccountMenuOptions"
-					placement="right-end"
-					:distance="4"
-					class="brightness-100 hover:!brightness-100 focus-visible:!brightness-100"
-					:class="railExpanded ? '!w-full justify-start gap-3 px-3' : ''"
-				>
-					<UserIcon class="!text-brand size-5 shrink-0" />
-					<span v-if="railExpanded" class="min-w-0 truncate text-[13px] font-medium text-primary">
-						{{ octraSession.username }}
-					</span>
-				</TeleportOverflowMenu>
+						<template
+							v-for="account in minecraftAccountSwitcherAccounts"
+							:key="account.optionId"
+							#[account.optionId]
+						>
+							<Avatar :src="account.avatarUrl" size="1.25rem" aria-hidden="true" circle />
+							<span class="min-w-0 truncate">{{ account.profile.name }}</span>
+							<span
+								v-if="account.offline"
+								class="shrink-0 rounded-full bg-surface-3 px-1.5 py-0.5 text-[0.65rem] font-semibold leading-none text-secondary"
+							>
+								{{ formatMessage(messages.nonPremium) }}
+							</span>
+						</template>
+					</TeleportOverflowMenu>
+				</span>
 				<NavButton
-					v-else
-					:to="() => openOctraAccount('login')"
+					v-tooltip.right="
+						railExpanded ? undefined : formatMessage(commonMessages.discoverContentLabel)
+					"
+					to="/browse/modpack"
+					:is-primary="() => route.path.startsWith('/browse') && !route.query.i && !route.query.sid"
+					:is-subpage="
+						(route) => route.path.startsWith('/project') && !route.query.i && !route.query.sid
+					"
 					:expanded="railExpanded"
-					:label="formatMessage(messages.signInToModrinthAccount)"
+					:label="formatMessage(messages.packGallery)"
 				>
-					<LogInIcon class="text-brand size-5 shrink-0" />
+					<CompassIcon class="size-5 shrink-0" />
 				</NavButton>
-			</span>
+				<NavButton
+					v-tooltip.right="railExpanded ? undefined : formatMessage(commonMessages.settingsLabel)"
+					:to="() => appSettingsModal?.show()"
+					:expanded="railExpanded"
+					:label="formatMessage(commonMessages.settingsLabel)"
+				>
+					<SettingsIcon class="size-5 shrink-0" />
+				</NavButton>
+			</div>
 			<div class="my-1 h-px shrink-0 bg-surface-5" :class="railExpanded ? 'mx-1' : 'w-8'" />
 			<button
 				type="button"
 				class="nav-rail-collapse flex items-center border-none bg-transparent text-secondary cursor-pointer hover:bg-button-bg hover:text-contrast"
-				:class="railExpanded ? 'h-11 w-full gap-3 rounded-xl px-3' : 'h-11 w-11 justify-center rounded-full'"
+				:class="railExpanded ? 'h-10 w-full gap-3 rounded-xl px-3' : 'h-10 w-10 justify-center rounded-full'"
 				:aria-label="formatMessage(railExpanded ? messages.collapseRail : messages.expandRail)"
 				:title="formatMessage(railExpanded ? messages.collapseRail : messages.expandRail)"
 				@click="railExpanded = !railExpanded"
@@ -2432,15 +2517,22 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	</div>
 	<div
 		v-if="stateInitialized"
-		class="app-contents"
+		class="app-contents flex"
 		:class="{
 			'rail-expanded': railExpanded,
 			'sidebar-enabled': sidebarVisible,
 			'disable-advanced-rendering': !appTheme.advancedRendering,
 		}"
 	>
+		<OctraChatPanel
+			ref="octraChatPanel"
+			:session="octraSession"
+			:open="chatPanelOpen"
+			@close="chatPanelOpen = false"
+			@sign-in="openOctraAccount('login')"
+		/>
 		<div
-			class="app-viewport flex-grow router-view"
+			class="app-viewport flex-grow router-view min-w-0"
 			:class="{ 'sidebar-open': sidebarVisible }"
 		>
 			<SurveyPopup />
@@ -2520,6 +2612,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 						:loading-session="octraSessionLoading"
 						@sign-in="openOctraAccount('login')"
 						@register="openOctraAccount('register')"
+						@message-player="openOctraChatDm"
 					/>
 				</div>
 			</div>
@@ -2539,7 +2632,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 			<template v-if="false">
 				<a
 					href="https://modrinth.plus?app"
-					class="absolute bottom-[250px] w-full flex justify-center items-center gap-1 px-4 py-3 text-purple font-medium hover:underline z-10"
+					class="absolute bottom-[250px] w-full flex justify-center items-center gap-1 px-4 py-3 text-brand font-medium hover:underline z-10"
 					target="_blank"
 				>
 					<ArrowBigUpDashIcon class="text-2xl" />
@@ -2554,6 +2647,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 			v-if="stateInitialized && showFriendsFab"
 			type="button"
 			class="friends-fab fixed z-40 flex size-12 items-center justify-center rounded-full border-none bg-button-bg text-secondary shadow-raised cursor-pointer hover:bg-button-bg hover:text-contrast hover:brightness-[--hover-brightness]"
+			:class="{ 'friends-fab--presence': !!octraSession }"
 			:aria-label="formatMessage(messages.expandSidebar)"
 			:title="formatMessage(messages.expandSidebar)"
 			@click="sidebarExpandedPreference = true"
@@ -2628,6 +2722,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	--top-bar-height: 3rem;
 	--left-bar-width: 4rem;
 	--right-bar-width: 0px;
+	--shell-motion: 0.28s cubic-bezier(0.32, 0.72, 0, 1);
 
 	&.rail-expanded {
 		--left-bar-width: 15.5rem;
@@ -2652,11 +2747,94 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	grid-area: nav;
 	position: relative;
 	z-index: 2;
-	transition: width 0.2s ease-out;
+	transition: width var(--shell-motion);
 	border-right: 1px solid var(--color-divider);
+	background: linear-gradient(180deg, var(--surface-2) 0%, var(--surface-1-5) 100%);
 
 	@media (prefers-reduced-motion: reduce) {
 		transition: none;
+	}
+}
+
+.nav-rail-slot {
+	transition:
+		background-color var(--shell-motion),
+		color var(--shell-motion),
+		box-shadow var(--shell-motion),
+		transform var(--shell-motion);
+
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
+	}
+}
+
+.nav-rail-slot--active {
+	background: var(--surface-3);
+	box-shadow: inset 0 0 0 1px var(--surface-5);
+	transform: translateX(2px);
+
+	&::before {
+		content: '';
+		position: absolute;
+		left: 0.15rem;
+		top: 50%;
+		transform: translateY(-50%);
+		height: 1.25rem;
+		width: 0.22rem;
+		border-radius: 999px;
+		background: var(--color-brand);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		transform: none;
+	}
+}
+
+.nav-rail-footer {
+	margin-top: 0.25rem;
+	padding-top: 0.35rem;
+	border-top: 1px solid color-mix(in srgb, var(--surface-5) 80%, transparent);
+}
+
+.nav-rail-account {
+	height: 2.5rem !important;
+	min-height: 2.5rem !important;
+	background: transparent !important;
+	box-shadow: none !important;
+	color: var(--color-primary) !important;
+	transition:
+		background-color var(--shell-motion),
+		color var(--shell-motion),
+		box-shadow var(--shell-motion);
+
+	&:hover,
+	&:focus-visible {
+		background: var(--color-button-bg) !important;
+		color: var(--color-contrast) !important;
+	}
+
+	&:not(.nav-rail-account--expanded) {
+		width: 2.5rem !important;
+		min-width: 2.5rem !important;
+		padding: 0 !important;
+	}
+
+	&.nav-rail-account--expanded {
+		border-radius: 0.75rem !important;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
+	}
+}
+
+.nav-rail-identity {
+	&.nav-rail-identity--expanded {
+		height: auto !important;
+		min-height: 2.75rem !important;
+		padding-top: 0.375rem !important;
+		padding-bottom: 0.375rem !important;
+		border-radius: 0.75rem !important;
 	}
 }
 
@@ -2695,7 +2873,8 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	overflow: auto;
 	overflow-x: hidden;
 	scrollbar-gutter: stable;
-	transition: margin-right 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+	position: relative;
+	transition: margin-right var(--shell-motion);
 
 	&.sidebar-open {
 		margin-right: 300px;
@@ -2704,6 +2883,26 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	@media (prefers-reduced-motion: reduce) {
 		transition: none;
 	}
+}
+
+.app-viewport::after {
+	content: '';
+	pointer-events: none;
+	position: fixed;
+	left: var(--left-bar-width);
+	top: var(--top-bar-height);
+	right: var(--right-bar-width);
+	bottom: 0;
+	z-index: 15;
+	border-top-left-radius: var(--radius-xl);
+	opacity: 0.4;
+	background:
+		radial-gradient(ellipse at center, transparent 45%, rgba(0, 0, 0, 0.22) 100%),
+		url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.45'/%3E%3C/svg%3E");
+	background-size:
+		100% 100%,
+		180px 180px;
+	mix-blend-mode: soft-light;
 }
 
 .app-sidebar {
@@ -2718,7 +2917,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	background: var(--color-raised-bg);
 	transform: translateX(100%);
 	pointer-events: none;
-	transition: transform 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+	transition: transform var(--shell-motion);
 
 	&.open {
 		transform: translateX(0);
@@ -2750,11 +2949,19 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	bottom: 1.25rem;
 }
 
+.friends-fab--presence {
+	color: var(--color-brand);
+	box-shadow:
+		0 0 0 2px color-mix(in srgb, var(--color-brand) 45%, transparent),
+		0 0 0 6px color-mix(in srgb, var(--color-brand) 14%, transparent),
+		var(--shadow-raised);
+}
+
 .friends-fab-enter-active,
 .friends-fab-leave-active {
 	transition:
-		opacity 0.2s ease,
-		transform 0.2s cubic-bezier(0.32, 0.72, 0, 1);
+		opacity var(--shell-motion),
+		transform var(--shell-motion);
 }
 
 .friends-fab-enter-from,
@@ -2767,7 +2974,9 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	.friends-fab {
 		transition:
 			transform 0.15s ease,
-			filter 0.15s ease;
+			filter 0.15s ease,
+			box-shadow 0.28s cubic-bezier(0.32, 0.72, 0, 1),
+			color 0.28s cubic-bezier(0.32, 0.72, 0, 1);
 	}
 
 	.friends-fab:hover {
@@ -2777,12 +2986,39 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	.friends-fab:active {
 		transform: scale(0.96);
 	}
+
+	.friends-fab--presence::after {
+		content: '';
+		position: absolute;
+		inset: -3px;
+		border-radius: 9999px;
+		border: 1px solid color-mix(in srgb, var(--color-brand) 40%, transparent);
+		opacity: 0.7;
+		animation: presence-ring 2.4s ease-out infinite;
+		pointer-events: none;
+	}
+}
+
+@keyframes presence-ring {
+	0% {
+		transform: scale(1);
+		opacity: 0.65;
+	}
+	100% {
+		transform: scale(1.28);
+		opacity: 0;
+	}
 }
 
 @media (prefers-reduced-motion: reduce) {
 	.friends-fab-enter-active,
 	.friends-fab-leave-active {
 		transition: none;
+	}
+
+	.friends-fab--presence::after {
+		animation: none;
+		display: none;
 	}
 }
 

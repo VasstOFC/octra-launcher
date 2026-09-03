@@ -171,6 +171,7 @@ impl ProcessManager {
         instance_id: &str,
         instance_path: &str,
         instance_name: &str,
+        join_address: Option<String>,
         mut mc_command: Command,
         post_exit_command: Option<String>,
         post_exit_env_vars: Vec<(String, String)>,
@@ -235,6 +236,7 @@ impl ProcessManager {
                 instance_id: instance_id.to_string(),
                 instance_path: instance_path.to_string(),
                 instance_name: instance_name.to_string(),
+                join_address,
             },
             child: mc_proc,
             rpc_server,
@@ -401,6 +403,9 @@ pub struct ProcessMetadata {
     pub instance_path: String,
     pub instance_name: String,
     pub start_time: DateTime<Utc>,
+    /// Multiplayer address when launched via QuickPlay Server / join server.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub join_address: Option<String>,
 }
 
 #[derive(Debug)]

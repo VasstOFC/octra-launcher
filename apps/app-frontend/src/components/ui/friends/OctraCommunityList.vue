@@ -1,17 +1,26 @@
 <script setup lang="ts">
-import { SearchIcon } from '@modrinth/assets'
+import { MessageIcon, PlayIcon, SearchIcon } from '@modrinth/assets'
+import type { ButtonMenuOption } from '@modrinth/ui'
 import {
 	Avatar,
 	Button,
+	ContextMenu,
 	defineMessages,
+	IconButton,
 	Input,
+	injectNotificationManager,
 	useRelativeTime,
 	useVIntl,
 } from '@modrinth/ui'
 import { useQuery } from '@tanstack/vue-query'
-import { computed, ref } from 'vue'
+import { computed, ref, useTemplateRef } from 'vue'
 
+import { useOctraCommunityAvatars } from '@/composables/use-octra-community-avatars'
+import { handleSevereError } from '@/composables/use-error.js'
+import { list } from '@/helpers/instance'
 import { octraCommunity } from '@/helpers/octra-account.js'
+import type { GameInstance } from '@/helpers/types'
+import { start_join_server } from '@/helpers/worlds'
 
 type OctraAccountSession = {
 	token: string
@@ -30,6 +39,7 @@ type OctraCommunityMember = {
 	avatar_url: string
 	presence?: string
 	instance_name?: string | null
+	join_address?: string | null
 	last_seen?: string | null
 }
 
@@ -41,11 +51,21 @@ const props = defineProps<{
 const emit = defineEmits<{
 	signIn: []
 	register: []
+	messagePlayer: [userId: number]
 }>()
 
 const { formatMessage } = useVIntl()
+const { handleError } = injectNotificationManager()
 const formatRelativeTime = useRelativeTime({ numeric: 'auto', style: 'short' })
 const search = ref('')
+const joiningId = ref<number | null>(null)
+const memberOptions = useTemplateRef('memberOptions')
+
+/** Strip markup so API nick/status never render as HTML (text-only sidebar). */
+function plainText(value: string | null | undefined): string {
+	if (value == null) return ''
+	return String(value).replace(/<[^>]*>/g, '')
+}
 
 const query = useQuery({
 	queryKey: computed(() => ['octra-community', props.session?.username ?? null]),
@@ -57,14 +77,21 @@ const query = useQuery({
 
 const snapshot = computed(() => query.data.value)
 const connected = computed(() => !!props.session && !!snapshot.value?.connected)
-const members = computed<OctraCommunityMember[]>(() => snapshot.value?.members ?? [])
+const members = computed<OctraCommunityMember[]>(() => {
+	const raw = snapshot.value?.members ?? []
+	return raw.map((member) => ({
+		...member,
+		minecraft_nick: plainText(member.minecraft_nick),
+		instance_name: member.instance_name != null ? plainText(member.instance_name) : member.instance_name,
+	}))
+})
 const listLoading = computed(
 	() => !!props.loadingSession || (!!props.session && query.isLoading.value),
 )
 
 const filtered = computed(() => {
-	const q = search.value.trim().toLowerCase()
-	const list = members.value.slice().sort((a, b) => {
+	const q = plainText(search.value).trim().toLowerCase()
+	const listMembers = members.value.slice().sort((a, b) => {
 		const rank = (presence?: string) => {
 			if (presence === 'ingame') return 0
 			if (presence === 'launcher') return 1
@@ -74,9 +101,11 @@ const filtered = computed(() => {
 		if (byPresence !== 0) return byPresence
 		return a.minecraft_nick.localeCompare(b.minecraft_nick, undefined, { sensitivity: 'base' })
 	})
-	if (!q) return list
-	return list.filter((member) => member.minecraft_nick.toLowerCase().includes(q))
+	if (!q) return listMembers
+	return listMembers.filter((member) => member.minecraft_nick.toLowerCase().includes(q))
 })
+
+const { avatarFor } = useOctraCommunityAvatars(members)
 
 function presenceDotClass(presence?: string) {
 	if (presence === 'ingame') return 'bg-brand-green'
@@ -101,6 +130,62 @@ function presenceLabel(member: OctraCommunityMember) {
 		}
 	}
 	return formatMessage(messages.offline)
+}
+
+function createContextMenuOptions(member: OctraCommunityMember): ButtonMenuOption[] {
+	return [
+		{
+			id: 'message-player',
+			label: formatMessage(messages.messagePlayer),
+			icon: MessageIcon,
+			action: () => emit('messagePlayer', member.id),
+		},
+	]
+}
+
+function openMemberContextMenu(event: MouseEvent, member: OctraCommunityMember) {
+	memberOptions.value?.open(event, createContextMenuOptions(member))
+}
+
+function canJoin(member: OctraCommunityMember) {
+	return member.presence === 'ingame' && !!member.join_address?.trim()
+}
+
+function pickInstance(
+	instances: GameInstance[],
+	preferredName: string | null | undefined,
+): GameInstance | null {
+	if (instances.length === 0) return null
+	const preferred = preferredName?.trim().toLowerCase()
+	if (preferred) {
+		const byName = instances.find((instance) => instance.name.toLowerCase() === preferred)
+		if (byName) return byName
+	}
+	const sorted = [...instances].sort((a, b) => {
+		const aTime = a.last_played ? new Date(a.last_played).getTime() : 0
+		const bTime = b.last_played ? new Date(b.last_played).getTime() : 0
+		return bTime - aTime
+	})
+	return sorted[0] ?? null
+}
+
+async function joinFriend(member: OctraCommunityMember) {
+	const address = member.join_address?.trim()
+	if (!address) return
+	joiningId.value = member.id
+	try {
+		const instances = await list()
+		const instance = pickInstance(instances, member.instance_name)
+		if (!instance) {
+			handleError(formatMessage(messages.noInstance))
+			return
+		}
+		await start_join_server(instance.id, address)
+	} catch (error) {
+		handleSevereError(error, handleError)
+	} finally {
+		joiningId.value = null
+	}
 }
 
 const messages = defineMessages({
@@ -154,7 +239,7 @@ const messages = defineMessages({
 	},
 	inGame: {
 		id: 'octra.community.in-game',
-		defaultMessage: 'Playing {name}',
+		defaultMessage: 'Playing: {name}',
 	},
 	inGameUnknown: {
 		id: 'octra.community.in-game-unknown',
@@ -164,11 +249,28 @@ const messages = defineMessages({
 		id: 'octra.community.last-seen',
 		defaultMessage: 'Last seen {time}',
 	},
+	join: {
+		id: 'octra.community.join',
+		defaultMessage: 'Join',
+	},
+	noInstance: {
+		id: 'octra.community.no-instance',
+		defaultMessage: 'Create or install an instance before joining a friend.',
+	},
+	messagePlayer: {
+		id: 'octra.community.message-player',
+		defaultMessage: 'Message player',
+	},
+	memberActionsLabel: {
+		id: 'octra.community.actions.label',
+		defaultMessage: 'Friend actions',
+	},
 })
 </script>
 
 <template>
 	<div class="flex flex-col gap-3">
+		<ContextMenu ref="memberOptions" :label="formatMessage(messages.memberActionsLabel)" />
 		<div class="flex items-start justify-between gap-2">
 			<div class="min-w-0">
 				<h3 class="m-0 text-base font-medium text-primary">
@@ -218,7 +320,7 @@ const messages = defineMessages({
 		</template>
 
 		<template v-else-if="members.length === 0">
-			<p class="m-0 text-sm text-secondary">
+			<p class="m-0 font-minecraft text-sm text-secondary">
 				{{ formatMessage(messages.empty) }}
 			</p>
 		</template>
@@ -236,14 +338,21 @@ const messages = defineMessages({
 				wrapper-class="!border-button-bg [&>span:first-child]:!text-primary [&>span:first-child]:!opacity-100"
 				@keyup.esc="search = ''"
 			/>
-			<div class="flex flex-col gap-0.5">
+			<div class="community-list flex flex-col gap-0.5">
 				<div
-					v-for="member in filtered"
+					v-for="(member, index) in filtered"
 					:key="member.id"
-					class="grid grid-cols-[auto_1fr] items-center gap-2 rounded-xl px-1 py-1.5 select-none"
+					class="community-row grid grid-cols-[auto_1fr_auto] items-center gap-2 rounded-xl px-1 py-1.5 select-none"
+					:style="{ '--stagger': `${Math.min(index, 8) * 28}ms` }"
+					@contextmenu.prevent.stop="(event) => openMemberContextMenu(event, member)"
 				>
 					<div class="relative shrink-0">
-						<Avatar :src="member.avatar_url" size="32px" circle />
+						<Avatar
+							:src="avatarFor(member)"
+							:alt="member.minecraft_nick"
+							size="32px"
+							circle
+						/>
 						<span
 							class="absolute bottom-0 right-0 size-2 rounded-full ring-2 ring-[var(--color-raised-bg)]"
 							:class="presenceDotClass(member.presence)"
@@ -255,11 +364,43 @@ const messages = defineMessages({
 							{{ presenceLabel(member) }}
 						</span>
 					</div>
+					<IconButton
+						v-if="canJoin(member)"
+						v-tooltip="formatMessage(messages.join)"
+						type="standard"
+						color="brand"
+						:label="formatMessage(messages.join)"
+						:disabled="joiningId === member.id"
+						@click="joinFriend(member)"
+					>
+						<PlayIcon />
+					</IconButton>
 				</div>
 			</div>
 			<p v-if="filtered.length === 0 && search" class="m-0 text-sm text-secondary">
-				{{ formatMessage(messages.noMatch, { query: search }) }}
+				{{ formatMessage(messages.noMatch, { query: plainText(search) }) }}
 			</p>
 		</template>
 	</div>
 </template>
+
+<style scoped>
+@media (prefers-reduced-motion: no-preference) {
+	:global(.app-sidebar.open) .community-row {
+		animation: community-row-in 0.28s cubic-bezier(0.32, 0.72, 0, 1) both;
+		animation-delay: var(--stagger, 0ms);
+	}
+}
+
+@keyframes community-row-in {
+	from {
+		opacity: 0;
+		transform: translateX(0.5rem);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+</style>
+

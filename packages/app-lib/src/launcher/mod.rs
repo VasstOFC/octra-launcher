@@ -1168,8 +1168,31 @@ pub async fn launch_minecraft(
         .friends_socket
         .update_status(Some(instance.name.clone()))
         .await;
-    let _ = crate::octra_accounts::publish_presence("ingame", Some(&instance.name))
-        .await;
+
+    let join_address = match &quick_play_type {
+        QuickPlayType::Server(ServerAddress::Unresolved(address)) => {
+            Some(address.clone())
+        }
+        QuickPlayType::Server(ServerAddress::Resolved {
+            original_host,
+            original_port,
+            ..
+        }) => {
+            if *original_port == 25565 {
+                Some(original_host.clone())
+            } else {
+                Some(format!("{original_host}:{original_port}"))
+            }
+        }
+        _ => None,
+    };
+
+    let _ = crate::octra_accounts::publish_presence(
+        "ingame",
+        Some(&instance.name),
+        join_address.as_deref(),
+    )
+    .await;
 
     // Create Minecraft child by inserting it into the state
     // This also spawns the process and prepares the subsequent processes
@@ -1179,6 +1202,7 @@ pub async fn launch_minecraft(
             &instance.id,
             &instance.path,
             &instance.name,
+            join_address,
             command,
             post_exit_hook,
             env_args,

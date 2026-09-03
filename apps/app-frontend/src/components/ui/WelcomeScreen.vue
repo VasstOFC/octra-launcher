@@ -96,7 +96,7 @@ onUnmounted(() => {
 					<h1 class="m-0 flex items-center gap-2 text-2xl font-semibold leading-8 text-contrast">
 						{{ formatMessage(messages.welcomeTitle) }}
 					</h1>
-					<p class="m-0 text-center text-base leading-6 text-primary">
+					<p class="m-0 text-center font-minecraft text-base leading-6 text-primary">
 						{{ formatMessage(messages.welcomeDescription) }}
 					</p>
 				</div>

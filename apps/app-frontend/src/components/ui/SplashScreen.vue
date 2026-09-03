@@ -4,6 +4,7 @@
 			<div class="app-logo-wrapper" data-tauri-drag-region>
 				<OctraMark animate class="app-logo text-brand" />
 				<p class="app-title">Octra App</p>
+				<p class="app-tagline font-minecraft">{{ formatMessage(messages.tagline) }}</p>
 				<ProgressBar class="loading-bar" :progress="Math.min(loadingProgress, 100)" />
 				<span v-if="message">{{ message }}</span>
 			</div>
@@ -15,7 +16,7 @@
 </template>
 
 <script setup>
-import { injectLoadingState } from '@modrinth/ui'
+import { injectLoadingState, defineMessages, useVIntl } from '@modrinth/ui'
 import { ref, watch } from 'vue'
 
 import OctraMark from '@/components/brand/OctraMark.vue'
@@ -24,6 +25,14 @@ import { useAppEvent } from '@/composables/use-app-event'
 import { useTheme } from '@/composables/use-theme.ts'
 
 const theme = useTheme()
+const { formatMessage } = useVIntl()
+
+const messages = defineMessages({
+	tagline: {
+		id: 'app.splash.tagline',
+		defaultMessage: 'Ready when you are',
+	},
+})
 
 const doneLoading = ref(false)
 const loadingProgress = ref(0)
@@ -95,11 +104,24 @@ useAppEvent('loading', (e) => {
 }
 
 .splash-fade-leave-active {
-	transition: opacity 0.3s ease-in-out;
+	transition:
+		opacity 0.42s cubic-bezier(0.32, 0.72, 0, 1),
+		filter 0.42s cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 .splash-fade-leave-to {
 	opacity: 0;
+	filter: blur(4px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.splash-fade-leave-active {
+		transition: opacity 0.2s ease;
+	}
+
+	.splash-fade-leave-to {
+		filter: none;
+	}
 }
 
 .app-logo-wrapper {
@@ -112,7 +134,7 @@ useAppEvent('loading', (e) => {
 	justify-content: center;
 	align-items: center;
 
-	gap: 1rem;
+	gap: 0.75rem;
 	color: var(--color-contrast);
 
 	z-index: 9998;
@@ -129,10 +151,41 @@ useAppEvent('loading', (e) => {
 	font-weight: 800;
 	letter-spacing: -0.04em;
 	line-height: 1;
+	animation: splash-copy-in 0.7s cubic-bezier(0.32, 0.72, 0, 1) 0.12s both;
+}
+
+.app-tagline {
+	margin: 0;
+	font-size: 0.8rem;
+	letter-spacing: 0.04em;
+	line-height: 1.2;
+	color: var(--color-secondary);
+	animation: splash-copy-in 0.7s cubic-bezier(0.32, 0.72, 0, 1) 0.22s both;
 }
 
 .loading-bar {
 	max-width: 20rem;
+	margin-top: 0.35rem;
+	animation: splash-copy-in 0.7s cubic-bezier(0.32, 0.72, 0, 1) 0.3s both;
+}
+
+@keyframes splash-copy-in {
+	from {
+		opacity: 0;
+		transform: translateY(0.4rem);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.app-title,
+	.app-tagline,
+	.loading-bar {
+		animation: none;
+	}
 }
 
 .gradient-bg {

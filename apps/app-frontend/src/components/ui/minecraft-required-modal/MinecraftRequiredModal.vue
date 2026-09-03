@@ -100,7 +100,7 @@ const messages = defineMessages({
 	description: {
 		id: 'minecraft-required.description',
 		defaultMessage:
-			'Sign in with Microsoft, or play offline with a nickname. Your skin is uploaded so it shows in singleplayer and on SkinsRestorer servers.',
+			'Sign in with Microsoft, or play offline with a nickname. Your skin is published to the Octra cloud so you and friends see it in-game — no extra mods required. SkinsRestorer remains optional for dedicated servers.',
 	},
 	signIn: {
 		id: 'minecraft-required.sign-in',

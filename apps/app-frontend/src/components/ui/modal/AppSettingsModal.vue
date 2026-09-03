@@ -374,6 +374,7 @@ async function handleCheckForUpdates() {
 		:before-hide="canLeaveCurrentTab"
 		:before-tab-change="canLeaveCurrentTab"
 		:floating-action-bar-shown="hasUnsavedChanges"
+		variant="emberslot"
 	>
 		<template #title>
 			<span class="text-2xl font-semibold text-contrast">

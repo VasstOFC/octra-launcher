@@ -448,6 +448,12 @@ fn main() {
                         "octra_account_login",
                         "octra_account_logout",
                         "octra_community",
+                        "octra_chat_channels",
+                        "octra_chat_open_dm",
+                        "octra_chat_create_group",
+                        "octra_chat_list",
+                        "octra_chat_post",
+                        "octra_cache_mrpack_url",
                     ])
                     .default_permission(
                         DefaultPermissionRule::AllowAllCommands,

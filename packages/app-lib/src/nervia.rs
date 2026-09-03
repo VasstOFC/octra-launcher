@@ -11,8 +11,11 @@
 //! 3. After changing the URL, also update:
 //!    - `apps/app/capabilities/plugins.json` — add `https://<domain>/*` to http allowlist
 //!    - `apps/app/tauri.conf.json` — CSP `connect-src` and `img-src`
-//!    - Rebuild/redistribute the launcher so CSL config picks up the new base URL
+//!    - Rebuild/redistribute the launcher so authlib-injector points at the new base URL
 //! 4. Full VPS + Cloudflare checklist: `services/octra-api/deploy/README.md`
+//!
+//! Authlib-injector uses [`skins_url()`] as the shared remote Yggdrasil API root
+//! (see `octra_skins::ygg_root` / `octra_skins::prepare_launch`).
 
 use std::sync::OnceLock;
 

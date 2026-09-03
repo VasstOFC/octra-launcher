@@ -5,6 +5,7 @@ import dayjs from 'dayjs'
 import { computed, inject, onActivated, ref } from 'vue'
 
 import FeaturedPackCard from '@/components/ui/FeaturedPackCard.vue'
+import HomeHeroBand from '@/components/ui/home/HomeHeroBand.vue'
 import LibrarySection from '@/components/ui/library/index.vue'
 import WelcomeScreen from '@/components/ui/WelcomeScreen.vue'
 import RecentWorldsList from '@/components/ui/world/RecentWorldsList.vue'
@@ -114,6 +115,7 @@ function openPageContextMenu(event: MouseEvent) {
 		class="flex flex-col gap-3 p-6"
 		@contextmenu="openPageContextMenu"
 	>
+		<HomeHeroBand />
 		<FeaturedPackCard :installed="hasFeaturedPack" @installed="fetchInstances" />
 		<RecentWorldsList
 			v-if="recentInstances?.length > 0 && appSettings.getFeatureFlag('worlds_in_home')"

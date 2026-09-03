@@ -90,6 +90,7 @@ DATA_DIR=/var/lib/octra-skins
 DATABASE_PATH=/var/lib/octra-skins/octra.db
 JWT_SECRET=WYMIEN_NA_DLUGI_LOSOWY_CIEN
 API_KEY=WYMIEN_NA_STARY_KLUCZ_OCTRA
+PUBLIC_BASE_URL=http://92.5.186.6
 EOF
 sudo chmod 600 /etc/octra/octra.env
 sudo chown root:octra /etc/octra/octra.env
@@ -162,12 +163,57 @@ curl -X POST http://127.0.0.1/api/v1/auth/login \
 | POST | `/api/v1/auth/register` | rejestracja: `password`, `minecraft_nick`, `profile_uuid`, opcjonalnie `account_type` (legacy opcjonalne `username` ignorowane przy nicku) |
 | POST | `/api/v1/auth/login` | logowanie: `username` (nick) + `password` |
 | GET | `/api/v1/auth/me` | sesja (Bearer) |
-| GET | `/api/v1/community` | lista wszystkich kont Octra oprócz Ciebie (Bearer) — bez zaproszeń; zawiera `presence` (`launcher` / `ingame` / `offline`), `instance_name`, `last_seen` |
-| POST | `/api/v1/presence` | heartbeat: `{ "status": "launcher"|"ingame"|"offline", "instance_name": "..." }` (Bearer). Po ~60 s bez pulsu status spada do offline |
+| GET | `/api/v1/community` | lista wszystkich kont Octra oprócz Ciebie (Bearer) — bez zaproszeń; zawiera `presence` (`launcher` / `ingame` / `offline`), `instance_name`, `join_address` (gdy start przez Octra/QuickPlay), `last_seen` |
+| POST | `/api/v1/presence` | heartbeat: `{ "status": "launcher"|"ingame"|"offline", "instance_name": "...", "join_address": "host:port" }` (Bearer). Po ~60 s bez pulsu status spada do offline |
+| GET | `/api/v1/chat/channels` | lista kanałów (DM + grupy) użytkownika (Bearer) |
+| POST | `/api/v1/chat/channels/dm` | `{ "user_id": N }` — otwórz/utwórz DM |
+| POST | `/api/v1/chat/channels/group` | `{ "name": "...", "member_ids": [..] }` — nowa grupa |
+| GET | `/api/v1/chat/channels/{id}/messages?after_id=` | wiadomości kanału |
+| POST | `/api/v1/chat/channels/{id}/messages` | `{ "text": "..." }` — wyślij na kanał |
+| GET/POST | `/api/v1/chat` | legacy → grupa „Everyone” |
 | GET/PUT/POST | `/skins/{uuid}` | skin po UUID |
-| GET | `/skins/MinecraftSkins/{nick}.png` | skin po nicku (CSL) |
+| GET | `/skins/MinecraftSkins/{nick}.png` | skin po nicku (legacy / SkinsRestorer / authlib textures) |
+| GET | `/` lub `/index.json` | **authlib-injector** meta (`skinDomains`, `feature.non_email_login`) |
+| GET | `/sessionserver/session/minecraft/profile/{uuid}` | profil Yggdrasil + textures (registry → Mojang fallthrough) |
+| GET | `/sessionserver/session/minecraft/hasJoined` | `?username=` — join check (stub + registry) |
+| POST | `/sessionserver/session/minecraft/join` | stub 204 (offline) |
+| POST | `/api/profiles/minecraft` | lista `{id,name}` po nickach |
+| POST | `/authserver/authenticate` (także refresh/validate) | stub sesji offline |
+| GET | `/textures/{sha256}` | opcjonalnie PNG po hashu |
 
-Launcher rejestruje konto Octra z domyślnego konta Minecraft (nick + UUID), bez osobnego username i bez tworzenia konta offline. Po zalogowaniu wysyła skiny z `Authorization: Bearer <jwt>`. Panel znajomych w launcherze pokazuje **wszystkie** konta z `GET /api/v1/community` (prywatny launcher — bez dodawania znajomych).
+Launcher rejestruje konto Octra z domyślnego konta Minecraft (nick + UUID), bez osobnego username i bez tworzenia konta offline. Po zalogowaniu wysyła skiny z `Authorization: Bearer <jwt>`. Panel znajomych w launcherze pokazuje **wszystkie** konta z `GET /api/v1/community` (prywatny launcher — bez dodawania znajomych). Presence może zawierać `join_address`, gdy gracz wystartował multiplayer przez Octra (QuickPlay / lista serwerów) — wtedy inni widzą przycisk Dołącz. Czat grupowy: `GET/POST /api/v1/chat` (wklejony link `.mrpack` → Instaluj w UI).
+
+### MUST redeploy — shared remote Yggdrasil (authlib-injector)
+
+Od tej wersji launcher wskazuje authlib-injector na **ten sam host** co registry (`http://92.5.186.6`), bez lokalnego hubu i bez CustomSkinLoader. Bez nowych tras Yggdrasil na VPS znajomi **nie zobaczą** skinów offline.
+
+**Weryfikacja po `systemctl restart octra-api`:**
+
+```bash
+# Meta root (authlib-injector)
+curl -s http://127.0.0.1:8787/ | head -c 400; echo
+# Oczekuj: "serverName":"Octra", "skinDomains" zawiera 92.5.186.6
+
+# Profil Vasstek (podstaw swój offline UUID z launchera / by-uuid)
+# Przykład: najpierw znajdź plik:
+ls /var/lib/octra-skins/by-name/vasstek.json
+# potem:
+NICK=Vasstek
+UUID=$(python3 -c "import json; print(json.load(open('/var/lib/octra-skins/by-name/vasstek.json'))['uuid'])")
+curl -s "http://127.0.0.1:8787/sessionserver/session/minecraft/profile/${UUID}"
+# Oczekuj: properties[].name == textures, value (base64) z URL .../skins/MinecraftSkins/Vasstek.png
+
+curl -s -o /dev/null -w "%{http_code}\n" "http://127.0.0.1:8787/skins/MinecraftSkins/${NICK}.png"
+# Oczekuj: 200
+
+# Z zewnątrz (ten sam URL co launcher):
+curl -s http://92.5.186.6/ | head -c 200; echo
+curl -s "http://92.5.186.6/sessionserver/session/minecraft/profile/${UUID}" | head -c 300; echo
+```
+
+Opcjonalnie ustaw `PUBLIC_BASE_URL=http://92.5.186.6` w `/etc/octra/octra.env` (domyślna wartość w kodzie jest taka sama).
+
+**Uwaga HTTP:** authlib-injector akceptuje cleartext HTTP z ostrzeżeniem w logu JVM (`You are using HTTP protocol, which is INSECURE`). Działa na IP bez HTTPS; po cutoverze na domenę+TLS wystarczy zmienić `SKINS_URL` / `PUBLIC_BASE_URL`.
 
 ---
 
@@ -234,7 +280,7 @@ pub const SKINS_URL: &str = "https://skins.twojadomena.pl";
 
 4. CSP: w `apps/app/tauri.conf.json` dopisz domenę do `connect-src` i `img-src` (obok `http://92.5.186.6`).
 
-5. Zbuduj i opublikuj nowy launcher. `write_csl_config` bierze URL z `nervia::skins_url()`, więc CustomSkinLoader automatycznie dostanie HTTPS.
+5. Zbuduj i opublikuj nowy launcher. `octra_skins::ygg_root()` / authlib-injector bierze URL z `nervia::skins_url()`, więc agent automatycznie dostanie HTTPS.
 
 ### D. Opcjonalny override bez rebuildu (dev / test)
 
@@ -260,4 +306,5 @@ Produkcyjne buildy i tak powinny mieć poprawny `SKINS_URL` w `nervia.rs` — en
 - [ ] `plugins.json` — wpis `https://<domena>/*`
 - [ ] `tauri.conf.json` — CSP `connect-src` / `img-src`
 - [ ] Rebuild + dystrybucja launchera
-- [ ] Test: upload skina + CSL u drugiego gracza po HTTPS
+- [ ] Test: upload skina + drugi klient Octra widzi skin przez authlib (bez CSL) po HTTPS
+- [ ] `curl https://<domena>/` zwraca meta Yggdrasil; profil UUID zawiera textures

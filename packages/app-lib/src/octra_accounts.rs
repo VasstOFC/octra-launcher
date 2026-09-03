@@ -41,6 +41,8 @@ pub struct OctraCommunityMember {
 	#[serde(default)]
 	pub instance_name: Option<String>,
 	#[serde(default)]
+	pub join_address: Option<String>,
+	#[serde(default)]
 	pub last_seen: Option<String>,
 }
 
@@ -80,6 +82,8 @@ struct CommunityMemberApi {
 	presence: String,
 	#[serde(default)]
 	instance_name: Option<String>,
+	#[serde(default)]
+	join_address: Option<String>,
 	#[serde(default)]
 	last_seen: Option<String>,
 }
@@ -154,7 +158,7 @@ pub async fn login(username: &str, password: &str) -> crate::Result<OctraAccount
 }
 
 pub async fn logout() -> crate::Result<()> {
-	let _ = publish_presence("offline", None).await;
+	let _ = publish_presence("offline", None, None).await;
 	let state = State::get().await?;
 	for key in [
 		TOKEN_KEY,
@@ -222,7 +226,13 @@ pub async fn community() -> crate::Result<OctraCommunitySnapshot> {
 		members: parsed
 			.into_iter()
 			.map(|member| {
-				let avatar_url = format!("{}/skins/{}", base, member.profile_uuid);
+				// Prefer the legacy nick PNG path (same as authlib / SkinsRestorer).
+				// The UI crops this full skin atlas into a player head — do not
+				// display the raw texture in Avatar.
+				let avatar_url = format!(
+					"{}/skins/MinecraftSkins/{}.png",
+					base, member.minecraft_nick
+				);
 				OctraCommunityMember {
 					id: member.id,
 					minecraft_nick: member.minecraft_nick,
@@ -232,6 +242,7 @@ pub async fn community() -> crate::Result<OctraCommunitySnapshot> {
 					avatar_url,
 					presence: member.presence,
 					instance_name: member.instance_name,
+					join_address: member.join_address,
 					last_seen: member.last_seen,
 				}
 			})
@@ -242,6 +253,7 @@ pub async fn community() -> crate::Result<OctraCommunitySnapshot> {
 pub async fn publish_presence(
 	status: &str,
 	instance_name: Option<&str>,
+	join_address: Option<&str>,
 ) -> crate::Result<()> {
 	let Some(session) = session().await? else {
 		return Ok(());
@@ -251,6 +263,7 @@ pub async fn publish_presence(
 	let body = serde_json::json!({
 		"status": status,
 		"instance_name": instance_name,
+		"join_address": join_address,
 	});
 	let response = INSECURE_REQWEST_CLIENT
 		.post(&url)
@@ -279,9 +292,14 @@ pub async fn sync_presence() -> crate::Result<()> {
 	let state = State::get().await?;
 	let processes = state.process_manager.get_all();
 	if let Some(process) = processes.first() {
-		publish_presence("ingame", Some(&process.instance_name)).await
+		publish_presence(
+			"ingame",
+			Some(&process.instance_name),
+			process.join_address.as_deref(),
+		)
+		.await
 	} else {
-		publish_presence("launcher", None).await
+		publish_presence("launcher", None, None).await
 	}
 }
 
@@ -294,6 +312,165 @@ pub fn spawn_presence_heartbeat() {
 			tokio::time::sleep(Duration::from_secs(20)).await;
 		}
 	});
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct OctraChatMember {
+	pub id: i64,
+	pub minecraft_nick: String,
+	pub profile_uuid: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct OctraChatChannel {
+	pub id: i64,
+	pub kind: String,
+	pub name: Option<String>,
+	pub created_at: String,
+	#[serde(default)]
+	pub last_body: Option<String>,
+	#[serde(default)]
+	pub last_at: Option<String>,
+	#[serde(default)]
+	pub members: Vec<OctraChatMember>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct OctraChatMessage {
+	pub id: i64,
+	#[serde(default)]
+	pub channel_id: i64,
+	pub user_id: i64,
+	pub minecraft_nick: String,
+	pub body: String,
+	pub created_at: String,
+}
+
+async fn chat_auth_get(path: &str) -> crate::Result<reqwest::Response> {
+	let Some(session) = session().await? else {
+		return Err(crate::ErrorKind::OtherError(
+			"not signed in to Octra".to_string(),
+		)
+		.into());
+	};
+	let url = format!("{}{}", nervia::skins_url(), path);
+	INSECURE_REQWEST_CLIENT
+		.get(&url)
+		.header("Authorization", format!("Bearer {}", session.token))
+		.timeout(Duration::from_secs(15))
+		.send()
+		.await
+		.map_err(|e| {
+			crate::ErrorKind::OtherError(format!("octra chat request failed: {e}")).into()
+		})
+}
+
+async fn chat_auth_post(
+	path: &str,
+	body: &serde_json::Value,
+) -> crate::Result<reqwest::Response> {
+	let Some(session) = session().await? else {
+		return Err(crate::ErrorKind::OtherError(
+			"not signed in to Octra".to_string(),
+		)
+		.into());
+	};
+	let url = format!("{}{}", nervia::skins_url(), path);
+	INSECURE_REQWEST_CLIENT
+		.post(&url)
+		.header("Authorization", format!("Bearer {}", session.token))
+		.json(body)
+		.timeout(Duration::from_secs(15))
+		.send()
+		.await
+		.map_err(|e| {
+			crate::ErrorKind::OtherError(format!("octra chat request failed: {e}")).into()
+		})
+}
+
+async fn read_chat_error(response: reqwest::Response) -> crate::Result<String> {
+	let status = response.status();
+	let text_body = response.text().await.unwrap_or_default();
+	if status.is_success() {
+		return Ok(text_body);
+	}
+	let detail = serde_json::from_str::<serde_json::Value>(&text_body)
+		.ok()
+		.and_then(|v| {
+			v.get("detail")
+				.and_then(|d| d.as_str())
+				.map(ToOwned::to_owned)
+		})
+		.unwrap_or(text_body);
+	Err(crate::ErrorKind::OtherError(detail).into())
+}
+
+pub async fn chat_channels() -> crate::Result<Vec<OctraChatChannel>> {
+	if session().await?.is_none() {
+		return Ok(Vec::new());
+	}
+	let response = chat_auth_get("/api/v1/chat/channels").await?;
+	let text = read_chat_error(response).await?;
+	serde_json::from_str(&text).map_err(|e| {
+		crate::ErrorKind::OtherError(format!("octra chat channels parse failed: {e}")).into()
+	})
+}
+
+pub async fn chat_open_dm(user_id: i64) -> crate::Result<OctraChatChannel> {
+	let response = chat_auth_post(
+		"/api/v1/chat/channels/dm",
+		&serde_json::json!({ "user_id": user_id }),
+	)
+	.await?;
+	let text = read_chat_error(response).await?;
+	serde_json::from_str(&text).map_err(|e| {
+		crate::ErrorKind::OtherError(format!("octra chat dm parse failed: {e}")).into()
+	})
+}
+
+pub async fn chat_create_group(
+	name: &str,
+	member_ids: &[i64],
+) -> crate::Result<OctraChatChannel> {
+	let response = chat_auth_post(
+		"/api/v1/chat/channels/group",
+		&serde_json::json!({
+			"name": name,
+			"member_ids": member_ids,
+		}),
+	)
+	.await?;
+	let text = read_chat_error(response).await?;
+	serde_json::from_str(&text).map_err(|e| {
+		crate::ErrorKind::OtherError(format!("octra chat group parse failed: {e}")).into()
+	})
+}
+
+pub async fn chat_list(channel_id: i64, after_id: i64) -> crate::Result<Vec<OctraChatMessage>> {
+	if session().await?.is_none() {
+		return Ok(Vec::new());
+	}
+	let path = format!(
+		"/api/v1/chat/channels/{channel_id}/messages?after_id={}",
+		after_id.max(0)
+	);
+	let response = chat_auth_get(&path).await?;
+	let text = read_chat_error(response).await?;
+	serde_json::from_str(&text).map_err(|e| {
+		crate::ErrorKind::OtherError(format!("octra chat response parse failed: {e}")).into()
+	})
+}
+
+pub async fn chat_post(channel_id: i64, text: &str) -> crate::Result<OctraChatMessage> {
+	let response = chat_auth_post(
+		&format!("/api/v1/chat/channels/{channel_id}/messages"),
+		&serde_json::json!({ "text": text }),
+	)
+	.await?;
+	let text_body = read_chat_error(response).await?;
+	serde_json::from_str(&text_body).map_err(|e| {
+		crate::ErrorKind::OtherError(format!("octra chat post parse failed: {e}")).into()
+	})
 }
 
 pub async fn bearer_token() -> Option<String> {
