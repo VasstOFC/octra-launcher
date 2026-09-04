@@ -1,6 +1,8 @@
 //! Octra skins via authlib-injector + a client-side Fabric overlay mod.
 //!
-//! - Every launch gets `-javaagent:authlib-injector.jar=<ygg_root>`.
+//! - Offline launches get `-javaagent:authlib-injector.jar=<ygg_root>`.
+//! - Microsoft (premium) launches skip authlib-injector so Mojang session
+//!   joins work on online-mode servers (`Not authenticated with Minecraft.net`).
 //! - Fabric / Quilt: `-Dfabric.addMods=<octra-client-skins.jar>` (not copied into packs).
 //! - Vanilla 1.20.1: overlay Fabric loader so the client mod can load.
 //! - Legacy PNG URLs (`/skins/MinecraftSkins/{nick}.png`) remain for SkinsRestorer.
@@ -366,7 +368,8 @@ pub async fn overlay_fabric_if_vanilla(
 	}
 }
 
-/// Before Minecraft starts: publish equipped skin, inject authlib + client skins mod.
+/// Before Minecraft starts: publish equipped skin, inject authlib (offline only)
+/// and the client skins mod.
 pub async fn prepare_launch(
 	instance_path: &Path,
 	game_version: &str,
@@ -391,16 +394,26 @@ pub async fn prepare_launch(
 		}
 	}
 
-	let jar = authlib_jar_path().await?;
-	let jar = dunce::canonicalize(&jar).unwrap_or(jar);
-	let root = ygg_root();
-	java_args.insert(0, format!("-javaagent:{}={}", jar.display(), root));
-	java_args.insert(1, "-Dauthlibinjector.side=client".to_string());
-	java_args.insert(2, format!("-Doctra.skins.url={root}"));
-	tracing::info!(
-		"Octra skins: authlib-injector → {root} ({})",
-		credentials.offline_profile.name
-	);
+	// Authlib-injector replaces Mojang session servers. Premium accounts must
+	// keep native MSA auth or online-mode joins fail with
+	// "Not authenticated with Minecraft.net".
+	if credentials.is_offline() {
+		let jar = authlib_jar_path().await?;
+		let jar = dunce::canonicalize(&jar).unwrap_or(jar);
+		let root = ygg_root();
+		java_args.insert(0, format!("-javaagent:{}={}", jar.display(), root));
+		java_args.insert(1, "-Dauthlibinjector.side=client".to_string());
+		java_args.insert(2, format!("-Doctra.skins.url={root}"));
+		tracing::info!(
+			"Octra skins: authlib-injector → {root} ({})",
+			credentials.offline_profile.name
+		);
+	} else {
+		tracing::info!(
+			"Octra skins: skipping authlib-injector for Microsoft account {}",
+			credentials.offline_profile.name
+		);
+	}
 
 	if let Err(error) =
 		inject_client_skins(instance_path, game_version, loader, java_args)

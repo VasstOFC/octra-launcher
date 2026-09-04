@@ -11,7 +11,14 @@ export type VersionEntry = {
 
 const VERSIONS: VersionEntry[] = [
 	{
-		date: `2026-09-04T21:00:00+00:00`,
+		date: `2026-09-04T20:00:00+00:00`,
+		product: 'app',
+		version: '2.0.14',
+		body: `## Fixed
+- Fixed Microsoft (premium) accounts failing to join online-mode servers with "Not authenticated with Minecraft.net". Authlib-injector now only applies to offline accounts.`,
+	},
+	{
+		date: `2026-09-04T19:30:00+00:00`,
 		product: 'app',
 		version: '2.0.13',
 		body: `## Added

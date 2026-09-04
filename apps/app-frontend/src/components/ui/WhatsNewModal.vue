@@ -24,18 +24,18 @@ const isPolish = computed(() =>
 	const featureBullets = computed(() =>
 	isPolish.value
 		? [
+				'Kontrolka premium: logowanie Microsoft znów działa na serwerach online-mode',
 				'Play Dock: szeroki dock biblioteki i nawigacja Start / Serwery / Szafka / Odkrywaj',
 				'Odkrywaj: cichsze karty, szuflada filtrów, skróty sortowania i siatka modpacków',
-				'Serwery: wspólne vs lokalne, udostępnianie IP, usuwanie dla wszystkich i live sync',
-				'Czat w panelu znajomych: grupy, reakcje, screenshoty i znaczniki czasu',
-				'Domyślny akcent lawendowy oraz gęstsze, grafitowe ustawienia',
+				'Serwery: wspólne vs lokalne, udostępnianie IP i live sync',
+				'Czat w panelu znajomych: grupy, reakcje i screenshoty',
 			]
 		: [
+				'Premium fix: Microsoft accounts can join online-mode servers again',
 				'Play Dock: wide library dock and Start / Servers / Locker / Discover navigation',
 				'Discover: quieter cards, filter drawer, sort shortcuts, and modpack grid',
-				'Servers: shared vs local lists, share IP, delete-for-everyone, and live sync',
-				'Chat in the friends panel: groups, reactions, screenshots, and timestamps',
-				'Default lavender accent plus denser graphite settings',
+				'Servers: shared vs local lists, share IP, and live sync',
+				'Chat in the friends panel: groups, reactions, and screenshots',
 			],
 )
 
