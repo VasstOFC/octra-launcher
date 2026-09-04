@@ -938,7 +938,11 @@ function getCardActions(
 				disabled:
 					showAsInstalled || isInstalling || isInstallingSelection || (isQueued && !isQueuedRoot),
 				color: isQueued && !isInstalling && !isInstallingSelection ? 'green' : 'brand',
-				type: 'outlined',
+				type: showAsInstalled
+					? 'transparent'
+					: isQueued && !isInstalling && !isInstallingSelection
+						? 'outlined'
+						: 'standard',
 				onClick: async () => {
 					if (isQueuedRoot) {
 						removeQueuedServerInstall(projectResult.project_id)
@@ -1010,7 +1014,7 @@ function getCardActions(
 			iconClass: isInstalling ? 'animate-spin' : undefined,
 			disabled: showAsInstalled || isInstalling,
 			color: 'brand',
-			type: 'outlined',
+			type: showAsInstalled ? 'transparent' : 'standard',
 			onClick: async () => {
 				setProjectInstalling(projectResult.project_id, true)
 				try {
@@ -1155,6 +1159,7 @@ const searchState = useBrowseSearch({
 	providedFilters: combinedProvidedFilters,
 	search,
 	persistentQueryParams: ['i', 'ai', 'shi', 'sid', 'wid', 'from'],
+	displayMode: computed(() => (projectType.value === 'modpack' ? 'grid' : 'list')),
 	getExtraQueryParams: () => ({
 		sid: serverIdQuery.value || undefined,
 		wid: effectiveServerWorldId.value || undefined,
@@ -1243,6 +1248,8 @@ const advancedFiltersCollapsed = computed({
 	},
 })
 
+const filtersMenuOpen = ref(false)
+
 const dismissedPhotosensitivityFilterWarning = computed({
 	get: () => appSettings.getFeatureFlag('dismissed_photosensitivity_filter_warning'),
 	set: (value) => {
@@ -1261,6 +1268,7 @@ provideBrowseManager({
 	projectType,
 	...searchState,
 	advancedFiltersCollapsed,
+	filtersMenuOpen,
 	dismissedPhotosensitivityFilterWarning,
 	getProjectLink: (result: Labrinth.Search.v3.ResultSearchProject) => ({
 		path: `/project/${result.project_id ?? result.slug}`,
@@ -1354,8 +1362,8 @@ provideBrowseManager({
 			@browse-modpacks="() => {}"
 			@create="handleServerModpackFlowCreate"
 		/>
-		<Teleport v-if="browseRouteActive" to="#sidebar-teleport-target">
-			<BrowseSidebar />
+		<Teleport to="#teleports">
+			<BrowseSidebar v-if="filtersMenuOpen" />
 		</Teleport>
 	</div>
 </template>

@@ -823,6 +823,18 @@ pub async fn launch_minecraft(
 
     let state = State::get().await?;
 
+    if let Err(error) =
+        crate::api::instance::refresh_instance_octra_shared_servers(
+            &instance.id,
+        )
+        .await
+    {
+        tracing::warn!(
+            "Failed to inject Octra shared servers before launch of {}: {error}",
+            instance.id
+        );
+    }
+
     let instance_path = get_instance_full_path(&instance.path).await?;
 
     let (minecraft, version_index) =

@@ -59,6 +59,10 @@ const messages = defineMessages({
 		id: 'browse.filter-results',
 		defaultMessage: 'Filter results...',
 	},
+	filtersWithCount: {
+		id: 'browse.filters-with-count',
+		defaultMessage: 'Filters · {count}',
+	},
 	offline: {
 		id: 'browse.offline',
 		defaultMessage: 'You are currently offline. Connect to the internet to browse Modrinth!',
@@ -66,6 +70,26 @@ const messages = defineMessages({
 	noResults: {
 		id: 'browse.no-results',
 		defaultMessage: 'No results found for your query!',
+	},
+	noResultsHint: {
+		id: 'browse.no-results.hint',
+		defaultMessage: 'Try clearing filters or broadening your search.',
+	},
+	clearFilters: {
+		id: 'browse.clear-filters',
+		defaultMessage: 'Clear filters',
+	},
+	shortcutPopular: {
+		id: 'browse.shortcut.popular',
+		defaultMessage: 'Popular',
+	},
+	shortcutUpdated: {
+		id: 'browse.shortcut.updated',
+		defaultMessage: 'Updated',
+	},
+	shortcutNewest: {
+		id: 'browse.shortcut.newest',
+		defaultMessage: 'New',
 	},
 	linkOverridingPreferences: {
 		id: 'browse.advanced-filters.link-overriding-preferences',
@@ -76,6 +100,38 @@ const messages = defineMessages({
 		defaultMessage: 'Apply saved preferences',
 	},
 })
+
+const activeFilterCount = computed(() =>
+	ctx.isServerType.value
+		? ctx.serverCurrentFilters.value.length
+		: ctx.currentFilters.value.length,
+)
+
+const filtersButtonLabel = computed(() =>
+	activeFilterCount.value > 0
+		? formatMessage(messages.filtersWithCount, { count: activeFilterCount.value })
+		: formatMessage(commonMessages.filtersLabel),
+)
+
+function clearActiveFilters() {
+	if (ctx.isServerType.value) {
+		ctx.serverCurrentFilters.value = []
+	} else {
+		ctx.currentFilters.value = []
+	}
+	ctx.onFilterChange()
+}
+
+function applySortShortcut(name: string) {
+	const next = ctx.effectiveSortTypes.value.find((sort) => sort.name === name)
+	if (next) {
+		ctx.effectiveCurrentSortType.value = next
+	}
+}
+
+function isSortActive(name: string) {
+	return ctx.effectiveCurrentSortType.value.name === name
+}
 
 function cardActionType(action: CardAction) {
 	if (action.type === 'transparent') return 'quiet'
@@ -131,9 +187,20 @@ function getProjectCardTags(result: Labrinth.Search.v3.ResultSearchProject, disp
 		<div
 			ref="stickyInstallHeaderRef"
 			class="sticky top-0 z-20 -mx-6 -mt-6 rounded-tl-[--radius-xl] border-0 border-b border-solid bg-surface-1 px-6 py-4 border-surface-5"
-			:class="[isInstallHeaderStuck ? 'border-t' : '']"
+			:class="[
+				isInstallHeaderStuck ? 'border-t' : '',
+				ctx.variant === 'app'
+					? 'shadow-[inset_0_2px_0_0_var(--color-brand)] bg-[color-mix(in_srgb,var(--color-brand)_8%,var(--surface-1))]'
+					: '',
+			]"
 		>
 			<BrowseInstallHeader />
+			<p
+				v-if="ctx.variant === 'app' && ctx.installContext.value.heading"
+				class="m-0 mt-2 text-sm text-brand"
+			>
+				{{ ctx.installContext.value.heading }}
+			</p>
 		</div>
 	</template>
 	<SelectedProjectsFloatingBar v-if="ctx.installContext?.value && ctx.variant !== 'web'" />
@@ -211,9 +278,12 @@ function getProjectCardTags(result: Labrinth.Search.v3.ResultSearchProject, disp
 			</template>
 		</Combobox>
 
-		<div v-if="ctx.filtersMenuOpen && !ctx.filtersMenuOpen.value" class="lg:hidden">
-			<Button @click="ctx.filtersMenuOpen.value = true">
-				{{ formatMessage(messages.filterResults) }}
+		<div
+			v-if="ctx.filtersMenuOpen && !ctx.filtersMenuOpen.value"
+			:class="ctx.variant === 'app' ? '' : 'lg:hidden'"
+		>
+			<Button type="outlined" @click="ctx.filtersMenuOpen.value = true">
+				{{ filtersButtonLabel }}
 			</Button>
 		</div>
 
@@ -233,6 +303,36 @@ function getProjectCardTags(result: Labrinth.Search.v3.ResultSearchProject, disp
 		/>
 	</div>
 
+	<div
+		v-if="ctx.variant === 'app' && !ctx.isServerType.value"
+		class="mt-2 flex flex-wrap items-center gap-1.5"
+	>
+		<Button
+			:type="isSortActive('downloads') ? 'colored' : 'quiet'"
+			:color="isSortActive('downloads') ? 'brand' : undefined"
+			size="sm"
+			@click="applySortShortcut('downloads')"
+		>
+			{{ formatMessage(messages.shortcutPopular) }}
+		</Button>
+		<Button
+			:type="isSortActive('updated') ? 'colored' : 'quiet'"
+			:color="isSortActive('updated') ? 'brand' : undefined"
+			size="sm"
+			@click="applySortShortcut('updated')"
+		>
+			{{ formatMessage(messages.shortcutUpdated) }}
+		</Button>
+		<Button
+			:type="isSortActive('newest') ? 'colored' : 'quiet'"
+			:color="isSortActive('newest') ? 'brand' : undefined"
+			size="sm"
+			@click="applySortShortcut('newest')"
+		>
+			{{ formatMessage(messages.shortcutNewest) }}
+		</Button>
+	</div>
+
 	<SearchFilterControl
 		v-if="ctx.isServerType.value"
 		v-model:selected-filters="ctx.serverCurrentFilters.value"
@@ -240,6 +340,7 @@ function getProjectCardTags(result: Labrinth.Search.v3.ResultSearchProject, disp
 		:project-type="ctx.projectType.value"
 		:provided-filters="[]"
 		:overridden-provided-filter-types="[]"
+		:class="ctx.variant === 'app' ? 'mt-1 !gap-1.5' : undefined"
 	/>
 	<SearchFilterControl
 		v-else
@@ -253,6 +354,7 @@ function getProjectCardTags(result: Labrinth.Search.v3.ResultSearchProject, disp
 		:provided-filters="ctx.providedFilters?.value ?? []"
 		:overridden-provided-filter-types="ctx.overriddenProvidedFilterTypes.value"
 		:provided-message="lockedMessages?.providedBy"
+		:class="ctx.variant === 'app' ? 'mt-1 !gap-1.5' : undefined"
 	/>
 
 	<div class="search mt-1 [overflow-anchor:none]">
@@ -268,12 +370,24 @@ function getProjectCardTags(result: Labrinth.Search.v3.ResultSearchProject, disp
 					? ctx.serverHits.value.length === 0
 					: ctx.projectHits.value.length === 0
 			"
-			class="offline"
+			class="offline flex flex-col items-start gap-3 py-8"
 		>
-			<p>{{ formatMessage(messages.noResults) }}</p>
+			<p class="m-0 text-contrast font-medium">{{ formatMessage(messages.noResults) }}</p>
+			<p class="m-0 text-sm text-secondary">{{ formatMessage(messages.noResultsHint) }}</p>
+			<Button
+				v-if="activeFilterCount > 0"
+				type="outlined"
+				@click="clearActiveFilters"
+			>
+				{{ formatMessage(messages.clearFilters) }}
+			</Button>
 		</section>
 
-		<ProjectCardList v-else :layout="ctx.effectiveLayout.value">
+		<ProjectCardList
+			v-else
+			:layout="ctx.effectiveLayout.value"
+			:class="ctx.variant === 'app' ? '!gap-2' : undefined"
+		>
 			<template v-if="ctx.isServerType.value">
 				<ProjectCard
 					v-for="result in ctx.serverHits.value"
@@ -292,7 +406,8 @@ function getProjectCardTags(result: Labrinth.Search.v3.ResultSearchProject, disp
 					:hide-online-players-label="ctx.variant === 'app'"
 					:hide-recent-plays-label="ctx.variant === 'app'"
 					:layout="ctx.effectiveLayout.value"
-					:max-tags="2"
+					:density="ctx.variant === 'app' ? 'quiet' : 'default'"
+					:max-tags="3"
 					is-server-project
 					exclude-loaders
 					:color="result.color ?? undefined"
@@ -372,6 +487,8 @@ function getProjectCardTags(result: Labrinth.Search.v3.ResultSearchProject, disp
 							: undefined
 					"
 					:layout="ctx.effectiveLayout.value"
+					:density="ctx.variant === 'app' ? 'quiet' : 'default'"
+					:max-tags="3"
 					@contextmenu.prevent.stop="(event: MouseEvent) => ctx.onContextMenu?.(event, result)"
 					@mouseenter="ctx.onProjectHover?.(result)"
 					@mouseleave="ctx.onProjectHoverEnd?.()"

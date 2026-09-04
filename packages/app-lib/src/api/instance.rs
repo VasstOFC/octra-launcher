@@ -111,5 +111,7 @@ pub use self::synced_options::{
 };
 pub use self::synced_servers::{
     DesyncServerMode, ServerSource, SyncedServer, desync_server,
-    list_synced_servers, remove_synced_server, update_synced_server,
+    list_synced_servers, refresh_instance_octra_shared_servers,
+    refresh_octra_shared_servers_overlay, remove_synced_server,
+    update_synced_server,
 };

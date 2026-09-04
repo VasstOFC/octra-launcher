@@ -17,6 +17,9 @@ use super::modpack::{
     is_modpack_link, pack_state_exists, pack_state_matches_link,
     reconstruct_modpack_servers,
 };
+use super::octra_overlay::{
+    prepend_overlay, strip_octra_overlay,
+};
 use super::storage::{
     begin_server_checkpoint, canonical_exists, commit_server_state,
     generated_path, load_local, load_projection_entries, read_canonical,
@@ -215,7 +218,7 @@ pub(in crate::api::instance) async fn reconcile_servers(
         return compose_instance(metadata, state).await;
     }
 
-    let current = read_servers(&local_path).await?;
+    let current = strip_octra_overlay(read_servers(&local_path).await?);
     let projections =
         load_projection_entries(&metadata.instance.id, state).await?;
     let projection_matches = match_projection_entries(&current, &projections);
@@ -395,20 +398,60 @@ async fn list_server_records_locked(
     metadata: &InstanceMetadata,
     state: &State,
 ) -> crate::Result<Vec<ServerRecord>> {
+    let path = instance_dir(metadata, state).join(SERVERS_FILE);
     if participating(metadata, state).await? {
+        if instance_is_running(metadata, state).await? {
+            return list_live_server_records(metadata, &path, state).await;
+        }
         return compose_records(metadata, state).await;
     }
-    Ok(
-        read_servers(&instance_dir(metadata, state).join(SERVERS_FILE))
-            .await?
-            .into_iter()
-            .map(|data| ServerRecord {
-                id: Uuid::new_v4().to_string(),
-                source: ServerSource::LocalDesynced,
-                data,
-            })
-            .collect(),
-    )
+    Ok(strip_octra_overlay(read_servers(&path).await?)
+        .into_iter()
+        .map(|data| ServerRecord {
+            id: Uuid::new_v4().to_string(),
+            source: ServerSource::LocalDesynced,
+            data,
+        })
+        .collect())
+}
+
+async fn list_live_server_records(
+    metadata: &InstanceMetadata,
+    path: &std::path::Path,
+    state: &State,
+) -> crate::Result<Vec<ServerRecord>> {
+    let current = strip_octra_overlay(read_servers(path).await?);
+    let projections =
+        load_projection_entries(&metadata.instance.id, state).await?;
+    let locals = load_local(&metadata.instance.id, state).await?;
+    let matches = match_projection_entries(&current, &projections);
+    Ok(current
+        .into_iter()
+        .zip(matches)
+        .map(|(data, projection)| {
+            if let Some(projection) = projection {
+                let source = match projection.owner {
+                    ProjectionOwner::Synced => ServerSource::UserSynced,
+                    ProjectionOwner::Instance => locals
+                        .iter()
+                        .find(|server| server.id == projection.id)
+                        .map(|server| server.source)
+                        .unwrap_or(ServerSource::LocalDesynced),
+                };
+                ServerRecord {
+                    id: projection.id.clone(),
+                    source,
+                    data,
+                }
+            } else {
+                ServerRecord {
+                    id: Uuid::new_v4().to_string(),
+                    source: ServerSource::LocalDesynced,
+                    data,
+                }
+            }
+        })
+        .collect())
 }
 
 pub(crate) async fn add_user_server(
@@ -428,13 +471,13 @@ pub(crate) async fn add_user_server(
         regenerate_servers(state).await?;
     } else {
         let path = instance_dir(metadata, state).join(SERVERS_FILE);
-        let mut servers = read_servers(&path).await?;
+        let mut servers = strip_octra_overlay(read_servers(&path).await?);
         let insert_index = servers
             .iter()
             .position(server_hidden)
             .unwrap_or(servers.len());
         servers.insert(insert_index, std::mem::take(&mut data));
-        write_servers(&path, &servers).await?;
+        write_servers(&path, &prepend_overlay(servers).await).await?;
     }
     Ok(id)
 }
@@ -509,7 +552,7 @@ pub(crate) async fn update_server_by_index(
         return update_server_locked(metadata, &record.id, data, state).await;
     }
     let path = instance_dir(metadata, state).join(SERVERS_FILE);
-    let mut servers = read_servers(&path).await?;
+    let mut servers = strip_octra_overlay(read_servers(&path).await?);
     let server = servers
         .get_mut(index)
         .filter(|server| !server_hidden(server))
@@ -519,7 +562,7 @@ pub(crate) async fn update_server_by_index(
             ))
         })?;
     update_server_data(server, name, address, accept_textures);
-    write_servers(&path, &servers).await
+    write_servers(&path, &prepend_overlay(servers).await).await
 }
 
 async fn remove_server_locked(
@@ -571,7 +614,7 @@ pub(crate) async fn remove_server_by_index(
         return remove_server_locked(metadata, &record.id, state).await;
     }
     let path = instance_dir(metadata, state).join(SERVERS_FILE);
-    let mut servers = read_servers(&path).await?;
+    let mut servers = strip_octra_overlay(read_servers(&path).await?);
     if servers.get(index).is_none_or(server_hidden) {
         return Err(ErrorKind::InputError(format!(
             "No removable server at index {index}"
@@ -579,7 +622,7 @@ pub(crate) async fn remove_server_by_index(
         .into());
     }
     servers.remove(index);
-    write_servers(&path, &servers).await
+    write_servers(&path, &prepend_overlay(servers).await).await
 }
 
 pub async fn desync_server(
@@ -705,12 +748,12 @@ pub(super) async fn compose_instance(
     state: &State,
 ) -> crate::Result<()> {
     let records = compose_records(metadata, state).await?;
-    let bytes = servers_to_bytes(
-        &records
-            .iter()
-            .map(|record| record.data.clone())
-            .collect::<Vec<_>>(),
-    )?;
+    let composed = records
+        .iter()
+        .map(|record| record.data.clone())
+        .collect::<Vec<_>>();
+    let with_overlay = prepend_overlay(composed).await;
+    let bytes = servers_to_bytes(&with_overlay)?;
     let expected = sha1_bytes(&bytes);
     let revision = server_revision(state).await?;
     begin_server_checkpoint(

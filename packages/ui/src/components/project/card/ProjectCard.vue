@@ -74,7 +74,7 @@
 							:tags="tags"
 							:exclude-loaders="excludeLoaders"
 							:deprioritized-tags="deprioritizedTags"
-							:max-tags="(maxTags || 6) + (!!environment ? 0 : 1)"
+							:max-tags="effectiveMaxTags"
 						/>
 						<ServerModpackContent
 							v-if="serverModpackContent"
@@ -101,23 +101,30 @@
 			v-else
 			:class="[
 				baseCardStyle,
-				'p-4 grid grid-project-card-list gap-x-3 gap-y-2',
-				{ 'has-actions': !!$slots.actions },
+				'grid grid-project-card-list gap-x-3',
+				isQuiet ? 'p-3 gap-y-1.5' : 'p-4 gap-y-2',
+				{ 'has-actions': !!$slots.actions, 'project-card--quiet': isQuiet },
 			]"
 		>
 			<Avatar
 				:src="iconUrl"
-				size="100px"
+				:size="isQuiet ? '64px' : '100px'"
 				class="project-card__icon grid-project-card-list__icon ease-brightness"
 				no-shadow
 			/>
-			<div class="flex flex-col gap-2 grid-project-card-list__info">
+			<div
+				class="flex flex-col grid-project-card-list__info"
+				:class="isQuiet ? 'gap-1' : 'gap-2'"
+			>
 				<div class="flex gap-2 items-center">
-					<ProjectCardTitle :title="title" />
+					<ProjectCardTitle :title="title" :compact="isQuiet" />
 					<ProjectCardAuthor v-if="author" :author="author" />
 					<ProjectStatusBadge v-if="status" :status="status" />
 				</div>
-				<div class="project-card-summary m-0 font-normal line-clamp-2">
+				<div
+					class="project-card-summary m-0 font-normal text-secondary"
+					:class="isQuiet ? 'line-clamp-1 text-sm' : 'line-clamp-2'"
+				>
 					{{ summary }}
 				</div>
 			</div>
@@ -129,8 +136,12 @@
 				<slot name="actions" />
 			</div>
 			<div
-				class="flex flex-col gap-3 items-end shrink-0 ml-auto empty:hidden grid-project-card-list__stats"
-				:class="{ 'mt-3': !!$slots.actions }"
+				class="flex shrink-0 ml-auto empty:hidden grid-project-card-list__stats"
+				:class="
+					isQuiet
+						? 'flex-row flex-wrap items-center justify-end gap-x-3 gap-y-1 text-secondary'
+						: ['flex-col gap-3 items-end', { 'mt-3': !!$slots.actions }]
+				"
 			>
 				<div
 					v-if="downloads !== undefined || followers !== undefined"
@@ -141,7 +152,7 @@
 				<ProjectCardDate v-if="date && autoDisplayDate" :type="autoDisplayDate" :date="date" />
 			</div>
 			<div class="mt-auto flex items-center gap-3 grid-project-card-list__tags">
-				<div class="flex items-center gap-2 w-full">
+				<div class="flex items-center gap-2 w-full min-w-0">
 					<template v-if="isServerProject">
 						<ServerOnlinePlayers
 							v-if="serverOnlinePlayers !== undefined"
@@ -155,7 +166,7 @@
 							:hide-label="true"
 						/>
 					</template>
-					<div class="flex items-center gap-1">
+					<div class="flex items-center gap-1 min-w-0 overflow-hidden">
 						<template v-if="isServerProject">
 							<ServerPing v-if="serverPing && serverStatusOnline" :ping="serverPing" />
 							<ServerRegion
@@ -171,7 +182,7 @@
 							:extra-tags="extraTags"
 							:exclude-loaders="excludeLoaders"
 							:deprioritized-tags="deprioritizedTags"
-							:max-tags="(maxTags || (!!$slots.actions ? 4 : 5)) + (!!environment ? 0 : 1)"
+							:max-tags="effectiveMaxTags"
 						/>
 					</div>
 					<ServerModpackContent
@@ -191,7 +202,7 @@
 <script setup lang="ts">
 import type { ProjectStatus } from '@modrinth/utils'
 import dayjs from 'dayjs'
-import { computed } from 'vue'
+import { computed, useSlots } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 
 import { AutoLink, Avatar } from '../../base'
@@ -252,10 +263,28 @@ const props = defineProps<{
 	environment?: ProjectCardEnvironmentValue
 	status?: ProjectStatus
 	maxTags?: number
+	density?: 'default' | 'quiet'
 }>()
 
-const baseCardStyle =
-	'w-full h-full border-[1px] border-solid border-surface-4 overflow-hidden bg-surface-3 rounded-2xl transition-all smart-clickable:outline-on-focus smart-clickable:highlight-on-hover'
+const slots = useSlots()
+const isQuiet = computed(() => props.density === 'quiet')
+
+const effectiveMaxTags = computed(() => {
+	if (props.maxTags != null) {
+		return props.maxTags
+	}
+	const base = isQuiet.value ? 3 : slots.actions ? 4 : 5
+	return base + (props.environment ? 0 : 1)
+})
+
+const baseCardStyle = computed(() =>
+	[
+		'w-full h-full border-[1px] border-solid overflow-hidden transition-all smart-clickable:outline-on-focus smart-clickable:highlight-on-hover',
+		isQuiet.value
+			? 'border-surface-5 bg-surface-2 rounded-xl'
+			: 'border-surface-4 bg-surface-3 rounded-2xl',
+	].join(' '),
+)
 
 const updatedDate = computed(() =>
 	props.dateUpdated ? dayjs(props.dateUpdated).toDate() : undefined,
@@ -402,6 +431,18 @@ const cssColor = computed(() => {
 	.project-card-summary {
 		@apply text-sm;
 	}
+}
+
+.project-card--quiet .project-card__icon {
+	--_override-size: 64px;
+}
+
+.project-card--quiet.grid-project-card-list.has-actions {
+	grid-template:
+		'icon info actions'
+		'icon info stats'
+		'icon tags tags';
+	grid-template-columns: auto 1fr auto;
 }
 
 /*noinspection CssUnresolvedCustomProperty*/

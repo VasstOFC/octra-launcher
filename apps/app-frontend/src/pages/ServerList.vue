@@ -136,6 +136,11 @@ const messages = defineMessages({
 		id: 'app.servers.shared.title',
 		defaultMessage: 'Shared servers',
 	},
+	sharedSubtitle: {
+		id: 'app.servers.shared.subtitle',
+		defaultMessage:
+			'Shown at the top of the Minecraft multiplayer list with the Octra icon.',
+	},
 	sharedEmpty: {
 		id: 'app.servers.shared.empty',
 		defaultMessage: 'No shared servers yet. Share an address below so friends can join.',
@@ -187,7 +192,8 @@ const messages = defineMessages({
 	},
 	localSubtitle: {
 		id: 'app.servers.local.subtitle',
-		defaultMessage: 'From Minecraft for the selected instance. Updates live when you add or remove servers in-game.',
+		defaultMessage:
+			'From Minecraft for the selected instance. Updates live while the game is open; deletions sync when Minecraft saves the list.',
 	},
 	localEmpty: {
 		id: 'app.servers.local.empty',
@@ -385,6 +391,9 @@ const localServers = computed<LocalServerRow[]>(() => {
 		const server = world as ServerWorld
 		const address = server.address.trim()
 		if (!address) continue
+		// Octra shared servers are injected into servers.dat for in-game display;
+		// keep them out of the local list (they already appear under Shared).
+		if (server.name.trim().startsWith('[Octra] ')) continue
 		rows.push({
 			key: `local:${server.index}:${address.toLowerCase()}`,
 			name: server.name || address,
@@ -751,6 +760,9 @@ async function viewPack(member: PlayWithFriendMember) {
 					<h2 class="m-0 text-xs font-medium uppercase tracking-wide text-secondary">
 						{{ formatMessage(messages.sharedTitle) }}
 					</h2>
+					<p class="m-0 mt-1 text-sm text-secondary">
+						{{ formatMessage(messages.sharedSubtitle) }}
+					</p>
 
 					<div
 						v-if="sessionQuery.data.value"

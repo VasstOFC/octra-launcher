@@ -11,6 +11,38 @@ export type VersionEntry = {
 
 const VERSIONS: VersionEntry[] = [
 	{
+		date: `2026-09-04T21:00:00+00:00`,
+		product: 'app',
+		version: '2.0.13',
+		body: `## Added
+- Filter drawer on Discover with an active filter count and clear action.
+- Sort shortcuts for Popular, Updated, and New above Discover results.
+- Grid layout for modpacks on Discover in the app.
+- Octra overlay entries for shared servers in the instance server list.
+
+## Changed
+- Quieter Discover project cards with fewer tags and denser spacing.
+- Discover no longer force-opens the right sidebar; project pages still do.
+- Stronger Install and quieter Installed buttons on Discover cards.
+
+## Fixed
+- Fixed a CSS parse break in quiet project cards that could blank Discover styles.`,
+	},
+	{
+		date: `2026-09-04T15:16:00+00:00`,
+		product: 'app',
+		version: '2.0.12',
+		body: `## Added
+- Play Dock library shell with Start, Servers, Locker, and Discover stage navigation.
+- Friends sidebar chat with groups, reactions, screenshots, and hover timestamps.
+- Shared versus local servers hub with share IP and delete-for-everyone confirmation.
+
+## Changed
+- Default brand accent is lavender; copper remains available as a preset.
+- Home Continue flow and featured pack promo are tighter in the Library dock.
+- Settings use denser graphite surfaces and the language picker was removed.`,
+	},
+	{
 		date: `2026-08-27T18:54:17+00:00`,
 		product: 'app',
 		version: '0.19.1',

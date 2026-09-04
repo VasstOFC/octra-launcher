@@ -2,11 +2,11 @@
 import { InfoIcon, XIcon } from '@modrinth/assets'
 import { computed, nextTick, toValue, useTemplateRef, watch } from 'vue'
 
-import { IconButton } from '#ui/components/base/buttons'
+import { IconButton, Button } from '#ui/components/base/buttons'
 import Toggle from '#ui/components/base/Toggle.vue'
 import PhotosensitivityWarningModal from '#ui/components/modal/PhotosensitivityWarningModal.vue'
 import SearchSidebarFilter from '#ui/components/search/SearchSidebarFilter.vue'
-import { useVIntl } from '#ui/composables/i18n'
+import { defineMessages, useVIntl } from '#ui/composables/i18n'
 import { useAdvancedPrefs } from '#ui/utils/advanced-filter-preferences'
 import { commonMessages } from '#ui/utils/common-messages'
 
@@ -19,12 +19,34 @@ const ctx = injectBrowseManager()
 const { formatMessage } = useVIntl()
 const advancedPrefs = useAdvancedPrefs()
 
+const messages = defineMessages({
+	clearFilters: {
+		id: 'browse.sidebar.clear-filters',
+		defaultMessage: 'Clear',
+	},
+})
+
 const isApp = computed(() => ctx.variant === 'app')
 const lockedMessages = computed(() => toValue(ctx.lockedFilterMessages))
 const hiddenFilterTypes = computed(() => ctx.hiddenFilterTypes?.value ?? [])
 
 const advancedFiltersCollapsed = computed(() => ctx.advancedFiltersCollapsed?.value ?? true)
 const photosensitivityWarningModal = useTemplateRef('photosensitivityWarningModal')
+
+const activeFilterCount = computed(() =>
+	ctx.isServerType.value
+		? ctx.serverCurrentFilters.value.length
+		: ctx.currentFilters.value.length,
+)
+
+function clearAllFilters() {
+	if (ctx.isServerType.value) {
+		ctx.serverCurrentFilters.value = []
+	} else {
+		ctx.currentFilters.value = []
+	}
+	ctx.onFilterChange()
+}
 
 function setAdvancedFiltersCollapsed(collapsed: boolean) {
 	if (ctx.advancedFiltersCollapsed) {
@@ -70,7 +92,9 @@ function closeFiltersMenu() {
 	if (ctx.filtersMenuOpen) {
 		ctx.filtersMenuOpen.value = false
 	}
-	window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior })
+	if (ctx.variant !== 'app') {
+		window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior })
+	}
 }
 
 const filterClass = computed(() => {
@@ -119,7 +143,7 @@ function getFilterOpenByDefault(filterId: string): boolean {
 		].includes(filterId)
 	}
 	if (isApp.value) {
-		return filterId.startsWith('category') || filterId === 'environment' || filterId === 'license'
+		return filterId.startsWith('category')
 	}
 	if (
 		lockedMessages.value?.gameVersionShaderMessage &&
@@ -140,24 +164,48 @@ function getFilterOpenByDefault(filterId: string): boolean {
 		@dismiss="onPhotosensitivityWarningDismiss"
 	/>
 
-	<div v-if="ctx.filtersMenuOpen?.value" class="fixed inset-0 z-40 bg-bg" />
+	<div
+		v-if="ctx.filtersMenuOpen?.value"
+		class="fixed inset-0 z-40"
+		:class="isApp ? 'bg-black/50' : 'bg-bg'"
+		@click="closeFiltersMenu"
+	/>
 
 	<div
 		class="flex flex-col"
 		:class="{
 			'gap-3': !isApp,
 			'fixed inset-0 z-50 m-4 mb-0 overflow-auto rounded-t-3xl bg-bg-raised':
-				ctx.filtersMenuOpen?.value,
+				ctx.filtersMenuOpen?.value && !isApp,
+			'fixed inset-y-0 right-0 z-50 flex w-[min(22rem,100vw)] flex-col overflow-auto border-0 border-l border-solid border-surface-5 bg-surface-2 shadow-raised':
+				ctx.filtersMenuOpen?.value && isApp,
 		}"
 	>
 		<div
 			v-if="ctx.filtersMenuOpen?.value"
-			class="sticky top-0 z-10 mx-1 flex items-center justify-between gap-3 border-0 border-b-[1px] border-solid border-divider bg-bg-raised px-6 py-4"
+			class="sticky top-0 z-10 flex items-center justify-between gap-3 border-0 border-b border-solid px-4 py-3"
+			:class="
+				isApp
+					? 'border-surface-5 bg-surface-2'
+					: 'mx-1 rounded-t-3xl border-divider bg-bg-raised px-6 py-4'
+			"
 		>
 			<h3 class="m-0 text-lg text-contrast">{{ formatMessage(commonMessages.filtersLabel) }}</h3>
-			<IconButton label="Close" @click="closeFiltersMenu">
-				<XIcon />
-			</IconButton>
+			<div class="flex items-center gap-1">
+				<Button
+					v-if="activeFilterCount > 0"
+					type="quiet"
+					@click="clearAllFilters"
+				>
+					{{ formatMessage(messages.clearFilters) }}
+				</Button>
+				<IconButton
+					:label="formatMessage(commonMessages.closeButton)"
+					@click="closeFiltersMenu"
+				>
+					<XIcon />
+				</IconButton>
+			</div>
 		</div>
 
 		<div

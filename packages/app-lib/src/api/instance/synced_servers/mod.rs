@@ -1,5 +1,6 @@
 mod codec;
 mod modpack;
+mod octra_overlay;
 mod operations;
 mod storage;
 mod types;
@@ -8,6 +9,10 @@ const SERVERS_FILE: &str = "servers.dat";
 
 pub(crate) use self::codec::server_data;
 pub use self::modpack::{capture_modpack_servers, clear_modpack_servers};
+pub use self::octra_overlay::{
+    refresh_instance_octra_shared_servers,
+    refresh_octra_shared_servers_overlay,
+};
 pub(crate) use self::operations::{
     add_user_server, list_server_records, remove_server_by_index,
     update_server_by_index,

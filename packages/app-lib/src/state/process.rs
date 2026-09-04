@@ -961,6 +961,11 @@ impl Process {
                     "Failed to reconcile synced options after Minecraft exited for {reconcile_instance_id}: {error}"
                 );
             }
+            let _ = crate::event::emit::emit_instance(
+                &reconcile_instance_id,
+                InstancePayloadType::ServersUpdated,
+            )
+            .await;
         });
 
         // Publish play time update

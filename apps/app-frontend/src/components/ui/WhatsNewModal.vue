@@ -21,19 +21,21 @@ const isPolish = computed(() =>
 		.startsWith('pl'),
 )
 
-const featureBullets = computed(() =>
+	const featureBullets = computed(() =>
 	isPolish.value
 		? [
-				'Czat Octra: DM-y, grupy, reakcje, przypięte wiadomości i zaproszenia do grup',
-				'Lista znajomych z obecnością, „Graj z” i udostępnianiem IP serwera',
-				'Wspólne serwery w panelu znajomych oraz podgląd paczek .mrpack przed instalacją',
-				'Odznaka nieprzeczytanych wiadomości i powiadomienia o nowych wiadomościach',
+				'Play Dock: szeroki dock biblioteki i nawigacja Start / Serwery / Szafka / Odkrywaj',
+				'Odkrywaj: cichsze karty, szuflada filtrów, skróty sortowania i siatka modpacków',
+				'Serwery: wspólne vs lokalne, udostępnianie IP, usuwanie dla wszystkich i live sync',
+				'Czat w panelu znajomych: grupy, reakcje, screenshoty i znaczniki czasu',
+				'Domyślny akcent lawendowy oraz gęstsze, grafitowe ustawienia',
 			]
 		: [
-				'Octra chat: DMs, groups, reactions, pinned messages, and group invites',
-				'Friends list with presence, Play with, and share-your-server-IP',
-				'Shared servers in the friends sidebar plus .mrpack preview before install',
-				'Unread chat badge and toasts when new messages arrive',
+				'Play Dock: wide library dock and Start / Servers / Locker / Discover navigation',
+				'Discover: quieter cards, filter drawer, sort shortcuts, and modpack grid',
+				'Servers: shared vs local lists, share IP, delete-for-everyone, and live sync',
+				'Chat in the friends panel: groups, reactions, screenshots, and timestamps',
+				'Default lavender accent plus denser graphite settings',
 			],
 )
 
@@ -74,7 +76,7 @@ const messages = defineMessages({
 	},
 	intro: {
 		id: 'octra.whats-new.intro',
-		defaultMessage: 'Social sprint highlights in this build:',
+		defaultMessage: 'Highlights since your last update:',
 	},
 	dismiss: {
 		id: 'octra.whats-new.dismiss',

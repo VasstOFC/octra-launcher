@@ -222,9 +222,7 @@ const APP_SIDEBAR_WIDTH = 300
 const INTERCOM_BUBBLE_DEFAULT_PADDING = 20
 const credentials = ref()
 let credentialsRefreshId = 0
-const forceSidebar = computed(
-	() => route.path.startsWith('/browse') || route.path.startsWith('/project'),
-)
+const forceSidebar = computed(() => route.path.startsWith('/project'))
 const SIDEBAR_STORAGE_KEY = 'octra.sidebarExpanded'
 const sidebarExpandedPreference = ref(localStorage.getItem(SIDEBAR_STORAGE_KEY) === '1')
 watch(sidebarExpandedPreference, (value) => {

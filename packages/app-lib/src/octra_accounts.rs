@@ -819,14 +819,25 @@ pub async fn shared_servers_add(name: &str, address: &str) -> crate::Result<Octr
 	)
 	.await?;
 	let text = read_chat_error(response).await?;
-	serde_json::from_str(&text).map_err(|e| {
-		crate::ErrorKind::OtherError(format!("octra servers add parse failed: {e}")).into()
-	})
+	let server: OctraSharedServer = serde_json::from_str(&text).map_err(|e| {
+		crate::ErrorKind::OtherError(format!("octra servers add parse failed: {e}"))
+	})?;
+	if let Err(error) =
+		crate::api::instance::refresh_octra_shared_servers_overlay().await
+	{
+		tracing::warn!("Failed to inject Octra shared servers into Minecraft: {error}");
+	}
+	Ok(server)
 }
 
 pub async fn shared_servers_delete(server_id: i64) -> crate::Result<()> {
 	let response = chat_auth_delete(&format!("/api/v1/servers/{server_id}")).await?;
 	let _ = read_chat_error(response).await?;
+	if let Err(error) =
+		crate::api::instance::refresh_octra_shared_servers_overlay().await
+	{
+		tracing::warn!("Failed to refresh Octra shared servers in Minecraft: {error}");
+	}
 	Ok(())
 }
 
