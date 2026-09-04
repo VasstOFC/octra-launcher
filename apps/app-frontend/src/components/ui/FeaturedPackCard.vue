@@ -33,7 +33,7 @@ const pack = ref<FeaturedPackInfo | null>(null)
 const messages = defineMessages({
 	kicker: {
 		id: 'app.featured-pack.kicker',
-		defaultMessage: 'Featured pack',
+		defaultMessage: 'Staff pick',
 	},
 	title: {
 		id: 'app.featured-pack.title',
@@ -41,7 +41,7 @@ const messages = defineMessages({
 	},
 	blurb: {
 		id: 'app.featured-pack.blurb',
-		defaultMessage: 'Author pack — a couple of clicks and you can play.',
+		defaultMessage: 'Catch, battle, explore — install once and jump straight in.',
 	},
 	install: {
 		id: 'app.featured-pack.install',
@@ -95,26 +95,26 @@ async function install() {
 			{{
 				installing
 					? formatMessage(messages.installing)
-					: formatMessage(messages.install) + ' ' + (pack.title || formatMessage(messages.title))
+					: formatMessage(messages.install) + ' ' + formatMessage(messages.title)
 			}}
 		</Button>
-		<div
-			v-else
-			class="featured-strip flex items-center justify-between gap-3 rounded-lg bg-surface-3 px-3 py-2"
-		>
-			<div class="min-w-0 flex items-baseline gap-2">
-				<span class="shrink-0 text-xs font-semibold uppercase tracking-wide text-brand">
+		<aside v-else class="featured-promo" :aria-label="formatMessage(messages.kicker)">
+			<div class="featured-promo__accent" aria-hidden="true" />
+			<div class="featured-promo__body min-w-0">
+				<p class="featured-promo__kicker m-0">
 					{{ formatMessage(messages.kicker) }}
-				</span>
-				<span class="truncate text-sm font-medium text-contrast">
-					{{ pack.title || formatMessage(messages.title) }}
-				</span>
-				<span class="hidden truncate text-sm text-secondary sm:inline">
-					{{ pack.blurb || formatMessage(messages.blurb) }}
-				</span>
+				</p>
+				<div class="featured-promo__copy min-w-0">
+					<p class="featured-promo__title m-0 truncate">
+						{{ formatMessage(messages.title) }}
+					</p>
+					<p class="featured-promo__blurb m-0 truncate">
+						{{ formatMessage(messages.blurb) }}
+					</p>
+				</div>
 			</div>
 			<Button
-				type="quiet"
+				type="colored"
 				color="brand"
 				size="sm"
 				class="!shadow-none shrink-0"
@@ -125,6 +125,77 @@ async function install() {
 				<DownloadIcon v-else />
 				{{ installing ? formatMessage(messages.installing) : formatMessage(messages.install) }}
 			</Button>
-		</div>
+		</aside>
 	</div>
 </template>
+
+<style scoped lang="scss">
+.featured-promo {
+	align-items: center;
+	background:
+		linear-gradient(
+			100deg,
+			color-mix(in srgb, var(--color-brand) 14%, transparent) 0%,
+			transparent 42%
+		),
+		color-mix(in srgb, var(--color-brand) 4%, var(--surface-2));
+	border: 1px solid color-mix(in srgb, var(--color-brand) 26%, var(--surface-5));
+	border-radius: var(--radius-md);
+	display: flex;
+	gap: 0.875rem;
+	justify-content: space-between;
+	overflow: hidden;
+	padding: 0.65rem 0.85rem 0.65rem 0;
+	position: relative;
+}
+
+.featured-promo__accent {
+	align-self: stretch;
+	background: linear-gradient(
+		180deg,
+		var(--color-brand) 0%,
+		color-mix(in srgb, var(--color-brand) 45%, transparent) 100%
+	);
+	border-radius: 0 2px 2px 0;
+	flex-shrink: 0;
+	margin-right: 0.15rem;
+	width: 3px;
+}
+
+.featured-promo__body {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	gap: 0.2rem;
+	min-width: 0;
+	padding-left: 0.15rem;
+}
+
+.featured-promo__kicker {
+	color: var(--color-brand);
+	font-size: 0.6875rem;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+.featured-promo__copy {
+	display: flex;
+	flex-direction: column;
+	gap: 0.1rem;
+	min-width: 0;
+}
+
+.featured-promo__title {
+	color: var(--color-contrast);
+	font-size: 0.9375rem;
+	font-weight: 600;
+	line-height: 1.25;
+}
+
+.featured-promo__blurb {
+	color: var(--color-secondary);
+	font-size: 0.8125rem;
+	line-height: 1.3;
+}
+</style>

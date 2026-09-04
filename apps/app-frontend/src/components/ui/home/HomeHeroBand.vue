@@ -162,18 +162,18 @@ onMounted(() => {
 			>
 				<Avatar
 					class="!rounded-lg shrink-0"
-					size="48px"
+					size="64px"
 					:src="iconSrc"
 					:tint-by="instance.id"
 					alt=""
 					no-shadow
 					pad-transparent-corners
 				/>
-				<div class="min-w-0 flex flex-col gap-0.5 text-left">
-					<p class="m-0 truncate text-xs font-semibold uppercase tracking-wide text-secondary">
+				<div class="min-w-0 flex flex-col gap-1 text-left">
+					<p class="continue-band__kicker m-0 truncate text-xs font-semibold uppercase tracking-wide">
 						{{ formatMessage(messages.continue) }}
 					</p>
-					<h2 class="m-0 truncate text-xl font-semibold leading-6 text-contrast">
+					<h2 class="m-0 truncate text-2xl font-semibold leading-7 text-contrast">
 						{{ instance.name }}
 					</h2>
 					<p class="m-0 truncate text-sm capitalize leading-5 text-primary">
@@ -227,17 +227,29 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .continue-band {
-	border-bottom: 1px solid var(--color-divider);
-	margin: -1.5rem -1.5rem 0;
-	padding: 1.25rem 1.5rem;
-	background: var(--color-raised-bg);
+	border: 1px solid color-mix(in srgb, var(--color-brand) 34%, var(--surface-5));
+	border-radius: var(--radius-md);
+	margin: 0;
+	padding: 1.5rem 1.5rem;
+	background:
+		linear-gradient(
+			120deg,
+			color-mix(in srgb, var(--color-brand) 18%, transparent) 0%,
+			transparent 52%
+		),
+		color-mix(in srgb, var(--color-brand) 7%, var(--surface-2));
+	box-shadow: inset 0 2px 0 0 color-mix(in srgb, var(--color-brand) 58%, transparent);
+}
+
+.continue-band__kicker {
+	color: var(--color-brand);
 }
 
 .continue-band__row {
 	align-items: center;
 	display: flex;
 	flex-wrap: wrap;
-	gap: 1rem;
+	gap: 1.25rem;
 	justify-content: space-between;
 	min-width: 0;
 }
@@ -248,7 +260,7 @@ onMounted(() => {
 	border: 0;
 	cursor: pointer;
 	display: flex;
-	gap: 0.875rem;
+	gap: 1rem;
 	min-width: 0;
 	padding: 0;
 	text-align: left;
@@ -263,5 +275,9 @@ onMounted(() => {
 	display: flex;
 	flex-shrink: 0;
 	gap: 0.5rem;
+}
+
+.continue-band__actions :deep(.btn) {
+	min-width: 7.5rem;
 }
 </style>

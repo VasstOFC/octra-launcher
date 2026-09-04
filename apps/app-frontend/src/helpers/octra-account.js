@@ -69,7 +69,14 @@ import { invoke } from '@tauri-apps/api/core'
  * @property {string} created_at
  * @property {boolean} [pinned]
  * @property {boolean} [deleted]
+ * @property {string|null} [attachment_url]
  * @property {OctraChatReaction[]} [reactions]
+ */
+
+/**
+ * @typedef {Object} OctraChatAttachment
+ * @property {string} url
+ * @property {string} path
  */
 
 /**
@@ -143,10 +150,23 @@ export async function octraChatList(channelId, afterId = 0) {
 /**
  * @param {number} channelId
  * @param {string} text
+ * @param {string|null} [attachmentUrl]
  * @returns {Promise<OctraChatMessage>}
  */
-export async function octraChatPost(channelId, text) {
-	return await invoke('plugin:octra|octra_chat_post', { channelId, text })
+export async function octraChatPost(channelId, text, attachmentUrl = null) {
+	return await invoke('plugin:octra|octra_chat_post', {
+		channelId,
+		text,
+		attachmentUrl,
+	})
+}
+
+/**
+ * @param {string} path
+ * @returns {Promise<OctraChatAttachment>}
+ */
+export async function octraChatUploadImage(path) {
+	return await invoke('plugin:octra|octra_chat_upload_image', { path })
 }
 
 /**
@@ -184,6 +204,35 @@ export async function octraChatPinMessage(messageId, pinned) {
  */
 export async function octraChatReactMessage(messageId, emoji) {
 	return await invoke('plugin:octra|octra_chat_react_message', { messageId, emoji })
+}
+
+/**
+ * @typedef {Object} OctraChatDeleteVote
+ * @property {boolean} active
+ * @property {number} channel_id
+ * @property {number} member_count
+ * @property {number} yes_count
+ * @property {number} no_count
+ * @property {number} needed
+ * @property {boolean|null} [my_vote]
+ * @property {boolean} [deleted]
+ */
+
+/**
+ * @param {number} channelId
+ * @returns {Promise<OctraChatDeleteVote>}
+ */
+export async function octraChatGetDeleteVote(channelId) {
+	return await invoke('plugin:octra|octra_chat_get_delete_vote', { channelId })
+}
+
+/**
+ * @param {number} channelId
+ * @param {boolean} yes
+ * @returns {Promise<OctraChatDeleteVote>}
+ */
+export async function octraChatCastDeleteVote(channelId, yes) {
+	return await invoke('plugin:octra|octra_chat_cast_delete_vote', { channelId, yes })
 }
 
 /** @param {string} address */

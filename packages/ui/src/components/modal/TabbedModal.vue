@@ -185,11 +185,11 @@ defineExpose({ show, hide, selectedTab, setTab })
 		<!-- Top navbar layout -->
 		<div
 			v-if="isTopNav"
-			class="flex flex-col p-6 pb-3"
-			:class="{ 'emberslot-panel': isEmberslot }"
+			class="flex flex-col"
+			:class="isEmberslot ? 'emberslot-panel gap-3 p-4 pb-3' : 'p-6 pb-3'"
 		>
 			<nav
-				class="emberslot-topnav flex shrink-0 flex-col gap-3 border-0 border-b border-solid border-divider pb-3"
+				class="emberslot-topnav flex shrink-0 flex-col gap-2 border-0 border-b border-solid border-divider pb-3"
 			>
 				<div class="flex flex-wrap gap-1.5">
 					<button
@@ -238,7 +238,7 @@ defineExpose({ show, hide, selectedTab, setTab })
 			</nav>
 
 			<div
-				class="relative mt-4 min-h-[min(55vh,520px)]"
+				class="relative min-h-[min(52vh,480px)]"
 				:class="{ 'emberslot-content rounded-lg': isEmberslot }"
 			>
 				<Transition
@@ -259,7 +259,10 @@ defineExpose({ show, hide, selectedTab, setTab })
 				<div
 					ref="scrollContainer"
 					class="absolute inset-0 overflow-y-auto"
-					:class="floatingActionBarShown ? 'pb-24' : 'pb-2'"
+					:class="[
+						isEmberslot ? 'px-4 pt-3' : '',
+						floatingActionBarShown ? 'pb-24' : isEmberslot ? 'pb-3' : 'pb-2',
+					]"
 					@scroll="checkScrollState"
 				>
 					<Suspense>

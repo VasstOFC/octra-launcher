@@ -4,13 +4,16 @@ import {
 	GlobeIcon,
 	PackageSearchIcon,
 	PlayIcon,
+	PlusIcon,
 	RefreshCwIcon,
+	ShareIcon,
 	SpinnerIcon,
 	TrashIcon,
 } from '@modrinth/assets'
 import {
 	Avatar,
 	Button,
+	ConfirmModal,
 	defineMessages,
 	IconButton,
 	injectNotificationManager,
@@ -20,6 +23,7 @@ import { useQuery, useQueryClient } from '@tanstack/vue-query'
 import { computed, onActivated, ref, useTemplateRef, watch } from 'vue'
 
 import PlayWithFriendModal from '@/components/ui/friends/PlayWithFriendModal.vue'
+import { useAppEvent } from '@/composables/use-app-event'
 import {
 	canPlayWithFriend,
 	canViewFriendPack,
@@ -28,14 +32,20 @@ import {
 import { useOctraCommunityAvatars } from '@/composables/use-octra-community-avatars'
 import { toError } from '@/helpers/errors'
 import { list as listInstances } from '@/helpers/instance'
-import { listOctraServers, removeOctraServer } from '@/helpers/octra'
 import {
 	octraAccountSession,
 	octraCommunity,
+	octraSharedServersAdd,
 	octraSharedServersDelete,
 	octraSharedServersList,
 } from '@/helpers/octra-account.js'
-import { get_server_status, start_join_server } from '@/helpers/worlds'
+import {
+	get_instance_worlds,
+	get_server_status,
+	remove_server_from_instance,
+	type ServerWorld,
+	start_join_server,
+} from '@/helpers/worlds'
 import { instanceKeys } from '@/pages/instance/query-options'
 import { useRootBreadcrumb } from '@/providers/breadcrumbs'
 
@@ -45,12 +55,20 @@ const { formatMessage } = useVIntl()
 const { handleError, addNotification } = injectNotificationManager()
 const queryClient = useQueryClient()
 
-type SavedServer = {
+type SharedServerRow = {
 	key: string
 	name: string
 	address: string
-	source: 'local' | 'shared'
-	sharedId?: number
+	sharedId: number
+	createdBy: number
+	createdByNick: string | null
+}
+
+type LocalServerRow = {
+	key: string
+	name: string
+	address: string
+	index: number
 }
 
 type PingState = {
@@ -114,17 +132,70 @@ const messages = defineMessages({
 		id: 'app.servers.friends-ingame.view-pack',
 		defaultMessage: 'View pack',
 	},
-	savedTitle: {
-		id: 'app.servers.saved.title',
-		defaultMessage: 'Saved servers',
+	sharedTitle: {
+		id: 'app.servers.shared.title',
+		defaultMessage: 'Shared servers',
 	},
-	savedEmpty: {
-		id: 'app.servers.saved.empty',
-		defaultMessage: 'No saved servers yet. Add shared ones from the friends panel Servers tab.',
+	sharedEmpty: {
+		id: 'app.servers.shared.empty',
+		defaultMessage: 'No shared servers yet. Share an address below so friends can join.',
 	},
-	savedSharedBadge: {
-		id: 'app.servers.saved.shared-badge',
-		defaultMessage: 'Shared',
+	sharedEmptySignedOut: {
+		id: 'app.servers.shared.empty-signed-out',
+		defaultMessage: 'Sign in to Octra to share servers with friends.',
+	},
+	sharedBy: {
+		id: 'app.servers.shared.by',
+		defaultMessage: 'Shared by {name}',
+	},
+	sharedNamePlaceholder: {
+		id: 'app.servers.shared.name-placeholder',
+		defaultMessage: 'Server name',
+	},
+	sharedAddressPlaceholder: {
+		id: 'app.servers.shared.address-placeholder',
+		defaultMessage: 'play.example.com:25565',
+	},
+	sharedAdd: {
+		id: 'app.servers.shared.add',
+		defaultMessage: 'Share server',
+	},
+	sharedAdded: {
+		id: 'app.servers.shared.added',
+		defaultMessage: 'Server shared with everyone',
+	},
+	shareLocal: {
+		id: 'app.servers.shared.share-local',
+		defaultMessage: 'Share with friends',
+	},
+	sharedDeleteConfirmTitle: {
+		id: 'app.servers.shared.delete-confirm.title',
+		defaultMessage: 'Remove shared server?',
+	},
+	sharedDeleteConfirmBody: {
+		id: 'app.servers.shared.delete-confirm.body',
+		defaultMessage:
+			'This shared server will disappear for everyone who has it. This cannot be undone.',
+	},
+	sharedDeleteConfirmAction: {
+		id: 'app.servers.shared.delete-confirm.action',
+		defaultMessage: 'Remove for everyone',
+	},
+	localTitle: {
+		id: 'app.servers.local.title',
+		defaultMessage: 'My local servers',
+	},
+	localSubtitle: {
+		id: 'app.servers.local.subtitle',
+		defaultMessage: 'From Minecraft for the selected instance. Updates live when you add or remove servers in-game.',
+	},
+	localEmpty: {
+		id: 'app.servers.local.empty',
+		defaultMessage: 'No servers in this instance yet. Add one in Minecraft Multiplayer.',
+	},
+	localEmptyNoInstance: {
+		id: 'app.servers.local.empty-no-instance',
+		defaultMessage: 'Select an instance to see its Minecraft server list.',
 	},
 	savedDelete: {
 		id: 'app.servers.saved.delete',
@@ -186,6 +257,7 @@ const breadcrumb = useRootBreadcrumb({
 onActivated(breadcrumb.reset)
 
 const playWithModal = useTemplateRef<InstanceType<typeof PlayWithFriendModal>>('playWithModal')
+const deleteSharedModal = useTemplateRef<InstanceType<typeof ConfirmModal>>('deleteSharedModal')
 const quickAddress = ref('')
 const selectedInstanceId = ref<string | null>(null)
 const joiningQuick = ref(false)
@@ -193,6 +265,10 @@ const joiningFriendId = ref<number | null>(null)
 const joiningSavedKey = ref<string | null>(null)
 const pinging = ref(false)
 const pings = ref<Record<string, PingState>>({})
+const shareName = ref('')
+const shareAddress = ref('')
+const sharing = ref(false)
+const pendingDeleteShared = ref<SharedServerRow | null>(null)
 
 const sessionQuery = useQuery({
 	queryKey: ['octra', 'account-session'],
@@ -208,15 +284,11 @@ const communityQuery = useQuery({
 	refetchInterval: 15_000,
 })
 
-const localServersQuery = useQuery({
-	queryKey: ['octra', 'servers'],
-	queryFn: listOctraServers,
-})
-
 const sharedServersQuery = useQuery({
 	queryKey: computed(() => ['octra', 'shared-servers', sessionQuery.data.value?.username ?? null]),
 	queryFn: () => octraSharedServersList(),
 	enabled: computed(() => !!sessionQuery.data.value),
+	refetchInterval: 20_000,
 })
 
 const instancesQuery = useQuery({
@@ -258,6 +330,20 @@ watch(
 	{ immediate: true },
 )
 
+const localWorldsQuery = useQuery({
+	queryKey: computed(() => instanceKeys.worlds(resolvedInstanceId.value ?? '')),
+	queryFn: () => get_instance_worlds(resolvedInstanceId.value!),
+	enabled: computed(() => !!resolvedInstanceId.value),
+	staleTime: 0,
+	refetchInterval: 4_000,
+})
+
+useAppEvent('instance', async (event) => {
+	if (event.event !== 'servers_updated') return
+	if (!resolvedInstanceId.value || event.instance_id !== resolvedInstanceId.value) return
+	await queryClient.invalidateQueries({ queryKey: instanceKeys.worlds(resolvedInstanceId.value) })
+})
+
 const friendsInGame = computed(() => {
 	const members = communityQuery.data.value?.members ?? []
 	return members
@@ -270,48 +356,62 @@ const friendsInGame = computed(() => {
 
 const { avatarFor } = useOctraCommunityAvatars(friendsInGame)
 
-const savedServers = computed<SavedServer[]>(() => {
-	const byAddress = new Map<string, SavedServer>()
-	for (const server of localServersQuery.data.value ?? []) {
-		const address = server.address.trim()
-		if (!address) continue
-		const key = address.toLowerCase()
-		byAddress.set(key, {
-			key: `local:${key}`,
-			name: server.name || address,
-			address,
-			source: 'local',
-		})
-	}
+const selfNick = computed(() =>
+	(sessionQuery.data.value?.minecraft_nick ?? '').trim().toLowerCase(),
+)
+
+const sharedServers = computed<SharedServerRow[]>(() => {
+	const rows: SharedServerRow[] = []
 	for (const server of sharedServersQuery.data.value ?? []) {
 		const address = String(server.address ?? '').trim()
 		if (!address) continue
-		const key = address.toLowerCase()
-		if (byAddress.has(key)) continue
-		byAddress.set(key, {
+		rows.push({
 			key: `shared:${server.id}`,
 			name: server.name || address,
 			address,
-			source: 'shared',
 			sharedId: Number(server.id),
+			createdBy: Number(server.created_by),
+			createdByNick: server.created_by_nick ? String(server.created_by_nick) : null,
 		})
 	}
-	return [...byAddress.values()].sort((a, b) =>
-		a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }),
-	)
+	return rows.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }))
+})
+
+const localServers = computed<LocalServerRow[]>(() => {
+	const worlds = localWorldsQuery.data.value ?? []
+	const rows: LocalServerRow[] = []
+	for (const world of worlds) {
+		if (world.type !== 'server') continue
+		const server = world as ServerWorld
+		const address = server.address.trim()
+		if (!address) continue
+		rows.push({
+			key: `local:${server.index}:${address.toLowerCase()}`,
+			name: server.name || address,
+			address,
+			index: server.index,
+		})
+	}
+	return rows
 })
 
 const pageLoading = computed(
 	() =>
-		localServersQuery.isPending.value ||
 		instancesQuery.isPending.value ||
 		(!!sessionQuery.data.value && communityQuery.isPending.value),
 )
 
+function isSharedByOther(server: SharedServerRow): boolean {
+	const nick = (server.createdByNick ?? '').trim().toLowerCase()
+	if (!nick || !selfNick.value) return !!nick
+	return nick !== selfNick.value
+}
+
 async function refreshPings() {
 	const addresses = [
 		...new Set([
-			...savedServers.value.map((server) => server.address),
+			...sharedServers.value.map((server) => server.address),
+			...localServers.value.map((server) => server.address),
 			...friendsInGame.value
 				.map((member) => member.join_address?.trim())
 				.filter((address): address is string => !!address),
@@ -380,16 +480,76 @@ async function playAddress(address: string, busyKey?: string) {
 	}
 }
 
-async function deleteSavedServer(server: SavedServer) {
+async function shareServer(name: string, address: string) {
+	const trimmedName = name.trim() || address.trim()
+	const trimmedAddress = address.trim()
+	if (!trimmedAddress || sharing.value) return
+	if (!sessionQuery.data.value) {
+		addNotification({
+			title: formatMessage(messages.sharedEmptySignedOut),
+			text: '',
+			type: 'error',
+		})
+		return
+	}
+	sharing.value = true
+	try {
+		await octraSharedServersAdd(trimmedName, trimmedAddress)
+		await queryClient.invalidateQueries({ queryKey: ['octra', 'shared-servers'] })
+		addNotification({
+			title: formatMessage(messages.sharedAdded),
+			text: trimmedAddress,
+			type: 'success',
+		})
+		shareName.value = ''
+		shareAddress.value = ''
+	} catch (error: unknown) {
+		handleError(toError(error))
+	} finally {
+		sharing.value = false
+	}
+}
+
+async function shareFromForm() {
+	await shareServer(shareName.value, shareAddress.value)
+}
+
+async function shareLocalServer(server: LocalServerRow) {
+	await shareServer(server.name, server.address)
+}
+
+function requestDeleteShared(server: SharedServerRow) {
+	pendingDeleteShared.value = server
+	deleteSharedModal.value?.show()
+}
+
+async function confirmDeleteShared() {
+	const server = pendingDeleteShared.value
+	pendingDeleteShared.value = null
+	if (!server) return
 	joiningSavedKey.value = server.key
 	try {
-		if (server.source === 'shared' && server.sharedId != null) {
-			await octraSharedServersDelete(server.sharedId)
-			await queryClient.invalidateQueries({ queryKey: ['octra', 'shared-servers'] })
-		} else {
-			await removeOctraServer(server.address)
-			await queryClient.invalidateQueries({ queryKey: ['octra', 'servers'] })
-		}
+		await octraSharedServersDelete(server.sharedId)
+		await queryClient.invalidateQueries({ queryKey: ['octra', 'shared-servers'] })
+		addNotification({
+			title: formatMessage(messages.savedDeleted),
+			text: server.name,
+			type: 'success',
+		})
+	} catch (error: unknown) {
+		handleError(toError(error))
+	} finally {
+		joiningSavedKey.value = null
+	}
+}
+
+async function deleteLocalServer(server: LocalServerRow) {
+	const instanceId = resolvedInstanceId.value
+	if (!instanceId) return
+	joiningSavedKey.value = server.key
+	try {
+		await remove_server_from_instance(instanceId, server.index)
+		await queryClient.invalidateQueries({ queryKey: instanceKeys.worlds(instanceId) })
 		addNotification({
 			title: formatMessage(messages.savedDeleted),
 			text: server.name,
@@ -430,6 +590,14 @@ async function viewPack(member: PlayWithFriendMember) {
 <template>
 	<div class="flex h-full min-h-0 flex-col">
 		<PlayWithFriendModal ref="playWithModal" @closed="onPlayWithClosed" />
+		<ConfirmModal
+			ref="deleteSharedModal"
+			:title="formatMessage(messages.sharedDeleteConfirmTitle)"
+			:description="formatMessage(messages.sharedDeleteConfirmBody)"
+			:proceed-label="formatMessage(messages.sharedDeleteConfirmAction)"
+			:markdown="false"
+			@proceed="confirmDeleteShared"
+		/>
 
 		<div class="border-0 border-b border-solid border-surface-5 px-6 py-5">
 			<div class="flex flex-wrap items-start justify-between gap-3">
@@ -440,7 +608,12 @@ async function viewPack(member: PlayWithFriendMember) {
 					<p class="m-0 mt-1 text-sm text-secondary">{{ formatMessage(messages.subtitle) }}</p>
 				</div>
 				<Button
-					:disabled="pinging || (savedServers.length === 0 && friendsInGame.length === 0)"
+					:disabled="
+						pinging ||
+						(sharedServers.length === 0 &&
+							localServers.length === 0 &&
+							friendsInGame.length === 0)
+					"
 					@click="refreshPings"
 				>
 					<SpinnerIcon v-if="pinging" class="animate-spin" />
@@ -576,14 +749,54 @@ async function viewPack(member: PlayWithFriendMember) {
 
 				<section class="mx-auto mt-8 max-w-3xl">
 					<h2 class="m-0 text-xs font-medium uppercase tracking-wide text-secondary">
-						{{ formatMessage(messages.savedTitle) }}
+						{{ formatMessage(messages.sharedTitle) }}
 					</h2>
-					<p v-if="savedServers.length === 0" class="m-0 mt-3 text-sm text-secondary">
-						{{ formatMessage(messages.savedEmpty) }}
+
+					<div
+						v-if="sessionQuery.data.value"
+						class="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center"
+					>
+						<input
+							v-model="shareName"
+							type="text"
+							class="min-h-9 min-w-0 flex-1 rounded-lg border border-solid border-surface-5 bg-surface-3 px-3 py-2 text-sm text-primary placeholder:text-secondary sm:max-w-[12rem]"
+							:placeholder="formatMessage(messages.sharedNamePlaceholder)"
+							:disabled="sharing"
+						/>
+						<input
+							v-model="shareAddress"
+							type="text"
+							class="min-h-9 min-w-0 flex-1 rounded-lg border border-solid border-surface-5 bg-surface-3 px-3 py-2 text-sm text-primary placeholder:text-secondary"
+							:placeholder="formatMessage(messages.sharedAddressPlaceholder)"
+							:disabled="sharing"
+							@keydown.enter.prevent="shareFromForm"
+						/>
+						<Button
+							type="colored"
+							color="brand"
+							:disabled="sharing || !shareAddress.trim()"
+							@click="shareFromForm"
+						>
+							<PlusIcon />
+							{{ formatMessage(messages.sharedAdd) }}
+						</Button>
+					</div>
+
+					<p
+						v-if="!sessionQuery.data.value"
+						class="m-0 mt-3 text-sm text-secondary"
+					>
+						{{ formatMessage(messages.sharedEmptySignedOut) }}
+					</p>
+					<p
+						v-else-if="sharedServers.length === 0"
+						class="m-0 mt-3 text-sm text-secondary"
+					>
+						{{ formatMessage(messages.sharedEmpty) }}
 					</p>
 					<ul v-else class="m-0 mt-2 flex list-none flex-col gap-1 p-0">
 						<li
-							v-for="server in savedServers"
+							v-for="server in sharedServers"
 							:key="server.key"
 							class="flex flex-wrap items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-surface-3"
 						>
@@ -591,14 +804,16 @@ async function viewPack(member: PlayWithFriendMember) {
 								<div class="flex flex-wrap items-center gap-2">
 									<p class="m-0 truncate text-sm font-medium text-contrast">{{ server.name }}</p>
 									<span
-										v-if="server.source === 'shared'"
+										v-if="isSharedByOther(server) && server.createdByNick"
 										class="rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-secondary bg-surface-3"
 									>
-										{{ formatMessage(messages.savedSharedBadge) }}
+										{{
+											formatMessage(messages.sharedBy, { name: server.createdByNick })
+										}}
 									</span>
 									<span
 										v-if="pings[server.address]"
-										class="rounded-full px-2 py-0.5 text-[10px] font-bold"
+										class="rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide"
 										:class="
 											pings[server.address].online
 												? 'bg-highlight-green text-green'
@@ -647,7 +862,123 @@ async function viewPack(member: PlayWithFriendMember) {
 									type="quiet"
 									:label="formatMessage(messages.savedDelete)"
 									:disabled="joiningSavedKey === server.key"
-									@click="deleteSavedServer(server)"
+									@click="requestDeleteShared(server)"
+								>
+									<TrashIcon />
+								</IconButton>
+								<Button
+									type="colored"
+									color="brand"
+									:disabled="!resolvedInstanceId || joiningSavedKey === server.key"
+									@click="playAddress(server.address, server.key)"
+								>
+									<PlayIcon />
+									{{ formatMessage(messages.play) }}
+								</Button>
+							</div>
+						</li>
+					</ul>
+				</section>
+
+				<hr class="mx-auto mt-8 max-w-3xl border-0 border-t border-solid border-surface-5" />
+
+				<section class="mx-auto mt-8 max-w-3xl">
+					<h2 class="m-0 text-xs font-medium uppercase tracking-wide text-secondary">
+						{{ formatMessage(messages.localTitle) }}
+					</h2>
+					<p class="m-0 mt-1 text-xs text-secondary">
+						{{ formatMessage(messages.localSubtitle) }}
+					</p>
+
+					<p
+						v-if="!resolvedInstanceId"
+						class="m-0 mt-3 text-sm text-secondary"
+					>
+						{{ formatMessage(messages.localEmptyNoInstance) }}
+					</p>
+					<p
+						v-else-if="localWorldsQuery.isPending.value"
+						class="m-0 mt-3 flex items-center gap-2 text-sm text-secondary"
+					>
+						<SpinnerIcon class="animate-spin" />
+						{{ formatMessage(messages.loading) }}
+					</p>
+					<p
+						v-else-if="localServers.length === 0"
+						class="m-0 mt-3 text-sm text-secondary"
+					>
+						{{ formatMessage(messages.localEmpty) }}
+					</p>
+					<ul v-else class="m-0 mt-2 flex list-none flex-col gap-1 p-0">
+						<li
+							v-for="server in localServers"
+							:key="server.key"
+							class="flex flex-wrap items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-surface-3"
+						>
+							<div class="min-w-0 flex-1">
+								<div class="flex flex-wrap items-center gap-2">
+									<p class="m-0 truncate text-sm font-medium text-contrast">{{ server.name }}</p>
+									<span
+										v-if="pings[server.address]"
+										class="rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide"
+										:class="
+											pings[server.address].online
+												? 'bg-highlight-green text-green'
+												: 'bg-highlight-red text-red'
+										"
+									>
+										{{
+											pings[server.address].online
+												? formatMessage(messages.online)
+												: formatMessage(messages.offline)
+										}}
+									</span>
+								</div>
+								<p class="m-0 mt-0.5 font-mono text-xs text-secondary">{{ server.address }}</p>
+								<div
+									v-if="pings[server.address]?.online"
+									class="mt-1 flex flex-wrap gap-3 text-[11px] text-secondary"
+								>
+									<span v-if="pings[server.address].ping != null">
+										{{ formatMessage(messages.ping, { ms: pings[server.address].ping }) }}
+									</span>
+									<span
+										v-if="
+											pings[server.address].playersOnline != null &&
+											pings[server.address].playersMax != null
+										"
+									>
+										{{
+											formatMessage(messages.players, {
+												online: pings[server.address].playersOnline,
+												max: pings[server.address].playersMax,
+											})
+										}}
+									</span>
+								</div>
+							</div>
+							<div class="flex items-center gap-1">
+								<IconButton
+									v-if="sessionQuery.data.value"
+									type="quiet"
+									:label="formatMessage(messages.shareLocal)"
+									:disabled="sharing"
+									@click="shareLocalServer(server)"
+								>
+									<ShareIcon />
+								</IconButton>
+								<IconButton
+									type="quiet"
+									:label="formatMessage(messages.copy)"
+									@click="copyAddress(server.address)"
+								>
+									<ClipboardCopyIcon />
+								</IconButton>
+								<IconButton
+									type="quiet"
+									:label="formatMessage(messages.savedDelete)"
+									:disabled="joiningSavedKey === server.key"
+									@click="deleteLocalServer(server)"
 								>
 									<TrashIcon />
 								</IconButton>

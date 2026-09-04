@@ -3,11 +3,7 @@ import {
 	MessageIcon,
 	PackageSearchIcon,
 	PlayIcon,
-	PlusIcon,
 	SearchIcon,
-	ServerIcon,
-	ShareIcon,
-	TrashIcon,
 } from '@modrinth/assets'
 import type { ButtonMenuOption } from '@modrinth/ui'
 import {
@@ -22,24 +18,16 @@ import {
 	useVIntl,
 } from '@modrinth/ui'
 import { useQuery } from '@tanstack/vue-query'
-import { computed, ref, useTemplateRef, watch } from 'vue'
+import { computed, nextTick, ref, useTemplateRef, watch } from 'vue'
 
 import PlayWithFriendModal from '@/components/ui/friends/PlayWithFriendModal.vue'
+import OctraChatPanel from '@/components/ui/friends/OctraChatPanel.vue'
 import {
 	canPlayWithFriend,
 	canViewFriendPack,
 } from '@/composables/play-with-friend'
-import { handleSevereError } from '@/composables/use-error.js'
 import { useOctraCommunityAvatars } from '@/composables/use-octra-community-avatars'
-import { list } from '@/helpers/instance'
-import {
-	octraCommunity,
-	octraSharedServersAdd,
-	octraSharedServersDelete,
-	octraSharedServersList,
-	octraShareJoinAddress,
-} from '@/helpers/octra-account.js'
-import { start_join_server } from '@/helpers/worlds'
+import { octraCommunity } from '@/helpers/octra-account.js'
 
 type OctraAccountSession = {
 	token: string
@@ -64,43 +52,37 @@ type OctraCommunityMember = {
 	last_seen?: string | null
 }
 
-type OctraSharedServer = {
-	id: number
-	name: string
-	address: string
-	created_by: number
-	created_by_nick?: string | null
-	created_at: string
-}
-
 const props = defineProps<{
 	session: OctraAccountSession | null
 	loadingSession?: boolean
+	/** True while the friends sidebar is visible. */
+	panelActive?: boolean
+	unreadTotal?: number
 }>()
 
 const emit = defineEmits<{
 	signIn: []
 	register: []
-	messagePlayer: [userId: number]
+	unreadChanged: [total: number]
+	chatActive: [active: boolean]
 }>()
 
 const { formatMessage } = useVIntl()
-const { handleError, addNotification } = injectNotificationManager()
+const { addNotification } = injectNotificationManager()
 const formatRelativeTime = useRelativeTime({ numeric: 'auto', style: 'short' })
 const search = ref('')
-const panelTab = ref<'friends' | 'servers'>('friends')
+const panelTab = ref<'friends' | 'chat'>('friends')
+const chatUnread = ref(0)
 const joiningId = ref<number | null>(null)
-const joiningSharedId = ref<number | null>(null)
-const shareAddress = ref('')
-const sharingAddress = ref(false)
-const sharedServers = ref<OctraSharedServer[]>([])
-const sharedName = ref('')
-const sharedAddress = ref('')
-const addingShared = ref(false)
 const previousPresence = ref<Map<number, string>>(new Map())
 const presenceReady = ref(false)
 const memberOptions = useTemplateRef('memberOptions')
 const playWithModal = useTemplateRef<InstanceType<typeof PlayWithFriendModal>>('playWithModal')
+const chatPanel = useTemplateRef<InstanceType<typeof OctraChatPanel>>('chatPanel')
+
+const badgeUnread = computed(() =>
+	Math.max(props.unreadTotal ?? 0, chatUnread.value),
+)
 
 /** Strip markup so API nick/status never render as HTML (text-only sidebar). */
 function plainText(value: string | null | undefined): string {
@@ -175,33 +157,22 @@ watch(
 	{ deep: true },
 )
 
+watch(panelTab, (tab) => {
+	emit('chatActive', tab === 'chat')
+})
+
 watch(
 	() => props.session?.username ?? null,
 	() => {
 		previousPresence.value = new Map()
 		presenceReady.value = false
 		panelTab.value = 'friends'
-		void refreshSharedServers()
+		emit('chatActive', false)
 	},
 )
 
-async function refreshSharedServers() {
-	if (!props.session) {
-		sharedServers.value = []
-		return
-	}
-	try {
-		sharedServers.value = await octraSharedServersList()
-	} catch {
-		sharedServers.value = []
-	}
-}
-
-void refreshSharedServers()
-
 function presenceDotClass(presence?: string) {
-	if (presence === 'ingame') return 'bg-brand-green'
-	if (presence === 'launcher') return 'bg-brand'
+	if (presence === 'ingame' || presence === 'launcher') return 'bg-brand-green'
 	return 'bg-secondary opacity-40'
 }
 
@@ -230,7 +201,7 @@ function createContextMenuOptions(member: OctraCommunityMember): ButtonMenuOptio
 			id: 'message-player',
 			label: formatMessage(messages.messagePlayer),
 			icon: MessageIcon,
-			action: () => emit('messagePlayer', member.id),
+			action: () => void openChatDm(member.id),
 		},
 	]
 	if (canJoin(member)) {
@@ -268,23 +239,6 @@ async function viewFriendPack(member: OctraCommunityMember) {
 	await playWithModal.value?.viewPack(member)
 }
 
-function pickInstance(
-	instances: Awaited<ReturnType<typeof list>>,
-	preferredName: string | null | undefined,
-) {
-	if (instances.length === 0) return null
-	const preferred = preferredName?.trim().toLowerCase()
-	if (preferred) {
-		const byName = instances.find((instance) => instance.name.toLowerCase() === preferred)
-		if (byName) return byName
-	}
-	return [...instances].sort((a, b) => {
-		const aTime = a.last_played ? new Date(a.last_played).getTime() : 0
-		const bTime = b.last_played ? new Date(b.last_played).getTime() : 0
-		return bTime - aTime
-	})[0] ?? null
-}
-
 async function openPlayWith(member: OctraCommunityMember) {
 	joiningId.value = member.id
 	await playWithModal.value?.open(member)
@@ -298,72 +252,32 @@ async function joinFriend(member: OctraCommunityMember) {
 	await openPlayWith(member)
 }
 
-async function shareMyIp() {
-	const address = shareAddress.value.trim()
-	if (!address || sharingAddress.value) return
-	sharingAddress.value = true
-	try {
-		await octraShareJoinAddress(address)
-		addNotification({
-			title: formatMessage(messages.shareIpSuccess),
-			text: '',
-			type: 'success',
-		})
-		shareAddress.value = ''
-	} catch (error) {
-		handleSevereError(error, handleError)
-	} finally {
-		sharingAddress.value = false
-	}
+async function openChatDm(userId: number) {
+	panelTab.value = 'chat'
+	emit('chatActive', true)
+	await nextTick()
+	await chatPanel.value?.openDm?.(userId)
 }
 
-async function addSharedServer() {
-	const name = sharedName.value.trim()
-	const address = sharedAddress.value.trim()
-	if (!name || !address || addingShared.value) return
-	addingShared.value = true
-	try {
-		await octraSharedServersAdd(name, address)
-		sharedName.value = ''
-		sharedAddress.value = ''
-		await refreshSharedServers()
-		addNotification({
-			title: formatMessage(messages.sharedAddSuccess),
-			text: '',
-			type: 'success',
-		})
-	} catch (error) {
-		handleSevereError(error, handleError)
-	} finally {
-		addingShared.value = false
-	}
+function setTab(tab: 'friends' | 'chat') {
+	panelTab.value = tab
+	emit('chatActive', tab === 'chat')
 }
 
-async function deleteSharedServer(server: OctraSharedServer) {
-	try {
-		await octraSharedServersDelete(server.id)
-		await refreshSharedServers()
-	} catch (error) {
-		handleSevereError(error, handleError)
-	}
+function isChatActive() {
+	return panelTab.value === 'chat'
 }
 
-async function joinSharedServer(server: OctraSharedServer) {
-	joiningSharedId.value = server.id
-	try {
-		const instances = await list()
-		const instance = pickInstance(instances, null)
-		if (!instance) {
-			handleError(formatMessage(messages.noInstance))
-			return
-		}
-		await start_join_server(instance.id, server.address)
-	} catch (error) {
-		handleSevereError(error, handleError)
-	} finally {
-		joiningSharedId.value = null
-	}
+function onChatUnread(total: number) {
+	chatUnread.value = total
+	emit('unreadChanged', total)
 }
+
+defineExpose({
+	setTab,
+	isChatActive,
+	openChatDm,
+})
 
 const messages = defineMessages({
 	heading: {
@@ -374,9 +288,9 @@ const messages = defineMessages({
 		id: 'octra.community.tab.friends',
 		defaultMessage: 'Friends',
 	},
-	tabServers: {
-		id: 'octra.community.tab.servers',
-		defaultMessage: 'Servers',
+	tabChat: {
+		id: 'octra.community.tab.chat',
+		defaultMessage: 'Chat',
 	},
 	search: {
 		id: 'octra.community.search',
@@ -446,26 +360,6 @@ const messages = defineMessages({
 		id: 'octra.community.friend-in-game',
 		defaultMessage: '{nick} is in game',
 	},
-	shareIpLabel: {
-		id: 'octra.community.share-ip',
-		defaultMessage: 'Share my server IP…',
-	},
-	shareIpPlaceholder: {
-		id: 'octra.community.share-ip-placeholder',
-		defaultMessage: 'play.example.com:25565',
-	},
-	shareIpAction: {
-		id: 'octra.community.share-ip-action',
-		defaultMessage: 'Share IP',
-	},
-	shareIpSuccess: {
-		id: 'octra.community.share-ip-success',
-		defaultMessage: 'Your join address is shared with friends.',
-	},
-	noInstance: {
-		id: 'octra.community.no-instance',
-		defaultMessage: 'Create or install an instance before joining a friend.',
-	},
 	messagePlayer: {
 		id: 'octra.community.message-player',
 		defaultMessage: 'Message player',
@@ -478,51 +372,19 @@ const messages = defineMessages({
 		id: 'octra.community.actions.label',
 		defaultMessage: 'Friend actions',
 	},
-	sharedHeading: {
-		id: 'octra.community.shared-heading',
-		defaultMessage: 'Shared servers',
-	},
-	sharedEmpty: {
-		id: 'octra.community.shared-empty',
-		defaultMessage: 'No shared servers yet.',
-	},
-	sharedNamePlaceholder: {
-		id: 'octra.community.shared-name',
-		defaultMessage: 'Name',
-	},
-	sharedAddressPlaceholder: {
-		id: 'octra.community.shared-address',
-		defaultMessage: 'Address',
-	},
-	sharedAdd: {
-		id: 'octra.community.shared-add',
-		defaultMessage: 'Add server',
-	},
-	sharedAddSuccess: {
-		id: 'octra.community.shared-add-success',
-		defaultMessage: 'Shared server added.',
-	},
-	sharedJoin: {
-		id: 'octra.community.shared-join',
-		defaultMessage: 'Join server',
-	},
-	sharedDelete: {
-		id: 'octra.community.shared-delete',
-		defaultMessage: 'Delete server',
-	},
 })
 </script>
 
 <template>
-	<div class="flex flex-col gap-3">
+	<div class="community-panel flex h-full min-h-0 flex-1 flex-col gap-3">
 		<ContextMenu ref="memberOptions" :label="formatMessage(messages.memberActionsLabel)" />
 		<PlayWithFriendModal ref="playWithModal" @closed="onPlayWithClosed" />
 		<div class="flex items-start justify-between gap-2">
 			<div class="min-w-0">
-				<h3 class="m-0 text-base font-medium text-primary">
+				<h3 class="m-0 text-sm font-semibold uppercase tracking-wide text-secondary">
 					{{ formatMessage(messages.heading) }}
 				</h3>
-				<div class="mt-0.5 flex items-center gap-1.5 text-[11px] leading-none text-secondary">
+				<div class="mt-1 flex items-center gap-1.5 text-[11px] leading-none text-secondary">
 					<span
 						class="size-1.5 shrink-0 rounded-full"
 						:class="connected ? 'bg-brand-green opacity-70' : 'bg-secondary opacity-40'"
@@ -565,19 +427,15 @@ const messages = defineMessages({
 
 		<template v-else>
 			<div
-				class="grid grid-cols-2 gap-0.5 rounded-lg bg-surface-2 p-0.5"
+				class="community-tabs grid shrink-0 grid-cols-2 gap-0 border-0 border-b border-solid border-surface-5"
 				role="tablist"
 				:aria-label="formatMessage(messages.heading)"
 			>
 				<button
 					type="button"
 					role="tab"
-					class="rounded-md px-2 py-1.5 text-xs font-medium transition-colors"
-					:class="
-						panelTab === 'friends'
-							? 'bg-surface-3 text-contrast'
-							: 'text-secondary hover:text-primary'
-					"
+					class="community-tab"
+					:class="{ 'community-tab--active': panelTab === 'friends' }"
 					:aria-selected="panelTab === 'friends'"
 					@click="panelTab = 'friends'"
 				>
@@ -586,21 +444,17 @@ const messages = defineMessages({
 				<button
 					type="button"
 					role="tab"
-					class="rounded-md px-2 py-1.5 text-xs font-medium transition-colors"
-					:class="
-						panelTab === 'servers'
-							? 'bg-surface-3 text-contrast'
-							: 'text-secondary hover:text-primary'
-					"
-					:aria-selected="panelTab === 'servers'"
-					@click="panelTab = 'servers'"
+					class="community-tab relative"
+					:class="{ 'community-tab--active': panelTab === 'chat' }"
+					:aria-selected="panelTab === 'chat'"
+					@click="panelTab = 'chat'"
 				>
-					{{ formatMessage(messages.tabServers) }}
+					{{ formatMessage(messages.tabChat) }}
 					<span
-						v-if="sharedServers.length > 0"
-						class="ml-1 text-[10px] text-secondary"
+						v-if="badgeUnread > 0 && panelTab !== 'chat'"
+						class="ml-1 inline-flex min-w-[1rem] items-center justify-center rounded-full bg-brand px-1 text-[10px] font-semibold leading-4 text-[var(--color-accent-contrast)]"
 					>
-						{{ sharedServers.length }}
+						{{ badgeUnread > 99 ? '99+' : badgeUnread }}
 					</span>
 				</button>
 			</div>
@@ -625,11 +479,11 @@ const messages = defineMessages({
 						wrapper-class="!border-button-bg [&>span:first-child]:!text-primary [&>span:first-child]:!opacity-100"
 						@keyup.esc="search = ''"
 					/>
-					<div class="community-list flex flex-col gap-0.5">
+					<div class="community-list flex flex-col">
 						<div
 							v-for="(member, index) in filtered"
 							:key="member.id"
-							class="community-row grid grid-cols-[auto_1fr_auto] items-center gap-2 rounded-lg px-1 py-1.5 select-none hover:bg-surface-3"
+							class="community-row grid grid-cols-[auto_1fr_auto] items-center gap-2 px-1 py-2 select-none hover:bg-surface-3"
 							:style="{ '--stagger': `${Math.min(index, 8) * 28}ms` }"
 							@contextmenu.prevent.stop="(event) => openMemberContextMenu(event, member)"
 						>
@@ -670,105 +524,56 @@ const messages = defineMessages({
 				</template>
 			</template>
 
-			<template v-else>
-				<div class="flex flex-col gap-1.5 rounded-lg bg-surface-2 p-2">
-					<span class="text-[11px] font-medium text-secondary">
-						{{ formatMessage(messages.shareIpLabel) }}
-					</span>
-					<div class="flex items-center gap-1.5">
-						<input
-							v-model="shareAddress"
-							type="text"
-							class="min-h-8 w-full rounded-md border border-solid border-surface-5 bg-surface-3 px-2 py-1 text-xs text-primary placeholder:text-secondary"
-							:placeholder="formatMessage(messages.shareIpPlaceholder)"
-							:disabled="sharingAddress"
-							@keydown.enter.prevent="shareMyIp"
-						/>
-						<IconButton
-							v-tooltip="formatMessage(messages.shareIpAction)"
-							type="standard"
-							color="brand"
-							:label="formatMessage(messages.shareIpAction)"
-							:disabled="sharingAddress || !shareAddress.trim()"
-							@click="shareMyIp"
-						>
-							<ShareIcon />
-						</IconButton>
-					</div>
-				</div>
-
-				<div class="flex flex-col gap-2">
-					<div class="flex items-center gap-1.5 text-primary">
-						<ServerIcon class="size-3.5 shrink-0 text-secondary" />
-						<h4 class="m-0 text-sm font-medium">
-							{{ formatMessage(messages.sharedHeading) }}
-						</h4>
-					</div>
-					<p v-if="sharedServers.length === 0" class="m-0 text-xs text-secondary">
-						{{ formatMessage(messages.sharedEmpty) }}
-					</p>
-					<div
-						v-for="server in sharedServers"
-						:key="server.id"
-						class="grid grid-cols-[1fr_auto] items-center gap-1 rounded-lg px-1 py-1 hover:bg-surface-3"
-					>
-						<div class="min-w-0">
-							<span class="block truncate text-sm text-contrast">{{ server.name }}</span>
-							<span class="block truncate text-[11px] text-secondary">{{ server.address }}</span>
-						</div>
-						<div class="flex items-center gap-0.5">
-							<IconButton
-								v-tooltip="formatMessage(messages.sharedJoin)"
-								type="quiet"
-								color="brand"
-								:label="formatMessage(messages.sharedJoin)"
-								:disabled="joiningSharedId === server.id"
-								@click="joinSharedServer(server)"
-							>
-								<PlayIcon />
-							</IconButton>
-							<IconButton
-								v-tooltip="formatMessage(messages.sharedDelete)"
-								type="quiet"
-								:label="formatMessage(messages.sharedDelete)"
-								@click="deleteSharedServer(server)"
-							>
-								<TrashIcon />
-							</IconButton>
-						</div>
-					</div>
-					<div class="flex flex-col gap-1.5">
-						<input
-							v-model="sharedName"
-							type="text"
-							class="min-h-8 w-full rounded-md border border-solid border-surface-5 bg-surface-3 px-2 py-1 text-xs text-primary placeholder:text-secondary"
-							:placeholder="formatMessage(messages.sharedNamePlaceholder)"
-						/>
-						<input
-							v-model="sharedAddress"
-							type="text"
-							class="min-h-8 w-full rounded-md border border-solid border-surface-5 bg-surface-3 px-2 py-1 text-xs text-primary placeholder:text-secondary"
-							:placeholder="formatMessage(messages.sharedAddressPlaceholder)"
-							@keydown.enter.prevent="addSharedServer"
-						/>
-						<Button
-							type="colored"
-							color="brand"
-							class="w-full"
-							:disabled="addingShared || !sharedName.trim() || !sharedAddress.trim()"
-							@click="addSharedServer"
-						>
-							<PlusIcon />
-							{{ formatMessage(messages.sharedAdd) }}
-						</Button>
-					</div>
-				</div>
-			</template>
+			<div v-else class="community-chat flex min-h-0 flex-1 flex-col">
+				<OctraChatPanel
+					ref="chatPanel"
+					class="min-h-0 flex-1"
+					embedded
+					:session="session"
+					:open="!!panelActive && panelTab === 'chat'"
+					@sign-in="emit('signIn')"
+					@unread-changed="onChatUnread"
+				/>
+			</div>
 		</template>
 	</div>
 </template>
 
 <style scoped>
+.community-tabs {
+	margin: 0 -0.25rem;
+}
+
+.community-tab {
+	background: transparent;
+	border: 0;
+	border-bottom: 2px solid transparent;
+	color: var(--color-secondary);
+	cursor: pointer;
+	font-size: 0.75rem;
+	font-weight: 600;
+	margin-bottom: -1px;
+	padding: 0.5rem 0.25rem;
+	text-align: center;
+}
+
+.community-tab:hover {
+	color: var(--color-primary);
+}
+
+.community-tab--active {
+	border-bottom-color: var(--color-brand);
+	color: var(--color-brand);
+}
+
+.community-row + .community-row {
+	border-top: 1px solid color-mix(in srgb, var(--surface-5) 70%, transparent);
+}
+
+.community-chat {
+	min-height: 0;
+}
+
 @media (prefers-reduced-motion: no-preference) {
 	:global(.app-sidebar.open) .community-row {
 		animation: community-row-in 0.28s cubic-bezier(0.32, 0.72, 0, 1) both;

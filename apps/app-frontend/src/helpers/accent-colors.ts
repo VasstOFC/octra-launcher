@@ -14,9 +14,9 @@ export interface AccentPresetDefinition {
 }
 
 export const ACCENT_PRESETS: readonly AccentPresetDefinition[] = [
-	{ id: 'octra', light: '#c96b35', dark: '#e49a4a' },
+	{ id: 'octra', light: '#5B35D9', dark: '#C4A8FF' },
 	{ id: 'cobalt', light: '#1f68c0', dark: '#5196df' },
-	{ id: 'ember', light: '#e08325', dark: '#e7a038' },
+	{ id: 'ember', light: '#c96b35', dark: '#e49a4a' },
 	{ id: 'mint', light: '#00af5c', dark: '#33f598' },
 	{ id: 'rose', light: '#ed4661', dark: '#f67687' },
 	{ id: 'aurora', light: '#761ad6', dark: '#ba7eff' },
@@ -24,7 +24,7 @@ export const ACCENT_PRESETS: readonly AccentPresetDefinition[] = [
 
 export const DEFAULT_ACCENT: AccentPreference = {
 	preset: 'octra',
-	customHex: '#c96b35',
+	customHex: '#5B35D9',
 }
 
 const BRAND_CSS_VARS = [
@@ -69,7 +69,7 @@ export function normalizeHexColor(hex: string, fallback = DEFAULT_ACCENT.customH
 function rgba(hex: string, alpha: number): string {
 	const parsed = parseHexColor(hex)
 	if (!parsed) {
-		return `rgba(201, 107, 53, ${alpha})`
+		return `rgba(91, 53, 217, ${alpha})`
 	}
 
 	return `rgba(${parsed.r}, ${parsed.g}, ${parsed.b}, ${alpha})`

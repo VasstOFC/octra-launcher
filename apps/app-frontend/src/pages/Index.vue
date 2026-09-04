@@ -110,12 +110,28 @@ function openPageContextMenu(event: MouseEvent) {
 	<div
 		v-else-if="isReady"
 		data-library-page-background
-		class="flex flex-col gap-4 p-6"
+		class="home-stage flex flex-col gap-5 p-6"
 		@contextmenu="openPageContextMenu"
 	>
 		<HomeHeroBand :instance="continueInstance" />
-		<FeaturedPackCard :installed="hasFeaturedPack" @installed="fetchInstances" />
-		<LibrarySection :instances="instances" />
+		<section class="home-stage__library">
+			<LibrarySection :instances="instances">
+				<template #promo>
+					<FeaturedPackCard :installed="hasFeaturedPack" @installed="fetchInstances" />
+				</template>
+			</LibrarySection>
+		</section>
 		<ContextMenu ref="pageOptions" :label="formatMessage(messages.libraryActionsLabel)" />
 	</div>
 </template>
+
+<style scoped lang="scss">
+.home-stage {
+	background: transparent;
+}
+
+.home-stage__library {
+	border-top: 1px solid var(--color-divider);
+	padding-top: 1rem;
+}
+</style>

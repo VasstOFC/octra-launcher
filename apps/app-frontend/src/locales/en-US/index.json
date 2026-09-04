@@ -309,7 +309,7 @@
     "message": "1.0.0"
   },
   "app.featured-pack.blurb": {
-    "message": "Author pack — a couple of clicks and you can play."
+    "message": "Catch, battle, explore — install once and jump straight in."
   },
   "app.featured-pack.install": {
     "message": "Install"
@@ -318,7 +318,7 @@
     "message": "Installing…"
   },
   "app.featured-pack.kicker": {
-    "message": "Featured pack"
+    "message": "Staff pick"
   },
   "app.featured-pack.title": {
     "message": "Cobblemon Vasst"
@@ -1350,7 +1350,7 @@
     "message": "under a minute"
   },
   "app.nav.quick-switch": {
-    "message": "Quick switch"
+    "message": "Library"
   },
   "app.nav.remove-account": {
     "message": "Remove account"
@@ -1601,6 +1601,27 @@
   "app.screenshots.show-in-folder": {
     "message": "Show in folder"
   },
+  "app.screenshots.share": {
+    "message": "Share with a friend"
+  },
+  "app.screenshots.share.chat-body": {
+    "message": "Shared a screenshot: {name} ({instance})"
+  },
+  "app.screenshots.share.empty": {
+    "message": "No friends found yet."
+  },
+  "app.screenshots.share.hint": {
+    "message": "Pick someone to send this screenshot in Octra chat."
+  },
+  "app.screenshots.share.sign-in": {
+    "message": "Sign in to Octra to share screenshots with friends."
+  },
+  "app.screenshots.share.success": {
+    "message": "Screenshot shared with {nick}"
+  },
+  "app.screenshots.share.title": {
+    "message": "Share with a friend"
+  },
   "app.screenshots.sort-by": {
     "message": "Sort by"
   },
@@ -1679,6 +1700,18 @@
   "app.servers.refresh": {
     "message": "Refresh"
   },
+  "app.servers.local.empty": {
+    "message": "No servers in this instance yet. Add one in Minecraft Multiplayer."
+  },
+  "app.servers.local.empty-no-instance": {
+    "message": "Select an instance to see its Minecraft server list."
+  },
+  "app.servers.local.subtitle": {
+    "message": "From Minecraft for the selected instance. Updates live when you add or remove servers in-game."
+  },
+  "app.servers.local.title": {
+    "message": "My local servers"
+  },
   "app.servers.saved.delete": {
     "message": "Remove server"
   },
@@ -1686,13 +1719,49 @@
     "message": "Server removed"
   },
   "app.servers.saved.empty": {
-    "message": "No saved servers yet. Add shared ones from the friends panel Servers tab."
+    "message": "No saved servers yet."
   },
   "app.servers.saved.shared-badge": {
     "message": "Shared"
   },
   "app.servers.saved.title": {
     "message": "Saved servers"
+  },
+  "app.servers.shared.add": {
+    "message": "Share server"
+  },
+  "app.servers.shared.added": {
+    "message": "Server shared with everyone"
+  },
+  "app.servers.shared.address-placeholder": {
+    "message": "play.example.com:25565"
+  },
+  "app.servers.shared.by": {
+    "message": "Shared by {name}"
+  },
+  "app.servers.shared.delete-confirm.action": {
+    "message": "Remove for everyone"
+  },
+  "app.servers.shared.delete-confirm.body": {
+    "message": "This shared server will disappear for everyone who has it. This cannot be undone."
+  },
+  "app.servers.shared.delete-confirm.title": {
+    "message": "Remove shared server?"
+  },
+  "app.servers.shared.empty": {
+    "message": "No shared servers yet. Share an address below so friends can join."
+  },
+  "app.servers.shared.empty-signed-out": {
+    "message": "Sign in to Octra to share servers with friends."
+  },
+  "app.servers.shared.name-placeholder": {
+    "message": "Server name"
+  },
+  "app.servers.shared.share-local": {
+    "message": "Share with friends"
+  },
+  "app.servers.shared.title": {
+    "message": "Shared servers"
   },
   "app.servers.subtitle": {
     "message": "Join friends in game, or hop onto a saved address."
@@ -1716,13 +1785,13 @@
     "message": "Cobalt"
   },
   "app.settings.accent.preset.ember": {
-    "message": "Ember"
+    "message": "Copper"
   },
   "app.settings.accent.preset.mint": {
     "message": "Mint"
   },
   "app.settings.accent.preset.octra": {
-    "message": "Octra"
+    "message": "Lavender"
   },
   "app.settings.accent.preset.rose": {
     "message": "Rose"
@@ -1760,14 +1829,8 @@
   "app.settings.appearance.group.accent.description": {
     "message": "Brand color across the launcher."
   },
-  "app.settings.appearance.group.language": {
-    "message": "Language"
-  },
-  "app.settings.appearance.group.language.description": {
-    "message": "Octra App interface language."
-  },
   "app.settings.appearance.panel.description": {
-    "message": "Theme, accent color, language, and library layout."
+    "message": "Theme, accent color, and window chrome."
   },
   "app.settings.appearance.panel.title": {
     "message": "Appearance"
@@ -3425,11 +3488,41 @@
   "octra.chat.delete": {
     "message": "Delete"
   },
+  "octra.chat.message-actions": {
+    "message": "Message actions"
+  },
+  "octra.chat.delete-group": {
+    "message": "Delete group"
+  },
+  "octra.chat.delete-vote-confirm": {
+    "message": "A two-thirds majority must vote yes to delete this group."
+  },
+  "octra.chat.delete-vote-hint": {
+    "message": "{yes} of {needed} yes votes needed ({members} members)."
+  },
+  "octra.chat.delete-vote-no": {
+    "message": "Vote no"
+  },
+  "octra.chat.delete-vote-start": {
+    "message": "Start delete vote"
+  },
+  "octra.chat.delete-vote-title": {
+    "message": "Vote to delete this group"
+  },
+  "octra.chat.delete-vote-yes": {
+    "message": "Vote yes"
+  },
   "octra.chat.empty": {
     "message": "No messages yet. Say hi or share a pack link."
   },
+  "octra.chat.image-attachment": {
+    "message": "Image"
+  },
   "octra.chat.empty-channels": {
     "message": "No conversations yet."
+  },
+  "octra.chat.group-min-members": {
+    "message": "Pick at least 2 other people (3 total including you)."
   },
   "octra.chat.group-name": {
     "message": "Group name"
@@ -3502,6 +3595,9 @@
   },
   "octra.chat.unread": {
     "message": "{count} unread"
+  },
+  "octra.chat.back-to-list": {
+    "message": "Back to conversations"
   },
   "octra.community.actions.label": {
     "message": "Friend actions"
@@ -3652,6 +3748,9 @@
   },
   "octra.community.tab.servers": {
     "message": "Servers"
+  },
+  "octra.community.tab.chat": {
+    "message": "Chat"
   },
   "octra.whats-new.dismiss": {
     "message": "Got it"

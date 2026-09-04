@@ -424,7 +424,15 @@ pub struct OctraChatMessage {
 	#[serde(default)]
 	pub deleted: bool,
 	#[serde(default)]
+	pub attachment_url: Option<String>,
+	#[serde(default)]
 	pub reactions: Vec<OctraChatReaction>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct OctraChatAttachment {
+	pub url: String,
+	pub path: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -436,6 +444,20 @@ pub struct OctraSharedServer {
 	#[serde(default)]
 	pub created_by_nick: Option<String>,
 	pub created_at: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct OctraChatDeleteVote {
+	pub active: bool,
+	pub channel_id: i64,
+	pub member_count: i64,
+	pub yes_count: i64,
+	pub no_count: i64,
+	pub needed: i64,
+	#[serde(default)]
+	pub my_vote: Option<bool>,
+	#[serde(default)]
+	pub deleted: bool,
 }
 
 async fn chat_auth_get(path: &str) -> crate::Result<reqwest::Response> {
@@ -512,8 +534,20 @@ async fn read_chat_error(response: reqwest::Response) -> crate::Result<String> {
 				.and_then(|d| d.as_str())
 				.map(ToOwned::to_owned)
 		})
-		.unwrap_or(text_body);
-	Err(crate::ErrorKind::OtherError(detail).into())
+		.filter(|d| !d.is_empty())
+		.unwrap_or_else(|| text_body.trim().to_string());
+	let message = if detail.is_empty() {
+		format!("octra chat request failed ({status})")
+	} else if status.as_u16() == 404
+		&& detail.eq_ignore_ascii_case("Not Found")
+	{
+		format!(
+			"chat attachments endpoint missing on server ({status}) — redeploy octra-api"
+		)
+	} else {
+		detail
+	};
+	Err(crate::ErrorKind::OtherError(message).into())
 }
 
 pub async fn chat_channels() -> crate::Result<Vec<OctraChatChannel>> {
@@ -572,10 +606,78 @@ pub async fn chat_list(channel_id: i64, after_id: i64) -> crate::Result<Vec<Octr
 	})
 }
 
-pub async fn chat_post(channel_id: i64, text: &str) -> crate::Result<OctraChatMessage> {
+async fn chat_auth_post_bytes(
+	path: &str,
+	bytes: Vec<u8>,
+	content_type: &str,
+) -> crate::Result<reqwest::Response> {
+	let Some(session) = session().await? else {
+		return Err(crate::ErrorKind::OtherError(
+			"not signed in to Octra".to_string(),
+		)
+		.into());
+	};
+	let url = format!("{}{}", nervia::skins_url(), path);
+	INSECURE_REQWEST_CLIENT
+		.post(&url)
+		.header("Authorization", format!("Bearer {}", session.token))
+		.header("Content-Type", content_type)
+		.body(bytes)
+		.timeout(Duration::from_secs(60))
+		.send()
+		.await
+		.map_err(|e| {
+			crate::ErrorKind::OtherError(format!("octra chat upload failed: {e}")).into()
+		})
+}
+
+pub async fn chat_upload_image(image_path: &str) -> crate::Result<OctraChatAttachment> {
+	let path = std::path::Path::new(image_path);
+	if !path.is_file() {
+		return Err(crate::ErrorKind::OtherError("image file not found".to_string()).into());
+	}
+	let bytes = match tokio::fs::read(path).await {
+		Ok(data) => data,
+		Err(e) => {
+			return Err(
+				crate::ErrorKind::OtherError(format!("failed to read image: {e}")).into(),
+			);
+		}
+	};
+	if bytes.is_empty() {
+		return Err(crate::ErrorKind::OtherError("empty image file".to_string()).into());
+	}
+	let content_type = if bytes.starts_with(b"\x89PNG\r\n\x1a\n") {
+		"image/png"
+	} else if bytes.starts_with(&[0xff, 0xd8, 0xff]) {
+		"image/jpeg"
+	} else if bytes.len() >= 12 && &bytes[0..4] == b"RIFF" && &bytes[8..12] == b"WEBP" {
+		"image/webp"
+	} else {
+		return Err(crate::ErrorKind::OtherError(
+			"unsupported image type (png/jpeg/webp)".to_string(),
+		)
+		.into());
+	};
+	let response = chat_auth_post_bytes("/api/v1/chat/attachments", bytes, content_type).await?;
+	let text = read_chat_error(response).await?;
+	serde_json::from_str(&text).map_err(|e| {
+		crate::ErrorKind::OtherError(format!("octra chat upload parse failed: {e}")).into()
+	})
+}
+
+pub async fn chat_post(
+	channel_id: i64,
+	text: &str,
+	attachment_url: Option<&str>,
+) -> crate::Result<OctraChatMessage> {
+	let mut body = serde_json::json!({ "text": text });
+	if let Some(url) = attachment_url.filter(|u| !u.is_empty()) {
+		body["attachment_url"] = serde_json::Value::String(url.to_string());
+	}
 	let response = chat_auth_post(
 		&format!("/api/v1/chat/channels/{channel_id}/messages"),
-		&serde_json::json!({ "text": text }),
+		&body,
 	)
 	.await?;
 	let text_body = read_chat_error(response).await?;
@@ -642,6 +744,30 @@ pub async fn chat_react_message(
 	let text = read_chat_error(response).await?;
 	serde_json::from_str(&text).map_err(|e| {
 		crate::ErrorKind::OtherError(format!("octra chat react parse failed: {e}")).into()
+	})
+}
+
+pub async fn chat_get_delete_vote(channel_id: i64) -> crate::Result<OctraChatDeleteVote> {
+	let response =
+		chat_auth_get(&format!("/api/v1/chat/channels/{channel_id}/delete-vote")).await?;
+	let text = read_chat_error(response).await?;
+	serde_json::from_str(&text).map_err(|e| {
+		crate::ErrorKind::OtherError(format!("octra chat delete-vote parse failed: {e}")).into()
+	})
+}
+
+pub async fn chat_cast_delete_vote(
+	channel_id: i64,
+	yes: bool,
+) -> crate::Result<OctraChatDeleteVote> {
+	let response = chat_auth_post(
+		&format!("/api/v1/chat/channels/{channel_id}/delete-vote"),
+		&serde_json::json!({ "yes": yes }),
+	)
+	.await?;
+	let text = read_chat_error(response).await?;
+	serde_json::from_str(&text).map_err(|e| {
+		crate::ErrorKind::OtherError(format!("octra chat delete-vote cast failed: {e}")).into()
 	})
 }
 

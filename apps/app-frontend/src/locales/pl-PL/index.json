@@ -309,7 +309,7 @@
     "message": "1.0.0"
   },
   "app.featured-pack.blurb": {
-    "message": "Autorska paczka — parę kliknięć i możesz grać."
+    "message": "Łap, walcz, odkrywaj — zainstaluj raz i wskakuj do gry."
   },
   "app.featured-pack.install": {
     "message": "Zainstaluj"
@@ -318,7 +318,7 @@
     "message": "Instalowanie…"
   },
   "app.featured-pack.kicker": {
-    "message": "Polecana paczka"
+    "message": "Wybór Octra"
   },
   "app.featured-pack.title": {
     "message": "Cobblemon Vasst"
@@ -1347,7 +1347,7 @@
     "message": "poniżej minuty"
   },
   "app.nav.quick-switch": {
-    "message": "Szybkie przełączanie"
+    "message": "Biblioteka"
   },
   "app.nav.remove-account": {
     "message": "Usuń konto"
@@ -1595,6 +1595,27 @@
   "app.screenshots.show-in-folder": {
     "message": "Pokaż w folderze"
   },
+  "app.screenshots.share": {
+    "message": "Udostępnij znajomemu"
+  },
+  "app.screenshots.share.chat-body": {
+    "message": "Udostępnił(a) zrzut ekranu: {name} ({instance})"
+  },
+  "app.screenshots.share.empty": {
+    "message": "Brak znajomych."
+  },
+  "app.screenshots.share.hint": {
+    "message": "Wybierz osobę, której wyślesz ten zrzut na czacie Octra."
+  },
+  "app.screenshots.share.sign-in": {
+    "message": "Zaloguj się do Octra, aby udostępniać zrzuty znajomym."
+  },
+  "app.screenshots.share.success": {
+    "message": "Zrzut udostępniony użytkownikowi {nick}"
+  },
+  "app.screenshots.share.title": {
+    "message": "Udostępnij znajomemu"
+  },
   "app.screenshots.sort-by": {
     "message": "Sortuj według"
   },
@@ -1673,6 +1694,18 @@
   "app.servers.refresh": {
     "message": "Odśwież"
   },
+  "app.servers.local.empty": {
+    "message": "Brak serwerów w tej instancji. Dodaj je w Minecraft Multiplayer."
+  },
+  "app.servers.local.empty-no-instance": {
+    "message": "Wybierz instancję, żeby zobaczyć jej listę serwerów Minecraft."
+  },
+  "app.servers.local.subtitle": {
+    "message": "Z Minecrafta dla wybranej instancji. Aktualizuje się na żywo, gdy dodajesz lub usuwasz serwery w grze."
+  },
+  "app.servers.local.title": {
+    "message": "Moje lokalne serwery"
+  },
   "app.servers.saved.delete": {
     "message": "Usuń serwer"
   },
@@ -1680,13 +1713,49 @@
     "message": "Usunięto serwer"
   },
   "app.servers.saved.empty": {
-    "message": "Brak zapisanych serwerów. Dodaj współdzielone w zakładce Serwery w panelu znajomych."
+    "message": "Brak zapisanych serwerów."
   },
   "app.servers.saved.shared-badge": {
     "message": "Współdzielony"
   },
   "app.servers.saved.title": {
     "message": "Zapisane serwery"
+  },
+  "app.servers.shared.add": {
+    "message": "Udostępnij serwer"
+  },
+  "app.servers.shared.added": {
+    "message": "Serwer udostępniony wszystkim"
+  },
+  "app.servers.shared.address-placeholder": {
+    "message": "play.example.com:25565"
+  },
+  "app.servers.shared.by": {
+    "message": "Udostępnione przez {name}"
+  },
+  "app.servers.shared.delete-confirm.action": {
+    "message": "Usuń dla wszystkich"
+  },
+  "app.servers.shared.delete-confirm.body": {
+    "message": "Ten współdzielony serwer zniknie u wszystkich, którzy go mają. Tej operacji nie można cofnąć."
+  },
+  "app.servers.shared.delete-confirm.title": {
+    "message": "Usunąć współdzielony serwer?"
+  },
+  "app.servers.shared.empty": {
+    "message": "Brak współdzielonych serwerów. Udostępnij adres poniżej, żeby znajomi mogli dołączyć."
+  },
+  "app.servers.shared.empty-signed-out": {
+    "message": "Zaloguj się do Octra, żeby udostępniać serwery znajomym."
+  },
+  "app.servers.shared.name-placeholder": {
+    "message": "Nazwa serwera"
+  },
+  "app.servers.shared.share-local": {
+    "message": "Udostępnij znajomym"
+  },
+  "app.servers.shared.title": {
+    "message": "Współdzielone serwery"
   },
   "app.servers.subtitle": {
     "message": "Dołącz do znajomych w grze albo wejdź na zapisany adres."
@@ -1710,13 +1779,13 @@
     "message": "Kobalt"
   },
   "app.settings.accent.preset.ember": {
-    "message": "Ember"
+    "message": "Miedź"
   },
   "app.settings.accent.preset.mint": {
     "message": "Mięta"
   },
   "app.settings.accent.preset.octra": {
-    "message": "Octra"
+    "message": "Lawenda"
   },
   "app.settings.accent.preset.rose": {
     "message": "Róż"
@@ -1754,14 +1823,8 @@
   "app.settings.appearance.group.accent.description": {
     "message": "Kolor marki w całym launcherze."
   },
-  "app.settings.appearance.group.language": {
-    "message": "Język"
-  },
-  "app.settings.appearance.group.language.description": {
-    "message": "Język interfejsu Octra App."
-  },
   "app.settings.appearance.panel.description": {
-    "message": "Motyw, kolor akcentu, język i układ biblioteki."
+    "message": "Motyw, kolor akcentu i wygląd okna."
   },
   "app.settings.appearance.panel.title": {
     "message": "Wygląd"
@@ -3559,6 +3622,51 @@
   },
   "octra.community.tab.servers": {
     "message": "Serwery"
+  },
+  "octra.community.tab.chat": {
+    "message": "Czat"
+  },
+  "octra.chat.back-to-list": {
+    "message": "Wróć do rozmów"
+  },
+  "octra.chat.create-group": {
+    "message": "Utwórz grupę"
+  },
+  "octra.chat.delete": {
+    "message": "Usuń wiadomość"
+  },
+  "octra.chat.image-attachment": {
+    "message": "Obraz"
+  },
+  "octra.chat.message-actions": {
+    "message": "Akcje wiadomości"
+  },
+  "octra.chat.delete-group": {
+    "message": "Usuń grupę"
+  },
+  "octra.chat.delete-vote-confirm": {
+    "message": "Do usunięcia grupy potrzebna jest większość 2/3 głosów „tak”."
+  },
+  "octra.chat.delete-vote-hint": {
+    "message": "{yes} z {needed} głosów „tak” ({members} członków)."
+  },
+  "octra.chat.delete-vote-no": {
+    "message": "Głosuj nie"
+  },
+  "octra.chat.delete-vote-start": {
+    "message": "Rozpocznij głosowanie"
+  },
+  "octra.chat.delete-vote-title": {
+    "message": "Głosowanie o usunięcie grupy"
+  },
+  "octra.chat.delete-vote-yes": {
+    "message": "Głosuj tak"
+  },
+  "octra.chat.group-min-members": {
+    "message": "Wybierz co najmniej 2 inne osoby (łącznie 3 z Tobą)."
+  },
+  "octra.chat.group-name": {
+    "message": "Nazwa grupy"
   },
   "octra.whats-new.dismiss": {
     "message": "Rozumiem"

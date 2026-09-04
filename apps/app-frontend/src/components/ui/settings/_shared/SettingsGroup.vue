@@ -7,7 +7,7 @@ defineProps<{
 
 <template>
 	<section
-		class="settings-group border-0 border-solid border-surface-5 pt-6 first-of-type:pt-0 [&:not(:first-of-type)]:mt-6 [&:not(:first-of-type)]:border-t"
+		class="settings-group border-0 border-solid border-surface-5 pt-4 first-of-type:pt-0 [&:not(:first-of-type)]:mt-4 [&:not(:first-of-type)]:border-t"
 	>
 		<div class="mb-3">
 			<h3

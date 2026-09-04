@@ -249,6 +249,7 @@ watch(selectedLibraryInstances, (selectedInstances) => {
 			<h2 class="m-0 text-lg font-semibold text-contrast">
 				{{ formatMessage(messages.library) }}
 			</h2>
+			<slot name="promo" />
 			<LibraryToolbar />
 			<div
 				v-if="libraryGroupsLoaded && isSearching && visibleInstanceGroups.length === 0"

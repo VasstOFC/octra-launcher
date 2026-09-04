@@ -17,7 +17,7 @@ import {
 } from '@modrinth/ui'
 import { useQueryClient } from '@tanstack/vue-query'
 import dayjs from 'dayjs'
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 import NavButton from '@/components/ui/NavButton.vue'
@@ -34,10 +34,15 @@ const props = defineProps({
 		type: Boolean,
 		default: false,
 	},
+	dock: {
+		type: Boolean,
+		default: false,
+	},
 })
 
 const ITEM_SIZE = 52
-const APPROX_USED_VERTICAL_SPACE = 475 // doesn't need to be exact lol just close enough so there's a little gap and no overflow
+const APPROX_USED_VERTICAL_SPACE = 320
+const APPROX_USED_VERTICAL_SPACE_DOCK = 260
 const STORAGE_KEY = 'modrinth-quick-instance-count'
 
 const { handleError } = injectNotificationManager()
@@ -53,7 +58,7 @@ const railMessages = defineMessages({
 	playtimeMinutes: { id: 'app.nav.playtime-minutes', defaultMessage: '{m} min' },
 	playtimeHours: { id: 'app.nav.playtime-hours', defaultMessage: '{h} hr' },
 	playtimeHoursMinutes: { id: 'app.nav.playtime-hours-minutes', defaultMessage: '{h} hr {m} min' },
-	quickSwitch: { id: 'app.nav.quick-switch', defaultMessage: 'Quick switch' },
+	quickSwitch: { id: 'app.nav.quick-switch', defaultMessage: 'Library' },
 	emptyLibrary: {
 		id: 'app.nav.library-empty',
 		defaultMessage: 'No instances yet',
@@ -97,10 +102,8 @@ const canDrag = computed(() => maxVisible.value > 0)
 const showOverdrag = ref(false)
 
 const updateMaxAuto = () => {
-	maxAuto.value = Math.max(
-		0,
-		Math.floor((window.innerHeight - APPROX_USED_VERTICAL_SPACE) / ITEM_SIZE),
-	)
+	const reserved = props.dock ? APPROX_USED_VERTICAL_SPACE_DOCK : APPROX_USED_VERTICAL_SPACE
+	maxAuto.value = Math.max(0, Math.floor((window.innerHeight - reserved) / ITEM_SIZE))
 }
 
 const setLimit = (count) => {
@@ -223,6 +226,13 @@ onMounted(() => {
 	window.addEventListener('resize', updateMaxAuto)
 	checkProcesses()
 })
+
+watch(
+	() => props.dock,
+	() => {
+		updateMaxAuto()
+	},
+)
 
 onUnmounted(() => {
 	window.removeEventListener('resize', updateMaxAuto)
@@ -444,7 +454,8 @@ function openContextMenu(event, instance) {
 	overflow: hidden;
 
 	& + & {
-		margin-top: 0.25rem;
+		margin-top: 0;
+		border-top: 1px solid color-mix(in srgb, var(--surface-5) 70%, transparent);
 	}
 }
 

@@ -15,7 +15,7 @@
 		</div>
 		<span v-if="badge" class="user-avatar-badge" aria-hidden="true">
 			<slot>
-				<span class="block size-full rounded-full bg-brand" />
+				<span class="block size-full rounded-full bg-brand-green" />
 			</slot>
 		</span>
 	</div>

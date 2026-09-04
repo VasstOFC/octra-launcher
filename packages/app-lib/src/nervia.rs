@@ -75,7 +75,7 @@ pub const SKINS_API_KEY: &str =
 pub const FEATURED_PACK: &str = "packs/Cobblemon vasst 1.0.0.mrpack";
 pub const FEATURED_PACK_TITLE: &str = "Cobblemon Vasst";
 pub const FEATURED_PACK_BLURB: &str =
-	"Autorska paczka — parę kliknięć i możesz grać.";
+	"Catch, battle, explore — install once and jump straight in.";
 /// Hosted next to the skin registry so the NSIS installer stays small.
 /// Keep on the same host as [`SKINS_URL`] until the HTTPS cutover.
 pub const FEATURED_PACK_URL: &str =

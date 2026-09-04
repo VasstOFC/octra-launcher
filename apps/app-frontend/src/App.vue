@@ -17,7 +17,6 @@ import {
 	ImagesIcon,
 	LogInIcon,
 	LogOutIcon,
-	MessageIcon,
 	PlayIcon,
 	PlusIcon,
 	RefreshCwIcon,
@@ -66,13 +65,13 @@ import { saveWindowState, StateFlags } from '@tauri-apps/plugin-window-state'
 import { computed, nextTick, onMounted, onUnmounted, provide, ref, watch } from 'vue'
 import { RouterView, useRoute, useRouter } from 'vue-router'
 
+import OctraMark from '@/components/brand/OctraMark.vue'
 import OctraWordmark from '@/components/brand/OctraWordmark.vue'
 import AccountsCard from '@/components/ui/AccountsCard.vue'
 import AddOfflineAccountModal from '@/components/ui/AddOfflineAccountModal.vue'
 import AppActionBar from '@/components/ui/AppActionBar.vue'
 import Breadcrumbs from '@/components/ui/Breadcrumbs.vue'
 import ErrorModal from '@/components/ui/ErrorModal.vue'
-import OctraChatPanel from '@/components/ui/friends/OctraChatPanel.vue'
 import OctraCommunityList from '@/components/ui/friends/OctraCommunityList.vue'
 import HostingUpdateRequired from '@/components/ui/HostingUpdateRequired.vue'
 import AddServerToInstanceModal from '@/components/ui/install_flow/AddServerToInstanceModal.vue'
@@ -170,8 +169,6 @@ import { setupAppEventsProvider } from '@/providers/setup/app-events'
 import { setupAuthProvider } from '@/providers/setup/auth'
 import { setupLoadingStateProvider } from '@/providers/setup/loading-state'
 import { setupAppUserPreferencesProvider } from '@/providers/setup/user-preferences.ts'
-import { appMessages } from '@/utils/app-messages'
-
 import { generateSkinPreviews } from './helpers/rendering/batch-skin-renderer'
 import { get_available_capes, get_available_skins } from './helpers/skins'
 import { AppNotificationManager } from './providers/app-notifications'
@@ -219,7 +216,8 @@ async function handleFullscreenChange() {
 
 updateHistoryNavigationState()
 
-const APP_LEFT_NAV_WIDTH = '4rem'
+const APP_LEFT_NAV_WIDTH_COLLAPSED = '4rem'
+const APP_LEFT_NAV_WIDTH_EXPANDED = '17.5rem'
 const APP_SIDEBAR_WIDTH = 300
 const INTERCOM_BUBBLE_DEFAULT_PADDING = 20
 const credentials = ref()
@@ -232,32 +230,34 @@ const sidebarExpandedPreference = ref(localStorage.getItem(SIDEBAR_STORAGE_KEY) 
 watch(sidebarExpandedPreference, (value) => {
 	localStorage.setItem(SIDEBAR_STORAGE_KEY, value ? '1' : '0')
 })
+const RAIL_STORAGE_KEY = 'octra.railExpanded'
+const railExpanded = ref(localStorage.getItem(RAIL_STORAGE_KEY) !== '0')
+watch(railExpanded, (value) => {
+	localStorage.setItem(RAIL_STORAGE_KEY, value ? '1' : '0')
+})
+const leftBarWidth = computed(() =>
+	railExpanded.value ? APP_LEFT_NAV_WIDTH_EXPANDED : APP_LEFT_NAV_WIDTH_COLLAPSED,
+)
 const sidebarVisible = computed(() => forceSidebar.value || sidebarExpandedPreference.value)
-const chatPanelOpen = ref(false)
-const octraChatPanel = ref(null)
+const octraCommunityList = ref(null)
 const chatUnreadTotal = ref(0)
 const lastPolledUnreadTotal = ref(0)
 const chatUnreadReady = ref(false)
+const communityChatActive = ref(false)
 let chatUnreadPollTimer = null
 const runningInstanceName = ref(null)
 const whatsNewModal = ref(null)
 const displayedAppVersion = ref('')
 
-async function openOctraChatDm(userId) {
-	chatPanelOpen.value = true
-	await nextTick()
-	await octraChatPanel.value?.openDm?.(userId)
-}
+const chatViewActive = computed(() => sidebarVisible.value && communityChatActive.value)
 
-function dismissChatPanelFromViewport() {
-	if (chatPanelOpen.value) {
-		chatPanelOpen.value = false
-	}
+function onCommunityChatActive(active) {
+	communityChatActive.value = !!active
 }
 
 function onChatUnreadChanged(total) {
 	const next = Number(total) || 0
-	if (!chatPanelOpen.value && chatUnreadReady.value && next > chatUnreadTotal.value) {
+	if (!chatViewActive.value && chatUnreadReady.value && next > chatUnreadTotal.value) {
 		addNotification({
 			title: formatMessage(messages.chatNewMessage),
 			text: '',
@@ -278,7 +278,7 @@ async function pollChatUnread() {
 	try {
 		const channels = await octraChatChannels()
 		const total = (channels || []).reduce((sum, channel) => sum + (channel.unread_count ?? 0), 0)
-		if (!chatPanelOpen.value && chatUnreadReady.value && total > lastPolledUnreadTotal.value) {
+		if (!chatViewActive.value && chatUnreadReady.value && total > lastPolledUnreadTotal.value) {
 			addNotification({
 				title: formatMessage(messages.chatNewMessage),
 				text: '',
@@ -424,7 +424,7 @@ providePageContext({
 	showAds: showAd,
 	adConsentAvailable,
 	floatingActionBarOffsets: {
-		left: ref(APP_LEFT_NAV_WIDTH),
+		left: leftBarWidth,
 		right: computed(() => (sidebarVisible.value ? `${APP_SIDEBAR_WIDTH}px` : '0px')),
 	},
 	intercomBubble: hostingIntercom.intercomBubble,
@@ -607,12 +607,6 @@ onUnmounted(async () => {
 const { formatMessage } = useVIntl()
 const formatBytes = useFormatBytes()
 
-const RAIL_STORAGE_KEY = 'octra.railExpanded'
-const railExpanded = ref(localStorage.getItem(RAIL_STORAGE_KEY) !== '0')
-watch(railExpanded, (value) => {
-	localStorage.setItem(RAIL_STORAGE_KEY, value ? '1' : '0')
-})
-
 const messages = defineMessages({
 	warning: { id: 'app.notification.warning', defaultMessage: 'Warning' },
 	goBack: { id: 'app.navigation.go-back', defaultMessage: 'Go back' },
@@ -691,10 +685,6 @@ const messages = defineMessages({
 	expandSidebar: {
 		id: 'app.nav.expand-sidebar',
 		defaultMessage: 'Show friends',
-	},
-	chat: {
-		id: 'app.nav.chat',
-		defaultMessage: 'Chat',
 	},
 	servers: {
 		id: 'app.nav.servers',
@@ -1405,6 +1395,35 @@ async function logoutOctraAccount() {
 	await accounts.value?.refreshValues?.()
 }
 provide('accountsCard', accounts)
+provide('openFriendsSidebar', (tab) => {
+	sidebarExpandedPreference.value = true
+	void nextTick(() => {
+		const resolved =
+			tab === 'chat' || tab === 'friends'
+				? tab
+				: chatUnreadTotal.value > 0
+					? 'chat'
+					: null
+		if (resolved) {
+			octraCommunityList.value?.setTab?.(resolved)
+		}
+	})
+})
+
+provide('openOctraChatDm', async (userId) => {
+	sidebarExpandedPreference.value = true
+	await nextTick()
+	await octraCommunityList.value?.openChatDm?.(userId)
+})
+
+function openSocialSidebar() {
+	sidebarExpandedPreference.value = true
+	void nextTick(() => {
+		if (chatUnreadTotal.value > 0) {
+			octraCommunityList.value?.setTab?.('chat')
+		}
+	})
+}
 
 watch(
 	() => octraSession.value?.username ?? null,
@@ -1421,8 +1440,8 @@ watch(
 	{ immediate: true },
 )
 
-watch(chatPanelOpen, (open) => {
-	if (open) {
+watch(chatViewActive, (active) => {
+	if (active) {
 		chatUnreadTotal.value = 0
 	} else {
 		void pollChatUnread()
@@ -2251,77 +2270,16 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 		/>
 		<UnknownPackWarningModal ref="unknownPackWarningModal" />
 		<div
-			class="app-grid-navbar flex flex-col p-2 gap-1 w-[--left-bar-width] overflow-hidden"
-			:class="railExpanded ? 'items-stretch' : 'items-center'"
+			class="app-grid-navbar library-dock flex flex-col overflow-hidden"
+			:class="railExpanded ? 'items-stretch p-3 gap-2' : 'items-center p-2 gap-1'"
 		>
-			<NavButton
-				v-tooltip.right="railExpanded ? undefined : formatMessage(messages.railStart)"
-				to="/"
-				:is-primary="(route) => route.path === '/'"
-				:is-subpage="
-					() =>
-						(route.path.startsWith('/browse') || route.path.startsWith('/project')) && route.query.i
-				"
-				:expanded="railExpanded"
-				:label="formatMessage(messages.railStart)"
+			<div
+				class="library-dock__brand flex shrink-0 items-center"
+				:class="railExpanded ? 'gap-2.5 px-1 py-1' : 'justify-center py-1'"
 			>
-				<PlayIcon class="ml-0.5 size-5 shrink-0" />
-			</NavButton>
-			<NavButton
-				v-tooltip.right="railExpanded ? undefined : formatMessage(appMessages.skinSelectorLabel)"
-				to="/skins"
-				:expanded="railExpanded"
-				:label="formatMessage(messages.locker)"
-			>
-				<ShirtIcon class="size-5 shrink-0" />
-			</NavButton>
-			<div class="my-1.5 h-px shrink-0 bg-surface-5" :class="railExpanded ? 'mx-1' : 'w-8'" />
-			<NavButton
-				v-if="globalSyncedOptionsQuery.data.value?.screenshots"
-				v-tooltip.right="railExpanded ? undefined : formatMessage(messages.screenshots)"
-				to="/screenshots"
-				:expanded="railExpanded"
-				:label="formatMessage(messages.screenshots)"
-			>
-				<ImagesIcon class="size-5 shrink-0" />
-			</NavButton>
-			<NavButton
-				v-tooltip.right="railExpanded ? undefined : formatMessage(messages.servers)"
-				to="/servers"
-				:is-primary="(r) => r.path === '/servers' || r.path.startsWith('/servers/')"
-				:expanded="railExpanded"
-				:label="formatMessage(messages.servers)"
-			>
-				<GlobeIcon class="size-5 shrink-0" />
-			</NavButton>
-			<button
-				type="button"
-				class="nav-button nav-rail-slot flex items-center border-none cursor-pointer relative"
-				:class="[
-					railExpanded
-						? 'h-10 w-full gap-3 rounded-lg px-3'
-						: 'h-10 w-10 justify-center rounded-full',
-					chatPanelOpen
-						? 'nav-rail-slot--active text-brand'
-						: 'text-secondary hover:bg-button-bg hover:text-contrast bg-transparent',
-				]"
-				:aria-label="formatMessage(messages.chat)"
-				:title="formatMessage(messages.chat)"
-				:aria-pressed="chatPanelOpen"
-				@click="chatPanelOpen = !chatPanelOpen"
-			>
-				<MessageIcon class="size-5 shrink-0" />
-				<span v-if="railExpanded" class="truncate text-[13px] font-medium">
-					{{ formatMessage(messages.chat) }}
-				</span>
-				<span
-					v-if="chatUnreadTotal > 0 && !chatPanelOpen"
-					class="absolute top-1 right-1 flex min-w-[1rem] items-center justify-center rounded-full bg-brand px-1 text-[10px] font-semibold leading-4 text-[var(--color-accent-contrast)]"
-					:class="railExpanded ? '!right-2' : ''"
-				>
-					{{ chatUnreadTotal > 99 ? '99+' : chatUnreadTotal }}
-				</span>
-			</button>
+				<OctraMark v-if="!railExpanded" class="size-8 shrink-0" />
+				<OctraWordmark v-else class="h-5 w-auto min-w-0 pointer-events-none" />
+			</div>
 			<NavButton
 				v-tooltip.right="railExpanded ? undefined : formatMessage(messages.createNewInstance)"
 				:to="() => installationModal?.show()"
@@ -2333,7 +2291,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 			</NavButton>
 			<div class="flex min-h-0 flex-1 flex-col overflow-hidden">
 				<Suspense>
-					<QuickInstanceSwitcher :expanded="railExpanded" />
+					<QuickInstanceSwitcher :expanded="railExpanded" dock />
 				</Suspense>
 			</div>
 			<div class="nav-rail-footer flex w-full flex-col gap-1">
@@ -2413,18 +2371,13 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 					</TeleportOverflowMenu>
 				</span>
 				<NavButton
-					v-tooltip.right="
-						railExpanded ? undefined : formatMessage(commonMessages.discoverContentLabel)
-					"
-					to="/browse/modpack"
-					:is-primary="() => route.path.startsWith('/browse') && !route.query.i && !route.query.sid"
-					:is-subpage="
-						(route) => route.path.startsWith('/project') && !route.query.i && !route.query.sid
-					"
+					v-if="globalSyncedOptionsQuery.data.value?.screenshots"
+					v-tooltip.right="railExpanded ? undefined : formatMessage(messages.screenshots)"
+					to="/screenshots"
 					:expanded="railExpanded"
-					:label="formatMessage(messages.packGallery)"
+					:label="formatMessage(messages.screenshots)"
 				>
-					<CompassIcon class="size-5 shrink-0" />
+					<ImagesIcon class="size-5 shrink-0" />
 				</NavButton>
 				<NavButton
 					v-tooltip.right="railExpanded ? undefined : formatMessage(commonMessages.settingsLabel)"
@@ -2435,7 +2388,6 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 					<SettingsIcon class="size-5 shrink-0" />
 				</NavButton>
 			</div>
-			<div class="my-1 h-px shrink-0 bg-surface-5" :class="railExpanded ? 'mx-1' : 'w-8'" />
 			<button
 				type="button"
 				class="nav-rail-collapse flex items-center border-none bg-transparent text-secondary cursor-pointer hover:bg-button-bg hover:text-contrast"
@@ -2456,9 +2408,56 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 			</button>
 		</div>
 		<div data-tauri-drag-region class="app-grid-statusbar h-[--top-bar-height] flex">
-			<div data-tauri-drag-region class="flex min-w-0 flex-1 items-center overflow-hidden p-2">
-				<OctraWordmark class="h-7 w-auto shrink-0 pointer-events-none" />
-				<div data-tauri-drag-region class="ml-2 flex shrink-0 items-center gap-2">
+			<nav
+				data-tauri-drag-region-exclude
+				class="stage-destinations flex shrink-0 items-center gap-0.5 p-2 pr-1"
+				:aria-label="formatMessage(messages.home)"
+			>
+				<NavButton
+					to="/"
+					:is-primary="(r) => r.path === '/'"
+					:is-subpage="
+						() =>
+							(route.path.startsWith('/browse') || route.path.startsWith('/project')) && route.query.i
+					"
+					expanded
+					class="stage-dest"
+					:label="formatMessage(messages.railStart)"
+				>
+					<PlayIcon class="ml-0.5 size-4 shrink-0" />
+				</NavButton>
+				<NavButton
+					to="/servers"
+					:is-primary="(r) => r.path === '/servers' || r.path.startsWith('/servers/')"
+					expanded
+					class="stage-dest"
+					:label="formatMessage(messages.servers)"
+				>
+					<GlobeIcon class="size-4 shrink-0" />
+				</NavButton>
+				<NavButton
+					to="/skins"
+					expanded
+					class="stage-dest"
+					:label="formatMessage(messages.locker)"
+				>
+					<ShirtIcon class="size-4 shrink-0" />
+				</NavButton>
+				<NavButton
+					to="/browse/modpack"
+					:is-primary="() => route.path.startsWith('/browse') && !route.query.i && !route.query.sid"
+					:is-subpage="
+						(r) => r.path.startsWith('/project') && !r.query.i && !r.query.sid
+					"
+					expanded
+					class="stage-dest"
+					:label="formatMessage(commonMessages.discoverContentLabel)"
+				>
+					<CompassIcon class="size-4 shrink-0" />
+				</NavButton>
+			</nav>
+			<div data-tauri-drag-region class="flex min-w-0 flex-1 items-center overflow-hidden p-2 pl-1">
+				<div data-tauri-drag-region class="flex shrink-0 items-center gap-2">
 					<IconButton
 						type="outlined"
 						:label="formatMessage(messages.goBack)"
@@ -2505,18 +2504,9 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 			'disable-advanced-rendering': !appTheme.advancedRendering,
 		}"
 	>
-		<OctraChatPanel
-			ref="octraChatPanel"
-			:session="octraSession"
-			:open="chatPanelOpen"
-			@close="chatPanelOpen = false"
-			@sign-in="openOctraAccount('login')"
-			@unread-changed="onChatUnreadChanged"
-		/>
 		<div
 			class="app-viewport flex-grow router-view min-w-0"
 			:class="{ 'sidebar-open': sidebarVisible }"
-			@pointerdown.capture="dismissChatPanelFromViewport"
 		>
 			<SurveyPopup />
 			<div
@@ -2580,7 +2570,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 			<div
 				v-overlay-scrollbars="sidebarOverlayScrollbarsOptions"
 				class="app-sidebar-scrollable flex-grow shrink relative"
-				:class="{ 'pb-12': !hasPlus }"
+				:class="{ 'pb-12': !hasPlus, 'app-sidebar-scrollable--chat': chatViewActive }"
 				data-overlayscrollbars-initialize
 			>
 				<div class="hidden">
@@ -2589,13 +2579,21 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 					</Suspense>
 				</div>
 				<div id="sidebar-teleport-target" class="sidebar-teleport-content"></div>
-				<div class="px-3 py-3">
+				<div
+					class="flex flex-1 flex-col px-3 py-3"
+					:class="chatViewActive ? 'h-full min-h-0' : 'min-h-full'"
+				>
 					<OctraCommunityList
+						ref="octraCommunityList"
+						class="min-h-0 flex-1"
 						:session="octraSession"
 						:loading-session="octraSessionLoading"
+						:panel-active="sidebarVisible"
+						:unread-total="chatUnreadTotal"
 						@sign-in="openOctraAccount('login')"
 						@register="openOctraAccount('register')"
-						@message-player="openOctraChatDm"
+						@unread-changed="onChatUnreadChanged"
+						@chat-active="onCommunityChatActive"
 					/>
 				</div>
 			</div>
@@ -2633,9 +2631,15 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 			:class="{ 'friends-fab--presence': !!octraSession }"
 			:aria-label="formatMessage(messages.expandSidebar)"
 			:title="formatMessage(messages.expandSidebar)"
-			@click="sidebarExpandedPreference = true"
+			@click="openSocialSidebar"
 		>
 			<UsersIcon class="size-5" />
+			<span
+				v-if="chatUnreadTotal > 0"
+				class="friends-fab__badge absolute -top-0.5 -right-0.5 flex min-w-[1.1rem] items-center justify-center rounded-full bg-brand px-1 text-[10px] font-semibold leading-4 text-[var(--color-accent-contrast)]"
+			>
+				{{ chatUnreadTotal > 99 ? '99+' : chatUnreadTotal }}
+			</span>
 		</button>
 	</Transition>
 	<I18nDebugPanel />
@@ -2709,7 +2713,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	--shell-motion: 0.28s cubic-bezier(0.32, 0.72, 0, 1);
 
 	&.rail-expanded {
-		--left-bar-width: 15.5rem;
+		--left-bar-width: 17.5rem;
 	}
 }
 
@@ -2731,12 +2735,34 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	grid-area: nav;
 	position: relative;
 	z-index: 2;
+	width: var(--left-bar-width);
 	transition: width var(--shell-motion);
 	border-right: 1px solid var(--color-divider);
 	background: var(--surface-2);
 
 	@media (prefers-reduced-motion: reduce) {
 		transition: none;
+	}
+}
+
+.library-dock {
+	box-shadow: none;
+}
+
+.stage-destinations {
+	:deep(.stage-dest.nav-button),
+	.stage-dest {
+		width: auto !important;
+		min-width: 0;
+		height: 2rem !important;
+		padding: 0 0.625rem !important;
+		gap: 0.4rem !important;
+		border-radius: var(--radius-md) !important;
+		font-size: 1rem;
+
+		&::before {
+			display: none;
+		}
 	}
 }
 
@@ -2767,6 +2793,10 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 		border-radius: 1px;
 		background: var(--color-brand);
 	}
+}
+
+.stage-destinations .nav-rail-slot--active::before {
+	display: none;
 }
 
 .nav-rail-footer {
@@ -2877,7 +2907,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	overflow: hidden;
 	width: 300px;
 	height: 100%;
-	background: var(--color-raised-bg);
+	background: var(--surface-2);
 	transform: translateX(100%);
 	pointer-events: none;
 	transition: transform var(--shell-motion);
@@ -2889,6 +2919,23 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 
 	@media (prefers-reduced-motion: reduce) {
 		transition: none;
+	}
+}
+
+.app-sidebar-scrollable--chat {
+	display: flex;
+	flex-direction: column;
+	min-height: 0;
+	overflow: hidden;
+
+	:deep([data-overlayscrollbars-viewport]),
+	:deep([data-overlayscrollbars-contents]) {
+		display: flex !important;
+		flex: 1 1 auto;
+		flex-direction: column;
+		height: 100% !important;
+		max-height: 100%;
+		min-height: 0;
 	}
 }
 
@@ -2910,6 +2957,10 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 .friends-fab {
 	right: 1.25rem;
 	bottom: 1.25rem;
+}
+
+.friends-fab__badge {
+	pointer-events: none;
 }
 
 .friends-fab--presence {

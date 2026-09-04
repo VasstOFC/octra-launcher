@@ -13,6 +13,7 @@ import {
 	EditIcon,
 	FileArchiveIcon,
 	FolderOpenIcon,
+	MessageIcon,
 	MinusIcon,
 	SquarePlusIcon,
 	TrashIcon,
@@ -47,6 +48,7 @@ import dayjs from 'dayjs'
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
+import ShareScreenshotModal from '@/components/ui/screenshots-page/ShareScreenshotModal.vue'
 import { useAppEvent } from '@/composables/use-app-event'
 import {
 	create_screenshot_group,
@@ -182,6 +184,7 @@ const activeDropGroupId = ref<string | null>(null)
 const imageViewer = ref<InstanceType<typeof ImageViewerEditor>>()
 const screenshotOptionsMenu = ref<InstanceType<typeof ContextMenu>>()
 const screenshotOptionsTarget = ref<InstanceScreenshot>()
+const shareScreenshotModal = ref<InstanceType<typeof ShareScreenshotModal>>()
 const deleteModal = ref<InstanceType<typeof ConfirmModal>>()
 const bulkDeleteModal = ref<InstanceType<typeof ConfirmModal>>()
 const deleteGroupModal = ref<InstanceType<typeof ConfirmModal>>()
@@ -268,6 +271,10 @@ const messages = defineMessages({
 	edit: { id: 'app.screenshots.edit', defaultMessage: 'Edit screenshot' },
 	showInFolder: { id: 'app.screenshots.show-in-folder', defaultMessage: 'Show in folder' },
 	goToInstance: { id: 'app.screenshots.go-to-instance', defaultMessage: 'Go to instance' },
+	shareWithFriend: {
+		id: 'app.screenshots.share',
+		defaultMessage: 'Share with a friend',
+	},
 	deleteTitle: { id: 'app.screenshots.delete-title', defaultMessage: 'Delete screenshot' },
 	deleteDescription: {
 		id: 'app.screenshots.delete-description',
@@ -1016,6 +1023,12 @@ function showScreenshotOptions(screenshot: InstanceScreenshot, event: MouseEvent
 				]
 			: []),
 		{
+			id: 'share',
+			label: formatMessage(messages.shareWithFriend),
+			icon: MessageIcon,
+			action: () => shareScreenshotModal.value?.show(screenshot),
+		},
+		{
 			id: 'open',
 			label: formatMessage(messages.showInFolder),
 			icon: FolderOpenIcon,
@@ -1382,6 +1395,7 @@ onBeforeUnmount(() => {
 			{{ formatMessage(messages.goToInstance) }}
 		</template>
 	</ContextMenu>
+	<ShareScreenshotModal ref="shareScreenshotModal" />
 	<ImageViewerEditor
 		ref="imageViewer"
 		:items="previewItems"

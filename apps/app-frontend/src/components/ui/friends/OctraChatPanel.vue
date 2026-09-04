@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {
+	ChevronLeftIcon,
 	DownloadIcon,
 	MessageIcon,
 	PinIcon,
@@ -12,13 +13,16 @@ import {
 import {
 	Avatar,
 	Button,
+	type ButtonMenuOption,
 	commonMessages,
+	ContextMenu,
 	defineMessages,
 	IconButton,
 	injectNotificationManager,
 	useVIntl,
 } from '@modrinth/ui'
-import { computed, nextTick, onUnmounted, ref, watch } from 'vue'
+import { openUrl } from '@tauri-apps/plugin-opener'
+import { computed, nextTick, onUnmounted, ref, useTemplateRef, watch } from 'vue'
 
 import { handleSevereError } from '@/composables/use-error.js'
 import {
@@ -35,9 +39,11 @@ import {
 	extractMrpackUrls,
 	octraCacheMrpackUrl,
 	octraChatAddMembers,
+	octraChatCastDeleteVote,
 	octraChatChannels,
 	octraChatCreateGroup,
 	octraChatDeleteMessage,
+	octraChatGetDeleteVote,
 	octraChatList,
 	octraChatMarkRead,
 	octraChatOpenDm,
@@ -66,6 +72,17 @@ type ChatReaction = {
 	user_ids?: number[]
 }
 
+type ChatDeleteVote = {
+	active: boolean
+	channel_id: number
+	member_count: number
+	yes_count: number
+	no_count: number
+	needed: number
+	my_vote?: boolean | null
+	deleted?: boolean
+}
+
 type ChatChannel = {
 	id: number
 	kind: string
@@ -88,6 +105,7 @@ type ChatMessage = {
 	created_at: string
 	pinned?: boolean
 	deleted?: boolean
+	attachment_url?: string | null
 	reactions?: ChatReaction[]
 }
 
@@ -124,6 +142,8 @@ const REACTION_EMOJIS = ['👍', '❤️', '😂', '🔥', '🎉', '👀'] as co
 const props = defineProps<{
 	session: OctraAccountSession | null
 	open: boolean
+	/** Render inside Friends sidebar (single-column, no floating rail chrome). */
+	embedded?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -131,6 +151,8 @@ const emit = defineEmits<{
 	signIn: []
 	unreadChanged: [total: number]
 }>()
+
+const embedded = computed(() => !!props.embedded)
 
 const { formatMessage } = useVIntl()
 const { handleError } = injectNotificationManager()
@@ -147,22 +169,48 @@ const scrollEl = ref<HTMLElement | null>(null)
 const showNewDm = ref(false)
 const showNewGroup = ref(false)
 const showInvite = ref(false)
+const showDeleteVote = ref(false)
 const groupName = ref('')
 const groupPick = ref<number[]>([])
 const invitePick = ref<number[]>([])
+const deleteVote = ref<ChatDeleteVote | null>(null)
+const deleteVoteBusy = ref(false)
 const hoveredMessageId = ref<number | null>(null)
+const messageOptions = useTemplateRef<InstanceType<typeof ContextMenu>>('messageOptions')
 let pollTimer: ReturnType<typeof setInterval> | null = null
 
 const SKINS_FALLBACK_ORIGIN = 'http://92.5.186.6'
+const MIN_GROUP_MEMBERS = 3
 
 const selected = computed(() => channels.value.find((c) => c.id === selectedId.value) ?? null)
+
+const showChannelList = computed(() => !embedded.value || selectedId.value == null)
+const showThreadPane = computed(() => !embedded.value || selectedId.value != null)
 
 const unreadTotal = computed(() =>
 	channels.value.reduce((sum, channel) => sum + (channel.unread_count ?? 0), 0),
 )
 
-const canInvite = computed(
-	() => !!selected.value && selected.value.kind === 'group' && selected.value.name !== 'Everyone',
+const selfUserId = computed(() => {
+	const uuid = props.session?.profile_uuid?.toLowerCase()
+	const nick = props.session?.minecraft_nick?.toLowerCase()
+	const pools = [
+		...(selected.value?.members || []),
+		...channels.value.flatMap((c) => c.members || []),
+	]
+	for (const member of pools) {
+		if (uuid && member.profile_uuid?.toLowerCase() === uuid) return member.id
+		if (nick && member.minecraft_nick?.toLowerCase() === nick) return member.id
+	}
+	return null
+})
+
+const canInvite = computed(() => !!selected.value && selected.value.kind === 'group')
+
+const canCreateGroup = computed(
+	() =>
+		groupName.value.trim().length > 0 &&
+		groupPick.value.length + 1 >= MIN_GROUP_MEMBERS,
 )
 
 const inviteCandidates = computed(() => {
@@ -243,7 +291,8 @@ const bubbles = computed<BubbleRow[]>(() => {
 			message,
 			mine,
 			showName: !mine && !sameAsPrev,
-			showAvatar: !mine && !sameAsNext,
+			// Discord/Messenger: head only on the last bubble of a same-sender streak (both sides).
+			showAvatar: !sameAsNext,
 			clustered: sameAsPrev,
 		}
 	})
@@ -254,10 +303,24 @@ function titleFor(channel: ChatChannel) {
 }
 
 function formatTime(value: string) {
-	return new Date(value).toLocaleTimeString([], {
-		hour: '2-digit',
-		minute: '2-digit',
+	return new Date(value).toLocaleString([], {
+		dateStyle: 'medium',
+		timeStyle: 'short',
 	})
+}
+
+function openMessageContextMenu(row: BubbleRow, event: MouseEvent) {
+	if (row.message.deleted || !row.mine) return
+	const options: ButtonMenuOption[] = [
+		{
+			id: 'delete',
+			label: formatMessage(messages.delete),
+			icon: TrashIcon,
+			tone: 'red',
+			action: () => void deleteMessage(row.message),
+		},
+	]
+	messageOptions.value?.open(event, options)
 }
 
 async function scrollToBottom() {
@@ -292,8 +355,17 @@ async function refreshChannels() {
 		emitUnread()
 		return
 	}
-	channels.value = await octraChatChannels()
-	if (selectedId.value == null && channels.value.length > 0) {
+	const rows = await octraChatChannels()
+	channels.value = rows.filter(
+		(c) => !(c.kind === 'group' && (c.name || '').toLowerCase() === 'everyone'),
+	)
+	if (selectedId.value != null && !channels.value.some((c) => c.id === selectedId.value)) {
+		selectedId.value = null
+		messagesList.value = []
+		deleteVote.value = null
+		showDeleteVote.value = false
+	}
+	if (!embedded.value && selectedId.value == null && channels.value.length > 0) {
 		selectedId.value = channels.value[0]!.id
 	}
 	emitUnread()
@@ -344,6 +416,9 @@ function startPolling() {
 	pollTimer = setInterval(() => {
 		void loadMessages(false)
 		void refreshChannels().catch(() => undefined)
+		if (selected.value?.kind === 'group') {
+			void refreshDeleteVote()
+		}
 	}, 8_000)
 }
 
@@ -353,11 +428,16 @@ watch(
 		stopPolling()
 		if (!isOpen || !props.session) {
 			messagesList.value = []
+			if (embedded.value) {
+				selectedId.value = null
+			}
 			return
 		}
 		try {
 			await Promise.all([refreshChannels(), refreshCommunity()])
-			await loadMessages(true)
+			if (selectedId.value != null) {
+				await loadMessages(true)
+			}
 			startPolling()
 		} catch (error) {
 			handleSevereError(error, handleError)
@@ -367,16 +447,30 @@ watch(
 )
 
 watch(selectedId, async () => {
-	if (!props.open || !props.session || selectedId.value == null) return
+	if (!props.open || !props.session || selectedId.value == null) {
+		deleteVote.value = null
+		showDeleteVote.value = false
+		return
+	}
 	showInvite.value = false
 	invitePick.value = []
+	showDeleteVote.value = false
 	mrpackPreview.value = null
 	try {
 		await loadMessages(true)
+		await refreshDeleteVote()
 	} catch (error) {
 		handleSevereError(error, handleError)
 	}
 })
+
+function backToList() {
+	selectedId.value = null
+	messagesList.value = []
+	showInvite.value = false
+	invitePick.value = []
+	mrpackPreview.value = null
+}
 
 onUnmounted(() => stopPolling())
 
@@ -417,7 +511,7 @@ defineExpose({ openDm, unreadTotal })
 
 async function createGroup() {
 	const name = groupName.value.trim()
-	if (!name) return
+	if (!name || !canCreateGroup.value) return
 	try {
 		const channel = await octraChatCreateGroup(name, groupPick.value)
 		await refreshChannels()
@@ -431,6 +525,61 @@ async function createGroup() {
 	}
 }
 
+function reactionIsMine(reaction: ChatReaction) {
+	const uid = selfUserId.value
+	if (uid == null) return false
+	return (reaction.user_ids || []).includes(uid)
+}
+
+function applyMessageUpdate(updated: ChatMessage) {
+	const index = messagesList.value.findIndex((m) => m.id === updated.id)
+	if (index >= 0) {
+		messagesList.value[index] = { ...messagesList.value[index], ...updated }
+	}
+}
+
+function openAttachment(url: string) {
+	void openUrl(url)
+}
+
+function channelPreview(channel: ChatChannel) {
+	const body = channel.last_body?.trim()
+	if (!body) return '—'
+	if (body === '[image]') return formatMessage(messages.imageAttachment)
+	return body
+}
+
+async function refreshDeleteVote() {
+	if (!selected.value || selected.value.kind !== 'group') {
+		deleteVote.value = null
+		return
+	}
+	try {
+		deleteVote.value = await octraChatGetDeleteVote(selected.value.id)
+	} catch {
+		deleteVote.value = null
+	}
+}
+
+async function castDeleteVote(yes: boolean) {
+	if (!selected.value || selected.value.kind !== 'group' || deleteVoteBusy.value) return
+	deleteVoteBusy.value = true
+	try {
+		const result = await octraChatCastDeleteVote(selected.value.id, yes)
+		deleteVote.value = result
+		if (result.deleted) {
+			showDeleteVote.value = false
+			selectedId.value = null
+			messagesList.value = []
+			await refreshChannels()
+		}
+	} catch (error) {
+		handleSevereError(error, handleError)
+	} finally {
+		deleteVoteBusy.value = false
+	}
+}
+
 function toggleNewDmPanel() {
 	showNewDm.value = !showNewDm.value
 	showNewGroup.value = false
@@ -439,6 +588,19 @@ function toggleNewDmPanel() {
 function toggleNewGroupPanel() {
 	showNewGroup.value = !showNewGroup.value
 	showNewDm.value = false
+}
+
+function toggleInvitePanel() {
+	showInvite.value = !showInvite.value
+	showDeleteVote.value = false
+}
+
+function toggleDeleteVotePanel() {
+	showDeleteVote.value = !showDeleteVote.value
+	showInvite.value = false
+	if (showDeleteVote.value) {
+		void refreshDeleteVote()
+	}
 }
 
 function toggleGroupMember(id: number) {
@@ -464,6 +626,7 @@ async function inviteMembers() {
 		invitePick.value = []
 		showInvite.value = false
 		await refreshChannels()
+		await refreshDeleteVote()
 	} catch (error) {
 		handleSevereError(error, handleError)
 	}
@@ -471,8 +634,8 @@ async function inviteMembers() {
 
 async function reactToMessage(message: ChatMessage, emoji: string) {
 	try {
-		await octraChatReactMessage(message.id, emoji)
-		await loadMessages(true)
+		const updated = await octraChatReactMessage(message.id, emoji)
+		applyMessageUpdate(updated)
 	} catch (error) {
 		handleSevereError(error, handleError)
 	}
@@ -493,6 +656,7 @@ async function deleteMessage(message: ChatMessage) {
 		await octraChatDeleteMessage(message.id)
 		message.deleted = true
 		message.body = ''
+		message.attachment_url = null
 	} catch (error) {
 		handleSevereError(error, handleError)
 	}
@@ -598,6 +762,10 @@ const messages = defineMessages({
 		id: 'octra.chat.message-deleted',
 		defaultMessage: 'Message deleted',
 	},
+	imageAttachment: {
+		id: 'octra.chat.image-attachment',
+		defaultMessage: 'Image',
+	},
 	pin: { id: 'octra.chat.pin', defaultMessage: 'Pin' },
 	unpin: { id: 'octra.chat.unpin', defaultMessage: 'Unpin' },
 	delete: { id: 'octra.chat.delete', defaultMessage: 'Delete' },
@@ -610,20 +778,68 @@ const messages = defineMessages({
 		id: 'octra.chat.invite-confirm',
 		defaultMessage: 'Add to group',
 	},
+	groupMinMembers: {
+		id: 'octra.chat.group-min-members',
+		defaultMessage: 'Pick at least 2 other people (3 total including you).',
+	},
+	deleteGroup: {
+		id: 'octra.chat.delete-group',
+		defaultMessage: 'Delete group',
+	},
+	deleteVoteTitle: {
+		id: 'octra.chat.delete-vote-title',
+		defaultMessage: 'Vote to delete this group',
+	},
+	deleteVoteHint: {
+		id: 'octra.chat.delete-vote-hint',
+		defaultMessage: '{yes} of {needed} yes votes needed ({members} members).',
+	},
+	deleteVoteYes: {
+		id: 'octra.chat.delete-vote-yes',
+		defaultMessage: 'Vote yes',
+	},
+	deleteVoteNo: {
+		id: 'octra.chat.delete-vote-no',
+		defaultMessage: 'Vote no',
+	},
+	deleteVoteStart: {
+		id: 'octra.chat.delete-vote-start',
+		defaultMessage: 'Start delete vote',
+	},
+	deleteVoteConfirm: {
+		id: 'octra.chat.delete-vote-confirm',
+		defaultMessage: 'A two-thirds majority must vote yes to delete this group.',
+	},
 	unreadBadge: {
 		id: 'octra.chat.unread',
 		defaultMessage: '{count} unread',
+	},
+	backToList: {
+		id: 'octra.chat.back-to-list',
+		defaultMessage: 'Back to conversations',
+	},
+	messageActions: {
+		id: 'octra.chat.message-actions',
+		defaultMessage: 'Message actions',
 	},
 })
 </script>
 
 <template>
-	<aside
+	<component
+		:is="embedded ? 'div' : 'aside'"
 		v-if="open"
-		class="octra-chat-rail relative flex h-full min-h-0 w-[min(560px,52vw)] shrink-0 flex-col border-0 border-r border-solid border-surface-5 bg-bg-raised"
+		class="relative flex h-full min-h-0 flex-col"
+		:class="
+			embedded
+				? 'octra-chat-embedded w-full min-h-0 flex-1 border-0'
+				: 'octra-chat-rail w-[min(560px,52vw)] shrink-0 border-0 border-r border-solid border-surface-5 bg-bg-raised'
+		"
 	>
-		<div class="octra-chat-rail__accent" aria-hidden="true" />
+		<ContextMenu ref="messageOptions" :label="formatMessage(messages.messageActions)" />
+		<div v-if="!embedded" class="octra-chat-rail__accent" aria-hidden="true" />
 		<div
+			v-if="!embedded"
 			class="octra-chat-rail__header flex items-center justify-between gap-2 border-0 border-b border-solid border-surface-5 px-3 py-2"
 		>
 			<div class="flex items-center gap-2 text-contrast">
@@ -636,7 +852,7 @@ const messages = defineMessages({
 		</div>
 
 		<template v-if="!session">
-			<div class="flex flex-col gap-2 p-3">
+			<div class="flex flex-col gap-2 p-1">
 				<p class="m-0 text-sm text-secondary">{{ formatMessage(messages.signInHint) }}</p>
 				<Button type="colored" color="brand" @click="emit('signIn')">
 					{{ formatMessage(messages.signInAction) }}
@@ -645,11 +861,20 @@ const messages = defineMessages({
 		</template>
 
 		<template v-else>
-			<div class="flex min-h-0 flex-1">
+			<div
+				class="flex min-h-0 flex-1"
+				:class="embedded ? 'flex-col' : 'flex-row'"
+			>
 				<div
-					class="flex w-[38%] min-w-[9.5rem] max-w-[15rem] shrink-0 flex-col border-0 border-r border-solid border-surface-5"
+					v-show="showChannelList"
+					class="flex min-h-0 flex-col"
+					:class="
+						embedded
+							? 'w-full flex-1'
+							: 'w-[38%] min-w-[9.5rem] max-w-[15rem] shrink-0 border-0 border-r border-solid border-surface-5'
+					"
 				>
-					<div class="flex gap-1 p-2">
+					<div class="flex gap-1 px-0.5 py-1">
 						<IconButton
 							v-tooltip="formatMessage(messages.newDm)"
 							type="quiet"
@@ -668,12 +893,12 @@ const messages = defineMessages({
 						</IconButton>
 					</div>
 
-					<div v-if="showNewDm" class="flex max-h-40 flex-col gap-0.5 overflow-y-auto px-2 pb-2">
+					<div v-if="showNewDm" class="flex max-h-40 flex-col gap-0 overflow-y-auto pb-2">
 						<button
 							v-for="member in community"
 							:key="member.id"
 							type="button"
-							class="flex items-center gap-2 rounded-lg border-0 bg-transparent px-2 py-1.5 text-left text-sm text-primary hover:bg-button-bg cursor-pointer"
+							class="chat-row flex items-center gap-2 border-0 bg-transparent px-2 py-1.5 text-left text-sm text-primary hover:bg-button-bg cursor-pointer"
 							@click="openDm(member.id)"
 						>
 							<Avatar :src="headForNick(member.minecraft_nick)" size="22px" circle />
@@ -681,19 +906,22 @@ const messages = defineMessages({
 						</button>
 					</div>
 
-					<div v-if="showNewGroup" class="flex flex-col gap-2 px-2 pb-2">
+					<div v-if="showNewGroup" class="flex flex-col gap-2 px-1 pb-2">
 						<input
 							v-model="groupName"
 							type="text"
-							class="w-full rounded-lg border border-solid border-surface-5 bg-button-bg px-2 py-1.5 text-sm text-primary"
+							class="w-full rounded-md border border-solid border-surface-5 bg-button-bg px-2 py-1.5 text-sm text-primary"
 							:placeholder="formatMessage(messages.groupName)"
 						/>
 						<p class="m-0 text-[11px] text-secondary">{{ formatMessage(messages.pickMembers) }}</p>
+						<p class="m-0 text-[11px] text-secondary">
+							{{ formatMessage(messages.groupMinMembers) }}
+						</p>
 						<div class="max-h-28 overflow-y-auto">
 							<label
 								v-for="member in community"
 								:key="member.id"
-								class="flex cursor-pointer items-center gap-2 rounded-lg px-1 py-1 text-sm text-primary hover:bg-button-bg"
+								class="flex cursor-pointer items-center gap-2 px-1 py-1 text-sm text-primary hover:bg-button-bg"
 							>
 								<input
 									type="checkbox"
@@ -708,7 +936,7 @@ const messages = defineMessages({
 							type="colored"
 							color="brand"
 							class="w-full"
-							:disabled="!groupName.trim()"
+							:disabled="!canCreateGroup"
 							@click="createGroup"
 						>
 							<UsersIcon />
@@ -716,18 +944,18 @@ const messages = defineMessages({
 						</Button>
 					</div>
 
-					<p v-if="channels.length === 0" class="m-0 px-3 py-2 text-xs text-secondary">
+					<p v-if="channels.length === 0" class="m-0 px-2 py-2 text-xs text-secondary">
 						{{ formatMessage(messages.emptyChannels) }}
 					</p>
-					<div class="min-h-0 flex-1 overflow-y-auto px-1 pb-2">
+					<div class="min-h-0 flex-1 overflow-y-auto pb-1">
 						<button
 							v-for="channel in channels"
 							:key="channel.id"
 							type="button"
-							class="mb-0.5 flex w-full items-center gap-2 rounded-xl border-0 px-2 py-1.5 text-left cursor-pointer"
+							class="chat-row flex w-full items-center gap-2 border-0 px-2 py-2 text-left cursor-pointer"
 							:class="
 								selectedId === channel.id
-									? 'bg-button-bg text-contrast'
+									? 'chat-row--active text-contrast'
 									: 'bg-transparent text-primary hover:bg-button-bg'
 							"
 							@click="selectedId = channel.id"
@@ -744,7 +972,7 @@ const messages = defineMessages({
 							<div class="min-w-0 flex-1">
 								<span class="block truncate text-sm font-medium">{{ titleFor(channel) }}</span>
 								<span class="block truncate text-[11px] text-secondary">
-									{{ channel.last_body || '—' }}
+									{{ channelPreview(channel) }}
 								</span>
 							</div>
 							<span
@@ -759,35 +987,62 @@ const messages = defineMessages({
 				</div>
 
 				<div
-					class="flex min-w-0 flex-1 flex-col bg-[color-mix(in_srgb,var(--color-bg)_70%,transparent)]"
+					v-show="showThreadPane"
+					class="flex min-h-0 min-w-0 flex-1 flex-col"
+					:class="
+						embedded
+							? 'bg-transparent'
+							: 'bg-[color-mix(in_srgb,var(--color-bg)_70%,transparent)]'
+					"
 				>
 					<div
-						class="flex items-center justify-between gap-2 border-0 border-b border-solid border-surface-5 px-3 py-2.5"
+						class="flex items-center justify-between gap-2 border-0 border-b border-solid border-surface-5 px-1 py-2"
 					>
-						<span class="min-w-0 truncate text-sm font-semibold text-contrast">
-							{{ selected ? titleFor(selected) : formatMessage(messages.selectConversation) }}
-						</span>
-						<IconButton
-							v-if="canInvite"
-							v-tooltip="formatMessage(messages.inviteMembers)"
-							type="quiet"
-							:label="formatMessage(messages.inviteMembers)"
-							@click="showInvite = !showInvite"
-						>
-							<UsersIcon />
-						</IconButton>
+						<div class="flex min-w-0 items-center gap-1">
+							<IconButton
+								v-if="embedded"
+								type="quiet"
+								:label="formatMessage(messages.backToList)"
+								@click="backToList"
+							>
+								<ChevronLeftIcon />
+							</IconButton>
+							<span class="min-w-0 truncate text-sm font-semibold text-contrast">
+								{{ selected ? titleFor(selected) : formatMessage(messages.selectConversation) }}
+							</span>
+						</div>
+						<div class="flex shrink-0 items-center gap-0.5">
+							<IconButton
+								v-if="canInvite"
+								v-tooltip="formatMessage(messages.inviteMembers)"
+								type="quiet"
+								:label="formatMessage(messages.inviteMembers)"
+								@click="toggleInvitePanel"
+							>
+								<UsersIcon />
+							</IconButton>
+							<IconButton
+								v-if="canInvite"
+								v-tooltip="formatMessage(messages.deleteGroup)"
+								type="quiet"
+								:label="formatMessage(messages.deleteGroup)"
+								@click="toggleDeleteVotePanel"
+							>
+								<TrashIcon />
+							</IconButton>
+						</div>
 					</div>
 
 					<div
 						v-if="showInvite && canInvite"
-						class="flex flex-col gap-2 border-0 border-b border-solid border-surface-5 px-3 py-2"
+						class="flex flex-col gap-2 border-0 border-b border-solid border-surface-5 px-2 py-2"
 					>
 						<p class="m-0 text-[11px] text-secondary">{{ formatMessage(messages.pickMembers) }}</p>
 						<div class="max-h-28 overflow-y-auto">
 							<label
 								v-for="member in inviteCandidates"
 								:key="member.id"
-								class="flex cursor-pointer items-center gap-2 rounded-lg px-1 py-1 text-sm text-primary hover:bg-button-bg"
+								class="flex cursor-pointer items-center gap-2 px-1 py-1 text-sm text-primary hover:bg-button-bg"
 							>
 								<input
 									type="checkbox"
@@ -810,8 +1065,50 @@ const messages = defineMessages({
 					</div>
 
 					<div
+						v-if="showDeleteVote && canInvite"
+						class="flex flex-col gap-2 border-0 border-b border-solid border-surface-5 px-2 py-2"
+					>
+						<p class="m-0 text-sm font-medium text-contrast">
+							{{ formatMessage(messages.deleteVoteTitle) }}
+						</p>
+						<p class="m-0 text-[11px] text-secondary">
+							{{ formatMessage(messages.deleteVoteConfirm) }}
+						</p>
+						<p v-if="deleteVote" class="m-0 text-[11px] text-secondary">
+							{{
+								formatMessage(messages.deleteVoteHint, {
+									yes: deleteVote.yes_count,
+									needed: deleteVote.needed,
+									members: deleteVote.member_count,
+								})
+							}}
+						</p>
+						<div class="flex flex-wrap gap-2">
+							<Button
+								type="colored"
+								color="brand"
+								:disabled="deleteVoteBusy || deleteVote?.my_vote === true"
+								@click="castDeleteVote(true)"
+							>
+								{{
+									deleteVote?.active
+										? formatMessage(messages.deleteVoteYes)
+										: formatMessage(messages.deleteVoteStart)
+								}}
+							</Button>
+							<Button
+								v-if="deleteVote?.active"
+								:disabled="deleteVoteBusy || deleteVote?.my_vote === false"
+								@click="castDeleteVote(false)"
+							>
+								{{ formatMessage(messages.deleteVoteNo) }}
+							</Button>
+						</div>
+					</div>
+
+					<div
 						v-if="mrpackPreview"
-						class="mx-3 mt-2 rounded-xl border border-solid border-surface-5 bg-button-bg p-3"
+						class="mx-2 mt-2 rounded-md border border-solid border-surface-5 bg-button-bg p-3"
 					>
 						<p v-if="mrpackPreview.loading" class="m-0 text-sm text-secondary">
 							{{ formatMessage(messages.installPreviewLoading) }}
@@ -849,12 +1146,18 @@ const messages = defineMessages({
 						</template>
 					</div>
 
-					<div ref="scrollEl" class="flex min-h-0 flex-1 flex-col overflow-y-auto px-3 py-3">
+					<div ref="scrollEl" class="min-h-0 flex-1 overflow-y-auto px-2 py-2">
 						<p
 							v-if="selected && messagesList.length === 0"
-							class="m-auto max-w-[16rem] text-center text-sm text-secondary"
+							class="m-auto max-w-[16rem] py-8 text-center text-sm text-secondary"
 						>
 							{{ formatMessage(messages.emptyMessages) }}
+						</p>
+						<p
+							v-else-if="!selected && !embedded"
+							class="m-auto max-w-[16rem] py-8 text-center text-sm text-secondary"
+						>
+							{{ formatMessage(messages.selectConversation) }}
 						</p>
 						<div
 							v-for="row in bubbles"
@@ -864,29 +1167,30 @@ const messages = defineMessages({
 							@mouseenter="hoveredMessageId = row.message.id"
 							@mouseleave="hoveredMessageId = null"
 						>
-							<div class="flex w-8 shrink-0 items-end justify-center">
+							<div class="flex w-7 shrink-0 items-end justify-center self-end">
 								<Avatar
 									v-if="row.showAvatar"
 									:src="headForNick(row.message.minecraft_nick)"
 									:alt="row.message.minecraft_nick"
-									size="28px"
+									size="24px"
 									circle
 								/>
 							</div>
 							<div
-								class="relative flex max-w-[78%] flex-col"
+								class="relative flex max-w-[85%] flex-col"
 								:class="row.mine ? 'items-end' : 'items-start'"
 							>
 								<span v-if="row.showName" class="mb-1 px-1 text-[11px] font-medium text-secondary">
 									{{ row.message.minecraft_nick }}
 								</span>
 								<div
-									class="px-3 py-2 text-sm leading-snug whitespace-pre-wrap break-words shadow-sm"
-									:class="
-										row.mine
-											? 'rounded-2xl rounded-br-md bg-brand text-[var(--color-accent-contrast)]'
-											: 'rounded-2xl rounded-bl-md bg-button-bg text-primary'
-									"
+									v-tooltip="formatTime(row.message.created_at)"
+									class="chat-bubble px-2.5 py-1.5 text-[13px] leading-snug whitespace-pre-wrap break-words"
+									:class="[
+										row.mine ? 'chat-bubble--mine' : 'chat-bubble--theirs',
+										row.showAvatar ? 'chat-bubble--tailed' : 'chat-bubble--cluster',
+									]"
+									@contextmenu.prevent.stop="openMessageContextMenu(row, $event)"
 								>
 									<span
 										v-if="row.message.pinned"
@@ -901,7 +1205,15 @@ const messages = defineMessages({
 										}}</span>
 									</template>
 									<template v-else>
-										{{ row.message.body }}
+										<img
+											v-if="row.message.attachment_url"
+											:src="row.message.attachment_url"
+											alt=""
+											class="chat-attachment"
+											loading="lazy"
+											@click.stop="openAttachment(row.message.attachment_url)"
+										/>
+										<span v-if="row.message.body">{{ row.message.body }}</span>
 										<div
 											v-if="extractMrpackUrls(row.message.body).length > 0"
 											class="mt-2 flex flex-col gap-1"
@@ -910,12 +1222,7 @@ const messages = defineMessages({
 												v-for="url in extractMrpackUrls(row.message.body)"
 												:key="url"
 												type="button"
-												class="inline-flex items-center gap-1.5 rounded-lg border-0 px-2 py-1 text-xs font-medium cursor-pointer"
-												:class="
-													row.mine
-														? 'bg-black/20 text-[var(--color-accent-contrast)] hover:bg-black/30'
-														: 'bg-surface-3 text-primary hover:bg-surface-4'
-												"
+												class="chat-pack-btn"
 												:disabled="installingUrl === url || mrpackPreview?.loading"
 												@click="beginMrpackInstall(url)"
 											>
@@ -925,26 +1232,34 @@ const messages = defineMessages({
 										</div>
 									</template>
 									<div v-if="row.message.reactions?.length" class="mt-1.5 flex flex-wrap gap-1">
-										<span
+										<button
 											v-for="reaction in row.message.reactions"
 											:key="reaction.emoji"
-											class="inline-flex items-center gap-0.5 rounded-full bg-black/15 px-1.5 py-0.5 text-[11px]"
+											type="button"
+											class="chat-reaction"
+											:class="{ 'chat-reaction--mine': reactionIsMine(reaction) }"
+											@click="reactToMessage(row.message, reaction.emoji)"
 										>
 											{{ reaction.emoji }}
-											<span class="opacity-80">{{ reaction.count }}</span>
-										</span>
+											<span class="chat-reaction__count">{{ reaction.count }}</span>
+										</button>
 									</div>
 								</div>
 								<div
 									v-if="!row.message.deleted && hoveredMessageId === row.message.id"
-									class="absolute -top-3 z-10 flex items-center gap-0.5 rounded-lg border border-solid border-surface-5 bg-bg-raised px-1 py-0.5 shadow-sm"
+									class="absolute -top-3 z-10 flex items-center gap-0.5 rounded-md border border-solid border-surface-5 bg-bg-raised px-1 py-0.5"
 									:class="row.mine ? 'right-0' : 'left-0'"
 								>
 									<button
 										v-for="emoji in REACTION_EMOJIS"
 										:key="emoji"
 										type="button"
-										class="border-0 bg-transparent px-0.5 text-sm leading-none cursor-pointer hover:scale-110"
+										class="chat-reaction-pick border-0 bg-transparent px-0.5 text-sm leading-none cursor-pointer hover:scale-110"
+										:class="{
+											'chat-reaction-pick--mine': row.message.reactions?.some(
+												(r) => r.emoji === emoji && reactionIsMine(r),
+											),
+										}"
 										@click="reactToMessage(row.message, emoji)"
 									>
 										{{ emoji }}
@@ -967,27 +1282,24 @@ const messages = defineMessages({
 										<TrashIcon class="size-3" />
 									</button>
 								</div>
-								<span class="mt-0.5 px-1 text-[10px] text-secondary opacity-80">
-									{{ formatTime(row.message.created_at) }}
-								</span>
 							</div>
 						</div>
 					</div>
 					<div
 						v-if="selected"
-						class="flex items-center gap-2 border-0 border-t border-solid border-surface-5 p-2.5"
+						class="flex shrink-0 items-center gap-2 border-0 border-t border-solid border-surface-5 p-2"
 					>
 						<input
 							v-model="draft"
 							type="text"
-							class="min-h-10 w-full rounded-full border border-solid border-surface-5 bg-button-bg px-4 py-2 text-sm text-primary placeholder:text-secondary"
+							class="min-h-9 w-full rounded-md border border-solid border-surface-5 bg-button-bg px-3 py-2 text-sm text-primary placeholder:text-secondary"
 							:placeholder="formatMessage(messages.placeholder)"
 							:disabled="sending"
 							@keydown="onKeydown"
 						/>
 						<button
 							type="button"
-							class="flex size-10 shrink-0 items-center justify-center rounded-full border-0 bg-brand text-[var(--color-accent-contrast)] cursor-pointer disabled:opacity-40"
+							class="flex size-9 shrink-0 items-center justify-center rounded-md border-0 bg-brand text-[var(--color-accent-contrast)] cursor-pointer disabled:opacity-40"
 							:aria-label="formatMessage(messages.send)"
 							:disabled="sending || !draft.trim()"
 							@click="send"
@@ -998,7 +1310,7 @@ const messages = defineMessages({
 				</div>
 			</div>
 		</template>
-	</aside>
+	</component>
 </template>
 
 <style scoped lang="scss">
@@ -1012,20 +1324,151 @@ const messages = defineMessages({
 	bottom: 0;
 	left: 0;
 	width: 0.2rem;
-	background: linear-gradient(
-		180deg,
-		var(--color-brand) 0%,
-		color-mix(in srgb, var(--color-brand) 35%, transparent) 100%
-	);
+	background: var(--color-brand);
 	z-index: 1;
 }
 
 .octra-chat-rail__header {
-	background: linear-gradient(
-		90deg,
-		color-mix(in srgb, var(--color-brand) 16%, transparent) 0%,
-		transparent 72%
-	);
+	background: var(--surface-2);
+}
+
+.octra-chat-embedded {
+	display: flex;
+	flex: 1 1 auto;
+	flex-direction: column;
+	height: 100%;
+	min-height: 0;
+}
+
+.chat-row + .chat-row {
+	border-top: 1px solid color-mix(in srgb, var(--surface-5) 70%, transparent);
+}
+
+.chat-row--active {
+	background: color-mix(in srgb, var(--color-brand) 12%, transparent);
+	box-shadow: inset 2px 0 0 var(--color-brand);
+}
+
+.chat-bubble {
+	position: relative;
+}
+
+.chat-attachment {
+	display: block;
+	max-width: min(100%, 18rem);
+	max-height: 14rem;
+	width: auto;
+	height: auto;
+	border-radius: var(--radius-sm);
+	margin-bottom: 0.35rem;
+	cursor: zoom-in;
+	object-fit: contain;
+	background: color-mix(in srgb, var(--surface-1) 60%, transparent);
+}
+
+.chat-bubble--mine {
+	background: color-mix(in srgb, var(--color-brand) 22%, var(--surface-3));
+	border: 1px solid color-mix(in srgb, var(--color-brand) 35%, transparent);
+	color: var(--color-contrast);
+}
+
+.chat-bubble--theirs {
+	background: var(--surface-3);
+	border: 1px solid color-mix(in srgb, var(--surface-5) 90%, transparent);
+	color: var(--color-primary);
+}
+
+.chat-bubble--cluster.chat-bubble--mine,
+.chat-bubble--cluster.chat-bubble--theirs {
+	border-radius: var(--radius-md);
+}
+
+.chat-bubble--tailed.chat-bubble--theirs {
+	border-radius: var(--radius-md) var(--radius-md) var(--radius-md) 0.2rem;
+
+	&::before {
+		border-color: transparent var(--surface-3) transparent transparent;
+		border-style: solid;
+		border-width: 6px 7px 6px 0;
+		bottom: 0.55rem;
+		content: '';
+		left: -7px;
+		position: absolute;
+	}
+}
+
+.chat-bubble--tailed.chat-bubble--mine {
+	border-radius: var(--radius-md) var(--radius-md) 0.2rem var(--radius-md);
+
+	&::before {
+		border-color: transparent transparent transparent
+			color-mix(in srgb, var(--color-brand) 22%, var(--surface-3));
+		border-style: solid;
+		border-width: 6px 0 6px 7px;
+		bottom: 0.55rem;
+		content: '';
+		position: absolute;
+		right: -7px;
+	}
+}
+
+.chat-pack-btn {
+	align-items: center;
+	background: color-mix(in srgb, var(--color-brand) 14%, transparent);
+	border: 1px solid color-mix(in srgb, var(--color-brand) 28%, transparent);
+	border-radius: var(--radius-md);
+	color: var(--color-primary);
+	cursor: pointer;
+	display: inline-flex;
+	font-size: 0.75rem;
+	font-weight: 600;
+	gap: 0.35rem;
+	padding: 0.3rem 0.5rem;
+
+	&:hover {
+		background: color-mix(in srgb, var(--color-brand) 22%, transparent);
+	}
+
+	&:disabled {
+		cursor: not-allowed;
+		opacity: 0.5;
+	}
+}
+
+.chat-reaction {
+	align-items: center;
+	background: color-mix(in srgb, var(--surface-5) 55%, transparent);
+	border: 1px solid color-mix(in srgb, var(--surface-5) 90%, transparent);
+	border-radius: 999px;
+	color: var(--color-primary);
+	cursor: pointer;
+	display: inline-flex;
+	font-size: 0.6875rem;
+	gap: 0.25rem;
+	line-height: 1;
+	padding: 0.2rem 0.45rem;
+	transition: background 0.12s ease, border-color 0.12s ease;
+
+	&:hover {
+		background: color-mix(in srgb, var(--color-brand) 12%, transparent);
+		border-color: color-mix(in srgb, var(--color-brand) 35%, transparent);
+	}
+}
+
+.chat-reaction--mine {
+	background: color-mix(in srgb, var(--color-brand) 18%, transparent);
+	border-color: color-mix(in srgb, var(--color-brand) 55%, transparent);
+	color: var(--color-contrast);
+}
+
+.chat-reaction__count {
+	opacity: 0.85;
+}
+
+.chat-reaction-pick--mine {
+	border-radius: 0.25rem;
+	box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-brand) 65%, transparent);
+	background: color-mix(in srgb, var(--color-brand) 16%, transparent);
 }
 
 @keyframes chat-rail-in {

@@ -42,10 +42,12 @@ MAX_BODY = int(os.environ.get("MAX_BODY", str(1024 * 1024)))
 # Keep in sync with packages/app-lib/src/nervia.rs SKINS_URL until HTTPS cutover.
 DEFAULT_PUBLIC_BASE = os.environ.get("PUBLIC_BASE_URL", "http://92.5.186.6").strip().rstrip("/")
 
-app = FastAPI(title="Octra API", version="1.8.0")
+app = FastAPI(title="Octra API", version="1.9.0")
 PRESENCE_TTL = timedelta(seconds=60)
 CHAT_MAX_LEN = 1000
 CHAT_MIN_INTERVAL = timedelta(seconds=2)
+CHAT_ATTACHMENT_MAX = int(os.environ.get("CHAT_ATTACHMENT_MAX", str(8 * 1024 * 1024)))
+CHAT_MEDIA_DIR = DATA_DIR / "chat-media"
 app.add_middleware(
 	CORSMiddleware,
 	allow_origins=["*"],
@@ -161,11 +163,18 @@ class ChatMessage(BaseModel):
 	created_at: str
 	pinned: bool = False
 	deleted: bool = False
+	attachment_url: Optional[str] = None
 	reactions: list[ChatReaction] = Field(default_factory=list)
 
 
 class ChatPostBody(BaseModel):
-	text: str = Field(min_length=1, max_length=CHAT_MAX_LEN)
+	text: str = Field(default="", max_length=CHAT_MAX_LEN)
+	attachment_url: Optional[str] = None
+
+
+class ChatAttachmentUploadResponse(BaseModel):
+	url: str
+	path: str
 
 
 class ChatDmBody(BaseModel):
@@ -189,6 +198,21 @@ class ChatReactionBody(BaseModel):
 	emoji: str = Field(min_length=1, max_length=16)
 
 
+class ChatDeleteVoteBody(BaseModel):
+	yes: bool = True
+
+
+class ChatDeleteVoteStatus(BaseModel):
+	active: bool
+	channel_id: int
+	member_count: int
+	yes_count: int
+	no_count: int
+	needed: int
+	my_vote: Optional[bool] = None
+	deleted: bool = False
+
+
 class ChatPinBody(BaseModel):
 	pinned: bool = True
 
@@ -208,18 +232,47 @@ class SharedServerBody(BaseModel):
 
 
 ALLOWED_REACTION_EMOJIS = {"👍", "❤️", "😂", "🔥", "🎉", "👀"}
+CHAT_MEDIA_NAME_RE = re.compile(r"^[a-f0-9]{64}\.(png|jpg|webp)$")
+
+
+def chat_media_public_url(relative_path: str) -> str:
+	rel = relative_path if relative_path.startswith("/") else f"/{relative_path}"
+	return f"{DEFAULT_PUBLIC_BASE}{rel}"
+
+
+def detect_chat_image(data: bytes) -> Optional[str]:
+	if data.startswith(b"\x89PNG\r\n\x1a\n"):
+		return "png"
+	if data.startswith(b"\xff\xd8\xff"):
+		return "jpg"
+	if len(data) >= 12 and data[:4] == b"RIFF" and data[8:12] == b"WEBP":
+		return "webp"
+	return None
+
+
+def chat_attachment_path_ok(path: str) -> bool:
+	if not path.startswith("/chat-media/"):
+		return False
+	name = path.removeprefix("/chat-media/")
+	if not CHAT_MEDIA_NAME_RE.fullmatch(name):
+		return False
+	return (CHAT_MEDIA_DIR / name).is_file()
 
 
 def chat_message_from_row(row: dict) -> ChatMessage:
+	deleted = bool(row.get("deleted_at"))
+	attachment = None if deleted else row.get("attachment_url")
+	absolute = chat_media_public_url(attachment) if attachment else None
 	return ChatMessage(
 		id=int(row["id"]),
 		channel_id=int(row["channel_id"]),
 		user_id=int(row["user_id"]),
 		minecraft_nick=row["minecraft_nick"],
-		body="" if row.get("deleted_at") else row["body"],
+		body="" if deleted else row["body"],
 		created_at=row["created_at"],
 		pinned=bool(row.get("pinned")),
-		deleted=bool(row.get("deleted_at")),
+		deleted=deleted,
+		attachment_url=absolute,
 		reactions=[
 			ChatReaction(
 				emoji=r["emoji"],
@@ -442,7 +495,6 @@ async def register(body: RegisterBody) -> SessionResponse:
 
 	password_hash = hash_password(body.password)
 	user = db.create_user(username, password_hash, nick, profile_uuid, account_type)
-	db.ensure_user_in_everyone(int(user["id"]))
 	token = create_access_token(user["id"], jwt_secret())
 	return session_from_user(user, token)
 
@@ -507,7 +559,6 @@ async def presence(
 async def chat_channels(
 	user: Annotated[dict, Depends(bearer_user)],
 ) -> list[ChatChannel]:
-	db.ensure_user_in_everyone(int(user["id"]))
 	rows = db.list_channels_for_user(int(user["id"]))
 	return [chat_channel_from_row(row) for row in rows]
 
@@ -539,6 +590,8 @@ async def chat_create_group(
 	name = body.name.strip()
 	if not name:
 		raise HTTPException(status_code=400, detail="name required")
+	if name.lower() == "everyone":
+		raise HTTPException(status_code=400, detail="invalid group name")
 	member_ids: list[int] = []
 	for raw_id in body.member_ids:
 		uid = int(raw_id)
@@ -547,7 +600,16 @@ async def chat_create_group(
 		if not db.get_user_by_id(uid):
 			raise HTTPException(status_code=404, detail=f"user {uid} not found")
 		member_ids.append(uid)
-	channel = db.create_group(name, int(user["id"]), member_ids, utcnow_iso())
+	# Creator + selected members must total at least 3 participants.
+	if len({int(user["id"]), *member_ids}) < 3:
+		raise HTTPException(
+			status_code=400,
+			detail="group requires at least 3 members",
+		)
+	try:
+		channel = db.create_group(name, int(user["id"]), member_ids, utcnow_iso())
+	except ValueError as exc:
+		raise HTTPException(status_code=400, detail=str(exc)) from exc
 	members = db.channel_member_rows(int(channel["id"]))
 	channel["members"] = members
 	channel["last_read_id"] = 0
@@ -564,8 +626,6 @@ async def chat_add_group_members(
 	channel = db.get_channel(channel_id)
 	if not channel or channel.get("kind") != "group":
 		raise HTTPException(status_code=404, detail="group not found")
-	if channel.get("name") == "Everyone":
-		raise HTTPException(status_code=400, detail="cannot edit Everyone membership")
 	if not db.is_channel_member(channel_id, int(user["id"])):
 		raise HTTPException(status_code=403, detail="not a channel member")
 	member_ids: list[int] = []
@@ -582,6 +642,42 @@ async def chat_add_group_members(
 	return chat_channel_from_row(updated)
 
 
+@app.get(
+	"/api/v1/chat/channels/{channel_id}/delete-vote",
+	response_model=ChatDeleteVoteStatus,
+)
+async def chat_get_delete_vote(
+	channel_id: int,
+	user: Annotated[dict, Depends(bearer_user)],
+) -> ChatDeleteVoteStatus:
+	channel = db.get_channel(channel_id)
+	if not channel or channel.get("kind") != "group":
+		raise HTTPException(status_code=404, detail="group not found")
+	if not db.is_channel_member(channel_id, int(user["id"])):
+		raise HTTPException(status_code=403, detail="not a channel member")
+	return ChatDeleteVoteStatus(**db.get_delete_vote_status(channel_id, int(user["id"])))
+
+
+@app.post(
+	"/api/v1/chat/channels/{channel_id}/delete-vote",
+	response_model=ChatDeleteVoteStatus,
+)
+async def chat_cast_delete_vote(
+	channel_id: int,
+	body: ChatDeleteVoteBody,
+	user: Annotated[dict, Depends(bearer_user)],
+) -> ChatDeleteVoteStatus:
+	channel = db.get_channel(channel_id)
+	if not channel or channel.get("kind") != "group":
+		raise HTTPException(status_code=404, detail="group not found")
+	if not db.is_channel_member(channel_id, int(user["id"])):
+		raise HTTPException(status_code=403, detail="not a channel member")
+	status = db.cast_delete_vote(
+		channel_id, int(user["id"]), bool(body.yes), utcnow_iso()
+	)
+	return ChatDeleteVoteStatus(**status)
+
+
 @app.post("/api/v1/chat/channels/{channel_id}/read")
 async def chat_mark_read(
 	channel_id: int,
@@ -592,6 +688,51 @@ async def chat_mark_read(
 		raise HTTPException(status_code=403, detail="not a channel member")
 	db.mark_channel_read(channel_id, int(user["id"]), int(body.last_read_id))
 	return JSONResponse({"ok": True})
+
+
+@app.post("/api/v1/chat/attachments", response_model=ChatAttachmentUploadResponse)
+async def chat_upload_attachment(
+	request: Request,
+	user: Annotated[dict, Depends(bearer_user)],
+) -> ChatAttachmentUploadResponse:
+	_ = user
+	data = await request.body()
+	if len(data) <= 0 or len(data) > CHAT_ATTACHMENT_MAX:
+		raise HTTPException(status_code=400, detail="bad attachment size")
+	ext = detect_chat_image(data)
+	if not ext:
+		raise HTTPException(status_code=400, detail="unsupported image type")
+	digest = hashlib.sha256(data).hexdigest()
+	name = f"{digest}.{ext}"
+	CHAT_MEDIA_DIR.mkdir(parents=True, exist_ok=True)
+	path = CHAT_MEDIA_DIR / name
+	if not path.is_file():
+		path.write_bytes(data)
+	relative = f"/chat-media/{name}"
+	return ChatAttachmentUploadResponse(
+		url=chat_media_public_url(relative),
+		path=relative,
+	)
+
+
+@app.get("/chat-media/{name}")
+async def chat_get_media(name: str) -> Response:
+	if not CHAT_MEDIA_NAME_RE.fullmatch(name):
+		raise HTTPException(status_code=400, detail="bad name")
+	path = CHAT_MEDIA_DIR / name
+	if not path.is_file():
+		raise HTTPException(status_code=404, detail="not found")
+	ext = name.rsplit(".", 1)[-1]
+	media_type = {
+		"png": "image/png",
+		"jpg": "image/jpeg",
+		"webp": "image/webp",
+	}.get(ext, "application/octet-stream")
+	return Response(
+		content=path.read_bytes(),
+		media_type=media_type,
+		headers={"Cache-Control": "public, max-age=31536000, immutable"},
+	)
 
 
 @app.get("/api/v1/chat/channels/{channel_id}/messages", response_model=list[ChatMessage])
@@ -614,8 +755,15 @@ async def chat_channel_post(
 ) -> ChatMessage:
 	if not db.is_channel_member(channel_id, int(user["id"])):
 		raise HTTPException(status_code=403, detail="not a channel member")
-	text = body.text.strip()
-	if not text:
+	text = (body.text or "").strip()
+	attachment = (body.attachment_url or "").strip() or None
+	if attachment:
+		# Accept absolute public URL or relative /chat-media/... path.
+		if attachment.startswith(DEFAULT_PUBLIC_BASE):
+			attachment = attachment[len(DEFAULT_PUBLIC_BASE) :]
+		if not chat_attachment_path_ok(attachment):
+			raise HTTPException(status_code=400, detail="invalid attachment")
+	if not text and not attachment:
 		raise HTTPException(status_code=400, detail="empty message")
 	user_id = int(user["id"])
 	last_at = parse_iso(db.last_chat_message_at(user_id, channel_id))
@@ -627,6 +775,7 @@ async def chat_channel_post(
 		user["minecraft_nick"],
 		text,
 		utcnow_iso(),
+		attachment_url=attachment,
 	)
 	db.mark_channel_read(channel_id, user_id, int(row["id"]))
 	return chat_message_from_row(row)
@@ -739,21 +888,15 @@ async def delete_shared_server(
 	return JSONResponse({"ok": True})
 
 
-# Legacy global chat endpoints kept as thin wrappers onto the Everyone group.
+# Legacy global chat endpoints — Everyone group removed; keep stubs for old clients.
 @app.get("/api/v1/chat", response_model=list[ChatMessage])
 async def chat_list_legacy(
 	user: Annotated[dict, Depends(bearer_user)],
 	after_id: int = 0,
 ) -> list[ChatMessage]:
-	db.ensure_user_in_everyone(int(user["id"]))
-	channels = db.list_channels_for_user(int(user["id"]))
-	everyone = next(
-		(c for c in channels if c.get("kind") == "group" and c.get("name") == "Everyone"),
-		None,
-	)
-	if not everyone:
-		return []
-	return await chat_channel_messages(int(everyone["id"]), user, after_id)
+	_ = user
+	_ = after_id
+	return []
 
 
 @app.post("/api/v1/chat", response_model=ChatMessage)
@@ -761,15 +904,12 @@ async def chat_post_legacy(
 	body: ChatPostBody,
 	user: Annotated[dict, Depends(bearer_user)],
 ) -> ChatMessage:
-	db.ensure_user_in_everyone(int(user["id"]))
-	channels = db.list_channels_for_user(int(user["id"]))
-	everyone = next(
-		(c for c in channels if c.get("kind") == "group" and c.get("name") == "Everyone"),
-		None,
+	_ = body
+	_ = user
+	raise HTTPException(
+		status_code=410,
+		detail="global everyone chat removed; use group channels",
 	)
-	if not everyone:
-		raise HTTPException(status_code=500, detail="everyone channel missing")
-	return await chat_channel_post(int(everyone["id"]), body, user)
 
 
 @app.get("/skins/{uuid}")

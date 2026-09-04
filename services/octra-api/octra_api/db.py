@@ -144,6 +144,8 @@ class Database:
 				)
 			if "deleted_at" not in msg_cols:
 				conn.execute("ALTER TABLE chat_messages ADD COLUMN deleted_at TEXT")
+			if "attachment_url" not in msg_cols:
+				conn.execute("ALTER TABLE chat_messages ADD COLUMN attachment_url TEXT")
 			conn.executescript(
 				"""
 				CREATE TABLE IF NOT EXISTS chat_reactions (
@@ -168,58 +170,46 @@ class Database:
 					UNIQUE(address)
 				);
 				CREATE INDEX IF NOT EXISTS idx_chat_reactions_message ON chat_reactions(message_id);
+				CREATE TABLE IF NOT EXISTS chat_group_delete_votes (
+					channel_id INTEGER NOT NULL,
+					user_id INTEGER NOT NULL,
+					yes INTEGER NOT NULL,
+					created_at TEXT NOT NULL,
+					PRIMARY KEY (channel_id, user_id)
+				);
 				"""
 			)
-			self._ensure_everyone_channel(conn)
+			self._retire_everyone_channel(conn)
 
-	def _ensure_everyone_channel(self, conn: sqlite3.Connection) -> None:
-		row = conn.execute(
-			"SELECT id FROM chat_channels WHERE kind = 'group' AND name = 'Everyone' LIMIT 1"
-		).fetchone()
-		if row:
-			channel_id = int(row["id"])
-		else:
-			cur = conn.execute(
-				"""
-				INSERT INTO chat_channels (kind, name, dm_key, created_by, created_at)
-				VALUES ('group', 'Everyone', NULL, NULL, datetime('now'))
-				"""
-			)
-			channel_id = int(cur.lastrowid)
-		user_ids = [
-			int(r["id"]) for r in conn.execute("SELECT id FROM users").fetchall()
-		]
-		for uid in user_ids:
-			conn.execute(
-				"""
-				INSERT OR IGNORE INTO chat_channel_members (channel_id, user_id)
-				VALUES (?, ?)
-				""",
-				(channel_id, uid),
-			)
-		conn.execute(
+	def _retire_everyone_channel(self, conn: sqlite3.Connection) -> None:
+		"""Remove the legacy Everyone broadcast group if it still exists."""
+		rows = conn.execute(
 			"""
-			UPDATE chat_messages SET channel_id = ?
-			WHERE channel_id = 0 OR channel_id IS NULL
-			""",
+			SELECT id FROM chat_channels
+			WHERE kind = 'group' AND name = 'Everyone' COLLATE NOCASE
+			"""
+		).fetchall()
+		for row in rows:
+			self._delete_channel_cascade(conn, int(row["id"]))
+
+	def _delete_channel_cascade(self, conn: sqlite3.Connection, channel_id: int) -> None:
+		message_ids = [
+			int(r["id"])
+			for r in conn.execute(
+				"SELECT id FROM chat_messages WHERE channel_id = ?",
+				(channel_id,),
+			).fetchall()
+		]
+		for mid in message_ids:
+			conn.execute("DELETE FROM chat_reactions WHERE message_id = ?", (mid,))
+		conn.execute("DELETE FROM chat_messages WHERE channel_id = ?", (channel_id,))
+		conn.execute("DELETE FROM chat_channel_reads WHERE channel_id = ?", (channel_id,))
+		conn.execute("DELETE FROM chat_channel_members WHERE channel_id = ?", (channel_id,))
+		conn.execute(
+			"DELETE FROM chat_group_delete_votes WHERE channel_id = ?",
 			(channel_id,),
 		)
-
-	def ensure_user_in_everyone(self, user_id: int) -> None:
-		with self._connect() as conn:
-			self._ensure_everyone_channel(conn)
-			row = conn.execute(
-				"SELECT id FROM chat_channels WHERE kind = 'group' AND name = 'Everyone' LIMIT 1"
-			).fetchone()
-			if not row:
-				return
-			conn.execute(
-				"""
-				INSERT OR IGNORE INTO chat_channel_members (channel_id, user_id)
-				VALUES (?, ?)
-				""",
-				(int(row["id"]), user_id),
-			)
+		conn.execute("DELETE FROM chat_channels WHERE id = ?", (channel_id,))
 
 	def create_user(
 		self,
@@ -315,7 +305,7 @@ class Database:
 
 	def list_channels_for_user(self, user_id: int) -> list[dict[str, Any]]:
 		with self._connect() as conn:
-			self._ensure_everyone_channel(conn)
+			self._retire_everyone_channel(conn)
 			rows = conn.execute(
 				"""
 				SELECT
@@ -324,7 +314,12 @@ class Database:
 					c.name,
 					c.created_at,
 					(
-						SELECT body FROM chat_messages m
+						SELECT CASE
+							WHEN m.body IS NOT NULL AND length(trim(m.body)) > 0 THEN m.body
+							WHEN m.attachment_url IS NOT NULL AND m.attachment_url != '' THEN '[image]'
+							ELSE COALESCE(m.body, '')
+						END
+						FROM chat_messages m
 						WHERE m.channel_id = c.id AND m.deleted_at IS NULL
 						ORDER BY m.id DESC LIMIT 1
 					) AS last_body,
@@ -348,6 +343,7 @@ class Database:
 				FROM chat_channels c
 				INNER JOIN chat_channel_members cm ON cm.channel_id = c.id
 				WHERE cm.user_id = ?
+					AND NOT (c.kind = 'group' AND c.name = 'Everyone' COLLATE NOCASE)
 				ORDER BY COALESCE(last_at, c.created_at) DESC, c.id DESC
 				""",
 				(user_id, user_id),
@@ -430,6 +426,10 @@ class Database:
 		created_at: str,
 	) -> dict[str, Any]:
 		members = sorted({creator_id, *member_ids})
+		if len(members) < 3:
+			raise ValueError("group requires at least 3 members")
+		if name.strip().lower() == "everyone":
+			raise ValueError("invalid group name")
 		with self._connect() as conn:
 			cur = conn.execute(
 				"""
@@ -452,6 +452,126 @@ class Database:
 				(channel_id,),
 			).fetchone()
 			return dict(row)
+
+	def channel_member_count(self, channel_id: int) -> int:
+		with self._connect() as conn:
+			row = conn.execute(
+				"""
+				SELECT COUNT(*) AS n FROM chat_channel_members WHERE channel_id = ?
+				""",
+				(channel_id,),
+			).fetchone()
+			return int(row["n"]) if row else 0
+
+	@staticmethod
+	def delete_vote_needed(member_count: int) -> int:
+		"""Two-thirds majority (rounded up)."""
+		if member_count <= 0:
+			return 1
+		return (member_count * 2 + 2) // 3
+
+	def get_delete_vote_status(
+		self, channel_id: int, user_id: int
+	) -> dict[str, Any]:
+		with self._connect() as conn:
+			member_count = int(
+				conn.execute(
+					"""
+					SELECT COUNT(*) AS n FROM chat_channel_members WHERE channel_id = ?
+					""",
+					(channel_id,),
+				).fetchone()["n"]
+			)
+			votes = conn.execute(
+				"""
+				SELECT user_id, yes FROM chat_group_delete_votes WHERE channel_id = ?
+				""",
+				(channel_id,),
+			).fetchall()
+			yes_count = sum(1 for v in votes if int(v["yes"]) == 1)
+			no_count = sum(1 for v in votes if int(v["yes"]) == 0)
+			my_vote: Optional[bool] = None
+			for v in votes:
+				if int(v["user_id"]) == user_id:
+					my_vote = int(v["yes"]) == 1
+					break
+			needed = self.delete_vote_needed(member_count)
+			return {
+				"active": len(votes) > 0,
+				"channel_id": channel_id,
+				"member_count": member_count,
+				"yes_count": yes_count,
+				"no_count": no_count,
+				"needed": needed,
+				"my_vote": my_vote,
+				"deleted": False,
+			}
+
+	def cast_delete_vote(
+		self, channel_id: int, user_id: int, yes: bool, created_at: str
+	) -> dict[str, Any]:
+		with self._connect() as conn:
+			conn.execute(
+				"""
+				INSERT INTO chat_group_delete_votes (channel_id, user_id, yes, created_at)
+				VALUES (?, ?, ?, ?)
+				ON CONFLICT(channel_id, user_id) DO UPDATE SET
+					yes = excluded.yes,
+					created_at = excluded.created_at
+				""",
+				(channel_id, user_id, 1 if yes else 0, created_at),
+			)
+			member_count = int(
+				conn.execute(
+					"""
+					SELECT COUNT(*) AS n FROM chat_channel_members WHERE channel_id = ?
+					""",
+					(channel_id,),
+				).fetchone()["n"]
+			)
+			yes_count = int(
+				conn.execute(
+					"""
+					SELECT COUNT(*) AS n FROM chat_group_delete_votes
+					WHERE channel_id = ? AND yes = 1
+					""",
+					(channel_id,),
+				).fetchone()["n"]
+			)
+			needed = self.delete_vote_needed(member_count)
+			deleted = yes_count >= needed
+			if deleted:
+				self._delete_channel_cascade(conn, channel_id)
+			no_count = 0 if deleted else int(
+				conn.execute(
+					"""
+					SELECT COUNT(*) AS n FROM chat_group_delete_votes
+					WHERE channel_id = ? AND yes = 0
+					""",
+					(channel_id,),
+				).fetchone()["n"]
+			)
+			return {
+				"active": not deleted,
+				"channel_id": channel_id,
+				"member_count": member_count,
+				"yes_count": yes_count,
+				"no_count": no_count,
+				"needed": needed,
+				"my_vote": yes,
+				"deleted": deleted,
+			}
+
+	def delete_group_channel(self, channel_id: int) -> bool:
+		with self._connect() as conn:
+			row = conn.execute(
+				"SELECT id, kind FROM chat_channels WHERE id = ?",
+				(channel_id,),
+			).fetchone()
+			if not row or row["kind"] != "group":
+				return False
+			self._delete_channel_cascade(conn, channel_id)
+			return True
 
 	def channel_member_rows(self, channel_id: int) -> list[dict[str, Any]]:
 		with self._connect() as conn:
@@ -479,7 +599,7 @@ class Database:
 				rows = conn.execute(
 					"""
 					SELECT id, channel_id, user_id, minecraft_nick, body, created_at,
-						COALESCE(pinned, 0) AS pinned, deleted_at
+						COALESCE(pinned, 0) AS pinned, deleted_at, attachment_url
 					FROM chat_messages
 					WHERE channel_id = ? AND id > ?
 					ORDER BY id ASC
@@ -491,10 +611,10 @@ class Database:
 				rows = conn.execute(
 					"""
 					SELECT id, channel_id, user_id, minecraft_nick, body, created_at,
-						pinned, deleted_at
+						pinned, deleted_at, attachment_url
 					FROM (
 						SELECT id, channel_id, user_id, minecraft_nick, body, created_at,
-							COALESCE(pinned, 0) AS pinned, deleted_at
+							COALESCE(pinned, 0) AS pinned, deleted_at, attachment_url
 						FROM chat_messages
 						WHERE channel_id = ?
 						ORDER BY id DESC
@@ -509,6 +629,7 @@ class Database:
 				message = dict(row)
 				if message.get("deleted_at"):
 					message["body"] = ""
+					message["attachment_url"] = None
 				message["reactions"] = self._reactions_for_message(conn, int(message["id"]))
 				messages.append(message)
 			return messages
@@ -545,7 +666,7 @@ class Database:
 			row = conn.execute(
 				"""
 				SELECT id, channel_id, user_id, minecraft_nick, body, created_at,
-					COALESCE(pinned, 0) AS pinned, deleted_at
+					COALESCE(pinned, 0) AS pinned, deleted_at, attachment_url
 				FROM chat_messages WHERE id = ?
 				""",
 				(message_id,),
@@ -553,6 +674,9 @@ class Database:
 			if not row:
 				return None
 			message = dict(row)
+			if message.get("deleted_at"):
+				message["body"] = ""
+				message["attachment_url"] = None
 			message["reactions"] = self._reactions_for_message(conn, int(message["id"]))
 			return message
 
@@ -561,7 +685,7 @@ class Database:
 			conn.execute(
 				"""
 				UPDATE chat_messages
-				SET deleted_at = ?, body = '', pinned = 0
+				SET deleted_at = ?, body = '', pinned = 0, attachment_url = NULL
 				WHERE id = ? AND deleted_at IS NULL
 				""",
 				(deleted_at, message_id),
@@ -710,19 +834,22 @@ class Database:
 		minecraft_nick: str,
 		body: str,
 		created_at: str,
+		attachment_url: Optional[str] = None,
 	) -> dict[str, Any]:
 		with self._connect() as conn:
 			cur = conn.execute(
 				"""
-				INSERT INTO chat_messages (channel_id, user_id, minecraft_nick, body, created_at)
-				VALUES (?, ?, ?, ?, ?)
+				INSERT INTO chat_messages (
+					channel_id, user_id, minecraft_nick, body, created_at, attachment_url
+				)
+				VALUES (?, ?, ?, ?, ?, ?)
 				""",
-				(channel_id, user_id, minecraft_nick, body, created_at),
+				(channel_id, user_id, minecraft_nick, body, created_at, attachment_url),
 			)
 			row = conn.execute(
 				"""
 				SELECT id, channel_id, user_id, minecraft_nick, body, created_at,
-					COALESCE(pinned, 0) AS pinned, deleted_at
+					COALESCE(pinned, 0) AS pinned, deleted_at, attachment_url
 				FROM chat_messages WHERE id = ?
 				""",
 				(cur.lastrowid,),

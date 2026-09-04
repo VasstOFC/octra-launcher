@@ -25,6 +25,31 @@ sudo rsync -a /tmp/octra-api/ /opt/octra-api/
 sudo chown -R root:root /opt/octra-api
 ```
 
+### MUST redeploy for chat image attachments (v1.9)
+
+Chat screenshot sharing uploads PNG/JPEG/WebP to the API and stores them under
+`$DATA_DIR/chat-media/`. Without this deploy, share still fails or only sends text.
+
+**From your Windows/dev machine** (repo root):
+
+```bash
+scp services/octra-api/octra_api/main.py `
+  services/octra-api/octra_api/db.py `
+  user@92.5.186.6:/tmp/octra-api-update/
+```
+
+**On the VPS:**
+
+```bash
+sudo cp /tmp/octra-api-update/main.py /tmp/octra-api-update/db.py /opt/octra-api/octra_api/
+sudo mkdir -p /var/lib/octra-skins/chat-media
+sudo chown -R octra:octra /var/lib/octra-skins/chat-media
+sudo systemctl restart octra-api
+curl -s http://127.0.0.1:8787/health
+```
+
+Optional env in `/etc/octra/octra.env`: `CHAT_ATTACHMENT_MAX=8388608` (8 MiB default).
+
 ### MUST redeploy after passport schema change
 
 Launcher registration no longer sends `username` — only `password`, `minecraft_nick`,
@@ -167,10 +192,11 @@ curl -X POST http://127.0.0.1/api/v1/auth/login \
 | POST | `/api/v1/presence` | heartbeat: `{ "status": "launcher"|"ingame"|"offline", "instance_name": "...", "join_address": "host:port" }` (Bearer). Po ~60 s bez pulsu status spada do offline |
 | GET | `/api/v1/chat/channels` | lista kanałów (DM + grupy) użytkownika (Bearer) |
 | POST | `/api/v1/chat/channels/dm` | `{ "user_id": N }` — otwórz/utwórz DM |
-| POST | `/api/v1/chat/channels/group` | `{ "name": "...", "member_ids": [..] }` — nowa grupa |
+| POST | `/api/v1/chat/channels/group` | `{ "name": "...", "member_ids": [..] }` — nowa grupa (min. 3 uczestników łącznie z twórcą) |
+| GET/POST | `/api/v1/chat/channels/{id}/delete-vote` | głosowanie o usunięcie grupy (większość 2/3 „tak”) |
 | GET | `/api/v1/chat/channels/{id}/messages?after_id=` | wiadomości kanału |
 | POST | `/api/v1/chat/channels/{id}/messages` | `{ "text": "..." }` — wyślij na kanał |
-| GET/POST | `/api/v1/chat` | legacy → grupa „Everyone” |
+| GET/POST | `/api/v1/chat` | legacy — Everyone usunięty (GET pusta lista, POST 410) |
 | GET/PUT/POST | `/skins/{uuid}` | skin po UUID |
 | GET | `/skins/MinecraftSkins/{nick}.png` | skin po nicku (legacy / SkinsRestorer / authlib textures) |
 | GET | `/` lub `/index.json` | **authlib-injector** meta (`skinDomains`, `feature.non_email_login`) |
@@ -181,7 +207,7 @@ curl -X POST http://127.0.0.1/api/v1/auth/login \
 | POST | `/authserver/authenticate` (także refresh/validate) | stub sesji offline |
 | GET | `/textures/{sha256}` | opcjonalnie PNG po hashu |
 
-Launcher rejestruje konto Octra z domyślnego konta Minecraft (nick + UUID), bez osobnego username i bez tworzenia konta offline. Po zalogowaniu wysyła skiny z `Authorization: Bearer <jwt>`. Panel znajomych w launcherze pokazuje **wszystkie** konta z `GET /api/v1/community` (prywatny launcher — bez dodawania znajomych). Presence może zawierać `join_address`, gdy gracz wystartował multiplayer przez Octra (QuickPlay / lista serwerów) — wtedy inni widzą przycisk Dołącz. Czat grupowy: `GET/POST /api/v1/chat` (wklejony link `.mrpack` → Instaluj w UI).
+Launcher rejestruje konto Octra z domyślnego konta Minecraft (nick + UUID), bez osobnego username i bez tworzenia konta offline. Po zalogowaniu wysyła skiny z `Authorization: Bearer <jwt>`. Panel znajomych w launcherze pokazuje **wszystkie** konta z `GET /api/v1/community` (prywatny launcher — bez dodawania znajomych). Presence może zawierać `join_address`, gdy gracz wystartował multiplayer przez Octra (QuickPlay / lista serwerów) — wtedy inni widzą przycisk Dołącz. Czat: DM + grupy (min. 3 osoby; usuwanie grupy przez głosowanie 2/3). Wklejony link `.mrpack` → Instaluj w UI.
 
 ### MUST redeploy — shared remote Yggdrasil (authlib-injector)
 

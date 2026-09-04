@@ -1,8 +1,8 @@
 use crate::api::Result;
 use serde::{Deserialize, Serialize};
 use theseus::octra_accounts::{
-	self, OctraAccountSession, OctraChatChannel, OctraChatMessage, OctraCommunitySnapshot,
-	OctraSharedServer,
+	self, OctraAccountSession, OctraChatAttachment, OctraChatChannel, OctraChatDeleteVote,
+	OctraChatMessage, OctraCommunitySnapshot, OctraSharedServer,
 };
 use theseus::octra_sync::{self, OctraServerEntry};
 use theseus::pack::featured;
@@ -23,10 +23,13 @@ pub fn init<R: tauri::Runtime>() -> tauri::plugin::TauriPlugin<R> {
 			octra_chat_add_members,
 			octra_chat_list,
 			octra_chat_post,
+			octra_chat_upload_image,
 			octra_chat_mark_read,
 			octra_chat_delete_message,
 			octra_chat_pin_message,
 			octra_chat_react_message,
+			octra_chat_get_delete_vote,
+			octra_chat_cast_delete_vote,
 			octra_share_join_address,
 			octra_shared_servers_list,
 			octra_shared_servers_add,
@@ -119,8 +122,17 @@ pub async fn octra_chat_list(channel_id: i64, after_id: i64) -> Result<Vec<Octra
 }
 
 #[tauri::command]
-pub async fn octra_chat_post(channel_id: i64, text: &str) -> Result<OctraChatMessage> {
-	Ok(octra_accounts::chat_post(channel_id, text).await?)
+pub async fn octra_chat_post(
+	channel_id: i64,
+	text: &str,
+	attachment_url: Option<String>,
+) -> Result<OctraChatMessage> {
+	Ok(octra_accounts::chat_post(channel_id, text, attachment_url.as_deref()).await?)
+}
+
+#[tauri::command]
+pub async fn octra_chat_upload_image(path: &str) -> Result<OctraChatAttachment> {
+	Ok(octra_accounts::chat_upload_image(path).await?)
 }
 
 #[tauri::command]
@@ -145,6 +157,19 @@ pub async fn octra_chat_react_message(
 	emoji: &str,
 ) -> Result<OctraChatMessage> {
 	Ok(octra_accounts::chat_react_message(message_id, emoji).await?)
+}
+
+#[tauri::command]
+pub async fn octra_chat_get_delete_vote(channel_id: i64) -> Result<OctraChatDeleteVote> {
+	Ok(octra_accounts::chat_get_delete_vote(channel_id).await?)
+}
+
+#[tauri::command]
+pub async fn octra_chat_cast_delete_vote(
+	channel_id: i64,
+	yes: bool,
+) -> Result<OctraChatDeleteVote> {
+	Ok(octra_accounts::chat_cast_delete_vote(channel_id, yes).await?)
 }
 
 #[tauri::command]

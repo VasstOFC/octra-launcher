@@ -11,7 +11,6 @@ import {
 import { computed, inject, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 import AccentColorSettings from '@/components/ui/settings/display/AccentColorSettings.vue'
-import LanguageSettings from '@/components/ui/settings/display/LanguageSettings.vue'
 import {
 	SettingsGroup,
 	SettingsPanelHeader,
@@ -31,7 +30,6 @@ const { updatePreferences } = injectUserPreferences()
 const settingsModal = inject(appSettingsModalContextKey, null)
 const os = await getOS()
 const settings = ref(await get())
-const languageSettings = ref<InstanceType<typeof LanguageSettings> | null>(null)
 
 const messages = defineMessages({
 	panelTitle: {
@@ -40,7 +38,7 @@ const messages = defineMessages({
 	},
 	panelDescription: {
 		id: 'app.settings.appearance.panel.description',
-		defaultMessage: 'Theme, accent color, window chrome, and language.',
+		defaultMessage: 'Theme, accent color, and window chrome.',
 	},
 	accentGroup: {
 		id: 'app.settings.appearance.group.accent',
@@ -49,14 +47,6 @@ const messages = defineMessages({
 	accentGroupDescription: {
 		id: 'app.settings.appearance.group.accent.description',
 		defaultMessage: 'Change the accent color used for buttons, highlights, and selection.',
-	},
-	languageGroup: {
-		id: 'app.settings.appearance.group.language',
-		defaultMessage: 'Language',
-	},
-	languageGroupDescription: {
-		id: 'app.settings.appearance.group.language.description',
-		defaultMessage: 'Choose the language used across Octra App.',
 	},
 })
 
@@ -210,50 +200,14 @@ async function saveAppearanceSettings(): Promise<void> {
 	}
 }
 
-function combinedHasChanges(): boolean {
-	return hasChanges.value || Boolean(languageSettings.value?.hasChanges)
-}
-
-function combinedIsSaving(): boolean {
-	return saving.value || Boolean(languageSettings.value?.saving)
-}
-
-function getCombinedOriginal(): Record<string, unknown> {
-	const result: Record<string, unknown> = { ...saved.value }
-	if (languageSettings.value?.hasChanges) {
-		Object.assign(result, languageSettings.value.originalState ?? {})
-	}
-	return result
-}
-
-function getCombinedModified(): Record<string, unknown> {
-	const result: Record<string, unknown> = { ...changes.value }
-	if (languageSettings.value?.hasChanges) {
-		Object.assign(result, languageSettings.value.modifiedState ?? {})
-	}
-	return result
-}
-
-function resetAppearanceAndLanguage(): void {
-	reset()
-	languageSettings.value?.reset()
-}
-
-async function saveAppearanceAndLanguage(): Promise<void> {
-	await saveAppearanceSettings()
-	if (languageSettings.value?.hasChanges) {
-		await languageSettings.value.save()
-	}
-}
-
 onMounted(() => {
 	settingsModal?.registerUnsavedChangesController({
-		hasChanges: combinedHasChanges,
-		getOriginal: getCombinedOriginal,
-		getModified: getCombinedModified,
-		isSaving: combinedIsSaving,
-		reset: resetAppearanceAndLanguage,
-		save: saveAppearanceAndLanguage,
+		hasChanges: () => hasChanges.value,
+		getOriginal: () => ({ ...saved.value }),
+		getModified: () => ({ ...changes.value }),
+		isSaving: () => saving.value,
+		reset,
+		save: saveAppearanceSettings,
 	})
 })
 
@@ -313,16 +267,9 @@ provideAppearanceSettings({
 		</SettingsGroup>
 
 		<section
-			class="settings-group border-0 border-solid border-surface-5 pt-6 mt-6 border-t"
+			class="settings-group border-0 border-solid border-surface-5 pt-4 mt-4 border-t"
 		>
 			<AppearanceSettingsLayout />
 		</section>
-
-		<SettingsGroup
-			:label="formatMessage(messages.languageGroup)"
-			:description="formatMessage(messages.languageGroupDescription)"
-		>
-			<LanguageSettings ref="languageSettings" embedded />
-		</SettingsGroup>
 	</div>
 </template>
