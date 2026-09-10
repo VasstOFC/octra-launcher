@@ -147,16 +147,16 @@ import {
 	LoaderCircleIcon,
 	ScaleIcon,
 	UserPlusIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import {
 	Admonition,
 	Avatar,
 	Button,
 	ButtonLink,
 	defineMessages,
-	injectModrinthClient,
+	injectLumenClient,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useQuery } from '@tanstack/vue-query'
 import { computed, onServerPrefetch, useTemplateRef } from 'vue'
 
@@ -188,7 +188,7 @@ const messages = defineMessages({
 	},
 	unknownInviter: {
 		id: 'shared-instance.invite.inviter.unknown',
-		defaultMessage: 'A Modrinth user',
+		defaultMessage: 'A Lumen user',
 	},
 	joinedCount: {
 		id: 'shared-instance.invite.joined-count',
@@ -205,13 +205,13 @@ const messages = defineMessages({
 	trustWarning: {
 		id: 'shared-instance.invite.trust.description',
 		defaultMessage:
-			'This invite was created by another Modrinth user, not Modrinth. Only accept invites from people you trust.',
+			'This invite was created by another Lumen user, not Lumen. Only accept invites from people you trust.',
 	},
 })
 
 const route = useRoute()
 const auth = await useAuth()
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const inviteId = computed(() => String(route.params.inviteId))
 const openInAppModal = useTemplateRef('openInAppModal')
 

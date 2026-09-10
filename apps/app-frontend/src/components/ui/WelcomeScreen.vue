@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ImportIcon, PlusIcon } from '@modrinth/assets'
-import { Button, defineMessages, IntlFormatted, useVIntl } from '@modrinth/ui'
+import { ImportIcon, PlusIcon } from '@lumen/assets'
+import { Button, defineMessages, IntlFormatted, useVIntl } from '@lumen/ui'
 import { inject, onMounted, onUnmounted, ref } from 'vue'
 
-import OctraMark from '@/components/brand/OctraMark.vue'
+import LumenMark from '@/components/brand/LumenMark.vue'
 import FeaturedPackCard from '@/components/ui/FeaturedPackCard.vue'
 
 const showCreationModal = inject<() => void>('showCreationModal')
@@ -14,7 +14,7 @@ const { formatMessage } = useVIntl()
 const messages = defineMessages({
 	welcomeTitle: {
 		id: 'app.welcome-screen.title',
-		defaultMessage: 'Welcome to Octra App',
+		defaultMessage: 'Welcome to Lumen App',
 	},
 	welcomeDescription: {
 		id: 'app.welcome-screen.description',
@@ -68,6 +68,24 @@ function handleQuickCreate(event: KeyboardEvent) {
 	}
 }
 
+function particleStyle(i: number) {
+	const size = 2 + Math.random() * 4
+	const x = Math.random() * 100
+	const y = Math.random() * 100
+	const delay = Math.random() * 10
+	const duration = 8 + Math.random() * 15
+	const opacity = 0.1 + Math.random() * 0.4
+	return {
+		width: `${size}px`,
+		height: `${size}px`,
+		left: `${x}%`,
+		top: `${y}%`,
+		animationDelay: `${delay}s`,
+		animationDuration: `${duration}s`,
+		opacity,
+	}
+}
+
 onMounted(() => {
 	window.addEventListener('offline', handleOffline)
 	window.addEventListener('online', handleOnline)
@@ -82,43 +100,48 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<div class="flex flex-col min-h-full px-6 pb-6 pt-16">
+	<div class="welcome-screen">
+		<div class="welcome-bg" aria-hidden="true">
+			<div class="gradient-mesh" />
+			<div class="particles">
+				<span v-for="i in 30" :key="i" class="particle" :style="particleStyle(i)" />
+			</div>
+			<div class="grid-pattern" />
+		</div>
 		<div class="relative flex grow items-center justify-center">
-			<div class="relative isolate flex flex-col items-center gap-6">
-				<div
-					class="dot-pattern pointer-events-none absolute left-1/2 -top-52 -z-10 h-[29.875rem] w-[min(25.9375rem,80vw)] -translate-x-1/2 rounded-2xl [@media(max-height:700px)]:h-[23rem]"
-					aria-hidden="true"
-				/>
-				<div class="size-[6.25rem]">
-					<OctraMark class="pointer-events-none size-full" />
+			<div class="welcome-content">
+				<div class="logo-wrapper">
+					<div class="logo-glow">
+						<LumenMark class="pointer-events-none size-full" />
+					</div>
 				</div>
-				<div class="flex flex-col items-center gap-2">
-					<h1 class="m-0 flex items-center gap-2 text-2xl font-semibold leading-8 text-contrast">
+				<div class="text-center">
+					<h1 class="welcome-title">
 						{{ formatMessage(messages.welcomeTitle) }}
 					</h1>
-					<p class="m-0 text-center font-minecraft text-base leading-6 text-primary">
+					<p class="welcome-subtitle font-minecraft">
 						{{ formatMessage(messages.welcomeDescription) }}
 					</p>
 				</div>
-				<div class="flex w-72 flex-col items-center gap-4">
-					<FeaturedPackCard compact />
+				<div class="welcome-actions">
+					<div class="pack-card-wrapper">
+						<FeaturedPackCard compact />
+					</div>
 					<Button
 						type="colored"
 						color="brand"
 						size="lg"
-						class="!shadow-none"
+						class="welcome-cta"
 						:disabled="offline"
 						@click="showCreationModal?.()"
 					>
 						<PlusIcon />
 						{{ formatMessage(messages.createInstance) }}
 					</Button>
-					<span class="flex items-center gap-1 text-sm leading-5 text-secondary">
+					<span class="hint-text">
 						<IntlFormatted :message-id="messages.quickCreateHint">
 							<template #shortcut="{ children }">
-								<kbd
-									class="inline-flex h-5 min-w-5 items-center justify-center rounded-md border border-solid border-surface-5 bg-button-bg px-1 text-xs font-normal leading-4 text-primary"
-								>
+								<kbd class="shortcut-key">
 									<component :is="() => children" />
 								</kbd>
 							</template>
@@ -127,11 +150,9 @@ onUnmounted(() => {
 				</div>
 			</div>
 		</div>
-		<div
-			class="flex flex-col h-max items-center justify-end gap-4 text-sm leading-5 text-secondary"
-		>
+		<div class="welcome-footer">
 			<span class="whitespace-nowrap">{{ formatMessage(messages.importPrompt) }}</span>
-			<Button size="lg" class="!font-medium" :disabled="offline" @click="showImportModal?.()">
+			<Button size="lg" class="import-btn" :disabled="offline" @click="showImportModal?.()">
 				<ImportIcon />
 				{{ formatMessage(messages.importFromLauncher) }}
 			</Button>
@@ -140,17 +161,224 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-.dot-pattern {
-	background-image: radial-gradient(
-		circle,
-		color-mix(in srgb, var(--color-text-primary) 25%, transparent) 0.5px,
-		transparent 0.75px
-	);
-	background-size: 0.5625rem 0.5625rem;
-	opacity: 0.8;
-	-webkit-mask-image: radial-gradient(ellipse at center, black 10%, transparent 68%);
-	mask-image: radial-gradient(ellipse at center, black 10%, transparent 68%);
-	-webkit-mask-repeat: no-repeat;
-	mask-repeat: no-repeat;
+.welcome-screen {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	min-height: 100%;
+	overflow: hidden;
+}
+
+.welcome-bg {
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	overflow: hidden;
+}
+
+.gradient-mesh {
+	position: absolute;
+	inset: 0;
+	background:
+		radial-gradient(ellipse at 20% 30%, rgba(0, 212, 255, 0.12) 0%, transparent 50%),
+		radial-gradient(ellipse at 80% 70%, rgba(124, 58, 237, 0.1) 0%, transparent 50%),
+		radial-gradient(ellipse at 50% 50%, rgba(0, 212, 255, 0.05) 0%, transparent 70%);
+	animation: mesh-shift 20s ease-in-out infinite;
+}
+
+@keyframes mesh-shift {
+	0%, 100% {
+		opacity: 1;
+		transform: scale(1) rotate(0deg);
+	}
+	33% {
+		opacity: 0.8;
+		transform: scale(1.05) rotate(1deg);
+	}
+	66% {
+		opacity: 0.9;
+		transform: scale(0.95) rotate(-1deg);
+	}
+}
+
+.particles {
+	position: absolute;
+	inset: 0;
+}
+
+.particle {
+	position: absolute;
+	background: #00d4ff;
+	border-radius: 50%;
+	animation: particle-float ease-in-out infinite;
+	filter: blur(1px);
+}
+
+@keyframes particle-float {
+	0%, 100% {
+		transform: translateY(0) translateX(0);
+		opacity: 0;
+	}
+	10% {
+		opacity: var(--particle-opacity, 0.3);
+	}
+	50% {
+		transform: translateY(-30px) translateX(15px);
+	}
+	90% {
+		opacity: var(--particle-opacity, 0.3);
+	}
+}
+
+.grid-pattern {
+	position: absolute;
+	inset: 0;
+	background-image:
+		linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+		linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+	background-size: 50px 50px;
+	mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+	-webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+}
+
+.welcome-content {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 2rem;
+	padding: 2rem;
+}
+
+.logo-wrapper {
+	position: relative;
+	width: 8rem;
+	height: 8rem;
+}
+
+.logo-glow {
+	width: 100%;
+	height: 100%;
+	filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.4)) drop-shadow(0 0 60px rgba(0, 212, 255, 0.2));
+	animation: logo-pulse 3s ease-in-out infinite;
+}
+
+@keyframes logo-pulse {
+	0%, 100% {
+		filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.4)) drop-shadow(0 0 60px rgba(0, 212, 255, 0.2));
+	}
+	50% {
+		filter: drop-shadow(0 0 40px rgba(0, 212, 255, 0.6)) drop-shadow(0 0 80px rgba(0, 212, 255, 0.3));
+	}
+}
+
+.welcome-title {
+	margin: 0;
+	font-size: 2.5rem;
+	font-weight: 800;
+	letter-spacing: -0.04em;
+	line-height: 1;
+	color: white;
+	text-shadow: 0 0 40px rgba(0, 212, 255, 0.3);
+	animation: title-in 0.8s cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+@keyframes title-in {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.welcome-subtitle {
+	margin: 0;
+	font-size: 1.125rem;
+	color: rgba(255, 255, 255, 0.6);
+	animation: title-in 0.8s cubic-bezier(0.32, 0.72, 0, 1) 0.1s both;
+}
+
+.welcome-actions {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1.25rem;
+	width: 20rem;
+	animation: title-in 0.8s cubic-bezier(0.32, 0.72, 0, 1) 0.2s both;
+}
+
+.pack-card-wrapper {
+	width: 100%;
+}
+
+.welcome-cta {
+	width: 100%;
+	background: linear-gradient(135deg, #00d4ff 0%, #7c3aed 100%) !important;
+	border: none !important;
+	font-weight: 600;
+	padding: 1rem 2rem;
+	font-size: 1rem;
+	box-shadow: 0 0 0 rgba(0, 212, 255, 0) !important;
+	transition: all 0.3s ease;
+
+	&:hover:not(:disabled) {
+		transform: translateY(-2px) !important;
+		box-shadow: 0 0 30px rgba(0, 212, 255, 0.4), 0 0 60px rgba(0, 212, 255, 0.15) !important;
+	}
+
+	&:active:not(:disabled) {
+		transform: translateY(0) !important;
+	}
+}
+
+.hint-text {
+	display: flex;
+	align-items: center;
+	gap: 0.25rem;
+	font-size: 0.875rem;
+	color: rgba(255, 255, 255, 0.4);
+}
+
+.shortcut-key {
+	display: inline-flex;
+	height: 1.5rem;
+	min-width: 1.5rem;
+	align-items: center;
+	justify-content: center;
+	border-radius: 0.375rem;
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	background: rgba(255, 255, 255, 0.05);
+	padding: 0 0.5rem;
+	font-size: 0.75rem;
+	font-weight: 500;
+	color: rgba(255, 255, 255, 0.7);
+}
+
+.welcome-footer {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1rem;
+	padding: 2rem;
+	font-size: 0.875rem;
+	color: rgba(255, 255, 255, 0.5);
+}
+
+.import-btn {
+	background: rgba(255, 255, 255, 0.05) !important;
+	border: 1px solid rgba(255, 255, 255, 0.1) !important;
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	transition: all 0.2s ease;
+
+	&:hover:not(:disabled) {
+		background: rgba(255, 255, 255, 0.1) !important;
+		border-color: rgba(0, 212, 255, 0.3) !important;
+		box-shadow: 0 0 20px rgba(0, 212, 255, 0.15) !important;
+	}
 }
 </style>

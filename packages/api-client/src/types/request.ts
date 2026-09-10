@@ -9,8 +9,8 @@ export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
 export type RequestOptions = {
 	/**
 	 * API to use for this request
-	 * - 'labrinth': Main Modrinth API (resolves to labrinthBaseUrl)
-	 * - 'archon': Modrinth Hosting API (resolves to archonBaseUrl)
+	 * - 'labrinth': Main Lumen API (resolves to labrinthBaseUrl)
+	 * - 'archon': Lumen Hosting API (resolves to archonBaseUrl)
 	 * - 'sharedinstances': Shared Instances API (resolves to sharedInstancesBaseUrl)
 	 * - string: Custom base URL (e.g., 'https://custom-api.com')
 	 */

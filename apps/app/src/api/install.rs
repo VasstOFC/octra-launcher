@@ -115,9 +115,9 @@ pub async fn install_create_modpack_instance(
 }
 
 #[tauri::command]
-pub fn install_get_featured_pack() -> Result<theseus::pack::featured::FeaturedPackInfo>
-{
-    Ok(theseus::pack::featured::featured_pack_info())
+pub async fn install_get_featured_pack()
+-> Result<theseus::pack::featured::FeaturedPackInfo> {
+	Ok(theseus::pack::featured::featured_pack_info().await)
 }
 
 #[tauri::command]

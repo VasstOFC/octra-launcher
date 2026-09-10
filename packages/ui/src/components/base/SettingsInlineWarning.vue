@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TriangleAlertIcon } from '@modrinth/assets'
+import { TriangleAlertIcon } from '@lumen/assets'
 </script>
 
 <template>

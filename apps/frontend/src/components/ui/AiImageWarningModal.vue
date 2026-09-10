@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import { CheckCircleIcon } from '@modrinth/assets'
+import { CheckCircleIcon } from '@lumen/assets'
 import {
 	Button,
 	commonMessages,
@@ -43,7 +43,7 @@ import {
 	NewModal,
 	normalizeChildren,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useTemplateRef } from 'vue'
 
 const { formatMessage } = useVIntl()
@@ -57,11 +57,11 @@ const messages = defineMessages({
 	body1: {
 		id: 'project.ai-image-warning-modal.body.1',
 		defaultMessage:
-			'Using AI-generated images to represent your project is not allowed. Attempting to work around detection may lead to your Modrinth account being suspended.',
+			'Using AI-generated images to represent your project is not allowed. Attempting to work around detection may lead to your Lumen account being suspended.',
 	},
 	body2: {
 		id: 'project.ai-image-warning-modal.body.2',
-		defaultMessage: `See section 6 of <rules>Modrinth's Content Rules</rules> for more information on our generative AI policy.`,
+		defaultMessage: `See section 6 of <rules>Lumen's Content Rules</rules> for more information on our generative AI policy.`,
 	},
 })
 

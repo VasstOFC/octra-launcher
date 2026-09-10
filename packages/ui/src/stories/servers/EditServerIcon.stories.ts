@@ -1,12 +1,12 @@
-import type { Archon, UploadState } from '@modrinth/api-client'
+import type { Archon, UploadState } from '@lumen/api-client'
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { computed, ref } from 'vue'
 
 import EditServerIcon from '../../components/servers/edit-server-icon/EditServerIcon.vue'
-import { provideModrinthServerContext } from '../../providers'
+import { provideLumenServerContext } from '../../providers'
 import type {
 	CancelUploadHandler,
-	ModrinthServerContext,
+	LumenServerContext,
 	ServerStats,
 } from '../../providers/server-context'
 
@@ -56,7 +56,7 @@ const meta = {
 					totalFiles: 0,
 				})
 
-				const serverContext: ModrinthServerContext = {
+				const serverContext: LumenServerContext = {
 					get serverId() {
 						return 'story-server-id'
 					},
@@ -87,7 +87,7 @@ const meta = {
 					dismissOperation: async () => {},
 				}
 
-				provideModrinthServerContext(serverContext)
+				provideLumenServerContext(serverContext)
 			},
 			template: '<div style="max-width: 320px;"><story /></div>',
 		}),

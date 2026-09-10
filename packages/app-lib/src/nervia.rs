@@ -6,7 +6,7 @@
 //! # Changing the skin registry URL (HTTPS / domain cutover)
 //!
 //! 1. Prefer editing [`SKINS_URL`] below — single compile-time source of truth.
-//! 2. Optional runtime override: set env `OCTRA_SKINS_URL` (no trailing slash), e.g.
+//! 2. Optional runtime override: set env `LUMEN_SKINS_URL` (no trailing slash), e.g.
 //!    `https://<your-domain>`. Useful for local/dev builds without rebuilding.
 //! 3. After changing the URL, also update:
 //!    - `apps/app/capabilities/plugins.json` — add `https://<domain>/*` to http allowlist
@@ -25,17 +25,17 @@ pub const AZURE_CLIENT_ID: &str = "bfe8ec3a-8e09-4be9-bbef-68f0fa0d1321";
 /// Default skin registry base URL (production).
 ///
 /// Keep the HTTP IP until a real domain + HTTPS is ready. Do not invent a placeholder
-/// domain here — change this value (or set `OCTRA_SKINS_URL`) only when DNS works.
+/// domain here — change this value (or set `LUMEN_SKINS_URL`) only when DNS works.
 ///
 /// Prefer [`skins_url()`] at call sites so the optional env override is honored.
 pub const SKINS_URL: &str = "http://92.5.186.6";
 
 /// Env var that overrides [`SKINS_URL`] at process start (trimmed, no trailing `/`).
-pub const SKINS_URL_ENV: &str = "OCTRA_SKINS_URL";
+pub const SKINS_URL_ENV: &str = "LUMEN_SKINS_URL";
 
 /// Resolved skin registry base URL (no trailing slash).
 ///
-/// Order: non-empty `OCTRA_SKINS_URL` env → [`SKINS_URL`].
+/// Order: non-empty `LUMEN_SKINS_URL` env → [`SKINS_URL`].
 pub fn skins_url() -> &'static str {
 	static RESOLVED: OnceLock<String> = OnceLock::new();
 	RESOLVED
@@ -67,9 +67,22 @@ pub fn skins_host() -> &'static str {
 	.as_str()
 }
 
-/// Header `X-Octra-Key` for skin uploads. Must match `/etc/octra-skins.env`.
-pub const SKINS_API_KEY: &str =
-	"73184f02fd2715d7d07952222621461de55478fa3856747c";
+/// Env var for optional legacy `X-Octra-Key` skin uploads (no JWT).
+/// Never bake a production key into the client binary — set this only for
+/// local/dev or transitional builds that still need key-based uploads.
+pub const SKINS_API_KEY_ENV: &str = "LUMEN_SKINS_API_KEY";
+
+/// Optional legacy skins API key from [`SKINS_API_KEY_ENV`]. Prefer Octra JWT.
+pub fn skins_api_key() -> Option<&'static str> {
+	static KEY: OnceLock<Option<String>> = OnceLock::new();
+	KEY.get_or_init(|| {
+		std::env::var(SKINS_API_KEY_ENV)
+			.ok()
+			.map(|s| s.trim().to_string())
+			.filter(|s| !s.is_empty())
+	})
+	.as_deref()
+}
 
 /// Relative path used when looking for a local drop-in `.mrpack`.
 pub const FEATURED_PACK: &str = "packs/Cobblemon vasst 1.0.0.mrpack";
@@ -78,10 +91,14 @@ pub const FEATURED_PACK_BLURB: &str =
 	"Catch, battle, explore — install once and jump straight in.";
 /// Hosted next to the skin registry so the NSIS installer stays small.
 /// Keep on the same host as [`SKINS_URL`] until the HTTPS cutover.
+/// Prefer remote override via `{skins_url}/featured-pack.json` (see pack::featured).
 pub const FEATURED_PACK_URL: &str =
 	"http://92.5.186.6/packs/Cobblemon-vasst.mrpack";
 pub const FEATURED_PACK_VERSION: &str = "1.0.0";
 pub const FEATURED_PACK_CACHE_NAME: &str = "cobblemon-vasst.mrpack";
+
+/// Optional CMS-style override fetched from the Octra API host.
+pub const FEATURED_PACK_CONFIG_PATH: &str = "/featured-pack.json";
 
 /// Discord application ID. The "Playing …" label is the app name in the Discord
 /// Developer Portal — create an application named **Octra App** and paste its ID here.

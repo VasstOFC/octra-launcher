@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EditIcon, SaveIcon, XIcon } from '@modrinth/assets'
+import { EditIcon, SaveIcon, XIcon } from '@lumen/assets'
 import {
 	Button,
 	commonMessages,
@@ -10,16 +10,12 @@ import {
 	NewModal,
 	Toggle,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
 import type { Component } from 'vue'
 import { computed, ref, shallowRef } from 'vue'
 
-import {
-	SettingsGroup,
-	SettingsPanelHeader,
-	SettingsRow,
-} from '@/components/ui/settings/_shared'
+import { SettingsGroup, SettingsPanelHeader, SettingsRow } from '@/components/ui/settings/_shared'
 import WorldItem from '@/components/ui/world/WorldItem.vue'
 import {
 	get_command_history,
@@ -253,8 +249,8 @@ async function openCommandHistoryEditor() {
 	if (!editorComponent.value) {
 		const [editor] = await Promise.all([
 			import('vue3-ace-editor'),
-			import('@modrinth/ui/src/utils/ace-theme'),
-			import('@modrinth/ui/src/utils/ace-mode-mcfunction'),
+			import('@lumen/ui/src/utils/ace-theme'),
+			import('@lumen/ui/src/utils/ace-mode-mcfunction'),
 		])
 		editorComponent.value = editor.VAceEditor
 	}
@@ -338,9 +334,9 @@ async function removeSyncedServer(serverId: string) {
 				v-if="editorComponent"
 				v-model:value="commandHistory"
 				lang="mcfunction"
-				theme="modrinth"
+				theme="Lumen"
 				:print-margin="false"
-				class="command-history-editor ace-modrinth rounded-[20px] !border !border-solid !border-surface-5"
+				class="command-history-editor ace-Lumen rounded-[20px] !border !border-solid !border-surface-5"
 				style="height: 420px; font-size: 0.875rem"
 			/>
 			<template #actions>
@@ -483,23 +479,23 @@ async function removeSyncedServer(serverId: string) {
 </template>
 
 <style>
-.command-history-editor.ace-modrinth {
+.command-history-editor.ace-Lumen {
 	background-color: var(--surface-2);
 }
 
-.command-history-editor.ace-modrinth .ace_gutter {
+.command-history-editor.ace-Lumen .ace_gutter {
 	background: var(--surface-1);
 }
 
-.command-history-editor.ace-modrinth .ace_marker-layer .ace_active-line {
+.command-history-editor.ace-Lumen .ace_marker-layer .ace_active-line {
 	background: var(--surface-2-5);
 }
 
-.command-history-editor.ace-modrinth .ace_gutter-active-line {
+.command-history-editor.ace-Lumen .ace_gutter-active-line {
 	background-color: var(--surface-1-5);
 }
 
-.command-history-editor.ace-modrinth.ace_multiselect .ace_selection.ace_start {
+.command-history-editor.ace-Lumen.ace_multiselect .ace_selection.ace_start {
 	box-shadow: 0 0 3px 0 var(--surface-2);
 }
 

@@ -1,5 +1,5 @@
-import { compareImportSources } from '@modrinth/tooling-config/script-utils/import-sort'
-import { md } from '@modrinth/utils'
+import { compareImportSources } from '@lumen/tooling-config/script-utils/import-sort'
+import { md } from '@lumen/utils'
 import { promises as fs } from 'fs'
 import { glob } from 'glob'
 import matter from 'gray-matter'
@@ -232,12 +232,12 @@ async function generateRssFeed(articles): Promise<void> {
 	}
 
 	const feed = new RSS({
-		title: 'Modrinth News',
-		description: 'Keep up-to-date on the latest news from Modrinth.',
+		title: 'Lumen News',
+		description: 'Keep up-to-date on the latest news from Lumen.',
 		feed_url: `${SITE_URL}/news/feed/rss.xml`,
 		site_url: `${SITE_URL}/news/`,
 		language: 'en',
-		generator: '@modrinth/blog',
+		generator: '@lumen/blog',
 	})
 
 	for (const article of sorted) {

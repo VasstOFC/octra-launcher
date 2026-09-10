@@ -116,8 +116,8 @@
 </template>
 
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
-import { TriangleAlertIcon } from '@modrinth/assets'
+import type { Labrinth } from '@lumen/api-client'
+import { TriangleAlertIcon } from '@lumen/assets'
 import {
 	type CdnDownloadReason,
 	Checkbox,
@@ -127,8 +127,8 @@ import {
 	getTagMessage,
 	useDebugLogger,
 	useVIntl,
-} from '@modrinth/ui'
-import type { DisplayProjectType } from '@modrinth/utils'
+} from '@lumen/ui'
+import type { DisplayProjectType } from '@lumen/utils'
 import dayjs from 'dayjs'
 import { computed, ref, watch } from 'vue'
 

@@ -1,4 +1,4 @@
-import { prepareThemeColorTransition } from '@modrinth/ui'
+import { prepareThemeColorTransition } from '@lumen/ui'
 import { computed, reactive, ref, watch } from 'vue'
 
 export const THEME_OPTIONS = ['dark', 'light', 'oled', 'retro', 'system'] as const
@@ -9,8 +9,8 @@ export type DarkTheme = (typeof DARK_THEMES)[number]
 type Theme = Exclude<ColorTheme, 'system'>
 type NativeTheme = 'light' | 'dark'
 
-const PREFERRED_THEME_KEY = 'modrinth-theme'
-const PREFERRED_DARK_THEME_KEY = 'modrinth-preferred-dark-theme'
+const PREFERRED_THEME_KEY = 'Lumen-theme'
+const PREFERRED_DARK_THEME_KEY = 'Lumen-preferred-dark-theme'
 
 export function isDarkTheme(theme: string): theme is DarkTheme {
 	return (DARK_THEMES as readonly string[]).includes(theme)

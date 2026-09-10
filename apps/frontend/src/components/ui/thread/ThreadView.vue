@@ -114,16 +114,16 @@ import {
 	MessageIcon,
 	ReplyIcon,
 	SendIcon,
-} from '@modrinth/assets'
-import type { QuickReply } from '@modrinth/moderation'
-import { Button, SplitButton, TeleportOverflowMenu } from '@modrinth/ui'
+} from '@lumen/assets'
+import type { QuickReply } from '@lumen/moderation'
+import { Button, SplitButton, TeleportOverflowMenu } from '@lumen/ui'
 import {
 	type ButtonMenuOption,
 	CopyCode,
 	injectNotificationManager,
 	MarkdownEditor,
-} from '@modrinth/ui'
-import type { Thread, User } from '@modrinth/utils'
+} from '@lumen/ui'
+import type { Thread, User } from '@lumen/utils'
 import dayjs from 'dayjs'
 
 import { useImageUpload } from '~/composables/image-upload.ts'

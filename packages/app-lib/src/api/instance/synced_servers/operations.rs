@@ -17,7 +17,7 @@ use super::modpack::{
     is_modpack_link, pack_state_exists, pack_state_matches_link,
     reconstruct_modpack_servers,
 };
-use super::octra_overlay::{
+use super::lumen_overlay::{
     prepend_overlay, strip_octra_overlay,
 };
 use super::storage::{

@@ -5,7 +5,7 @@
 			class="universal-card mx-auto flex w-full max-w-[27rem] flex-col gap-6 border border-solid border-surface-5 !p-6 text-center"
 		>
 			<div class="flex flex-col gap-2">
-				<h1 class="m-0 text-2xl font-semibold text-contrast">Opening Modrinth App...</h1>
+				<h1 class="m-0 text-2xl font-semibold text-contrast">Opening Lumen App...</h1>
 				<p class="m-0 text-left text-primary">
 					If the app doesn’t open, use the button below to finish signing in.
 				</p>
@@ -200,7 +200,7 @@ import {
 	RightArrowIcon,
 	SteamColorIcon,
 	UserKeyIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import {
 	type AccountChoice,
 	AccountChoiceList,
@@ -210,7 +210,7 @@ import {
 	defineMessages,
 	Input,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useStorage } from '@vueuse/core'
 import { ref } from 'vue'
 import type { LocationQuery } from 'vue-router'
@@ -312,11 +312,11 @@ const messages = defineMessages({
 	},
 	signInWithLabel: {
 		id: 'auth.sign-in.sign-in-with',
-		defaultMessage: 'Sign into Modrinth',
+		defaultMessage: 'Sign into Lumen',
 	},
 	chooseAccountLabel: {
 		id: 'auth.sign-in.choose-account',
-		defaultMessage: 'Choose an account to use in Modrinth App',
+		defaultMessage: 'Choose an account to use in Lumen App',
 	},
 	addAccountLabel: {
 		id: 'auth.sign-in.add-account',
@@ -358,15 +358,15 @@ const messages = defineMessages({
 	launcherSignInCompleteDescription: {
 		id: 'auth.sign-in.launcher.complete.description',
 		defaultMessage:
-			'We’re returning you to the Modrinth App. If nothing happens, use the button below.',
+			'We’re returning you to the Lumen App. If nothing happens, use the button below.',
 	},
 	returnToLauncherButton: {
 		id: 'auth.sign-in.launcher.complete.return-button',
-		defaultMessage: 'Open Modrinth App',
+		defaultMessage: 'Open Lumen App',
 	},
 	goToWebsiteButton: {
 		id: 'auth.sign-in.launcher.complete.go-to-website',
-		defaultMessage: 'Go to Modrinth.com',
+		defaultMessage: 'Go to Lumen.com',
 	},
 })
 </script>

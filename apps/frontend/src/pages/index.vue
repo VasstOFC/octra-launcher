@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="landing-hero">
-			<ModrinthIcon class="modrinth-icon text-brand" />
+			<LumenIcon class="Lumen-icon text-brand" />
 			<h1 class="main-header">
 				<IntlFormatted :message-id="messages.thePlaceForMinecraft">
 					<template #~content>
@@ -246,9 +246,9 @@
 								<nuxt-link
 									to="/app"
 									class="graphic gradient-border text-brand"
-									:aria-label="formatMessage(messages.modrinthAppLabel)"
+									:aria-label="formatMessage(messages.LumenAppLabel)"
 								>
-									<ModrinthIcon aria-hidden="true" />
+									<LumenIcon aria-hidden="true" />
 								</nuxt-link>
 								<a
 									rel="noopener"
@@ -443,22 +443,22 @@ import {
 	CompassIcon,
 	DashboardIcon,
 	LogInIcon,
-	ModrinthIcon,
+	LumenIcon,
 	SearchIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import {
 	Avatar,
 	ButtonLink,
 	commonMessages,
 	defineMessages,
 	DropdownSelect,
-	injectModrinthClient,
+	injectLumenClient,
 	Input,
 	IntlFormatted,
 	ProjectCard,
 	useRelativeTime,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { ref } from 'vue'
 
 import ATLauncherLogo from '~/assets/images/external/atlauncher.svg?component'
@@ -469,7 +469,7 @@ import { homePageNotifs, homePageProjects, homePageSearch } from '~/generated/st
 const formatRelativeTime = useRelativeTime()
 
 const { formatMessage } = useVIntl()
-const { labrinth } = injectModrinthClient()
+const { labrinth } = injectLumenClient()
 
 const searchQuery = ref('leave')
 const sortType = ref('relevance')
@@ -571,7 +571,7 @@ const messages = defineMessages({
 	findWhatYouWantDescription: {
 		id: 'landing.feature.search.description',
 		defaultMessage:
-			"Modrinth's lightning-fast search and powerful filters let you find what you want as you type.",
+			"Lumen's lightning-fast search and powerful filters let you find what you want as you type.",
 	},
 	followProjectsHeading: {
 		id: 'landing.feature.follow.heading',
@@ -588,7 +588,7 @@ const messages = defineMessages({
 	playWithLauncherDescription: {
 		id: 'landing.feature.launcher.description',
 		defaultMessage:
-			"Modrinth's open-source API lets launchers add deep integration with Modrinth. You can use Modrinth through <link>our own app</link> and some of the most popular launchers like ATLauncher, MultiMC, and Prism Launcher.",
+			"Lumen's open-source API lets launchers add deep integration with Lumen. You can use Lumen through <link>our own app</link> and some of the most popular launchers like ATLauncher, MultiMC, and Prism Launcher.",
 	},
 	notificationsHeading: {
 		id: 'landing.notifications.heading',
@@ -609,15 +609,15 @@ const messages = defineMessages({
 	launcherGraphicAlt: {
 		id: 'landing.launcher.graphic-alt',
 		defaultMessage:
-			'A simplified representation of a Minecraft window, with the Mojang Studios logo in Modrinth green.',
+			'A simplified representation of a Minecraft window, with the Mojang Studios logo in Lumen green.',
 	},
 	prismLauncherLabel: {
 		id: 'landing.launcher.prism-launcher-label',
 		defaultMessage: 'Prism Launcher',
 	},
-	modrinthAppLabel: {
-		id: 'landing.launcher.modrinth-app-label',
-		defaultMessage: 'Modrinth App',
+	LumenAppLabel: {
+		id: 'landing.launcher.Lumen-app-label',
+		defaultMessage: 'Lumen App',
 	},
 	atlauncherLabel: {
 		id: 'landing.launcher.atlauncher-label',
@@ -707,7 +707,7 @@ const creatorFeatureMessages = defineMessages({
 	constantlyEvolvingDescription: {
 		id: 'landing.creator.feature.constantly-evolving.description',
 		defaultMessage:
-			'Get the best modding experience possible with constant updates from the Modrinth team',
+			'Get the best modding experience possible with constant updates from the Lumen team',
 	},
 })
 </script>
@@ -725,7 +725,7 @@ const creatorFeatureMessages = defineMessages({
 	text-align: center;
 	flex-direction: column;
 
-	.modrinth-icon {
+	.Lumen-icon {
 		width: 13rem;
 		height: 13rem;
 		margin-bottom: 2.5rem;
@@ -1194,7 +1194,7 @@ const creatorFeatureMessages = defineMessages({
 	padding: 1rem 1rem 2rem 1rem;
 	overflow: hidden;
 
-	.modrinth-icon {
+	.Lumen-icon {
 		z-index: 2;
 		width: auto;
 		height: 32rem;

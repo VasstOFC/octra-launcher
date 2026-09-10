@@ -99,7 +99,7 @@
     "defaultMessage": "検索が見つかりませんでした"
   },
   "browse.offline": {
-    "defaultMessage": "現在オフラインです。インターネットに接続してModrinthを閲覧しましょう！"
+    "defaultMessage": "現在オフラインです。インターネットに接続してLumenを閲覧しましょう！"
   },
   "browse.search.placeholder": {
     "defaultMessage": "{projectType}を検索..."
@@ -227,7 +227,7 @@
   "button.open-in-folder": {
     "defaultMessage": "フォルダを開く"
   },
-  "button.open-in-modrinth": {
+  "button.open-in-Lumen": {
     "defaultMessage": "ブラウザで開く"
   },
   "button.play": {
@@ -507,7 +507,7 @@
     "defaultMessage": "サーバー上のコンテンツの一部は分析できず、この変更の影響を受ける可能性があります。"
   },
   "content.diff-modal.unknown-files-description": {
-    "defaultMessage": "この更新は、Modrinthに公開されていないファイルが含まれています。私たちは、信頼のあるウェブサイトからのインストールを強くおすすめします。"
+    "defaultMessage": "この更新は、Lumenに公開されていないファイルが含まれています。私たちは、信頼のあるウェブサイトからのインストールを強くおすすめします。"
   },
   "content.diff-modal.unknown-files-warning": {
     "defaultMessage": "不明なファイルの警告"
@@ -1028,8 +1028,8 @@
   "external-files.permissions-card.editor.link-to-work-url-placeholder": {
     "defaultMessage": "作品へのリンク"
   },
-  "external-files.permissions-card.editor.modrinth-link-to-work": {
-    "defaultMessage": "これはModrinthのリンクのようです。もしこのコンテンツがModrinthで入手可能であるなら、お使いのパックは正しくエクスポートされていない可能性があります。別のサイトからダウンロードした場合は、代わりにModrinth版をダウンロードしてみてください。ファイルが完全に同一ではない場合があるためです。"
+  "external-files.permissions-card.editor.Lumen-link-to-work": {
+    "defaultMessage": "これはLumenのリンクのようです。もしこのコンテンツがLumenで入手可能であるなら、お使いのパックは正しくエクスポートされていない可能性があります。別のサイトからダウンロードした場合は、代わりにLumen版をダウンロードしてみてください。ファイルが完全に同一ではない場合があるためです。"
   },
   "external-files.permissions-card.editor.notes-label": {
     "defaultMessage": "ノート"
@@ -1053,7 +1053,7 @@
     "defaultMessage": "虚偽の申告や画像の改ざんが発覚した場合、プロジェクトの削除およびアカウントの停止措置が取られる可能性があります。"
   },
   "external-files.permissions-card.editor.proof-warning.title": {
-    "defaultMessage": "Modrinthスタッフが提出された証明を確認・検証する場合があります"
+    "defaultMessage": "Lumenスタッフが提出された証明を確認・検証する場合があります"
   },
   "external-files.permissions-card.editor.save": {
     "defaultMessage": "帰属情報を保存"
@@ -1140,7 +1140,7 @@
     "defaultMessage": "自動的に出典が追加されました"
   },
   "external-files.permissions-card.reason.globally-allowed.description": {
-    "defaultMessage": "このファイルは以前確認済みであり、帰属表示又は、クレジットの記載内容を準備いたしました。もし誤りなどございましたら、ヘルプセンター経由でModrinthサポートまでご連絡ください"
+    "defaultMessage": "このファイルは以前確認済みであり、帰属表示又は、クレジットの記載内容を準備いたしました。もし誤りなどございましたら、ヘルプセンター経由でLumenサポートまでご連絡ください"
   },
   "external-files.permissions-card.reason.license": {
     "defaultMessage": "ライセンス"
@@ -2640,16 +2640,16 @@
     "defaultMessage": "サーバーが変更したときにファイルを更新し続ける"
   },
   "modal.open-in-app.get-app": {
-    "defaultMessage": "Modrinth Appを入手する"
+    "defaultMessage": "Lumen Appを入手する"
   },
   "modal.open-in-app.opening-automatically": {
-    "defaultMessage": "Modrinth Appが自動で開きます…"
+    "defaultMessage": "Lumen Appが自動で開きます…"
   },
   "modal.open-in-app.title": {
-    "defaultMessage": "Modrinth Appを開く"
+    "defaultMessage": "Lumen Appを開く"
   },
   "modal.open-in-app.why-use": {
-    "defaultMessage": "なぜModrinth Appを使うのか"
+    "defaultMessage": "なぜLumen Appを使うのか"
   },
   "notification.error.title": {
     "defaultMessage": "エラーが発生しました"
@@ -2681,8 +2681,8 @@
   "omorphia.component.badge.label.moderator": {
     "defaultMessage": "モデレーター"
   },
-  "omorphia.component.badge.label.modrinth-team": {
-    "defaultMessage": "Modrinth チーム"
+  "omorphia.component.badge.label.Lumen-team": {
+    "defaultMessage": "Lumen チーム"
   },
   "omorphia.component.badge.label.pending": {
     "defaultMessage": "保留中"
@@ -2802,13 +2802,13 @@
     "defaultMessage": "Visa"
   },
   "profile.bio.fallback.creator": {
-    "defaultMessage": "Modrinth クリエイター"
+    "defaultMessage": "Lumen クリエイター"
   },
   "profile.bio.fallback.user": {
-    "defaultMessage": "Modrinth ユーザー"
+    "defaultMessage": "Lumen ユーザー"
   },
   "profile.block-user.admonition-body": {
-    "defaultMessage": "{username} はあなたにフレンドリクエストの送信、共有インスタンスへの招待、および Modrinth Hosting サーバーへの招待ができなくなります。"
+    "defaultMessage": "{username} はあなたにフレンドリクエストの送信、共有インスタンスへの招待、および Lumen Hosting サーバーへの招待ができなくなります。"
   },
   "profile.block-user.admonition-title": {
     "defaultMessage": "このユーザーをブロックしてもよろしいですか？"
@@ -2859,7 +2859,7 @@
     "defaultMessage": "ブロック解除"
   },
   "profile.details.error.github-popup-blocked": {
-    "defaultMessage": "Modrinth でのポップアップを許可してから、もう一度お試しください。"
+    "defaultMessage": "Lumen でのポップアップを許可してから、もう一度お試しください。"
   },
   "profile.details.label.loading-github-profile": {
     "defaultMessage": "読み込み中…"
@@ -2880,7 +2880,7 @@
     "defaultMessage": "組織"
   },
   "profile.official-account": {
-    "defaultMessage": "Modrinth 公式アカウント"
+    "defaultMessage": "Lumen 公式アカウント"
   },
   "profile.unblock-user.success-title": {
     "defaultMessage": "ユーザーのブロックを解除しました"
@@ -3198,7 +3198,7 @@
     "defaultMessage": "{count}件の最近のプレイ"
   },
   "project.recent-plays.tooltip": {
-    "defaultMessage": "{count}件の過去2週間のModrinthからのプレイ"
+    "defaultMessage": "{count}件の過去2週間のLumenからのプレイ"
   },
   "project.server.customModpackTooltip": {
     "defaultMessage": "このプロジェクトはカスタムModパックを使用しています"
@@ -3513,7 +3513,7 @@
     "defaultMessage": "プロジェクトに複数の環境があります。"
   },
   "project.settings.environment.notice.review-options.description": {
-    "defaultMessage": "Modrinthの環境システムを刷新し、新しいオプションがご利用いただけるようになりました。以下のオプションが正しく選択されていることを確認し「確認」ボタンを押してください！"
+    "defaultMessage": "Lumenの環境システムを刷新し、新しいオプションがご利用いただけるようになりました。以下のオプションが正しく選択されていることを確認し「確認」ボタンを押してください！"
   },
   "project.settings.environment.notice.review-options.title": {
     "defaultMessage": "以下のオプションを確認してください"
@@ -4434,13 +4434,13 @@
     "defaultMessage": "Minecraftのユーザーネームを使わないでください。"
   },
   "servers.grant-access-modal.target.label": {
-    "defaultMessage": "Modrinthのユーザーネーム"
+    "defaultMessage": "Lumenのユーザーネーム"
   },
   "servers.grant-access-modal.target.no-suggestions": {
     "defaultMessage": "一致するユーザーは見つかりませんでした。"
   },
   "servers.grant-access-modal.target.placeholder": {
-    "defaultMessage": "Modrinthのユーザーネームを入力する"
+    "defaultMessage": "Lumenのユーザーネームを入力する"
   },
   "servers.grant-access-modal.target.searching": {
     "defaultMessage": "検索中…"
@@ -4454,14 +4454,14 @@
   "servers.list-empty.already-have-server-label": {
     "defaultMessage": "既にサーバーをお持ちですか？"
   },
-  "servers.list-empty.modrinth-hosting-label": {
-    "defaultMessage": "Modrinth Hosting"
+  "servers.list-empty.Lumen-hosting-label": {
+    "defaultMessage": "Lumen Hosting"
   },
   "servers.list-empty.new-server-button": {
     "defaultMessage": "新しいサーバー"
   },
   "servers.list-empty.no-servers-description": {
-    "defaultMessage": "Modrinth Appを使えば、MODのインストール、友達の招待、そして一緒にプレイすることなど、すべてが可能です。"
+    "defaultMessage": "Lumen Appを使えば、MODのインストール、友達の招待、そして一緒にプレイすることなど、すべてが可能です。"
   },
   "servers.list-empty.one-click-mod-installs-description": {
     "defaultMessage": "お好みのModを選んだら、あとはすべて対応いたします。"
@@ -4533,7 +4533,7 @@
     "defaultMessage": "成功"
   },
   "servers.manage.servers-title": {
-    "defaultMessage": "Modrinth ホスティング"
+    "defaultMessage": "Lumen ホスティング"
   },
   "servers.manage.settings-hint.description": {
     "defaultMessage": "こちらに移動しました！"
@@ -4557,10 +4557,10 @@
     "defaultMessage": "Medalサーバーの試用期間が終了し、サーバーがサスペンド（停止）されました。サーバーを引き続き利用するにはアップグレードしてください。"
   },
   "servers.medal-listing.notice.suspended": {
-    "defaultMessage": "サーバーがサスペンド（停止）されました。請求情報を更新するか、詳細は Modrinth サポートにお問い合わせください。"
+    "defaultMessage": "サーバーがサスペンド（停止）されました。請求情報を更新するか、詳細は Lumen サポートにお問い合わせください。"
   },
   "servers.medal-listing.notice.suspended-with-reason": {
-    "defaultMessage": "サーバーがサスペンド（停止）されました: {reason}。請求情報を更新するか、詳細は Modrinth サポートにお問い合わせください。"
+    "defaultMessage": "サーバーがサスペンド（停止）されました: {reason}。請求情報を更新するか、詳細は Lumen サポートにお問い合わせください。"
   },
   "servers.medal-listing.notice.upgrading": {
     "defaultMessage": "サーバーのハードウェアをアップグレード中です。まもなくオンラインに戻ります。"
@@ -4608,7 +4608,7 @@
     "defaultMessage": "閉じられない"
   },
   "servers.purchase.notification.success.text": {
-    "defaultMessage": "あなたのModrinthホースティングの購入は正常に完了しました。"
+    "defaultMessage": "あなたのLumenホースティングの購入は正常に完了しました。"
   },
   "servers.purchase.notification.success.title": {
     "defaultMessage": "購入完了"
@@ -4695,7 +4695,7 @@
     "defaultMessage": "サーバーをどこに設置しますか？"
   },
   "servers.region.region-unsupported": {
-    "defaultMessage": "ご希望の地域が見つかりませんか？ <link>Modrinth Hostingを利用したい場所をお知らせください！</link>"
+    "defaultMessage": "ご希望の地域が見つかりませんか？ <link>Lumen Hostingを利用したい場所をお知らせください！</link>"
   },
   "servers.region.southeast-asia": {
     "defaultMessage": "東南アジア"
@@ -4767,7 +4767,7 @@
     "defaultMessage": "サーバーをセットアップ"
   },
   "servers.setup.onboarding.step.choose.description": {
-    "defaultMessage": "Modrinthからお気に入りのモッドパックを選ぶか、ローダーを選択して好きなModを追加してください"
+    "defaultMessage": "Lumenからお気に入りのモッドパックを選ぶか、ローダーを選択して好きなModを追加してください"
   },
   "servers.setup.onboarding.step.choose.title": {
     "defaultMessage": "プレイするものを選ぶ"
@@ -4794,7 +4794,7 @@
     "defaultMessage": "サーバーの準備が完了しました。プレイを開始する手順は以下の通りです！"
   },
   "servers.setup.onboarding.welcome.title": {
-    "defaultMessage": "Modrinth ホスティングへようこそ"
+    "defaultMessage": "Lumen ホスティングへようこそ"
   },
   "servers.setup.rate-limit.text": {
     "defaultMessage": "レート制限に達しました。時間をおいて再試行してください。"
@@ -5406,16 +5406,16 @@
     "defaultMessage": "一般的にマルウェアは、Discord等のプラットフォーム上でModファイルを配布して拡散されます"
   },
   "user.profile.badge.alpha.about.1": {
-    "defaultMessage": "2020年11月までのModrinthがAlpha版の頃から活動しています"
+    "defaultMessage": "2020年11月までのLumenがAlpha版の頃から活動しています"
   },
   "user.profile.badge.alpha.name": {
     "defaultMessage": "Alpha Tester"
   },
   "user.profile.badge.beta.about.1": {
-    "defaultMessage": "2022年2月までのModrinthがBeta版の頃から活動しています"
+    "defaultMessage": "2022年2月までのLumenがBeta版の頃から活動しています"
   },
   "user.profile.badge.beta.link": {
-    "defaultMessage": "クリックするとModrinthのBeta版リリース記事を読むことができます"
+    "defaultMessage": "クリックするとLumenのBeta版リリース記事を読むことができます"
   },
   "user.profile.badge.beta.name": {
     "defaultMessage": "Beta Tester"
@@ -5430,19 +5430,19 @@
     "defaultMessage": "コンテンツモデレーター"
   },
   "user.profile.badge.plus.about.1": {
-    "defaultMessage": "Modrinthとクリエイターに特別なサポートを贈っています！"
+    "defaultMessage": "Lumenとクリエイターに特別なサポートを贈っています！"
   },
   "user.profile.badge.plus.link": {
-    "defaultMessage": "クリックしてModrinth+のメンバーになる方法を知る"
+    "defaultMessage": "クリックしてLumen+のメンバーになる方法を知る"
   },
   "user.profile.badge.plus.name": {
-    "defaultMessage": "Modrinth+ Member"
+    "defaultMessage": "Lumen+ Member"
   },
   "user.profile.badge.staff.about.1": {
-    "defaultMessage": "Modrinthのスタッフです"
+    "defaultMessage": "Lumenのスタッフです"
   },
   "user.profile.badge.staff.name": {
-    "defaultMessage": "Modrinth Team"
+    "defaultMessage": "Lumen Team"
   },
   "version.content.name": {
     "defaultMessage": "名前"

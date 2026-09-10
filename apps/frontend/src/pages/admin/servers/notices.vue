@@ -248,8 +248,8 @@
 	</div>
 </template>
 <script setup lang="ts">
-import type { Archon } from '@modrinth/api-client'
-import { EditIcon, PlusIcon, SaveIcon, SettingsIcon, TrashIcon, XIcon } from '@modrinth/assets'
+import type { Archon } from '@lumen/api-client'
+import { EditIcon, PlusIcon, SaveIcon, SettingsIcon, TrashIcon, XIcon } from '@lumen/assets'
 import {
 	Button,
 	Combobox,
@@ -257,7 +257,7 @@ import {
 	CopyCode,
 	DateInput,
 	defineMessages,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	Input,
 	NewModal,
@@ -268,15 +268,15 @@ import {
 	useFormatDateTime,
 	useRelativeTime,
 	useVIntl,
-} from '@modrinth/ui'
-import { NOTICE_LEVELS } from '@modrinth/ui/src/utils/notices.ts'
+} from '@lumen/ui'
+import { NOTICE_LEVELS } from '@lumen/ui/src/utils/notices.ts'
 import dayjs from 'dayjs'
 import { computed } from 'vue'
 
 import AssignNoticeModal from '~/components/ui/admin/AssignNoticeModal.vue'
 
 const { addNotification } = injectNotificationManager()
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const { formatMessage } = useVIntl()
 const formatRelativeTime = useRelativeTime()
 const formatDateTime = useFormatDateTime({

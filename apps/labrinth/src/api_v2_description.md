@@ -18,7 +18,7 @@ Authorization: mrp_RNtLRSPmGj2pd1v1ubi52nX7TJJM9sznrmwhAuj511oe4t1jAqAQ3D6Wc8Ic
 > - those which access private data (such as draft projects, notifications, emails, and payout data)
 
 Each request requiring authentication has a certain scope. For example, to view the email of the user being requested, the token must have the `USER_READ_EMAIL` scope.
-You can find the list of available scopes [on GitHub](https://github.com/modrinth/code/blob/main/apps/labrinth/src/models/v3/pats.rs#L9). Making a request with an invalid scope will return a 401 error.
+You can find the list of available scopes [on GitHub](https://github.com/VasstOFC/octra-launcher/blob/main/apps/labrinth/src/models/v3/pats.rs#L9). Making a request with an invalid scope will return a 401 error.
 
 Please note that certain scopes and requests cannot be completed with a personal access token or using OAuth.
 For example, deleting a user account can only be done through Modrinth's frontend.

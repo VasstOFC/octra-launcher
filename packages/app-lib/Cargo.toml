@@ -49,7 +49,7 @@ indicatif = { workspace = true, optional = true }
 itertools = { workspace = true }
 json5 = { workspace = true }
 md-5 = "0.10"
-modrinth-content-management = { workspace = true }
+lumen-content-management = { workspace = true }
 notify = { workspace = true }
 notify-debouncer-mini = { workspace = true }
 p256 = { workspace = true, features = ["ecdsa"] }

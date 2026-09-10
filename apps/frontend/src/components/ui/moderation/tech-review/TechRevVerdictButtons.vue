@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
-import { BanIcon, CheckCheckIcon, CheckIcon, ShieldAlertIcon } from '@modrinth/assets'
+import type { Labrinth } from '@lumen/api-client'
+import { BanIcon, CheckCheckIcon, CheckIcon, ShieldAlertIcon } from '@lumen/assets'
 import { computed } from 'vue'
 
 import { canUpdateGlobalDetail } from './helpers'

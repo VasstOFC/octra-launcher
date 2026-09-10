@@ -1,20 +1,17 @@
 <script setup lang="ts">
-import { DownloadIcon, PlayIcon } from '@modrinth/assets'
+import { DownloadIcon, PlayIcon } from '@lumen/assets'
 import {
 	Button,
 	defineMessages,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	NewModal,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { ref, useTemplateRef } from 'vue'
 import { useRouter } from 'vue-router'
 
-import {
-	canViewFriendPack,
-	type PlayWithFriendMember,
-} from '@/composables/play-with-friend'
+import { canViewFriendPack, type PlayWithFriendMember } from '@/composables/play-with-friend'
 import { handleSevereError } from '@/composables/use-error.js'
 import { get_project, get_project_versions } from '@/helpers/cache.js'
 import {
@@ -34,7 +31,7 @@ const emit = defineEmits<{
 
 const { formatMessage } = useVIntl()
 const { handleError, addNotification } = injectNotificationManager()
-const { labrinth } = injectModrinthClient()
+const { labrinth } = injectLumenClient()
 const router = useRouter()
 const appEvents = injectAppEvents()
 
@@ -49,68 +46,68 @@ const activeMemberId = ref<number | null>(null)
 
 const messages = defineMessages({
 	playWithToast: {
-		id: 'octra.community.play-with-toast',
-		defaultMessage: 'Joining {nick}…',
+		id: 'Lumen.community.play-with-toast',
+		defaultMessage: 'Dolaczanie do {nick}...',
 	},
 	playWithTitle: {
-		id: 'octra.community.play-with-title',
-		defaultMessage: 'Play with {nick}',
+		id: 'Lumen.community.play-with-title',
+		defaultMessage: 'Graj z {nick}',
 	},
 	playWithHint: {
-		id: 'octra.community.play-with-hint',
-		defaultMessage: 'Join with a pack you already have, or download the one {nick} is using.',
+		id: 'Lumen.community.play-with-hint',
+		defaultMessage: 'Dolacz z paczka, ktora juz masz, lub pobierz ta, ktorej uzywa {nick}.',
 	},
 	playOwnPack: {
-		id: 'octra.community.play-own-pack',
-		defaultMessage: 'Use my pack',
+		id: 'Lumen.community.play-own-pack',
+		defaultMessage: 'Uzyj mojej paczki',
 	},
 	playOwnPackHint: {
-		id: 'octra.community.play-own-pack-hint',
-		defaultMessage: 'Pick one of your installed instances and join the same server.',
+		id: 'Lumen.community.play-own-pack-hint',
+		defaultMessage: 'Wybierz jedna ze swoich zainstalowanych instancji i dolacz do tego samego serwera.',
 	},
 	playFriendPack: {
-		id: 'octra.community.play-friend-pack',
-		defaultMessage: "Download friend's pack",
+		id: 'Lumen.community.play-friend-pack',
+		defaultMessage: 'Pobierz paczke znajomego',
 	},
 	playFriendPackHint: {
-		id: 'octra.community.play-friend-pack-hint',
-		defaultMessage: 'Install {name} if you don’t have it yet, then join.',
+		id: 'Lumen.community.play-friend-pack-hint',
+		defaultMessage: 'Zainstaluj {name}, jesli jej jeszcze nie masz, a potem dolacz.',
 	},
 	playFriendPackUnknown: {
-		id: 'octra.community.play-friend-pack-unknown',
-		defaultMessage: 'their pack',
+		id: 'Lumen.community.play-friend-pack-unknown',
+		defaultMessage: 'jego paczke',
 	},
 	playPickInstance: {
-		id: 'octra.community.play-pick-instance',
-		defaultMessage: 'Choose an instance',
+		id: 'Lumen.community.play-pick-instance',
+		defaultMessage: 'Wybierz instancje',
 	},
 	playJoin: {
-		id: 'octra.community.play-join',
-		defaultMessage: 'Join',
+		id: 'Lumen.community.play-join',
+		defaultMessage: 'Dolacz',
 	},
 	playBack: {
-		id: 'octra.community.play-back',
-		defaultMessage: 'Back',
+		id: 'Lumen.community.play-back',
+		defaultMessage: 'Wstecz',
 	},
 	playCancel: {
-		id: 'octra.community.play-cancel',
-		defaultMessage: 'Cancel',
+		id: 'Lumen.community.play-cancel',
+		defaultMessage: 'Anuluj',
 	},
 	playBusy: {
-		id: 'octra.community.play-busy',
-		defaultMessage: 'Installing pack and joining…',
+		id: 'Lumen.community.play-busy',
+		defaultMessage: 'Instalowanie paczki i dolaczanie...',
 	},
 	friendPackMissing: {
-		id: 'octra.community.friend-pack-missing',
-		defaultMessage: "Couldn't find that pack online. Pick one of your instances instead.",
+		id: 'Lumen.community.friend-pack-missing',
+		defaultMessage: 'Nie znaleziono tej paczki online. Wybierz jedna ze swoich instancji.',
 	},
 	friendPackInstallFailed: {
-		id: 'octra.community.friend-pack-install-failed',
-		defaultMessage: 'Pack installed, but the new instance could not be opened.',
+		id: 'Lumen.community.friend-pack-install-failed',
+		defaultMessage: 'Paczka zainstalowana, ale nie mozna otworzyc nowej instancji.',
 	},
 	noInstance: {
-		id: 'octra.community.no-instance',
-		defaultMessage: 'Create or install an instance before joining a friend.',
+		id: 'Lumen.community.no-instance',
+		defaultMessage: 'Utworz lub zainstaluj instancje przed dolaczeniem do znajomego.',
 	},
 })
 
@@ -442,9 +439,7 @@ defineExpose({
 						<span class="mt-0.5 block text-xs text-secondary">
 							{{
 								formatMessage(messages.playFriendPackHint, {
-									name:
-										playMember?.instance_name ||
-										formatMessage(messages.playFriendPackUnknown),
+									name: playMember?.instance_name || formatMessage(messages.playFriendPackUnknown),
 								})
 							}}
 						</span>

@@ -185,13 +185,7 @@
 </template>
 
 <script setup lang="ts">
-import {
-	ChevronDownIcon,
-	ChevronRightIcon,
-	ChevronUpIcon,
-	FileIcon,
-	UndoIcon,
-} from '@modrinth/assets'
+import { ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, FileIcon, UndoIcon } from '@lumen/assets'
 import { type Component, type ComponentPublicInstance, computed, ref, watch } from 'vue'
 
 import { useFormatBytes } from '../../composables/format-bytes'

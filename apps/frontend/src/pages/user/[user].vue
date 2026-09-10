@@ -17,8 +17,8 @@
 </template>
 
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
-import { injectModrinthClient, provideUserProfile, UserProfilePageLayout } from '@modrinth/ui'
+import type { Labrinth } from '@lumen/api-client'
+import { injectLumenClient, provideUserProfile, UserProfilePageLayout } from '@lumen/ui'
 import { useQueryClient } from '@tanstack/vue-query'
 
 import AdPlaceholder from '~/components/ui/AdPlaceholder.vue'
@@ -27,7 +27,7 @@ import ProjectCreateModal from '~/components/ui/create/ProjectCreateModal.vue'
 import { warmProjectCheckCaches } from '~/composables/queries/project'
 
 const route = useNativeRoute()
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const queryClient = useQueryClient()
 const userProfile = provideUserProfile({
 	getUser: (userId) => client.labrinth.users_v3.get(userId),
@@ -93,15 +93,15 @@ if (projectsResult.status === 'fulfilled') {
 	warmProjectCheckCaches(queryClient, projectsResult.value)
 }
 const title = computed(() =>
-	prefetchedUser ? `${prefetchedUser.username} - Modrinth` : 'User not found',
+	prefetchedUser ? `${prefetchedUser.username} - Lumen` : 'User not found',
 )
 const description = computed(() => {
 	if (!prefetchedUser) {
 		return `There's no user here, check that you have the right link!`
 	}
 	return prefetchedUser.bio
-		? `${prefetchedUser.bio} - Download ${prefetchedUser.username}'s projects on Modrinth`
-		: `Download ${prefetchedUser.username}'s projects on Modrinth`
+		? `${prefetchedUser.bio} - Download ${prefetchedUser.username}'s projects on Lumen`
+		: `Download ${prefetchedUser.username}'s projects on Lumen`
 })
 
 useSeoMeta({
@@ -111,8 +111,8 @@ useSeoMeta({
 	ogDescription: () => description.value,
 	ogImage: () =>
 		prefetchedUser
-			? (prefetchedUser?.avatar_url ?? 'https://cdn-raw.modrinth.com/placeholder-circle.png')
-			: 'https://cdn-raw.modrinth.com/not-found-circle.png',
+			? (prefetchedUser?.avatar_url ?? 'https://cdn-raw.Lumen.com/placeholder-circle.png')
+			: 'https://cdn-raw.Lumen.com/not-found-circle.png',
 })
 
 const projectCreateModal = ref<InstanceType<typeof ProjectCreateModal> | null>(null)

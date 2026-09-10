@@ -1137,16 +1137,16 @@
     "defaultMessage": "Mantém ficheiros atualizados quando o servidor muda"
   },
   "modal.open-in-app.get-app": {
-    "defaultMessage": "Obter a Modrinth App"
+    "defaultMessage": "Obter a Lumen App"
   },
   "modal.open-in-app.opening-automatically": {
-    "defaultMessage": "A Modrinth App vai abrir automaticamente..."
+    "defaultMessage": "A Lumen App vai abrir automaticamente..."
   },
   "modal.open-in-app.title": {
-    "defaultMessage": "A abrir a Modrinth App"
+    "defaultMessage": "A abrir a Lumen App"
   },
   "modal.open-in-app.why-use": {
-    "defaultMessage": "Razões para usar a Modrinth App"
+    "defaultMessage": "Razões para usar a Lumen App"
   },
   "notification.error.title": {
     "defaultMessage": "Ocorreu um erro"
@@ -1175,8 +1175,8 @@
   "omorphia.component.badge.label.moderator": {
     "defaultMessage": "Moderador"
   },
-  "omorphia.component.badge.label.modrinth-team": {
-    "defaultMessage": "Equipa do Modrinth"
+  "omorphia.component.badge.label.Lumen-team": {
+    "defaultMessage": "Equipa do Lumen"
   },
   "omorphia.component.badge.label.pending": {
     "defaultMessage": "Pendente"
@@ -1290,10 +1290,10 @@
     "defaultMessage": "Visa"
   },
   "profile.bio.fallback.creator": {
-    "defaultMessage": "Um criador Modrinth."
+    "defaultMessage": "Um criador Lumen."
   },
   "profile.bio.fallback.user": {
-    "defaultMessage": "Um utilizador Modrinth."
+    "defaultMessage": "Um utilizador Lumen."
   },
   "profile.button.block": {
     "defaultMessage": "Bloquear"
@@ -1851,7 +1851,7 @@
     "defaultMessage": "O teu projeto tem múltiplos ambientes"
   },
   "project.settings.environment.notice.review-options.description": {
-    "defaultMessage": "Reformulámos o sistema de Ambientes no Modrinth e estão agora disponíveis novas opções. Certifica-te de que a opção correta está selecionada abaixo e clica em \"Verificar\" quando terminares!"
+    "defaultMessage": "Reformulámos o sistema de Ambientes no Lumen e estão agora disponíveis novas opções. Certifica-te de que a opção correta está selecionada abaixo e clica em \"Verificar\" quando terminares!"
   },
   "project.settings.environment.notice.review-options.title": {
     "defaultMessage": "Por favor, revê as opções abaixo"
@@ -1968,7 +1968,7 @@
     "defaultMessage": "Não listado"
   },
   "project.visibility.unlisted-by-staff": {
-    "defaultMessage": "Não listado pelo modrinth"
+    "defaultMessage": "Não listado pelo Lumen"
   },
   "report.item-type.user": {
     "defaultMessage": "utilizador"
@@ -2217,7 +2217,7 @@
     "defaultMessage": "Onde queres que o teu servidor esteja localizado?"
   },
   "servers.region.region-unsupported": {
-    "defaultMessage": "Região não listada? <link>Deixa-nos saber onde gostarias de ver Modrinth Hosting a seguir!</link>"
+    "defaultMessage": "Região não listada? <link>Deixa-nos saber onde gostarias de ver Lumen Hosting a seguir!</link>"
   },
   "servers.region.southeast-asia": {
     "defaultMessage": "Sudeste Asiático"
@@ -2754,10 +2754,10 @@
     "defaultMessage": "Tens alterações por guardar."
   },
   "unknown-file-warning-modal.mod-warning-body": {
-    "defaultMessage": " não está publicado no Modrinth. Recomendamos fortemente que apenas instales ficheiros de fontes que confies."
+    "defaultMessage": " não está publicado no Lumen. Recomendamos fortemente que apenas instales ficheiros de fontes que confies."
   },
   "unknown-file-warning-modal.modpack-warning-body": {
-    "defaultMessage": " contém ficheiros que não foram publicados no Modrinth. Recomendamos fortemente que apenas instales ficheiros de fontes que confies."
+    "defaultMessage": " contém ficheiros que não foram publicados no Lumen. Recomendamos fortemente que apenas instales ficheiros de fontes que confies."
   },
   "version.content.name": {
     "defaultMessage": "Nome"

@@ -2,8 +2,8 @@
 
 <script setup lang="ts">
 import { KeyboardSensor, PointerSensor, useDraggable } from '@dnd-kit/vue'
-import { CheckIcon, ClipboardCopyIcon, EditIcon, MoreHorizontalIcon } from '@modrinth/assets'
-import { defineMessages, IconButton, useFormatDateTime, useVIntl } from '@modrinth/ui'
+import { CheckIcon, ClipboardCopyIcon, EditIcon, MoreHorizontalIcon } from '@lumen/assets'
+import { defineMessages, IconButton, useFormatDateTime, useVIntl } from '@lumen/ui'
 import { computed, onMounted, ref, watch } from 'vue'
 
 import type { InstanceScreenshot } from '@/helpers/instance'

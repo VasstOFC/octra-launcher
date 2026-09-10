@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
-import { RotateCounterClockwiseIcon, SearchIcon } from '@modrinth/assets'
+import type { Labrinth } from '@lumen/api-client'
+import { RotateCounterClockwiseIcon, SearchIcon } from '@lumen/assets'
 import { computed, ref, toValue } from 'vue'
 
 import Admonition from '#ui/components/base/Admonition.vue'
@@ -65,7 +65,7 @@ const messages = defineMessages({
 	},
 	offline: {
 		id: 'browse.offline',
-		defaultMessage: 'You are currently offline. Connect to the internet to browse Modrinth!',
+		defaultMessage: 'You are currently offline. Connect to the internet to browse Lumen!',
 	},
 	noResults: {
 		id: 'browse.no-results',
@@ -102,9 +102,7 @@ const messages = defineMessages({
 })
 
 const activeFilterCount = computed(() =>
-	ctx.isServerType.value
-		? ctx.serverCurrentFilters.value.length
-		: ctx.currentFilters.value.length,
+	ctx.isServerType.value ? ctx.serverCurrentFilters.value.length : ctx.currentFilters.value.length,
 )
 
 const filtersButtonLabel = computed(() =>
@@ -374,11 +372,7 @@ function getProjectCardTags(result: Labrinth.Search.v3.ResultSearchProject, disp
 		>
 			<p class="m-0 text-contrast font-medium">{{ formatMessage(messages.noResults) }}</p>
 			<p class="m-0 text-sm text-secondary">{{ formatMessage(messages.noResultsHint) }}</p>
-			<Button
-				v-if="activeFilterCount > 0"
-				type="outlined"
-				@click="clearActiveFilters"
-			>
+			<Button v-if="activeFilterCount > 0" type="outlined" @click="clearActiveFilters">
 				{{ formatMessage(messages.clearFilters) }}
 			</Button>
 		</section>
@@ -465,7 +459,7 @@ function getProjectCardTags(result: Labrinth.Search.v3.ResultSearchProject, disp
 								? `/user/${encodeURIComponent(result.author_id ?? result.author)}`
 								: ctx.variant === 'web'
 									? `/organization/${result.organization_id}`
-									: `https://modrinth.com/organization/${result.organization_id}`,
+									: `https://Lumen.com/organization/${result.organization_id}`,
 					}"
 					:date-updated="result.date_modified"
 					:date-published="result.date_created"

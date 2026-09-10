@@ -92,17 +92,17 @@
 	</div>
 </template>
 <script setup lang="ts">
-import { KeyIcon, MailIcon, SendIcon } from '@modrinth/assets'
+import { KeyIcon, MailIcon, SendIcon } from '@lumen/assets'
 import {
 	Admonition,
 	Button,
 	commonMessages,
 	defineMessages,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	Input,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useQuery } from '@tanstack/vue-query'
 import type { LocationQueryValue } from 'vue-router'
 
@@ -140,7 +140,7 @@ const getErrorMessage = (error: unknown): string => {
 	return String(error)
 }
 
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const { addNotification } = injectNotificationManager()
 const { formatMessage } = useVIntl()
 
@@ -213,7 +213,7 @@ const messages = defineMessages({
 })
 
 useHead({
-	title: () => `${formatMessage(messages.title)} - Modrinth`,
+	title: () => `${formatMessage(messages.title)} - Lumen`,
 })
 
 const auth = await useAuth()

@@ -2,7 +2,7 @@ import {
 	type ImageViewerEditorData,
 	type ImageViewerEditorSource,
 	provideImageViewerEditor,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { readFile } from '@tauri-apps/plugin-fs'
 
 import { release_ads_window_hold, take_ads_window_hold } from '@/helpers/ads.js'

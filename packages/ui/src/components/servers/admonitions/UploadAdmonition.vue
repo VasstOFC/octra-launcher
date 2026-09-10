@@ -30,13 +30,13 @@
 </template>
 
 <script setup lang="ts">
-import { UploadIcon } from '@modrinth/assets'
+import { UploadIcon } from '@lumen/assets'
 import { computed } from 'vue'
 
 import Admonition from '#ui/components/base/Admonition.vue'
 import { Button } from '#ui/components/base/buttons'
 import { useFormatBytes } from '#ui/composables'
-import { injectModrinthServerContext } from '#ui/providers'
+import { injectLumenServerContext } from '#ui/providers'
 
 withDefaults(
 	defineProps<{
@@ -55,7 +55,7 @@ defineEmits<{
 
 const formatBytes = useFormatBytes()
 
-const ctx = injectModrinthServerContext()
+const ctx = injectLumenServerContext()
 
 const state = computed(() => ctx.uploadState.value)
 

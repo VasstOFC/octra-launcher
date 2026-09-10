@@ -19,12 +19,12 @@
 					<p class="m-0">
 						<IntlFormatted :message-id="messages.reportDescription">
 							<template #rules-link="{ children }">
-								<AutoLink class="text-link hover:underline" to="https://modrinth.com/legal/rules">
+								<AutoLink class="text-link hover:underline" to="https://Lumen.com/legal/rules">
 									<component :is="() => children" />
 								</AutoLink>
 							</template>
 							<template #terms-link="{ children }">
-								<AutoLink class="text-link hover:underline" to="https://modrinth.com/legal/terms">
+								<AutoLink class="text-link hover:underline" to="https://Lumen.com/legal/terms">
 									<component :is="() => children" />
 								</AutoLink>
 							</template>
@@ -41,7 +41,7 @@
 								<template #github-link="{ children }">
 									<AutoLink
 										class="text-link hover:underline"
-										to="https://github.com/modrinth/code/issues"
+										to="https://github.com/VasstOFC/Lumen-launcher/issues"
 									>
 										<component :is="() => children" />
 									</AutoLink>
@@ -53,7 +53,7 @@
 								<template #copyright-link="{ children }">
 									<AutoLink
 										class="text-link hover:underline"
-										to="https://modrinth.com/legal/copyright"
+										to="https://Lumen.com/legal/copyright"
 									>
 										<component :is="() => children" />
 									</AutoLink>
@@ -238,9 +238,9 @@
 </template>
 
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
-import { BanIcon, DownloadIcon, ReportIcon, SendIcon, SpinnerIcon, XIcon } from '@modrinth/assets'
-import { Button } from '@modrinth/ui'
+import type { Labrinth } from '@lumen/api-client'
+import { BanIcon, DownloadIcon, ReportIcon, SendIcon, SpinnerIcon, XIcon } from '@lumen/assets'
+import { Button } from '@lumen/ui'
 import {
 	Admonition,
 	AutoLink,
@@ -253,7 +253,7 @@ import {
 	defineMessages,
 	formatReportType,
 	injectAuth,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	IntlFormatted,
 	ManagedContentModal,
@@ -263,7 +263,7 @@ import {
 	type TableColumn,
 	useScrollIndicator,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useQueryClient } from '@tanstack/vue-query'
 import { openUrl } from '@tauri-apps/plugin-opener'
 import { computed, nextTick, ref } from 'vue'
@@ -309,7 +309,7 @@ const emit = defineEmits<{
 }>()
 const { formatMessage } = useVIntl()
 const auth = injectAuth()
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const queryClient = useQueryClient()
 const { addNotification, handleError } = injectNotificationManager()
 const { load } = useSharedInstancePreviewContent()
@@ -511,12 +511,12 @@ const messages = defineMessages({
 	inviteWarning: {
 		id: 'app.modal.install-to-play.invite-warning',
 		defaultMessage:
-			'This invite was created by another Modrinth user, not Modrinth. Only accept invites from people you trust.',
+			'This invite was created by another Lumen user, not Lumen. Only accept invites from people you trust.',
 	},
 	inviteWarningWithCreator: {
 		id: 'app.modal.install-to-play.invite-warning-with-creator',
 		defaultMessage:
-			'This invite was created by <creator>{username}</creator>, not Modrinth. Only accept invites from people you trust.',
+			'This invite was created by <creator>{username}</creator>, not Lumen. Only accept invites from people you trust.',
 	},
 	reportDescription: {
 		id: 'app.modal.install-to-play.report-description',
@@ -576,7 +576,7 @@ const messages = defineMessages({
 	unknownFilesDescription: {
 		id: 'app.modal.install-to-play.shared-instance-unknown-files-description',
 		defaultMessage:
-			'This shared instance contains files that aren’t published on Modrinth. We strongly recommend only installing files from sources you trust.',
+			'This shared instance contains files that aren’t published on Lumen. We strongly recommend only installing files from sources you trust.',
 	},
 	unrecognizedFiles: {
 		id: 'app.modal.install-to-play.unrecognized-files',
@@ -584,7 +584,7 @@ const messages = defineMessages({
 	},
 	reviewedFiles: {
 		id: 'app.modal.install-to-play.reviewed-files',
-		defaultMessage: "Files that aren't published to Modrinth aren't reviewed.",
+		defaultMessage: "Files that aren't published to Lumen aren't reviewed.",
 	},
 	installAnyway: {
 		id: 'app.modal.install-to-play.install-anyway',

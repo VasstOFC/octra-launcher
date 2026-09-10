@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ArrowUpDownIcon, LayoutGridIcon } from '@modrinth/assets'
-import { Combobox, type ComboboxOption, defineMessages, useVIntl } from '@modrinth/ui'
+import { ArrowUpDownIcon, LayoutGridIcon } from '@lumen/assets'
+import { Combobox, type ComboboxOption, defineMessages, useVIntl } from '@lumen/ui'
 
 import {
 	type LibraryGroupBy,

@@ -28,7 +28,7 @@
 			<span class="label">
 				<span class="label__title">Invite a member</span>
 				<span class="label__description">
-					Enter the Modrinth username of the person you'd like to invite to be a member of this
+					Enter the Lumen username of the person you'd like to invite to be a member of this
 					project.
 				</span>
 			</span>
@@ -559,7 +559,7 @@ import {
 	UserPlusIcon,
 	UsersIcon,
 	UserXIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import {
 	Avatar,
 	Badge,
@@ -571,18 +571,18 @@ import {
 	commonProjectSettingsMessages,
 	ConfirmModal,
 	IconButton,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	injectProjectPageContext,
 	Input,
 	Toggle,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useQuery } from '@tanstack/vue-query'
 
 import ConfirmTransferProjectModal from '~/components/ui/ConfirmTransferProjectModal.vue'
 import { removeSelfFromTeam } from '~/helpers/teams.js'
 
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const { addNotification } = injectNotificationManager()
 const {
 	projectV2: project,

@@ -17,39 +17,39 @@ interface SocialLink {
 
 const socialLinks = Object.freeze<readonly SocialLink[]>([
 	{
-		href: 'https://discord.modrinth.com',
+		href: 'https://discord.Lumen.com',
 		alt: 'Discord',
-		src: 'https://cdn-raw.modrinth.com/email/discord.png',
+		src: 'https://cdn-raw.Lumen.com/email/discord.png',
 	},
 	{
-		href: 'https://bsky.app/profile/modrinth.com',
+		href: 'https://bsky.app/profile/Lumen.com',
 		alt: 'Bluesky',
-		src: 'https://cdn-raw.modrinth.com/email/bluesky.png',
+		src: 'https://cdn-raw.Lumen.com/email/bluesky.png',
 	},
 	{
-		href: 'https://floss.social/@modrinth',
+		href: 'https://floss.social/@Lumen',
 		alt: 'Mastodon',
-		src: 'https://cdn-raw.modrinth.com/email/mastodon.png',
+		src: 'https://cdn-raw.Lumen.com/email/mastodon.png',
 	},
 	{
-		href: 'https://x.com/modrinth',
+		href: 'https://x.com/Lumen',
 		alt: 'X (Twitter)',
-		src: 'https://cdn-raw.modrinth.com/email/x.png',
+		src: 'https://cdn-raw.Lumen.com/email/x.png',
 	},
 	{
-		href: 'https://www.instagram.com/modrinth/',
+		href: 'https://www.instagram.com/Lumen/',
 		alt: 'Instagram',
-		src: 'https://cdn-raw.modrinth.com/email/instagram.png',
+		src: 'https://cdn-raw.Lumen.com/email/instagram.png',
 	},
 	{
-		href: 'https://www.youtube.com/@modrinth',
+		href: 'https://www.youtube.com/@Lumen',
 		alt: 'YouTube',
-		src: 'https://cdn-raw.modrinth.com/email/youtube.png',
+		src: 'https://cdn-raw.Lumen.com/email/youtube.png',
 	},
 	{
-		href: 'https://github.com/modrinth',
+		href: 'https://github.com/Lumen',
 		alt: 'GitHub',
-		src: 'https://cdn-raw.modrinth.com/email/github.png',
+		src: 'https://cdn-raw.Lumen.com/email/github.png',
 	},
 ])
 </script>
@@ -81,11 +81,11 @@ const socialLinks = Object.freeze<readonly SocialLink[]>([
 			<Container class="max-w-[600px]">
 				<Row>
 					<Column class="align-middle">
-						<VLink href="https://modrinth.com" aria-label="Modrinth">
+						<VLink href="https://Lumen.com" aria-label="Lumen">
 							<Img
 								src="https://cdn.modrinth.com/email/bd3357dfae4b1d266250372db3a0988f.png"
 								width="175"
-								alt="modrinth logo"
+								alt="Lumen logo"
 								class="block h-auto"
 							/>
 						</VLink>
@@ -117,9 +117,9 @@ const socialLinks = Object.freeze<readonly SocialLink[]>([
 		<!-- <Text
 			class="text-footerText text-2xs mb-4 mt-0 pb-0 pl-4 pr-4 pt-0 text-center font-sans"
 		>
-			This email was sent to you as a registered user of Modrinth. You can customize the
+			This email was sent to you as a registered user of Lumen. You can customize the
 			emails you recieve in your
-			<VLink href="https://modrinth.com/settings/notifications" class="text-green underline"
+			<VLink href="https://Lumen.com/settings/notifications" class="text-green underline"
 				>notification settings</VLink
 			>. Some emails are required to keep your account secure and cannot be disabled.
 		</Text> -->
@@ -153,7 +153,7 @@ const socialLinks = Object.freeze<readonly SocialLink[]>([
 				</span>
 				<!-- <span class="block break-words">
 					<span> <b>Notification settings:</b><br /> </span>
-					https://modrinth.com/settings/notifications
+					https://Lumen.com/settings/notifications
 				</span> -->
 			</Text>
 		</Section>

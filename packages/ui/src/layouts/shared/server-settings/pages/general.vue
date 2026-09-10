@@ -19,7 +19,7 @@
 									:disabled="!canUseAdvancedSettings"
 									@keyup.enter="!serverName && saveGeneral"
 								/>
-								<span>This name is only visible on Modrinth.</span>
+								<span>This name is only visible on Lumen.</span>
 								<div class="text-red font-medium">
 									<span v-if="!isValidServerName"> Server name cannot be empty. </span>
 								</div>
@@ -56,7 +56,7 @@
 										class="flex min-h-9 shrink-0 select-none items-center py-2 pr-4 font-medium opacity-50 [filter:grayscale(50%)]"
 										:class="!serverSubdomain ? '!ml-auto' : ''"
 									>
-										.modrinth.gg
+										.Lumen.gg
 									</div>
 								</div>
 							</label>
@@ -145,7 +145,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
+import type { Labrinth } from '@lumen/api-client'
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
 import { useStorage } from '@vueuse/core'
 import { computed, ref, watch } from 'vue'
@@ -155,15 +155,15 @@ import EditServerIcon from '#ui/components/servers/edit-server-icon/EditServerIc
 import SaveBanner from '#ui/components/servers/SaveBanner.vue'
 import { useServerPermissions } from '#ui/composables/server-permissions'
 import {
-	injectModrinthClient,
-	injectModrinthServerContext,
+	injectLumenClient,
+	injectLumenServerContext,
 	injectNotificationManager,
 	injectPageContext,
 } from '#ui/providers'
 
 const { addNotification } = injectNotificationManager()
-const client = injectModrinthClient()
-const { server: data, serverId, busyReasons } = injectModrinthServerContext()
+const client = injectLumenClient()
+const { server: data, serverId, busyReasons } = injectLumenServerContext()
 const { featureFlags } = injectPageContext()
 const queryClient = useQueryClient()
 const { canUseAdvancedSettings, canWriteFiles, permissionDeniedMessage } = useServerPermissions()
@@ -297,7 +297,7 @@ const getServerSpecs = (product?: Labrinth.Billing.Internal.Product | null) => {
 }
 
 const serverHostname = computed(() =>
-	serverSubdomain.value ? `${serverSubdomain.value}.modrinth.gg` : 'Unknown',
+	serverSubdomain.value ? `${serverSubdomain.value}.Lumen.gg` : 'Unknown',
 )
 
 const serverSpecs = computed(() => getServerSpecs(serverProduct.value))

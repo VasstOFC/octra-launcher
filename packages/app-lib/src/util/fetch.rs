@@ -629,8 +629,8 @@ async fn fetch_advanced_with_client_and_progress(
 ) -> crate::Result<Bytes> {
     let _permit = semaphore.0.acquire().await?;
 
-    let is_api_url = url.starts_with(env!("MODRINTH_API_URL"))
-        || url.starts_with(env!("MODRINTH_API_URL_V3"));
+    let is_api_url = url.starts_with(env!("LUMEN_API_URL"))
+        || url.starts_with(env!("LUMEN_API_URL_V3"));
     let fence_key = if is_api_url { uri_path } else { None };
 
     let creds = if header

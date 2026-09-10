@@ -381,7 +381,7 @@ pub async fn get_available_skins() -> crate::Result<Vec<Skin>> {
     if pending_skin.is_none()
         && !pending_unequip
         && selected_credentials.is_offline()
-        && let Some(equipped) = crate::octra_skins::load_equipped(
+        && let Some(equipped) = crate::lumen_skins::load_equipped(
             selected_credentials.offline_profile.id,
         )
         .await
@@ -536,7 +536,7 @@ pub async fn get_available_skins() -> crate::Result<Vec<Skin>> {
                 is_equipped: true,
             });
         } else if selected_credentials.is_offline()
-            && let Some(png) = crate::octra_skins::load_equipped_png(
+            && let Some(png) = crate::lumen_skins::load_equipped_png(
                 selected_credentials.offline_profile.id,
             )
             .await
@@ -566,8 +566,8 @@ pub async fn get_available_skins() -> crate::Result<Vec<Skin>> {
 pub async fn get_profile_equipped_skin_texture(
     profile_id: Uuid,
 ) -> crate::Result<Option<EquippedSkinTexture>> {
-    let equipped = crate::octra_skins::load_equipped(profile_id).await;
-    if let Some(png) = crate::octra_skins::load_equipped_png(profile_id).await
+    let equipped = crate::lumen_skins::load_equipped(profile_id).await;
+    if let Some(png) = crate::lumen_skins::load_equipped_png(profile_id).await
         && png_util::is_png(&png)
     {
         let (texture_key, variant) = match &equipped {
@@ -772,7 +772,7 @@ async fn add_and_equip_custom_skin_now(
         return Err(error);
     }
 
-    let _ = crate::octra_skins::save_equipped(
+    let _ = crate::lumen_skins::save_equipped(
         selected_credentials,
         &equipped_skin_texture_key,
         equipped_skin_variant,
@@ -857,7 +857,7 @@ async fn equip_skin_now(
         return Err(error);
     }
 
-    let _ = crate::octra_skins::save_equipped(
+    let _ = crate::lumen_skins::save_equipped(
         selected_credentials,
         &skin.texture_key,
         skin.variant,
@@ -1353,7 +1353,7 @@ async fn execute_offline_skin_change(
             local_texture_key,
             ..
         } => {
-            crate::octra_skins::save_equipped(
+            crate::lumen_skins::save_equipped(
                 selected_credentials,
                 local_texture_key,
                 *variant,
@@ -1371,7 +1371,7 @@ async fn execute_offline_skin_change(
                 &skin.texture,
             )
             .await;
-            crate::octra_skins::save_equipped(
+            crate::lumen_skins::save_equipped(
                 selected_credentials,
                 &skin.texture_key,
                 skin.variant,
@@ -1381,7 +1381,7 @@ async fn execute_offline_skin_change(
         }
         PendingSkinChange::Unequip {
             selected_credentials,
-        } => crate::octra_skins::clear_equipped(selected_credentials).await,
+        } => crate::lumen_skins::clear_equipped(selected_credentials).await,
     }
 }
 

@@ -77,8 +77,8 @@
   "app.action-bar.install.summary.minecraft-setup-failed": {
     "message": "Ustawianie Minecraft nie powiodło się"
   },
-  "app.action-bar.install.summary.modrinth-unreachable": {
-    "message": "Nie udało się połączyć z serwerami Modrinth"
+  "app.action-bar.install.summary.Lumen-unreachable": {
+    "message": "Nie udało się połączyć z serwerami Lumen"
   },
   "app.action-bar.install.summary.no-write-permission": {
     "message": "Brak permisji, aby zapisać pliki"
@@ -134,20 +134,11 @@
   "app.action-bar.view-logs": {
     "message": "Pokaż logi"
   },
-  "app.ads-consent.accept": {
-    "message": "Zaakceptuj wszystko"
-  },
-  "app.ads-consent.body": {
-    "message": "Reklamy pozwalają Modrinth oraz fundują wypłaty twórców. Nasi partnerzy mogą zachować lub uzyskać dostęp ciasteczek w aplikacji, żeby spersonalizować reklamy i zmierzyć wydajność."
-  },
   "app.ads-consent.manage": {
     "message": "Zarządzaj preferencjami"
   },
-  "app.ads-consent.reject": {
-    "message": "Odrzuć wszystkie"
-  },
   "app.ads-consent.title": {
-    "message": "Twoja prywatność i jak reklamy wspierają Modrinth"
+    "message": "Twoja prywatność i jak reklamy wspierają Lumen"
   },
   "app.appearance-settings.compact-mode.description": {
     "message": "Wyświetlaj instancje w bibliotece w zwartym układzie wierszy."
@@ -168,7 +159,7 @@
     "message": "Wskakuj do światów lub instancji"
   },
   "app.appearance-settings.minimize-launcher.description": {
-    "message": "Minimalizuj Octra App po uruchomieniu Minecrafta."
+    "message": "Minimalizuj Lumen App po uruchomieniu Minecrafta."
   },
   "app.appearance-settings.minimize-launcher.title": {
     "message": "Minimalizuj aplikację"
@@ -186,7 +177,7 @@
     "message": "Pomiń mało znaczące ostrzeżenia"
   },
   "app.appearance-settings.unknown-pack-warning.description": {
-    "message": "Pokaż ostrzeżenie o bezpieczeństwie przed zainstalowaniem Pakietu Modrinth (.mrpack), które nie jest hostowane na Modrinth."
+    "message": "Pokaż ostrzeżenie o bezpieczeństwie przed zainstalowaniem Pakietu Lumen (.mrpack), które nie jest hostowane na Lumen."
   },
   "app.appearance-settings.unknown-pack-warning.title": {
     "message": "Ostrzegaj mnie przed instalowaniem nieznanych paczek modów"
@@ -210,7 +201,7 @@
     "message": "Używaj tych ustawień zachowania na wszystkich urządzeniach, na których jesteś zalogowany. Wyłącz, aby zachować osobne ustawienia na tym urządzeniu."
   },
   "app.behavior-settings.sync-across-devices.signed-out-tooltip": {
-    "message": "Konta Octra pojawią się później. Wtedy będzie można synchronizować ustawienia."
+    "message": "Konta Lumen pojawią się później. Wtedy będzie można synchronizować ustawienia."
   },
   "app.behavior-settings.sync-across-devices.title": {
     "message": "Synchronizuj zachowanie między urządzeniami"
@@ -318,7 +309,7 @@
     "message": "Instalowanie…"
   },
   "app.featured-pack.kicker": {
-    "message": "Wybór Octra"
+    "message": "Wybór Lumen"
   },
   "app.featured-pack.title": {
     "message": "Cobblemon Vasst"
@@ -346,9 +337,6 @@
   },
   "app.home.continue.title": {
     "message": "Kontynuuj"
-  },
-  "app.home.hero.tagline": {
-    "message": "Twoje światy. Twoja ekipa. Jeden launcher."
   },
   "app.home.jump-back-in.actions.label": {
     "message": "Akcje instancji"
@@ -378,16 +366,16 @@
     "message": "Pokaż instancję"
   },
   "app.hosting.update-required.description": {
-    "message": "Aby korzystać z Modrinth Hosting w Octra App, musisz zaktualizować aplikację"
+    "message": "Aby korzystać z Lumen Hosting w Lumen App, musisz zaktualizować aplikację"
   },
   "app.hosting.update-required.download": {
     "message": "Pobierz aktualizację"
   },
   "app.hosting.update-required.rinthbot-alt": {
-    "message": "Podekscytowany bot Modrinth"
+    "message": "Podekscytowany bot Lumen"
   },
   "app.hosting.update-required.title": {
-    "message": "Wymagana aktualizacja Octra App"
+    "message": "Wymagana aktualizacja Lumen App"
   },
   "app.icon-editor.apply-icons-modal.apply-error": {
     "message": "Nie udało się zastosować losowych ikon do instancji."
@@ -402,7 +390,7 @@
     "message": "Zamknij"
   },
   "app.icon-editor.apply-icons-modal.description": {
-    "message": "Twórz własne ikony instancji bezpośrednio w Octra App. Łącz tła z symbolami z Minecrafta i popularnych modów!"
+    "message": "Twórz własne ikony instancji bezpośrednio w Lumen App. Łącz tła z symbolami z Minecrafta i popularnych modów!"
   },
   "app.icon-editor.apply-icons-modal.instances-without-icons": {
     "message": "{count, plural, one {# instancja nie ma jeszcze ikony} few {# instancje nie mają jeszcze ikon} many {# instancji nie ma jeszcze ikon} other {# instancji nie ma jeszcze ikon}}. Chcesz, żebyśmy na start nadali {count, plural, one {jej} other {im}} losowe?"
@@ -762,13 +750,13 @@
     "message": "Zaloguj się jako"
   },
   "app.instance.shared-instance-wrong-account.signed-out-header": {
-    "message": "Musisz zalogować się na Modrinth"
+    "message": "Musisz zalogować się na Lumen"
   },
   "app.instance.shared-instance-wrong-account.user-admonition-body-v2": {
     "message": ", by otrzymywać aktualizacje dla tej udostępnionej instancji."
   },
   "app.instance.shared-instance-wrong-account.warning-header": {
-    "message": "Korzystasz z niewłaściwego konta Modrinth"
+    "message": "Korzystasz z niewłaściwego konta Lumen"
   },
   "app.instance.shortcut.created": {
     "message": "Utworzono skrót"
@@ -1185,10 +1173,10 @@
     "message": "Zainstaluj"
   },
   "app.modal.install-to-play.invite-warning": {
-    "message": "To zaproszenie zostało utworzone przez innego użytkownika Modrinth, nie przez firmę Modrinth. Tylko akceptuj zaproszenia od osób, którym ufasz."
+    "message": "To zaproszenie zostało utworzone przez innego użytkownika Lumen, nie przez firmę Lumen. Tylko akceptuj zaproszenia od osób, którym ufasz."
   },
   "app.modal.install-to-play.invite-warning-with-creator": {
-    "message": "To zaproszenie zostało utworzone przez <creator>{username}</creator>, nie przez firmę Modrinth. Akceptuj zaproszenia tylko od osób, którym ufasz."
+    "message": "To zaproszenie zostało utworzone przez <creator>{username}</creator>, nie przez firmę Lumen. Akceptuj zaproszenia tylko od osób, którym ufasz."
   },
   "app.modal.install-to-play.managed-content.modpack-header": {
     "message": "Zawartość modpacka"
@@ -1221,7 +1209,7 @@
     "message": "W przypadku pytań technicznych prosimy o kontakt z <support-link>Zespołem Obsługi Klienta</support-link>. Aby, zgłosić błąd wejdź na <github-link>GitHub issue</github-link>."
   },
   "app.modal.install-to-play.reviewed-files": {
-    "message": "Pliki nieopublikowane w Modrinth nie są sprawdzane."
+    "message": "Pliki nieopublikowane w Lumen nie są sprawdzane."
   },
   "app.modal.install-to-play.shared-instance": {
     "message": "Przesłana Instalacja"
@@ -1230,10 +1218,10 @@
     "message": "Treści w przesłanej ci instalacji"
   },
   "app.modal.install-to-play.shared-instance-unknown-files-description": {
-    "message": "Ta udostępniona instancja zawiera pliki, które nie zostały opublikowane na Modrinth. Zalecamy instalowanie plików tylko ze źródeł, którym ufasz."
+    "message": "Ta udostępniona instancja zawiera pliki, które nie zostały opublikowane na Lumen. Zalecamy instalowanie plików tylko ze źródeł, którym ufasz."
   },
   "app.modal.install-to-play.unknown-files-description": {
-    "message": "Ta serwerowa paczka modów zawiera pliki, które nie zostały opublikowane na Modrinth. Zalecamy instalowanie plików tylko ze źródeł, którym ufasz."
+    "message": "Ta serwerowa paczka modów zawiera pliki, które nie zostały opublikowane na Lumen. Zalecamy instalowanie plików tylko ze źródeł, którym ufasz."
   },
   "app.modal.install-to-play.unknown-files-warning": {
     "message": "Ostrzeżenie o nieznanych plikach"
@@ -1254,7 +1242,7 @@
     "message": "Usunięto"
   },
   "app.modal.update-to-play.server-modpack-unknown-files-description": {
-    "message": "Ta aktualizacja modpacka serwerowego zawiera pliki, które nie są opublikowane na Modrinth. Zalecamy instalować pliki tylko z zaufanych źródeł."
+    "message": "Ta aktualizacja modpacka serwerowego zawiera pliki, które nie są opublikowane na Lumen. Zalecamy instalować pliki tylko z zaufanych źródeł."
   },
   "app.modal.update-to-play.shared-instance-added-label": {
     "message": "Dodano"
@@ -1263,7 +1251,7 @@
     "message": "Usunięto"
   },
   "app.modal.update-to-play.shared-instance-unknown-files-description": {
-    "message": "Ta aktualizacja udostępnionej instancji zawiera pliki, które nie zostały opublikowane na Modrinth. Zalecamy instalowanie plików tylko ze źródeł, którym ufasz."
+    "message": "Ta aktualizacja udostępnionej instancji zawiera pliki, które nie zostały opublikowane na Lumen. Zalecamy instalowanie plików tylko ze źródeł, którym ufasz."
   },
   "app.modal.update-to-play.update-required": {
     "message": "Wymagana jest aktualizacja"
@@ -1273,9 +1261,6 @@
   },
   "app.nav.add-account": {
     "message": "Dodaj konto"
-  },
-  "app.nav.chat": {
-    "message": "Czat"
   },
   "app.nav.collapse-rail": {
     "message": "Zwiń menu"
@@ -1305,16 +1290,16 @@
     "message": "Minecraft"
   },
   "app.nav.identity-octra-row": {
-    "message": "Octra · {name}"
+    "message": "Lumen · {name}"
   },
   "app.nav.identity-octra-section": {
-    "message": "Octra"
+    "message": "Lumen"
   },
   "app.nav.identity-octra-sign-in": {
-    "message": "Zaloguj do Octra"
+    "message": "Zaloguj do Lumen"
   },
   "app.nav.identity-tooltip": {
-    "message": "MC · {minecraft} · Octra · {octra}"
+    "message": "MC · {minecraft} · Lumen · {Lumen}"
   },
   "app.nav.library-empty": {
     "message": "Brak instancji"
@@ -1325,8 +1310,8 @@
   "app.nav.locker": {
     "message": "Szafka"
   },
-  "app.nav.modrinth-account": {
-    "message": "Konto Octra"
+  "app.nav.Lumen-account": {
+    "message": "Konto Lumen"
   },
   "app.nav.pack-gallery": {
     "message": "Galeria paczek"
@@ -1358,8 +1343,8 @@
   "app.nav.servers": {
     "message": "Serwery"
   },
-  "app.nav.sign-in-to-modrinth-account": {
-    "message": "Zaloguj się do Octra"
+  "app.nav.sign-in-to-Lumen-account": {
+    "message": "Zaloguj się do Lumen"
   },
   "app.nav.start": {
     "message": "Start"
@@ -1367,8 +1352,8 @@
   "app.nav.switch-account": {
     "message": "Przełącz konto"
   },
-  "app.nav.upgrade-to-modrinth-plus": {
-    "message": "Połącz konto Octra"
+  "app.nav.upgrade-to-Lumen-plus": {
+    "message": "Połącz konto Lumen"
   },
   "app.nav.view-profile": {
     "message": "Zobacz profil"
@@ -1581,7 +1566,7 @@
     "message": "Eksportuj ZIP"
   },
   "app.screenshots.selection.global-export-filename": {
-    "message": "Octra zrzuty ekranu.zip"
+    "message": "Lumen zrzuty ekranu.zip"
   },
   "app.screenshots.selection.instance-export-filename": {
     "message": "{instance} zrzuty ekranu.zip"
@@ -1605,10 +1590,10 @@
     "message": "Brak znajomych."
   },
   "app.screenshots.share.hint": {
-    "message": "Wybierz osobę, której wyślesz ten zrzut na czacie Octra."
+    "message": "Wybierz osobę, której wyślesz ten zrzut na czacie Lumen."
   },
   "app.screenshots.share.sign-in": {
-    "message": "Zaloguj się do Octra, aby udostępniać zrzuty znajomym."
+    "message": "Zaloguj się do Lumen, aby udostępniać zrzuty znajomym."
   },
   "app.screenshots.share.success": {
     "message": "Zrzut udostępniony użytkownikowi {nick}"
@@ -1634,11 +1619,8 @@
   "app.servers.copy": {
     "message": "Kopiuj adres"
   },
-  "app.servers.empty": {
-    "message": "Brak serwerów. Serwery dodane w Octra App pojawią się tutaj."
-  },
   "app.servers.friends-ingame.empty": {
-    "message": "Nikt z Octra nie jest teraz w grze z adresem do dołączenia."
+    "message": "Nikt z Lumen nie jest teraz w grze z adresem do dołączenia."
   },
   "app.servers.friends-ingame.play-with": {
     "message": "Dołącz"
@@ -1650,7 +1632,7 @@
     "message": "W grze"
   },
   "app.servers.friends-ingame.sign-in": {
-    "message": "Zaloguj się do Octra w panelu znajomych, żeby zobaczyć kto gra."
+    "message": "Zaloguj się do Lumen w panelu znajomych, żeby zobaczyć kto gra."
   },
   "app.servers.friends-ingame.title": {
     "message": "Znajomi w grze"
@@ -1712,15 +1694,6 @@
   "app.servers.saved.deleted": {
     "message": "Usunięto serwer"
   },
-  "app.servers.saved.empty": {
-    "message": "Brak zapisanych serwerów."
-  },
-  "app.servers.saved.shared-badge": {
-    "message": "Współdzielony"
-  },
-  "app.servers.saved.title": {
-    "message": "Zapisane serwery"
-  },
   "app.servers.shared.add": {
     "message": "Udostępnij serwer"
   },
@@ -1746,7 +1719,7 @@
     "message": "Brak współdzielonych serwerów. Udostępnij adres poniżej, żeby znajomi mogli dołączyć."
   },
   "app.servers.shared.empty-signed-out": {
-    "message": "Zaloguj się do Octra, żeby udostępniać serwery znajomym."
+    "message": "Zaloguj się do Lumen, żeby udostępniać serwery znajomym."
   },
   "app.servers.shared.name-placeholder": {
     "message": "Nazwa serwera"
@@ -1797,13 +1770,13 @@
     "message": "Zarządzaj"
   },
   "app.settings.account.panel.description": {
-    "message": "Zaloguj się do Octra, aby korzystać ze skinów, społeczności i czatu."
+    "message": "Zaloguj się do Lumen, aby korzystać ze skinów, społeczności i czatu."
   },
   "app.settings.account.panel.title": {
     "message": "Konto"
   },
   "app.settings.account.session.group": {
-    "message": "Sesja Octra"
+    "message": "Sesja Lumen"
   },
   "app.settings.account.session.signed-in": {
     "message": "Zalogowano"
@@ -1815,7 +1788,7 @@
     "message": "Niezalogowano"
   },
   "app.settings.app-version": {
-    "message": "Octra App {version}"
+    "message": "Lumen App {version}"
   },
   "app.settings.appearance.group.accent": {
     "message": "Akcent"
@@ -1962,7 +1935,7 @@
     "message": "Windows 11"
   },
   "app.settings.privacy.ads-consent.intro": {
-    "message": "Reklamy pozwalają na dalsze działanie Modrinth i finansują dochody dla twórców. Nasi partnerzy mogą gromadzić albo uzyskiwać dostęp do plików cookies w celu personalizacji reklam i mierzenia skuteczności."
+    "message": "Reklamy pozwalają na dalsze działanie Lumen i finansują dochody dla twórców. Nasi partnerzy mogą gromadzić albo uzyskiwać dostęp do plików cookies w celu personalizacji reklam i mierzenia skuteczności."
   },
   "app.settings.privacy.ads.group": {
     "message": "Reklamy"
@@ -1971,7 +1944,7 @@
     "message": "Dane"
   },
   "app.settings.privacy.discord-rich-presence.description": {
-    "message": "Pokazuj Octra App jako aktywność na Discordzie. Nie wpływa to na Rich Presence dodane do instancji przez mody. Wymaga ponownego uruchomienia aplikacji."
+    "message": "Pokazuj Lumen App jako aktywność na Discordzie. Nie wpływa to na Rich Presence dodane do instancji przez mody. Wymaga ponownego uruchomienia aplikacji."
   },
   "app.settings.privacy.discord-rich-presence.title": {
     "message": "Discord Rich Presence"
@@ -1983,7 +1956,7 @@
     "message": "Prywatność"
   },
   "app.settings.privacy.telemetry.description": {
-    "message": "Analityka użycia pozostaje wyłączona w Octra App."
+    "message": "Analityka użycia pozostaje wyłączona w Lumen App."
   },
   "app.settings.privacy.telemetry.title": {
     "message": "Telemetria"
@@ -2001,7 +1974,7 @@
     "message": "Wyczyścić pamięć podręczną aplikacji?"
   },
   "app.settings.resource-management.app-cache.description": {
-    "message": "Wyczyść dane z pamięci podręcznej i pobierz je ponownie z Modrinth. Aplikacja może działać wolniej, dopóki pamięć podręczna nie zostanie odbudowana."
+    "message": "Wyczyść dane z pamięci podręcznej i pobierz je ponownie z Lumen. Aplikacja może działać wolniej, dopóki pamięć podręczna nie zostanie odbudowana."
   },
   "app.settings.resource-management.app-cache.purge": {
     "message": "Wyczyść pamięć podręczną"
@@ -2022,7 +1995,7 @@
     "message": "Przeglądaj lokalizację aplikacji"
   },
   "app.settings.resource-management.app-directory.description": {
-    "message": "Gdzie Octra App przechowuje instancje i inne pliki. Zmiany zaczną obowiązywać po ponownym uruchomieniu aplikacji."
+    "message": "Gdzie Lumen App przechowuje instancje i inne pliki. Zmiany zaczną obowiązywać po ponownym uruchomieniu aplikacji."
   },
   "app.settings.resource-management.app-directory.select": {
     "message": "Wybierz nową lokalizację aplikacji"
@@ -2062,9 +2035,6 @@
   },
   "app.settings.sidebar.label.game-defaults": {
     "message": "Domyślne gry"
-  },
-  "app.settings.sidebar.label.instances": {
-    "message": "Instancje"
   },
   "app.settings.sidebar.label.look-and-feel": {
     "message": "Wygląd i styl"
@@ -2141,17 +2111,11 @@
   "app.settings.tabs.privacy": {
     "message": "Prywatność"
   },
-  "app.settings.tabs.resource-management": {
-    "message": "Zarządzanie zasobami"
-  },
   "app.settings.tabs.storage": {
     "message": "Pamięć"
   },
   "app.settings.tabs.sync": {
     "message": "Synchronizacja"
-  },
-  "app.settings.tabs.synced-options": {
-    "message": "Ustawienia synchronizacji"
   },
   "app.settings.update-already-latest": {
     "message": "Masz najnowszą wersję."
@@ -2291,14 +2255,14 @@
   "app.skins.section.minecon-earth-2017": {
     "message": "MINECON Earth 2017"
   },
-  "app.skins.section.modrinth": {
-    "message": "Modrinth"
+  "app.skins.section.Lumen": {
+    "message": "Lumen"
   },
-  "app.skins.section.modrinth-pride": {
-    "message": "Duma Modrinth"
+  "app.skins.section.Lumen-pride": {
+    "message": "Duma Lumen"
   },
-  "app.skins.section.modrinth-pride.tooltip": {
-    "message": "Zdobyłeś te skórki poprzez dotację na zbiórkę Dumy Modrinth w okresie Miesiąca Dumy."
+  "app.skins.section.Lumen-pride.tooltip": {
+    "message": "Zdobyłeś te skórki poprzez dotację na zbiórkę Dumy Lumen w okresie Miesiąca Dumy."
   },
   "app.skins.section.mounts-of-mayhem": {
     "message": "Mounts of Mayhem"
@@ -2319,7 +2283,7 @@
     "message": "Tiny Takeover"
   },
   "app.skins.sign-in.button": {
-    "message": "Logowanie do Octry"
+    "message": "Logowanie do Lumen"
   },
   "app.skins.title": {
     "message": "Wybór skórki"
@@ -2334,10 +2298,10 @@
     "message": "Gotowe, kiedy Ty jesteś"
   },
   "app.survey.body": {
-    "message": "Czy chcesz odpowiedzieć na kilka pytań o doświadczenia z Octra App?"
+    "message": "Czy chcesz odpowiedzieć na kilka pytań o doświadczenia z Lumen App?"
   },
   "app.survey.footer": {
-    "message": "Ta opinia trafi bezpośrednio do zespołu Octra i pomoże w przygotowaniu przyszłych aktualizacji!"
+    "message": "Ta opinia trafi bezpośrednio do zespołu Lumen i pomoże w przygotowaniu przyszłych aktualizacji!"
   },
   "app.survey.no-thanks": {
     "message": "Nie, dziękuję"
@@ -2346,16 +2310,16 @@
     "message": "Weź udział w ankiecie"
   },
   "app.survey.title": {
-    "message": "Cześć, użytkowniku Octra!"
+    "message": "Cześć, użytkowniku Lumen!"
   },
   "app.update-popup.body.download-complete": {
-    "message": "Octra App v{version} została pobrana. Odśwież, żeby zaktualizować teraz, albo automatycznie, gdy zamkniesz Octra App."
+    "message": "Lumen App v{version} została pobrana. Odśwież, żeby zaktualizować teraz, albo automatycznie, gdy zamkniesz Lumen App."
   },
   "app.update-popup.body.linux": {
-    "message": "Octra App v{version} jest dostępna. Pobierz aktualizację przez menedżer pakietów, by uzyskać najnowsze funkcje i poprawki!"
+    "message": "Lumen App v{version} jest dostępna. Pobierz aktualizację przez menedżer pakietów, by uzyskać najnowsze funkcje i poprawki!"
   },
   "app.update-popup.body.metered": {
-    "message": "Octra App v{version} jest dostępna! Ponieważ korzystasz z sieci taryfowej, nie pobraliśmy jej automatycznie."
+    "message": "Lumen App v{version} jest dostępna! Ponieważ korzystasz z sieci taryfowej, nie pobraliśmy jej automatycznie."
   },
   "app.update-popup.changelog": {
     "message": "Dziennik zmian"
@@ -2400,10 +2364,10 @@
     "message": "Naciśnij <shortcut>N</shortcut>, aby szybko utworzyć instancję"
   },
   "app.welcome-screen.title": {
-    "message": "Witaj w Octra App"
+    "message": "Witaj w Lumen App"
   },
   "app.world.server-modal.placeholder-address": {
-    "message": "example.modrinth.gg"
+    "message": "example.Lumen.gg"
   },
   "app.world.server-modal.select-an-option": {
     "message": "Wybierz opcję"
@@ -2469,7 +2433,7 @@
     "message": "Może różnić się od nazwy użytkownika Minecraft!"
   },
   "friends.add-friend.username.placeholder": {
-    "message": "Wprowadź nazwę użytkownika Modrinth..."
+    "message": "Wprowadź nazwę użytkownika Lumen..."
   },
   "friends.add-friend.username.title": {
     "message": "Jaka jest nazwa użytkownika Twojego znajomego?"
@@ -2517,7 +2481,7 @@
     "message": "{title} - {count}"
   },
   "friends.sign-in-to-add-friends": {
-    "message": "Konta Octra pojawią się później. Znajomi będą wtedy dostępni."
+    "message": "Konta Lumen pojawią się później. Znajomi będą wtedy dostępni."
   },
   "installation-settings.shared-instance.linked-title": {
     "message": "Powiązana udostępniona instancja"
@@ -2538,7 +2502,7 @@
     "message": "Wycofaj udostępnioną instancję"
   },
   "installation-settings.shared-instance.unpublish-description": {
-    "message": "Usuń tę udostępnioną instancję z Modrinth i przestań wysyłać aktualizacje do użytkowników, którym jest udostępniona. Nie wpłynie to na twoją lokalną instancję."
+    "message": "Usuń tę udostępnioną instancję z Lumen i przestań wysyłać aktualizacje do użytkowników, którym jest udostępniona. Nie wpłynie to na twoją lokalną instancję."
   },
   "installation-settings.shared-instance.unpublishing-button": {
     "message": "Anulowanie publikacji..."
@@ -2553,7 +2517,7 @@
     "message": "Odłącz udostępnioną instancję"
   },
   "installation-settings.unpublish-shared-instance.modal.admonition-body": {
-    "message": "Spowoduje to usunięcie przesyłanej instalacji z serwerów Modrinth. Użytkownicy korzystający z niej na Octra App przestaną otrzymywać aktualizacje, ale twoja lokalna instalacja zostanie na tym urządzeniu."
+    "message": "Spowoduje to usunięcie przesyłanej instalacji z serwerów Lumen. Użytkownicy korzystający z niej na Lumen App przestaną otrzymywać aktualizacje, ale twoja lokalna instalacja zostanie na tym urządzeniu."
   },
   "installation-settings.unpublish-shared-instance.modal.admonition-header": {
     "message": "Wycofywanie udostępnionej instancji"
@@ -2847,7 +2811,7 @@
     "message": "TNT"
   },
   "instance.icon-editor.symbol.wrenth-rinth": {
-    "message": "Klucz Modrinth"
+    "message": "Klucz Lumen"
   },
   "instance.icon-editor.symbol.zombie": {
     "message": "Zombie"
@@ -3246,7 +3210,7 @@
     "message": "Instancja źródłowa została usunięta. Instancja jest nadal dostępna, ale nie jest już połączona i nie będzie otrzymywać aktualizacji."
   },
   "instance.shared-instance.unavailable.locked-text": {
-    "message": "Ta udostępniona instancja została zablokowana przez zespół moderacyjny Modrinth. Nie będzie otrzymywać dalszych aktualizacji z instancji źródłowej."
+    "message": "Ta udostępniona instancja została zablokowana przez zespół moderacyjny Lumen. Nie będzie otrzymywać dalszych aktualizacji z instancji źródłowej."
   },
   "instance.shared-instance.unavailable.locked-title": {
     "message": "Instancja zablokowana"
@@ -3369,13 +3333,13 @@
     "message": "Wybierz konto"
   },
   "minecraft-account.sign-in": {
-    "message": "Logowanie do Octry"
+    "message": "Logowanie do Lumen"
   },
   "minecraft-required.description": {
-    "message": "Zaloguj się kontem Microsoft albo graj offline z nickiem. Skin jest publikowany w chmurze Octra — Ty i znajomi zobaczycie go w grze bez dodatkowych modów. SkinsRestorer pozostaje opcjonalny na serwerach dedykowanych."
+    "message": "Zaloguj się kontem Microsoft albo graj offline z nickiem. Skin jest publikowany w chmurze Lumen — Ty i znajomi zobaczycie go w grze bez dodatkowych modów. SkinsRestorer pozostaje opcjonalny na serwerach dedykowanych."
   },
   "minecraft-required.description-header": {
-    "message": "Logowanie do Octry"
+    "message": "Logowanie do Lumen"
   },
   "minecraft-required.dont-have-account": {
     "message": "Nie masz konta Microsoft?"
@@ -3384,7 +3348,7 @@
     "message": "Zdobądź Minecraft"
   },
   "minecraft-required.header": {
-    "message": "Logowanie do Octry"
+    "message": "Logowanie do Lumen"
   },
   "minecraft-required.offline-nick": {
     "message": "Nick offline"
@@ -3398,293 +3362,251 @@
   "minecraft-required.sign-in": {
     "message": "Konto Microsoft"
   },
-  "modal.modrinth-account-required.browser-description": {
+  "modal.Lumen-account-required.browser-description": {
     "message": "Nowa karta otwarta do zalogowania. Ukończ logowanie, a następnie wróć do aplikacji."
   },
-  "modal.modrinth-account-required.continue-in-browser-heading": {
+  "modal.Lumen-account-required.continue-in-browser-heading": {
     "message": "Kontynuuj w przeglądarce"
   },
-  "modal.modrinth-account-required.create-account-button": {
+  "modal.Lumen-account-required.create-account-button": {
     "message": "Utwórz konto"
   },
-  "modal.modrinth-account-required.description": {
-    "message": "Konta Octra pojawią się później. Ta funkcja będzie wtedy dostępna."
+  "modal.Lumen-account-required.description": {
+    "message": "Konta Lumen pojawią się później. Ta funkcja będzie wtedy dostępna."
   },
-  "modal.modrinth-account-required.header": {
+  "modal.Lumen-account-required.header": {
     "message": "Konto wymagane"
   },
-  "modal.modrinth-account-required.open-browser-again-button": {
+  "modal.Lumen-account-required.open-browser-again-button": {
     "message": "Otwórz ponownie przeglądarkę"
   },
-  "modal.modrinth-account-required.sign-in-button": {
-    "message": "Konto Octra — wkrótce"
+  "modal.Lumen-account-required.sign-in-button": {
+    "message": "Konto Lumen — wkrótce"
   },
-  "modal.modrinth-account-required.sign-in-heading": {
-    "message": "Konto Octra — wkrótce"
+  "modal.Lumen-account-required.sign-in-heading": {
+    "message": "Konto Lumen — wkrótce"
   },
-  "modal.modrinth-account-required.signing-in-header": {
+  "modal.Lumen-account-required.signing-in-header": {
     "message": "Trwa logowanie"
   },
-  "modal.modrinth-account-required.support-prompt": {
+  "modal.Lumen-account-required.support-prompt": {
     "message": "Masz problem z logowaniem? Skorzystaj z <support>Obsługi klienta</support>"
   },
-  "modal.modrinth-account-required.waiting-for-browser": {
+  "modal.Lumen-account-required.waiting-for-browser": {
     "message": "Oczekiwanie na twoje potwierdzenie..."
   },
-  "octra-account.hint": {
-    "message": "Octra łączy skiny z kontem Minecraft — nie tworzy konta MC. Najpierw dodaj Microsoft lub offline."
+  "lumen-account.hint": {
+    "message": "Lumen łączy skiny z kontem Minecraft — nie tworzy konta MC. Najpierw dodaj Microsoft lub offline."
   },
-  "octra-account.label": {
-    "message": "Konto Octra"
+  "lumen-account.label": {
+    "message": "Konto Lumen"
   },
-  "octra-account.linked-minecraft": {
+  "lumen-account.linked-minecraft": {
     "message": "Konto Minecraft"
   },
-  "octra-account.login": {
+  "lumen-account.login": {
     "message": "Zaloguj się"
   },
-  "octra-account.login-success": {
-    "message": "Zalogowano do Octra"
+  "lumen-account.login-success": {
+    "message": "Zalogowano do Lumen"
   },
-  "octra-account.logout": {
+  "lumen-account.logout": {
     "message": "Wyloguj"
   },
-  "octra-account.no-minecraft": {
+  "lumen-account.no-minecraft": {
     "message": "Najpierw dodaj konto Microsoft lub offline Minecraft."
   },
-  "octra-account.password": {
+  "lumen-account.password": {
     "message": "Hasło"
   },
-  "octra-account.register": {
+  "lumen-account.register": {
     "message": "Połącz"
   },
-  "octra-account.register-hint": {
-    "message": "Octra łączy się z aktualnym kontem Minecraft do skinów. Nie tworzy konta Minecraft."
+  "lumen-account.register-hint": {
+    "message": "Lumen łączy się z aktualnym kontem Minecraft do skinów. Nie tworzy konta Minecraft."
   },
-  "octra-account.register-success": {
-    "message": "Połączono konto Octra"
+  "lumen-account.register-success": {
+    "message": "Połączono konto Lumen"
   },
-  "octra-account.title": {
-    "message": "Konto Octra"
+  "lumen-account.title": {
+    "message": "Konto Lumen"
   },
-  "octra-account.username": {
+  "lumen-account.username": {
     "message": "Nick Minecraft"
   },
-  "octra.chat.new-message-toast": {
+  "lumen.chat.new-message-toast": {
     "message": "Nowa wiadomość na czacie"
   },
-  "octra.community.actions.label": {
+  "lumen.community.actions.label": {
     "message": "Akcje znajomego"
   },
-  "octra.community.connected": {
+  "lumen.community.connected": {
     "message": "Połączono"
   },
-  "octra.community.count": {
+  "lumen.community.count": {
     "message": "{count, plural, one {# gracz} few {# graczy} many {# graczy} other {# gracza}}"
   },
-  "octra.community.disconnected": {
+  "lumen.community.disconnected": {
     "message": "Rozłączono"
   },
-  "octra.community.empty": {
+  "lumen.community.empty": {
     "message": "Nie masz jeszcze nikogo znajomego :("
   },
-  "octra.community.friend-in-game": {
+  "lumen.community.friend-in-game": {
     "message": "{nick} jest w grze"
   },
-  "octra.community.friend-pack-install-failed": {
+  "lumen.community.friend-pack-install-failed": {
     "message": "Paczka zainstalowana, ale nie udało się otworzyć nowej instancji."
   },
-  "octra.community.friend-pack-missing": {
+  "lumen.community.friend-pack-missing": {
     "message": "Nie znaleziono tej paczki online. Wybierz zamiast tego jedną ze swoich instancji."
   },
-  "octra.community.heading": {
+  "lumen.community.heading": {
     "message": "Znajomi"
   },
-  "octra.community.in-game": {
+  "lumen.community.in-game": {
     "message": "Gra: {name}"
   },
-  "octra.community.in-game-unknown": {
+  "lumen.community.in-game-unknown": {
     "message": "W grze"
   },
-  "octra.community.in-launcher": {
+  "lumen.community.in-launcher": {
     "message": "W launcherze"
   },
-  "octra.community.join": {
+  "lumen.community.join": {
     "message": "Dołącz"
   },
-  "octra.community.last-seen": {
+  "lumen.community.last-seen": {
     "message": "Ostatnio {time}"
   },
-  "octra.community.message-player": {
+  "lumen.community.message-player": {
     "message": "Napisz wiadomość do gracza"
   },
-  "octra.community.no-instance": {
+  "lumen.community.no-instance": {
     "message": "Utwórz lub zainstaluj instancję, zanim dołączysz do znajomego."
   },
-  "octra.community.no-match": {
+  "lumen.community.no-match": {
     "message": "Nie znaleziono znajomych pasujących do zapytania \"{query}\""
   },
-  "octra.community.offline": {
+  "lumen.community.offline": {
     "message": "Offline"
   },
-  "octra.community.play-back": {
+  "lumen.community.play-back": {
     "message": "Wstecz"
   },
-  "octra.community.play-busy": {
+  "lumen.community.play-busy": {
     "message": "Instalowanie paczki i dołączanie…"
   },
-  "octra.community.play-cancel": {
+  "lumen.community.play-cancel": {
     "message": "Anuluj"
   },
-  "octra.community.play-friend-pack": {
+  "lumen.community.play-friend-pack": {
     "message": "Pobierz paczkę znajomego"
   },
-  "octra.community.play-friend-pack-hint": {
+  "lumen.community.play-friend-pack-hint": {
     "message": "Zainstaluj {name}, jeśli jeszcze jej nie masz, a potem dołącz."
   },
-  "octra.community.play-friend-pack-unknown": {
+  "lumen.community.play-friend-pack-unknown": {
     "message": "ich paczkę"
   },
-  "octra.community.play-join": {
+  "lumen.community.play-join": {
     "message": "Dołącz"
   },
-  "octra.community.play-own-pack": {
+  "lumen.community.play-own-pack": {
     "message": "Użyj mojej paczki"
   },
-  "octra.community.play-own-pack-hint": {
+  "lumen.community.play-own-pack-hint": {
     "message": "Wybierz jedną ze swoich zainstalowanych instancji i dołącz do tego samego serwera."
   },
-  "octra.community.play-pick-instance": {
+  "lumen.community.play-pick-instance": {
     "message": "Wybierz instancję"
   },
-  "octra.community.play-with": {
+  "lumen.community.play-with": {
     "message": "Graj z"
   },
-  "octra.community.play-with-hint": {
+  "lumen.community.play-with-hint": {
     "message": "Dołącz z paczką, którą już masz, albo pobierz tę, której używa {nick}."
   },
-  "octra.community.play-with-title": {
+  "lumen.community.play-with-title": {
     "message": "Graj z {nick}"
   },
-  "octra.community.play-with-toast": {
+  "lumen.community.play-with-toast": {
     "message": "Dołączanie do {nick}…"
   },
-  "octra.community.register-action": {
+  "lumen.community.register-action": {
     "message": "Połącz konto"
   },
-  "octra.community.search": {
+  "lumen.community.search": {
     "message": "Szukaj znajomych..."
   },
-  "octra.community.share-ip": {
-    "message": "Udostępnij IP serwera…"
+  "lumen.community.sign-in": {
+    "message": "Zaloguj się na Lumen, żeby zobaczyć wszystkich z tego launchera."
   },
-  "octra.community.share-ip-action": {
-    "message": "Udostępnij IP"
-  },
-  "octra.community.share-ip-placeholder": {
-    "message": "play.example.com:25565"
-  },
-  "octra.community.share-ip-success": {
-    "message": "Twój adres dołączenia jest udostępniony znajomym."
-  },
-  "octra.community.shared-add": {
-    "message": "Dodaj serwer"
-  },
-  "octra.community.shared-add-success": {
-    "message": "Dodano wspólny serwer."
-  },
-  "octra.community.shared-address": {
-    "message": "Adres"
-  },
-  "octra.community.shared-delete": {
-    "message": "Usuń serwer"
-  },
-  "octra.community.shared-empty": {
-    "message": "Brak wspólnych serwerów."
-  },
-  "octra.community.shared-heading": {
-    "message": "Wspólne serwery"
-  },
-  "octra.community.shared-join": {
-    "message": "Dołącz do serwera"
-  },
-  "octra.community.shared-name": {
-    "message": "Nazwa"
-  },
-  "octra.community.sign-in": {
-    "message": "Zaloguj się na Octra, żeby zobaczyć wszystkich z tego launchera."
-  },
-  "octra.community.sign-in-action": {
+  "lumen.community.sign-in-action": {
     "message": "Zaloguj się"
   },
-  "octra.community.tab.friends": {
+  "lumen.community.tab.friends": {
     "message": "Znajomi"
   },
-  "octra.community.tab.servers": {
-    "message": "Serwery"
-  },
-  "octra.community.tab.chat": {
+  "lumen.community.tab.chat": {
     "message": "Czat"
   },
-  "octra.chat.back-to-list": {
+  "lumen.chat.back-to-list": {
     "message": "Wróć do rozmów"
   },
-  "octra.chat.create-group": {
+  "lumen.chat.create-group": {
     "message": "Utwórz grupę"
   },
-  "octra.chat.delete": {
+  "lumen.chat.delete": {
     "message": "Usuń wiadomość"
   },
-  "octra.chat.image-attachment": {
+  "lumen.chat.image-attachment": {
     "message": "Obraz"
   },
-  "octra.chat.message-actions": {
+  "lumen.chat.message-actions": {
     "message": "Akcje wiadomości"
   },
-  "octra.chat.delete-group": {
+  "lumen.chat.delete-group": {
     "message": "Usuń grupę"
   },
-  "octra.chat.delete-vote-confirm": {
+  "lumen.chat.delete-vote-confirm": {
     "message": "Do usunięcia grupy potrzebna jest większość 2/3 głosów „tak”."
   },
-  "octra.chat.delete-vote-hint": {
+  "lumen.chat.delete-vote-hint": {
     "message": "{yes} z {needed} głosów „tak” ({members} członków)."
   },
-  "octra.chat.delete-vote-no": {
+  "lumen.chat.delete-vote-no": {
     "message": "Głosuj nie"
   },
-  "octra.chat.delete-vote-start": {
+  "lumen.chat.delete-vote-start": {
     "message": "Rozpocznij głosowanie"
   },
-  "octra.chat.delete-vote-title": {
+  "lumen.chat.delete-vote-title": {
     "message": "Głosowanie o usunięcie grupy"
   },
-  "octra.chat.delete-vote-yes": {
+  "lumen.chat.delete-vote-yes": {
     "message": "Głosuj tak"
   },
-  "octra.chat.group-min-members": {
+  "lumen.chat.group-min-members": {
     "message": "Wybierz co najmniej 2 inne osoby (łącznie 3 z Tobą)."
   },
-  "octra.chat.group-name": {
+  "lumen.chat.group-name": {
     "message": "Nazwa grupy"
   },
-  "octra.whats-new.dismiss": {
+  "lumen.whats-new.dismiss": {
     "message": "Rozumiem"
   },
-  "octra.whats-new.intro": {
-    "message": "Społecznościowe nowości w tej wersji:"
-  },
-  "octra.whats-new.title": {
-    "message": "Nowości w Octra {version}"
+  "lumen.whats-new.title": {
+    "message": "Nowości w Lumen {version}"
   },
   "onboarding-checklist.create-instance": {
     "message": "Utwórz pierwszą instancję"
   },
   "onboarding-checklist.login-minecraft": {
-    "message": "Zaloguj się do Octry"
+    "message": "Zaloguj się do Minecraft"
   },
-  "onboarding-checklist.login-modrinth": {
-    "message": "Konto Octra (wkrótce)"
+  "onboarding-checklist.login-Lumen": {
+    "message": "Zaloguj się na konto Lumen"
   },
   "onboarding-checklist.title": {
     "message": "Pierwsze kroki"
@@ -3703,11 +3625,5 @@
   },
   "search.filter.locked.server-environment.title": {
     "message": "Tylko mody po stronie klienta mogą być dodane do instancji serwera"
-  },
-  "settings.sidebar.label.account": {
-    "message": "Konto"
-  },
-  "settings.sidebar.label.display": {
-    "message": "Wyświetlanie"
   }
 }

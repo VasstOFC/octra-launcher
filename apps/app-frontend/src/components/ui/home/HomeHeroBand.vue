@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PlayIcon, SpinnerIcon, StopCircleIcon } from '@modrinth/assets'
+import { PlayIcon, SpinnerIcon, StopCircleIcon } from '@lumen/assets'
 import {
 	Avatar,
 	Button,
@@ -7,9 +7,9 @@ import {
 	injectNotificationManager,
 	useRelativeTime,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import dayjs from 'dayjs'
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, inject, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { useAppEvent } from '@/composables/use-app-event'
@@ -27,6 +27,7 @@ const { handleError } = injectNotificationManager()
 const { formatMessage } = useVIntl()
 const formatRelativeTime = useRelativeTime({ numeric: 'auto', style: 'short' })
 const router = useRouter()
+const showCreationModal = inject<() => void>('showCreationModal')
 
 const playing = ref(false)
 const loading = ref(false)
@@ -64,6 +65,10 @@ const messages = defineMessages({
 	empty: {
 		id: 'app.home.continue.empty',
 		defaultMessage: 'Create an instance to start playing.',
+	},
+	emptyCta: {
+		id: 'app.home.continue.empty-cta',
+		defaultMessage: 'Create instance',
 	},
 })
 
@@ -170,7 +175,9 @@ onMounted(() => {
 					pad-transparent-corners
 				/>
 				<div class="min-w-0 flex flex-col gap-1 text-left">
-					<p class="continue-band__kicker m-0 truncate text-xs font-semibold uppercase tracking-wide">
+					<p
+						class="continue-band__kicker m-0 truncate text-xs font-semibold uppercase tracking-wide"
+					>
 						{{ formatMessage(messages.continue) }}
 					</p>
 					<h2 class="m-0 truncate text-2xl font-semibold leading-7 text-contrast">
@@ -188,7 +195,7 @@ onMounted(() => {
 					type="colored"
 					color="red"
 					size="lg"
-					class="!shadow-none"
+					class="!shadow-none band-btn--stop"
 					@click="stop"
 				>
 					<StopCircleIcon />
@@ -210,7 +217,7 @@ onMounted(() => {
 					type="colored"
 					color="brand"
 					size="lg"
-					class="!shadow-none"
+					class="!shadow-none band-btn--play"
 					@click="play"
 					@mouseenter="checkProcess"
 				>
@@ -219,30 +226,69 @@ onMounted(() => {
 				</Button>
 			</div>
 		</div>
-		<p v-else class="m-0 text-sm text-secondary">
-			{{ formatMessage(messages.empty) }}
+		<p v-else class="m-0 flex flex-wrap items-center gap-3 text-sm text-secondary">
+			<span>{{ formatMessage(messages.empty) }}</span>
+			<Button
+				type="colored"
+				color="brand"
+				size="sm"
+				class="!shadow-none"
+				@click="showCreationModal?.()"
+			>
+				{{ formatMessage(messages.emptyCta) }}
+			</Button>
 		</p>
 	</section>
 </template>
 
 <style scoped lang="scss">
 .continue-band {
-	border: 1px solid color-mix(in srgb, var(--color-brand) 34%, var(--surface-5));
-	border-radius: var(--radius-md);
+	position: relative;
+	border: 1px solid rgba(0, 212, 255, 0.12);
+	border-radius: var(--radius-lg);
 	margin: 0;
-	padding: 1.5rem 1.5rem;
+	padding: 2rem;
 	background:
 		linear-gradient(
 			120deg,
-			color-mix(in srgb, var(--color-brand) 18%, transparent) 0%,
+			rgba(0, 212, 255, 0.08) 0%,
 			transparent 52%
 		),
-		color-mix(in srgb, var(--color-brand) 7%, var(--surface-2));
-	box-shadow: inset 0 2px 0 0 color-mix(in srgb, var(--color-brand) 58%, transparent);
+		rgba(15, 15, 25, 0.85);
+	backdrop-filter: blur(20px);
+	-webkit-backdrop-filter: blur(20px);
+	box-shadow:
+		0 0 0 1px rgba(0, 212, 255, 0.06),
+		inset 0 2px 0 0 rgba(0, 212, 255, 0.2),
+		0 20px 40px -15px rgba(0, 0, 0, 0.4);
+	overflow: hidden;
+	transition: all 0.3s ease;
+
+	&::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: radial-gradient(
+			ellipse at 20% 50%,
+			rgba(0, 212, 255, 0.06) 0%,
+			transparent 60%
+		);
+		pointer-events: none;
+	}
+
+	&:hover {
+		border-color: rgba(0, 212, 255, 0.18);
+		box-shadow:
+			0 0 0 1px rgba(0, 212, 255, 0.1),
+			inset 0 2px 0 0 rgba(0, 212, 255, 0.3),
+			0 25px 50px -15px rgba(0, 0, 0, 0.5);
+	}
 }
 
 .continue-band__kicker {
-	color: var(--color-brand);
+	color: #00d4ff;
+	text-shadow: 0 0 10px rgba(0, 212, 255, 0.4);
+	letter-spacing: 0.08em;
 }
 
 .continue-band__row {
@@ -264,11 +310,17 @@ onMounted(() => {
 	min-width: 0;
 	padding: 0;
 	text-align: left;
-}
+	transition: transform 0.2s ease;
 
-.continue-band__identity:focus-visible {
-	outline: 2px solid var(--color-brand);
-	outline-offset: 2px;
+	&:hover {
+		transform: translateX(4px);
+	}
+
+	&:focus-visible {
+		outline: 2px solid #00d4ff;
+		outline-offset: 2px;
+		border-radius: var(--radius-sm);
+	}
 }
 
 .continue-band__actions {
@@ -279,5 +331,36 @@ onMounted(() => {
 
 .continue-band__actions :deep(.btn) {
 	min-width: 7.5rem;
+}
+
+.band-btn--play {
+	background: linear-gradient(135deg, #00d4ff 0%, #7c3aed 100%) !important;
+	border: none !important;
+	box-shadow: 0 0 0 rgba(0, 212, 255, 0) !important;
+	transition: all 0.2s ease;
+
+	&:hover:not(:disabled) {
+		transform: translateY(-2px) !important;
+		box-shadow: 0 0 25px rgba(0, 212, 255, 0.4), 0 0 50px rgba(0, 212, 255, 0.15) !important;
+		animation: play-glow 1.5s ease-in-out infinite;
+	}
+}
+
+@keyframes play-glow {
+	0%, 100% {
+		box-shadow: 0 0 20px rgba(0, 212, 255, 0.4), 0 0 40px rgba(0, 212, 255, 0.1);
+	}
+	50% {
+		box-shadow: 0 0 30px rgba(0, 212, 255, 0.6), 0 0 60px rgba(0, 212, 255, 0.2);
+	}
+}
+
+.band-btn--stop {
+	transition: all 0.2s ease;
+
+	&:hover:not(:disabled) {
+		transform: translateY(-2px) !important;
+		box-shadow: 0 0 20px rgba(239, 68, 68, 0.4) !important;
+	}
 }
 </style>

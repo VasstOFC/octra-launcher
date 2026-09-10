@@ -1,4 +1,4 @@
-const MODRINTH_ORIGIN = 'https://modrinth.com'
+const Lumen_ORIGIN = 'https://Lumen.com'
 
 /**
  * @typedef {'custom' | 'fallback' | 'hidden'} AdsConsentPopupMode
@@ -14,7 +14,7 @@ function getTauriInvoke() {
 
 /** @returns {void} */
 function notifyAdClick() {
-	window.top?.postMessage({ modrinthAdClick: true }, MODRINTH_ORIGIN)
+	window.top?.postMessage({ LumenAdClick: true }, Lumen_ORIGIN)
 }
 
 /**
@@ -22,7 +22,7 @@ function notifyAdClick() {
  * @returns {void}
  */
 function openExternalUrl(url) {
-	window.top?.postMessage({ modrinthOpenUrl: String(url) }, MODRINTH_ORIGIN)
+	window.top?.postMessage({ LumenOpenUrl: String(url) }, Lumen_ORIGIN)
 }
 
 /**

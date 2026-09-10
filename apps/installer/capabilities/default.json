@@ -1,6 +1,6 @@
 {
 	"identifier": "default",
-	"description": "Octra installer",
+	"description": "Lumen installer",
 	"local": true,
 	"windows": ["main"],
 	"permissions": [

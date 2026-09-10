@@ -416,8 +416,8 @@
   "omorphia.component.badge.label.failed": {
     "defaultMessage": "ไม่สำเร็จ"
   },
-  "omorphia.component.badge.label.modrinth-team": {
-    "defaultMessage": "ทีม Modrinth"
+  "omorphia.component.badge.label.Lumen-team": {
+    "defaultMessage": "ทีม Lumen"
   },
   "omorphia.component.badge.label.pending": {
     "defaultMessage": "กําลังดำเนินการ"

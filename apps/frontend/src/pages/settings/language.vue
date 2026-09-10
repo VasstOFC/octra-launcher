@@ -19,13 +19,13 @@ import {
 	LanguageSettings,
 	UnsavedChangesPopup,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 
 const { formatMessage } = useVIntl()
 const languageSettings = ref<InstanceType<typeof LanguageSettings> | null>(null)
 const emptyLanguageState = { locale: '' }
 
 useHead({
-	title: () => `${formatMessage(commonSettingsMessages.language)} - Modrinth`,
+	title: () => `${formatMessage(commonSettingsMessages.language)} - Lumen`,
 })
 </script>

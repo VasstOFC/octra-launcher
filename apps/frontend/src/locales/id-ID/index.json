@@ -83,11 +83,11 @@
   "analytics.chart.controls.display": {
     "message": "Tampilan"
   },
-  "analytics.chart.controls.modrinth-events": {
-    "message": "Acara Modrinth"
+  "analytics.chart.controls.Lumen-events": {
+    "message": "Acara Lumen"
   },
-  "analytics.chart.controls.no-modrinth-events": {
-    "message": "Tidak ada acara Modrinth di grafik."
+  "analytics.chart.controls.no-Lumen-events": {
+    "message": "Tidak ada acara Lumen di grafik."
   },
   "analytics.chart.controls.no-project-events": {
     "message": "Tidak ada acara proyek di grafik."
@@ -165,10 +165,10 @@
     "message": "Pembaruan"
   },
   "analytics.download-source.app": {
-    "message": "Modrinth App"
+    "message": "Lumen App"
   },
   "analytics.download-source.website": {
-    "message": "Situs Web Modrinth"
+    "message": "Situs Web Lumen"
   },
   "analytics.downloads.suffix": {
     "message": "unduhan"
@@ -246,7 +246,7 @@
     "message": "Linux"
   },
   "app-marketing.download.linux-disclaimer": {
-    "message": "Modrinth App untuk Linux <issues-link>diketahui memiliki masalah</issues-link> pada sistem dan konfigurasi tertentu. Bila Modrinth App tidak stabil pada sistem Anda, kami menyarankan Anda untuk mencoba aplikasi lain seperti <prism-link>Prism Launcher</prism-link> untuk mengunduh konten Modrinth dengan mudah."
+    "message": "Lumen App untuk Linux <issues-link>diketahui memiliki masalah</issues-link> pada sistem dan konfigurasi tertentu. Bila Lumen App tidak stabil pada sistem Anda, kami menyarankan Anda untuk mencoba aplikasi lain seperti <prism-link>Prism Launcher</prism-link> untuk mengunduh konten Lumen dengan mudah."
   },
   "app-marketing.download.mac": {
     "message": "Mac"
@@ -255,10 +255,10 @@
     "message": "Pilihan pengunduhan"
   },
   "app-marketing.download.terms": {
-    "message": "Dengan mengunduh Modrinth App, Anda menyetujui <terms-link>Syarat</terms-link> dan <privacy-link>Kebijakan Privasi</privacy-link> kami."
+    "message": "Dengan mengunduh Lumen App, Anda menyetujui <terms-link>Syarat</terms-link> dan <privacy-link>Kebijakan Privasi</privacy-link> kami."
   },
   "app-marketing.download.title": {
-    "message": "Unduh Modrinth App (Beta)"
+    "message": "Unduh Lumen App (Beta)"
   },
   "app-marketing.download.windows": {
     "message": "Windows"
@@ -270,7 +270,7 @@
     "message": "Ikuti proyek"
   },
   "app-marketing.features.importing.description": {
-    "message": "Impor semua profil favorit Anda dari launcher yang telah Anda gunakan sebelumnya, dan mulai menggunakan Modrinth App dalam hitungan detik!"
+    "message": "Impor semua profil favorit Anda dari launcher yang telah Anda gunakan sebelumnya, dan mulai menggunakan Lumen App dalam hitungan detik!"
   },
   "app-marketing.features.importing.gdlauncher-alt": {
     "message": "GDLauncher"
@@ -288,7 +288,7 @@
     "message": "oleh {author}"
   },
   "app-marketing.features.mod-management.description": {
-    "message": "Modrinth mempermudah pengurusan seluruh mod Anda dalam satu tempat. Anda dapat memasang, menghapus, dan memperbarui mod dalam satu klik."
+    "message": "Lumen mempermudah pengurusan seluruh mod Anda dalam satu tempat. Anda dapat memasang, menghapus, dan memperbarui mod dalam satu klik."
   },
   "app-marketing.features.mod-management.installed-mods": {
     "message": "Mod terpasang"
@@ -312,7 +312,7 @@
     "message": "Mode luring"
   },
   "app-marketing.features.open-source.description": {
-    "message": "Peluncur Modrinth sepenuhnya bersumber terbuka. Anda dapat melihat kode sumber pada <github-link>GitHub</github-link> kami!"
+    "message": "Peluncur Lumen sepenuhnya bersumber terbuka. Anda dapat melihat kode sumber pada <github-link>GitHub</github-link> kami!"
   },
   "app-marketing.features.open-source.title": {
     "message": "Sumber terbuka"
@@ -324,7 +324,7 @@
     "message": "% CPU"
   },
   "app-marketing.features.performance.description": {
-    "message": "Modrinth App bekerja lebih baik daripada pengelola mod ternama lainnya, dengan menggunakan hanya 150 MB RAM!"
+    "message": "Lumen App bekerja lebih baik daripada pengelola mod ternama lainnya, dengan menggunakan hanya 150 MB RAM!"
   },
   "app-marketing.features.performance.discord": {
     "message": "Discord"
@@ -341,8 +341,8 @@
   "app-marketing.features.performance.less-than-150mb": {
     "message": "< 150 MB"
   },
-  "app-marketing.features.performance.modrinth-app": {
-    "message": "Modrinth App"
+  "app-marketing.features.performance.Lumen-app": {
+    "message": "Lumen App"
   },
   "app-marketing.features.performance.one-billion-percent": {
     "message": "1 miliar %"
@@ -360,13 +360,13 @@
     "message": "Berkinerja"
   },
   "app-marketing.features.play.description": {
-    "message": "Gunakan Modrinth App untuk mengunduh dan memainkan mod dan paket mod favorit Anda."
+    "message": "Gunakan Lumen App untuk mengunduh dan memainkan mod dan paket mod favorit Anda."
   },
   "app-marketing.features.play.title": {
     "message": "Mainkan mod favorit Anda"
   },
   "app-marketing.features.sharing.description": {
-    "message": "Buat, bagikan, dan mainkan paket mod dengan berbagai pilihan mod dan paket mod yang dibagikan di Modrinth."
+    "message": "Buat, bagikan, dan mainkan paket mod dengan berbagai pilihan mod dan paket mod yang dibagikan di Lumen."
   },
   "app-marketing.features.sharing.modpack": {
     "message": "Paket Mod"
@@ -381,7 +381,7 @@
     "message": "Tidak seperti launcher lain"
   },
   "app-marketing.features.website.description": {
-    "message": "Modrinth App berintegrasi penuh dengan situs web, sehingga Anda dapat mengakses semua proyek favorit Anda dari aplikasi!"
+    "message": "Lumen App berintegrasi penuh dengan situs web, sehingga Anda dapat mengakses semua proyek favorit Anda dari aplikasi!"
   },
   "app-marketing.features.website.title": {
     "message": "Integrasi situs web"
@@ -390,19 +390,19 @@
     "message": "yang pernah Anda gunakan"
   },
   "app-marketing.hero.app-screenshot-alt": {
-    "message": "Tangkapan layar dari Modrinth App dengan pemasangan Cobblemon dibuka pada halaman 'Konten'."
+    "message": "Tangkapan layar dari Lumen App dengan pemasangan Cobblemon dibuka pada halaman 'Konten'."
   },
   "app-marketing.hero.description": {
-    "message": "Modrinth App adalah launcher unik dan bersumber terbuka yang memperbolehkan Anda untuk memainkan mod-mod favorit Anda dan memastikannya diperbarui, semuanya dalam satu kemasan ringkas."
+    "message": "Lumen App adalah launcher unik dan bersumber terbuka yang memperbolehkan Anda untuk memainkan mod-mod favorit Anda dan memastikannya diperbarui, semuanya dalam satu kemasan ringkas."
   },
   "app-marketing.hero.download-button": {
-    "message": "Unduh Modrinth App"
+    "message": "Unduh Lumen App"
   },
-  "app-marketing.hero.download-modrinth-app": {
-    "message": "Unduh Modrinth App"
+  "app-marketing.hero.download-Lumen-app": {
+    "message": "Unduh Lumen App"
   },
-  "app-marketing.hero.download-modrinth-app-for-os": {
-    "message": "Unduh Modrinth App untuk {os}"
+  "app-marketing.hero.download-Lumen-app-for-os": {
+    "message": "Unduh Lumen App untuk {os}"
   },
   "app-marketing.hero.minecraft-screenshot-alt": {
     "message": "Tangkapan layar menu utama pemasangan Cobblemon."
@@ -477,7 +477,7 @@
     "message": "Masuk"
   },
   "auth.sign-up.legal-dislaimer": {
-    "message": "Dengan membuat sebuah akun, Anda menyetujui <terms-link>Ketentuan</terms-link> dan <privacy-policy-link>Kebijakan Privasi</privacy-policy-link> Modrinth."
+    "message": "Dengan membuat sebuah akun, Anda menyetujui <terms-link>Ketentuan</terms-link> dan <privacy-policy-link>Kebijakan Privasi</privacy-policy-link> Lumen."
   },
   "auth.sign-up.sign-in-option.title": {
     "message": "Sudah memiliki akun?"
@@ -540,7 +540,7 @@
     "message": "Apakah Anda yakin ingin menghapus koleksi ini?"
   },
   "collection.description": {
-    "message": "{description} - Lihat koleksi {name} oleh {username} di Modrinth"
+    "message": "{description} - Lihat koleksi {name} oleh {username} di Lumen"
   },
   "collection.description.following": {
     "message": "Koleksi semua proyek yang Anda ikuti yang dibuat secara otomatis."
@@ -792,7 +792,7 @@
     "message": "Formulir pajak"
   },
   "dashboard.creator-tax-form-modal.security.description": {
-    "message": "Modrinth menggunakan penyedia pihak ketiga Track1099 untuk mengumpulkan dan menyimpan formulir pajak Anda dengan aman. <security-link>Pelajari lebih lanjut di sini.</security-link>"
+    "message": "Lumen menggunakan penyedia pihak ketiga Track1099 untuk mengumpulkan dan menyimpan formulir pajak Anda dengan aman. <security-link>Pelajari lebih lanjut di sini.</security-link>"
   },
   "dashboard.creator-tax-form-modal.security.header": {
     "message": "Praktik keamanan"
@@ -957,7 +957,7 @@
     "message": "Untuk menarik <b>{available}</b> Anda yang tersedia secara penuh, silakan lengkapi formulir di bawah ini. Hal ini diperlukan untuk pelaporan pajak dan hanya perlu dilakukan sekali saja."
   },
   "dashboard.creator-withdraw-modal.tax-form-required.body-with-limit": {
-    "message": "Anda wajib melengkapi formulir W-9 atau W-8 untuk catatan pajak Modrinth sehingga kami tetap memenuhi peraturan perpajakan."
+    "message": "Anda wajib melengkapi formulir W-9 atau W-8 untuk catatan pajak Lumen sehingga kami tetap memenuhi peraturan perpajakan."
   },
   "dashboard.creator-withdraw-modal.tax-form-required.header": {
     "message": "Formulir pajak wajib"
@@ -999,7 +999,7 @@
     "message": "Sur-el belum terverifikasi"
   },
   "dashboard.creator-withdraw-modal.tremendous-details.unverified-email-message": {
-    "message": "Alamat sur-el pengiriman yang Anda masukkan tidak terikat dengan akun Modrinth Anda. Modrinth tidak dapat memulihkan ganjaran yang dikirim ke alamat sur-el yang salah."
+    "message": "Alamat sur-el pengiriman yang Anda masukkan tidak terikat dengan akun Lumen Anda. Lumen tidak dapat memulihkan ganjaran yang dikirim ke alamat sur-el yang salah."
   },
   "dashboard.creator-withdraw-modal.tremendous-details.usd-paypal-warning-header": {
     "message": "Biaya lebih rendah tersedia"
@@ -1026,7 +1026,7 @@
     "message": "Estimasi pendapatan dapat berubah sewaktu-waktu hingga data tersebut tersedia."
   },
   "dashboard.revenue.estimated-tooltip.msg2": {
-    "message": "Klik untuk membaca tentang bagaimana Modrinth menangani pendapatan Anda."
+    "message": "Klik untuk membaca tentang bagaimana Lumen menangani pendapatan Anda."
   },
   "dashboard.revenue.estimated-with-date": {
     "message": "Perkiraan {date}"
@@ -1047,7 +1047,7 @@
     "message": "Ditarik"
   },
   "dashboard.revenue.tos": {
-    "message": "Dengan mengunggah proyek ke Modrinth dan menarik uang dari rekening Anda, Anda menyetujui <terms-link>Syarat dan Ketentuan Program Ganjaran</terms-link> kami. Pelajari lebih lanjut tentang <info-link>Program Hadiah</info-link>."
+    "message": "Dengan mengunggah proyek ke Lumen dan menarik uang dari rekening Anda, Anda menyetujui <terms-link>Syarat dan Ketentuan Program Ganjaran</terms-link> kami. Pelajari lebih lanjut tentang <info-link>Program Hadiah</info-link>."
   },
   "dashboard.revenue.transactions.btn.download-csv": {
     "message": "Unduh sebagai CSV"
@@ -1206,7 +1206,7 @@
     "message": "Koleksi tersebut mungkin bersifat pribadi."
   },
   "error.collection.404.list_item.3": {
-    "message": "Koleksi tersebut mungkin telah dihapus oleh tim moderasi Modrinth karena melanggar <tou-link>Ketentuan Penggunaan</tou-link> kami."
+    "message": "Koleksi tersebut mungkin telah dihapus oleh tim moderasi Lumen karena melanggar <tou-link>Ketentuan Penggunaan</tou-link> kami."
   },
   "error.collection.404.list_title": {
     "message": "Mengapa?"
@@ -1227,10 +1227,10 @@
     "message": "Konten tidak tersedia karena alasan hukum"
   },
   "error.generic.default.list_item.1": {
-    "message": "Periksa apakah Modrinth sedang mengalami gangguan di <status-link>halaman Status</status-link>."
+    "message": "Periksa apakah Lumen sedang mengalami gangguan di <status-link>halaman Status</status-link>."
   },
   "error.generic.default.list_item.2": {
-    "message": "Bila hal ini terus terjadi, Anda mungkin ingin memberi tahu Tim Modrinth dengan bergabung ke <discord-link>server Discord</discord-link> kami."
+    "message": "Bila hal ini terus terjadi, Anda mungkin ingin memberi tahu Tim Lumen dengan bergabung ke <discord-link>server Discord</discord-link> kami."
   },
   "error.generic.default.list_title": {
     "message": "Silakan coba lagi dalam beberapa menit."
@@ -1248,7 +1248,7 @@
     "message": "Pemilik organisasi mungkin telah mengubah URL atau menghapusnya."
   },
   "error.organization.404.list_item.3": {
-    "message": "Organisasi tersebut mungkin telah dihapus oleh tim moderasi Modrinth karena melanggar <tou-link>Ketentuan Penggunaan</tou-link> kami."
+    "message": "Organisasi tersebut mungkin telah dihapus oleh tim moderasi Lumen karena melanggar <tou-link>Ketentuan Penggunaan</tou-link> kami."
   },
   "error.organization.404.list_title": {
     "message": "Mengapa?"
@@ -1263,7 +1263,7 @@
     "message": "Pemilik proyek mungkin telah mengubah URL, menjadikan proyek tersebut bersifat pribadi, atau menghapusnya."
   },
   "error.project.404.list_item.3": {
-    "message": "Proyek tersebut mungkin telah dihapus oleh tim moderasi Modrinth karena melanggar <tou-link>Ketentuan Penggunaan</tou-link> kami."
+    "message": "Proyek tersebut mungkin telah dihapus oleh tim moderasi Lumen karena melanggar <tou-link>Ketentuan Penggunaan</tou-link> kami."
   },
   "error.project.404.list_title": {
     "message": "Mengapa?"
@@ -1278,7 +1278,7 @@
     "message": "Pengguna mungkin telah mengubah nama penggunanya atau menghapus akunnya."
   },
   "error.user.404.list_item.3": {
-    "message": "Akun pengguna mungkin telah dihentikan karena melanggar <tou-link>Ketentuan Penggunaan</tou-link> Modrinth."
+    "message": "Akun pengguna mungkin telah dihentikan karena melanggar <tou-link>Ketentuan Penggunaan</tou-link> Lumen."
   },
   "error.user.404.list_title": {
     "message": "Mengapa?"
@@ -1317,10 +1317,10 @@
     "message": "Ketika server Anda memiliki beban berat, kami memberikan akses terhadap utas CPU tambahan untuk sementara waktu demi mengurangi lonjakan latensi dan ketidakstabilan. Ini dapat membantu mencegah penurunan TPD (tik per detik) di bawah 20 dan memastikan pengalaman yang mulus. Karena utas CPU tambahan tersebut hanya tersedia dalam waktu singkat selama periode beban tinggi, mereka mungkin tidak muncul di laporan Spark atau alat-alat pemrofilan lainnya."
   },
   "hosting-marketing.faq.cpu-kind": {
-    "message": "Jenis CPU apa yang digunakan oleh server Modrinth Hosting untuk berjalan?"
+    "message": "Jenis CPU apa yang digunakan oleh server Lumen Hosting untuk berjalan?"
   },
   "hosting-marketing.faq.cpu-kind.answer": {
-    "message": "Server Modrinth Hosting didukung oleh CPU AMD Ryzen 7900 dan CPU setara 7950X3D berkecepatan 5+ GHz, dipasangkan dengan memori DDR5."
+    "message": "Server Lumen Hosting didukung oleh CPU AMD Ryzen 7900 dan CPU setara 7950X3D berkecepatan 5+ GHz, dipasangkan dengan memori DDR5."
   },
   "hosting-marketing.faq.currency": {
     "message": "Dalam mata uang apa harga-harga tersebut?"
@@ -1329,19 +1329,19 @@
     "message": "Seluruh harga tercantum dalam Dolar Amerika Serikat (USD)."
   },
   "hosting-marketing.faq.ddos-protection": {
-    "message": "Apakah server Modrinth Hosting memiliki perlindungan terhadap DDoS?"
+    "message": "Apakah server Lumen Hosting memiliki perlindungan terhadap DDoS?"
   },
   "hosting-marketing.faq.ddos-protection.answer": {
-    "message": "Ya. Semua server Modrinth Hosting dilengkapi dengan perlindungan terhadap DDoS, dengan kapasitas hingga 17 Tbps di beberapa lokasi."
+    "message": "Ya. Semua server Lumen Hosting dilengkapi dengan perlindungan terhadap DDoS, dengan kapasitas hingga 17 Tbps di beberapa lokasi."
   },
   "hosting-marketing.faq.heading": {
     "message": "Pertanyaan Umum"
   },
   "hosting-marketing.faq.how-fast": {
-    "message": "Seberapa cepat server Modrinth Hosting?"
+    "message": "Seberapa cepat server Lumen Hosting?"
   },
   "hosting-marketing.faq.how-fast.answer.one": {
-    "message": "Server Modrinth Hosting dihoskan pada perangkat keras kinerja tinggi yang sangat modern, tetapi itu sulit untuk menjawab secara pasti bagaimana hal itu berdampak pada kecepatan server Anda, karena ada banyak faktor yang memengaruhinya, seperti mod, paket data, atau pasang-masuk pada server Anda, dan bahkan tingkah laku pengguna."
+    "message": "Server Lumen Hosting dihoskan pada perangkat keras kinerja tinggi yang sangat modern, tetapi itu sulit untuk menjawab secara pasti bagaimana hal itu berdampak pada kecepatan server Anda, karena ada banyak faktor yang memengaruhinya, seperti mod, paket data, atau pasang-masuk pada server Anda, dan bahkan tingkah laku pengguna."
   },
   "hosting-marketing.faq.how-fast.answer.two": {
     "message": "Kebanyakan masalah kinerja yang timbul biasanya disebabkan oleh paket mod, mod, paket data, atau pasang-masuk yang dioptimalkan sehingga server menjadi lambat. Karena server kami sangat canggih, itu seharusnya tidak akan sering terjadi selama Anda memilih berlangganan yang tepat untuk konten yang Anda jalankan di server."
@@ -1350,16 +1350,16 @@
     "message": "Dapatkah saya menambah penyimpanan di server saya?"
   },
   "hosting-marketing.faq.increase-storage.answer": {
-    "message": "Ya, Anda dapat menambah penyimpanan server Anda tanpa biaya tambahan. Bila Anda perlu penyimpanan tambahan, hubungi Dukungan Modrinth."
+    "message": "Ya, Anda dapat menambah penyimpanan server Anda tanpa biaya tambahan. Bila Anda perlu penyimpanan tambahan, hubungi Dukungan Lumen."
   },
   "hosting-marketing.faq.location": {
-    "message": "Di mana server Modrinth Hosting terletak? Dapatkah saya memilih wilayah?"
+    "message": "Di mana server Lumen Hosting terletak? Dapatkah saya memilih wilayah?"
   },
   "hosting-marketing.faq.versions-loaders": {
     "message": "Versi dan pemuat Minecraft apa sajakah yang dapat digunakan?"
   },
   "hosting-marketing.faq.versions-loaders.answer.one": {
-    "message": "Server Modrinth Hosting dapat menjalankan seluruh versi Minecraft: Java Edition mulai dari 1.2.5, termasuk versi-versi citra (snapshot)."
+    "message": "Server Lumen Hosting dapat menjalankan seluruh versi Minecraft: Java Edition mulai dari 1.2.5, termasuk versi-versi citra (snapshot)."
   },
   "hosting-marketing.faq.versions-loaders.answer.two": {
     "message": "Kami juga mendukung berbagai jenis pemuat mod dan pasang-masuk, seperti Fabric, Quilt, Forge, dan NeoForge untuk mod, serta Paper dan Purpur untuk pasang-masuk. Ketersediaan bergantung pada apakah pemuat mod atau pasang-masuk tersebut mendukung versi Minecraft terpilih."
@@ -1376,11 +1376,11 @@
   "hosting-marketing.hero.button.start-your-server": {
     "message": "Mulai server Anda"
   },
-  "hosting-marketing.hero.host-with-modrinth": {
-    "message": "Hoskan server berikut Anda dengan Modrinth Hosting"
+  "hosting-marketing.hero.host-with-Lumen": {
+    "message": "Hoskan server berikut Anda dengan Lumen Hosting"
   },
   "hosting-marketing.hero.hosting-description": {
-    "message": "Modrinth Hosting adalah cara termudah untuk mengehos server Minecraft: Java Edition Anda sendiri. Pasang dan mainkan mod dan paket mod kesukaan Anda dengan mulus, semuanya dalam platform Modrinth."
+    "message": "Lumen Hosting adalah cara termudah untuk mengehos server Minecraft: Java Edition Anda sendiri. Pasang dan mainkan mod dan paket mod kesukaan Anda dengan mulus, semuanya dalam platform Lumen."
   },
   "hosting-marketing.included.advanced-networking": {
     "message": "Manajemen jaringan lanjutan"
@@ -1398,10 +1398,10 @@
     "message": "URL Tersuai"
   },
   "hosting-marketing.included.custom-url.description": {
-    "message": "Bagikan server Anda dengan URL <contrast>modrinth.gg</contrast> tersuai."
+    "message": "Bagikan server Anda dengan URL <contrast>Lumen.gg</contrast> tersuai."
   },
   "hosting-marketing.included.description": {
-    "message": "Setiap server dilengkapi dengan serangkaian fitur yang dirancang untuk menyediakan pengalaman pengehosan yang hanya dapat ditawarkan oleh Modrinth."
+    "message": "Setiap server dilengkapi dengan serangkaian fitur yang dirancang untuk menyediakan pengalaman pengehosan yang hanya dapat ditawarkan oleh Lumen."
   },
   "hosting-marketing.included.file-manager": {
     "message": "Pengelola berkas yang mudah digunakan"
@@ -1416,19 +1416,19 @@
     "message": "Bantuan saat Anda memerlukannya"
   },
   "hosting-marketing.included.help.description": {
-    "message": "Hubungi tim Modrinth untuk mendapat bantuan terkait server Anda kapan saja."
+    "message": "Hubungi tim Lumen untuk mendapat bantuan terkait server Anda kapan saja."
   },
   "hosting-marketing.included.powerful-console": {
     "message": "Konsol canggih, pengelola properti server, dan banyak lagi"
   },
   "hosting-marketing.included.powerful-console.description": {
-    "message": "Modrinth Hosting dilengkapi dengan alat-alat yang canggih untuk mengelola server Anda."
+    "message": "Lumen Hosting dilengkapi dengan alat-alat yang canggih untuk mengelola server Anda."
   },
   "hosting-marketing.included.sftp-access": {
     "message": "Akses SFTP"
   },
   "hosting-marketing.included.sftp-access.description": {
-    "message": "Akses berkas-berkas server Anda secara langsung dengan SFTP yang terintegrasi dalam Modrinth Hosting."
+    "message": "Akses berkas-berkas server Anda secara langsung dengan SFTP yang terintegrasi dalam Lumen Hosting."
   },
   "hosting-marketing.included.with-your-server": {
     "message": "Termasuk dalam server Anda"
@@ -1451,20 +1451,20 @@
   "hosting-marketing.server-for-everyone": {
     "message": "Server untuk semuanya"
   },
-  "hosting-marketing.why.all-on-modrinth": {
-    "message": "Kelola semuanya di Modrinth"
+  "hosting-marketing.why.all-on-Lumen": {
+    "message": "Kelola semuanya di Lumen"
   },
-  "hosting-marketing.why.all-on-modrinth.description": {
-    "message": "Server, mod, pemain, dan lainnya semua ada di Modrinth. Tidak perlu berganti-ganti platform."
+  "hosting-marketing.why.all-on-Lumen.description": {
+    "message": "Server, mod, pemain, dan lainnya semua ada di Lumen. Tidak perlu berganti-ganti platform."
   },
   "hosting-marketing.why.consistently-fast": {
     "message": "Selalu cepat"
   },
   "hosting-marketing.why.consistently-fast.description": {
-    "message": "Infrastruktur kami tidak pernah kelebihan muatan, yang berarti setiap server yang dihoskan di Modrinth selalu berjalan dengan kinerja penuh."
+    "message": "Infrastruktur kami tidak pernah kelebihan muatan, yang berarti setiap server yang dihoskan di Lumen selalu berjalan dengan kinerja penuh."
   },
   "hosting-marketing.why.description": {
-    "message": "Pilih dari ribuan paket mod di Modrinth atau buat sendiri. Undang teman Anda ketika Anda sudah siap bermain."
+    "message": "Pilih dari ribuan paket mod di Lumen atau buat sendiri. Undang teman Anda ketika Anda sudah siap bermain."
   },
   "hosting-marketing.why.heading": {
     "message": "Cari paket mod. Sekarang, ini adalah server."
@@ -1473,22 +1473,22 @@
     "message": "Rasakan pengehosan yang modern dan dapat diandalkan"
   },
   "hosting-marketing.why.modern-reliable-hosting.description": {
-    "message": "Server Modrinth Hosting dihos pada <contrast>CPU AMD kinerja tinggi dengan RAM DDR5</contrast>, berjalan pada perangkat lunak tersuai untuk memastikan server Anda berjalan mulus."
+    "message": "Server Lumen Hosting dihos pada <contrast>CPU AMD kinerja tinggi dengan RAM DDR5</contrast>, berjalan pada perangkat lunak tersuai untuk memastikan server Anda berjalan mulus."
   },
   "hosting-marketing.why.where-mods-are": {
     "message": "Bermain di tempat mod-mod Anda berada"
   },
   "hosting-marketing.why.where-mods-are.description": {
-    "message": "Modrinth Hosting mengintegrasikan proses pemasangan mod dan paket mod ke server Anda dengan mulus."
+    "message": "Lumen Hosting mengintegrasikan proses pemasangan mod dan paket mod ke server Anda dengan mulus."
   },
-  "hosting-marketing.why.why-modrinth-hosting": {
-    "message": "Mengapa harus Modrinth Hosting?"
+  "hosting-marketing.why.why-Lumen-hosting": {
+    "message": "Mengapa harus Lumen Hosting?"
   },
   "hosting-marketing.why.your-favorite-mods": {
     "message": "Semua mod-mod favorit Anda"
   },
   "hosting-marketing.why.your-favorite-mods.description": {
-    "message": "Pilih antara Vanila, Fabric, Forge, Quilt, dan NeoForge. Bila ia ada di Modrinth, ia dapat dijalankan di server Anda."
+    "message": "Pilih antara Vanila, Fabric, Forge, Quilt, dan NeoForge. Bila ia ada di Lumen, ia dapat dijalankan di server Anda."
   },
   "hosting.plan.out-of-stock": {
     "message": "Habis"
@@ -1503,7 +1503,7 @@
     "message": "Buka dasbor"
   },
   "landing.creator.feature.constantly-evolving.description": {
-    "message": "Dapatkan pengalaman pengemodan terbaik dengan pembaruan terus-menerus dari tim Modrinth"
+    "message": "Dapatkan pengalaman pengemodan terbaik dengan pembaruan terus-menerus dari tim Lumen"
   },
   "landing.creator.feature.constantly-evolving.title": {
     "message": "Terus Berkembang"
@@ -1548,13 +1548,13 @@
     "message": "Ikuti proyek yang Anda sukai"
   },
   "landing.feature.launcher.description": {
-    "message": "API sumber terbuka Modrinth memungkinkan peluncur untuk menambahkan integrasi mendalam dengan Modrinth. Anda dapat menggunakan Modrinth melalui <link>aplikasi kami sendiri</link> dan beberapa peluncur paling populer seperti ATLauncher, MultiMC, dan Prism Launcher."
+    "message": "API sumber terbuka Lumen memungkinkan peluncur untuk menambahkan integrasi mendalam dengan Lumen. Anda dapat menggunakan Lumen melalui <link>aplikasi kami sendiri</link> dan beberapa peluncur paling populer seperti ATLauncher, MultiMC, dan Prism Launcher."
   },
   "landing.feature.launcher.heading": {
     "message": "Mainkan dengan peluncur favorit Anda"
   },
   "landing.feature.search.description": {
-    "message": "Pencarian kilat dan penyaringan canggih Modrinth memungkinkan Anda menemukan apa yang Anda inginkan saat mengetik."
+    "message": "Pencarian kilat dan penyaringan canggih Lumen memungkinkan Anda menemukan apa yang Anda inginkan saat mengetik."
   },
   "landing.feature.search.heading": {
     "message": "Temukan apa yang Anda mau, dengan cepat dan mudah"
@@ -1587,10 +1587,10 @@
     "message": "ATLauncher"
   },
   "landing.launcher.graphic-alt": {
-    "message": "Representasi sederhana dari jendela Minecraft, dengan logo Mojang Studios berwarna hijau Modrinth."
+    "message": "Representasi sederhana dari jendela Minecraft, dengan logo Mojang Studios berwarna hijau Lumen."
   },
-  "landing.launcher.modrinth-app-label": {
-    "message": "Modrinth App"
+  "landing.launcher.Lumen-app-label": {
+    "message": "Lumen App"
   },
   "landing.launcher.prism-launcher-label": {
     "message": "Prism Launcher"
@@ -1677,22 +1677,22 @@
     "message": "Kunjungi pengaturan akun"
   },
   "layout.banner.add-email.description": {
-    "message": "Demi alasan keamanan, Modrinth mengharuskan Anda untuk mendaftarkan alamat sur-el ke akun Anda."
+    "message": "Demi alasan keamanan, Lumen mengharuskan Anda untuk mendaftarkan alamat sur-el ke akun Anda."
   },
   "layout.banner.build-fail.description": {
-    "message": "Penyebaran bagian depan Modrinth ini gagal menghasilkan keadaan dari API. Hal ini mungkin disebabkan oleh gangguan atau kesalahan konfigurasi. Bangun ulang saat API tersedia. Kode kesalahan: {errors}; URL API saat ini adalah: {url}"
+    "message": "Penyebaran bagian depan Lumen ini gagal menghasilkan keadaan dari API. Hal ini mungkin disebabkan oleh gangguan atau kesalahan konfigurasi. Bangun ulang saat API tersedia. Kode kesalahan: {errors}; URL API saat ini adalah: {url}"
   },
   "layout.banner.build-fail.title": {
     "message": "Terjadi kesalahan saat menghasilkan keadaan dari API saat membangun."
   },
   "layout.banner.preview.title": {
-    "message": "Ini adalah penerapan pratinjau dari situs web Modrinth."
+    "message": "Ini adalah penerapan pratinjau dari situs web Lumen."
   },
   "layout.banner.staging.description": {
-    "message": "Lingkungan pementasan sepenuhnya terpisah dari basis data Modrinth produksi. Lingkungan ini digunakan untuk tujuan pengujian dan pengawakutuan, dan mungkin menjalankan versi pengembangan dari bagian belakang atau depan Modrinth yang lebih baru daripada instans produksi."
+    "message": "Lingkungan pementasan sepenuhnya terpisah dari basis data Lumen produksi. Lingkungan ini digunakan untuk tujuan pengujian dan pengawakutuan, dan mungkin menjalankan versi pengembangan dari bagian belakang atau depan Lumen yang lebih baru daripada instans produksi."
   },
   "layout.banner.staging.title": {
-    "message": "Anda sedang melihat lingkungan pementasan Modrinth"
+    "message": "Anda sedang melihat lingkungan pementasan Lumen"
   },
   "layout.banner.subscription-payment-failed.button": {
     "message": "Perbarui informasi penagihan"
@@ -1707,7 +1707,7 @@
     "message": "Lengkapi formulir pajak"
   },
   "layout.banner.tax.description": {
-    "message": "Anda telah menarik lebih dari {threshold} dari Modrinth tahun ini. Untuk mematuhi peraturan perpajakan, Anda harus melengkapi formulir pajak. Penarikan dana Anda dihentikan sementara hingga formulir diajukan."
+    "message": "Anda telah menarik lebih dari {threshold} dari Lumen tahun ini. Untuk mematuhi peraturan perpajakan, Anda harus melengkapi formulir pajak. Penarikan dana Anda dihentikan sementara hingga formulir diajukan."
   },
   "layout.banner.tax.title": {
     "message": "Formulir pajak diperlukan"
@@ -1725,7 +1725,7 @@
     "message": "Kirim ulang sur-el verifikasi"
   },
   "layout.banner.verify-email.description": {
-    "message": "Demi alasan keamanan, Modrinth mengharuskan Anda untuk memverifikasi alamat sur-el yang terkait dengan akun Anda."
+    "message": "Demi alasan keamanan, Lumen mengharuskan Anda untuk memverifikasi alamat sur-el yang terkait dengan akun Anda."
   },
   "layout.footer.about": {
     "message": "Tentang"
@@ -1766,23 +1766,23 @@
   "layout.footer.legal.terms-of-use": {
     "message": "Ketentuan Penggunaan"
   },
-  "layout.footer.modrinth-information": {
-    "message": "Informasi Modrinth"
+  "layout.footer.Lumen-information": {
+    "message": "Informasi Lumen"
   },
   "layout.footer.open-source": {
-    "message": "Modrinth adalah proyek <github-link>bersumber terbuka</github-link>."
+    "message": "Lumen adalah proyek <github-link>bersumber terbuka</github-link>."
   },
   "layout.footer.products": {
     "message": "Produk"
   },
   "layout.footer.products.app": {
-    "message": "Modrinth App"
+    "message": "Lumen App"
   },
   "layout.footer.products.plus": {
-    "message": "Modrinth+"
+    "message": "Lumen+"
   },
   "layout.footer.products.servers": {
-    "message": "Modrinth Hosting"
+    "message": "Lumen Hosting"
   },
   "layout.footer.resources": {
     "message": "Sumber Daya"
@@ -1815,7 +1815,7 @@
     "message": "Hidup/matikan menu"
   },
   "layout.meta.description": {
-    "message": "Unduh mod, pasang-masuk, paket data, efek gambar, paket sumber, dan paket mod untuk Minecraft di Modrinth. Temukan dan terbitkan proyek di Modrinth dengan antarmuka dan API yang modern dan mudah digunakan."
+    "message": "Unduh mod, pasang-masuk, paket data, efek gambar, paket sumber, dan paket mod untuk Minecraft di Lumen. Temukan dan terbitkan proyek di Lumen dengan antarmuka dan API yang modern dan mudah digunakan."
   },
   "layout.meta.og-description": {
     "message": "Temukan dan terbitkan konten Minecraft!"
@@ -1832,8 +1832,8 @@
   "layout.nav.discover": {
     "message": "Temukan"
   },
-  "layout.nav.get-modrinth-app": {
-    "message": "Dapatkan Modrinth App"
+  "layout.nav.get-Lumen-app": {
+    "message": "Dapatkan Lumen App"
   },
   "layout.nav.home": {
     "message": "Beranda"
@@ -1841,11 +1841,11 @@
   "layout.nav.host-a-server": {
     "message": "Jalankan server"
   },
-  "layout.nav.modrinth-app": {
-    "message": "Modrinth App"
+  "layout.nav.Lumen-app": {
+    "message": "Lumen App"
   },
-  "layout.nav.modrinth-home-page": {
-    "message": "Beranda Modrinth"
+  "layout.nav.Lumen-home-page": {
+    "message": "Beranda Lumen"
   },
   "layout.nav.my-servers": {
     "message": "Server saya"
@@ -1868,8 +1868,8 @@
   "layout.nav.search": {
     "message": "Cari"
   },
-  "layout.nav.upgrade-to-modrinth-plus": {
-    "message": "Tingkatkan ke Modrinth+"
+  "layout.nav.upgrade-to-Lumen-plus": {
+    "message": "Tingkatkan ke Lumen+"
   },
   "moderation.moderate": {
     "message": "Moderasi"
@@ -2178,7 +2178,7 @@
     "message": "Kirim ulang untuk peninjauan"
   },
   "project-moderation-nags.resubmit-for-review-desc": {
-    "message": "Proyek Anda telah {status, select, rejected {ditolak} withheld {ditahan} other {{status}}} oleh staf Modrinth. Umumnya, Anda dapat mengirim ulang proyek ini untuk ditinjau kembali setelah menangani masalah yang tertulis pada pesan staf."
+    "message": "Proyek Anda telah {status, select, rejected {ditolak} withheld {ditahan} other {{status}}} oleh staf Lumen. Umumnya, Anda dapat mengirim ulang proyek ini untuk ditinjau kembali setelah menangani masalah yang tertulis pada pesan staf."
   },
   "project-moderation-nags.submit-checklist-tooltip": {
     "message": "Anda harus menyelesaikan langkah-langkah yang diperlukan pada daftar centang penerbitan!"
@@ -2274,7 +2274,7 @@
     "message": "Tinjau proyek"
   },
   "project.actions.servers-promo.description": {
-    "message": "Modrinth Hosting adalah cara termudah untuk bermain bersama teman Anda tanpa repot!"
+    "message": "Lumen Hosting adalah cara termudah untuk bermain bersama teman Anda tanpa repot!"
   },
   "project.actions.servers-promo.pricing": {
     "message": "Mulai dari {price}<small> / bulan</small>"
@@ -2295,7 +2295,7 @@
     "message": "{title} tidak mendukung {gameVersion} untuk {platform}"
   },
   "project.download.no-app": {
-    "message": "Tidak memiliki Modrinth App?"
+    "message": "Tidak memiliki Lumen App?"
   },
   "project.download.platform-unsupported-tooltip": {
     "message": "{title} tidak mendukung {platform} untuk {gameVersion}"
@@ -2313,7 +2313,7 @@
     "message": "Unduh {title}"
   },
   "project.environment.migration-no-permission.message": {
-    "message": "Kami baru saja merombak sistem Lingkingan pada Modrinth dan pilihan baru kini tersedia. Anda tidak memiliki izin untuk mengubah pengaturan ini, tetapi mohon beri tahu anggota proyek lain bahwa metadata lingkungan perlu diverifikasi."
+    "message": "Kami baru saja merombak sistem Lingkingan pada Lumen dan pilihan baru kini tersedia. Anda tidak memiliki izin untuk mengubah pengaturan ini, tetapi mohon beri tahu anggota proyek lain bahwa metadata lingkungan perlu diverifikasi."
   },
   "project.environment.migration-no-permission.title": {
     "message": "Metadata lingkungan perlu ditinjau"
@@ -2322,7 +2322,7 @@
     "message": "Pelajari lebih lanjut tentang perubahan ini"
   },
   "project.environment.migration.message": {
-    "message": "Kami baru saja merombak sistem Lingkingan pada Modrinth dan pilihan baru kini tersedia. Mohon pastikan metadata sudah benar."
+    "message": "Kami baru saja merombak sistem Lingkingan pada Lumen dan pilihan baru kini tersedia. Mohon pastikan metadata sudah benar."
   },
   "project.environment.migration.review-button": {
     "message": "Tinjau pengaturan lingkungan"
@@ -2418,7 +2418,7 @@
     "message": "Mohon berikan konteks tambahan tentang laporan Anda"
   },
   "report.for.violation": {
-    "message": "Pelanggaran <rules-link>Peraturan</rules-link> Modrinth atau <terms-link>Ketentuan Penggunaan</terms-link>"
+    "message": "Pelanggaran <rules-link>Peraturan</rules-link> Lumen atau <terms-link>Ketentuan Penggunaan</terms-link>"
   },
   "report.for.violation.description": {
     "message": "Meliputi konten berbahaya, spam, menyinggung, menipu, menyesatkan, dan ilegal."
@@ -2649,7 +2649,7 @@
     "message": "Tulis laporan"
   },
   "scopes.sessionAccess.description": {
-    "message": "Mengakses sesi yang dikeluarkan Modrinth"
+    "message": "Mengakses sesi yang dikeluarkan Lumen"
   },
   "scopes.sessionAccess.label": {
     "message": "Akses sesi"
@@ -2931,7 +2931,7 @@
     "message": "Apakah Anda yakin ingin menghapus aplikasi ini?"
   },
   "settings.applications.description.intro": {
-    "message": "Aplikasi dapat digunakan untuk mengautentikasi pengguna Modrinth dengan produk Anda. Untuk informasi lebih lanjut, lihat <docs-link>dokumentasi API Modrinth</docs-link>."
+    "message": "Aplikasi dapat digunakan untuk mengautentikasi pengguna Lumen dengan produk Anda. Untuk informasi lebih lanjut, lihat <docs-link>dokumentasi API Lumen</docs-link>."
   },
   "settings.applications.field.description": {
     "message": "Keterangan"
@@ -3015,13 +3015,13 @@
     "message": "Metode pembayaran"
   },
   "settings.billing.pyro_subscription.description": {
-    "message": "Kelola langganan Modrinth Servers Anda."
+    "message": "Kelola langganan Lumen Servers Anda."
   },
   "settings.billing.pyro_subscription.title": {
-    "message": "Langganan Modrinth Servers"
+    "message": "Langganan Lumen Servers"
   },
   "settings.billing.subscription.description": {
-    "message": "Kelola langganan Modrinth Anda."
+    "message": "Kelola langganan Lumen Anda."
   },
   "settings.billing.subscription.title": {
     "message": "Langganan"
@@ -3030,13 +3030,13 @@
     "message": "Matikan mode pengembang"
   },
   "settings.display.banner.developer-mode.description": {
-    "message": "<strong>Mode pengembang</strong> aktif. Ini akan memungkinkan Anda untuk melihat pengenal internal dari berbagai hal di seluruh Modrinth yang dapat berguna bila Anda adalah seorang pengembang yang menggunakan API Modrinth. Klik logo Modrinth di bagian bawah halaman lima kali untuk menghidupkan mode pengembang."
+    "message": "<strong>Mode pengembang</strong> aktif. Ini akan memungkinkan Anda untuk melihat pengenal internal dari berbagai hal di seluruh Lumen yang dapat berguna bila Anda adalah seorang pengembang yang menggunakan API Lumen. Klik logo Lumen di bagian bawah halaman lima kali untuk menghidupkan mode pengembang."
   },
   "settings.pats.action.create": {
     "message": "Buat PAT"
   },
   "settings.pats.description": {
-    "message": "PAT dapat digunakan untuk mengakses API Modrinth dan dapat dibuat dan dicabut kapan saja. Untuk informasi lebih lanjut, lihat <doc-link>dokumentasi API Modrinth</doc-link>."
+    "message": "PAT dapat digunakan untuk mengakses API Lumen dan dapat dibuat dan dicabut kapan saja. Untuk informasi lebih lanjut, lihat <doc-link>dokumentasi API Lumen</doc-link>."
   },
   "settings.pats.modal.create.action": {
     "message": "Buat PAT"
@@ -3093,7 +3093,7 @@
     "message": "Sesi saat ini"
   },
   "settings.sessions.description": {
-    "message": "Berikut adalah semua perangkat yang saat ini masuk dengan akun Modrinth Anda. Anda dapat keluar dari masing-masing perangkat secara satu per satu.\n\nBila Anda melihat entri yang tidak dikenali, segera keluar dari perangkat tersebut dan ubah kata sandi akun Modrinth Anda."
+    "message": "Berikut adalah semua perangkat yang saat ini masuk dengan akun Lumen Anda. Anda dapat keluar dari masing-masing perangkat secara satu per satu.\n\nBila Anda melihat entri yang tidak dikenali, segera keluar dari perangkat tersebut dan ubah kata sandi akun Lumen Anda."
   },
   "settings.sessions.last-accessed-ago": {
     "message": "Terakhir diakses {ago}"
@@ -3114,7 +3114,7 @@
     "message": "Tampilan"
   },
   "ui.latest-news-row.latest-news": {
-    "message": "Berita terkini dari Modrinth"
+    "message": "Berita terkini dari Lumen"
   },
   "ui.latest-news-row.view-all": {
     "message": "Lihat semua berita"

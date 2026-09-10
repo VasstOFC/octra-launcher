@@ -59,8 +59,8 @@
 </template>
 
 <script setup lang="ts">
-import { ChartAreaIcon, ChartColumnBigIcon, ChartSplineIcon } from '@modrinth/assets'
-import { Tabs, type TabsTab, useVIntl } from '@modrinth/ui'
+import { ChartAreaIcon, ChartColumnBigIcon, ChartSplineIcon } from '@lumen/assets'
+import { Tabs, type TabsTab, useVIntl } from '@lumen/ui'
 
 import {
 	DEFAULT_ANALYTICS_GRAPH_EVENTS_VISIBILITY,

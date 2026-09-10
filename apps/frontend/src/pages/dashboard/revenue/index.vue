@@ -271,14 +271,14 @@
 </template>
 
 <script setup lang="ts">
-import { ArrowUpRightIcon, InProgressIcon, UnknownIcon } from '@modrinth/assets'
+import { ArrowUpRightIcon, InProgressIcon, UnknownIcon } from '@lumen/assets'
 import {
 	defineMessages,
-	injectModrinthClient,
+	injectLumenClient,
 	useFormatDateTime,
 	useFormatMoney,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useQuery } from '@tanstack/vue-query'
 import dayjs from 'dayjs'
 import { Tooltip } from 'floating-vue'
@@ -293,7 +293,7 @@ const formatDate = useFormatDateTime({ dateStyle: 'medium' })
 
 await useAuth()
 
-const client = injectModrinthClient()
+const client = injectLumenClient()
 
 type RevenueBarSegment = {
 	key: string
@@ -330,7 +330,7 @@ const messages = defineMessages({
 	},
 	estimatedTooltip2: {
 		id: 'dashboard.revenue.estimated-tooltip.msg2',
-		defaultMessage: 'Click to read about how Modrinth handles your revenue.',
+		defaultMessage: 'Click to read about how Lumen handles your revenue.',
 	},
 	processing: {
 		id: 'dashboard.revenue.processing',
@@ -361,7 +361,7 @@ const messages = defineMessages({
 	tosLabel: {
 		id: 'dashboard.revenue.tos',
 		defaultMessage:
-			'By uploading projects to Modrinth and withdrawing money from your account, you agree to our <terms-link>Rewards Program Terms</terms-link>. Learn more about the <info-link>Reward Program</info-link>.',
+			'By uploading projects to Lumen and withdrawing money from your account, you agree to our <terms-link>Rewards Program Terms</terms-link>. Learn more about the <info-link>Reward Program</info-link>.',
 	},
 	transactionsHeader: {
 		id: 'dashboard.revenue.transactions.header',

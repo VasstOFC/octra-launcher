@@ -854,7 +854,7 @@ pub async fn launch_minecraft(
     )
     .await?;
     let (effective_loader, loader_version) =
-        crate::octra_skins::overlay_fabric_if_vanilla(
+        crate::lumen_skins::overlay_fabric_if_vanilla(
             &content_set.game_version,
             content_set.loader,
             loader_version,
@@ -957,7 +957,7 @@ pub async fn launch_minecraft(
 
     let env_args = Vec::from(env_args);
     let mut java_args = Vec::from(java_args);
-    if let Err(e) = crate::octra_skins::prepare_launch(
+    if let Err(e) = crate::lumen_skins::prepare_launch(
         &instance_path,
         &content_set.game_version,
         effective_loader,
@@ -1207,7 +1207,7 @@ pub async fn launch_minecraft(
     let (link_project_id, link_version_id) =
         link_project_and_version(&context.link);
 
-    let _ = crate::octra_accounts::publish_presence(
+    let _ = crate::lumen_accounts::publish_presence(
         "ingame",
         Some(&instance.name),
         join_address.as_deref(),

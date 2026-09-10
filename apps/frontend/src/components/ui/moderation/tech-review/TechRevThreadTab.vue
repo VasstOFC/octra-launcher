@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
+import type { Labrinth } from '@lumen/api-client'
 import {
 	BugIcon,
 	CheckIcon,
@@ -9,21 +9,21 @@ import {
 	ShieldCheckIcon,
 	SpinnerIcon,
 	XIcon,
-} from '@modrinth/assets'
-import { type TechReviewContext, techReviewQuickReplies } from '@modrinth/moderation'
+} from '@lumen/assets'
+import { type TechReviewContext, techReviewQuickReplies } from '@lumen/moderation'
 import {
 	Button,
 	type ButtonMenuOption,
 	CollapsibleRegion,
 	commonMessages,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	TeleportOverflowMenu,
 	useFormatBytes,
 	useFormatDateTime,
 	useVIntl,
-} from '@modrinth/ui'
-import { capitalizeString, type ThreadMessage, type User } from '@modrinth/utils'
+} from '@lumen/ui'
+import { capitalizeString, type ThreadMessage, type User } from '@lumen/utils'
 import dayjs from 'dayjs'
 import { computed, ref } from 'vue'
 
@@ -55,7 +55,7 @@ const auth = useAuthState()
 const featureFlags = useFeatureFlags()
 const { formatMessage } = useVIntl()
 const { addNotification } = injectNotificationManager()
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const { getDetailDecision } = injectTechReviewDecisions()
 const formatBytes = useFormatBytes()
 

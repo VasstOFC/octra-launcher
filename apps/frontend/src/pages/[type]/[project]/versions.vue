@@ -138,7 +138,7 @@
 								label: 'Copy link',
 								action: () =>
 									copyToClipboard(
-										`https://modrinth.com/${project.project_type}/${
+										`https://Lumen.com/${project.project_type}/${
 											project.slug ? project.slug : project.id
 										}/version/${encodeURI(version.displayUrlEnding ? version.displayUrlEnding : version.id)}`,
 									),
@@ -179,7 +179,7 @@
 								id: 'copy-maven',
 								label: 'Copy Maven coordinates',
 								action: () => {
-									copyToClipboard(`maven.modrinth:${project.slug}:${version.id}`)
+									copyToClipboard(`maven.Lumen:${project.slug}:${version.id}`)
 								},
 								shown: flags.developerMode,
 							},
@@ -297,18 +297,18 @@ import {
 	ShareIcon,
 	SpinnerIcon,
 	TrashIcon,
-} from '@modrinth/assets'
-import { moderationSettings } from '@modrinth/moderation'
+} from '@lumen/assets'
+import { moderationSettings } from '@lumen/moderation'
 import {
 	ButtonLink,
 	ConfirmModal,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	injectProjectPageContext,
 	ProjectPageVersions,
 	TeleportOverflowMenu,
-} from '@modrinth/ui'
-import { isStaff } from '@modrinth/utils'
+} from '@lumen/ui'
+import { isStaff } from '@lumen/utils'
 import { onMounted, useTemplateRef, watch } from 'vue'
 
 import CreateProjectVersionModal from '~/components/ui/create-project-version/CreateProjectVersionModal.vue'
@@ -325,7 +325,7 @@ const flags = useFeatureFlags()
 const modSettings = useModerationSettings()
 const auth = await useAuth()
 
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const { addNotification } = injectNotificationManager()
 const {
 	projectV2: project,

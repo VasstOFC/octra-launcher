@@ -18,9 +18,9 @@
 </template>
 
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
-import { FileIcon, FilePlusIcon } from '@modrinth/assets'
-import { TagItem } from '@modrinth/ui'
+import type { Labrinth } from '@lumen/api-client'
+import { FileIcon, FilePlusIcon } from '@lumen/assets'
+import { TagItem } from '@lumen/ui'
 
 import { fileTypeLabels } from '~/providers/version/manage-version-modal'
 

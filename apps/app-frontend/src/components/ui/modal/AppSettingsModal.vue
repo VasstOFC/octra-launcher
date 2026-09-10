@@ -9,7 +9,7 @@ import {
 	ShieldIcon,
 	ToggleRightIcon,
 	UserIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import {
 	Button,
 	commonMessages,
@@ -21,13 +21,13 @@ import {
 	TabbedModal,
 	UnsavedChangesPopup,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { getVersion } from '@tauri-apps/api/app'
 import { platform as getOsPlatform, version as getOsVersion } from '@tauri-apps/plugin-os'
 import { computed, provide, ref, watch } from 'vue'
 
-import OctraMark from '@/components/brand/OctraMark.vue'
-import OctraAccountSettings from '@/components/ui/settings/account/OctraAccountSettings.vue'
+import LumenMark from '@/components/brand/LumenMark.vue'
+import LumenAccountSettings from '@/components/ui/settings/account/LumenAccountSettings.vue'
 import PrivacySettings from '@/components/ui/settings/account/PrivacySettings.vue'
 import AppearanceSettings from '@/components/ui/settings/display/AppearanceSettings.vue'
 import BehaviorSettings from '@/components/ui/settings/display/BehaviorSettings.vue'
@@ -106,7 +106,7 @@ const tabs = [
 		}),
 		category: tabCategories.app,
 		icon: UserIcon,
-		content: OctraAccountSettings,
+		content: LumenAccountSettings,
 	},
 	{
 		name: defineMessage({
@@ -232,7 +232,7 @@ function showFeatureFlags(): void {
 }
 
 function showAccount(): void {
-	showTab(OctraAccountSettings)
+	showTab(LumenAccountSettings)
 }
 
 function showSyncedOptions(): void {
@@ -292,7 +292,7 @@ const messages = defineMessages({
 	},
 	appVersion: {
 		id: 'app.settings.app-version',
-		defaultMessage: 'Octra App {version}',
+		defaultMessage: 'Lumen App {version}',
 	},
 	macos: {
 		id: 'app.settings.operating-system.macos',
@@ -452,7 +452,7 @@ async function handleCheckForUpdates() {
 						}"
 						@click="devModeCount"
 					>
-						<OctraMark aria-hidden="true" class="h-6 w-6" />
+						<LumenMark aria-hidden="true" class="h-6 w-6" />
 					</button>
 					<div class="min-w-0">
 						<p class="m-0">

@@ -1,12 +1,12 @@
-import type { AbstractModrinthClient, Labrinth, SharedInstances } from '@modrinth/api-client'
-import type { ContentItem } from '@modrinth/ui'
+import type { AbstractLumenClient, Labrinth, SharedInstances } from '@lumen/api-client'
+import type { ContentItem } from '@lumen/ui'
 
 type SharedInstanceVersionDependency = Labrinth.Versions.v2.Dependency & {
 	project_id?: string
 	version_id?: string
 }
 
-export function createSharedInstanceContentLoader(client: AbstractModrinthClient) {
+export function createSharedInstanceContentLoader(client: AbstractLumenClient) {
 	const instanceVersions = new Map<string, SharedInstances.Instances.v1.InstanceVersion>()
 
 	function cacheVersion(instanceId: string, version: SharedInstances.Instances.v1.InstanceVersion) {
@@ -32,7 +32,7 @@ export function createSharedInstanceContentLoader(client: AbstractModrinthClient
 	): Promise<ContentItem[]> {
 		const instanceVersion = await getVersion(instanceId, versionNumber)
 		const modpackVersionId = instanceVersion.modpack_id
-		const directVersionIds = (instanceVersion.modrinth_ids ?? []).filter(
+		const directVersionIds = (instanceVersion.Lumen_ids ?? []).filter(
 			(versionId) => versionId !== modpackVersionId,
 		)
 		const modpackVersion = modpackVersionId

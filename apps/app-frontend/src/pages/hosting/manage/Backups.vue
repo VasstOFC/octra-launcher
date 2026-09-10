@@ -1,13 +1,9 @@
 <script setup lang="ts">
-import {
-	injectModrinthClient,
-	injectModrinthServerContext,
-	ServersManageBackupsPage,
-} from '@modrinth/ui'
+import { injectLumenClient, injectLumenServerContext, ServersManageBackupsPage } from '@lumen/ui'
 import { useQueryClient } from '@tanstack/vue-query'
 
-const client = injectModrinthClient()
-const { serverId, worldId, isServerRunning } = injectModrinthServerContext()
+const client = injectLumenClient()
+const { serverId, worldId, isServerRunning } = injectLumenServerContext()
 const queryClient = useQueryClient()
 
 if (worldId.value) {

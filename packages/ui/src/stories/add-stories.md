@@ -1,6 +1,6 @@
-# Storybook Story Creation Guide
+﻿# Storybook Story Creation Guide
 
-This document provides instructions for AI assistants when creating Storybook stories for Vue components in the `@modrinth/ui` package.
+This document provides instructions for AI assistants when creating Storybook stories for Vue components in the `@lumen/ui` package.
 
 ## File Location
 
@@ -42,14 +42,14 @@ export const Default: Story = {
 **DO NOT** manually define `argTypes`.
 
 ```typescript
-// ❌ BAD - Don't include prop types
+// âťŚ BAD - Don't include prop types
 const meta = {
 	argTypes: {
 		size: { control: 'select', options: ['small', 'medium', 'large'] },
 	},
 }
 
-// ✅ GOOD - Let Storybook infer from component
+// âś… GOOD - Let Storybook infer from component
 const meta = {
 	component: MyComponent,
 }
@@ -84,12 +84,12 @@ Instead of creating individual stories for every prop variant, use showcase stor
 Make sure to type it as `StoryObj` when using render functions.
 
 ```typescript
-// ❌ BAD - Too many individual stories
+// âťŚ BAD - Too many individual stories
 export const Small: Story = { args: { size: 'small' } }
 export const Medium: Story = { args: { size: 'medium' } }
 export const Large: Story = { args: { size: 'large' } }
 
-// ✅ GOOD - One showcase story
+// âś… GOOD - One showcase story
 export const AllSizes: StoryObj = {
 	render: () => ({
 		components: { MyComponent },
@@ -127,10 +127,10 @@ const meta = {
 
 ### Components with Icons
 
-Import icons from `@modrinth/assets`:
+Import icons from `@lumen/assets`:
 
 ```typescript
-import { SearchIcon, ChevronDownIcon } from '@modrinth/assets'
+import { SearchIcon, ChevronDownIcon } from '@lumen/assets'
 
 export const WithIcon: Story = {
 	render: () => ({
@@ -191,15 +191,15 @@ export const Default: Story = {
 
 ## Things to Avoid
 
-### 1. Don't Import from `@modrinth/ui` in Components
+### 1. Don't Import from `@lumen/ui` in Components
 
 Components should use relative imports, not the package alias:
 
 ```typescript
-// ❌ BAD - Causes circular dependency in Storybook
-import { Button } from '@modrinth/ui'
+// âťŚ BAD - Causes circular dependency in Storybook
+import { Button } from '@lumen/ui'
 
-// ✅ GOOD - Use relative imports
+// âś… GOOD - Use relative imports
 import Button from '../components/base/buttons/Button.vue'
 ```
 
@@ -208,13 +208,13 @@ import Button from '../components/base/buttons/Button.vue'
 This is a Vue requirement that `vue-docgen-plugin` enforces:
 
 ```typescript
-// ❌ BAD - Will cause Storybook build error
+// âťŚ BAD - Will cause Storybook build error
 defineProps<{ icon: Component }>()
 withDefaults(defineProps<{ icon: Component }>(), {
 	icon: TrashIcon,
 })
 
-// ✅ GOOD - Use factory function
+// âś… GOOD - Use factory function
 withDefaults(defineProps<{ icon: Component }>(), {
 	icon: () => TrashIcon,
 })

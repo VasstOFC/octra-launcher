@@ -19,7 +19,7 @@ import {
 	injectI18n,
 	LoadingBar,
 	NotificationPanel,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 
 import AdsConsentNotification from '~/components/ui/AdsConsentNotification.vue'
 import { setupProviders } from '~/providers/setup.ts'

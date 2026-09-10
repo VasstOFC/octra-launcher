@@ -289,7 +289,7 @@ import {
 	TriangleAlertIcon,
 	UploadIcon,
 	XIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import { computed, ref, watch } from 'vue'
 
 import AutoLink from '#ui/components/base/AutoLink.vue'

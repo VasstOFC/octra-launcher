@@ -172,7 +172,7 @@
 		<p>
 			<IntlFormatted :message-id="messages.descriptionIntro">
 				<template #docs-link="{ children }">
-					<a class="text-link" href="https://docs.modrinth.com">
+					<a class="text-link" href="https://docs.Lumen.com">
 						<component :is="() => normalizeChildren(children)" />
 					</a>
 				</template>
@@ -247,7 +247,7 @@
 	</div>
 </template>
 <script setup>
-import { EditIcon, PlusIcon, SaveIcon, TrashIcon, UploadIcon, XIcon } from '@modrinth/assets'
+import { EditIcon, PlusIcon, SaveIcon, TrashIcon, UploadIcon, XIcon } from '@lumen/assets'
 import {
 	Avatar,
 	Button,
@@ -259,7 +259,7 @@ import {
 	defineMessages,
 	FileButton,
 	IconButton,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	Input,
 	IntlFormatted,
@@ -268,7 +268,7 @@ import {
 	Textarea,
 	useFormatDateTime,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useQuery } from '@tanstack/vue-query'
 
 import {
@@ -280,7 +280,7 @@ import {
 	useScopes,
 } from '~/composables/auth/scopes.ts'
 
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const { addNotification } = injectNotificationManager()
 const { formatMessage } = useVIntl()
 const formatDate = useFormatDateTime()
@@ -374,7 +374,7 @@ const messages = defineMessages({
 	descriptionIntro: {
 		id: 'settings.applications.description.intro',
 		defaultMessage:
-			"Applications can be used to authenticate Modrinth's users with your products. For more information, see <docs-link>Modrinth's API documentation</docs-link>.",
+			"Applications can be used to authenticate Lumen's users with your products. For more information, see <docs-link>Lumen's API documentation</docs-link>.",
 	},
 	aboutLabel: {
 		id: 'settings.applications.about',
@@ -411,7 +411,7 @@ const messages = defineMessages({
 })
 
 useHead({
-	title: () => `${formatMessage(messages.headTitle)} - Modrinth`,
+	title: () => `${formatMessage(messages.headTitle)} - Lumen`,
 })
 
 const { scopesToLabels } = useScopes()

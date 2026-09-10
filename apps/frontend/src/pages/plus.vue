@@ -23,11 +23,11 @@
 	/>
 	<div class="main-hero">
 		<div class="flex max-w-screen-lg flex-col items-center gap-4 text-center">
-			<ModrinthPlusIcon class="h-8 w-max text-contrast" />
+			<LumenPlusIcon class="h-8 w-max text-contrast" />
 			<h1 class="m-0 text-[4rem]">Support creators and go ad-free</h1>
 			<p class="m-0 mb-4 text-[18px] leading-relaxed">
-				Subscribe to Modrinth Plus to go ad-free, support Modrinth's development, and get an
-				exclusive profile badge! Half your subscription goes directly to Modrinth creators. Cancel
+				Subscribe to Lumen Plus to go ad-free, support Lumen's development, and get an
+				exclusive profile badge! Half your subscription goes directly to Lumen creators. Cancel
 				anytime.
 			</p>
 			<p class="m-0 text-[2rem] font-bold text-purple">
@@ -68,20 +68,20 @@
 		</div>
 	</div>
 	<div class="perks-hero">
-		<h2>What you get with Modrinth Plus!</h2>
+		<h2>What you get with Lumen Plus!</h2>
 		<div class="mt-8 grid max-w-screen-lg gap-8 lg:grid-cols-3">
 			<div class="flex flex-col gap-4 rounded-xl bg-bg-raised p-4">
 				<HeartIcon class="h-8 w-8 text-purple" />
-				<span class="text-lg font-bold">Support Modrinth creators</span>
+				<span class="text-lg font-bold">Support Lumen creators</span>
 				<span class="leading-5 text-secondary">
-					50% of your subscription goes directly to Modrinth creators.
+					50% of your subscription goes directly to Lumen creators.
 				</span>
 			</div>
 			<div class="flex flex-col gap-4 rounded-xl bg-bg-raised p-4">
 				<SparklesIcon class="h-8 w-8 text-purple" />
 				<span class="text-lg font-bold">Remove all ads</span>
 				<span class="leading-5 text-secondary">
-					Never see an advertisement again on the Modrinth app.
+					Never see an advertisement again on the Lumen app.
 				</span>
 			</div>
 			<div class="flex flex-col gap-4 rounded-xl bg-bg-raised p-4">
@@ -94,15 +94,15 @@
 	</div>
 </template>
 <script setup>
-import { HeartIcon, ModrinthPlusIcon, SettingsIcon, SparklesIcon, StarIcon } from '@modrinth/assets'
+import { HeartIcon, LumenPlusIcon, SettingsIcon, SparklesIcon, StarIcon } from '@lumen/assets'
 import {
 	Button,
 	ButtonLink,
 	injectNotificationManager,
 	PurchaseModal,
 	useFormatPrice,
-} from '@modrinth/ui'
-import { calculateSavings, getCurrency } from '@modrinth/utils'
+} from '@lumen/ui'
+import { calculateSavings, getCurrency } from '@lumen/utils'
 
 import { useBaseFetch } from '@/composables/fetch.js'
 import { products } from '~/generated/state.json'
@@ -111,9 +111,9 @@ import { hasActiveMidas } from '~/utils/user-membership.ts'
 const { addNotification } = injectNotificationManager()
 const formatPrice = useFormatPrice()
 
-const title = 'Subscribe to Modrinth Plus!'
+const title = 'Subscribe to Lumen Plus!'
 const description =
-	"Subscribe to Modrinth Plus to go ad-free, support Modrinth's development, and get an exclusive profile badge! Half your subscription goes directly to Modrinth creators."
+	"Subscribe to Lumen Plus to go ad-free, support Lumen's development, and get an exclusive profile badge! Half your subscription goes directly to Lumen creators."
 
 useSeoMeta({
 	title,

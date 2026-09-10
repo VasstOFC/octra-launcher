@@ -14,7 +14,7 @@ public final class SkinFetcher {
 		if (!fromProp.isEmpty()) {
 			return fromProp.replaceAll("/+$", "");
 		}
-		String fromEnv = System.getenv("OCTRA_SKINS_URL");
+		String fromEnv = System.getenv("LUMEN_SKINS_URL");
 		if (fromEnv != null && !fromEnv.isBlank()) {
 			return fromEnv.trim().replaceAll("/+$", "");
 		}

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DropdownIcon } from '@modrinth/assets'
+import { DropdownIcon } from '@lumen/assets'
 import {
 	Accordion,
 	commonMessages,
@@ -7,7 +7,7 @@ import {
 	InlineEditableText,
 	TagItem,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { nextTick, ref, watch } from 'vue'
 
 const props = withDefaults(

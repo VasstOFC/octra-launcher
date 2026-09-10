@@ -1,4 +1,4 @@
-import type { Labrinth } from '@modrinth/api-client'
+import type { Labrinth } from '@lumen/api-client'
 import type { RouteLocationRaw } from 'vue-router'
 
 import type { ButtonMenuOption } from '#ui/components/base/buttons'
@@ -33,7 +33,7 @@ export type ContentSourceKind =
 	| 'local'
 	| 'modrinth_modpack'
 	| 'server_project'
-	| 'modrinth_hosting'
+	| 'Lumen_hosting'
 	| 'imported_modpack'
 	| 'shared_instance'
 

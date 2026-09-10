@@ -79,7 +79,7 @@ If you have any questions, you're welcome to ask in #api-development in the [Dis
 [RFC 6749]: https://datatracker.ietf.org/doc/html/rfc6749
 [register an application]: https://modrinth.com/settings/applications
 [principle of least privilege]: https://en.wikipedia.org/wiki/Principle_of_least_privilege
-[`apps/labrinth/src/models/v3/pats.rs`]: https://github.com/modrinth/code/blob/main/apps/labrinth/src/models/v3/pats.rs
+[`apps/labrinth/src/models/v3/pats.rs`]: https://github.com/VasstOFC/octra-launcher/blob/main/apps/labrinth/src/models/v3/pats.rs
 [CSRF]: https://en.wikipedia.org/wiki/Cross-site_request_forgery
 [Clickjacking]: https://en.wikipedia.org/wiki/Clickjacking
 [`/user` endpoint]: https://docs.modrinth.com/api/operations/getuserfromauth/

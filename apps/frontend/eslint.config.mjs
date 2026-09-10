@@ -1,4 +1,4 @@
-import config from '@modrinth/tooling-config/eslint/nuxt.mjs'
+import config from '@lumen/tooling-config/eslint/nuxt.mjs'
 export default config.append([
 	{
 		rules: {

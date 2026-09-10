@@ -8,8 +8,8 @@ import StyledEmail from '../shared/StyledEmail.vue'
 	<StyledEmail
 		title="You've been invited to an organization"
 		:manual-links="[
-			{ link: 'https://modrinth.com/organization/{organization.id}', label: 'Organization page' },
-			{ link: 'https://modrinth.com/dashboard/notifications', label: 'Notification dashboard' },
+			{ link: 'https://Lumen.com/organization/{organization.id}', label: 'Organization page' },
+			{ link: 'https://Lumen.com/dashboard/notifications', label: 'Notification dashboard' },
 			{ link: 'https://support.modrinth.com', label: 'Support Portal' },
 		]"
 	>
@@ -30,22 +30,22 @@ import StyledEmail from '../shared/StyledEmail.vue'
 		<Text class="text-base">Hi <span class="no-auto-link">{user.name}</span>,</Text>
 
 		<Text class="text-base"
-			>Modrinth user
+			>Lumen user
 			<b
-				><VLink href="https://modrinth.com/user/{inviter.name}" class="text-green underline">
+				><VLink href="https://Lumen.com/user/{inviter.name}" class="text-green underline">
 					{inviter.name}
 				</VLink></b
 			>
 			has invited you to join the organization
 			<b
 				><VLink
-					href="https://modrinth.com/organization/{organization.id}"
+					href="https://Lumen.com/organization/{organization.id}"
 					class="text-green underline"
 				>
 					{organization.name}
 				</VLink></b
 			>
-			on Modrinth.
+			on Lumen.
 		</Text>
 
 		<Section class="bg-bg-super mb-4 mt-4 rounded-lg border border-divider pb-4 pl-4 pr-4 pt-4">
@@ -56,7 +56,7 @@ import StyledEmail from '../shared/StyledEmail.vue'
 		</Section>
 
 		<Button
-			href="https://modrinth.com/dashboard/notifications"
+			href="https://Lumen.com/dashboard/notifications"
 			target="_blank"
 			class="text-accentContrast inline-block rounded-[12px] bg-brand pb-3 pl-4 pr-4 pt-3 text-[14px] font-bold"
 		>

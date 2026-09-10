@@ -134,7 +134,7 @@
 							label: formatMessage(messages.copyLinkOption),
 							action: () =>
 								copyToClipboard(
-									`https://modrinth.com/${project.project_type}/${
+									`https://Lumen.com/${project.project_type}/${
 										project.slug ? project.slug : project.id
 									}/version/${encodeURI(version.displayUrlEnding ? version.displayUrlEnding : version.id)}`,
 								),
@@ -167,7 +167,7 @@
 							id: 'copy-maven',
 							label: formatMessage(messages.copyMavenCoordinatesOption),
 							action: () => {
-								copyToClipboard(`maven.modrinth:${project.slug}:${version.id}`)
+								copyToClipboard(`maven.Lumen:${project.slug}:${version.id}`)
 							},
 							shown: flags.developerMode,
 						},
@@ -327,7 +327,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { Labrinth } from '@modrinth/api-client'
+import type { Labrinth } from '@lumen/api-client'
 import {
 	BoxIcon,
 	ClipboardCopyIcon,
@@ -343,7 +343,7 @@ import {
 	RightArrowIcon,
 	ShareIcon,
 	TrashIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import {
 	Admonition,
 	Button,
@@ -352,13 +352,13 @@ import {
 	commonProjectSettingsMessages,
 	ConfirmModal,
 	defineMessages,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	injectProjectPageContext,
 	ProjectPageVersions,
 	TeleportOverflowMenu,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useTemplateRef, watch } from 'vue'
 
 import CreateProjectVersionModal from '~/components/ui/create-project-version/CreateProjectVersionModal.vue'
@@ -369,7 +369,7 @@ const route = useRoute()
 
 const { createProjectDownloadUrl, updateVersionsFilterContext } = useCdnDownloadContext()
 
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const { addNotification } = injectNotificationManager()
 const { formatMessage } = useVIntl()
 const {

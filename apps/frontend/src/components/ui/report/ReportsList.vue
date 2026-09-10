@@ -31,7 +31,7 @@
 	<p v-if="filteredReports.length === 0">You don't have any active reports.</p>
 </template>
 <script setup>
-import { Chips, formatReportType, injectModrinthClient, useVIntl } from '@modrinth/ui'
+import { Chips, formatReportType, injectLumenClient, useVIntl } from '@lumen/ui'
 import { useQuery } from '@tanstack/vue-query'
 import { computed, ref } from 'vue'
 
@@ -51,7 +51,7 @@ const props = defineProps({
 })
 
 const { formatMessage } = useVIntl()
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const viewMode = ref('open')
 const reasonFilter = ref('All')
 

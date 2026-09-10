@@ -9,7 +9,7 @@ import {
 	UpdatedIcon,
 	WrenchIcon,
 	XIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import {
 	Button,
 	ButtonLink,
@@ -18,7 +18,7 @@ import {
 	IconButton,
 	injectNotificationManager,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { computed, ref } from 'vue'
 
 import { ChatIcon } from '@/assets/icons'
@@ -70,6 +70,12 @@ defineExpose({
 			if (errorVal.message.includes('because the target machine actively refused it')) {
 				metadata.value.hostsFile = true
 			}
+			if (
+				errorVal.message.includes('429 Too Many Requests') ||
+				errorVal.message.includes('Status Code: 429')
+			) {
+				metadata.value.rateLimited = true
+			}
 		} else if (errorVal.message && errorVal.message.includes('Move directory error:')) {
 			title.value = 'Could not change app directory'
 			errorType.value = 'directory_move'
@@ -88,7 +94,7 @@ defineExpose({
 			supportLink.value = 'https://support.modrinth.com'
 			metadata.value.instanceId = context.instanceId
 		} else if (source === 'state_init') {
-			title.value = 'Error initializing Octra App'
+			title.value = 'Error initializing Lumen App'
 			errorType.value = 'state_init'
 			supportLink.value = 'https://support.modrinth.com'
 		} else {
@@ -177,10 +183,22 @@ async function copyToClipboard(text) {
 		<div class="modal-body max-w-[550px]">
 			<div class="markdown-body">
 				<template v-if="errorType === 'minecraft_auth'">
-					<template v-if="metadata.network">
+					<template v-if="metadata.rateLimited">
+						<h3>Too many sign-in attempts</h3>
+						<p>
+							Microsoft temporarily blocked Minecraft sign-in because there were too many recent
+							requests. Waiting and retrying too soon will keep the limit active.
+						</p>
+						<ul>
+							<li>Wait about an hour before trying again</li>
+							<li>Restart Lumen App after waiting</li>
+							<li>Sign in once — avoid rapid retries</li>
+						</ul>
+					</template>
+					<template v-else-if="metadata.network">
 						<h3>Network issues</h3>
 						<p>
-							It looks like there were issues with the Octra App connecting to Microsoft's servers.
+							It looks like there were issues with the Lumen App connecting to Microsoft's servers.
 							This is often the result of a poor connection, so we recommend trying again to see if
 							it works. If issues continue to persist, follow the steps in
 							<a
@@ -194,7 +212,7 @@ async function copyToClipboard(text) {
 					<template v-else-if="metadata.hostsFile">
 						<h3>Network issues</h3>
 						<p>
-							The Octra App tried to connect to Microsoft / Xbox / Minecraft services, but the
+							The Lumen App tried to connect to Microsoft / Xbox / Minecraft services, but the
 							remote server rejected the connection. This may indicate that these services are
 							blocked by the hosts file. Please visit
 							<a
@@ -223,7 +241,7 @@ async function copyToClipboard(text) {
 							first. Once you're done, come back here and sign in!
 						</p>
 					</template>
-					<div class="cta-button">
+					<div v-if="!metadata.rateLimited" class="cta-button">
 						<button class="btn btn-primary" :disabled="loadingMinecraft" @click="loginMinecraft">
 							<LogInIcon /> Try signing in again
 						</button>
@@ -233,7 +251,7 @@ async function copyToClipboard(text) {
 					<template v-if="metadata.readOnly">
 						<h3>Change directory permissions</h3>
 						<p>
-							It looks like the Octra App is unable to write to the directory you selected. Please
+							It looks like the Lumen App is unable to write to the directory you selected. Please
 							adjust the permissions of the directory and try again or cancel the directory change.
 						</p>
 					</template>
@@ -246,7 +264,7 @@ async function copyToClipboard(text) {
 					</template>
 					<template v-else>
 						<p>
-							The Octra App is unable to migrate to the new directory you selected. Please contact
+							The Lumen App is unable to migrate to the new directory you selected. Please contact
 							support for help or cancel the directory change.
 						</p>
 					</template>
@@ -262,7 +280,7 @@ async function copyToClipboard(text) {
 				</template>
 				<template v-else-if="errorType === 'state_init'">
 					<p>
-						Octra App failed to load correctly. This may be because of a corrupted file, or because
+						Lumen App failed to load correctly. This may be because of a corrupted file, or because
 						the app is missing crucial files.
 					</p>
 					<p>You may be able to fix it through one of the following ways:</p>
@@ -272,7 +290,7 @@ async function copyToClipboard(text) {
 					</ul>
 				</template>
 				<template v-else-if="errorType === 'no_loader_version'">
-					<p>The Octra App failed to find the loader version for this instance.</p>
+					<p>The Lumen App failed to find the loader version for this instance.</p>
 					<p>To resolve this, you need to repair the instance. Click the button below to do so.</p>
 					<div class="cta-button">
 						<button class="btn btn-primary" :disabled="loadingRepair" @click="repairInstance">

@@ -8,14 +8,14 @@
 </template>
 
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
-import { AccountSocialSettings, injectModrinthClient } from '@modrinth/ui'
+import type { Labrinth } from '@lumen/api-client'
+import { AccountSocialSettings, injectLumenClient } from '@lumen/ui'
 import { inject, onBeforeUnmount, onMounted, ref } from 'vue'
 
 import { get_blocked_users, unblock_user } from '@/helpers/users'
 import { appSettingsModalContextKey } from '@/providers/app-settings-modal'
 
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const settingsModal = inject(appSettingsModalContextKey, null)
 const socialSettings = ref<InstanceType<typeof AccountSocialSettings> | null>(null)
 

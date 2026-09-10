@@ -15,15 +15,15 @@
 </template>
 
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
+import type { Labrinth } from '@lumen/api-client'
 import {
 	DropArea,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	injectProjectPageContext,
 	MultiStageModal,
-} from '@modrinth/ui'
-import { acceptFileFromProjectType } from '@modrinth/utils'
+} from '@lumen/ui'
+import { acceptFileFromProjectType } from '@lumen/utils'
 import type { ComponentExposed } from 'vue-component-type-helpers'
 
 import {
@@ -45,7 +45,7 @@ const { newDraftVersion, editingVersion, handleNewFiles } = ctx
 
 const { projectV2 } = injectProjectPageContext()
 const { addNotification } = injectNotificationManager()
-const { labrinth } = injectModrinthClient()
+const { labrinth } = injectLumenClient()
 
 async function openEditVersionModal(versionId: string, projectId: string, stageId?: string | null) {
 	try {

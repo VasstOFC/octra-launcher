@@ -1,4 +1,4 @@
-const DB_NAME = 'modrinth-moderation'
+const DB_NAME = 'Lumen-moderation'
 const DB_VERSION = 2
 
 function hasIndexedDb(): boolean {

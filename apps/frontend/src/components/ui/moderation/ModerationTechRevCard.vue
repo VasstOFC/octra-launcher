@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
+import type { Labrinth } from '@lumen/api-client'
 import {
 	CheckIcon,
 	CodeIcon,
@@ -7,7 +7,7 @@ import {
 	ExternalIcon,
 	TimerIcon,
 	VersionIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import {
 	Avatar,
 	ButtonLink,
@@ -16,8 +16,8 @@ import {
 	getProjectTypeIcon,
 	NavTabs,
 	useFormatBytes,
-} from '@modrinth/ui'
-import { capitalizeString, formatProjectType } from '@modrinth/utils'
+} from '@lumen/ui'
+import { capitalizeString, formatProjectType } from '@lumen/utils'
 import { computed, provide, ref, watch } from 'vue'
 
 import type { UnsafeFile } from '~/components/ui/moderation/MaliciousSummaryModal.vue'
@@ -290,7 +290,7 @@ watch(
 						<CopyCode v-tooltip="'Copy project ID'" :text="item.project.id" />
 						<CopyLinkButton
 							copy-label="Copy project link"
-							:url="`https://modrinth.com/moderation/technical-review/${props.item.project.id}`"
+							:url="`https://Lumen.com/moderation/technical-review/${props.item.project.id}`"
 						/>
 						<ButtonLink
 							v-tooltip="'Open tech review in new tab'"

@@ -1,4 +1,4 @@
-# Cross-Platform Pages
+﻿# Cross-Platform Pages
 
 Put pages for both Modrinth Website and Modrinth App in `packages/ui/src/layouts/`.
 
@@ -14,11 +14,11 @@ Make each shared layout a self-contained module:
 
 ```
 shared/content-tab/
-├── layout.vue            # Main layout component
-├── types.ts              # TypeScript types
-├── components/           # Internal UI components
-├── composables/          # State logic for search, filters, and selection
-└── providers/            # DI context definitions
+â”śâ”€â”€ layout.vue            # Main layout component
+â”śâ”€â”€ types.ts              # TypeScript types
+â”śâ”€â”€ components/           # Internal UI components
+â”śâ”€â”€ composables/          # State logic for search, filters, and selection
+â””â”€â”€ providers/            # DI context definitions
 ```
 
 ### Structure
@@ -61,7 +61,7 @@ The website uses `api-client` and TanStack Query:
 ```vue
 <!-- apps/frontend/src/pages/instance/content.vue -->
 <script setup lang="ts">
-import { provideContentManager, ContentPageLayout } from '@modrinth/ui'
+import { provideContentManager, ContentPageLayout } from '@lumen/ui'
 
 const { data: items } = useQuery({
 	queryKey: ['content', instanceId],
@@ -87,7 +87,7 @@ The app uses Tauri `invoke`:
 ```vue
 <!-- apps/app-frontend/src/pages/instance/Mods.vue -->
 <script setup lang="ts">
-import { provideContentManager, ContentPageLayout } from '@modrinth/ui'
+import { provideContentManager, ContentPageLayout } from '@lumen/ui'
 import { invoke } from '@tauri-apps/api/core'
 
 const items = ref<ContentItem[]>([])
@@ -137,11 +137,11 @@ A wrapped page is a complete page-level Vue component. Its directory structure m
 
 ```
 wrapped/hosting/manage/
-├── index.vue
-├── content.vue
-├── backups.vue
-├── files.vue
-└── [id]/onboarding.vue
+â”śâ”€â”€ index.vue
+â”śâ”€â”€ content.vue
+â”śâ”€â”€ backups.vue
+â”śâ”€â”€ files.vue
+â””â”€â”€ [id]/onboarding.vue
 ```
 
 Wrapped pages get their own data. They usually use TanStack Query and `api-client`.
@@ -151,7 +151,7 @@ Import the wrapped page as a simple component in both frontends:
 ```vue
 <!-- apps/frontend/src/pages/hosting/manage/[id]/content.vue -->
 <script setup lang="ts">
-import { ServersManageContentPage } from '@modrinth/ui'
+import { ServersManageContentPage } from '@lumen/ui'
 </script>
 
 <template>
@@ -203,10 +203,10 @@ Put the call in a `try` block. Catch the error so that route setup can continue.
 The mounted layout runs its `useQuery` call and shows the error to the user.
 
 ```ts
-import { injectModrinthClient, injectModrinthServerContext, ServersManageFilesPage } from '@modrinth/ui'
+import { injectLumenClient, injectModrinthServerContext, ServersManageFilesPage } from '@lumen/ui'
 import { useQueryClient } from '@tanstack/vue-query'
 
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const { serverId } = injectModrinthServerContext()
 const queryClient = useQueryClient()
 

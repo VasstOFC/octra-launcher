@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { GitForkIcon, PlusIcon, TrashIcon } from '@modrinth/assets'
+import { GitForkIcon, PlusIcon, TrashIcon } from '@lumen/assets'
 import {
 	Button,
 	commonMessages,
@@ -8,7 +8,7 @@ import {
 	SettingsFormGroup,
 	Textarea,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { watch } from 'vue'
 
 import DisclosureToggleCard from './DisclosureToggleCard.vue'

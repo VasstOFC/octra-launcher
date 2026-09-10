@@ -14,7 +14,7 @@
 				:values="{ platform }"
 			>
 				<template #~crowdin-link="{ children }">
-					<AutoLink to="https://translate.modrinth.com" class="text-link">
+					<AutoLink to="https://translate.Lumen.com" class="text-link">
 						<component :is="() => children" />
 					</AutoLink>
 				</template>

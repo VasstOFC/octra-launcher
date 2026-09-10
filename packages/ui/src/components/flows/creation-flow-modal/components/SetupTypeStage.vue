@@ -117,8 +117,8 @@ import {
 	DownloadIcon,
 	RightArrowIcon,
 	UploadIcon,
-} from '@modrinth/assets'
-import { commonMessages, defineMessages, useVIntl } from '@modrinth/ui'
+} from '@lumen/assets'
+import { commonMessages, defineMessages, useVIntl } from '@lumen/ui'
 import { computed, defineAsyncComponent, h, onMounted, ref, watch } from 'vue'
 
 import { useDebugLogger } from '#ui/composables/debug-logger'

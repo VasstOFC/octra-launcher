@@ -69,12 +69,13 @@ pub struct ServerPlayers {
     pub sample: Option<Vec<ServerPlayer>>,
 }
 
-/// Contains the server's MOTD.
+/// Contains the server's MOTD (full chat component JSON when present).
 #[derive(Debug, Deserialize)]
 #[serde(untagged)]
 pub enum ServerDescription {
     Plain(String),
-    Object { text: String },
+    /// Full chat component object — preserve `extra`, `translate`, etc.
+    Component(serde_json::Value),
 }
 
 /// The decoded JSON response from a status query over
@@ -334,9 +335,15 @@ mod tests {
 
     #[test]
     fn test_server_description_object() {
-        let json = r#"{"text":"A Minecraft Server"}"#;
+        let json = r#"{"text":"A Minecraft Server","extra":[{"text":"!" }]}"#;
         let desc: ServerDescription = serde_json::from_str(json).unwrap();
-        assert!(matches!(desc, ServerDescription::Object { text } if text == "A Minecraft Server"));
+        match desc {
+            ServerDescription::Component(value) => {
+                assert_eq!(value["text"], "A Minecraft Server");
+                assert!(value.get("extra").is_some());
+            }
+            ServerDescription::Plain(_) => panic!("expected component description"),
+        }
     }
 
     #[test]

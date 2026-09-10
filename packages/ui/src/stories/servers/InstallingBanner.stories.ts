@@ -1,13 +1,13 @@
-import type { Archon, UploadState } from '@modrinth/api-client'
+import type { Archon, UploadState } from '@lumen/api-client'
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { computed, ref } from 'vue'
 
 import InstallingBanner from '../../components/servers/InstallingBanner.vue'
 import type { ServerInstallationState } from '../../composables/server-installation-tracker'
-import { provideModrinthServerContext } from '../../providers'
+import { provideLumenServerContext } from '../../providers'
 import type {
 	CancelUploadHandler,
-	ModrinthServerContext,
+	LumenServerContext,
 	ServerStats,
 } from '../../providers/server-context'
 
@@ -16,7 +16,7 @@ function renderInstallation(state: ServerInstallationState) {
 		components: { InstallingBanner },
 		setup() {
 			const installation = ref<ServerInstallationState | null>(state)
-			const serverContext: ModrinthServerContext = {
+			const serverContext: LumenServerContext = {
 				get serverId() {
 					return 'story-server'
 				},
@@ -75,7 +75,7 @@ function renderInstallation(state: ServerInstallationState) {
 				activeOperations: computed(() => []),
 				dismissOperation: async () => {},
 			}
-			provideModrinthServerContext(serverContext)
+			provideLumenServerContext(serverContext)
 		},
 		template: '<InstallingBanner />',
 	})
@@ -139,7 +139,7 @@ export const Vanilla: Story = {
 
 export const Modpack: Story = {
 	render: renderInstallation({
-		id: 'modrinth-modpack:project:version',
+		id: 'Lumen-modpack:project:version',
 		key: {
 			type: 'modrinth_modpack',
 			project_id: 'project',
@@ -170,7 +170,7 @@ export const PlatformFailed: Story = {
 
 export const ModpackFailed: Story = {
 	render: renderInstallation({
-		id: 'modrinth-modpack:project:version',
+		id: 'Lumen-modpack:project:version',
 		key: {
 			type: 'modrinth_modpack',
 			project_id: 'project',

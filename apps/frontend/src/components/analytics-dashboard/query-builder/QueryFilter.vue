@@ -197,14 +197,14 @@
 </template>
 
 <script setup lang="ts">
-import { BoxIcon, UserIcon } from '@modrinth/assets'
+import { BoxIcon, UserIcon } from '@lumen/assets'
 import {
 	buildDependentsSearchFilters,
 	type ButtonSize,
 	DropdownFilterBar,
 	type DropdownFilterBarCategory,
 	type DropdownFilterBarOption,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	type ProjectType,
 	Tabs,
@@ -212,8 +212,8 @@ import {
 	type TabsValue,
 	truncatedTooltip,
 	useVIntl,
-} from '@modrinth/ui'
-import { formatProjectType } from '@modrinth/utils'
+} from '@lumen/ui'
+import { formatProjectType } from '@lumen/utils'
 import { useQuery } from '@tanstack/vue-query'
 import type { ComponentPublicInstance } from 'vue'
 
@@ -286,7 +286,7 @@ const props = withDefaults(
 )
 
 const { formatMessage } = useVIntl()
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const { addNotification } = injectNotificationManager()
 const {
 	hasProjectContext,

@@ -323,9 +323,9 @@ import {
 	UploadIcon,
 	XIcon,
 	YouTubeIcon,
-} from '@modrinth/assets'
-import { markdownCommands, modrinthMarkdownEditorKeymap } from '@modrinth/utils/codemirror'
-import { renderHighlightedString } from '@modrinth/utils/highlightjs'
+} from '@lumen/assets'
+import { LumenMarkdownEditorKeymap, markdownCommands } from '@lumen/utils/codemirror'
+import { renderHighlightedString } from '@lumen/utils/highlightjs'
 import { type Component, computed, onBeforeUnmount, onMounted, ref, toRef, useId, watch } from 'vue'
 
 import { Button, IconButton } from '#ui/components/base/buttons'
@@ -693,7 +693,7 @@ onMounted(() => {
 			eventHandlers,
 			updateListener,
 			keymap.of([indentWithTab]),
-			keymap.of(modrinthMarkdownEditorKeymap),
+			keymap.of(LumenMarkdownEditorKeymap),
 			history(),
 			markdown({
 				addKeymap: false,

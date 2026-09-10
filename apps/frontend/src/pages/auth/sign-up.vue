@@ -25,10 +25,10 @@
 import {
 	commonMessages,
 	defineMessages,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useQuery } from '@tanstack/vue-query'
 import { useStorage } from '@vueuse/core'
 import type { LocationQueryValue } from 'vue-router'
@@ -77,7 +77,7 @@ const getErrorMessage = (error: unknown): string => {
 	return String(error)
 }
 
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const { addNotification } = injectNotificationManager()
 const { formatMessage } = useVIntl()
 
@@ -92,12 +92,12 @@ const messages = defineMessages({
 	},
 	under13HelperText: {
 		id: 'auth.create-account.date-of-birth.under13-helper',
-		defaultMessage: 'You cannot create an account at Modrinth unless you are over 13 years old.',
+		defaultMessage: 'You cannot create an account at Lumen unless you are over 13 years old.',
 	},
 })
 
 useHead({
-	title: () => `${formatMessage(messages.title)} - Modrinth`,
+	title: () => `${formatMessage(messages.title)} - Lumen`,
 })
 
 const auth = await useAuth()

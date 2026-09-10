@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { InfoIcon, XIcon } from '@modrinth/assets'
+import { InfoIcon, XIcon } from '@lumen/assets'
 import { computed, nextTick, toValue, useTemplateRef, watch } from 'vue'
 
-import { IconButton, Button } from '#ui/components/base/buttons'
+import { Button, IconButton } from '#ui/components/base/buttons'
 import Toggle from '#ui/components/base/Toggle.vue'
 import PhotosensitivityWarningModal from '#ui/components/modal/PhotosensitivityWarningModal.vue'
 import SearchSidebarFilter from '#ui/components/search/SearchSidebarFilter.vue'
@@ -34,9 +34,7 @@ const advancedFiltersCollapsed = computed(() => ctx.advancedFiltersCollapsed?.va
 const photosensitivityWarningModal = useTemplateRef('photosensitivityWarningModal')
 
 const activeFilterCount = computed(() =>
-	ctx.isServerType.value
-		? ctx.serverCurrentFilters.value.length
-		: ctx.currentFilters.value.length,
+	ctx.isServerType.value ? ctx.serverCurrentFilters.value.length : ctx.currentFilters.value.length,
 )
 
 function clearAllFilters() {
@@ -192,17 +190,10 @@ function getFilterOpenByDefault(filterId: string): boolean {
 		>
 			<h3 class="m-0 text-lg text-contrast">{{ formatMessage(commonMessages.filtersLabel) }}</h3>
 			<div class="flex items-center gap-1">
-				<Button
-					v-if="activeFilterCount > 0"
-					type="quiet"
-					@click="clearAllFilters"
-				>
+				<Button v-if="activeFilterCount > 0" type="quiet" @click="clearAllFilters">
 					{{ formatMessage(messages.clearFilters) }}
 				</Button>
-				<IconButton
-					:label="formatMessage(commonMessages.closeButton)"
-					@click="closeFiltersMenu"
-				>
+				<IconButton :label="formatMessage(commonMessages.closeButton)" @click="closeFiltersMenu">
 					<XIcon />
 				</IconButton>
 			</div>

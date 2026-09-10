@@ -23,10 +23,10 @@
 import {
 	commonMessages,
 	defineMessages,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
 import { useStorage } from '@vueuse/core'
 import type { LocationQueryValue } from 'vue-router'
@@ -80,7 +80,7 @@ const getErrorMessage = (error: unknown): string => {
 	return String(error)
 }
 
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const queryClient = useQueryClient()
 const { addNotification } = injectNotificationManager()
 const { formatMessage } = useVIntl()
@@ -94,7 +94,7 @@ const messages = defineMessages({
 
 useHead({
 	title() {
-		return `${formatMessage(messages.signInTitle)} - Modrinth`
+		return `${formatMessage(messages.signInTitle)} - Lumen`
 	},
 })
 

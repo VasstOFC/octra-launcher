@@ -367,7 +367,7 @@ import {
 	UpdatedIcon,
 	UploadIcon,
 	XIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import {
 	Avatar,
 	Button,
@@ -383,7 +383,7 @@ import {
 	FileInput,
 	filterProjectsByType,
 	HorizontalRule,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	Input,
 	IntlFormatted,
@@ -402,8 +402,8 @@ import {
 	useRelativeTime,
 	useSavable,
 	useVIntl,
-} from '@modrinth/ui'
-import { isAdmin, renderString } from '@modrinth/utils'
+} from '@lumen/ui'
+import { isAdmin, renderString } from '@lumen/utils'
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
 import dayjs from 'dayjs'
 import { onServerPrefetch } from 'vue'
@@ -415,7 +415,7 @@ useSeoMeta({
 })
 
 const { handleError } = injectNotificationManager()
-const api = injectModrinthClient()
+const api = injectLumenClient()
 const { formatMessage } = useVIntl()
 const formatRelativeTime = useRelativeTime()
 const { formatCompactNumber, formatCompactNumberPlural } = useCompactNumber()
@@ -448,7 +448,7 @@ async function fetchFollowedProjects(userId) {
 const messages = defineMessages({
 	collectionDescription: {
 		id: 'collection.description',
-		defaultMessage: '{description} - View the collection {name} by {username} on Modrinth',
+		defaultMessage: '{description} - View the collection {name} by {username} on Lumen',
 	},
 	collectionTitle: {
 		id: 'collection.title',
@@ -726,7 +726,7 @@ watch(
 	[collection, creator, creatorHasPublicProjects],
 	([col, cre, hasPublicProjects]) => {
 		if (col && cre) {
-			const canonicalUrl = col ? `https://modrinth.com/collection/${col.id}` : undefined
+			const canonicalUrl = col ? `https://Lumen.com/collection/${col.id}` : undefined
 			useSeoMeta({
 				title: formatMessage(messages.collectionTitle, { name: col.name }),
 				description: formatMessage(messages.collectionDescription, {
@@ -736,7 +736,7 @@ watch(
 				}),
 				ogTitle: formatMessage(messages.collectionTitle, { name: col.name }),
 				ogDescription: col.description,
-				ogImage: col.icon_url ?? 'https://cdn-raw.modrinth.com/placeholder-square.png',
+				ogImage: col.icon_url ?? 'https://cdn-raw.Lumen.com/placeholder-square.png',
 				ogUrl: canonicalUrl,
 				robots: col.status === 'listed' && hasPublicProjects ? 'all' : 'noindex',
 			})

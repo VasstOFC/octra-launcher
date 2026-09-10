@@ -197,7 +197,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
+import type { Labrinth } from '@lumen/api-client'
 import {
 	BlendIcon,
 	CheckIcon,
@@ -206,14 +206,14 @@ import {
 	ListFilterIcon,
 	SortAscIcon,
 	SortDescIcon,
-} from '@modrinth/assets'
-import type { ExtendedReport } from '@modrinth/moderation'
+} from '@lumen/assets'
+import type { ExtendedReport } from '@lumen/moderation'
 import {
 	Combobox,
 	type ComboboxOption,
 	commonMessages,
 	formatReportType,
-	injectModrinthClient,
+	injectLumenClient,
 	MultiSelect,
 	type MultiSelectItem,
 	Pagination,
@@ -221,7 +221,7 @@ import {
 	useDebugLogger,
 	useFormatNumber,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import Fuse from 'fuse.js'
 
 import ModerationFilterCount from '~/components/ui/moderation/ModerationFilterCount.vue'
@@ -230,14 +230,14 @@ import ModerationQueueToolbar from '~/components/ui/moderation/ModerationQueueTo
 import ReportCard from '~/components/ui/moderation/ModerationReportCard.vue'
 import { enrichReportBatch } from '~/helpers/moderation.ts'
 
-useHead({ title: 'Reports queue - Modrinth' })
+useHead({ title: 'Reports queue - Lumen' })
 
 const { formatMessage } = useVIntl()
 const formatNumber = useFormatNumber()
 const route = useRoute()
 const router = useRouter()
 const auth = await useAuth()
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const debug = useDebugLogger('ModerationReports')
 
 const { data: allReports, pending: reportsPending } = await useLazyAsyncData(

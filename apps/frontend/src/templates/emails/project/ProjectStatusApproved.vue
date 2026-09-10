@@ -9,7 +9,7 @@ import StyledEmail from '../shared/StyledEmail.vue'
 		title="Your project, {project.name}, has been approved 🎉"
 		:manual-links="[
 			{ link: 'https://modrinth.com/project/{project.id}', label: 'Project page' },
-			{ link: 'https://modrinth.com/legal/rules', label: 'Community Guidelines' },
+			{ link: 'https://Lumen.com/legal/rules', label: 'Community Guidelines' },
 			{ link: 'https://support.modrinth.com', label: 'Support Portal' },
 		]"
 	>
@@ -50,6 +50,6 @@ import StyledEmail from '../shared/StyledEmail.vue'
 			>.
 		</Text>
 
-		<Text class="text-base">Thank you for sharing your work with the Modrinth community!</Text>
+		<Text class="text-base">Thank you for sharing your work with the Lumen community!</Text>
 	</StyledEmail>
 </template>

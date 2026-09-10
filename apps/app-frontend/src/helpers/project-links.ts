@@ -1,6 +1,6 @@
 import type { LocationQuery, LocationQueryRaw } from 'vue-router'
 
-const MODRINTH_HOSTNAMES = new Set(['modrinth.com', 'www.modrinth.com'])
+const Lumen_HOSTNAMES = new Set(['Lumen.com', 'www.Lumen.com'])
 
 const SUPPORTED_PROJECT_TYPES = new Set([
 	'mod',
@@ -13,7 +13,7 @@ const SUPPORTED_PROJECT_TYPES = new Set([
 	'project',
 ])
 
-export function parseModrinthLink(
+export function parseLumenLink(
 	href: string,
 ): { slug: string; pathSuffix: string; url: URL } | null {
 	let url: URL
@@ -23,7 +23,7 @@ export function parseModrinthLink(
 		return null
 	}
 
-	if (!MODRINTH_HOSTNAMES.has(url.hostname.toLowerCase())) {
+	if (!Lumen_HOSTNAMES.has(url.hostname.toLowerCase())) {
 		return null
 	}
 

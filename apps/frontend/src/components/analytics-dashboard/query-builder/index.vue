@@ -448,7 +448,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
+import type { Labrinth } from '@lumen/api-client'
 import {
 	BlocksIcon,
 	BoxIcon,
@@ -459,8 +459,8 @@ import {
 	FolderOpenIcon,
 	LayersIcon,
 	UserIcon,
-} from '@modrinth/assets'
-import { Button } from '@modrinth/ui'
+} from '@lumen/assets'
+import { Button } from '@lumen/ui'
 import {
 	Combobox,
 	type ComboboxOption,
@@ -468,7 +468,7 @@ import {
 	type MultiSelectItem,
 	type MultiSelectOption,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 
 import {
 	buildDefaultAnalyticsQueryBuilderState,

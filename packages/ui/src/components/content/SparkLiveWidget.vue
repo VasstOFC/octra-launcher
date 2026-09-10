@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { VideoIcon } from '@modrinth/assets'
+import { VideoIcon } from '@lumen/assets'
 
 withDefaults(
 	defineProps<{
@@ -23,7 +23,7 @@ withDefaults(
 			<span>
 				Ask questions for us to answer in our
 				<a
-					href="https://discord.modrinth.com"
+					href="https://discord.Lumen.com"
 					target="_blank"
 					class="text-brand font-semibold hover:underline"
 					>Discord server</a

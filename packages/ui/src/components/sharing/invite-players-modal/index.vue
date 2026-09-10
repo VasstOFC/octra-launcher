@@ -25,7 +25,7 @@
 						show-search-icon
 						:show-chevron="false"
 						search-type="search"
-						search-name="modrinth-player-invite-search"
+						search-name="Lumen-player-invite-search"
 						search-inputmode="search"
 						search-autocomplete="new-password"
 						search-autocorrect="off"
@@ -140,7 +140,7 @@
 </template>
 
 <script setup lang="ts">
-import { ClipboardCopyIcon, PlusIcon } from '@modrinth/assets'
+import { ClipboardCopyIcon, PlusIcon } from '@lumen/assets'
 import { computed, ref } from 'vue'
 
 import { Button } from '#ui/components/base/buttons'
@@ -213,7 +213,7 @@ const messages = defineMessages({
 	},
 	searchPlaceholder: {
 		id: 'sharing.invite-players-modal.search-placeholder',
-		defaultMessage: 'Enter Modrinth username',
+		defaultMessage: 'Enter Lumen username',
 	},
 	addButton: {
 		id: 'sharing.invite-players-modal.add',

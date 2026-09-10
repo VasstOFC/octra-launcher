@@ -9,8 +9,8 @@ import {
 	GithubIcon,
 	InstagramIcon,
 	KoFiIcon,
+	LumenIcon,
 	MastodonIcon,
-	ModrinthIcon,
 	OpenCollectiveIcon,
 	PatreonIcon,
 	PayPalIcon,
@@ -26,7 +26,7 @@ import {
 	YouTubeGaming,
 	YouTubeIcon,
 	YouTubeShortsIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import { computed } from 'vue'
 
 const props = defineProps<{
@@ -131,8 +131,8 @@ const services = [
 		keywords: ['curseforge', 'cf', 'curse', 'curse forge'],
 	},
 	{
-		icon: ModrinthIcon,
-		keywords: ['modrinth', 'mod rinth', 'modrith', 'mr'],
+		icon: LumenIcon,
+		keywords: ['Lumen', 'mod rinth', 'modrith', 'mr'],
 	},
 	{
 		icon: TwitterIcon,

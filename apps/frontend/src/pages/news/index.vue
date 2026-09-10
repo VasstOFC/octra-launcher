@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ChevronRightIcon, GitGraphIcon, RssIcon } from '@modrinth/assets'
-import { articles as rawArticles } from '@modrinth/blog'
-import { ButtonLink, NewsArticleCard, useFormatDateTime } from '@modrinth/ui'
+import { ChevronRightIcon, GitGraphIcon, RssIcon } from '@lumen/assets'
+import { articles as rawArticles } from '@lumen/blog'
+import { ButtonLink, NewsArticleCard, useFormatDateTime } from '@lumen/ui'
 import { computed, ref } from 'vue'
 
 import NewsletterButton from '~/components/ui/NewsletterButton.vue'
@@ -29,10 +29,10 @@ const featuredArticle = computed(() => articles.value?.[0])
 const config = useRuntimeConfig()
 
 useSeoMeta({
-	title: 'Modrinth News',
-	ogTitle: 'Modrinth News',
-	description: 'Keep up-to-date on the latest news from Modrinth.',
-	ogDescription: 'Keep up-to-date on the latest news from Modrinth.',
+	title: 'Lumen News',
+	ogTitle: 'Lumen News',
+	description: 'Keep up-to-date on the latest news from Lumen.',
+	ogDescription: 'Keep up-to-date on the latest news from Lumen.',
 	ogType: 'website',
 	ogImage: () => `${config.public.siteUrl}/news/thumbnail.webp`,
 	twitterCard: 'summary_large_image',

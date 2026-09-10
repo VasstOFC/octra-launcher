@@ -1,10 +1,10 @@
-import { ModrinthApiError } from '@modrinth/api-client'
+import { LumenApiError } from '@lumen/api-client'
 import {
 	injectAuth,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	injectPopupNotificationManager,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useQueryClient } from '@tanstack/vue-query'
 import { type Ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
@@ -51,7 +51,7 @@ export function useSharedInstanceInviteHandler(
 	accountRequiredModal: Ref<AccountRequiredModal | undefined>,
 ) {
 	const auth = injectAuth()
-	const client = injectModrinthClient()
+	const client = injectLumenClient()
 	const { handleError } = injectNotificationManager()
 	const { notifySharedInstanceConnectionError, notifySharedInstanceError } =
 		useSharedInstanceErrors()
@@ -77,7 +77,7 @@ export function useSharedInstanceInviteHandler(
 		try {
 			await client.labrinth.notifications_v2.markAsRead(String(notification.id))
 		} catch (error) {
-			if (error instanceof ModrinthApiError && error.statusCode === 404) return
+			if (error instanceof LumenApiError && error.statusCode === 404) return
 			throw error
 		}
 	}

@@ -368,8 +368,8 @@ export namespace Archon {
 				| 'purpur'
 				| 'vanilla'
 
-			export type ModpackSpecModrinth = {
-				platform: 'modrinth'
+			export type ModpackSpecLumen = {
+				platform: 'Lumen'
 				project_id: string
 				version_id: string
 			}
@@ -381,7 +381,7 @@ export namespace Archon {
 				description: string | null
 			}
 
-			export type ModpackSpec = ModpackSpecModrinth | ModpackSpecLocalFile
+			export type ModpackSpec = ModpackSpecLumen | ModpackSpecLocalFile
 
 			export type ModpackOwner = {
 				id: string
@@ -698,7 +698,7 @@ export namespace Archon {
 			}
 
 			export type JWTAuth = {
-				url: string // e.g., "node-xyz.modrinth.com/modrinth/v0/fs"
+				url: string // e.g., "node-xyz.Lumen.com/Lumen/v0/fs"
 				token: string // JWT token for filesystem access
 			}
 
@@ -1026,7 +1026,7 @@ export namespace Archon {
 			export type WorldContentModpackSource =
 				| 'CurseForge'
 				| {
-						Modrinth: {
+						Lumen: {
 							version_id: string
 							project_id: string
 							mrpack_sha1: string | null
@@ -1215,7 +1215,7 @@ export namespace Archon {
 				target_filename?: string | null
 			}
 
-			export type InstallProgressModrinthModpackKey = {
+			export type InstallProgressLumenModpackKey = {
 				type: 'modrinth_modpack'
 				project_id: string
 				version_id: string
@@ -1235,7 +1235,7 @@ export namespace Archon {
 
 			export type InstallProgressKey =
 				| InstallProgressFileKey
-				| InstallProgressModrinthModpackKey
+				| InstallProgressLumenModpackKey
 				| InstallProgressLocalModpackKey
 				| InstallProgressPlatformKey
 

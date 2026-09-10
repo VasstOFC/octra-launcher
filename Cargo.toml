@@ -23,7 +23,7 @@ members = [
 [workspace.package]
 edition = "2024"
 rust-version = "1.90.0"
-repository = "https://github.com/modrinth/code"
+repository = "https://github.com/VasstOFC/octra-launcher"
 
 [workspace.dependencies]
 actix-cors = "0.7.1"
@@ -130,9 +130,9 @@ lz4_flex = { version = "0.11.5", default-features = false, features = [
   "std",
 ] }
 maxminddb = "0.26.0"
-modrinth-content-management = { path = "packages/modrinth-content-management" }
-modrinth-log = { path = "packages/modrinth-log" }
-modrinth-util = { path = "packages/modrinth-util" }
+lumen-content-management = { path = "packages/modrinth-content-management" }
+lumen-log = { path = "packages/modrinth-log" }
+lumen-util = { path = "packages/modrinth-util" }
 muralpay = { path = "packages/muralpay" }
 murmur2 = "0.1.0"
 native-dialog = "0.9.2"

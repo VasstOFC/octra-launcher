@@ -1,5 +1,5 @@
-import type { AbstractWebNotificationManager } from '@modrinth/ui'
-import { injectNotificationManager } from '@modrinth/ui'
+import type { AbstractWebNotificationManager } from '@lumen/ui'
+import { injectNotificationManager } from '@lumen/ui'
 
 type AsyncFunction<TArgs extends any[], TResult> = (...args: TArgs) => Promise<TResult>
 type ErrorFunction = (

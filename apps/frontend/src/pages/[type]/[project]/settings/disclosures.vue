@@ -4,7 +4,7 @@ import {
 	ConfirmLeaveModal,
 	defineMessages,
 	EmptyState,
-	injectModrinthClient,
+	injectLumenClient,
 	injectProjectPageContext,
 	IntlFormatted,
 	isDisclosureCompatibleWithProjectTypes,
@@ -14,8 +14,8 @@ import {
 	usePageLeaveSafety,
 	useSavable,
 	useVIntl,
-} from '@modrinth/ui'
-import { isStaff, TeamMemberPermission } from '@modrinth/utils'
+} from '@lumen/ui'
+import { isStaff, TeamMemberPermission } from '@lumen/utils'
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
 import { computed, watch } from 'vue'
 
@@ -43,7 +43,7 @@ import { useAuth } from '~/composables/auth'
 const DISCLOSURE_QUERY_STALE_TIME = 1000 * 60 * 5
 
 const { formatMessage } = useVIntl()
-const { labrinth } = injectModrinthClient()
+const { labrinth } = injectLumenClient()
 const { projectV2: project, projectV3, currentMember } = injectProjectPageContext()
 const queryClient = useQueryClient()
 const flags = useFeatureFlags()
@@ -72,7 +72,7 @@ const messages = defineMessages({
 	},
 	description: {
 		id: 'project.settings.disclosures.description',
-		defaultMessage: `You must add any applicable content disclosures to your project in compliance with <rules>Modrinth's Content Rules</rules>.`,
+		defaultMessage: `You must add any applicable content disclosures to your project in compliance with <rules>Lumen's Content Rules</rules>.`,
 	},
 	noPermission: {
 		id: 'project.settings.disclosures.save-blocked.no-permission',

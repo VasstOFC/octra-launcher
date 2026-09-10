@@ -6,14 +6,10 @@ import {
 	Toggle,
 	useSavable,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { inject, onBeforeUnmount, onMounted, ref } from 'vue'
 
-import {
-	SettingsGroup,
-	SettingsPanelHeader,
-	SettingsRow,
-} from '@/components/ui/settings/_shared'
+import { SettingsGroup, SettingsPanelHeader, SettingsRow } from '@/components/ui/settings/_shared'
 import {
 	DEFAULT_FEATURE_FLAGS,
 	type FeatureFlag,
@@ -54,7 +50,7 @@ const messages = defineMessages({
 	},
 	syncAcrossDevicesSignedOutTooltip: {
 		id: 'app.behavior-settings.sync-across-devices.signed-out-tooltip',
-		defaultMessage: "Octra accounts are coming later. You'll be able to sync settings then.",
+		defaultMessage: "Lumen accounts are coming later. You'll be able to sync settings then.",
 	},
 	syncGroup: {
 		id: 'app.behavior-settings.group.sync',
@@ -82,7 +78,7 @@ const messages = defineMessages({
 	},
 	minimizeLauncherDescription: {
 		id: 'app.appearance-settings.minimize-launcher.description',
-		defaultMessage: 'Minimize Octra App when Minecraft starts.',
+		defaultMessage: 'Minimize Lumen App when Minecraft starts.',
 	},
 	jumpBackIntoWorldsTitle: {
 		id: 'app.appearance-settings.jump-back-into-worlds.title',
@@ -125,7 +121,7 @@ const messages = defineMessages({
 	unknownPackWarningDescription: {
 		id: 'app.appearance-settings.unknown-pack-warning.description',
 		defaultMessage:
-			"Show a safety warning before installing a Modrinth Pack (.mrpack) that isn't hosted on Modrinth.",
+			"Show a safety warning before installing a Lumen Pack (.mrpack) that isn't hosted on Lumen.",
 	},
 	skipNonEssentialWarningsTitle: {
 		id: 'app.appearance-settings.skip-non-essential-warnings.title',
@@ -143,7 +139,7 @@ const messages = defineMessages({
 	discordRichPresenceDescription: {
 		id: 'app.settings.privacy.discord-rich-presence.description',
 		defaultMessage:
-			'Show Octra App as your current activity on Discord. This does not affect Rich Presence added to instances by mods. Requires an app restart.',
+			'Show Lumen App as your current activity on Discord. This does not affect Rich Presence added to instances by mods. Requires an app restart.',
 	},
 })
 
@@ -296,11 +292,7 @@ onBeforeUnmount(() => {
 				:description="formatMessage(messages.minimizeLauncherDescription)"
 			>
 				<template #default="{ labelledBy, controlId }">
-					<Toggle
-						:id="controlId"
-						v-model="current.minimizeApp"
-						:aria-labelledby="labelledBy"
-					/>
+					<Toggle :id="controlId" v-model="current.minimizeApp" :aria-labelledby="labelledBy" />
 				</template>
 			</SettingsRow>
 		</SettingsGroup>
@@ -312,11 +304,7 @@ onBeforeUnmount(() => {
 				:description="formatMessage(messages.jumpBackIntoWorldsDescription)"
 			>
 				<template #default="{ labelledBy, controlId }">
-					<Toggle
-						:id="controlId"
-						v-model="current.showJumpIn"
-						:aria-labelledby="labelledBy"
-					/>
+					<Toggle :id="controlId" v-model="current.showJumpIn" :aria-labelledby="labelledBy" />
 				</template>
 			</SettingsRow>
 
@@ -340,11 +328,7 @@ onBeforeUnmount(() => {
 				:description="formatMessage(messages.showPlayTimeDescription)"
 			>
 				<template #default="{ labelledBy, controlId }">
-					<Toggle
-						:id="controlId"
-						v-model="current.showPlayTime"
-						:aria-labelledby="labelledBy"
-					/>
+					<Toggle :id="controlId" v-model="current.showPlayTime" :aria-labelledby="labelledBy" />
 				</template>
 			</SettingsRow>
 
@@ -354,11 +338,7 @@ onBeforeUnmount(() => {
 				:description="formatMessage(messages.hideNametagDescription)"
 			>
 				<template #default="{ labelledBy, controlId }">
-					<Toggle
-						:id="controlId"
-						v-model="current.hideNametag"
-						:aria-labelledby="labelledBy"
-					/>
+					<Toggle :id="controlId" v-model="current.hideNametag" :aria-labelledby="labelledBy" />
 				</template>
 			</SettingsRow>
 		</SettingsGroup>
@@ -400,11 +380,7 @@ onBeforeUnmount(() => {
 				:description="formatMessage(messages.discordRichPresenceDescription)"
 			>
 				<template #default="{ labelledBy, controlId }">
-					<Toggle
-						:id="controlId"
-						v-model="current.discordRpc"
-						:aria-labelledby="labelledBy"
-					/>
+					<Toggle :id="controlId" v-model="current.discordRpc" :aria-labelledby="labelledBy" />
 				</template>
 			</SettingsRow>
 		</SettingsGroup>

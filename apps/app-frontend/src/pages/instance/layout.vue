@@ -98,7 +98,7 @@ import {
 	StopCircleIcon,
 	TerminalSquareIcon,
 	UserPlusIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import {
 	commonMessages,
 	ContextMenu,
@@ -107,7 +107,7 @@ import {
 	NavTabs,
 	useLoadingBarToken,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
 import { useOnline } from '@vueuse/core'
 import dayjs from 'dayjs'

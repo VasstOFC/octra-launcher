@@ -9,7 +9,7 @@
     "message": "모두 수용"
   },
   "ads-consent.body": {
-    "message": "Modrinth는 광고를 통해 운영되며, 크리에이터에게 지급하여 보상합니다. 파트너들은 맞춤형 광고 제공과 성과 측정을 위해 웹사이트에서 쿠키를 저장 또는 접근할 수 있습니다."
+    "message": "Lumen는 광고를 통해 운영되며, 크리에이터에게 지급하여 보상합니다. 파트너들은 맞춤형 광고 제공과 성과 측정을 위해 웹사이트에서 쿠키를 저장 또는 접근할 수 있습니다."
   },
   "ads-consent.manage": {
     "message": "참조 관리"
@@ -18,7 +18,7 @@
     "message": "모두 거절"
   },
   "ads-consent.title": {
-    "message": "프라이버시와 광고가 Modrinth를 지원하는 방식"
+    "message": "프라이버시와 광고가 Lumen를 지원하는 방식"
   },
   "analytics.action.add": {
     "message": "추가"
@@ -110,11 +110,11 @@
   "analytics.chart.controls.display": {
     "message": "표시"
   },
-  "analytics.chart.controls.modrinth-events": {
-    "message": "Modrinth 이벤트"
+  "analytics.chart.controls.Lumen-events": {
+    "message": "Lumen 이벤트"
   },
-  "analytics.chart.controls.no-modrinth-events": {
-    "message": "그래프에 Modrinth 이벤트가 없습니다."
+  "analytics.chart.controls.no-Lumen-events": {
+    "message": "그래프에 Lumen 이벤트가 없습니다."
   },
   "analytics.chart.controls.no-project-events": {
     "message": "그래프에 프로젝트 이벤트가 없습니다."
@@ -144,7 +144,7 @@
     "message": "수익화 분석 상세 보기"
   },
   "analytics.chart.legend.monetization-details.description": {
-    "message": "Modrinth를 통해 발생한 조회수와 다운로드만 수익화에 반영되며, 다운로드 시에는 로그인해야 합니다."
+    "message": "Lumen를 통해 발생한 조회수와 다운로드만 수익화에 반영되며, 다운로드 시에는 로그인해야 합니다."
   },
   "analytics.chart.legend.monetization-details.title": {
     "message": "수익화 분석 상세 내역"
@@ -228,10 +228,10 @@
     "message": "업데이트"
   },
   "analytics.download-source.app": {
-    "message": "Modrinth 앱"
+    "message": "Lumen 앱"
   },
   "analytics.download-source.website": {
-    "message": "Modrinth 웹사이트"
+    "message": "Lumen 웹사이트"
   },
   "analytics.downloads.suffix": {
     "message": "다운로드"
@@ -417,7 +417,7 @@
     "message": "다운로드 수"
   },
   "analytics.stat.monetization-banner.body": {
-    "message": "Modrinth를 통해 발생한 조회수와 다운로드만 수익 창출 대상이 되며, 부정행위 방지 필터링을 통과해야 합니다. 또한, Modrinth 앱을 통한 다운로드는 사용자가 로그인한 상태여야 합니다. 모든 프로젝트의 수익 창출 다운로드 비율은 유사하므로, 모든 다운로드 수가 집계에 포함되더라도 귀하의 수익에는 의미 있는 변화가 없을 것입니다."
+    "message": "Lumen를 통해 발생한 조회수와 다운로드만 수익 창출 대상이 되며, 부정행위 방지 필터링을 통과해야 합니다. 또한, Lumen 앱을 통한 다운로드는 사용자가 로그인한 상태여야 합니다. 모든 프로젝트의 수익 창출 다운로드 비율은 유사하므로, 모든 다운로드 수가 집계에 포함되더라도 귀하의 수익에는 의미 있는 변화가 없을 것입니다."
   },
   "analytics.stat.monetization-banner.learn-more": {
     "message": "자세히 알아보기"
@@ -456,7 +456,7 @@
     "message": "{start} ~ {end}"
   },
   "analytics.table.csv.filename": {
-    "message": "Modrinth 분석 {breakdown} 상세 내역 - {dateRange}"
+    "message": "Lumen 분석 {breakdown} 상세 내역 - {dateRange}"
   },
   "analytics.table.csv.header.playtime-seconds": {
     "message": "플레이 시간 (초)"
@@ -564,7 +564,7 @@
     "message": "Linux"
   },
   "app-marketing.download.linux-disclaimer": {
-    "message": "Linux용 Modrinth App은 일부 시스템 및 구성에서 <issues-link>문제가 있는 것으로 알려져</issues-link> 있습니다. Modrinth App이 불안정한 경우, <prism-link>Prism Launcher</prism-link> 등의 다른 앱을 사용하여 Modrinth 콘텐츠를 설치하는 것을 권장합니다."
+    "message": "Linux용 Lumen App은 일부 시스템 및 구성에서 <issues-link>문제가 있는 것으로 알려져</issues-link> 있습니다. Lumen App이 불안정한 경우, <prism-link>Prism Launcher</prism-link> 등의 다른 앱을 사용하여 Lumen 콘텐츠를 설치하는 것을 권장합니다."
   },
   "app-marketing.download.mac": {
     "message": "Mac"
@@ -573,10 +573,10 @@
     "message": "다운로드 옵션"
   },
   "app-marketing.download.terms": {
-    "message": "Modrinth App을 다운로드하면, <terms-link>이용 약관</terms-link> 및 <privacy-link>개인정보 처리방침</privacy-link>에 동의하는 것으로 간주됩니다."
+    "message": "Lumen App을 다운로드하면, <terms-link>이용 약관</terms-link> 및 <privacy-link>개인정보 처리방침</privacy-link>에 동의하는 것으로 간주됩니다."
   },
   "app-marketing.download.title": {
-    "message": "Modrinth App (베타) 다운로드"
+    "message": "Lumen App (베타) 다운로드"
   },
   "app-marketing.download.windows": {
     "message": "Windows"
@@ -588,7 +588,7 @@
     "message": "프로젝트 팔로우"
   },
   "app-marketing.features.importing.description": {
-    "message": "이전 런처에서 사용하던 모든 즐겨찾기 프로필을 가져오고, Modrinth App에서 바로 시작하세요!"
+    "message": "이전 런처에서 사용하던 모든 즐겨찾기 프로필을 가져오고, Lumen App에서 바로 시작하세요!"
   },
   "app-marketing.features.importing.gdlauncher-alt": {
     "message": "GDLauncher"
@@ -606,7 +606,7 @@
     "message": "{author} 제공"
   },
   "app-marketing.features.mod-management.description": {
-    "message": "Modrinth와 함께라면 모든 모드를 한곳에서 쉽게 관리할 수 있습니다. 단 한 번의 클릭으로 모드를 설치, 삭제, 업데이트해 보세요."
+    "message": "Lumen와 함께라면 모든 모드를 한곳에서 쉽게 관리할 수 있습니다. 단 한 번의 클릭으로 모드를 설치, 삭제, 업데이트해 보세요."
   },
   "app-marketing.features.mod-management.installed-mods": {
     "message": "설치된 모드"
@@ -630,7 +630,7 @@
     "message": "오프라인 모드"
   },
   "app-marketing.features.open-source.description": {
-    "message": "Modrinth의 런처는 완전히 오픈 소스입니다. <github-link>Github</github-link>에서 소스 코드를 확인하세요!"
+    "message": "Lumen의 런처는 완전히 오픈 소스입니다. <github-link>Github</github-link>에서 소스 코드를 확인하세요!"
   },
   "app-marketing.features.open-source.title": {
     "message": "오픈 소스"
@@ -642,7 +642,7 @@
     "message": "% CPU"
   },
   "app-marketing.features.performance.description": {
-    "message": "Modrinth App은 대다수 모드 매니저들보다 빠릅니다, 150 MB의 메모리만 사용하죠!"
+    "message": "Lumen App은 대다수 모드 매니저들보다 빠릅니다, 150 MB의 메모리만 사용하죠!"
   },
   "app-marketing.features.performance.discord": {
     "message": "Discord"
@@ -662,8 +662,8 @@
   "app-marketing.features.performance.less-than-150mb": {
     "message": "< 150 MB"
   },
-  "app-marketing.features.performance.modrinth-app": {
-    "message": "Modrinth App"
+  "app-marketing.features.performance.Lumen-app": {
+    "message": "Lumen App"
   },
   "app-marketing.features.performance.one-billion-percent": {
     "message": "10억%"
@@ -681,13 +681,13 @@
     "message": "고성능"
   },
   "app-marketing.features.play.description": {
-    "message": "Modrinth App을 통해 여러분이 좋아하는 모드와 모드팩을 다운로드하고 바로 플레이하세요."
+    "message": "Lumen App을 통해 여러분이 좋아하는 모드와 모드팩을 다운로드하고 바로 플레이하세요."
   },
   "app-marketing.features.play.title": {
     "message": "좋아하는 모드를 플레이하세요"
   },
   "app-marketing.features.sharing.description": {
-    "message": "Modrinth에 있는 수천 개의 모드와 모드팩으로 모드팩을 만들고, 공유하고, 플레이하세요."
+    "message": "Lumen에 있는 수천 개의 모드와 모드팩으로 모드팩을 만들고, 공유하고, 플레이하세요."
   },
   "app-marketing.features.sharing.modpack": {
     "message": "모드팩"
@@ -702,7 +702,7 @@
     "message": "한 번도 경험하지 못했던,"
   },
   "app-marketing.features.website.description": {
-    "message": "Modrinth App은 웹사이트와 완전히 통합되어 있어, 앱에서 좋아하는 프로젝트에 접근할 수 있습니다!"
+    "message": "Lumen App은 웹사이트와 완전히 통합되어 있어, 앱에서 좋아하는 프로젝트에 접근할 수 있습니다!"
   },
   "app-marketing.features.website.title": {
     "message": "웹사이트 통합"
@@ -711,19 +711,19 @@
     "message": "차원이 다른 런처"
   },
   "app-marketing.hero.app-screenshot-alt": {
-    "message": "Cobblemon 인스턴스가 ‘콘텐츠’ 페이지에 열려 있는 Modrinth App의 스크린샷."
+    "message": "Cobblemon 인스턴스가 ‘콘텐츠’ 페이지에 열려 있는 Lumen App의 스크린샷."
   },
   "app-marketing.hero.description": {
-    "message": "Modrinth App은 독특한 오픈 소스 런처로, 좋아하는 모드를 플레이하고 최신 상태로 유지하는 모든 기능이 이 깔끔한 패키지 하나에 모두 담겨 있습니다."
+    "message": "Lumen App은 독특한 오픈 소스 런처로, 좋아하는 모드를 플레이하고 최신 상태로 유지하는 모든 기능이 이 깔끔한 패키지 하나에 모두 담겨 있습니다."
   },
   "app-marketing.hero.download-button": {
-    "message": "Modrinth App 다운로드"
+    "message": "Lumen App 다운로드"
   },
-  "app-marketing.hero.download-modrinth-app": {
-    "message": "Modrinth App 다운로드"
+  "app-marketing.hero.download-Lumen-app": {
+    "message": "Lumen App 다운로드"
   },
-  "app-marketing.hero.download-modrinth-app-for-os": {
-    "message": "{os}용 Modrinth App 다운로드"
+  "app-marketing.hero.download-Lumen-app-for-os": {
+    "message": "{os}용 Lumen App 다운로드"
   },
   "app-marketing.hero.minecraft-screenshot-alt": {
     "message": "Cobblemon 인스턴스의 메인 메뉴 스크린샷"
@@ -792,7 +792,7 @@
     "message": "생년월일은 필수 입력 항목입니다"
   },
   "auth.create-account.date-of-birth.under13-helper": {
-    "message": "Modrinth 회원가입에 필요한 연령 기준을 충족하지 않습니다."
+    "message": "Lumen 회원가입에 필요한 연령 기준을 충족하지 않습니다."
   },
   "auth.create-account.info-panel.source-code-link": {
     "message": "관련 소스 코드"
@@ -807,7 +807,7 @@
     "message": "보안 검사"
   },
   "auth.create-account.subscribe.label": {
-    "message": "Modrinth의 흥미로운 소식을 이메일로 받아보겠습니다"
+    "message": "Lumen의 흥미로운 소식을 이메일로 받아보겠습니다"
   },
   "auth.create-account.title": {
     "message": "회원가입"
@@ -879,7 +879,7 @@
     "message": "계정이 없으신가요?"
   },
   "auth.sign-in.sign-in-with": {
-    "message": "Modrinth 로그인"
+    "message": "Lumen 로그인"
   },
   "auth.sign-in.title": {
     "message": "로그인"
@@ -891,7 +891,7 @@
     "message": "이메일로 계속하기"
   },
   "auth.sign-up.legal-dislaimer": {
-    "message": "계정을 생성함으로써, Modrinth의 <terms-link>이용 약관</terms-link> 및 <privacy-policy-link>개인정보 보호정책</privacy-policy-link>에 동의합니다."
+    "message": "계정을 생성함으로써, Lumen의 <terms-link>이용 약관</terms-link> 및 <privacy-policy-link>개인정보 보호정책</privacy-policy-link>에 동의합니다."
   },
   "auth.sign-up.show-fewer-options": {
     "message": "간략히 보기"
@@ -981,7 +981,7 @@
     "message": "이 컬렉션을 삭제하시겠습니까?"
   },
   "collection.description": {
-    "message": "{description} - Modrinth에서 {username}님이 만든 컬렉션 {name} 보기"
+    "message": "{description} - Lumen에서 {username}님이 만든 컬렉션 {name} 보기"
   },
   "collection.description.following": {
     "message": "팔로우하는 모든 프로젝트로 자동 생성된 컬렉션입니다."
@@ -1101,7 +1101,7 @@
     "message": "스레드에 답글 게시"
   },
   "conversation-thread.reply-modal.help-center-note": {
-    "message": "운영진에게 문의하려면 <help-center-link>Modrinth 도움말 센터</help-center-link>를 이용하고, 오른쪽 하단에 있는 파란색 말풍선을 클릭하여 지원 센에 문의해 주세요."
+    "message": "운영진에게 문의하려면 <help-center-link>Lumen 도움말 센터</help-center-link>를 이용하고, 오른쪽 하단에 있는 파란색 말풍선을 클릭하여 지원 센에 문의해 주세요."
   },
   "conversation-thread.resubmit-modal.confirmation.description": {
     "message": "운영진이 보낸 메시지에 답변했는지 확인"
@@ -1509,7 +1509,7 @@
     "message": "완료되지 않은 세금 양식"
   },
   "dashboard.creator-tax-form-modal.security.description": {
-    "message": "Modrinth는 제3자 제공업체 Track1099를 통해 세금 신고서를 안전하게 수집하고 보관합니다. <security-link>자세히 알아보기</security-link>"
+    "message": "Lumen는 제3자 제공업체 Track1099를 통해 세금 신고서를 안전하게 수집하고 보관합니다. <security-link>자세히 알아보기</security-link>"
   },
   "dashboard.creator-tax-form-modal.security.header": {
     "message": "보안 관행"
@@ -1683,7 +1683,7 @@
     "message": "사용 가능한 잔액 <b>{available}</b> 전액을 출금하려면 아래 양식을 작성해 주세요. 이는 세금 신고를 위해 필요하며, 한 번만 완료하면 됩니다."
   },
   "dashboard.creator-withdraw-modal.tax-form-required.body-with-limit": {
-    "message": "세금 규정을 준수하기 위해 Modrinth의 세무 기록용으로 이용하는 W-9 또는 W-8 양식을 작성해야 합니다."
+    "message": "세금 규정을 준수하기 위해 Lumen의 세무 기록용으로 이용하는 W-9 또는 W-8 양식을 작성해야 합니다."
   },
   "dashboard.creator-withdraw-modal.tax-form-required.header": {
     "message": "세금 신고서 필요"
@@ -1746,7 +1746,7 @@
     "message": "인증되지 않은 이메일"
   },
   "dashboard.creator-withdraw-modal.tremendous-details.unverified-email-message": {
-    "message": "입력하신 배송 이메일은 귀하의 Modrinth 계정과 연결되어 있지 않습니다. Modrinth는 잘못된 이메일 주소로 발송된 보상을 복구할 수 없습니다."
+    "message": "입력하신 배송 이메일은 귀하의 Lumen 계정과 연결되어 있지 않습니다. Lumen는 잘못된 이메일 주소로 발송된 보상을 복구할 수 없습니다."
   },
   "dashboard.creator-withdraw-modal.tremendous-details.usd-paypal-warning-header": {
     "message": "수수료 절감 가능"
@@ -1770,7 +1770,7 @@
     "message": "귀하의 <b>{withdrawLimit}</b> 출금 한도를 모두 사용하셨습니다. 추가 출금을 위해서는 세금 신고서를 작성하셔야 합니다."
   },
   "dashboard.discord-roles.banner.body": {
-    "message": "{roles} 역할을 획득하실 수 있습니다. Modrinth에 Discord 계정을 연동하시면 자동으로 동기화됩니다."
+    "message": "{roles} 역할을 획득하실 수 있습니다. Lumen에 Discord 계정을 연동하시면 자동으로 동기화됩니다."
   },
   "dashboard.discord-roles.banner.cta": {
     "message": "Discord 링크"
@@ -1953,7 +1953,7 @@
     "message": "추정 수익은 제공될 때까지 변경될 수 있습니다."
   },
   "dashboard.revenue.estimated-tooltip.msg2": {
-    "message": "Modrinth가 수익을 처리하는 방법에 대해 알아보려면 클릭하세요."
+    "message": "Lumen가 수익을 처리하는 방법에 대해 알아보려면 클릭하세요."
   },
   "dashboard.revenue.estimated-with-date": {
     "message": "예정일: {date}"
@@ -1974,7 +1974,7 @@
     "message": "출금 완료"
   },
   "dashboard.revenue.tos": {
-    "message": "Modrinth에 프로젝트를 업로드하고 계좌에서 자금을 출금함으로써 귀하는 당사의 <terms-link>리워드 프로그램 약관</terms-link>에 동의하는 것으로 간주됩니다. <info-link>리워드 프로그램</info-link>에 대해 자세히 알아보세요."
+    "message": "Lumen에 프로젝트를 업로드하고 계좌에서 자금을 출금함으로써 귀하는 당사의 <terms-link>리워드 프로그램 약관</terms-link>에 동의하는 것으로 간주됩니다. <info-link>리워드 프로그램</info-link>에 대해 자세히 알아보세요."
   },
   "dashboard.revenue.transactions.btn.download-csv": {
     "message": "CSV로 다운로드"
@@ -2163,7 +2163,7 @@
     "message": "리셋 후 설치할 모드팩 선택"
   },
   "discover.seo.description": {
-    "message": "Modrinth에서 수천 개의 마인크래프트 {projectType}을 정확하고 빠르게 검색해 보세요. 맞춤형 필터 기능으로 원하는 최고의 마인크래프트 {projectType}을 막힘없이 찾아낼 수 있습니다."
+    "message": "Lumen에서 수천 개의 마인크래프트 {projectType}을 정확하고 빠르게 검색해 보세요. 맞춤형 필터 기능으로 원하는 최고의 마인크래프트 {projectType}을 막힘없이 찾아낼 수 있습니다."
   },
   "discover.seo.title": {
     "message": "{projectType} 검색"
@@ -2178,7 +2178,7 @@
     "message": "컬렉션이 비공개일 수 있습니다."
   },
   "error.collection.404.list_item.3": {
-    "message": "컬렉션이 <tou-link>이용약관</tou-link>을 위반하여 Modrinth 관리 팀에서 삭제했을 수 있습니다."
+    "message": "컬렉션이 <tou-link>이용약관</tou-link>을 위반하여 Lumen 관리 팀에서 삭제했을 수 있습니다."
   },
   "error.collection.404.list_title": {
     "message": "다음 사항을 확인하십시오:"
@@ -2205,10 +2205,10 @@
     "message": "법적 사유로 인해 콘텐츠를 이용하실 수 없습니다"
   },
   "error.generic.default.list_item.1": {
-    "message": "<status-link>서버 상태</status-link>에서 Modrinth 서버가 다운되었는지 확인해 보세요."
+    "message": "<status-link>서버 상태</status-link>에서 Lumen 서버가 다운되었는지 확인해 보세요."
   },
   "error.generic.default.list_item.2": {
-    "message": "계속해서 문제가 발생하는 경우, <discord-link>디스코드 서버</discord-link>에 접속해 Modrinth 팀과 연락할 수 있습니다."
+    "message": "계속해서 문제가 발생하는 경우, <discord-link>디스코드 서버</discord-link>에 접속해 Lumen 팀과 연락할 수 있습니다."
   },
   "error.generic.default.list_title": {
     "message": "몇 분 뒤에 다시 시도해 보세요."
@@ -2226,7 +2226,7 @@
     "message": "조직 소유자가 URL을 변경했거나 삭제했을 수 있습니다."
   },
   "error.organization.404.list_item.3": {
-    "message": "조직이 <tou-link>이용약관</tou-link>을 위반하여 Modrinth 관리 팀에서 삭제했을 수 있습니다."
+    "message": "조직이 <tou-link>이용약관</tou-link>을 위반하여 Lumen 관리 팀에서 삭제했을 수 있습니다."
   },
   "error.organization.404.list_title": {
     "message": "다음 사항을 확인하십시오:"
@@ -2241,7 +2241,7 @@
     "message": "프로젝트 소유자가 URL을 변경했거나, 비공개로 전환했거나, 삭제했을 수 있습니다."
   },
   "error.project.404.list_item.3": {
-    "message": "프로젝트가 <tou-link>이용약관</tou-link>을 위반하여 Modrinth 관리 팀에서 삭제했을 수 있습니다."
+    "message": "프로젝트가 <tou-link>이용약관</tou-link>을 위반하여 Lumen 관리 팀에서 삭제했을 수 있습니다."
   },
   "error.project.404.list_title": {
     "message": "다음 사항을 확인하십시오:"
@@ -2256,7 +2256,7 @@
     "message": "해당 사용자가 이름을 변경했거나 계정을 삭제했을 수도 있습니다."
   },
   "error.user.404.list_item.3": {
-    "message": "해당 사용자의 계정이 Modrinth의 <tou-link>이용 약관</tou-link>을 위반하여 정지되었습니다."
+    "message": "해당 사용자의 계정이 Lumen의 <tou-link>이용 약관</tou-link>을 위반하여 정지되었습니다."
   },
   "error.user.404.list_title": {
     "message": "다음 사항을 확인하십시오:"
@@ -2298,10 +2298,10 @@
     "message": "서버가 과부하 상태일 때, 일시적으로 추가 CPU 스레드를 제공하여 지연과 불안정성을 완화합니다. 이를 통해 TPS가 20 밑으로 떨어지지 않도록 하여 가능한 한 부드러운 환경을 유지할 수 있습니다. 단, 이러한 추가 CPU 스레드는 부하가 높은 순간에만 잠시 제공되므로 Spark 보고서나 다른 프로파일링 도구에는 나타나지 않을 수 있습니다."
   },
   "hosting-marketing.faq.cpu-kind": {
-    "message": "Modrinth 호스팅 서버는 어떤 종류의 CPU를 사용하나요?"
+    "message": "Lumen 호스팅 서버는 어떤 종류의 CPU를 사용하나요?"
   },
   "hosting-marketing.faq.cpu-kind.answer": {
-    "message": "Modrinth 호스팅 서버는 5GHz 이상의 AMD Ryzen 7900 및 7950X3D급 CPU와 DDR5 메모리로 구동됩니다."
+    "message": "Lumen 호스팅 서버는 5GHz 이상의 AMD Ryzen 7900 및 7950X3D급 CPU와 DDR5 메모리로 구동됩니다."
   },
   "hosting-marketing.faq.currency": {
     "message": "가격은 어떤 통화로 표시되나요?"
@@ -2310,31 +2310,31 @@
     "message": "모든 가격은 미국 달러(USD)로 표시됩니다."
   },
   "hosting-marketing.faq.ddos-protection": {
-    "message": "Modrinth 호스팅 서버는 DDoS 공격 방어 기능을 갖추고 있나요?"
+    "message": "Lumen 호스팅 서버는 DDoS 공격 방어 기능을 갖추고 있나요?"
   },
   "hosting-marketing.faq.ddos-protection.answer": {
-    "message": "네. 모든 Modrinth 호스팅 서버에는 DDoS 공격 방지 기능이 탑재되어 있으며, 일부 지역에서는 최대 17 Tbps의 용량을 제공합니다."
+    "message": "네. 모든 Lumen 호스팅 서버에는 DDoS 공격 방지 기능이 탑재되어 있으며, 일부 지역에서는 최대 17 Tbps의 용량을 제공합니다."
   },
   "hosting-marketing.faq.heading": {
     "message": "자주 묻는 질문"
   },
   "hosting-marketing.faq.how-fast": {
-    "message": "Modrinth Hosting 서버 속도는 얼마나 빠른가요?"
+    "message": "Lumen Hosting 서버 속도는 얼마나 빠른가요?"
   },
   "hosting-marketing.faq.how-fast.answer.one": {
-    "message": "Modrinth 서버는 최신 고성능 하드웨어에서 호스팅되지만, 서버 속도가 정확히 얼마나 나올지는 장담하기 어렵습니다 사용 중인 모드, 데이터팩, 플러그인뿐 아니라 사용자 행동 등 다양한 요소가 속도에 영향을 미치기 때문입니다."
+    "message": "Lumen 서버는 최신 고성능 하드웨어에서 호스팅되지만, 서버 속도가 정확히 얼마나 나올지는 장담하기 어렵습니다 사용 중인 모드, 데이터팩, 플러그인뿐 아니라 사용자 행동 등 다양한 요소가 속도에 영향을 미치기 때문입니다."
   },
   "hosting-marketing.faq.how-fast.answer.two": {
-    "message": "대부분의 성능 문제는 서버를 느리게 만드는 최적화되지 않은 모드팩, 모드, 데이터팩, 또는 플러그인 때문에 발생합니다. Modrinth 서버는 최고급 장비로 운영되므로, 서버에서 사용하는 콘텐츠에 맞는 요금제를 선택하면 큰 문제 없이 이용할 수 있을 것입니다."
+    "message": "대부분의 성능 문제는 서버를 느리게 만드는 최적화되지 않은 모드팩, 모드, 데이터팩, 또는 플러그인 때문에 발생합니다. Lumen 서버는 최고급 장비로 운영되므로, 서버에서 사용하는 콘텐츠에 맞는 요금제를 선택하면 큰 문제 없이 이용할 수 있을 것입니다."
   },
   "hosting-marketing.faq.increase-storage": {
     "message": "서버 저장 용량을 늘릴 수 있나요?"
   },
   "hosting-marketing.faq.increase-storage.answer": {
-    "message": "네, 서버 저장 용량은 추가 비용 없이 늘릴 수 있습니다. 더 많은 저장 용량이 필요하시면 Modrinth 지원팀에 문의해 주세요."
+    "message": "네, 서버 저장 용량은 추가 비용 없이 늘릴 수 있습니다. 더 많은 저장 용량이 필요하시면 Lumen 지원팀에 문의해 주세요."
   },
   "hosting-marketing.faq.location": {
-    "message": "Modrinth 호스팅 서버는 어디에 위치해 있나요? 지역을 선택할 수 있나요?"
+    "message": "Lumen 호스팅 서버는 어디에 위치해 있나요? 지역을 선택할 수 있나요?"
   },
   "hosting-marketing.faq.location.answer": {
     "message": "현재 구매 시 북미, 유럽, 동남아시아, 호주 지역의 서버를 선택하실 수 있습니다. 앞으로 더 많은 지역이 추가될 예정입니다! 서버 지역 변경을 원하시면 고객 지원으로 문의해 주세요."
@@ -2343,7 +2343,7 @@
     "message": "어떤 마인크래프트 버전과 로더를 사용할 수 있나요?"
   },
   "hosting-marketing.faq.versions-loaders.answer.one": {
-    "message": "Modrinth Hosting 서버는 스냅샷 버전을 포함하여 버전 1.2.5부터 모든 버전의 Minecraft: Java Edition을 실행할 수 있습니다."
+    "message": "Lumen Hosting 서버는 스냅샷 버전을 포함하여 버전 1.2.5부터 모든 버전의 Minecraft: Java Edition을 실행할 수 있습니다."
   },
   "hosting-marketing.faq.versions-loaders.answer.two": {
     "message": "저희는 Fabric, Quilt, Forge, NeoForge 등의 모드 로더와 Paper, Purpur 등의 플러그인 로더를 포함한 다양한 모드 및 플러그인 로더를 지원합니다. 지원 여부는 해당 모드 또는 플러그인 로더가 선택한 Minecraft 버전을 지원하는지에 따라 달라집니다."
@@ -2360,11 +2360,11 @@
   "hosting-marketing.hero.button.start-your-server": {
     "message": "새 서버 시작하기"
   },
-  "hosting-marketing.hero.host-with-modrinth": {
-    "message": "당신의 서버를 Modrinth 호스팅으로 시작하세요"
+  "hosting-marketing.hero.host-with-Lumen": {
+    "message": "당신의 서버를 Lumen 호스팅으로 시작하세요"
   },
   "hosting-marketing.hero.hosting-description": {
-    "message": "Modrinth 호스팅은 마인크래프트 자바에디션 서버를 운영하는 가장 쉬운 방법입니다. Modrinth 플랫폼 내에서 좋아하는 모드와 모드팩을 간편하게 설치하고 바로 플레이하세요."
+    "message": "Lumen 호스팅은 마인크래프트 자바에디션 서버를 운영하는 가장 쉬운 방법입니다. Lumen 플랫폼 내에서 좋아하는 모드와 모드팩을 간편하게 설치하고 바로 플레이하세요."
   },
   "hosting-marketing.included.advanced-networking": {
     "message": "고급 네트워킹 관리"
@@ -2382,10 +2382,10 @@
     "message": "커스텀 링크"
   },
   "hosting-marketing.included.custom-url.description": {
-    "message": "사용자 지정 서버 <contrast>modrinth.gg</contrast> 링크를 공유하세요."
+    "message": "사용자 지정 서버 <contrast>Lumen.gg</contrast> 링크를 공유하세요."
   },
   "hosting-marketing.included.description": {
-    "message": "모든 서버에는 Modrinth만이 제공할 수 있는 최고의 호스팅 환경을 위해 설계된 다양한 기능들이 기본으로 포함되어 있습니다."
+    "message": "모든 서버에는 Lumen만이 제공할 수 있는 최고의 호스팅 환경을 위해 설계된 다양한 기능들이 기본으로 포함되어 있습니다."
   },
   "hosting-marketing.included.file-manager": {
     "message": "사용하기 쉬운 파일 메니저"
@@ -2400,19 +2400,19 @@
     "message": "도움이 필요할 때 언제든"
   },
   "hosting-marketing.included.help.description": {
-    "message": "서버 관련 문의 사항이 있으시면 언제든지 Modrinth 팀에 연락해 주세요."
+    "message": "서버 관련 문의 사항이 있으시면 언제든지 Lumen 팀에 연락해 주세요."
   },
   "hosting-marketing.included.powerful-console": {
     "message": "강력한 콘솔, 서버 설정 관리자 등 다양한 기능을 제공합니다."
   },
   "hosting-marketing.included.powerful-console.description": {
-    "message": "Modrinth 호스팅은 서버 관리를 위한 강력한 도구를 제공합니다."
+    "message": "Lumen 호스팅은 서버 관리를 위한 강력한 도구를 제공합니다."
   },
   "hosting-marketing.included.sftp-access": {
     "message": "SFTP 엑세스"
   },
   "hosting-marketing.included.sftp-access.description": {
-    "message": "Modrinth 호스팅에 내장된 SFTP를 사용하여 서버 파일에 직접 접근하세요."
+    "message": "Lumen 호스팅에 내장된 SFTP를 사용하여 서버 파일에 직접 접근하세요."
   },
   "hosting-marketing.included.with-your-server": {
     "message": "당신의 서버에 기본으로 포함되어 있습니다."
@@ -2453,20 +2453,20 @@
   "hosting-marketing.server-for-everyone": {
     "message": "모두에게 어울리는 서버"
   },
-  "hosting-marketing.why.all-on-modrinth": {
-    "message": "Modrinth에서 모든 것을 관리하세요"
+  "hosting-marketing.why.all-on-Lumen": {
+    "message": "Lumen에서 모든 것을 관리하세요"
   },
-  "hosting-marketing.why.all-on-modrinth.description": {
-    "message": "서버, 모드, 플레이어 등 모든 것이 Modrinth에 있습니다. 플랫폼을 전환할 필요가 없습니다."
+  "hosting-marketing.why.all-on-Lumen.description": {
+    "message": "서버, 모드, 플레이어 등 모든 것이 Lumen에 있습니다. 플랫폼을 전환할 필요가 없습니다."
   },
   "hosting-marketing.why.consistently-fast": {
     "message": "끊김없이 빠른 속도를 제공합니다"
   },
   "hosting-marketing.why.consistently-fast.description": {
-    "message": "저희 인프라는 절대 과부하되지 않습니다. 즉, Modrinth에서 호스트 중인 모든 서버는 항상 최선의 성능으로 돌아갑니다."
+    "message": "저희 인프라는 절대 과부하되지 않습니다. 즉, Lumen에서 호스트 중인 모든 서버는 항상 최선의 성능으로 돌아갑니다."
   },
   "hosting-marketing.why.description": {
-    "message": "Modrinth에서 제공하는 수천 개의 모드팩 중에서 선택하거나 직접 만들어 보세요. 준비가 되면 친구들을 초대하여 함께 플레이하세요."
+    "message": "Lumen에서 제공하는 수천 개의 모드팩 중에서 선택하거나 직접 만들어 보세요. 준비가 되면 친구들을 초대하여 함께 플레이하세요."
   },
   "hosting-marketing.why.heading": {
     "message": "모드팩을 찾으세요. 이제 서버가 완성됩니다."
@@ -2475,22 +2475,22 @@
     "message": "현대적이고 안정적인 호스팅을 경험해 보세요"
   },
   "hosting-marketing.why.modern-reliable-hosting.description": {
-    "message": "Modrinth 호스팅 서버는 <contrast>고성능 AMD CPU와 DDR5 RAM</contrast>으로 호스팅되어, 여러분의 서버가 원활하게 작동하도록 맞춤 제작된 소프트웨어에서 실행됩니다."
+    "message": "Lumen 호스팅 서버는 <contrast>고성능 AMD CPU와 DDR5 RAM</contrast>으로 호스팅되어, 여러분의 서버가 원활하게 작동하도록 맞춤 제작된 소프트웨어에서 실행됩니다."
   },
   "hosting-marketing.why.where-mods-are": {
     "message": "모드가 있는 곳에서 플레이하세요"
   },
   "hosting-marketing.why.where-mods-are.description": {
-    "message": "Modrinth 호스팅은 모드 및 모드팩 설치 과정을 서버에 완벽하게 통합합니다."
+    "message": "Lumen 호스팅은 모드 및 모드팩 설치 과정을 서버에 완벽하게 통합합니다."
   },
-  "hosting-marketing.why.why-modrinth-hosting": {
-    "message": "왜 Modrinth 호스팅를 선택해야 할까요?"
+  "hosting-marketing.why.why-Lumen-hosting": {
+    "message": "왜 Lumen 호스팅를 선택해야 할까요?"
   },
   "hosting-marketing.why.your-favorite-mods": {
     "message": "좋아하는 모드로 플레이하세요"
   },
   "hosting-marketing.why.your-favorite-mods.description": {
-    "message": "바닐라, Fabric, Forge, Quilt, NeoForge 중에서 선택하세요. Modrinth에서 실행되는 모드라면 여러분의 서버에서도 실행할 수 있습니다."
+    "message": "바닐라, Fabric, Forge, Quilt, NeoForge 중에서 선택하세요. Lumen에서 실행되는 모드라면 여러분의 서버에서도 실행할 수 있습니다."
   },
   "hosting.plan.out-of-stock": {
     "message": "품절"
@@ -2505,7 +2505,7 @@
     "message": "대시보드로 가기"
   },
   "landing.creator.feature.constantly-evolving.description": {
-    "message": "Modrinth 팀의 지속적인 업데이트로 최고의 모딩 경험을 누리세요"
+    "message": "Lumen 팀의 지속적인 업데이트로 최고의 모딩 경험을 누리세요"
   },
   "landing.creator.feature.constantly-evolving.title": {
     "message": "지속적인 발전"
@@ -2550,13 +2550,13 @@
     "message": "좋아하는 프로젝트를 팔로우하세요"
   },
   "landing.feature.launcher.description": {
-    "message": "Modrinth의 오픈 소스 API를 통해 런처는 Modrinth와 깊게 통합될 수 있습니다. <link>자체 앱</link>과 ATLauncher, MultiMC, Prism Launcher 같은 인기 런처에서도 Modrinth를 이용할 수 있습니다."
+    "message": "Lumen의 오픈 소스 API를 통해 런처는 Lumen와 깊게 통합될 수 있습니다. <link>자체 앱</link>과 ATLauncher, MultiMC, Prism Launcher 같은 인기 런처에서도 Lumen를 이용할 수 있습니다."
   },
   "landing.feature.launcher.heading": {
     "message": "원하는 런처로 플레이하세요"
   },
   "landing.feature.search.description": {
-    "message": "Modrinth의 번개처럼 빠른 검색과 강력한 필터 기능으로 입력하는 즉시 원하는 것을 찾을 수 있습니다."
+    "message": "Lumen의 번개처럼 빠른 검색과 강력한 필터 기능으로 입력하는 즉시 원하는 것을 찾을 수 있습니다."
   },
   "landing.feature.search.heading": {
     "message": "원하는 프로젝트를 쉽고 빠르게 찾으세요"
@@ -2589,10 +2589,10 @@
     "message": "ATLauncher"
   },
   "landing.launcher.graphic-alt": {
-    "message": "Minecraft 창을 단순화한 표현으로, Modrinth 그린 색상의 Mojang Studios 로고가 포함되어 있습니다."
+    "message": "Minecraft 창을 단순화한 표현으로, Lumen 그린 색상의 Mojang Studios 로고가 포함되어 있습니다."
   },
-  "landing.launcher.modrinth-app-label": {
-    "message": "Modrinth 앱"
+  "landing.launcher.Lumen-app-label": {
+    "message": "Lumen 앱"
   },
   "landing.launcher.prism-launcher-label": {
     "message": "Prism Launcher"
@@ -2685,13 +2685,13 @@
     "message": "계정 설정 방문"
   },
   "layout.banner.add-email.description": {
-    "message": "보안상의 이유로 Modrinth 계정에 이메일을 등록해야 합니다."
+    "message": "보안상의 이유로 Lumen 계정에 이메일을 등록해야 합니다."
   },
   "layout.banner.build-fail.always-ignore": {
     "message": "항상 무시"
   },
   "layout.banner.build-fail.description": {
-    "message": "Modrinth 프론트엔드 배포가 API로부터 상태를 생성하지 못했습니다. 이는 서비스 중단 또는 구성 오류 때문일 수 있습니다. API가 사용 가능해지면 재빌드하십시오. 오류 코드: {errors}; 현재 API URL: {url}"
+    "message": "Lumen 프론트엔드 배포가 API로부터 상태를 생성하지 못했습니다. 이는 서비스 중단 또는 구성 오류 때문일 수 있습니다. API가 사용 가능해지면 재빌드하십시오. 오류 코드: {errors}; 현재 API URL: {url}"
   },
   "layout.banner.build-fail.ignore": {
     "message": "무시"
@@ -2700,16 +2700,16 @@
     "message": "빌드 중 API에서 상태 생성 오류가 발생했습니다."
   },
   "layout.banner.preview.description": {
-    "message": "공식 Modrinth 웹사이트에 접속하려는 경우, {url}을(를) 방문하세요. 이 미리보기 배포판은 Modrinth 운영진이 테스트 목적으로 사용하며, 이는 {ref} 기반으로 빌드되었습니다."
+    "message": "공식 Lumen 웹사이트에 접속하려는 경우, {url}을(를) 방문하세요. 이 미리보기 배포판은 Lumen 운영진이 테스트 목적으로 사용하며, 이는 {ref} 기반으로 빌드되었습니다."
   },
   "layout.banner.preview.title": {
-    "message": "이 웹사이트는 Modrinth의 미리보기입니다."
+    "message": "이 웹사이트는 Lumen의 미리보기입니다."
   },
   "layout.banner.staging.description": {
-    "message": "스테이징 환경은 실제 Modrinth 프로덕션 데이터베이스와 완전히 분리되어 있으며, 테스트와 디버깅을 목적으로 사용됩니다. 이 환경에서는 프로덕션 인스턴스보다 최신 버전의 Modrinth 백엔드 또는 프론트엔드의 개발 버전이 실행되고 있을 수 있습니다."
+    "message": "스테이징 환경은 실제 Lumen 프로덕션 데이터베이스와 완전히 분리되어 있으며, 테스트와 디버깅을 목적으로 사용됩니다. 이 환경에서는 프로덕션 인스턴스보다 최신 버전의 Lumen 백엔드 또는 프론트엔드의 개발 버전이 실행되고 있을 수 있습니다."
   },
   "layout.banner.staging.title": {
-    "message": "현재 Modrinth의 스테이징 환경을 보고 있습니다"
+    "message": "현재 Lumen의 스테이징 환경을 보고 있습니다"
   },
   "layout.banner.subscription-payment-failed.button": {
     "message": "결제 정보 업데이트"
@@ -2724,7 +2724,7 @@
     "message": "세금 신고서를 작성 완료하세요"
   },
   "layout.banner.tax.description": {
-    "message": "올해 이미 Modrinth에서 {threshold} 이상을 출금했습니다. 세금 규정을 준수하기 위해 세금 신고서를 작성하셔야 합니다. 이 서류가 제출될 때까지 출금이 일시 중단됩니다."
+    "message": "올해 이미 Lumen에서 {threshold} 이상을 출금했습니다. 세금 규정을 준수하기 위해 세금 신고서를 작성하셔야 합니다. 이 서류가 제출될 때까지 출금이 일시 중단됩니다."
   },
   "layout.banner.tax.title": {
     "message": "세금 신고서 필요"
@@ -2742,7 +2742,7 @@
     "message": "인증 이메일 재전송"
   },
   "layout.banner.verify-email.description": {
-    "message": "보안상의 이유로 Modrinth 계정에 연결된 이메일 주소를 인증해야 합니다."
+    "message": "보안상의 이유로 Lumen 계정에 연결된 이메일 주소를 인증해야 합니다."
   },
   "layout.footer.about": {
     "message": "소개"
@@ -2798,23 +2798,23 @@
   "layout.footer.legal.terms-of-use": {
     "message": "이용 약관"
   },
-  "layout.footer.modrinth-information": {
-    "message": "Modrinth 정보"
+  "layout.footer.Lumen-information": {
+    "message": "Lumen 정보"
   },
   "layout.footer.open-source": {
-    "message": "Modrinth는 <github-link>오픈 소스</github-link>입니다."
+    "message": "Lumen는 <github-link>오픈 소스</github-link>입니다."
   },
   "layout.footer.products": {
     "message": "상품"
   },
   "layout.footer.products.app": {
-    "message": "Modrinth App"
+    "message": "Lumen App"
   },
   "layout.footer.products.plus": {
-    "message": "Modrinth+"
+    "message": "Lumen+"
   },
   "layout.footer.products.servers": {
-    "message": "Modrinth 호스팅"
+    "message": "Lumen 호스팅"
   },
   "layout.footer.resources": {
     "message": "정보"
@@ -2850,7 +2850,7 @@
     "message": "메뉴 전환"
   },
   "layout.meta.description": {
-    "message": "Modrinth에서 마인크래프트 모드, 플러그인, 데이터 팩, 셰이더, 리소스 팩, 모드팩을 다운로드하세요. 현대적이고 사용하기 쉬운 인터페이스와 API를 통해 Modrinth에서 프로젝트를 탐색하고 게시하세요."
+    "message": "Lumen에서 마인크래프트 모드, 플러그인, 데이터 팩, 셰이더, 리소스 팩, 모드팩을 다운로드하세요. 현대적이고 사용하기 쉬운 인터페이스와 API를 통해 Lumen에서 프로젝트를 탐색하고 게시하세요."
   },
   "layout.meta.og-description": {
     "message": "마인크래프트 콘텐츠를 탐색하고 게시하세요!"
@@ -2867,8 +2867,8 @@
   "layout.nav.discover": {
     "message": "탐색"
   },
-  "layout.nav.get-modrinth-app": {
-    "message": "Modrinth App 받기"
+  "layout.nav.get-Lumen-app": {
+    "message": "Lumen App 받기"
   },
   "layout.nav.home": {
     "message": "홈"
@@ -2876,11 +2876,11 @@
   "layout.nav.host-a-server": {
     "message": "서버 호스트하기"
   },
-  "layout.nav.modrinth-app": {
-    "message": "Modrinth 앱"
+  "layout.nav.Lumen-app": {
+    "message": "Lumen 앱"
   },
-  "layout.nav.modrinth-home-page": {
-    "message": "Modrinth 홈페이지"
+  "layout.nav.Lumen-home-page": {
+    "message": "Lumen 홈페이지"
   },
   "layout.nav.my-servers": {
     "message": "내 서버"
@@ -2903,11 +2903,11 @@
   "layout.nav.search": {
     "message": "검색"
   },
-  "layout.nav.upgrade-to-modrinth-plus": {
-    "message": "Modrinth+ 로 업그레이드"
+  "layout.nav.upgrade-to-Lumen-plus": {
+    "message": "Lumen+ 로 업그레이드"
   },
   "layout.publish.email-verification-required.description": {
-    "message": "Modrinth에 개시하기 전 이메일에서 승인해야 합니다."
+    "message": "Lumen에 개시하기 전 이메일에서 승인해야 합니다."
   },
   "layout.publish.email-verification-required.title": {
     "message": "이메일 승인이 필요합니다"
@@ -2922,19 +2922,19 @@
     "message": "공유된 콘텐츠가 변경될 때마다 최신 상태 유지"
   },
   "modal.shared-instance.open-in-app.get-app": {
-    "message": "Modrinth App 받기"
+    "message": "Lumen App 받기"
   },
   "modal.shared-instance.open-in-app.managed-by": {
     "message": "관리자:"
   },
   "modal.shared-instance.open-in-app.opening-automatically": {
-    "message": "Modrinth App이 자동으로 열립니다..."
+    "message": "Lumen App이 자동으로 열립니다..."
   },
   "modal.shared-instance.open-in-app.title": {
-    "message": "Modrinth App 실행 중"
+    "message": "Lumen App 실행 중"
   },
   "modal.shared-instance.open-in-app.why-use": {
-    "message": "Modrinth App을 사용해야 하는 이유"
+    "message": "Lumen App을 사용해야 하는 이유"
   },
   "moderation.exclude-technical-review": {
     "message": "기술 검토 제외"
@@ -3354,7 +3354,7 @@
     "message": "검토를 위해 다시 제출"
   },
   "project-moderation-nags.resubmit-for-review-desc": {
-    "message": "귀하의 프로젝트는 Modrinth 직원들에 의해 {status, select, rejected {거부} withheld {보류} other {{status}}} 처리되었습니다. 대부분의 경우, 직원들의 메시지를 해결한 후 재검토를 위해 재제출할 수 있습니다."
+    "message": "귀하의 프로젝트는 Lumen 직원들에 의해 {status, select, rejected {거부} withheld {보류} other {{status}}} 처리되었습니다. 대부분의 경우, 직원들의 메시지를 해결한 후 재검토를 위해 재제출할 수 있습니다."
   },
   "project-moderation-nags.submit-checklist-tooltip": {
     "message": "게시 체크리스트에 필요한 단계를 완료해야 합니다!"
@@ -3462,7 +3462,7 @@
     "message": "프로젝트 검토"
   },
   "project.actions.servers-promo.description": {
-    "message": "Modrinth 호스팅은 친구들과 번거로움 없이 플레이할 수 있는 가장 쉬운 방법입니다!"
+    "message": "Lumen 호스팅은 친구들과 번거로움 없이 플레이할 수 있는 가장 쉬운 방법입니다!"
   },
   "project.actions.servers-promo.pricing": {
     "message": "{price}<small> / 월</small>부터 시작"
@@ -3471,10 +3471,10 @@
     "message": "서버 생성"
   },
   "project.ai-image-warning-modal.body.1": {
-    "message": "AI로 생성된 이미지를 사용하여 프로젝트를 소개하는 것은 허용되지 않습니다. 탐지 시스템을 우회하려는 시도는 Modrinth 계정 정지 조치로 이어질 수 있습니다."
+    "message": "AI로 생성된 이미지를 사용하여 프로젝트를 소개하는 것은 허용되지 않습니다. 탐지 시스템을 우회하려는 시도는 Lumen 계정 정지 조치로 이어질 수 있습니다."
   },
   "project.ai-image-warning-modal.body.2": {
-    "message": "생성형 AI 정책에 대한 자세한 내용은 <rules>Modrinth 콘텐츠 규정</rules>의 6항을 참조하십시오."
+    "message": "생성형 AI 정책에 대한 자세한 내용은 <rules>Lumen 콘텐츠 규정</rules>의 6항을 참조하십시오."
   },
   "project.ai-image-warning-modal.title": {
     "message": "AI로 생성된 이미지는 허용되지 않습니다"
@@ -3561,13 +3561,13 @@
     "message": "{title}은(는) {platform}용 {gameVersion}을(를) 지원하지 않습니다"
   },
   "project.download.install-with-app": {
-    "message": "Modrinth 앱으로 설치"
+    "message": "Lumen 앱으로 설치"
   },
   "project.download.manually": {
     "message": "직접 다운로드"
   },
   "project.download.no-app": {
-    "message": "Modrinth 앱을 설치하지 않으셨나요?"
+    "message": "Lumen 앱을 설치하지 않으셨나요?"
   },
   "project.download.no-game-versions-found": {
     "message": "게임 버전을 찾을수 없습니다"
@@ -3612,7 +3612,7 @@
     "message": "파일 다운로드 실패"
   },
   "project.environment.migration-no-permission.message": {
-    "message": "Modrinth의 환경 시스템을 전면 개편하여 새로운 옵션이 추가되었습니다. 해당 설정 변경 권한은 없으나, 환경 메타데이터 검토가 필요함을 프로젝트 다른 구성원에게 알려주시기 바랍니다."
+    "message": "Lumen의 환경 시스템을 전면 개편하여 새로운 옵션이 추가되었습니다. 해당 설정 변경 권한은 없으나, 환경 메타데이터 검토가 필요함을 프로젝트 다른 구성원에게 알려주시기 바랍니다."
   },
   "project.environment.migration-no-permission.title": {
     "message": "환경 메타데이터를 검토해야 합니다"
@@ -3621,7 +3621,7 @@
     "message": "변경 사항에 대해 자세히 알아보기"
   },
   "project.environment.migration.message": {
-    "message": "Modrinth의 환경 시스템을 대대적으로 개편하여 새로운 옵션이 추가되었습니다. 메타데이터가 올바른지 확인해 주시기 바랍니다."
+    "message": "Lumen의 환경 시스템을 대대적으로 개편하여 새로운 옵션이 추가되었습니다. 메타데이터가 올바른지 확인해 주시기 바랍니다."
   },
   "project.environment.migration.review-button": {
     "message": "환경 설정 검토"
@@ -3648,10 +3648,10 @@
     "message": "이 프로젝트는 비공개로 설정되어 있어, 본인과 본인이 초대한 사람만 접근할 수 있습니다."
   },
   "project.moderation.admonition.approved.body.public": {
-    "message": "프로젝트가 Modrinth에 게시되어 누구나 확인할 수 있습니다."
+    "message": "프로젝트가 Lumen에 게시되어 누구나 확인할 수 있습니다."
   },
   "project.moderation.admonition.approved.body.unlisted": {
-    "message": "프로젝트는 일부 공개로 설정되어 있어, 직접 링크를 통해서만 접근할 수 있으며 Modrinth에서 검색할 수 없습니다."
+    "message": "프로젝트는 일부 공개로 설정되어 있어, 직접 링크를 통해서만 접근할 수 있으며 Lumen에서 검색할 수 없습니다."
   },
   "project.moderation.admonition.approved.body.visibility-message": {
     "message": "프로젝트의 <visibility-settings-link>공개 범위 설정</visibility-settings-link>에서 프로젝트의 공개 범위를 변경할 수 있습니다."
@@ -3660,13 +3660,13 @@
     "message": "프로젝트 승인됨"
   },
   "project.moderation.admonition.draft.body": {
-    "message": "이 프로젝트는 검토를 위해 제출되고 Modrinth 운영진의 승인을 받기 전까지는 다른 사람이 볼 수 없는 초안입니다."
+    "message": "이 프로젝트는 검토를 위해 제출되고 Lumen 운영진의 승인을 받기 전까지는 다른 사람이 볼 수 없는 초안입니다."
   },
   "project.moderation.admonition.draft.header": {
     "message": "프로젝트 초안"
   },
   "project.moderation.admonition.draft.submit-for-review": {
-    "message": "필요한 모든 단계를 완료하고 프로젝트가 Modrinth의 <rules-link>콘텐츠 규정</rules-link>을 준수하는지 확인한 후, 프로젝트를 검토를 위해 제출할 수 있습니다."
+    "message": "필요한 모든 단계를 완료하고 프로젝트가 Lumen의 <rules-link>콘텐츠 규정</rules-link>을 준수하는지 확인한 후, 프로젝트를 검토를 위해 제출할 수 있습니다."
   },
   "project.moderation.admonition.rejected.address-all-concerns": {
     "message": "이 프로젝트를 다시 제출하기 전에, 아래 메시지에 언급된 문제를 포함하여 모든 검토 관련 사항을 해결해야 합니다."
@@ -3678,10 +3678,10 @@
     "message": "검토 과정에서 제기된 모든 문제를 먼저 해결하지 않고 프로젝트를 반복적으로 제출할 경우, 계정이 정지될 수 있습니다."
   },
   "project.moderation.admonition.under-review.body.1": {
-    "message": "프로젝트가 Modrinth 운영진의 검토 대기열에 등록되었습니다."
+    "message": "프로젝트가 Lumen 운영진의 검토 대기열에 등록되었습니다."
   },
   "project.moderation.admonition.under-review.body.2": {
-    "message": "프로젝트가 스캔 과정을 거친 후, Modrinth의 <rules-link>콘텐츠 규정</rules-link> 및 <terms-link>이용 약관</terms-link>을 준수하는지 확인하기 위해 운영진이 검토하게 됩니다."
+    "message": "프로젝트가 스캔 과정을 거친 후, Lumen의 <rules-link>콘텐츠 규정</rules-link> 및 <terms-link>이용 약관</terms-link>을 준수하는지 확인하기 위해 운영진이 검토하게 됩니다."
   },
   "project.moderation.admonition.under-review.body.3": {
     "message": "프로젝트를 수정해도 대기열 우선 순위에는 영향을 미치지 않습니다."
@@ -3693,7 +3693,7 @@
     "message": "1주일 이내에 제출 항목을 검토하고자 하나, 일부 프로젝트 검토가 지연될 수 있습니다. 제출 항목의 문제를 의미하지는 않습니다."
   },
   "project.moderation.admonition.under-review.body.5": {
-    "message": "<emphasis>운영진들이 Modrinth의 안전한 환경을 유지하기 위해 최선을 다하고 있는 동안 기다려 주셔서 감사합니다. 여러분의 콘텐츠를 공유하실 수 있도록 도와드릴 수 있기를 기대합니다! 💚</emphasis>"
+    "message": "<emphasis>운영진들이 Lumen의 안전한 환경을 유지하기 위해 최선을 다하고 있는 동안 기다려 주셔서 감사합니다. 여러분의 콘텐츠를 공유하실 수 있도록 도와드릴 수 있기를 기대합니다! 💚</emphasis>"
   },
   "project.moderation.admonition.under-review.header": {
     "message": "프로젝트 검토 중"
@@ -3714,10 +3714,10 @@
     "message": "콘텐츠 관리자는 대부분의 문제에 대해 지원을 제공할 수 없으며, 이 스레드에 남겨진 메시지는 운영진에 전달되지 않습니다."
   },
   "project.moderation.thread.help-center-note.2": {
-    "message": "도움이 필요하거나 추가 문의 사항이 있다면 <help-center-link>Modrinth 도움말 센터</help-center-link>를 방문하여 파란색 말풍선을 클릭해 지원 센터에 문의해 주세요."
+    "message": "도움이 필요하거나 추가 문의 사항이 있다면 <help-center-link>Lumen 도움말 센터</help-center-link>를 방문하여 파란색 말풍선을 클릭해 지원 센터에 문의해 주세요."
   },
   "project.moderation.thread.private-description": {
-    "message": "이곳은 Modrinth 운영진과의 비공개 대화 스레드입니다. 운영진이 이 프로젝트와 관련된 사항에 대해 메시지를 보낼 수 있습니다."
+    "message": "이곳은 Lumen 운영진과의 비공개 대화 스레드입니다. 운영진이 이 프로젝트와 관련된 사항에 대해 메시지를 보낼 수 있습니다."
   },
   "project.moderation.thread.title": {
     "message": "운영진 메시지"
@@ -3807,7 +3807,7 @@
     "message": "알 수 없는 외부 콘텐츠"
   },
   "project.settings.permissions.bad-proof.description": {
-    "message": "Modrinth 운영팀이 일부 외부 콘텐츠에 대해 제출하신 권한 증명 정보를 반려했습니다. 아래 반려된 항목을 확인하신 후, 유효한 증명 자료를 다시 제출하거나 해당 콘텐츠를 삭제해 주세요."
+    "message": "Lumen 운영팀이 일부 외부 콘텐츠에 대해 제출하신 권한 증명 정보를 반려했습니다. 아래 반려된 항목을 확인하신 후, 유효한 증명 자료를 다시 제출하거나 해당 콘텐츠를 삭제해 주세요."
   },
   "project.settings.permissions.bad-proof.title": {
     "message": "일부 증명 자료가 거부되었습니다."
@@ -3846,13 +3846,13 @@
     "message": "모두 펼치기"
   },
   "project.settings.permissions.fail.description": {
-    "message": "프로젝트에 포함된 일부 외부 콘텐츠의 재배포 권한이 확인되지 않았습니다. Modrinth에 프로젝트를 게시하려면, 해당 콘텐츠를 삭제하거나 사용 권한이 있음을 증명할 수 있는 자료를 제출해 주세요."
+    "message": "프로젝트에 포함된 일부 외부 콘텐츠의 재배포 권한이 확인되지 않았습니다. Lumen에 프로젝트를 게시하려면, 해당 콘텐츠를 삭제하거나 사용 권한이 있음을 증명할 수 있는 자료를 제출해 주세요."
   },
   "project.settings.permissions.fail.title": {
     "message": "일부 콘텐츠는 포함될 수 없습니다"
   },
   "project.settings.permissions.info-banner.description": {
-    "message": "Modrinth에 호스팅되지 않은 외부 콘텐츠가 포함되어 있다면, 해당 콘텐츠의 출처를 밝히고 파일 배포 권한이 있음을 확인해 주셔야 합니다. 자세한 내용은 <link>새로운 시스템 도입 공지사항</link>에서 확인하실 수 있습니다!"
+    "message": "Lumen에 호스팅되지 않은 외부 콘텐츠가 포함되어 있다면, 해당 콘텐츠의 출처를 밝히고 파일 배포 권한이 있음을 확인해 주셔야 합니다. 자세한 내용은 <link>새로운 시스템 도입 공지사항</link>에서 확인하실 수 있습니다!"
   },
   "project.settings.permissions.info-banner.title": {
     "message": "배포 권한에 대해 알아보기"
@@ -3864,7 +3864,7 @@
     "message": "검색어와 일치하는 외부 파일이 없습니다."
   },
   "project.settings.permissions.not-allowed.description": {
-    "message": "포함된 외부 콘텐츠 중 일부는 Modrinth의 콘텐츠 운영 규정을 위반하여 배포할 수 없으므로 반드시 삭제해야 합니다."
+    "message": "포함된 외부 콘텐츠 중 일부는 Lumen의 콘텐츠 운영 규정을 위반하여 배포할 수 없으므로 반드시 삭제해야 합니다."
   },
   "project.settings.permissions.pending-approval-count": {
     "message": "{count, plural, =0 {승인이 필요한 출처 표기가 없습니다} other {#개의 출처 표기가 승인을 기다리고 있습니다}}"
@@ -4044,7 +4044,7 @@
     "message": "{item}을 찾을 수 없습니다"
   },
   "report.for.violation": {
-    "message": "Modrinth <rules-link>규칙</rules-link> 또는 <terms-link>이용 약관</terms-link>을 위반함"
+    "message": "Lumen <rules-link>규칙</rules-link> 또는 <terms-link>이용 약관</terms-link>을 위반함"
   },
   "report.for.violation.description": {
     "message": "악성 코드, 스팸, 사기, 불법적 콘텐츠, 폭력적 또는 오해의 소지가 있습니다."
@@ -4293,7 +4293,7 @@
     "message": "신고 쓰기"
   },
   "scopes.sessionAccess.description": {
-    "message": "Modrinth에서 발급한 세션 찾기"
+    "message": "Lumen에서 발급한 세션 찾기"
   },
   "scopes.sessionAccess.label": {
     "message": "세션 접근"
@@ -4392,7 +4392,7 @@
     "message": "서버와 동기화"
   },
   "servers.manage.content.title": {
-    "message": "콘텐츠 - {serverName} - Modrinth"
+    "message": "콘텐츠 - {serverName} - Lumen"
   },
   "servers.notice.actions": {
     "message": "활동"
@@ -4449,13 +4449,13 @@
     "message": "데이터 생성 중..."
   },
   "settings.account.data-export.description": {
-    "message": "Modrinth에 업로드한 모든 개인 데이터의 사본을 요청합니다. 처리하는 데 몇 분 정도 소요될 수 있습니다."
+    "message": "Lumen에 업로드한 모든 개인 데이터의 사본을 요청합니다. 처리하는 데 몇 분 정도 소요될 수 있습니다."
   },
   "settings.account.data-export.title": {
     "message": "데이터 내보내기"
   },
   "settings.account.delete.confirm.description": {
-    "message": "이 작업은 **모든 사용자 데이터와 팔로우 목록을 즉시 삭제합니다**. 단, 프로젝트는 삭제되지 않습니다. 계정 삭제는 되돌릴 수 없습니다.<br><br>계정 관련 도움이 필요하면 [Modrinth Discord](https://discord.modrinth.com)에서 도움을 받으세요."
+    "message": "이 작업은 **모든 사용자 데이터와 팔로우 목록을 즉시 삭제합니다**. 단, 프로젝트는 삭제되지 않습니다. 계정 삭제는 되돌릴 수 없습니다.<br><br>계정 관련 도움이 필요하면 [Lumen Discord](https://discord.Lumen.com)에서 도움을 받으세요."
   },
   "settings.account.delete.confirm.proceed": {
     "message": "계정 삭제"
@@ -4728,7 +4728,7 @@
     "message": "이 애플리케이션을 정말로 삭제하시겠습니까?"
   },
   "settings.applications.description.intro": {
-    "message": "애플리케이션을 사용하여 개발한 제품에서 Modrinth 사용자를 인증할 수 있습니다. 자세한 내용은 <docs-link>Modrinth API 문서</docs-link>를 참조하세요."
+    "message": "애플리케이션을 사용하여 개발한 제품에서 Lumen 사용자를 인증할 수 있습니다. 자세한 내용은 <docs-link>Lumen API 문서</docs-link>를 참조하세요."
   },
   "settings.applications.field.description": {
     "message": "설명"
@@ -4782,7 +4782,7 @@
     "message": "{user}님이 작성함"
   },
   "settings.authorizations.description": {
-    "message": "Modrinth 계정으로 애플리케이션에 권한을 부여하면, 해당 앱이 귀하의 계정에 접근할 수 있게 됩니다. 여기에서 언제든지 계정 접근 권한을 관리하고 확인할 수 있습니다."
+    "message": "Lumen 계정으로 애플리케이션에 권한을 부여하면, 해당 앱이 귀하의 계정에 접근할 수 있게 됩니다. 여기에서 언제든지 계정 접근 권한을 관리하고 확인할 수 있습니다."
   },
   "settings.authorizations.empty-state.description": {
     "message": "승인한 애플리케이션이 이곳에 표시됩니다."
@@ -4794,7 +4794,7 @@
     "message": "승인"
   },
   "settings.authorizations.official-tooltip": {
-    "message": "이 앱은 공식 Modrinth 계정에서 제작했습니다."
+    "message": "이 앱은 공식 Lumen 계정에서 제작했습니다."
   },
   "settings.authorizations.revoke.action": {
     "message": "취소"
@@ -4806,19 +4806,19 @@
     "message": "정말로 이 애플리케이션의 접근 권한을 취소하시겠습니까?"
   },
   "settings.authorizations.unofficial-disclosure": {
-    "message": "이 앱은 이름과 달리 Modrinth와 아무런 관련이 없습니다."
+    "message": "이 앱은 이름과 달리 Lumen와 아무런 관련이 없습니다."
   },
   "settings.billing.charges.description": {
-    "message": "Modrinth 계정의 과거 결제 내역을 여기서 확인할 수 있습니다:"
+    "message": "Lumen 계정의 과거 결제 내역을 여기서 확인할 수 있습니다:"
   },
   "settings.billing.charges.product.medal-trial": {
     "message": "Medal 서버 체험"
   },
   "settings.billing.charges.product.midas": {
-    "message": "Modrinth Plus"
+    "message": "Lumen Plus"
   },
   "settings.billing.charges.product.pyro": {
-    "message": "Modrinth 호스팅"
+    "message": "Lumen 호스팅"
   },
   "settings.billing.charges.title": {
     "message": "과거 결제 내역"
@@ -4836,10 +4836,10 @@
     "message": "년"
   },
   "settings.billing.midas.benefits.ad-free": {
-    "message": "Modrinth App 및 modrinth.com에서 광고 없이 브라우징"
+    "message": "Lumen App 및 Lumen.com에서 광고 없이 브라우징"
   },
   "settings.billing.midas.benefits.badge": {
-    "message": "프로필에 Modrinth+ 배지"
+    "message": "프로필에 Lumen+ 배지"
   },
   "settings.billing.midas.benefits.support": {
     "message": "Modrith 와 크리에이터 후원"
@@ -4866,7 +4866,7 @@
     "message": "결제가 처리 중입니다. 결제가 완료되면 혜택이 활성화됩니다."
   },
   "settings.billing.midas.upsell": {
-    "message": "Modrinth Plus 구독자가 되어보세요!"
+    "message": "Lumen Plus 구독자가 되어보세요!"
   },
   "settings.billing.modal.cancel.action": {
     "message": "구독 취소"
@@ -4923,7 +4923,7 @@
     "message": "{shared} 공유 CPU (최대 {bursts} CPU까지 버스트)"
   },
   "settings.billing.pyro.linked-server.not-found": {
-    "message": "이 구독에 연결된 서버를 찾을 수 없습니다. 이에 대한 몇 가지 원인이 있습니다. 서버를 방금 구매하신 경우, 이는 정상적인 현상입니다. 서버 프로비저닝에는 최대 1시간이 소요될 수 있습니다. 서버를 오래 전에 구매하신 경우, 그 사이에 서비스가 중단되었을 가능성이 높습니다. 이 외의 다른 상황이라면, 다음 정보를 포함하여 Modrinth 고객 지원에 문의해 주시기 바랍니다:"
+    "message": "이 구독에 연결된 서버를 찾을 수 없습니다. 이에 대한 몇 가지 원인이 있습니다. 서버를 방금 구매하신 경우, 이는 정상적인 현상입니다. 서버 프로비저닝에는 최대 1시간이 소요될 수 있습니다. 서버를 오래 전에 구매하신 경우, 그 사이에 서비스가 중단되었을 가능성이 높습니다. 이 외의 다른 상황이라면, 다음 정보를 포함하여 Lumen 고객 지원에 문의해 주시기 바랍니다:"
   },
   "settings.billing.pyro.linked-server.server-id": {
     "message": "서버 ID: {id}"
@@ -4935,7 +4935,7 @@
     "message": "{gb} GB RAM"
   },
   "settings.billing.pyro.resubscribe.error.text": {
-    "message": "Modrinth 서버 재구독 중에 오류가 발생했습니다."
+    "message": "Lumen 서버 재구독 중에 오류가 발생했습니다."
   },
   "settings.billing.pyro.resubscribe.error.title": {
     "message": "재구독 오류"
@@ -4962,10 +4962,10 @@
     "message": "{gb} GB 스왑 메모리"
   },
   "settings.billing.pyro_subscription.description": {
-    "message": "당신의 Modrinth 호스팅 플랜을 관리하세요."
+    "message": "당신의 Lumen 호스팅 플랜을 관리하세요."
   },
   "settings.billing.pyro_subscription.title": {
-    "message": "Modrinth Hosting 구독"
+    "message": "Lumen Hosting 구독"
   },
   "settings.billing.renews": {
     "message": "{date} 갱신"
@@ -4980,7 +4980,7 @@
     "message": "구독"
   },
   "settings.billing.subscription.description": {
-    "message": "당신의 Modrinth 플랜을 관리하세요."
+    "message": "당신의 Lumen 플랜을 관리하세요."
   },
   "settings.billing.subscription.title": {
     "message": "구독"
@@ -5007,7 +5007,7 @@
     "message": "개발자 모드 비활성화"
   },
   "settings.display.banner.developer-mode.description": {
-    "message": "<strong>개발자 모드</strong>가 활성화되어 있습니다. 이를 통해 Modrinth API를 사용하는 개발자인 경우 도움이 될 수 있는 Modrinth 전체의 여러 내부 ID를 확인할 수 있습니다. 페이지 하단의 Modrinth 로고를 5번 클릭하여 개발자 모드를 전환합니다."
+    "message": "<strong>개발자 모드</strong>가 활성화되어 있습니다. 이를 통해 Lumen API를 사용하는 개발자인 경우 도움이 될 수 있는 Lumen 전체의 여러 내부 ID를 확인할 수 있습니다. 페이지 하단의 Lumen 로고를 5번 클릭하여 개발자 모드를 전환합니다."
   },
   "settings.display.notification.developer-mode-deactivated.text": {
     "message": "개발자 모드가 비활성화 되었습니다"
@@ -5022,7 +5022,7 @@
     "message": "PAT 생성"
   },
   "settings.pats.description": {
-    "message": "개인 액세스 토큰는 Modrinth API에 액세스하는 데 사용할 수 있습니다. 언제든지 생성하거나 폐기할 수 있습니다. 자세한 내용은 <doc-link>Modrinth API 문서</doc-link>를 참조하세요."
+    "message": "개인 액세스 토큰는 Lumen API에 액세스하는 데 사용할 수 있습니다. 언제든지 생성하거나 폐기할 수 있습니다. 자세한 내용은 <doc-link>Lumen API 문서</doc-link>를 참조하세요."
   },
   "settings.pats.modal.create.action": {
     "message": "PAT 생성"
@@ -5079,7 +5079,7 @@
     "message": "현재 세션"
   },
   "settings.sessions.description": {
-    "message": "현재 Modrinth 계정으로 로그인 중인 장치 목록입니다. 여기서 각 장치를 개별적으로 로그아웃시키실 수 있습니다.\n\n만약 확인되지 않는 장치가 있다면 장치를 로그아웃시키신 후 즉시 Modrinth 계정 비밀번호를 변경하세요."
+    "message": "현재 Lumen 계정으로 로그인 중인 장치 목록입니다. 여기서 각 장치를 개별적으로 로그아웃시키실 수 있습니다.\n\n만약 확인되지 않는 장치가 있다면 장치를 로그아웃시키신 후 즉시 Lumen 계정 비밀번호를 변경하세요."
   },
   "settings.sessions.last-accessed-ago": {
     "message": "{ago} 에 접근함"
@@ -5103,7 +5103,7 @@
     "message": "초대 수락"
   },
   "shared-instance.invite.inviter.unknown": {
-    "message": "Modrinth 사용자"
+    "message": "Lumen 사용자"
   },
   "shared-instance.invite.joined-count": {
     "message": "이미 {count, plural, other {#명}}이 참여함"
@@ -5115,7 +5115,7 @@
     "message": "{name}님이 플레이 초대를 보냈습니다"
   },
   "shared-instance.invite.trust.description": {
-    "message": "이 초대는 Modrinth가 아닌 다른 Modrinth 사용자가 생성했습니다. 신뢰할 수 있는 사람의 초대만 수락하세요."
+    "message": "이 초대는 Lumen가 아닌 다른 Lumen 사용자가 생성했습니다. 신뢰할 수 있는 사람의 초대만 수락하세요."
   },
   "shared-instance.invite.trust.heading": {
     "message": "이 사용자를 알고 계십니까?"
@@ -5127,7 +5127,7 @@
     "message": "이 초대는 사용할 수 없습니다"
   },
   "ui.latest-news-row.latest-news": {
-    "message": "Modrinth의 최신 뉴스"
+    "message": "Lumen의 최신 뉴스"
   },
   "ui.latest-news-row.view-all": {
     "message": "모든 뉴스 보기"
@@ -5139,7 +5139,7 @@
     "message": "구독됨!"
   },
   "ui.newsletter-button.tooltip": {
-    "message": "Modrinth 뉴스레터 구독"
+    "message": "Lumen 뉴스레터 구독"
   },
   "version.all-versions": {
     "message": "전체 버전"
@@ -5241,10 +5241,10 @@
     "message": "Maven 식별 정보:"
   },
   "version.section.content.dev-info.maven-description": {
-    "message": "Modrinth의 프로젝트는 <gradle-link>Gradle</gradle-link>과 같은 JVM 빌드 도구에서 사용할 수 있도록 Maven 저장소를 통해 자동으로 제공됩니다. Modrinth Maven API에 대해 자세히 알아보려면 <article-link>여기</article-link>를 클릭하세요."
+    "message": "Lumen의 프로젝트는 <gradle-link>Gradle</gradle-link>과 같은 JVM 빌드 도구에서 사용할 수 있도록 Maven 저장소를 통해 자동으로 제공됩니다. Lumen Maven API에 대해 자세히 알아보려면 <article-link>여기</article-link>를 클릭하세요."
   },
   "version.section.content.dev-info.maven-note": {
-    "message": "참고: 사용 가능한 경우 제작자의 Maven 저장소를 대신 사용하는 것이 좋습니다. 제작자의 저장소에는 Modrinth Maven API에 없는 전이 의존성 정보가 포함되어 있기 때문입니다. 또한, 의존성을 가져올 때 Modrinth 저장소와 외부 Maven 저장소를 혼용하면 의존성이 중복될 수 있습니다. Modrinth Maven API를 통해 제공될 때는 그룹 식별자가 달라지기 때문입니다."
+    "message": "참고: 사용 가능한 경우 제작자의 Maven 저장소를 대신 사용하는 것이 좋습니다. 제작자의 저장소에는 Lumen Maven API에 없는 전이 의존성 정보가 포함되어 있기 때문입니다. 또한, 의존성을 가져올 때 Lumen 저장소와 외부 Maven 저장소를 혼용하면 의존성이 중복될 수 있습니다. Lumen Maven API를 통해 제공될 때는 그룹 식별자가 달라지기 때문입니다."
   },
   "version.section.content.dev-info.version-id": {
     "message": "버전 ID:"

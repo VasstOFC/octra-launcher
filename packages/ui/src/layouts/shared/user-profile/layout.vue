@@ -167,10 +167,10 @@
 			<template #header>
 				<UserPageHeader
 					:user="user"
-					:summary="isModrinthUser ? null : profileHeaderSummary"
+					:summary="isLumenUser ? null : profileHeaderSummary"
 					:auth-user="auth.user.value"
 					:edit-profile-link="editProfileLink"
-					:is-modrinth-user="isModrinthUser"
+					:is-lumen-user="isLumenUser"
 					:is-official-account="isOfficialAccount"
 					:show-affiliate-badge="isAdminViewing && isAffiliate"
 					:is-affiliate="isAffiliate"
@@ -195,7 +195,7 @@
 					"
 					@edit-user="editUserModal?.show()"
 				>
-					<template v-if="isModrinthUser" #summary>
+					<template v-if="isLumenUser" #summary>
 						<IntlFormatted :message-id="messages.officialAccountBio">
 							<template #support-link>
 								<a
@@ -209,12 +209,12 @@
 							</template>
 							<template #email>
 								<a
-									href="mailto:support@modrinth.com"
+									href="mailto:support@Lumen.com"
 									class="text-link"
 									target="_blank"
 									rel="noopener noreferrer"
 								>
-									support@modrinth.com
+									support@Lumen.com
 								</a>
 							</template>
 						</IntlFormatted>
@@ -391,7 +391,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
+import type { Labrinth } from '@lumen/api-client'
 import {
 	BanIcon,
 	BoxIcon,
@@ -402,13 +402,13 @@ import {
 	LockIcon,
 	SpinnerIcon,
 	XIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import {
 	getPrimaryProjectType,
-	isModrinthUser as checkIsModrinthUser,
+	isLumenUser as checkIsLumenUser,
 	isOfficialAccount as checkIsOfficialAccount,
 	UserBadge,
-} from '@modrinth/utils'
+} from '@lumen/utils'
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -430,7 +430,7 @@ import UserPageHeader from '#ui/components/user/UserPageHeader.vue'
 import { defineMessages, useVIntl } from '#ui/composables'
 import {
 	injectAuth,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	injectPageContext,
 } from '#ui/providers'
@@ -479,7 +479,7 @@ const props = withDefaults(
 		displayMode: 'list',
 		sidebarPosition: 'right',
 		variant: 'web',
-		siteUrl: 'https://modrinth.com',
+		siteUrl: 'https://Lumen.com',
 		externalNavigation: false,
 		projectLinkMode: 'website',
 		editProfileLink: undefined,
@@ -492,7 +492,7 @@ const userProfile = injectUserProfile()
 const auth = injectAuth()
 const pageContext = injectPageContext()
 const notificationManager = injectNotificationManager()
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const queryClient = useQueryClient()
 const route = useRoute()
 const router = useRouter()
@@ -546,7 +546,7 @@ const messages = defineMessages({
 	},
 	githubPopupBlockedMessage: {
 		id: 'profile.details.error.github-popup-blocked',
-		defaultMessage: 'Allow pop-ups for Modrinth, then try again.',
+		defaultMessage: 'Allow pop-ups for Lumen, then try again.',
 	},
 	paymentMethodsLabel: {
 		id: 'profile.details.label.payment-methods',
@@ -562,11 +562,11 @@ const messages = defineMessages({
 	},
 	bioFallbackUser: {
 		id: 'profile.bio.fallback.user',
-		defaultMessage: 'A Modrinth user.',
+		defaultMessage: 'A Lumen user.',
 	},
 	bioFallbackCreator: {
 		id: 'profile.bio.fallback.creator',
-		defaultMessage: 'A Modrinth creator.',
+		defaultMessage: 'A Lumen creator.',
 	},
 	collectionLabel: {
 		id: 'profile.label.collection',
@@ -615,7 +615,7 @@ const messages = defineMessages({
 	officialAccountBio: {
 		id: 'profile.official-account.bio',
 		defaultMessage:
-			'The official user account of Modrinth. Get support at <support-link></support-link> or via email at <email></email>',
+			'The official user account of Lumen. Get support at <support-link></support-link> or via email at <email></email>',
 	},
 	blockButton: {
 		id: 'profile.button.block',
@@ -648,7 +648,7 @@ const messages = defineMessages({
 	blockUserAdmonitionBody: {
 		id: 'profile.block-user.admonition-body',
 		defaultMessage:
-			'{username} will not be able to send you friend requests, invite you to shared instances or invite you to Modrinth Hosting servers.',
+			'{username} will not be able to send you friend requests, invite you to shared instances or invite you to Lumen Hosting servers.',
 	},
 	blockUserSuccessTitle: {
 		id: 'profile.block-user.success-title',
@@ -803,7 +803,7 @@ const earliestProjectByType = computed(() => {
 	return earliest
 })
 
-const isModrinthUser = computed(() => checkIsModrinthUser(user.value?.id))
+const isLumenUser = computed(() => checkIsLumenUser(user.value?.id))
 const isOfficialAccount = computed(() => checkIsOfficialAccount(user.value?.id))
 const isSelf = computed(() => auth.user.value?.id === user.value?.id)
 const isAdminViewing = computed(() => auth.user.value?.role === 'admin')

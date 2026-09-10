@@ -655,7 +655,7 @@ pub(super) async fn active_modrinth_session_is_valid(
 
     let _permit = state.api_semaphore.0.acquire().await?;
     let response = INSECURE_REQWEST_CLIENT
-        .get(concat!(env!("MODRINTH_API_URL"), "user"))
+        .get(concat!(env!("LUMEN_API_URL"), "user"))
         .header("Authorization", &credentials.session)
         .send()
         .await?;

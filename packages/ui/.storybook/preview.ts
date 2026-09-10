@@ -8,8 +8,8 @@ import '../../assets/styles/defaults.scss'
 import '../../../apps/app-frontend/src/assets/stylesheets/global.scss'
 import './preview.scss'
 
-import type { Labrinth } from '@modrinth/api-client'
-import { GenericModrinthClient } from '@modrinth/api-client'
+import type { Labrinth } from '@lumen/api-client'
+import { GenericLumenClient } from '@lumen/api-client'
 import { withThemeByClassName } from '@storybook/addon-themes'
 import type { Preview } from '@storybook/vue3-vite'
 import { setup } from '@storybook/vue3-vite'
@@ -34,7 +34,7 @@ import {
 	type NotificationPanelLocation,
 	type PopupNotification,
 	provideFilePicker,
-	provideModrinthClient,
+	provideLumenClient,
 	provideNotificationManager,
 	providePopupNotificationManager,
 	provideTags,
@@ -217,14 +217,14 @@ const StorybookProvider = defineComponent({
 		provideNotificationManager(new StorybookNotificationManager())
 		providePopupNotificationManager(new StorybookPopupNotificationManager())
 
-		const modrinthClient = new GenericModrinthClient({
-			userAgent: 'modrinth-storybook/1.0.0',
+		const LumenClient = new GenericLumenClient({
+			userAgent: 'Lumen-storybook/1.0.0',
 		})
-		provideModrinthClient(modrinthClient)
+		provideLumenClient(LumenClient)
 
 		const gameVersions = ref<Labrinth.Tags.v2.GameVersion[]>([])
 		const loaders = ref<Labrinth.Tags.v2.Loader[]>([])
-		modrinthClient.labrinth.state.build().then((state) => {
+		LumenClient.labrinth.state.build().then((state) => {
 			gameVersions.value = state.gameVersions
 			loaders.value = state.loaders
 		})

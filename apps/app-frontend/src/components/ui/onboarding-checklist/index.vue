@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { CheckIcon, RadioButtonIcon } from '@modrinth/assets'
-import { Accordion, defineMessages, useVIntl } from '@modrinth/ui'
+import { CheckIcon, RadioButtonIcon } from '@lumen/assets'
+import { Accordion, defineMessages, useVIntl } from '@lumen/ui'
 import { computed, onUnmounted, ref } from 'vue'
 
 import { injectOnboardingChecklist } from '@/providers/onboarding-checklist'
@@ -8,11 +8,11 @@ import { injectOnboardingChecklist } from '@/providers/onboarding-checklist'
 const emit = defineEmits<{
 	'create-instance': []
 	'login-minecraft': []
-	'login-modrinth': []
+	'login-Lumen': []
 }>()
 
 const { formatMessage } = useVIntl()
-const { hasCreatedInstance, hasLoggedIntoMinecraft, isReady, showChecklist } =
+const { hasCreatedInstance, hasLoggedIntoMinecraft, hasLoggedIntoLumen, isReady, showChecklist } =
 	injectOnboardingChecklist()
 const collapsedCornersVisible = ref(false)
 let collapseTimer: ReturnType<typeof setTimeout> | undefined
@@ -28,11 +28,11 @@ const messages = defineMessages({
 	},
 	loginMinecraft: {
 		id: 'onboarding-checklist.login-minecraft',
-		defaultMessage: 'Sign in to Octra',
+		defaultMessage: 'Sign in to Minecraft',
 	},
-	loginModrinth: {
-		id: 'onboarding-checklist.login-modrinth',
-		defaultMessage: 'Octra account (coming soon)',
+	loginLumen: {
+		id: 'onboarding-checklist.login-Lumen',
+		defaultMessage: 'Sign in to Lumen account',
 	},
 })
 
@@ -52,11 +52,11 @@ const steps = computed(() => [
 		action: () => emit('login-minecraft'),
 	},
 	{
-		id: 'login-modrinth',
-		label: formatMessage(messages.loginModrinth),
-		complete: false,
-		disabled: true,
-		action: () => {},
+		id: 'login-Lumen',
+		label: formatMessage(messages.loginLumen),
+		complete: hasLoggedIntoLumen.value,
+		disabled: false,
+		action: () => emit('login-Lumen'),
 	},
 ])
 
@@ -83,7 +83,7 @@ onUnmounted(() => clearTimeout(collapseTimer))
 <template>
 	<div
 		v-if="isReady && showChecklist"
-		class="border-0 border-b-[1px] border-solid border-[--brand-gradient-border] px-3 p-4"
+		class="border-0 border-b-[1px] border-solid border-[--brand-gradient-border] px-1 pb-2"
 	>
 		<Accordion
 			open-by-default

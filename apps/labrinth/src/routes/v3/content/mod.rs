@@ -15,7 +15,7 @@ use crate::util::error::ApiContext as _;
 use actix_web::{HttpRequest, post, web};
 use ariadne::ids::base62_impl::parse_base62;
 use async_trait::async_trait;
-use modrinth_content_management::{
+use lumen_content_management::{
     ContentMetadataProvider, Error as ResolveError, ResolveContentPlan,
     ResolveContentRequest,
 };
@@ -70,11 +70,11 @@ pub async fn resolve_content(
     let plan = if cache_public_result {
         resolve_content_with_cache(&mut provider, request).await
     } else {
-        modrinth_content_management::resolve_content(&mut provider, request)
+        lumen_content_management::resolve_content(&mut provider, request)
             .await
     }
     .map_err(resolve_error_to_api)
-    .wrap_api_err("executing `modrinth_content_management::resolve_content`")?;
+    .wrap_api_err("executing `lumen_content_management::resolve_content`")?;
 
     Ok(web::Json(plan))
 }
@@ -121,7 +121,7 @@ struct VersionState<'a> {
 struct ResolveContentHeatKey<'a> {
     project_id: &'a str,
     version_id: Option<&'a str>,
-    content_type: modrinth_content_management::ContentType,
+    content_type: lumen_content_management::ContentType,
 }
 
 #[async_trait]
@@ -129,7 +129,7 @@ impl ContentMetadataProvider for &mut LabrinthContentProvider<'_> {
     async fn get_version(
         &mut self,
         version_id: &str,
-    ) -> Result<Option<modrinth_content_management::Version>, ResolveError>
+    ) -> Result<Option<lumen_content_management::Version>, ResolveError>
     {
         let Some(db_version_id) = parse_version_id(version_id) else {
             return Ok(None);
@@ -165,7 +165,7 @@ impl ContentMetadataProvider for &mut LabrinthContentProvider<'_> {
     async fn get_project_versions(
         &mut self,
         project_id: &str,
-    ) -> Result<Vec<modrinth_content_management::Version>, ResolveError> {
+    ) -> Result<Vec<lumen_content_management::Version>, ResolveError> {
         let project = DBProject::get(project_id, self.pool, self.redis)
             .await
             .map_err(resolve_provider_error)?;
@@ -215,7 +215,7 @@ impl LabrinthContentProvider<'_> {
     fn record_version(
         &mut self,
         version_id: &str,
-        version: Option<&modrinth_content_management::Version>,
+        version: Option<&lumen_content_management::Version>,
     ) {
         self.trace
             .versions
@@ -225,7 +225,7 @@ impl LabrinthContentProvider<'_> {
     fn record_project_versions(
         &mut self,
         project_id: &str,
-        versions: &[modrinth_content_management::Version],
+        versions: &[lumen_content_management::Version],
     ) {
         self.trace
             .project_versions
@@ -268,7 +268,7 @@ async fn resolve_content_with_cache(
 
     provider.reset_trace();
     let plan =
-        modrinth_content_management::resolve_content(&mut *provider, request)
+        lumen_content_management::resolve_content(&mut *provider, request)
             .await?;
     let trace = provider.trace();
     set_cached_resolve_content_plan(
@@ -480,7 +480,7 @@ fn normalized_resolve_content_request(
 }
 
 fn hash_optional_version(
-    version: Option<&modrinth_content_management::Version>,
+    version: Option<&lumen_content_management::Version>,
 ) -> String {
     match version {
         Some(version) => format!("some:{}", hash_version(version)),
@@ -489,7 +489,7 @@ fn hash_optional_version(
 }
 
 fn hash_project_versions(
-    versions: &[modrinth_content_management::Version],
+    versions: &[lumen_content_management::Version],
 ) -> String {
     let mut versions = versions
         .iter()
@@ -500,7 +500,7 @@ fn hash_project_versions(
     hash_serializable(&versions)
 }
 
-fn hash_version(version: &modrinth_content_management::Version) -> String {
+fn hash_version(version: &lumen_content_management::Version) -> String {
     let mut dependencies = version
         .dependencies
         .iter()
@@ -540,15 +540,15 @@ fn hash_version(version: &modrinth_content_management::Version) -> String {
 }
 
 fn dependency_type_cache_key(
-    dependency_type: modrinth_content_management::DependencyType,
+    dependency_type: lumen_content_management::DependencyType,
 ) -> &'static str {
     match dependency_type {
-        modrinth_content_management::DependencyType::Required => "required",
-        modrinth_content_management::DependencyType::Optional => "optional",
-        modrinth_content_management::DependencyType::Incompatible => {
+        lumen_content_management::DependencyType::Required => "required",
+        lumen_content_management::DependencyType::Optional => "optional",
+        lumen_content_management::DependencyType::Incompatible => {
             "incompatible"
         }
-        modrinth_content_management::DependencyType::Embedded => "embedded",
+        lumen_content_management::DependencyType::Embedded => "embedded",
     }
 }
 
@@ -578,7 +578,7 @@ async fn visible_versions(
 
 fn version_to_resolver(
     version: Version,
-) -> modrinth_content_management::Version {
+) -> lumen_content_management::Version {
     let game_versions = version
         .fields
         .get("game_versions")
@@ -586,14 +586,14 @@ fn version_to_resolver(
         .and_then(|value| serde_json::from_value(value).ok())
         .unwrap_or_default();
 
-    modrinth_content_management::Version {
+    lumen_content_management::Version {
         id: version.id.to_string(),
         project_id: version.project_id.to_string(),
         date_published: version.date_published,
         dependencies: version
             .dependencies
             .into_iter()
-            .map(|dependency| modrinth_content_management::Dependency {
+            .map(|dependency| lumen_content_management::Dependency {
                 version_id: dependency.version_id.map(|id| id.to_string()),
                 project_id: dependency.project_id.map(|id| id.to_string()),
                 file_name: dependency.file_name,
@@ -609,19 +609,19 @@ fn version_to_resolver(
 
 fn dependency_type_to_resolver(
     dependency_type: DependencyType,
-) -> modrinth_content_management::DependencyType {
+) -> lumen_content_management::DependencyType {
     match dependency_type {
         DependencyType::Required => {
-            modrinth_content_management::DependencyType::Required
+            lumen_content_management::DependencyType::Required
         }
         DependencyType::Optional => {
-            modrinth_content_management::DependencyType::Optional
+            lumen_content_management::DependencyType::Optional
         }
         DependencyType::Incompatible => {
-            modrinth_content_management::DependencyType::Incompatible
+            lumen_content_management::DependencyType::Incompatible
         }
         DependencyType::Embedded => {
-            modrinth_content_management::DependencyType::Embedded
+            lumen_content_management::DependencyType::Embedded
         }
     }
 }

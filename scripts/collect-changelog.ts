@@ -148,7 +148,7 @@ function parseChangelogComment(body: string, parse: Function): ParsedChangelog |
 function linkifyIssues(text: string): string {
 	return text.replace(
 		/\[#(\d+)\]/g,
-		'[#$1](https://github.com/modrinth/code/issues/$1)',
+		'[#$1](https://github.com/VasstOFC/octra-launcher/issues/$1)',
 	)
 }
 

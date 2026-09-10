@@ -108,7 +108,7 @@
     "defaultMessage": "Не знайдено результатів за вашим запитом!"
   },
   "browse.offline": {
-    "defaultMessage": "Ви наразі не в мережі. Під'єднайтеся до інтернету, щоб шукати на Modrinth!"
+    "defaultMessage": "Ви наразі не в мережі. Під'єднайтеся до інтернету, щоб шукати на Lumen!"
   },
   "browse.search.placeholder": {
     "defaultMessage": "Шукати {projectType}…"
@@ -242,8 +242,8 @@
   "button.open-in-folder": {
     "defaultMessage": "Відкрити в теці"
   },
-  "button.open-in-modrinth": {
-    "defaultMessage": "Відкрити в Modrinth"
+  "button.open-in-Lumen": {
+    "defaultMessage": "Відкрити в Lumen"
   },
   "button.play": {
     "defaultMessage": "Грати"
@@ -525,13 +525,13 @@
     "defaultMessage": "Видалено (вимкнено): {count}"
   },
   "content.diff-modal.reviewed-files": {
-    "defaultMessage": "Розглядатимуть лише ті файли, що викладені на Modrinth."
+    "defaultMessage": "Розглядатимуть лише ті файли, що викладені на Lumen."
   },
   "content.diff-modal.unknown-content-body": {
     "defaultMessage": "Деякий уміст на вашому сервері не вдалося проаналізувати, тож ця зміна може вплинути на нього."
   },
   "content.diff-modal.unknown-files-description": {
-    "defaultMessage": "Це оновлення містить файли, які не викладені на Modrinth. Наполегливо радимо встановлювати вміст лише з тих джерел, яким ви довіряєте."
+    "defaultMessage": "Це оновлення містить файли, які не викладені на Lumen. Наполегливо радимо встановлювати вміст лише з тих джерел, яким ви довіряєте."
   },
   "content.diff-modal.unknown-files-warning": {
     "defaultMessage": "Попередження про невідомі файли"
@@ -1091,8 +1091,8 @@
   "external-files.permissions-card.editor.link-to-work-url-placeholder": {
     "defaultMessage": "посилання-на-роботу"
   },
-  "external-files.permissions-card.editor.modrinth-link-to-work": {
-    "defaultMessage": "Схоже, що це посилання від Modrinth. Якщо цей уміст доступний на Modrinth, ваш пакет, імовірно, експортовано неправильно. Якщо ви завантажили його з іншого сайту, спробуйте завантажити версію Modrinth: інколи вони не є ідентичними файлами."
+  "external-files.permissions-card.editor.Lumen-link-to-work": {
+    "defaultMessage": "Схоже, що це посилання від Lumen. Якщо цей уміст доступний на Lumen, ваш пакет, імовірно, експортовано неправильно. Якщо ви завантажили його з іншого сайту, спробуйте завантажити версію Lumen: інколи вони не є ідентичними файлами."
   },
   "external-files.permissions-card.editor.notes-label": {
     "defaultMessage": "Нотатки"
@@ -1116,7 +1116,7 @@
     "defaultMessage": "Якщо ми виявимо, що ви відправили несправжні чи змінені зображення, то ваш проєкт та обліковий запис можуть стати заблокованими."
   },
   "external-files.permissions-card.editor.proof-warning.title": {
-    "defaultMessage": "Персонал Modrinth може перевіряти відправлені докази"
+    "defaultMessage": "Персонал Lumen може перевіряти відправлені докази"
   },
   "external-files.permissions-card.editor.save": {
     "defaultMessage": "Зберегти атрибуцію"
@@ -1203,7 +1203,7 @@
     "defaultMessage": "Автоматично додано атрибуцію"
   },
   "external-files.permissions-card.reason.globally-allowed.description": {
-    "defaultMessage": "Ми вже бачили цей файл і підготували для вас атрибуцію. Якщо щось не так, зв'яжіться з підтримкою Modrinth через центр допомоги"
+    "defaultMessage": "Ми вже бачили цей файл і підготували для вас атрибуцію. Якщо щось не так, зв'яжіться з підтримкою Lumen через центр допомоги"
   },
   "external-files.permissions-card.reason.license": {
     "defaultMessage": "Ліцензія"
@@ -2136,7 +2136,7 @@
     "defaultMessage": "Зовнішнє"
   },
   "instances.managed-content-modal.external-content-description": {
-    "defaultMessage": "Цей файл не опубліковано на Modrinth."
+    "defaultMessage": "Цей файл не опубліковано на Lumen."
   },
   "instances.managed-content-modal.header": {
     "defaultMessage": "Керований уміст"
@@ -2742,16 +2742,16 @@
     "defaultMessage": "Зберігання файлів оновленими, попри зміни сервера"
   },
   "modal.open-in-app.get-app": {
-    "defaultMessage": "Отримати Modrinth App"
+    "defaultMessage": "Отримати Lumen App"
   },
   "modal.open-in-app.opening-automatically": {
-    "defaultMessage": "Modrinth App відкриється автоматично…"
+    "defaultMessage": "Lumen App відкриється автоматично…"
   },
   "modal.open-in-app.title": {
-    "defaultMessage": "Відкриття Modrinth App"
+    "defaultMessage": "Відкриття Lumen App"
   },
   "modal.open-in-app.why-use": {
-    "defaultMessage": "Навіщо використовувати Modrinth App"
+    "defaultMessage": "Навіщо використовувати Lumen App"
   },
   "notification.error.title": {
     "defaultMessage": "Виникла помилка"
@@ -2786,8 +2786,8 @@
   "omorphia.component.badge.label.moderator": {
     "defaultMessage": "Модератор"
   },
-  "omorphia.component.badge.label.modrinth-team": {
-    "defaultMessage": "Команда Modrinth"
+  "omorphia.component.badge.label.Lumen-team": {
+    "defaultMessage": "Команда Lumen"
   },
   "omorphia.component.badge.label.pending": {
     "defaultMessage": "На розгляді"
@@ -2907,13 +2907,13 @@
     "defaultMessage": "Visa"
   },
   "profile.bio.fallback.creator": {
-    "defaultMessage": "Творець Modrinth."
+    "defaultMessage": "Творець Lumen."
   },
   "profile.bio.fallback.user": {
-    "defaultMessage": "Користувач Modrinth."
+    "defaultMessage": "Користувач Lumen."
   },
   "profile.block-user.admonition-body": {
-    "defaultMessage": "{username} не зможе надсилати вам запити в друзі, запрошувати до спільних збірок або запрошувати на сервери Modrinth Hosting."
+    "defaultMessage": "{username} не зможе надсилати вам запити в друзі, запрошувати до спільних збірок або запрошувати на сервери Lumen Hosting."
   },
   "profile.block-user.admonition-title": {
     "defaultMessage": "Справді бажаєте заблокувати цього користувача?"
@@ -2967,7 +2967,7 @@
     "defaultMessage": "{count, plural, one {# проєкт} few {# проєкти} many {# проєктів} other {# проєкту}}"
   },
   "profile.details.error.github-popup-blocked": {
-    "defaultMessage": "Дозвольте спливні вікна для Modrinth, потім спробуйте знову."
+    "defaultMessage": "Дозвольте спливні вікна для Lumen, потім спробуйте знову."
   },
   "profile.details.error.github-profile-message": {
     "defaultMessage": "Не вдалося отримати профіль GitHub. Спробуйте знову."
@@ -3045,10 +3045,10 @@
     "defaultMessage": "{count, plural, one {проєкт} few {проєкти} many {проєктів} other {проєктів}}"
   },
   "profile.official-account": {
-    "defaultMessage": "Офіційний обліковий запис Modrinth"
+    "defaultMessage": "Офіційний обліковий запис Lumen"
   },
   "profile.official-account.bio": {
-    "defaultMessage": "Офіційний обліковий запис Modrinth. Зв'язатися з підтримкою можна за <support-link></support-link> або через електронну пошту за <email></email>"
+    "defaultMessage": "Офіційний обліковий запис Lumen. Зв'язатися з підтримкою можна за <support-link></support-link> або через електронну пошту за <email></email>"
   },
   "profile.unblock-user.error-description": {
     "defaultMessage": "Виникла помилка під час розблокування користувача. Спробуйте знову."
@@ -3423,7 +3423,7 @@
     "defaultMessage": "{count} {countPlural, plural, one {нещодавно грав} few {нещодавно грали} many {нещодавно грали} other {нещодавно грали}}"
   },
   "project.recent-plays.tooltip": {
-    "defaultMessage": "{count} {countPlural, plural, one {нещодавно грав} other {нещодавно грали}} з Modrinth за останні 2 тижні"
+    "defaultMessage": "{count} {countPlural, plural, one {нещодавно грав} other {нещодавно грали}} з Lumen за останні 2 тижні"
   },
   "project.server.customModpackTooltip": {
     "defaultMessage": "Цей проєкт використовує власну збірку"
@@ -3759,7 +3759,7 @@
     "defaultMessage": "Ваш проєкт має кілька середовищ"
   },
   "project.settings.environment.notice.review-options.description": {
-    "defaultMessage": "Нещодавно ми оновили систему середовищ у Modrinth і вам тепер доступні нові налаштування. Переконайтесь, що обрано правильні налаштування та натисніть «Підтвердити» коли закінчите!"
+    "defaultMessage": "Нещодавно ми оновили систему середовищ у Lumen і вам тепер доступні нові налаштування. Переконайтесь, що обрано правильні налаштування та натисніть «Підтвердити» коли закінчите!"
   },
   "project.settings.environment.notice.review-options.title": {
     "defaultMessage": "Перегляньте налаштування нижче"
@@ -4062,13 +4062,13 @@
     "defaultMessage": "Завантажувач"
   },
   "search.photosensitivity-warning-modal.body.1": {
-    "defaultMessage": "Ми не можемо гарантувати, що весь вміст на Modrinth позначено належним чином."
+    "defaultMessage": "Ми не можемо гарантувати, що весь вміст на Lumen позначено належним чином."
   },
   "search.photosensitivity-warning-modal.body.2": {
-    "defaultMessage": "Інформація щодо наявності тригерів світлочутливості встановлюються самими авторами, які завантажують уміст на Modrinth. Ці проєкти не проходили жодних перевірок безпеки."
+    "defaultMessage": "Інформація щодо наявності тригерів світлочутливості встановлюються самими авторами, які завантажують уміст на Lumen. Ці проєкти не проходили жодних перевірок безпеки."
   },
   "search.photosensitivity-warning-modal.body.3": {
-    "defaultMessage": "Використання будь-якого вмісту з Modrinth здійснюється на ваш власний ризик. Бережіть себе! 💚"
+    "defaultMessage": "Використання будь-якого вмісту з Lumen здійснюється на ваш власний ризик. Бережіть себе! 💚"
   },
   "search.photosensitivity-warning-modal.dont-show-again": {
     "defaultMessage": "Більше не показувати"
@@ -4833,13 +4833,13 @@
     "defaultMessage": "Не використовуйте їхнє ім’я користувача Minecraft."
   },
   "servers.grant-access-modal.target.label": {
-    "defaultMessage": "Ім’я користувача Modrinth"
+    "defaultMessage": "Ім’я користувача Lumen"
   },
   "servers.grant-access-modal.target.no-suggestions": {
     "defaultMessage": "За вашим запитом користувачів не знайдено."
   },
   "servers.grant-access-modal.target.placeholder": {
-    "defaultMessage": "Уведіть ім’я користувача Modrinth"
+    "defaultMessage": "Уведіть ім’я користувача Lumen"
   },
   "servers.grant-access-modal.target.searching": {
     "defaultMessage": "Пошук…"
@@ -4898,14 +4898,14 @@
   "servers.list-empty.already-have-server-label": {
     "defaultMessage": "Уже маєте сервер?"
   },
-  "servers.list-empty.modrinth-hosting-label": {
-    "defaultMessage": "Modrinth Hosting"
+  "servers.list-empty.Lumen-hosting-label": {
+    "defaultMessage": "Lumen Hosting"
   },
   "servers.list-empty.new-server-button": {
     "defaultMessage": "Новий сервер"
   },
   "servers.list-empty.no-servers-description": {
-    "defaultMessage": "Установлюйте моди, запрошуйте друзів і грайте разом із Modrinth App."
+    "defaultMessage": "Установлюйте моди, запрошуйте друзів і грайте разом із Lumen App."
   },
   "servers.list-empty.one-click-mod-installs-description": {
     "defaultMessage": "Виберіть свої улюблені моди, а ми подбаємо про решту."
@@ -4974,7 +4974,7 @@
     "defaultMessage": "Вашу передплату встановлено на скасовання <date>{formattedDate}</date>. "
   },
   "servers.listing.notice.suspended": {
-    "defaultMessage": "Ваш сервер призупинено. Для подробиць зверніться до служби підтримки Modrinth."
+    "defaultMessage": "Ваш сервер призупинено. Для подробиць зверніться до служби підтримки Lumen."
   },
   "servers.listing.notice.upgrading": {
     "defaultMessage": "Апаратне забезпечення вашого сервера зараз оновлюється та незабаром відновиться."
@@ -5007,7 +5007,7 @@
     "defaultMessage": "Вивантаження триває"
   },
   "servers.manage.contact-support-button": {
-    "defaultMessage": "Зв'язатися зі службою підтримки Modrinth"
+    "defaultMessage": "Зв'язатися зі службою підтримки Lumen"
   },
   "servers.manage.error.alert-notice": {
     "defaultMessage": "Наші системи автоматично сповіщають нашу команду про проблему. Ми вже працюємо над тим, щоб повернути їх у мережу."
@@ -5019,10 +5019,10 @@
     "defaultMessage": "Подробиці помилки:"
   },
   "servers.manage.error.queue-notice": {
-    "defaultMessage": "Якщо ви нещодавно придбали свій сервер Modrinth Hosting, він зараз у черзі та з’явиться тут, щойно буде готовий. <warning>Не намагайтеся придбати новий сервер.</warning>"
+    "defaultMessage": "Якщо ви нещодавно придбали свій сервер Lumen Hosting, він зараз у черзі та з’явиться тут, щойно буде готовий. <warning>Не намагайтеся придбати новий сервер.</warning>"
   },
   "servers.manage.error.support-notice": {
-    "defaultMessage": "Якщо вам потрібна персональна підтримка щодо стану вашого сервера, зверніться до служби підтримки Modrinth."
+    "defaultMessage": "Якщо вам потрібна персональна підтримка щодо стану вашого сервера, зверніться до служби підтримки Lumen."
   },
   "servers.manage.error.title": {
     "defaultMessage": "Не вдалося завантажити сервера"
@@ -5052,7 +5052,7 @@
     "defaultMessage": "Перезавантажити"
   },
   "servers.manage.resubscribe-error.text": {
-    "defaultMessage": "Під час поновлення передплати на сервер Modrinth сталася помилка."
+    "defaultMessage": "Під час поновлення передплати на сервер Lumen сталася помилка."
   },
   "servers.manage.resubscribe-error.title": {
     "defaultMessage": "Помилка поновлення передплати"
@@ -5073,7 +5073,7 @@
     "defaultMessage": "Пошук {count} {count, plural, one {сервера} few {серверів} many {серверів} other {серверів}}…"
   },
   "servers.manage.servers-title": {
-    "defaultMessage": "Modrinth Hosting"
+    "defaultMessage": "Lumen Hosting"
   },
   "servers.manage.settings-hint.description": {
     "defaultMessage": "Тепер їх можна знайти тут!"
@@ -5100,10 +5100,10 @@
     "defaultMessage": "Пробна версія вашого сервера Medal закінчилася, а роботу сервера призупинено. Оновіть, щоб продовжувати використовувати свій сервер."
   },
   "servers.medal-listing.notice.suspended": {
-    "defaultMessage": "Ваш сервер призупинено. Оновіть свою платіжну інформацію або зверніться до служби підтримки Modrinth для подробиць."
+    "defaultMessage": "Ваш сервер призупинено. Оновіть свою платіжну інформацію або зверніться до служби підтримки Lumen для подробиць."
   },
   "servers.medal-listing.notice.suspended-with-reason": {
-    "defaultMessage": "Ваш сервер призупинено: {reason}. Оновіть свою платіжну інформацію або зверніться до служби підтримки Modrinth для подробиць."
+    "defaultMessage": "Ваш сервер призупинено: {reason}. Оновіть свою платіжну інформацію або зверніться до служби підтримки Lumen для подробиць."
   },
   "servers.medal-listing.notice.upgrading": {
     "defaultMessage": "Апаратне забезпечення вашого сервера зараз оновлюється та незабаром відновиться."
@@ -5151,7 +5151,7 @@
     "defaultMessage": "Не можна відхилити"
   },
   "servers.purchase.notification.success.text": {
-    "defaultMessage": "Ваша покупка Modrinth Hosting була успішно завершена."
+    "defaultMessage": "Ваша покупка Lumen Hosting була успішно завершена."
   },
   "servers.purchase.notification.success.title": {
     "defaultMessage": "Успішна покупка"
@@ -5241,7 +5241,7 @@
     "defaultMessage": "Де б ви хотіли розмістити свій сервер?"
   },
   "servers.region.region-unsupported": {
-    "defaultMessage": "Регіону немає в списку? <link>Повідомте нам, де ви ще хотіли б побачити Modrinth Hosting!</link>"
+    "defaultMessage": "Регіону немає в списку? <link>Повідомте нам, де ви ще хотіли б побачити Lumen Hosting!</link>"
   },
   "servers.region.southeast-asia": {
     "defaultMessage": "Південно-східна Азія"
@@ -5313,7 +5313,7 @@
     "defaultMessage": "Налаштування сервера"
   },
   "servers.setup.onboarding.step.choose.description": {
-    "defaultMessage": "Виберіть свою улюблену збірку із Modrinth або виберіть завантажувач і додайте потрібні моди."
+    "defaultMessage": "Виберіть свою улюблену збірку із Lumen або виберіть завантажувач і додайте потрібні моди."
   },
   "servers.setup.onboarding.step.choose.title": {
     "defaultMessage": "Виберіть в що грати"
@@ -5340,7 +5340,7 @@
     "defaultMessage": "Ваш сервер готовий. Ось що вам потрібно зробити, щоб почати грати!"
   },
   "servers.setup.onboarding.welcome.title": {
-    "defaultMessage": "Ласкаво просимо до Modrinth Hosting"
+    "defaultMessage": "Ласкаво просимо до Lumen Hosting"
   },
   "servers.setup.rate-limit.text": {
     "defaultMessage": "На вас накладено обмеження через кількість запитів. Спробуйте ще раз пізніше."
@@ -5451,7 +5451,7 @@
     "defaultMessage": "Зображення профілю"
   },
   "settings.profile.public-information.description": {
-    "defaultMessage": "Інформація з вашого профілю є <profile-link>загальнодоступною на Modrinth</profile-link> та через <docs-link>Modrinth API</docs-link>."
+    "defaultMessage": "Інформація з вашого профілю є <profile-link>загальнодоступною на Lumen</profile-link> та через <docs-link>Lumen API</docs-link>."
   },
   "settings.profile.save-error": {
     "defaultMessage": "Не вдалося оновити профіль"
@@ -5460,10 +5460,10 @@
     "defaultMessage": "Виникла помилка під час оновлення вашого профілю Спробуйте знову."
   },
   "settings.profile.sign-in-required.description": {
-    "defaultMessage": "Увійдіть за допомогою облікового запису Modrinth, щоб налаштувати свій публічний профіль."
+    "defaultMessage": "Увійдіть за допомогою облікового запису Lumen, щоб налаштувати свій публічний профіль."
   },
   "settings.profile.sign-in-required.title": {
-    "defaultMessage": "Потрібен обліковий запис Modrinth"
+    "defaultMessage": "Потрібен обліковий запис Lumen"
   },
   "settings.profile.username.description": {
     "defaultMessage": "Унікальне ім'я для ідентифікації вашого профілю."
@@ -5478,7 +5478,7 @@
     "defaultMessage": "Користувач"
   },
   "settings.social.blocked-users.description": {
-    "defaultMessage": "Це користувачі, яких ви заблокували на Modrinth. Вони не можуть:"
+    "defaultMessage": "Це користувачі, яких ви заблокували на Lumen. Вони не можуть:"
   },
   "settings.social.blocked-users.empty": {
     "defaultMessage": "Ви нікого не заблокували."
@@ -5493,7 +5493,7 @@
     "defaultMessage": "Надсилати вам запити в друзі"
   },
   "settings.social.blocked-users.restriction.hosting": {
-    "defaultMessage": "Запрошувати вас керувати сервером Modrinth Hosting."
+    "defaultMessage": "Запрошувати вас керувати сервером Lumen Hosting."
   },
   "settings.social.blocked-users.restriction.shared-instances": {
     "defaultMessage": "Запрошувати вас до спільних збірок"
@@ -5517,7 +5517,7 @@
     "defaultMessage": "Аватар користувача {username}"
   },
   "settings.social.friend-requests.description": {
-    "defaultMessage": "Керуйте тим, хто може надсилати вам запити в друзі на Modrinth."
+    "defaultMessage": "Керуйте тим, хто може надсилати вам запити в друзі на Lumen."
   },
   "settings.social.friend-requests.title": {
     "defaultMessage": "Запити в друзі"
@@ -5535,10 +5535,10 @@
     "defaultMessage": "Ніхто"
   },
   "settings.social.sign-in-required.description": {
-    "defaultMessage": "З обліковим записом Modrinth ви можете налаштувати, хто може взаємодіяти з вами, або керувати заблокованими користувачами"
+    "defaultMessage": "З обліковим записом Lumen ви можете налаштувати, хто може взаємодіяти з вами, або керувати заблокованими користувачами"
   },
   "settings.social.sign-in-required.title": {
-    "defaultMessage": "Потрібен обліковий запис Modrinth"
+    "defaultMessage": "Потрібен обліковий запис Lumen"
   },
   "settings.social.title": {
     "defaultMessage": "Взаємодія"
@@ -6201,34 +6201,34 @@
     "defaultMessage": "Шкідливе програмне забезпечення часто поширюють через моди, які публікуються на таких платформах, як Discord."
   },
   "unknown-file-warning-modal.mod-warning-body": {
-    "defaultMessage": " не викладено на Modrinth. Наполегливо радимо встановлювати вміст лише з тих джерел, яким ви довіряєте."
+    "defaultMessage": " не викладено на Lumen. Наполегливо радимо встановлювати вміст лише з тих джерел, яким ви довіряєте."
   },
   "unknown-file-warning-modal.mod-warning-title": {
     "defaultMessage": "Попередження про невідомий файл"
   },
   "unknown-file-warning-modal.modpack-warning-body": {
-    "defaultMessage": " містить файли, які не викладені на Modrinth. Наполегливо радимо встановлювати вміст лише з тих джерел, яким ви довіряєте."
+    "defaultMessage": " містить файли, які не викладені на Lumen. Наполегливо радимо встановлювати вміст лише з тих джерел, яким ви довіряєте."
   },
   "unknown-file-warning-modal.modpack-warning-title": {
     "defaultMessage": "Попередження про невідомі файли"
   },
   "unknown-file-warning-modal.reviewed-files": {
-    "defaultMessage": "Розглядатимуть лише ті файли, що викладені на Modrinth."
+    "defaultMessage": "Розглядатимуть лише ті файли, що викладені на Lumen."
   },
   "unknown-file-warning-modal.unrecognized-files": {
     "defaultMessage": "Нерозпізнані файли"
   },
   "user.profile.badge.alpha.about.1": {
-    "defaultMessage": "Цей користувач з нами ще з альфа-версії Modrinth, яка завершилася в листопаді 2020."
+    "defaultMessage": "Цей користувач з нами ще з альфа-версії Lumen, яка завершилася в листопаді 2020."
   },
   "user.profile.badge.alpha.name": {
     "defaultMessage": "Альфа-тестувальник"
   },
   "user.profile.badge.beta.about.1": {
-    "defaultMessage": "Цей користувач з нами ще з бета-версії Modrinth, яка завершилася в лютому 2022."
+    "defaultMessage": "Цей користувач з нами ще з бета-версії Lumen, яка завершилася в лютому 2022."
   },
   "user.profile.badge.beta.link": {
-    "defaultMessage": "Натисніть, щоб прочитати про запуск бета-версії Modrinth."
+    "defaultMessage": "Натисніть, щоб прочитати про запуск бета-версії Lumen."
   },
   "user.profile.badge.beta.name": {
     "defaultMessage": "Бета-тестувальник"
@@ -6240,67 +6240,67 @@
     "defaultMessage": "{download_sum} завантажень"
   },
   "user.profile.badge.early-datapack-adopter.about.1": {
-    "defaultMessage": "Цей користувач допомагав нам тестувати пакети даних на Modrinth перед їхнім запуском у січні 2023."
+    "defaultMessage": "Цей користувач допомагав нам тестувати пакети даних на Lumen перед їхнім запуском у січні 2023."
   },
   "user.profile.badge.early-datapack-adopter.name": {
     "defaultMessage": "Ранній тестувальник пакетів даних"
   },
   "user.profile.badge.early-modpack-adopter.about.1": {
-    "defaultMessage": "Цей користувач допомагав нам тестувати збірки на Modrinth перед їхнім запуском у травні 2022."
+    "defaultMessage": "Цей користувач допомагав нам тестувати збірки на Lumen перед їхнім запуском у травні 2022."
   },
   "user.profile.badge.early-modpack-adopter.name": {
     "defaultMessage": "Ранній тестувальник збірок"
   },
   "user.profile.badge.early-plugin-adopter.about.1": {
-    "defaultMessage": "Цей користувач допомагав нам тестувати плагіни на Modrinth перед їхнім запуском у серпні 2022."
+    "defaultMessage": "Цей користувач допомагав нам тестувати плагіни на Lumen перед їхнім запуском у серпні 2022."
   },
   "user.profile.badge.early-plugin-adopter.name": {
     "defaultMessage": "Ранній тестувальник плагінів"
   },
   "user.profile.badge.early-resourcepack-adopter.about.1": {
-    "defaultMessage": "Цей користувач допомагав нам тестувати пакети ресурсів на Modrinth перед їхнім запуском у серпні 2022."
+    "defaultMessage": "Цей користувач допомагав нам тестувати пакети ресурсів на Lumen перед їхнім запуском у серпні 2022."
   },
   "user.profile.badge.early-resourcepack-adopter.name": {
     "defaultMessage": "Ранній тестувальник пакетів ресурсів"
   },
   "user.profile.badge.early-server-adopter.about.1": {
-    "defaultMessage": "Цей користувач допомагав нам тестувати сервери на Modrinth перед їхнім запуском у березні 2026."
+    "defaultMessage": "Цей користувач допомагав нам тестувати сервери на Lumen перед їхнім запуском у березні 2026."
   },
   "user.profile.badge.early-server-adopter.name": {
     "defaultMessage": "Ранній тестувальник серверів"
   },
   "user.profile.badge.early-shader-adopter.about.1": {
-    "defaultMessage": "Цей користувач допомагав нам тестувати шейдери на Modrinth перед їхнім запуском у січні 2023."
+    "defaultMessage": "Цей користувач допомагав нам тестувати шейдери на Lumen перед їхнім запуском у січні 2023."
   },
   "user.profile.badge.early-shader-adopter.name": {
     "defaultMessage": "Ранній тестувальник шейдерів"
   },
   "user.profile.badge.hosting-alpha.about.1": {
-    "defaultMessage": "Цей користувач брав участь у закритому альфа-тестуванні Modrinth Hosting перед запуском бета-тестування в листопаді 2024."
+    "defaultMessage": "Цей користувач брав участь у закритому альфа-тестуванні Lumen Hosting перед запуском бета-тестування в листопаді 2024."
   },
   "user.profile.badge.hosting-alpha.name": {
-    "defaultMessage": "Альфа-тестувальник Modrinth Hosting"
+    "defaultMessage": "Альфа-тестувальник Lumen Hosting"
   },
   "user.profile.badge.moderator.about.1": {
-    "defaultMessage": "Цей користувач працює на Modrinth як модератор умісту."
+    "defaultMessage": "Цей користувач працює на Lumen як модератор умісту."
   },
   "user.profile.badge.moderator.about.2": {
-    "defaultMessage": "Модератори вмісту на Modrinth розглядають проєкти, опрацьовують скарги та допомагають тримати Modrinth у безпеці."
+    "defaultMessage": "Модератори вмісту на Lumen розглядають проєкти, опрацьовують скарги та допомагають тримати Lumen у безпеці."
   },
   "user.profile.badge.moderator.name": {
     "defaultMessage": "Модератор умісту"
   },
   "user.profile.badge.plus.about.1": {
-    "defaultMessage": "Цей користувач активно підтримує Modrinth і творців на платформі."
+    "defaultMessage": "Цей користувач активно підтримує Lumen і творців на платформі."
   },
   "user.profile.badge.plus.link": {
     "defaultMessage": "Натисніть, щоб дізнатися, як стати нашим учасником."
   },
   "user.profile.badge.plus.name": {
-    "defaultMessage": "Учасник Modrinth+"
+    "defaultMessage": "Учасник Lumen+"
   },
   "user.profile.badge.pride.about.1": {
-    "defaultMessage": "Цей користувач брав участь в одному із благодійних зборів на підтримку спільноти ЛГБТК+ від Modrinth."
+    "defaultMessage": "Цей користувач брав участь в одному із благодійних зборів на підтримку спільноти ЛГБТК+ від Lumen."
   },
   "user.profile.badge.pride.link": {
     "defaultMessage": "Натисніть, щоб переглянути останній збір."
@@ -6309,10 +6309,10 @@
     "defaultMessage": "Підтримувач збору місяця гордості"
   },
   "user.profile.badge.staff.about.1": {
-    "defaultMessage": "Цей користувач працює на Modrinth."
+    "defaultMessage": "Цей користувач працює на Lumen."
   },
   "user.profile.badge.staff.name": {
-    "defaultMessage": "Команда Modrinth"
+    "defaultMessage": "Команда Lumen"
   },
   "version.content.name": {
     "defaultMessage": "Назва"

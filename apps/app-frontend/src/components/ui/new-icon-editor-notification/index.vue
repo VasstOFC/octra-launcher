@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { XIcon } from '@modrinth/assets'
-import { Button, defineMessages, IconButton, useVIntl } from '@modrinth/ui'
+import { XIcon } from '@lumen/assets'
+import { Button, defineMessages, IconButton, useVIntl } from '@lumen/ui'
 import { ref, useTemplateRef } from 'vue'
 
 import ApplyNewIconsModal from './apply-new-icons-modal.vue'

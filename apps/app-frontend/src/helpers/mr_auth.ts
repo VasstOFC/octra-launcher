@@ -5,31 +5,31 @@
  */
 import { invoke } from '@tauri-apps/api/core'
 
-export type ModrinthCredentials = {
+export type LumenCredentials = {
 	session: string
 	expires: string
 	user_id: string
 	active: boolean
 }
 
-export type ModrinthAuthFlow = 'sign-in' | 'sign-up'
+export type LumenAuthFlow = 'sign-in' | 'sign-up'
 
 export async function login(
-	flow: ModrinthAuthFlow = 'sign-in',
+	flow: LumenAuthFlow = 'sign-in',
 	addAccount = false,
-): Promise<ModrinthCredentials> {
-	return await invoke('plugin:mr-auth|modrinth_login', { flow, addAccount })
+): Promise<LumenCredentials> {
+	return await invoke('plugin:mr-auth|lumen_login', { flow, addAccount })
 }
 
 export async function logout(): Promise<void> {
 	return await invoke('plugin:mr-auth|logout')
 }
 
-export async function get(): Promise<ModrinthCredentials | null> {
+export async function get(): Promise<LumenCredentials | null> {
 	return await invoke('plugin:mr-auth|get')
 }
 
-export async function getAll(): Promise<ModrinthCredentials[]> {
+export async function getAll(): Promise<LumenCredentials[]> {
 	return await invoke('plugin:mr-auth|get_all')
 }
 
@@ -42,5 +42,5 @@ export async function removeUser(userId: string): Promise<void> {
 }
 
 export async function cancelLogin(): Promise<void> {
-	return await invoke('plugin:mr-auth|cancel_modrinth_login')
+	return await invoke('plugin:mr-auth|cancel_lumen_login')
 }

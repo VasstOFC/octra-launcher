@@ -36,7 +36,7 @@
 				<ButtonLink
 					v-tooltip="formatMessage(commonMessages.openInBrowserButton)"
 					type="quiet"
-					:href="`https://modrinth.com/${project.project_type}/${project.slug}/version/${version.id}`"
+					:href="`https://Lumen.com/${project.project_type}/${project.slug}/version/${version.id}`"
 					target="_blank"
 					:aria-label="formatMessage(commonMessages.openInBrowserButton)"
 					class="!w-9 !px-0 !rounded-full"
@@ -49,7 +49,7 @@
 </template>
 
 <script setup>
-import { CheckIcon, DownloadIcon, ExternalIcon } from '@modrinth/assets'
+import { CheckIcon, DownloadIcon, ExternalIcon } from '@lumen/assets'
 import {
 	ButtonLink,
 	commonMessages,
@@ -58,7 +58,7 @@ import {
 	injectNotificationManager,
 	ProjectPageVersions,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 

@@ -1,4 +1,4 @@
-import { createContext } from '@modrinth/ui'
+import { createContext } from '@lumen/ui'
 import { computed, type ComputedRef, ref } from 'vue'
 
 import { useAppEvent } from '@/composables/use-app-event'
@@ -8,7 +8,7 @@ import type { AppEvents } from '@/providers/app-events'
 export interface OnboardingChecklistContext {
 	hasCreatedInstance: ComputedRef<boolean>
 	hasLoggedIntoMinecraft: ComputedRef<boolean>
-	hasLoggedIntoModrinth: ComputedRef<boolean>
+	hasLoggedIntoLumen: ComputedRef<boolean>
 	isReady: ComputedRef<boolean>
 	showChecklist: ComputedRef<boolean>
 }
@@ -28,7 +28,7 @@ export function setupOnboardingChecklistProvider(
 	const context: OnboardingChecklistContext = {
 		hasCreatedInstance: computed(() => checklist.value?.has_created_instance ?? false),
 		hasLoggedIntoMinecraft: computed(() => checklist.value?.has_logged_into_minecraft ?? false),
-		hasLoggedIntoModrinth: computed(() => checklist.value?.has_logged_into_modrinth ?? false),
+		hasLoggedIntoLumen: computed(() => checklist.value?.has_logged_into_modrinth ?? false),
 		isReady: computed(() => checklist.value !== undefined),
 		showChecklist: computed(() => checklist.value?.show_checklist ?? false),
 	}

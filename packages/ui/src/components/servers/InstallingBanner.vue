@@ -29,12 +29,12 @@
 </template>
 
 <script setup lang="ts">
-import { RotateCounterClockwiseIcon } from '@modrinth/assets'
+import { RotateCounterClockwiseIcon } from '@lumen/assets'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 
 import { Button } from '#ui/components/base/buttons'
 import { defineMessages, useVIntl } from '#ui/composables/i18n'
-import { injectModrinthServerContext } from '#ui/providers'
+import { injectLumenServerContext } from '#ui/providers'
 import { commonMessages } from '#ui/utils/common-messages'
 import { formatLoaderLabel } from '#ui/utils/loaders'
 
@@ -51,7 +51,7 @@ const emit = defineEmits<{
 }>()
 
 const { formatMessage } = useVIntl()
-const { installation } = injectModrinthServerContext()
+const { installation } = injectLumenServerContext()
 
 const messages = defineMessages({
 	errorHeader: {

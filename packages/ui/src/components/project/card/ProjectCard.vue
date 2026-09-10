@@ -21,7 +21,7 @@
 				/>
 				<img
 					v-else
-					src="https://cdn-raw.modrinth.com/landing-new/landing.webp"
+					src="https://cdn-raw.Lumen.com/landing-new/landing.webp"
 					alt=""
 					class="absolute w-full h-full inset-0 object-cover object-center placeholder-banner scale-[200%]"
 				/>
@@ -112,10 +112,7 @@
 				class="project-card__icon grid-project-card-list__icon ease-brightness"
 				no-shadow
 			/>
-			<div
-				class="flex flex-col grid-project-card-list__info"
-				:class="isQuiet ? 'gap-1' : 'gap-2'"
-			>
+			<div class="flex flex-col grid-project-card-list__info" :class="isQuiet ? 'gap-1' : 'gap-2'">
 				<div class="flex gap-2 items-center">
 					<ProjectCardTitle :title="title" :compact="isQuiet" />
 					<ProjectCardAuthor v-if="author" :author="author" />
@@ -200,7 +197,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ProjectStatus } from '@modrinth/utils'
+import type { ProjectStatus } from '@lumen/utils'
 import dayjs from 'dayjs'
 import { computed, useSlots } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'

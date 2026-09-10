@@ -15,15 +15,15 @@
 				:class="props.subdomain ? 'hover:underline' : ''"
 				@click="copySubdomain"
 			>
-				{{ subdomain }}.modrinth.gg
+				{{ subdomain }}.Lumen.gg
 			</div>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { LinkIcon } from '@modrinth/assets'
-import { injectNotificationManager } from '@modrinth/ui'
+import { LinkIcon } from '@lumen/assets'
+import { injectNotificationManager } from '@lumen/ui'
 import { useStorage } from '@vueuse/core'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
@@ -39,7 +39,7 @@ const props = defineProps<{
 }>()
 
 const copySubdomain = () => {
-	navigator.clipboard.writeText(props.subdomain + '.modrinth.gg')
+	navigator.clipboard.writeText(props.subdomain + '.Lumen.gg')
 	addNotification({
 		title: 'Custom URL copied',
 		text: "Your server's URL has been copied to your clipboard.",

@@ -1,4 +1,4 @@
-import type { AbstractModrinthClient } from '@modrinth/api-client'
+import type { AbstractLumenClient } from '@lumen/api-client'
 
 import type { ModerationQueueService } from './queue.ts'
 
@@ -26,7 +26,7 @@ export function isEligibleQueueCandidate(result: QueueCandidateCheck | undefined
 }
 
 export async function batchCheckQueueCandidates(
-	client: AbstractModrinthClient,
+	client: AbstractLumenClient,
 	moderationQueue: ModerationQueueService,
 	projectIds: string[],
 ): Promise<Map<string, QueueCandidateCheck>> {
@@ -65,7 +65,7 @@ export async function batchCheckQueueCandidates(
 }
 
 export async function findNextEligibleQueueProject(
-	client: AbstractModrinthClient,
+	client: AbstractLumenClient,
 	moderationQueue: ModerationQueueService,
 	candidateIds: string[],
 ): Promise<EligibleQueueProject | null> {

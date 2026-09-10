@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { LoaderCircleIcon } from '@modrinth/assets'
+import { LoaderCircleIcon } from '@lumen/assets'
 import {
 	Accordion,
 	defineMessages,
@@ -7,7 +7,7 @@ import {
 	type GameVersion,
 	injectNotificationManager,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { platform } from '@tauri-apps/plugin-os'
 import type { Dayjs } from 'dayjs'
 import dayjs from 'dayjs'
@@ -62,7 +62,7 @@ const MAX_JUMP_BACK_IN = 5
 const MAX_NEW_INSTANCES = 3
 const MAX_LINUX_POPULATES = 3
 const ITEM_DRAG_DISTANCE = 92
-const STORAGE_KEY = 'modrinth-jump-back-in-count'
+const STORAGE_KEY = 'Lumen-jump-back-in-count'
 
 const storedVisibleCount = Number.parseInt(localStorage.getItem(STORAGE_KEY) ?? '', 10)
 const visibleItemLimit = ref(

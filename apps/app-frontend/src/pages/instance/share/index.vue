@@ -1,6 +1,6 @@
 <template>
 	<div v-if="!instance.quarantined" class="flex flex-col gap-4">
-		<ModrinthAccountRequiredModal ref="accountRequiredModal" :request-auth="requestAuth" />
+		<LumenAccountRequiredModal ref="accountRequiredModal" :request-auth="requestAuth" />
 		<InvitePlayersModal
 			ref="invitePlayersModal"
 			:header="formatMessage(messages.shareModalHeader, { name: instance.name })"
@@ -129,7 +129,7 @@
 </template>
 
 <script setup lang="ts">
-import { LogInIcon, SpinnerIcon, UserPlusIcon } from '@modrinth/assets'
+import { LogInIcon, SpinnerIcon, UserPlusIcon } from '@lumen/assets'
 import {
 	Avatar,
 	Button,
@@ -140,11 +140,11 @@ import {
 	InvitePlayersModal,
 	type InvitePlayersUser,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useQueryClient } from '@tanstack/vue-query'
 import { computed, ref, watch } from 'vue'
 
-import ModrinthAccountRequiredModal from '@/components/ui/modal/ModrinthAccountRequiredModal.vue'
+import LumenAccountRequiredModal from '@/components/ui/modal/LumenAccountRequiredModal.vue'
 import SharedInstancePublishModal from '@/components/ui/shared-instances/SharedInstancePublishModal.vue'
 import {
 	getSharedInstanceUnavailableReason,
@@ -152,7 +152,7 @@ import {
 	isSharedInstanceUnavailableError,
 } from '@/helpers/install'
 import { edit } from '@/helpers/instance'
-import type { ModrinthAuthFlow } from '@/helpers/mr_auth.ts'
+import type { LumenAuthFlow } from '@/helpers/mr_auth.ts'
 import {
 	sharedInstanceErrorMessages,
 	useSharedInstanceErrors,
@@ -186,7 +186,7 @@ const sharedInstanceActionsLocked = actionsLocked
 const currentUserId = computed(() => auth.user.value?.id ?? null)
 const isSignedIn = computed(() => !!auth.session_token.value)
 const sharedInstancesApiUnavailable = ref(false)
-const accountRequiredModal = ref<InstanceType<typeof ModrinthAccountRequiredModal>>()
+const accountRequiredModal = ref<InstanceType<typeof LumenAccountRequiredModal>>()
 const invitePlayersModal = ref<InstanceType<typeof InvitePlayersModal>>()
 const unlinkModal = ref<InstanceType<typeof ConfirmUnlinkModal>>()
 const removeMemberModal = ref<InstanceType<typeof SharedInstanceRemoveMemberModal>>()
@@ -392,7 +392,7 @@ function removeMember(row: ShareRow) {
 function userProfileLink(username: string) {
 	return !username || username.includes('@') ? undefined : `/user/${encodeURIComponent(username)}`
 }
-async function requestAuth(flow: ModrinthAuthFlow) {
+async function requestAuth(flow: LumenAuthFlow) {
 	await auth.requestSignIn(`/instance/${encodeURIComponent(instance.value.id)}/share`, flow, {
 		showModal: false,
 	})

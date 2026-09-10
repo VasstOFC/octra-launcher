@@ -15,7 +15,7 @@
 				<ButtonLink
 					type="colored"
 					color="blue"
-					href="https://modrinth.com/legal/cmp-info"
+					href="https://Lumen.com/legal/cmp-info"
 					target="_blank"
 					class="w-fit !px-4"
 				>
@@ -42,8 +42,8 @@
 </template>
 
 <script setup lang="ts">
-import { RightArrowIcon } from '@modrinth/assets'
-import { Admonition, ButtonLink, useFormatNumber, useVIntl } from '@modrinth/ui'
+import { RightArrowIcon } from '@lumen/assets'
+import { Admonition, ButtonLink, useFormatNumber, useVIntl } from '@lumen/ui'
 import { useLocalStorage } from '@vueuse/core'
 
 import {

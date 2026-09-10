@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { CpuIcon, DatabaseIcon, MemoryStickIcon, SparklesIcon, UnknownIcon } from '@modrinth/assets'
+import { CpuIcon, DatabaseIcon, MemoryStickIcon, SparklesIcon, UnknownIcon } from '@lumen/assets'
 import { computed } from 'vue'
 
 import { defineMessages, useVIntl } from '../../composables/i18n'
@@ -73,7 +73,7 @@ const sharedCpus = computed(() => {
 			<AutoLink
 				v-tooltip="formatMessage(messages.burstTooltip)"
 				class="flex"
-				to="https://modrinth.com/hosting#cpu-burst"
+				to="https://Lumen.com/hosting#cpu-burst"
 				target="_blank"
 				@click="() => emit('click-bursting-link')"
 			>

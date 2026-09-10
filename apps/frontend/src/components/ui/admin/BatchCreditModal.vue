@@ -92,7 +92,7 @@
 					<span>Hi {user.name},</span>
 					<Textarea id="message-batch" v-model="message" :rows="3" input-class="!bg-surface-3" />
 					<span>
-						To make up for it, we've added {{ days }} day{{ pluralize(days) }} to your Modrinth
+						To make up for it, we've added {{ days }} day{{ pluralize(days) }} to your Lumen
 						Servers subscription.
 					</span>
 					<span>
@@ -117,25 +117,25 @@
 </template>
 
 <script setup lang="ts">
-import { CheckIcon, PlusIcon, XIcon } from '@modrinth/assets'
+import { CheckIcon, PlusIcon, XIcon } from '@lumen/assets'
 import {
 	Button,
 	Combobox,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	Input,
 	NewModal,
 	TagItem,
 	Textarea,
 	Toggle,
-} from '@modrinth/ui'
-import { DEFAULT_CREDIT_EMAIL_MESSAGE } from '@modrinth/utils/utils.ts'
+} from '@lumen/ui'
+import { DEFAULT_CREDIT_EMAIL_MESSAGE } from '@lumen/utils/utils.ts'
 import { computed, ref } from 'vue'
 
 import { useBaseFetch } from '#imports'
 
 const { addNotification } = injectNotificationManager()
-const client = injectModrinthClient()
+const client = injectLumenClient()
 
 const modal = ref<InstanceType<typeof NewModal>>()
 

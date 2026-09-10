@@ -1,5 +1,5 @@
 <script setup>
-import { FolderOpenIcon, XIcon } from '@modrinth/assets'
+import { FolderOpenIcon, XIcon } from '@lumen/assets'
 import {
 	Button,
 	commonMessages,
@@ -11,7 +11,7 @@ import {
 	NewModal,
 	Textarea,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { save } from '@tauri-apps/plugin-dialog'
 import { ref, shallowRef } from 'vue'
 
@@ -98,7 +98,7 @@ const exportPack = async () => {
 		defaultPath: `${nameInput.value} ${versionInput.value}.mrpack`,
 		filters: [
 			{
-				name: 'Modrinth Modpack',
+				name: 'Lumen Modpack',
 				extensions: ['mrpack'],
 			},
 		],

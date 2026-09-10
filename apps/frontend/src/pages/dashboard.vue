@@ -76,7 +76,7 @@
 	</div>
 </template>
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
+import type { Labrinth } from '@lumen/api-client'
 import {
 	AffiliateIcon,
 	BellIcon as NotificationsIcon,
@@ -88,23 +88,23 @@ import {
 	ListIcon,
 	OrganizationIcon,
 	ReportIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import {
 	Admonition,
 	ButtonLink,
 	commonMessages,
 	defineMessages,
-	injectModrinthClient,
+	injectLumenClient,
 	useVIntl,
-} from '@modrinth/ui'
-import { UserBadge } from '@modrinth/utils'
+} from '@lumen/ui'
+import { UserBadge } from '@lumen/utils'
 import { useQuery } from '@tanstack/vue-query'
 import { useLocalStorage } from '@vueuse/core'
 
 import NavStack from '~/components/ui/NavStack.vue'
 
 const auth = (await useAuth()) as Ref<{ user: Labrinth.Users.v3.User | null }>
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const dismissedDiscordRoleBannerUsers = useLocalStorage<string[]>(
 	'dashboard-discord-role-banner-dismissed-users',
 	[],
@@ -160,7 +160,7 @@ const messages = defineMessages({
 	discordRoleBannerBody: {
 		id: 'dashboard.discord-roles.banner.body',
 		defaultMessage:
-			"You're eligible for {roles}. Link your Discord account through Modrinth and we'll sync them automatically.",
+			"You're eligible for {roles}. Link your Discord account through Lumen and we'll sync them automatically.",
 	},
 	discordRoleBannerCta: {
 		id: 'dashboard.discord-roles.banner.cta',

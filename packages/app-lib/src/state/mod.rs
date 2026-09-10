@@ -167,18 +167,18 @@ impl State {
             tracing::error!("Error recovering interrupted install jobs: {e}");
         }
 
-        if let Err(e) = crate::octra_sync::sync_from_octra_launcher().await {
+        if let Err(e) = crate::lumen_sync::sync_from_octra_launcher().await {
             tracing::error!("Failed to sync Octra Launcher instances: {e}");
         }
 
         #[cfg(all(windows, not(debug_assertions)))]
         {
             tokio::task::spawn_blocking(|| {
-                crate::octra_legacy::uninstall_legacy_launcher();
+                crate::lumen_legacy::uninstall_legacy_launcher();
             });
         }
 
-        if let Err(e) = crate::octra_skins::ensure_runtime().await {
+        if let Err(e) = crate::lumen_skins::ensure_runtime().await {
             tracing::warn!("Octra skins runtime: {e}");
         }
 
@@ -229,7 +229,7 @@ impl State {
                     &state.process_manager,
                 )
                 .await;
-            crate::octra_accounts::spawn_presence_heartbeat();
+            crate::lumen_accounts::spawn_presence_heartbeat();
             let _ = FriendsSocket::socket_loop().await;
         });
 

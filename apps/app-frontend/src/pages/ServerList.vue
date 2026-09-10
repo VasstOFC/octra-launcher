@@ -9,7 +9,7 @@ import {
 	ShareIcon,
 	SpinnerIcon,
 	TrashIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import {
 	Avatar,
 	Button,
@@ -18,27 +18,29 @@ import {
 	IconButton,
 	injectNotificationManager,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
+import { autoToHTML } from '@sfirew/minecraft-motd-parser'
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
-import { computed, onActivated, ref, useTemplateRef, watch } from 'vue'
+import { computed, inject, onActivated, ref, useTemplateRef, watch } from 'vue'
+import { useRouter } from 'vue-router'
 
 import PlayWithFriendModal from '@/components/ui/friends/PlayWithFriendModal.vue'
-import { useAppEvent } from '@/composables/use-app-event'
 import {
 	canPlayWithFriend,
 	canViewFriendPack,
 	type PlayWithFriendMember,
 } from '@/composables/play-with-friend'
-import { useOctraCommunityAvatars } from '@/composables/use-octra-community-avatars'
+import { useAppEvent } from '@/composables/use-app-event'
+import { useLumenCommunityAvatars } from '@/composables/use-lumen-community-avatars'
 import { toError } from '@/helpers/errors'
 import { list as listInstances } from '@/helpers/instance'
 import {
-	octraAccountSession,
-	octraCommunity,
-	octraSharedServersAdd,
-	octraSharedServersDelete,
-	octraSharedServersList,
-} from '@/helpers/octra-account.js'
+	LumenAccountSession,
+	LumenCommunity,
+	LumenSharedServersAdd,
+	LumenSharedServersDelete,
+	LumenSharedServersList,
+} from '@/helpers/lumen-account.js'
 import {
 	get_instance_worlds,
 	get_server_status,
@@ -77,6 +79,7 @@ type PingState = {
 	playersOnline?: number
 	playersMax?: number
 	version?: string
+	renderedMotd?: string
 }
 
 const messages = defineMessages({
@@ -110,11 +113,27 @@ const messages = defineMessages({
 	},
 	friendsInGameEmpty: {
 		id: 'app.servers.friends-ingame.empty',
-		defaultMessage: 'Nobody from Octra is in game with a join address right now.',
+		defaultMessage: 'Nobody from Lumen is in game with a join address right now.',
 	},
 	friendsSignIn: {
 		id: 'app.servers.friends-ingame.sign-in',
-		defaultMessage: 'Sign in to Octra in the friends panel to see who is playing.',
+		defaultMessage: 'Sign in to Lumen in the friends panel to see who is playing.',
+	},
+	friendsSignInCta: {
+		id: 'app.servers.friends-ingame.sign-in-cta',
+		defaultMessage: 'Open friends',
+	},
+	sharedEmptyCta: {
+		id: 'app.servers.shared.empty-cta',
+		defaultMessage: 'Share an address above to start a community list.',
+	},
+	localEmptyCta: {
+		id: 'app.servers.local.empty-cta',
+		defaultMessage: 'Create an instance',
+	},
+	localEmptyDiscoverCta: {
+		id: 'app.servers.local.empty-discover-cta',
+		defaultMessage: 'Browse modpacks',
 	},
 	playingAs: {
 		id: 'app.servers.friends-ingame.playing',
@@ -138,8 +157,7 @@ const messages = defineMessages({
 	},
 	sharedSubtitle: {
 		id: 'app.servers.shared.subtitle',
-		defaultMessage:
-			'Shown at the top of the Minecraft multiplayer list with the Octra icon.',
+		defaultMessage: 'Shown at the top of the Minecraft multiplayer list with the Lumen icon.',
 	},
 	sharedEmpty: {
 		id: 'app.servers.shared.empty',
@@ -147,7 +165,7 @@ const messages = defineMessages({
 	},
 	sharedEmptySignedOut: {
 		id: 'app.servers.shared.empty-signed-out',
-		defaultMessage: 'Sign in to Octra to share servers with friends.',
+		defaultMessage: 'Sign in to Lumen to share servers with friends.',
 	},
 	sharedBy: {
 		id: 'app.servers.shared.by',
@@ -262,6 +280,10 @@ const breadcrumb = useRootBreadcrumb({
 })
 onActivated(breadcrumb.reset)
 
+const router = useRouter()
+const openFriendsSidebar = inject<(tab?: string) => void>('openFriendsSidebar', () => {})
+const showCreationModal = inject<() => void>('showCreationModal')
+
 const playWithModal = useTemplateRef<InstanceType<typeof PlayWithFriendModal>>('playWithModal')
 const deleteSharedModal = useTemplateRef<InstanceType<typeof ConfirmModal>>('deleteSharedModal')
 const quickAddress = ref('')
@@ -277,22 +299,22 @@ const sharing = ref(false)
 const pendingDeleteShared = ref<SharedServerRow | null>(null)
 
 const sessionQuery = useQuery({
-	queryKey: ['octra', 'account-session'],
-	queryFn: () => octraAccountSession(),
+	queryKey: ['Lumen', 'account-session'],
+	queryFn: () => LumenAccountSession(),
 	staleTime: 30_000,
 })
 
 const communityQuery = useQuery({
-	queryKey: computed(() => ['octra-community', sessionQuery.data.value?.username ?? null]),
-	queryFn: () => octraCommunity(),
+	queryKey: computed(() => ['Lumen-community', sessionQuery.data.value?.username ?? null]),
+	queryFn: () => LumenCommunity(),
 	enabled: computed(() => !!sessionQuery.data.value),
 	staleTime: 10_000,
 	refetchInterval: 15_000,
 })
 
 const sharedServersQuery = useQuery({
-	queryKey: computed(() => ['octra', 'shared-servers', sessionQuery.data.value?.username ?? null]),
-	queryFn: () => octraSharedServersList(),
+	queryKey: computed(() => ['Lumen', 'shared-servers', sessionQuery.data.value?.username ?? null]),
+	queryFn: () => LumenSharedServersList(),
 	enabled: computed(() => !!sessionQuery.data.value),
 	refetchInterval: 20_000,
 })
@@ -318,12 +340,11 @@ const playableInstances = computed(() => {
 
 const defaultInstanceId = computed(() => playableInstances.value[0]?.id ?? null)
 
-const resolvedInstanceId = computed(
-	() =>
-		selectedInstanceId.value &&
-		playableInstances.value.some((instance) => instance.id === selectedInstanceId.value)
-			? selectedInstanceId.value
-			: defaultInstanceId.value,
+const resolvedInstanceId = computed(() =>
+	selectedInstanceId.value &&
+	playableInstances.value.some((instance) => instance.id === selectedInstanceId.value)
+		? selectedInstanceId.value
+		: defaultInstanceId.value,
 )
 
 watch(
@@ -360,7 +381,7 @@ const friendsInGame = computed(() => {
 		)
 })
 
-const { avatarFor } = useOctraCommunityAvatars(friendsInGame)
+const { avatarFor } = useLumenCommunityAvatars(friendsInGame)
 
 const selfNick = computed(() =>
 	(sessionQuery.data.value?.minecraft_nick ?? '').trim().toLowerCase(),
@@ -391,9 +412,9 @@ const localServers = computed<LocalServerRow[]>(() => {
 		const server = world as ServerWorld
 		const address = server.address.trim()
 		if (!address) continue
-		// Octra shared servers are injected into servers.dat for in-game display;
+		// Lumen shared servers are injected into servers.dat for in-game display;
 		// keep them out of the local list (they already appear under Shared).
-		if (server.name.trim().startsWith('[Octra] ')) continue
+		if (server.name.trim().startsWith('[Lumen] ')) continue
 		rows.push({
 			key: `local:${server.index}:${address.toLowerCase()}`,
 			name: server.name || address,
@@ -406,8 +427,7 @@ const localServers = computed<LocalServerRow[]>(() => {
 
 const pageLoading = computed(
 	() =>
-		instancesQuery.isPending.value ||
-		(!!sessionQuery.data.value && communityQuery.isPending.value),
+		instancesQuery.isPending.value || (!!sessionQuery.data.value && communityQuery.isPending.value),
 )
 
 function isSharedByOther(server: SharedServerRow): boolean {
@@ -433,6 +453,14 @@ async function refreshPings() {
 			addresses.map(async (address) => {
 				try {
 					const status = await get_server_status(address, null)
+					let renderedMotd: string | undefined
+					try {
+						if (status.description) {
+							renderedMotd = autoToHTML(status.description)
+						}
+					} catch {
+						renderedMotd = undefined
+					}
 					pings.value = {
 						...pings.value,
 						[address]: {
@@ -441,6 +469,7 @@ async function refreshPings() {
 							playersOnline: status.players?.online,
 							playersMax: status.players?.max,
 							version: status.version?.name,
+							renderedMotd,
 						},
 					}
 				} catch {
@@ -503,8 +532,8 @@ async function shareServer(name: string, address: string) {
 	}
 	sharing.value = true
 	try {
-		await octraSharedServersAdd(trimmedName, trimmedAddress)
-		await queryClient.invalidateQueries({ queryKey: ['octra', 'shared-servers'] })
+		await LumenSharedServersAdd(trimmedName, trimmedAddress)
+		await queryClient.invalidateQueries({ queryKey: ['Lumen', 'shared-servers'] })
 		addNotification({
 			title: formatMessage(messages.sharedAdded),
 			text: trimmedAddress,
@@ -538,8 +567,8 @@ async function confirmDeleteShared() {
 	if (!server) return
 	joiningSavedKey.value = server.key
 	try {
-		await octraSharedServersDelete(server.sharedId)
-		await queryClient.invalidateQueries({ queryKey: ['octra', 'shared-servers'] })
+		await LumenSharedServersDelete(server.sharedId)
+		await queryClient.invalidateQueries({ queryKey: ['Lumen', 'shared-servers'] })
 		addNotification({
 			title: formatMessage(messages.savedDeleted),
 			text: server.name,
@@ -619,9 +648,7 @@ async function viewPack(member: PlayWithFriendMember) {
 				<Button
 					:disabled="
 						pinging ||
-						(sharedServers.length === 0 &&
-							localServers.length === 0 &&
-							friendsInGame.length === 0)
+						(sharedServers.length === 0 && localServers.length === 0 && friendsInGame.length === 0)
 					"
 					@click="refreshPings"
 				>
@@ -653,11 +680,7 @@ async function viewPack(member: PlayWithFriendMember) {
 						<option :value="null" disabled>
 							{{ formatMessage(messages.quickJoinInstance) }}
 						</option>
-						<option
-							v-for="instance in playableInstances"
-							:key="instance.id"
-							:value="instance.id"
-						>
+						<option v-for="instance in playableInstances" :key="instance.id" :value="instance.id">
 							{{ instance.name }}
 						</option>
 					</select>
@@ -689,16 +712,15 @@ async function viewPack(member: PlayWithFriendMember) {
 						{{ formatMessage(messages.friendsInGame) }}
 					</h2>
 
-					<p
-						v-if="!sessionQuery.data.value"
-						class="m-0 mt-3 text-sm text-secondary"
-					>
+					<p v-if="!sessionQuery.data.value" class="m-0 mt-3 text-sm text-secondary">
 						{{ formatMessage(messages.friendsSignIn) }}
 					</p>
-					<p
-						v-else-if="friendsInGame.length === 0"
-						class="m-0 mt-3 text-sm text-secondary"
-					>
+					<div v-if="!sessionQuery.data.value" class="mt-2">
+						<Button type="secondary" @click="openFriendsSidebar('friends')">
+							{{ formatMessage(messages.friendsSignInCta) }}
+						</Button>
+					</div>
+					<p v-else-if="friendsInGame.length === 0" class="m-0 mt-3 text-sm text-secondary">
 						{{ formatMessage(messages.friendsInGameEmpty) }}
 					</p>
 					<ul v-else class="m-0 mt-2 flex list-none flex-col gap-1 p-0">
@@ -707,12 +729,7 @@ async function viewPack(member: PlayWithFriendMember) {
 							:key="friend.id"
 							class="flex flex-wrap items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-surface-3"
 						>
-							<Avatar
-								:src="avatarFor(friend)"
-								:alt="friend.minecraft_nick"
-								size="36px"
-								circle
-							/>
+							<Avatar :src="avatarFor(friend)" :alt="friend.minecraft_nick" size="36px" circle />
 							<div class="min-w-0 flex-1">
 								<p class="m-0 truncate text-sm font-medium text-contrast">
 									{{ friend.minecraft_nick }}
@@ -794,17 +811,12 @@ async function viewPack(member: PlayWithFriendMember) {
 						</Button>
 					</div>
 
-					<p
-						v-if="!sessionQuery.data.value"
-						class="m-0 mt-3 text-sm text-secondary"
-					>
+					<p v-if="!sessionQuery.data.value" class="m-0 mt-3 text-sm text-secondary">
 						{{ formatMessage(messages.sharedEmptySignedOut) }}
 					</p>
-					<p
-						v-else-if="sharedServers.length === 0"
-						class="m-0 mt-3 text-sm text-secondary"
-					>
+					<p v-else-if="sharedServers.length === 0" class="m-0 mt-3 text-sm text-secondary">
 						{{ formatMessage(messages.sharedEmpty) }}
+						{{ formatMessage(messages.sharedEmptyCta) }}
 					</p>
 					<ul v-else class="m-0 mt-2 flex list-none flex-col gap-1 p-0">
 						<li
@@ -819,9 +831,7 @@ async function viewPack(member: PlayWithFriendMember) {
 										v-if="isSharedByOther(server) && server.createdByNick"
 										class="rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-secondary bg-surface-3"
 									>
-										{{
-											formatMessage(messages.sharedBy, { name: server.createdByNick })
-										}}
+										{{ formatMessage(messages.sharedBy, { name: server.createdByNick }) }}
 									</span>
 									<span
 										v-if="pings[server.address]"
@@ -840,6 +850,11 @@ async function viewPack(member: PlayWithFriendMember) {
 									</span>
 								</div>
 								<p class="m-0 mt-0.5 font-mono text-xs text-secondary">{{ server.address }}</p>
+								<p
+									v-if="pings[server.address]?.renderedMotd"
+									class="motd-renderer m-0 mt-1 line-clamp-2 text-[11px] leading-4 text-secondary"
+									v-html="pings[server.address].renderedMotd"
+								/>
 								<div
 									v-if="pings[server.address]?.online"
 									class="mt-1 flex flex-wrap gap-3 text-[11px] text-secondary"
@@ -902,12 +917,17 @@ async function viewPack(member: PlayWithFriendMember) {
 						{{ formatMessage(messages.localSubtitle) }}
 					</p>
 
-					<p
-						v-if="!resolvedInstanceId"
-						class="m-0 mt-3 text-sm text-secondary"
-					>
+					<p v-if="!resolvedInstanceId" class="m-0 mt-3 text-sm text-secondary">
 						{{ formatMessage(messages.localEmptyNoInstance) }}
 					</p>
+					<div v-if="!resolvedInstanceId" class="mt-2 flex flex-wrap gap-2">
+						<Button type="colored" color="brand" @click="showCreationModal?.()">
+							{{ formatMessage(messages.localEmptyCta) }}
+						</Button>
+						<Button type="secondary" @click="router.push('/browse/modpack')">
+							{{ formatMessage(messages.localEmptyDiscoverCta) }}
+						</Button>
+					</div>
 					<p
 						v-else-if="localWorldsQuery.isPending.value"
 						class="m-0 mt-3 flex items-center gap-2 text-sm text-secondary"
@@ -915,10 +935,7 @@ async function viewPack(member: PlayWithFriendMember) {
 						<SpinnerIcon class="animate-spin" />
 						{{ formatMessage(messages.loading) }}
 					</p>
-					<p
-						v-else-if="localServers.length === 0"
-						class="m-0 mt-3 text-sm text-secondary"
-					>
+					<p v-else-if="localServers.length === 0" class="m-0 mt-3 text-sm text-secondary">
 						{{ formatMessage(messages.localEmpty) }}
 					</p>
 					<ul v-else class="m-0 mt-2 flex list-none flex-col gap-1 p-0">
@@ -947,6 +964,11 @@ async function viewPack(member: PlayWithFriendMember) {
 									</span>
 								</div>
 								<p class="m-0 mt-0.5 font-mono text-xs text-secondary">{{ server.address }}</p>
+								<p
+									v-if="pings[server.address]?.renderedMotd"
+									class="motd-renderer m-0 mt-1 line-clamp-2 text-[11px] leading-4 text-secondary"
+									v-html="pings[server.address].renderedMotd"
+								/>
 								<div
 									v-if="pings[server.address]?.online"
 									class="mt-1 flex flex-wrap gap-3 text-[11px] text-secondary"

@@ -109,7 +109,7 @@ onBeforeUnmount(clearTimers)
 
 <template>
 	<div
-		class="modrinth-loading-bar"
+		class="Lumen-loading-bar"
 		:style="{
 			position: props.position,
 			top: props.offsetTop,
@@ -128,7 +128,7 @@ onBeforeUnmount(clearTimers)
 </template>
 
 <style lang="scss" scoped>
-.modrinth-loading-bar {
+.Lumen-loading-bar {
 	z-index: 999999;
 
 	&::before {

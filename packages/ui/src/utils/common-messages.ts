@@ -1,5 +1,5 @@
-import type { Labrinth } from '@modrinth/api-client'
-import { capitalizeString } from '@modrinth/utils'
+import type { Labrinth } from '@lumen/api-client'
+import { capitalizeString } from '@lumen/utils'
 
 import { defineMessage, defineMessages, type MessageDescriptor } from '../composables/i18n'
 
@@ -228,9 +228,9 @@ export const commonMessages = defineMessages({
 		id: 'button.open-in-browser',
 		defaultMessage: 'Open in browser',
 	},
-	openInModrinthButton: {
-		id: 'button.open-in-modrinth',
-		defaultMessage: 'Open in Modrinth',
+	openInLumenButton: {
+		id: 'button.open-in-Lumen',
+		defaultMessage: 'Open in Lumen',
 	},
 	orLabel: {
 		id: 'label.or',
@@ -701,7 +701,7 @@ export const commonMessages = defineMessages({
 	projectRecentPlaysTooltip: {
 		id: 'project.recent-plays.tooltip',
 		defaultMessage:
-			'{count} {countPlural, plural, one {recent play} other {recent plays}} from Modrinth in the past 2 weeks',
+			'{count} {countPlural, plural, one {recent play} other {recent plays}} from Lumen in the past 2 weeks',
 	},
 })
 

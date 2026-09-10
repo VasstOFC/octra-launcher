@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { DownloadIcon, ExcitedRinthbot, RefreshCwIcon, ServerStackIcon } from '@modrinth/assets'
-import { Button, commonMessages, defineMessages, useVIntl } from '@modrinth/ui'
+import { DownloadIcon, ExcitedRinthbot, RefreshCwIcon, ServerStackIcon } from '@lumen/assets'
+import { Button, commonMessages, defineMessages, useVIntl } from '@lumen/ui'
 import { computed } from 'vue'
 
 import {
@@ -15,11 +15,11 @@ const { formatMessage } = useVIntl()
 const messages = defineMessages({
 	title: {
 		id: 'app.hosting.update-required.title',
-		defaultMessage: 'Modrinth App update required',
+		defaultMessage: 'Lumen App update required',
 	},
 	description: {
 		id: 'app.hosting.update-required.description',
-		defaultMessage: 'You need to update to use Modrinth Hosting through the Modrinth App',
+		defaultMessage: 'You need to update to use Lumen Hosting through the Lumen App',
 	},
 	downloadToUpdate: {
 		id: 'app.hosting.update-required.download',
@@ -35,7 +35,7 @@ const messages = defineMessages({
 	},
 	excitedRinthbotAlt: {
 		id: 'app.hosting.update-required.rinthbot-alt',
-		defaultMessage: 'Excited Modrinth Bot',
+		defaultMessage: 'Excited Lumen Bot',
 	},
 })
 

@@ -82,9 +82,9 @@ window.open = (url) => {
 	return null
 }
 
-window.modrinthPrivacy ??= {}
-window.modrinthPrivacy.adsConsentAction = (action) => void controller.performAction(action)
-window.modrinthPrivacy.adsReopenConsentPreferences = () => controller.reopenPreferences()
+window.LumenPrivacy ??= {}
+window.LumenPrivacy.adsConsentAction = (action) => void controller.performAction(action)
+window.LumenPrivacy.adsReopenConsentPreferences = () => controller.reopenPreferences()
 
 document.addEventListener('DOMContentLoaded', () => {
 	muteMediaElements()

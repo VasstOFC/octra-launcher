@@ -1,7 +1,7 @@
 <script lang="ts"></script>
 
 <script setup lang="ts">
-import { RightArrowIcon, SpinnerIcon } from '@modrinth/assets'
+import { RightArrowIcon, SpinnerIcon } from '@lumen/assets'
 import { type Component, type ComponentPublicInstance, computed, nextTick, ref, watch } from 'vue'
 
 import { type MessageDescriptor, useVIntl } from '../../composables/i18n'

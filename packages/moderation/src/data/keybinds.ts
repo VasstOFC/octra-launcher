@@ -1,4 +1,4 @@
-import type { Labrinth } from '@modrinth/api-client'
+import type { Labrinth } from '@lumen/api-client'
 
 import type { KeybindListener } from '../types/keybinds'
 
@@ -12,7 +12,7 @@ const copyProjectLink = async (
 	if (relative) {
 		url += `${globalThis.location.origin}`
 	} else {
-		url += `https://modrinth.com`
+		url += `https://Lumen.com`
 	}
 
 	if (permalink) {
@@ -29,9 +29,9 @@ const copyProjectLink = async (
 	return url
 }
 
-function isOfficialModrinthHost(): boolean {
+function isOfficialLumenHost(): boolean {
 	const host = globalThis.location?.hostname
-	return host === 'modrinth.com' || host === 'www.modrinth.com' || host === 'staging.modrinth.com'
+	return host === 'Lumen.com' || host === 'www.Lumen.com' || host === 'staging.Lumen.com'
 }
 
 function isLocalhost(): boolean {
@@ -127,7 +127,7 @@ const keybinds: { [id: string]: KeybindListener } = {
 		keybind: 'Ctrl+Shift+P',
 		description: 'Open current page on production/staging',
 		scope: 'global',
-		enabled: () => !isOfficialModrinthHost(),
+		enabled: () => !isOfficialLumenHost(),
 		action: (ctx) => {
 			globalThis.open(ctx.officialUrl, '_blank', 'noopener,noreferrer')
 		},
@@ -148,7 +148,7 @@ const keybinds: { [id: string]: KeybindListener } = {
 		enabled: () => isLocalhost(),
 		action: async (ctx) => {
 			await navigator.clipboard.writeText(ctx.officialUrl)
-			const environment = ctx.officialUrl.startsWith('https://staging.modrinth.com')
+			const environment = ctx.officialUrl.startsWith('https://staging.Lumen.com')
 				? 'staging'
 				: 'production'
 			ctx.notifyCopied(ctx.officialUrl, `Copied ${environment} URL to clipboard`)

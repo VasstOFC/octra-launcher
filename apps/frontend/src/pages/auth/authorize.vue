@@ -91,18 +91,18 @@
 </template>
 
 <script setup lang="ts">
-import { CheckIcon, XIcon } from '@modrinth/assets'
+import { CheckIcon, XIcon } from '@lumen/assets'
 import {
 	Avatar,
 	Button,
 	commonMessages,
 	defineMessages,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	IntlFormatted,
 	normalizeChildren,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useQuery } from '@tanstack/vue-query'
 import { computed } from 'vue'
 import type { LocationQueryValue } from 'vue-router'
@@ -134,7 +134,7 @@ const getErrorMessage = (error: unknown): string => {
 	return String(error)
 }
 
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const { addNotification } = injectNotificationManager()
 const { formatMessage } = useVIntl()
 

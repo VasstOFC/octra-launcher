@@ -42,14 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import {
-	ContractIcon,
-	ExpandIcon,
-	ShareIcon,
-	SpinnerIcon,
-	TrashIcon,
-	XIcon,
-} from '@modrinth/assets'
+import { ContractIcon, ExpandIcon, ShareIcon, SpinnerIcon, TrashIcon, XIcon } from '@lumen/assets'
 
 import { Button } from '#ui/components/base/buttons'
 

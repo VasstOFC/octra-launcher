@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ListPlusIcon, RadioTowerIcon, TrashIcon } from '@modrinth/assets'
+import { ListPlusIcon, RadioTowerIcon, TrashIcon } from '@lumen/assets'
 import {
 	Button,
 	Chips,
@@ -10,7 +10,7 @@ import {
 	Input,
 	SettingsFormGroup,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { watch } from 'vue'
 
 import DisclosureToggleCard from './DisclosureToggleCard.vue'

@@ -6,7 +6,7 @@ import {
 	PlayIcon,
 	SpinnerIcon,
 	StopCircleIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import {
 	Avatar,
 	commonMessages,
@@ -14,7 +14,7 @@ import {
 	defineMessages,
 	injectNotificationManager,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useQueryClient } from '@tanstack/vue-query'
 import dayjs from 'dayjs'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
@@ -43,7 +43,7 @@ const props = defineProps({
 const ITEM_SIZE = 52
 const APPROX_USED_VERTICAL_SPACE = 320
 const APPROX_USED_VERTICAL_SPACE_DOCK = 260
-const STORAGE_KEY = 'modrinth-quick-instance-count'
+const STORAGE_KEY = 'Lumen-quick-instance-count'
 
 const { handleError } = injectNotificationManager()
 const queryClient = useQueryClient()

@@ -1,4 +1,4 @@
-import type { Archon, UploadState } from '@modrinth/api-client'
+import type { Archon, UploadState } from '@lumen/api-client'
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -6,10 +6,10 @@ import { useRouter } from 'vue-router'
 import ServerPanelAdmonitions from '../../components/servers/admonitions/ServerPanelAdmonitions.vue'
 import { defineMessage } from '../../composables/i18n'
 import type { FileOperation } from '../../layouts/shared/files-tab/types'
-import { provideModrinthServerContext } from '../../providers'
+import { provideLumenServerContext } from '../../providers'
 import type {
 	CancelUploadHandler,
-	ModrinthServerContext,
+	LumenServerContext,
 	ServerStats,
 } from '../../providers/server-context'
 
@@ -73,7 +73,7 @@ const meta = {
 					},
 				])
 
-				const serverContext: ModrinthServerContext = {
+				const serverContext: LumenServerContext = {
 					get serverId() {
 						return 'demo-server'
 					},
@@ -111,7 +111,7 @@ const meta = {
 					},
 				}
 
-				provideModrinthServerContext(serverContext)
+				provideLumenServerContext(serverContext)
 				return {}
 			},
 			template: '<div style="max-width: 720px"><story /></div>',

@@ -30,7 +30,7 @@
 				</div>
 				<div v-if="loadingLookup" class="flex items-center gap-2 text-sm text-secondary">
 					<SpinnerIcon class="h-4 w-4 animate-spin" />
-					Looking up file on Modrinth...
+					Looking up file on Lumen...
 				</div>
 
 				<template v-if="fileHashes">
@@ -47,7 +47,7 @@
 			</template>
 
 			<template v-if="lookupResult">
-				<h3 class="mb-0 text-lg font-extrabold text-contrast">Modrinth project:</h3>
+				<h3 class="mb-0 text-lg font-extrabold text-contrast">Lumen project:</h3>
 				<nuxt-link
 					class="flex w-fit items-center gap-2 text-lg font-semibold text-contrast hover:underline"
 					target="_blank"
@@ -57,7 +57,7 @@
 					{{ lookupResult.name }}
 				</nuxt-link>
 				<CopyCode :text="lookupResult.projectId" />
-				<h3 class="mb-0 text-lg font-extrabold text-contrast">Modrinth version:</h3>
+				<h3 class="mb-0 text-lg font-extrabold text-contrast">Lumen version:</h3>
 				<nuxt-link
 					class="text-blue hover:underline"
 					:to="`/project/${lookupResult.projectId}/version/${lookupResult.versionId}`"
@@ -76,15 +76,15 @@
 </template>
 
 <script setup lang="ts">
-import { FileIcon, SpinnerIcon, UploadIcon } from '@modrinth/assets'
+import { FileIcon, SpinnerIcon, UploadIcon } from '@lumen/assets'
 import {
 	Admonition,
 	Avatar,
 	CopyCode,
 	injectNotificationManager,
 	useFormatBytes,
-} from '@modrinth/ui'
-import type { Project, Version } from '@modrinth/utils'
+} from '@lumen/ui'
+import type { Project, Version } from '@lumen/utils'
 
 const { addNotification } = injectNotificationManager()
 
@@ -196,7 +196,7 @@ async function lookupFile(hash: string): Promise<void> {
 		}
 	} catch (error: any) {
 		if (error.status === 404) {
-			lookupError.value = `File not found on Modrinth across projects you have access to.`
+			lookupError.value = `File not found on Lumen across projects you have access to.`
 		} else {
 			lookupError.value = error.data?.description || 'Failed to lookup file.'
 		}

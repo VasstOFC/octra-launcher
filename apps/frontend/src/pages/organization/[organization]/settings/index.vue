@@ -1,5 +1,5 @@
 <script setup>
-import { TrashIcon, UploadIcon } from '@modrinth/assets'
+import { TrashIcon, UploadIcon } from '@lumen/assets'
 import {
 	Avatar,
 	Button,
@@ -10,7 +10,7 @@ import {
 	Textarea,
 	UnsavedChangesPopup,
 	useSavable,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 
 import { injectOrganizationContext } from '~/providers/organization-context.ts'
 
@@ -199,7 +199,7 @@ const onDeleteOrganization = useClientTry(async () => {
 				<span class="label__title">URL</span>
 			</label>
 			<div class="text-input-wrapper">
-				<div class="text-input-wrapper__before">https://modrinth.com/organization/</div>
+				<div class="text-input-wrapper__before">https://Lumen.com/organization/</div>
 				<Input
 					id="project-slug"
 					v-model="current.slug"

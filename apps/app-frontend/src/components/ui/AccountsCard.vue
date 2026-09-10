@@ -1,41 +1,41 @@
-<template>
+﻿<template>
 	<div
 		class="flex flex-col gap-2 bg-button-bg border border-solid border-surface-5 rounded-xl p-3 mt-2"
 	>
 		<div class="flex items-center justify-between gap-2 min-w-0">
 			<div class="flex flex-col min-w-0">
 				<span class="text-contrast font-semibold truncate">
-					{{ formatMessage(messages.octraAccount) }}
+					{{ formatMessage(messages.LumenAccount) }}
 				</span>
-				<span v-if="octraSession" class="text-secondary text-xs truncate">
-					{{ octraSession.username }} · {{ octraSession.minecraft_nick }}
+				<span v-if="lumenSession" class="text-secondary text-xs truncate">
+					{{ lumenSession.username }} Â· {{ lumenSession.minecraft_nick }}
 				</span>
 				<span v-else class="text-secondary text-xs">
-					{{ formatMessage(messages.octraAccountHint) }}
+					{{ formatMessage(messages.LumenAccountHint) }}
 				</span>
 			</div>
-			<Button v-if="octraSession" type="outlined" :disabled="octraLoading" @click="logoutOctra">
-				{{ formatMessage(messages.octraLogout) }}
+			<Button v-if="lumenSession" type="outlined" :disabled="lumenLoading" @click="logoutLumen">
+				{{ formatMessage(messages.LumenLogout) }}
 			</Button>
 			<Button
 				v-else
 				type="colored"
 				color="brand"
-				:disabled="octraLoading"
-				@click="openOctraAccount('login')"
+				:disabled="lumenLoading"
+				@click="openLumenAccount('login')"
 			>
 				<LogInIcon />
-				{{ formatMessage(messages.octraLogin) }}
+				{{ formatMessage(messages.LumenLogin) }}
 			</Button>
 		</div>
 		<Button
-			v-if="!octraSession"
+			v-if="!lumenSession"
 			class="w-full"
-			:disabled="octraLoading"
-			@click="openOctraAccount('register')"
+			:disabled="lumenLoading"
+			@click="openLumenAccount('register')"
 		>
 			<PlusIcon />
-			{{ formatMessage(messages.octraRegister) }}
+			{{ formatMessage(messages.LumenRegister) }}
 		</Button>
 	</div>
 	<div
@@ -148,7 +148,7 @@
 		</div>
 	</Accordion>
 	<AddOfflineAccountModal ref="addOfflineModal" @added="onOfflineAdded" />
-	<OctraAccountModal ref="octraAccountModal" @success="onOctraAccountSuccess" />
+			<LumenAccountModal ref="lumenAccountModal" @success="onLumenAccountSuccess" />
 </template>
 
 <script setup lang="ts">
@@ -159,7 +159,7 @@ import {
 	RadioButtonIcon,
 	SpinnerIcon,
 	TrashIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import {
 	Accordion,
 	Avatar,
@@ -168,12 +168,12 @@ import {
 	IconButton,
 	injectNotificationManager,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import type { Ref } from 'vue'
 import { computed, ref } from 'vue'
 
 import AddOfflineAccountModal from '@/components/ui/AddOfflineAccountModal.vue'
-import OctraAccountModal from '@/components/ui/OctraAccountModal.vue'
+import LumenAccountModal from '@/components/ui/LumenAccountModal.vue'
 import { useAppEvent } from '@/composables/use-app-event'
 import { handleSevereError } from '@/composables/use-error.js'
 import { useMinecraftAccountAvatar } from '@/composables/use-minecraft-account-avatar.ts'
@@ -186,7 +186,7 @@ import {
 	set_default_user,
 	users,
 } from '@/helpers/auth'
-import { octraAccountLogout, octraAccountSession } from '@/helpers/octra-account.js'
+import { LumenAccountLogout, LumenAccountSession } from '@/helpers/lumen-account.js'
 import type { Skin } from '@/helpers/skins'
 
 const { formatMessage } = useVIntl()
@@ -207,14 +207,14 @@ type MinecraftCredential = {
 
 const accounts: Ref<MinecraftCredential[]> = ref([])
 const loginDisabled = ref(false)
-const octraLoading = ref(false)
-const octraSession = ref<{
+const lumenLoading = ref(false)
+const lumenSession = ref<{
 	username: string
 	minecraft_nick: string
 } | null>(null)
 const defaultUser = ref<string | undefined>()
 const addOfflineModal = ref<InstanceType<typeof AddOfflineAccountModal>>()
-const octraAccountModal = ref<InstanceType<typeof OctraAccountModal>>()
+const lumenAccountModal = ref<InstanceType<typeof LumenAccountModal>>()
 
 const { refreshEquippedSkinAvatar, setEquippedSkinAvatar, getAccountAvatarUrl } =
 	useMinecraftAccountAvatar()
@@ -224,7 +224,7 @@ async function refreshValues() {
 	const userList = await users().catch(handleError)
 	accounts.value = Array.isArray(userList) ? [...userList] : []
 	accounts.value.sort((a, b) => (a.profile?.name ?? '').localeCompare(b.profile?.name ?? ''))
-	octraSession.value = await octraAccountSession().catch(() => null)
+	lumenSession.value = await LumenAccountSession().catch(() => null)
 	await refreshEquippedSkinAvatar(accounts.value)
 }
 
@@ -240,29 +240,29 @@ function addOffline() {
 	addOfflineModal.value?.show()
 }
 
-function openOctraAccount(mode: 'login' | 'register') {
-	octraAccountModal.value?.show(mode)
+function openLumenAccount(mode: 'login' | 'register') {
+	lumenAccountModal.value?.show(mode)
 }
 
-async function onOctraAccountSuccess() {
-	octraLoading.value = true
+async function onLumenAccountSuccess() {
+	lumenLoading.value = true
 	try {
 		await refreshValues()
 		emit('change')
 	} finally {
-		octraLoading.value = false
+		lumenLoading.value = false
 	}
 }
 
-async function logoutOctra() {
-	octraLoading.value = true
+async function logoutLumen() {
+	lumenLoading.value = true
 	try {
-		await octraAccountLogout()
-		octraSession.value = null
+		await LumenAccountLogout()
+		lumenSession.value = null
 	} catch (error) {
 		handleError(error)
 	} finally {
-		octraLoading.value = false
+		lumenLoading.value = false
 	}
 }
 
@@ -368,9 +368,9 @@ const messages = defineMessages({
 		id: 'minecraft-account.label',
 		defaultMessage: 'Minecraft account',
 	},
-	signInToOctra: {
+	signInToLumen: {
 		id: 'minecraft-account.sign-in',
-		defaultMessage: 'Log in to Octra',
+		defaultMessage: 'Log in to Lumen',
 	},
 	addMicrosoftAccount: {
 		id: 'minecraft-account.add-microsoft',
@@ -380,25 +380,25 @@ const messages = defineMessages({
 		id: 'minecraft-account.non-premium',
 		defaultMessage: 'Non-premium',
 	},
-	octraAccount: {
-		id: 'octra-account.label',
-		defaultMessage: 'Octra account',
+	LumenAccount: {
+			id: 'lumen-account.label',
+		defaultMessage: 'Lumen account',
 	},
-	octraAccountHint: {
-		id: 'octra-account.hint',
+	LumenAccountHint: {
+			id: 'lumen-account.hint',
 		defaultMessage:
-			'Octra links skins to your Minecraft account — it does not create one. Add Microsoft or offline first.',
+			'Lumen links skins to your Minecraft account â€” it does not create one. Add Microsoft or offline first.',
 	},
-	octraLogin: {
-		id: 'octra-account.login',
+	LumenLogin: {
+			id: 'lumen-account.login',
 		defaultMessage: 'Log in',
 	},
-	octraRegister: {
-		id: 'octra-account.register',
+	LumenRegister: {
+			id: 'lumen-account.register',
 		defaultMessage: 'Connect',
 	},
-	octraLogout: {
-		id: 'octra-account.logout',
+	LumenLogout: {
+			id: 'lumen-account.logout',
 		defaultMessage: 'Log out',
 	},
 })

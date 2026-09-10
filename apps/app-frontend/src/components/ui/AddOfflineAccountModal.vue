@@ -30,8 +30,8 @@
 </template>
 
 <script setup lang="ts">
-import { PlusIcon, SpinnerIcon } from '@modrinth/assets'
-import { Button, commonMessages, defineMessages, Input, NewModal, useVIntl } from '@modrinth/ui'
+import { PlusIcon, SpinnerIcon } from '@lumen/assets'
+import { Button, commonMessages, defineMessages, Input, NewModal, useVIntl } from '@lumen/ui'
 import { computed, ref } from 'vue'
 
 import { handleSevereError } from '@/composables/use-error.js'

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { getMarginTarget } from '@modrinth/moderation'
-import { commonProjectTypeCategoryMessages, NavTabs, useVIntl } from '@modrinth/ui'
+import { getMarginTarget } from '@lumen/moderation'
+import { commonProjectTypeCategoryMessages, NavTabs, useVIntl } from '@lumen/ui'
 
 const { formatMessage } = useVIntl()
 

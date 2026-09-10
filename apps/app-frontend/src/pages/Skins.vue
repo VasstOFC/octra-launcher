@@ -8,20 +8,20 @@ import {
 	ShirtIcon,
 	SpinnerIcon,
 	WindowsIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import {
 	Button,
 	commonMessages,
 	ConfirmModal,
 	defineMessages,
 	injectAuth,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	SkinPreviewRenderer,
 	Toggle,
 	useVIntl,
-} from '@modrinth/ui'
-import { arrayBufferToBase64 } from '@modrinth/utils'
+} from '@lumen/ui'
+import { arrayBufferToBase64 } from '@lumen/utils'
 import { useQuery } from '@tanstack/vue-query'
 import { type DragDropEvent, getCurrentWebview } from '@tauri-apps/api/webview'
 import { computedAsync } from '@vueuse/core'
@@ -82,21 +82,21 @@ type VirtualSkinSectionListExpose = {
 }
 
 const PENDING_SKIN_REFRESH_DELAY_MS = 11_000
-const DEFAULT_SKIN_SECTION_SORT_ORDER = ['Default skins', 'Modrinth Pride']
+const DEFAULT_SKIN_SECTION_SORT_ORDER = ['Default skins', 'Lumen Pride']
 const EARS_NOTICE_PLACEHOLDER = '__EARS_MOD_NAME__'
 const messages = defineMessages({
-	modrinthPrideSection: {
-		id: 'app.skins.section.modrinth-pride',
-		defaultMessage: 'Modrinth Pride',
+	LumenPrideSection: {
+		id: 'app.skins.section.Lumen-pride',
+		defaultMessage: 'Lumen Pride',
 	},
-	modrinthPrideTooltip: {
-		id: 'app.skins.section.modrinth-pride.tooltip',
+	LumenPrideTooltip: {
+		id: 'app.skins.section.Lumen-pride.tooltip',
 		defaultMessage:
-			'You received these skins for donating to a Modrinth Pride fundraiser during Pride Month.',
+			'You received these skins for donating to a Lumen Pride fundraiser during Pride Month.',
 	},
-	modrinthSection: {
-		id: 'app.skins.section.modrinth',
-		defaultMessage: 'Modrinth',
+	LumenSection: {
+		id: 'app.skins.section.Lumen',
+		defaultMessage: 'Lumen',
 	},
 	defaultSkinsSection: {
 		id: 'app.skins.section.default-skins',
@@ -205,11 +205,11 @@ const messages = defineMessages({
 	},
 	demoDescription: {
 		id: 'app.skins.demo.description',
-		defaultMessage: 'Log in to Octra to save and apply skins.',
+		defaultMessage: 'Sign in with a Minecraft account to save and apply skins.',
 	},
 	signInButton: {
 		id: 'app.skins.sign-in.button',
-		defaultMessage: 'Log in to Octra',
+		defaultMessage: 'Sign in to Minecraft',
 	},
 })
 
@@ -221,7 +221,7 @@ const { formatMessage } = useVIntl()
 const notifications = injectNotificationManager()
 const { addNotification, handleError } = notifications
 const auth = injectAuth()
-const client = injectModrinthClient()
+const client = injectLumenClient()
 
 const appSettings = useAppSettings()
 const skins = ref<Skin[]>([])
@@ -279,18 +279,18 @@ const authServerQuery = useQuery({
 	retry: false,
 	refetchOnWindowFocus: false,
 })
-const { data: modrinthUser } = useQuery({
+const { data: LumenUser } = useQuery({
 	queryKey: computed(() => ['authenticated-user', 'campaigns', auth.user.value?.id]),
 	queryFn: () => client.labrinth.users_v3.getAuthenticated(),
 	enabled: () => !!auth.session_token.value,
 	retry: false,
 })
-const hasModrinthPrideCampaign = computed(
-	() => !!auth.session_token.value && hasPride26Badge(modrinthUser.value?.campaigns?.pride_26),
+const hasLumenPrideCampaign = computed(
+	() => !!auth.session_token.value && hasPride26Badge(LumenUser.value?.campaigns?.pride_26),
 )
 const defaultSkins = computed(() =>
 	filterDefaultSkins(skins.value).filter(
-		(skin) => skin.section !== 'Modrinth Pride' || hasModrinthPrideCampaign.value,
+		(skin) => skin.section !== 'Lumen Pride' || hasLumenPrideCampaign.value,
 	),
 )
 const defaultSkinSections = computed(() => {
@@ -493,10 +493,10 @@ function isMinecraftSkinRateLimitError(error: unknown) {
 
 function getDefaultSkinSectionTitle(section?: string) {
 	switch (section) {
-		case 'Modrinth Pride':
-			return formatMessage(messages.modrinthPrideSection)
-		case 'Modrinth':
-			return formatMessage(messages.modrinthSection)
+		case 'Lumen Pride':
+			return formatMessage(messages.LumenPrideSection)
+		case 'Lumen':
+			return formatMessage(messages.LumenSection)
 		case 'MINECON Earth 2017':
 			return formatMessage(messages.mineconEarth2017Section)
 		case 'Builders & Biomes':
@@ -524,8 +524,8 @@ function getDefaultSkinSectionTitle(section?: string) {
 
 function getDefaultSkinSectionInfoTooltip(section: string) {
 	switch (section) {
-		case 'Modrinth Pride':
-			return formatMessage(messages.modrinthPrideTooltip)
+		case 'Lumen Pride':
+			return formatMessage(messages.LumenPrideTooltip)
 		default:
 			return undefined
 	}

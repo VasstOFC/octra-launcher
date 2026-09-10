@@ -14,7 +14,7 @@
 					v-model="subdomainInput"
 					:icon="ServerIcon"
 					:error="submitted && !!validationError"
-					placeholder="example or example.modrinth.gg"
+					placeholder="example or example.Lumen.gg"
 					autocomplete="off"
 					autocapitalize="none"
 					:spellcheck="false"
@@ -39,11 +39,11 @@
 </template>
 
 <script setup lang="ts">
-import { ModrinthApiError } from '@modrinth/api-client'
-import { SearchIcon, ServerIcon } from '@modrinth/assets'
-import { Admonition, Button, injectModrinthClient, Input } from '@modrinth/ui'
+import { LumenApiError } from '@lumen/api-client'
+import { SearchIcon, ServerIcon } from '@lumen/assets'
+import { Admonition, Button, injectLumenClient, Input } from '@lumen/ui'
 
-const client = injectModrinthClient()
+const client = injectLumenClient()
 
 const subdomainInput = ref('')
 const submitted = ref(false)
@@ -53,7 +53,7 @@ const lookupError = ref('')
 const normalizedSubdomain = computed(() =>
 	subdomainInput.value
 		.trim()
-		.replace(/\.modrinth\.gg$/i, '')
+		.replace(/\.Lumen\.gg$/i, '')
 		.toLowerCase(),
 )
 const validationError = computed(() => {
@@ -73,7 +73,7 @@ const validationError = computed(() => {
 })
 
 watch(subdomainInput, (value) => {
-	const withoutDomain = value.replace(/\.modrinth\.gg$/i, '')
+	const withoutDomain = value.replace(/\.Lumen\.gg$/i, '')
 	if (withoutDomain !== value) {
 		subdomainInput.value = withoutDomain
 	}
@@ -99,8 +99,8 @@ async function lookupServer() {
 		const server = await client.archon.servers_internal.getBySubdomain(normalizedSubdomain.value)
 		await navigateTo(`/hosting/manage/${server.id}`)
 	} catch (error) {
-		if (error instanceof ModrinthApiError && error.statusCode === 404) {
-			lookupError.value = `No server was found for ${normalizedSubdomain.value}.modrinth.gg.`
+		if (error instanceof LumenApiError && error.statusCode === 404) {
+			lookupError.value = `No server was found for ${normalizedSubdomain.value}.Lumen.gg.`
 		} else {
 			lookupError.value = 'The server could not be looked up. Try again.'
 		}

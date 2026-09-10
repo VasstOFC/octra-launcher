@@ -17,15 +17,15 @@ import StyledEmail from '../shared/StyledEmail.vue'
 		<Text class="text-base">Hi,</Text>
 
 		<Text class="text-base">
-			Modrinth user
+			Lumen user
 			<b
-				><VLink href="https://modrinth.com/user/{inviter.name}" class="text-green underline">
+				><VLink href="https://Lumen.com/user/{inviter.name}" class="text-green underline">
 					{inviter.name}
 				</VLink></b
 			>
 			has invited you to help manage
 			<b>{server.name}</b>
-			on Modrinth Hosting.
+			on Lumen Hosting.
 		</Text>
 
 		<Section class="bg-bg-super mb-4 mt-4 rounded-lg border border-divider pb-4 pl-4 pr-4 pt-4">
@@ -47,9 +47,9 @@ import StyledEmail from '../shared/StyledEmail.vue'
 		</VLink>
 
 		<Text class="text-base">
-			To accept or reject this invitation, create a Modrinth account and review the invite from your
+			To accept or reject this invitation, create a Lumen account and review the invite from your
 			notifications dashboard. If you were not expecting this invitation, contact the server owner
-			or reach out to Modrinth Support
+			or reach out to Lumen Support
 			<VLink href="https://support.modrinth.com" class="text-green underline">
 				through the Support Portal</VLink
 			>.

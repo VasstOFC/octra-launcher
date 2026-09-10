@@ -1,4 +1,4 @@
-import type { Archon, Labrinth } from '@modrinth/api-client'
+import type { Archon, Labrinth } from '@lumen/api-client'
 import {
 	type BrowseInstallPlan,
 	type BrowseSelectedProject,
@@ -8,7 +8,7 @@ import {
 	getServerAddonInstallPlanProjectIds,
 	getStoredServerAddonInstallQueue,
 	getTargetInstallPreferences,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	type ProjectSearchResult,
 	readStoredServerInstallQueue,
@@ -17,7 +17,7 @@ import {
 	useServerPanelSync,
 	waitForServerContextRuntimeReady,
 	writeStoredServerInstallQueue,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useQueryClient } from '@tanstack/vue-query'
 import { computed, type ComputedRef, nextTick, type Ref, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -99,7 +99,7 @@ export function createServerInstallContent(opts: {
 	const { serverSetupModalRef } = opts
 	const route = useRoute()
 	const router = useRouter()
-	const client = injectModrinthClient()
+	const client = injectLumenClient()
 	const { handleError } = injectNotificationManager()
 	const queryClient = useQueryClient()
 
@@ -525,7 +525,7 @@ export function createServerInstallContent(opts: {
 			await client.archon.content_v1.installContent(sid, wid, {
 				content_variant: 'modpack',
 				spec: {
-					platform: 'modrinth',
+					platform: 'Lumen',
 					project_id: config.modpackSelection.value.projectId,
 					version_id: config.modpackSelection.value.versionId,
 				},

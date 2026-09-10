@@ -98,7 +98,7 @@
 </template>
 
 <script setup lang="ts">
-import { RightArrowIcon } from '@modrinth/assets'
+import { RightArrowIcon } from '@lumen/assets'
 import {
 	Admonition,
 	Button,
@@ -108,7 +108,7 @@ import {
 	injectNotificationManager,
 	Input,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { computed, ref } from 'vue'
 
 import HCaptcha from '@/components/ui/auth/HCaptcha.vue'
@@ -245,7 +245,7 @@ const messages = defineMessages({
 	},
 	under13HelperText: {
 		id: 'auth.create-account.date-of-birth.under13-helper',
-		defaultMessage: 'You do not meet the age requirement to create an account at Modrinth.',
+		defaultMessage: 'You do not meet the age requirement to create an account at Lumen.',
 	},
 	ageRequirementWarningTitle: {
 		id: 'auth.create-account.age-requirement.warning-title',
@@ -274,7 +274,7 @@ const messages = defineMessages({
 	},
 	subscribeLabel: {
 		id: 'auth.create-account.subscribe.label',
-		defaultMessage: 'Keep me updated on the cool things Modrinth is working on via email',
+		defaultMessage: 'Keep me updated on the cool things Lumen is working on via email',
 	},
 	completeSignUpButton: {
 		id: 'auth.create-account.complete-sign-up',

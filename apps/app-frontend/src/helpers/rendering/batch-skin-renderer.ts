@@ -1,4 +1,4 @@
-import { ClassicPlayerModel, SlimPlayerModel } from '@modrinth/assets'
+import { ClassicPlayerModel, SlimPlayerModel } from '@lumen/assets'
 import {
 	applyCapeTexture,
 	applyEarsMod,
@@ -7,7 +7,7 @@ import {
 	loadTexture,
 	removeEarsMod,
 	setupSkinModel,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import * as THREE from 'three'
 import { reactive } from 'vue'
 

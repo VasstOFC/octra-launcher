@@ -79,12 +79,12 @@ pub fn init<R: tauri::Runtime>() -> tauri::plugin::TauriPlugin<R> {
             instance_install_project_with_dependencies,
             instance_switch_project_version_with_dependencies,
             instance_add_project_from_path,
-            instance_is_file_on_modrinth,
+            instance_is_file_on_lumen,
             instance_toggle_disable_project,
             instance_set_project_locked,
             instance_remove_project,
-            instance_update_managed_modrinth_version,
-            instance_repair_managed_modrinth,
+            instance_update_managed_lumen_version,
+            instance_repair_managed_lumen,
             instance_run,
             instance_kill,
             instance_edit,
@@ -1041,7 +1041,7 @@ pub async fn instance_add_project_from_path(
 }
 
 #[tauri::command]
-pub async fn instance_is_file_on_modrinth(project_path: &Path) -> Result<bool> {
+pub async fn instance_is_file_on_lumen(project_path: &Path) -> Result<bool> {
     Ok(theseus::instance::is_file_on_modrinth(project_path).await?)
 }
 
@@ -1080,7 +1080,7 @@ pub async fn instance_remove_project(
 }
 
 #[tauri::command]
-pub async fn instance_update_managed_modrinth_version(
+pub async fn instance_update_managed_lumen_version(
     instance_id: String,
     version_id: String,
 ) -> Result<theseus::install::InstallJobSnapshot> {
@@ -1092,7 +1092,7 @@ pub async fn instance_update_managed_modrinth_version(
 }
 
 #[tauri::command]
-pub async fn instance_repair_managed_modrinth(
+pub async fn instance_repair_managed_lumen(
     instance_id: &str,
 ) -> Result<theseus::install::InstallJobSnapshot> {
     Ok(theseus::instance::repair_managed_modrinth(instance_id).await?)

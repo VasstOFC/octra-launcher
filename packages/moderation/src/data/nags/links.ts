@@ -1,4 +1,4 @@
-import { defineMessage, formatProjectTypeSentence, useVIntl } from '@modrinth/ui'
+import { defineMessage, formatProjectTypeSentence, useVIntl } from '@lumen/ui'
 
 import type { Nag, NagContext } from '../../types/nags'
 import { licenseRequiresSource, notSourceAsDistributed } from '../../utils'
@@ -26,7 +26,7 @@ export const commonLinkDomains = {
 	licenseBlocklist: [
 		'youtube.com',
 		'youtu.be',
-		'modrinth.com',
+		'Lumen.com',
 		'curseforge.com',
 		'twitter.com',
 		'x.com',
@@ -85,7 +85,7 @@ export const linksNags: Nag[] = [
 		description: defineMessage({
 			id: 'nags.add-links.description',
 			defaultMessage:
-				'Add any relevant links targeted outside of Modrinth, such as source code, an issue tracker, or a Discord invite.',
+				'Add any relevant links targeted outside of Lumen, such as source code, an issue tracker, or a Discord invite.',
 		}),
 		status: 'suggestion',
 		shouldShow: (context: NagContext) => {
@@ -112,7 +112,7 @@ export const linksNags: Nag[] = [
 		description: defineMessage({
 			id: 'nags.add-links-server.description',
 			defaultMessage:
-				'Add any relevant links targeted outside of Modrinth, such as a website, store, or a Discord invite.',
+				'Add any relevant links targeted outside of Lumen, such as a website, store, or a Discord invite.',
 		}),
 		status: 'suggestion',
 		shouldShow: (context: NagContext) => {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { CircuitBoardIcon } from '@modrinth/assets'
-import { defineMessages, SettingsFormGroup, Textarea, useVIntl } from '@modrinth/ui'
+import { CircuitBoardIcon } from '@lumen/assets'
+import { defineMessages, SettingsFormGroup, Textarea, useVIntl } from '@lumen/ui'
 
 import DisclosureToggleCard from './DisclosureToggleCard.vue'
 import type {

@@ -1,6 +1,6 @@
-import { type Labrinth, ModrinthApiError } from '@modrinth/api-client'
+import { type Labrinth, LumenApiError } from '@lumen/api-client'
 
-import { useServerModrinthClient } from '~/server/utils/api-client'
+import { useServerLumenClient } from '~/server/utils/api-client'
 
 export default defineEventHandler(async (event) => {
 	const id = getRouterParam(event, 'id')
@@ -12,13 +12,13 @@ export default defineEventHandler(async (event) => {
 		})
 	}
 
-	const client = useServerModrinthClient({ event })
+	const client = useServerLumenClient({ event })
 
 	let organization: Labrinth.Organizations.v3.Organization
 	try {
 		organization = await client.labrinth.organizations_v3.get(id)
 	} catch (error) {
-		if (error instanceof ModrinthApiError && error.statusCode === 404) {
+		if (error instanceof LumenApiError && error.statusCode === 404) {
 			throw createError({
 				statusCode: 404,
 				message: 'Organization not found',

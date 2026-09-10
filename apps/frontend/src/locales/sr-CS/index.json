@@ -9,7 +9,7 @@
     "message": "Prihvati sve"
   },
   "ads-consent.body": {
-    "message": "Reklame omogućavaju Modrinth i finansiraju isplate kreatorima. Naši partneri mogu da čuvaju ili pristupe kolačićima na websitu kako bi personalizovali reklame i merili performanse."
+    "message": "Reklame omogućavaju Lumen i finansiraju isplate kreatorima. Naši partneri mogu da čuvaju ili pristupe kolačićima na websitu kako bi personalizovali reklame i merili performanse."
   },
   "ads-consent.manage": {
     "message": "Upravljaj preferencijama"
@@ -18,7 +18,7 @@
     "message": "Odbij sve"
   },
   "ads-consent.title": {
-    "message": "Vaša privatnost i kako reklame pomažu Modrinthu"
+    "message": "Vaša privatnost i kako reklame pomažu Lumenu"
   },
   "analytics.action.add": {
     "message": "Dodaj"
@@ -110,11 +110,11 @@
   "analytics.chart.controls.display": {
     "message": "Prikaz"
   },
-  "analytics.chart.controls.modrinth-events": {
-    "message": "Modrinth događaji"
+  "analytics.chart.controls.Lumen-events": {
+    "message": "Lumen događaji"
   },
-  "analytics.chart.controls.no-modrinth-events": {
-    "message": "Nema Modrinth događaja na grafu."
+  "analytics.chart.controls.no-Lumen-events": {
+    "message": "Nema Lumen događaja na grafu."
   },
   "analytics.chart.controls.no-project-events": {
     "message": "Nema događaja projekta u grafu."
@@ -144,7 +144,7 @@
     "message": "Pogledaj detalje monetizovane analitike"
   },
   "analytics.chart.legend.monetization-details.description": {
-    "message": "Samo pregledi i preuzimanja obavljena putem Modrintha se računaju u monetizaciju, a za preuzimanja je potrebno da korisnici budu prijavljeni."
+    "message": "Samo pregledi i preuzimanja obavljena putem Lumena se računaju u monetizaciju, a za preuzimanja je potrebno da korisnici budu prijavljeni."
   },
   "analytics.chart.legend.monetization-details.title": {
     "message": "Detalji monetizovane analitike"
@@ -204,10 +204,10 @@
     "message": "Ažuiranje"
   },
   "analytics.download-source.app": {
-    "message": "Modrinth aplikacija"
+    "message": "Lumen aplikacija"
   },
   "analytics.download-source.website": {
-    "message": "Modrinth veb-stranica"
+    "message": "Lumen veb-stranica"
   },
   "analytics.downloads.suffix": {
     "message": "preuzimanja"
@@ -465,7 +465,7 @@
     "message": "Linux"
   },
   "app-marketing.download.linux-disclaimer": {
-    "message": "Poznato je da Linux verzije Modrinth aplikacije imaju <issues-link>problema</issues-link> na određenim sistemima i konfiguracijama. Ako Modrinth App radi nestabilno na tvojem sistemu, preporučujemo ti da isprobaš druge aplikacije, kao što je <prism-link>Prism Launcher</prism-link>, kako bi lako instalirao Modrinth sadržaj."
+    "message": "Poznato je da Linux verzije Lumen aplikacije imaju <issues-link>problema</issues-link> na određenim sistemima i konfiguracijama. Ako Lumen App radi nestabilno na tvojem sistemu, preporučujemo ti da isprobaš druge aplikacije, kao što je <prism-link>Prism Launcher</prism-link>, kako bi lako instalirao Lumen sadržaj."
   },
   "app-marketing.download.mac": {
     "message": "Mac"
@@ -489,7 +489,7 @@
     "message": "MultiMC"
   },
   "app-marketing.features.mod-management.description": {
-    "message": "Modrinth olakšava upravljanje svim tvojim modovima na jednom mestu. Modove možeš da instaliraš, uklanjaš i ažuriraš samo jednim klikom."
+    "message": "Lumen olakšava upravljanje svim tvojim modovima na jednom mestu. Modove možeš da instaliraš, uklanjaš i ažuriraš samo jednim klikom."
   },
   "app-marketing.features.mod-management.installed-mods": {
     "message": "Instalirani modovi"
@@ -539,8 +539,8 @@
   "app-marketing.features.performance.less-than-150mb": {
     "message": "< 150 MB"
   },
-  "app-marketing.features.performance.modrinth-app": {
-    "message": "Modrinth aplikacija"
+  "app-marketing.features.performance.Lumen-app": {
+    "message": "Lumen aplikacija"
   },
   "app-marketing.features.performance.one-billion-percent": {
     "message": "1 milijarda %"
@@ -564,16 +564,16 @@
     "message": "Deli modpackove"
   },
   "app-marketing.hero.app-screenshot-alt": {
-    "message": "Snimak ekrana Modrinth aplikacije sa otvorenom instancom Cobblemona na stranici Sadržaja."
+    "message": "Snimak ekrana Lumen aplikacije sa otvorenom instancom Cobblemona na stranici Sadržaja."
   },
   "app-marketing.hero.download-button": {
-    "message": "Preuzmi Modrinth aplikaciju"
+    "message": "Preuzmi Lumen aplikaciju"
   },
-  "app-marketing.hero.download-modrinth-app": {
-    "message": "Preuzmi Modrinth aplikaciju"
+  "app-marketing.hero.download-Lumen-app": {
+    "message": "Preuzmi Lumen aplikaciju"
   },
-  "app-marketing.hero.download-modrinth-app-for-os": {
-    "message": "Preuzmi Modrinth aplikaciju za {os}"
+  "app-marketing.hero.download-Lumen-app-for-os": {
+    "message": "Preuzmi Lumen aplikaciju za {os}"
   },
   "app-marketing.hero.minecraft-screenshot-alt": {
     "message": "Snimak ekrana glavnog menija instance Cobblemona."
@@ -672,7 +672,7 @@
     "message": "Prijavi se"
   },
   "auth.sign-up.legal-dislaimer": {
-    "message": "Kreiranjem naloga prihvataš <terms-link>Uslove</terms-link> i <privacy-policy-link>Pravila privatnosti</privacy-policy-link> Modrintha."
+    "message": "Kreiranjem naloga prihvataš <terms-link>Uslove</terms-link> i <privacy-policy-link>Pravila privatnosti</privacy-policy-link> Lumena."
   },
   "auth.sign-up.sign-in-option.title": {
     "message": "Već imaš račun?"
@@ -723,7 +723,7 @@
     "message": "Da li si siguran da želiš da obrišeš ovu kolekciju?"
   },
   "collection.description": {
-    "message": "{description} - Pogledaj kolekciju {name} korisnika {username} na Modrinthu"
+    "message": "{description} - Pogledaj kolekciju {name} korisnika {username} na Lumenu"
   },
   "collection.description.following": {
     "message": "Automatski generisana kolekcija svih projekata koje pratite."
@@ -807,7 +807,7 @@
     "message": "Ovaj tip sadržaja se ne može instalirati na server putem usluge pretrage."
   },
   "discover.seo.description": {
-    "message": "Pretražuj i pregledaj hiljade Minecraft {projectType} na Modrinthu uz trenutne i tačne rezultate pretrage. Naši filteri ti pomažu da brzo pronađeš najbolje Minecraft {projectType}."
+    "message": "Pretražuj i pregledaj hiljade Minecraft {projectType} na Lumenu uz trenutne i tačne rezultate pretrage. Naši filteri ti pomažu da brzo pronađeš najbolje Minecraft {projectType}."
   },
   "error.collection.404.list_item.1": {
     "message": "Možda si pogrešno unio URL kolekcije."
@@ -816,7 +816,7 @@
     "message": "Kolekcija može biti privatna."
   },
   "error.collection.404.list_item.3": {
-    "message": "Kolekcija je možda uklonjena od strane Modrinth tima za moderaciju zbog kršenja naših <tou-link>Uslova korišćenja</tou-link>."
+    "message": "Kolekcija je možda uklonjena od strane Lumen tima za moderaciju zbog kršenja naših <tou-link>Uslova korišćenja</tou-link>."
   },
   "error.collection.404.list_title": {
     "message": "Zašto?"
@@ -831,10 +831,10 @@
     "message": "Stranica nije pronađena"
   },
   "error.generic.default.list_item.1": {
-    "message": "Proveri da li je Modrinth nedostupan na našoj <status-link>stranici statusa</status-link>."
+    "message": "Proveri da li je Lumen nedostupan na našoj <status-link>stranici statusa</status-link>."
   },
   "error.generic.default.list_item.2": {
-    "message": "Ako se ovo nastavi dešavati, možeš obavestiti Modrinth tim pridruživši se našem <discord-link>Discord serveru</discord-link>."
+    "message": "Ako se ovo nastavi dešavati, možeš obavestiti Lumen tim pridruživši se našem <discord-link>Discord serveru</discord-link>."
   },
   "error.generic.default.list_title": {
     "message": "Molimo pokušaj ponovo za nekoliko minuta."
@@ -852,7 +852,7 @@
     "message": "Vlasnik organizacije je možda promenio URL ili ga obrisao."
   },
   "error.organization.404.list_item.3": {
-    "message": "Organizacija je možda uklonjena od strane Modrinthovog tima za moderaciju zbog kršenja naših <tou-link>Uslova korišćenja</tou-link>."
+    "message": "Organizacija je možda uklonjena od strane Lumenovog tima za moderaciju zbog kršenja naših <tou-link>Uslova korišćenja</tou-link>."
   },
   "error.organization.404.list_title": {
     "message": "Zašto?"
@@ -867,7 +867,7 @@
     "message": "Vlasnik projekta je možda promenio URL, postavio projekat kao privatan ili ga obrisao."
   },
   "error.project.404.list_item.3": {
-    "message": "Projekat je možda uklonjen od strane Modrinthovog tima za moderaciju zbog kršenja naših <tou-link>Uslova korišćenja</tou-link>."
+    "message": "Projekat je možda uklonjen od strane Lumenovog tima za moderaciju zbog kršenja naših <tou-link>Uslova korišćenja</tou-link>."
   },
   "error.project.404.list_title": {
     "message": "Zašto?"
@@ -882,7 +882,7 @@
     "message": "Korisnik je možda promenio korisničko ime ili obrisao nalog."
   },
   "error.user.404.list_item.3": {
-    "message": "Nalog korisnika je možda ugašen zbog kršenja Modrinthovih <tou-link>Uslova korišćenja</tou-link>."
+    "message": "Nalog korisnika je možda ugašen zbog kršenja Lumenovih <tou-link>Uslova korišćenja</tou-link>."
   },
   "error.user.404.list_title": {
     "message": "Zašto?"
@@ -903,22 +903,22 @@
     "message": "Kada je tvoj server pod velikim opterećenjem, privremeno mu dajemo pristup dodatnim procesorskim nitima kako bismo ublažili skokove lagova i nestabilnosti. Ovo pomaže u sprečavanju da TPS padne ispod 20, obezbeđujući što glađe iskustvo. Pošto su te dodatne procesorske niti dostupne samo kratko tokom perioda velikog opterećenja, možda se neće prikazivati u Spark izveštajima ili drugim alatima za profilisanje."
   },
   "hosting-marketing.faq.cpu-kind": {
-    "message": "Na kakvim procesorima rade serveri of Modrinth hostiranja?"
+    "message": "Na kakvim procesorima rade serveri of Lumen hostiranja?"
   },
   "hosting-marketing.faq.cpu-kind.answer": {
-    "message": "Modrinth Hosting serveri pokreću se pomoću procesora ekvivalentnih modelima AMD Ryzen 7900 i 7950X3D, koji rade na brzinama oko 5+ GHz i upareni su sa DDR5 radnom memorijom."
+    "message": "Lumen Hosting serveri pokreću se pomoću procesora ekvivalentnih modelima AMD Ryzen 7900 i 7950X3D, koji rade na brzinama oko 5+ GHz i upareni su sa DDR5 radnom memorijom."
   },
   "hosting-marketing.faq.ddos-protection": {
-    "message": "Da li Modrinth Hosting serveri imaju DDoS zaštitu?"
+    "message": "Da li Lumen Hosting serveri imaju DDoS zaštitu?"
   },
   "hosting-marketing.faq.ddos-protection.answer": {
-    "message": "Da. Svi Modrinth Hosting serveri dolaze sa DDoS zaštitom, uz kapacitet do 17 Tbps na pojedinim lokacijama."
+    "message": "Da. Svi Lumen Hosting serveri dolaze sa DDoS zaštitom, uz kapacitet do 17 Tbps na pojedinim lokacijama."
   },
   "hosting-marketing.faq.how-fast": {
-    "message": "Kako brzi su serveri od Modrinth Hosting?"
+    "message": "Kako brzi su serveri od Lumen Hosting?"
   },
   "hosting-marketing.faq.how-fast.answer.one": {
-    "message": "Modrinth Hosting serveri se pokreću na veoma modernom hardveru visokih performansi, ali je teško precizno reći kako će se to odraziti na brzinu rada tvojeg servera, jer na to utiču brojni faktori – poput modova, paketa podataka/data packs ili plugina koje koristiš, pa čak i ponašanja samih korisnika."
+    "message": "Lumen Hosting serveri se pokreću na veoma modernom hardveru visokih performansi, ali je teško precizno reći kako će se to odraziti na brzinu rada tvojeg servera, jer na to utiču brojni faktori – poput modova, paketa podataka/data packs ili plugina koje koristiš, pa čak i ponašanja samih korisnika."
   },
   "hosting-marketing.faq.how-fast.answer.two": {
     "message": "Većina problema sa performansama obično nastaje zbog neoptimizovanog modpaka, moda, data-packa ili plugina koji izazivaju lag na serveru. S obzirom na to da su naši serveri vrhunskih karakteristika, ne bi trebalo da imaš većih problema, pod uslovom da odabereš odgovarajući plan za sadržaj koji pokrećeš na serveru."
@@ -927,16 +927,16 @@
     "message": "Mogu li da povećam memoriju na svom serveru?"
   },
   "hosting-marketing.faq.increase-storage.answer": {
-    "message": "Da, memorija na tvojem serveru može se povećati bez dodatnih troškova. Ako ti je potrebno više prostora, obrati se Modrinth podršci."
+    "message": "Da, memorija na tvojem serveru može se povećati bez dodatnih troškova. Ako ti je potrebno više prostora, obrati se Lumen podršci."
   },
   "hosting-marketing.faq.location": {
-    "message": "Gde se nalaze Modrinth Hosting serveri? Mogu li da izaberem region?"
+    "message": "Gde se nalaze Lumen Hosting serveri? Mogu li da izaberem region?"
   },
   "hosting-marketing.faq.location.answer": {
     "message": "Trenutno su ti na raspolaganju serveri u Severnoj Americi, Evropi, Jugoistočnoj Aziji i Australiji, koje možeš izabrati prilikom kupovine. U budućnosti ćemo dodati još regiona! Ukoliko želiš da promeniš region, molimo te da kontaktiraš korisničku podršku."
   },
   "hosting-marketing.faq.versions-loaders.answer.one": {
-    "message": "Modrinth Hosting serveri mogu da pokreću bilo koju verziju igre Minecraft: Java Edicije, sve od verzije 1.2.5 pa nadalje, uključujući i snapshot verzije."
+    "message": "Lumen Hosting serveri mogu da pokreću bilo koju verziju igre Minecraft: Java Edicije, sve od verzije 1.2.5 pa nadalje, uključujući i snapshot verzije."
   },
   "hosting-marketing.hero.button.manage-your-servers": {
     "message": "Upravljaj svojim serverima"
@@ -947,11 +947,11 @@
   "hosting-marketing.hero.button.start-your-server": {
     "message": "Pokreni svoj server"
   },
-  "hosting-marketing.hero.host-with-modrinth": {
-    "message": "Hostuj svoj sledeći server uz Modrinth Hosting"
+  "hosting-marketing.hero.host-with-Lumen": {
+    "message": "Hostuj svoj sledeći server uz Lumen Hosting"
   },
   "hosting-marketing.hero.hosting-description": {
-    "message": "Modrinth Hosting je najjednostavniji način da hostuješ sopstveni Minecraft: Java Edition server. Jednostavno instaliraj i igraj svoje omiljene modove i modpakove, sve to u okviru Modrinth platforme."
+    "message": "Lumen Hosting je najjednostavniji način da hostuješ sopstveni Minecraft: Java Edition server. Jednostavno instaliraj i igraj svoje omiljene modove i modpakove, sve to u okviru Lumen platforme."
   },
   "hosting-marketing.included.advanced-networking.description": {
     "message": "Dodaj sopstveni domen na svoj server, rezerviši do 15 portova za modove koji ih zahtevaju i još mnogo toga."
@@ -960,25 +960,25 @@
     "message": "Uz svaki server dolazi 15 rezervnih kopija, bezbedno čuvanih na udaljenoj lokaciji."
   },
   "hosting-marketing.included.custom-url.description": {
-    "message": "Podeli svoj server putem prilagođene <contrast>modrinth.gg</contrast> adrese."
+    "message": "Podeli svoj server putem prilagođene <contrast>Lumen.gg</contrast> adrese."
   },
   "hosting-marketing.included.description": {
-    "message": "Uz svaki server dolazi skup funkcija osmišljenih tako da pruže iskustvo hostinga kakvo samo Modrinth može da ponudi."
+    "message": "Uz svaki server dolazi skup funkcija osmišljenih tako da pruže iskustvo hostinga kakvo samo Lumen može da ponudi."
   },
   "hosting-marketing.included.file-manager.description": {
     "message": "Sa lakoćom pretražuj, upravljaj, uređuj i postavi datoteke direktno na svoj server."
   },
   "hosting-marketing.included.help.description": {
-    "message": "U svakom trenutku se možeš obratiti timu platforme Modrinth za pomoć oko svog servera."
+    "message": "U svakom trenutku se možeš obratiti timu platforme Lumen za pomoć oko svog servera."
   },
   "hosting-marketing.included.powerful-console": {
     "message": "Moćna konzola, upravljač svojstvima servera i još mnogo toga"
   },
   "hosting-marketing.included.powerful-console.description": {
-    "message": "Modrinth Hosting dolazi sa moćnim alatima za upravljanje tvojim serverom."
+    "message": "Lumen Hosting dolazi sa moćnim alatima za upravljanje tvojim serverom."
   },
   "hosting-marketing.included.sftp-access.description": {
-    "message": "Pristupi datotekama svog servera direktno putem SFTP-a koji je ugrađen u Modrinth Hosting."
+    "message": "Pristupi datotekama svog servera direktno putem SFTP-a koji je ugrađen u Lumen Hosting."
   },
   "hosting-marketing.included.with-your-server": {
     "message": "Uključeno uz tvoj server"
@@ -992,23 +992,23 @@
   "hosting-marketing.server-for-everyone": {
     "message": "Postoji server za svakoga"
   },
-  "hosting-marketing.why.all-on-modrinth.description": {
-    "message": "Tvoj server, modovi, igrači i još mnogo toga – sve je na Modrinthu. Nema potrebe za prebacivanjem između platformi."
+  "hosting-marketing.why.all-on-Lumen.description": {
+    "message": "Tvoj server, modovi, igrači i još mnogo toga – sve je na Lumenu. Nema potrebe za prebacivanjem između platformi."
   },
   "hosting-marketing.why.consistently-fast.description": {
-    "message": "Naša infrastruktura nikada nije preopterećena, što znači da svaki server hostovan na Modrinthu uvek radi punim kapacitetom."
+    "message": "Naša infrastruktura nikada nije preopterećena, što znači da svaki server hostovan na Lumenu uvek radi punim kapacitetom."
   },
   "hosting-marketing.why.heading": {
     "message": "Pronađi modpack. Sada je to server."
   },
   "hosting-marketing.why.modern-reliable-hosting.description": {
-    "message": "Modrinth Hosting serveri se pokreću na <contrast>AMD procesorima visokih performansi sa DDR5 radnom memorijom</contrast> i koriste namenski razvijen softver kako bi se obezbedio nesmetan rad tvojeg servera."
+    "message": "Lumen Hosting serveri se pokreću na <contrast>AMD procesorima visokih performansi sa DDR5 radnom memorijom</contrast> i koriste namenski razvijen softver kako bi se obezbedio nesmetan rad tvojeg servera."
   },
   "hosting-marketing.why.where-mods-are.description": {
-    "message": "Modrinth Hosting neprimetno integriše proces instalacije modova i modpackova u tvoj server."
+    "message": "Lumen Hosting neprimetno integriše proces instalacije modova i modpackova u tvoj server."
   },
   "hosting-marketing.why.your-favorite-mods.description": {
-    "message": "Izaberi između Vanilla, Fabric, Forge, Quilt i NeoForge verzija. Ako se nalazi na Modrinthu, može da radi na tvom serveru."
+    "message": "Izaberi između Vanilla, Fabric, Forge, Quilt i NeoForge verzija. Ako se nalazi na Lumenu, može da radi na tvom serveru."
   },
   "landing.creator.feature.discovery.description": {
     "message": "Omogući hiljadama korisnika da otkriju tvoj projekat putem pretrage, naše početne stranice, Discord servera i drugih načina koji tek dolaze!"
@@ -1041,19 +1041,19 @@
     "message": "Poseti podešavanja naloga"
   },
   "layout.banner.add-email.description": {
-    "message": "Iz sigurnosnih razloga, Modrinth traži da registruješ email adresu na svom nalogu."
+    "message": "Iz sigurnosnih razloga, Lumen traži da registruješ email adresu na svom nalogu."
   },
   "layout.banner.build-fail.description": {
-    "message": "Ovo izdanje Modrinth frontend-a nije uspelo da generiše stanje iz API-ja. To može biti zbog prekida rada ili greške u konfiguraciji. Ponovo izgradi kada API bude dostupan. Kodovi grešaka: {errors}; Trenutni API URL je: {url}"
+    "message": "Ovo izdanje Lumen frontend-a nije uspelo da generiše stanje iz API-ja. To može biti zbog prekida rada ili greške u konfiguraciji. Ponovo izgradi kada API bude dostupan. Kodovi grešaka: {errors}; Trenutni API URL je: {url}"
   },
   "layout.banner.build-fail.title": {
-    "message": "Pregledate testno okruženje Modrintha."
+    "message": "Pregledate testno okruženje Lumena."
   },
   "layout.banner.staging.description": {
-    "message": "Staging okruženje je potpuno odvojeno od produkcione Modrinth baze podataka. Koristi se za testiranje i debagovanje i može pokretati razvojne verzije backend-a ili frontend-a koje su novije od produkcije."
+    "message": "Staging okruženje je potpuno odvojeno od produkcione Lumen baze podataka. Koristi se za testiranje i debagovanje i može pokretati razvojne verzije backend-a ili frontend-a koje su novije od produkcije."
   },
   "layout.banner.staging.title": {
-    "message": "Gledaš testno okruženje Modrintha"
+    "message": "Gledaš testno okruženje Lumena"
   },
   "layout.banner.subscription-payment-failed.button": {
     "message": "Ažuriraj podatke za plaćanje"
@@ -1068,7 +1068,7 @@
     "message": "Ponovo pošalji email za verifikaciju"
   },
   "layout.banner.verify-email.description": {
-    "message": "Iz sigurnosnih razloga, Modrinth zahteva da verifikuješ email adresu povezanu sa svojim nalogom."
+    "message": "Iz sigurnosnih razloga, Lumen zahteva da verifikuješ email adresu povezanu sa svojim nalogom."
   },
   "layout.footer.about": {
     "message": "O nama"
@@ -1110,19 +1110,19 @@
     "message": "Uslovi korištenja"
   },
   "layout.footer.open-source": {
-    "message": "Modrinth je <github-link>otvorenog koda</github-link>."
+    "message": "Lumen je <github-link>otvorenog koda</github-link>."
   },
   "layout.footer.products": {
     "message": "Proizvodi"
   },
   "layout.footer.products.app": {
-    "message": "Modrinth App"
+    "message": "Lumen App"
   },
   "layout.footer.products.plus": {
-    "message": "Modrinth+"
+    "message": "Lumen+"
   },
   "layout.footer.products.servers": {
-    "message": "Modrinth hostiranje"
+    "message": "Lumen hostiranje"
   },
   "layout.footer.resources": {
     "message": "Resursi"
@@ -1155,7 +1155,7 @@
     "message": "Prebaci meni"
   },
   "layout.meta.description": {
-    "message": "Preuzimaj Minecraft modove, plugine, datapackove, shadere, resourcepackove i modpackove na Modrinthu. Otkrij i objavi projekte na Modrinthu koristeći moderan, jednostavan interfejs i API."
+    "message": "Preuzimaj Minecraft modove, plugine, datapackove, shadere, resourcepackove i modpackove na Lumenu. Otkrij i objavi projekte na Lumenu koristeći moderan, jednostavan interfejs i API."
   },
   "layout.meta.og-description": {
     "message": "Otkrijte i objavite Minecraft sadržaj!"
@@ -1326,7 +1326,7 @@
     "message": "Kreiraj server"
   },
   "project.actions.servers-promo.description": {
-    "message": "Modrinth Hosting je najjednostavniji način da igraš sa prijateljima, bez ikakvih komplikacija!"
+    "message": "Lumen Hosting je najjednostavniji način da igraš sa prijateljima, bez ikakvih komplikacija!"
   },
   "project.actions.servers-promo.pricing": {
     "message": "Počinje od {price}<small> / mesec</small>"
@@ -1359,7 +1359,7 @@
     "message": "Molimo navedi dodatni kontekst za tvoju prijavu"
   },
   "report.for.violation": {
-    "message": "Kršenje Modrinth-ovih <rules-link>Pravila</rules-link> ili <terms-link>Uslova korišćenja</terms-link>"
+    "message": "Kršenje Lumen-ovih <rules-link>Pravila</rules-link> ili <terms-link>Uslova korišćenja</terms-link>"
   },
   "report.for.violation.description": {
     "message": "Primeri uključuju maliciozan, spam, uvredljiv, obmanjujući i nezakonit sadržaj."
@@ -1650,7 +1650,7 @@
     "message": "Sinhronizuj sa serverom"
   },
   "servers.manage.content.title": {
-    "message": "Sadržaj - {serverName} - Modrinth"
+    "message": "Sadržaj - {serverName} - Lumen"
   },
   "servers.notice.actions": {
     "message": "Radnje"
@@ -1707,7 +1707,7 @@
     "message": "Probna verzija Medal servera"
   },
   "settings.billing.charges.product.midas": {
-    "message": "Modrinth Plus"
+    "message": "Lumen Plus"
   },
   "settings.billing.interval.month": {
     "message": "mesec"
@@ -1716,10 +1716,10 @@
     "message": "godina"
   },
   "settings.billing.midas.benefits.ad-free": {
-    "message": "Pregledavanje na modrinth.com i Modrinth aplikaciji bez reklama"
+    "message": "Pregledavanje na Lumen.com i Lumen aplikaciji bez reklama"
   },
   "settings.billing.midas.benefits.badge": {
-    "message": "Modrinth+ oznaka na tvom profilu"
+    "message": "Lumen+ oznaka na tvom profilu"
   },
   "settings.billing.midas.save-per-year": {
     "message": "Uštedi {amount} godišnje prelaskom na godišnju naplatu!"
@@ -1728,7 +1728,7 @@
     "message": "Otkazali smo tvoju pretplatu."
   },
   "settings.billing.midas.upsell": {
-    "message": "Postani pretplatnik na Modrinth Plus!"
+    "message": "Postani pretplatnik na Lumen Plus!"
   },
   "settings.billing.modal.cancel.action": {
     "message": "Otkaži pretplatu"
@@ -1785,7 +1785,7 @@
     "message": "{shared} Deljeni procesori (kratkotrajna povećanja do {bursts} procesora)"
   },
   "settings.billing.pyro.linked-server.not-found": {
-    "message": "Za ovu pretplatu nije pronađen povezani server. Postoji nekoliko mogućih razloga za to. Ako ste server upravo kupili, ovo je normalna pojava; može proći i do sat vremena dok se server ne pripremi za rad. S druge strane, ako si server kupio ranije, verovatno je u međuvremenu suspendovan. Ukoliko ovo nije ono što ste očekivali, molimo te da kontaktiraš Modrinth podršku i dostaviš sledeće informacije:"
+    "message": "Za ovu pretplatu nije pronađen povezani server. Postoji nekoliko mogućih razloga za to. Ako ste server upravo kupili, ovo je normalna pojava; može proći i do sat vremena dok se server ne pripremi za rad. S druge strane, ako si server kupio ranije, verovatno je u međuvremenu suspendovan. Ukoliko ovo nije ono što ste očekivali, molimo te da kontaktiraš Lumen podršku i dostaviš sledeće informacije:"
   },
   "settings.billing.pyro.linked-server.server-id": {
     "message": "ID servera: {id}"
@@ -1797,7 +1797,7 @@
     "message": "{gb} GB radne memorije"
   },
   "settings.billing.pyro.resubscribe.error.text": {
-    "message": "Došlo je do greške prilikom ponovnog pretplaćivanja na tvoj Modrinth server."
+    "message": "Došlo je do greške prilikom ponovnog pretplaćivanja na tvoj Lumen server."
   },
   "settings.billing.pyro.resubscribe.error.title": {
     "message": "Greška pri ponovnom pretplaćivanju"
@@ -1824,10 +1824,10 @@
     "message": "{gb} GB swap"
   },
   "settings.billing.pyro_subscription.description": {
-    "message": "Upravljaj svojim Modrinth Server pretplatama."
+    "message": "Upravljaj svojim Lumen Server pretplatama."
   },
   "settings.billing.pyro_subscription.title": {
-    "message": "Modrinth Server Pretplate"
+    "message": "Lumen Server Pretplate"
   },
   "settings.billing.renews": {
     "message": "Obnovi se {date}"
@@ -1842,7 +1842,7 @@
     "message": "Pretplati se"
   },
   "settings.billing.subscription.description": {
-    "message": "Upravljaj svojim Modrinth pretplatama."
+    "message": "Upravljaj svojim Lumen pretplatama."
   },
   "settings.billing.subscription.title": {
     "message": "Pretplate"
@@ -1857,7 +1857,7 @@
     "message": "Deaktiviraj developerski režim"
   },
   "settings.display.banner.developer-mode.description": {
-    "message": "<strong>Developerski režim</strong> je aktivan. Ovo će ti omogućiti da vidiš interne ID-je raznih stvari na Modrinthu, što može biti korisno ako si developer koji koristi Modrinth API. Klikni na Modrinth logo na dnu stranice 5 puta da bi uključio/isključio developerski režim."
+    "message": "<strong>Developerski režim</strong> je aktivan. Ovo će ti omogućiti da vidiš interne ID-je raznih stvari na Lumenu, što može biti korisno ako si developer koji koristi Lumen API. Klikni na Lumen logo na dnu stranice 5 puta da bi uključio/isključio developerski režim."
   },
   "settings.head-title": {
     "message": "Podešavanja prikaza"
@@ -1920,7 +1920,7 @@
     "message": "Trenutna sesija"
   },
   "settings.sessions.description": {
-    "message": "Ovo su svi uređaji koji su trenutno prijavljeni na tvoj Modrinth račun. Možeš se odjaviti sa svakog pojedinačno.\n\nAko vidiš unos koji ne prepoznaješ, odjavi se sa tog uređaja i odmah promeni lozinku za svoj Modrinth nalog."
+    "message": "Ovo su svi uređaji koji su trenutno prijavljeni na tvoj Lumen račun. Možeš se odjaviti sa svakog pojedinačno.\n\nAko vidiš unos koji ne prepoznaješ, odjavi se sa tog uređaja i odmah promeni lozinku za svoj Lumen nalog."
   },
   "settings.sessions.last-accessed-ago": {
     "message": "Posljednji pristup {ago}"
@@ -1941,7 +1941,7 @@
     "message": "Prikaz"
   },
   "ui.latest-news-row.latest-news": {
-    "message": "Najnovije vesti od Modrintha"
+    "message": "Najnovije vesti od Lumena"
   },
   "ui.latest-news-row.view-all": {
     "message": "Pogledaj sve vesti"
@@ -2025,10 +2025,10 @@
     "message": "Maven koordinate:"
   },
   "version.section.content.dev-info.maven-description": {
-    "message": "Projekti na Modrinthu su automatski dostupni putem Maven spremišta za korišćenje sa JVM alatima za izgradnju, kao što je <gradle-link>Gradle</gradle-link>. Da bi saznao više o Modrinth Maven API-ju, <article-link>klikni ovde</article-link>."
+    "message": "Projekti na Lumenu su automatski dostupni putem Maven spremišta za korišćenje sa JVM alatima za izgradnju, kao što je <gradle-link>Gradle</gradle-link>. Da bi saznao više o Lumen Maven API-ju, <article-link>klikni ovde</article-link>."
   },
   "version.section.content.dev-info.maven-note": {
-    "message": "Napomena: Kada je dostupan, trebalo bi da koristiš Maven repozitorijum autora umesto njega, jer će on imati informacije o tranzitivnim zavisnostima koje Modrinth Maven API nema. Takođe možeš završiti sa dupliranim zavisnostima ako koristiš kombinaciju Modrinth i ne-Modrinth Maven repozitorijuma za svoje zavisnosti, jer će identifikator grupe biti drugačiji kada se služi preko Modrinth Maven API-ja."
+    "message": "Napomena: Kada je dostupan, trebalo bi da koristiš Maven repozitorijum autora umesto njega, jer će on imati informacije o tranzitivnim zavisnostima koje Lumen Maven API nema. Takođe možeš završiti sa dupliranim zavisnostima ako koristiš kombinaciju Lumen i ne-Lumen Maven repozitorijuma za svoje zavisnosti, jer će identifikator grupe biti drugačiji kada se služi preko Lumen Maven API-ja."
   },
   "version.section.content.dev-info.version-id": {
     "message": "ID verzije:"

@@ -1,5 +1,5 @@
-import '@modrinth/assets/styles/variables.scss'
-import '@modrinth/assets/styles/inter.scss'
+import '@lumen/assets/styles/variables.scss'
+import '@lumen/assets/styles/inter.scss'
 import './styles/installer.scss'
 
 import { createApp } from 'vue'

@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { CalendarIcon, UsersIcon, XIcon } from '@modrinth/assets'
-import { injectModrinthClient, ProgressBar } from '@modrinth/ui'
+import { CalendarIcon, UsersIcon, XIcon } from '@lumen/assets'
+import { injectLumenClient, ProgressBar } from '@lumen/ui'
 import { useQuery } from '@tanstack/vue-query'
 import { openUrl } from '@tauri-apps/plugin-opener'
 import { computed, ref } from 'vue'
 
 const DISMISSED_STORAGE_KEY = 'pride-fundraiser-2026-dismissed'
 
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const dismissed = ref(localStorage.getItem(DISMISSED_STORAGE_KEY) === 'true')
 
 const { data: campaignInfo } = useQuery({
@@ -23,7 +23,7 @@ const shouldShowBanner = computed(
 )
 
 async function openPrideFundraiser() {
-	await openUrl('https://modrinth.com/pride?from=app')
+	await openUrl('https://Lumen.com/pride?from=app')
 }
 
 function dismissBanner() {

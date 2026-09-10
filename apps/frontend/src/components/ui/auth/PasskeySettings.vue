@@ -192,7 +192,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
+import type { Labrinth } from '@lumen/api-client'
 import {
 	EditIcon,
 	PlusIcon,
@@ -201,26 +201,26 @@ import {
 	TrashIcon,
 	UserKeyIcon,
 	XIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import {
 	Button,
 	commonMessages,
 	ConfirmModal,
 	defineMessages,
 	IconButton,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	Input,
 	NewModal,
 	useFormatDateTime,
 	useRelativeTime,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { computed, ref, useTemplateRef } from 'vue'
 
 import { createPasskeyCredential } from '~/helpers/passkey.ts'
 
-const { labrinth } = injectModrinthClient()
+const { labrinth } = injectLumenClient()
 const { addNotification } = injectNotificationManager()
 const { formatMessage } = useVIntl()
 const formatRelativeTime = useRelativeTime()

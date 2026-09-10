@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
+import type { Labrinth } from '@lumen/api-client'
 import {
 	commonMessages,
 	defineMessages,
@@ -10,8 +10,8 @@ import {
 	provideInstallationSettings,
 	useDebugLogger,
 	useVIntl,
-} from '@modrinth/ui'
-import type { GameVersionTag, PlatformTag } from '@modrinth/utils'
+} from '@lumen/ui'
+import type { GameVersionTag, PlatformTag } from '@lumen/utils'
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
 import { computed, ref } from 'vue'
 
@@ -28,8 +28,8 @@ import {
 	edit,
 	get_linked_modpack_info,
 	unlink_shared_instance,
-	update_managed_modrinth_version,
-	update_repair_modrinth,
+	update_managed_Lumen_version,
+	update_repair_Lumen,
 } from '@/helpers/instance'
 import { get_loader_versions } from '@/helpers/metadata'
 import { get_game_versions, get_loaders } from '@/helpers/tags'
@@ -112,7 +112,7 @@ debug('metadata queries configured', {
 	gameVersion: instance.value.game_version,
 })
 
-const isModrinthLinkedModpack = computed(
+const isLumenLinkedModpack = computed(
 	() =>
 		instance.value.link?.type === 'modrinth_modpack' ||
 		instance.value.link?.type === 'server_project_modpack' ||
@@ -127,7 +127,7 @@ const canUnlinkSharedInstance = managedContentPolicy.canUnlink
 const modpackInfoQuery = useQuery({
 	queryKey: computed(() => ['linkedModpackInfo', instance.value.id]),
 	queryFn: () => get_linked_modpack_info(instance.value.id, 'must_revalidate'),
-	enabled: computed(() => isModrinthLinkedModpack.value && !offline),
+	enabled: computed(() => isLumenLinkedModpack.value && !offline),
 })
 const modpackInfo = modpackInfoQuery.data
 
@@ -232,7 +232,7 @@ provideInstallationSettings({
 	}),
 	isLinked: computed(
 		() =>
-			isModrinthLinkedModpack.value ||
+			isLumenLinkedModpack.value ||
 			isImportedModpack.value ||
 			instance.value.link?.type === 'server_project' ||
 			isSharedInstanceManagedModpack.value,
@@ -304,7 +304,7 @@ provideInstallationSettings({
 			})
 			return result
 		}
-		const placeholder = manifest.gameVersions?.find((item) => item.id === '${modrinth.gameVersion}')
+		const placeholder = manifest.gameVersions?.find((item) => item.id === '${Lumen.gameVersion}')
 		if (placeholder) {
 			const result = manifest.gameVersions?.some((item) => item.id === gameVersion)
 				? placeholder.loaders
@@ -390,7 +390,7 @@ provideInstallationSettings({
 			if (isImportedModpack.value) {
 				shouldTrack = await installLocalModpackFromPicker()
 			} else {
-				await update_repair_modrinth(instance.value.id).catch(handleError)
+				await update_repair_Lumen(instance.value.id).catch(handleError)
 				shouldTrack = true
 			}
 		} finally {
@@ -456,7 +456,7 @@ provideInstallationSettings({
 			versionId: version.id,
 			instanceId: instance.value.id,
 		})
-		await update_managed_modrinth_version(instance.value.id, version.id)
+		await update_managed_Lumen_version(instance.value.id, version.id)
 		await queryClient.invalidateQueries({
 			queryKey: ['linkedModpackInfo', instance.value.id],
 		})
@@ -476,7 +476,7 @@ provideInstallationSettings({
 	isApp: true,
 	showModpackVersionActions: computed(
 		() =>
-			isModrinthLinkedModpack.value &&
+			isLumenLinkedModpack.value &&
 			!isMinecraftServer.value &&
 			!isSharedInstanceManagedModpack.value,
 	),

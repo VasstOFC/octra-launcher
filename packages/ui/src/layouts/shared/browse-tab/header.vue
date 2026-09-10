@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { LeftArrowIcon, TagCategoryGamepad2Icon as Gamepad2Icon } from '@modrinth/assets'
+import { LeftArrowIcon, TagCategoryGamepad2Icon as Gamepad2Icon } from '@lumen/assets'
 import type { Component } from 'vue'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -18,7 +18,7 @@ import SelectedProjectsLeaveModal from './components/SelectedProjectsLeaveModal.
 import { injectBrowseManager } from './providers/browse-manager'
 import type { BrowseInstallContext } from './types'
 
-const MEDAL_ICON_URL = 'https://cdn-raw.modrinth.com/medal_icon.webp'
+const MEDAL_ICON_URL = 'https://cdn-raw.Lumen.com/medal_icon.webp'
 
 const router = useRouter()
 const props = defineProps<{

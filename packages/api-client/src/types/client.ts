@@ -37,13 +37,13 @@ export interface ClientConfig {
 	userAgent?: UserAgentProvider
 
 	/**
-	 * Base URL for Labrinth API (main Modrinth API)
+	 * Base URL for Labrinth API (main Lumen API)
 	 * @default 'https://api.modrinth.com'
 	 */
 	labrinthBaseUrl?: BaseUrlConfig
 
 	/**
-	 * Base URL for Archon API (Modrinth Hosting API)
+	 * Base URL for Archon API (Lumen Hosting API)
 	 * Can be a callback so apps can drive this from runtime feature flags.
 	 *
 	 * @default 'https://archon.modrinth.com'
@@ -68,7 +68,7 @@ export interface ClientConfig {
 	headers?: Record<string, string>
 
 	/**
-	 * Whether to attach `modrinth-sentry-capture: 1` to Archon requests.
+	 * Whether to attach `Lumen-sentry-capture: 1` to Archon requests.
 	 * Can be a callback so apps can drive this from runtime feature flags.
 	 *
 	 * @default false

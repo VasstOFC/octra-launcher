@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
-import { LoaderCircleIcon } from '@modrinth/assets'
-import { BackToParentLink, injectModrinthClient } from '@modrinth/ui'
+import type { Labrinth } from '@lumen/api-client'
+import { LoaderCircleIcon } from '@lumen/assets'
+import { BackToParentLink, injectLumenClient } from '@lumen/ui'
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
 
 import MaliciousSummaryModal, {
@@ -11,14 +11,14 @@ import ModerationTechRevCard from '~/components/ui/moderation/ModerationTechRevC
 import { flattenFileReports } from '~/components/ui/moderation/tech-review/helpers'
 import { useTechReviewSources } from '~/components/ui/moderation/tech-review/use-tech-review-sources'
 
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const queryClient = useQueryClient()
 const route = useRoute()
 const keybinds = useModerationKeybinds()
 
 const projectId = String(useRouteId('project'))
 
-useHead({ title: () => `Tech review - ${projectId} - Modrinth` })
+useHead({ title: () => `Tech review - ${projectId} - Lumen` })
 
 const {
 	data: projectReportData,

@@ -205,7 +205,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Archon } from '@modrinth/api-client'
+import type { Archon } from '@lumen/api-client'
 import {
 	ClipboardCopyIcon,
 	ExternalIcon,
@@ -213,7 +213,7 @@ import {
 	EyeOffIcon,
 	SpinnerIcon,
 	UpdatedIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
 import { computed, ref, watch } from 'vue'
 
@@ -222,14 +222,14 @@ import { Button, ButtonLink, IconButton } from '#ui/components/base/buttons'
 import SaveBanner from '#ui/components/servers/SaveBanner.vue'
 import { useServerPermissions } from '#ui/composables/server-permissions'
 import {
-	injectModrinthClient,
-	injectModrinthServerContext,
+	injectLumenClient,
+	injectLumenServerContext,
 	injectNotificationManager,
 } from '#ui/providers'
 
 const { addNotification } = injectNotificationManager()
-const { server, serverId, worldId } = injectModrinthServerContext()
-const client = injectModrinthClient()
+const { server, serverId, worldId } = injectLumenServerContext()
+const client = injectLumenClient()
 const queryClient = useQueryClient()
 const { canUseAdvancedSettings, canWriteFiles, permissionDeniedMessage } = useServerPermissions()
 

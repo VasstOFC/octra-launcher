@@ -1,4 +1,4 @@
-import type { Labrinth } from '@modrinth/api-client'
+import type { Labrinth } from '@lumen/api-client'
 import { nextTick } from 'vue'
 
 import { useAuthCookie } from '@/composables/auth-cookie.ts'

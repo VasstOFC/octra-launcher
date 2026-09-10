@@ -1,12 +1,5 @@
 <script setup lang="ts">
-import {
-	CopyIcon,
-	EditIcon,
-	PaletteIcon,
-	SpinnerIcon,
-	TrashIcon,
-	UploadIcon,
-} from '@modrinth/assets'
+import { CopyIcon, EditIcon, PaletteIcon, SpinnerIcon, TrashIcon, UploadIcon } from '@lumen/assets'
 import {
 	Avatar,
 	Button,
@@ -16,7 +9,7 @@ import {
 	Input,
 	TeleportOverflowMenu,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useQueryClient } from '@tanstack/vue-query'
 import { open } from '@tauri-apps/plugin-dialog'
 import { computed, type Ref, ref, watch } from 'vue'

@@ -47,11 +47,11 @@ import {
 	Breadcrumbs,
 	commonSettingsMessages,
 	defineMessages,
-	injectModrinthClient,
+	injectLumenClient,
 	useFormatDateTime,
 	useFormatPrice,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useQuery } from '@tanstack/vue-query'
 
 import { products } from '~/generated/state.json'
@@ -61,7 +61,7 @@ definePageMeta({
 })
 
 const { formatMessage } = useVIntl()
-const client = injectModrinthClient()
+const client = injectLumenClient()
 
 const formatPrice = useFormatPrice()
 const formatDate = useFormatDateTime({
@@ -77,15 +77,15 @@ const messages = defineMessages({
 	},
 	description: {
 		id: 'settings.billing.charges.description',
-		defaultMessage: 'All of your past charges to your Modrinth account will be listed here:',
+		defaultMessage: 'All of your past charges to your Lumen account will be listed here:',
 	},
 	productMidas: {
 		id: 'settings.billing.charges.product.midas',
-		defaultMessage: 'Modrinth Plus',
+		defaultMessage: 'Lumen Plus',
 	},
 	productPyro: {
 		id: 'settings.billing.charges.product.pyro',
-		defaultMessage: 'Modrinth Hosting',
+		defaultMessage: 'Lumen Hosting',
 	},
 	productMedalTrial: {
 		id: 'settings.billing.charges.product.medal-trial',

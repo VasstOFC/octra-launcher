@@ -110,8 +110,8 @@
 </template>
 
 <script setup lang="ts">
-import type { Archon, Labrinth } from '@modrinth/api-client'
-import { FilterIcon, SearchIcon, UserPlusIcon } from '@modrinth/assets'
+import type { Archon, Labrinth } from '@lumen/api-client'
+import { FilterIcon, SearchIcon, UserPlusIcon } from '@lumen/assets'
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
 import { computed, ref, watch } from 'vue'
 
@@ -135,8 +135,8 @@ import {
 import { useVIntl } from '#ui/composables/i18n'
 import { useServerPermissions } from '#ui/composables/server-permissions'
 import {
-	injectModrinthClient,
-	injectModrinthServerContext,
+	injectLumenClient,
+	injectLumenServerContext,
 	injectNotificationManager,
 } from '#ui/providers'
 
@@ -159,8 +159,8 @@ const showAuditLogInstances = computed(() => props.showAuditLogInstances)
 const INVITE_RESEND_COOLDOWN_SECONDS = 2 * 60
 
 const { formatMessage } = useVIntl()
-const client = injectModrinthClient()
-const { serverId, serverFull } = injectModrinthServerContext()
+const client = injectLumenClient()
+const { serverId, serverFull } = injectLumenServerContext()
 const { addNotification } = injectNotificationManager()
 const queryClient = useQueryClient()
 const grantAccessModal = ref<InstanceType<typeof GrantAccessModal> | null>(null)

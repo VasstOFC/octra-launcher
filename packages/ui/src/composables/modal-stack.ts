@@ -7,7 +7,7 @@ type ModalStackState = {
 	stackSizeRef: Ref<number>
 }
 
-const MODAL_STACK_STATE_KEY = '__modrinth_ui_modal_stack_state__' as const
+const MODAL_STACK_STATE_KEY = '__Lumen_ui_modal_stack_state__' as const
 const globalScope = globalThis as typeof globalThis & {
 	[MODAL_STACK_STATE_KEY]?: ModalStackState
 }

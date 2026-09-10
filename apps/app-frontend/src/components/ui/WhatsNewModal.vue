@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { Button, defineMessages, NewModal, useVIntl } from '@modrinth/ui'
-import { computed, ref } from 'vue'
+import { Button, defineMessages, NewModal, useVIntl } from '@lumen/ui'
+import { ref } from 'vue'
 
-const LAST_SEEN_KEY = 'octra-last-seen-version'
+const LAST_SEEN_KEY = 'Lumen-last-seen-version'
 
 const props = defineProps<{
 	version: string
@@ -12,32 +12,8 @@ const emit = defineEmits<{
 	dismissed: []
 }>()
 
-const { formatMessage, locale } = useVIntl()
+const { formatMessage } = useVIntl()
 const modal = ref<InstanceType<typeof NewModal> | null>(null)
-
-const isPolish = computed(() =>
-	String(locale.value || '')
-		.toLowerCase()
-		.startsWith('pl'),
-)
-
-	const featureBullets = computed(() =>
-	isPolish.value
-		? [
-				'Kontrolka premium: logowanie Microsoft znów działa na serwerach online-mode',
-				'Play Dock: szeroki dock biblioteki i nawigacja Start / Serwery / Szafka / Odkrywaj',
-				'Odkrywaj: cichsze karty, szuflada filtrów, skróty sortowania i siatka modpacków',
-				'Serwery: wspólne vs lokalne, udostępnianie IP i live sync',
-				'Czat w panelu znajomych: grupy, reakcje i screenshoty',
-			]
-		: [
-				'Premium fix: Microsoft accounts can join online-mode servers again',
-				'Play Dock: wide library dock and Start / Servers / Locker / Discover navigation',
-				'Discover: quieter cards, filter drawer, sort shortcuts, and modpack grid',
-				'Servers: shared vs local lists, share IP, and live sync',
-				'Chat in the friends panel: groups, reactions, and screenshots',
-			],
-)
 
 function shouldShow(version: string): boolean {
 	if (!version) return false
@@ -71,16 +47,16 @@ defineExpose({ show, shouldShow })
 
 const messages = defineMessages({
 	title: {
-		id: 'octra.whats-new.title',
-		defaultMessage: "What's new in Octra {version}",
-	},
-	intro: {
-		id: 'octra.whats-new.intro',
-		defaultMessage: 'Highlights since your last update:',
+		id: 'Lumen.whats-new.title',
+		defaultMessage: "What's new in Lumen {version}",
 	},
 	dismiss: {
-		id: 'octra.whats-new.dismiss',
+		id: 'Lumen.whats-new.dismiss',
 		defaultMessage: 'Got it',
+	},
+	fallback: {
+		id: 'Lumen.whats-new.fallback',
+		defaultMessage: 'See the full changelog on GitHub for details.',
 	},
 })
 </script>
@@ -92,14 +68,9 @@ const messages = defineMessages({
 		max-width="440px"
 		:on-hide="markSeen"
 	>
-		<p class="m-0 mb-3 text-sm text-secondary">
-			{{ formatMessage(messages.intro) }}
+		<p class="m-0 text-sm text-primary">
+			{{ formatMessage(messages.fallback) }}
 		</p>
-		<ul class="m-0 flex list-disc flex-col gap-2 pl-5 text-sm text-primary">
-			<li v-for="(bullet, index) in featureBullets" :key="index">
-				{{ bullet }}
-			</li>
-		</ul>
 		<template #actions>
 			<div class="flex justify-end">
 				<Button type="colored" color="brand" @click="dismiss">

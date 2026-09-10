@@ -1,5 +1,5 @@
-import type { Labrinth } from '@modrinth/api-client'
-import type { GameVersionTag, PlatformTag } from '@modrinth/utils'
+import type { Labrinth } from '@lumen/api-client'
+import type { GameVersionTag, PlatformTag } from '@lumen/utils'
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 
 import ProjectSidebarServerInfo from '../../components/project/ProjectSidebarServerInfo.vue'
@@ -62,7 +62,7 @@ export const WithRequiredContent: Story = {
 	args: {
 		projectV3: {
 			minecraft_java_server: {
-				address: 'mc.modrinth.com',
+				address: 'mc.Lumen.com',
 				content: {
 					kind: 'modpack',
 					version_id: 'abc123',
@@ -99,7 +99,7 @@ export const WithRequiredContentDownload: Story = {
 	args: {
 		projectV3: {
 			minecraft_java_server: {
-				address: 'mc.modrinth.com',
+				address: 'mc.Lumen.com',
 				content: {
 					kind: 'modpack',
 					version_id: 'abc123',

@@ -133,13 +133,13 @@ fn main() {
                 "mr-auth",
                 InlinedPlugin::new()
                     .commands(&[
-                        "modrinth_login",
+                        "lumen_login",
                         "logout",
                         "get",
                         "get_all",
                         "set_active",
                         "remove_account",
-                        "cancel_modrinth_login",
+                        "cancel_lumen_login",
                     ])
                     .default_permission(
                         DefaultPermissionRule::AllowAllCommands,
@@ -262,12 +262,12 @@ fn main() {
                         "instance_install_project_with_dependencies",
                         "instance_switch_project_version_with_dependencies",
                         "instance_add_project_from_path",
-                        "instance_is_file_on_modrinth",
+                        "instance_is_file_on_lumen",
                         "instance_toggle_disable_project",
                         "instance_set_project_locked",
                         "instance_remove_project",
-                        "instance_update_managed_modrinth_version",
-                        "instance_repair_managed_modrinth",
+                        "instance_update_managed_lumen_version",
+                        "instance_repair_managed_lumen",
                         "instance_run",
                         "instance_kill",
                         "instance_edit",

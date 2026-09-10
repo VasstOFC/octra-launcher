@@ -1,7 +1,7 @@
 ;(function () {
-	document.documentElement.classList.add('modrinth-cmp-summary-hidden')
+	document.documentElement.classList.add('Lumen-cmp-summary-hidden')
 
-	var host = 'modrinth.com'
+	var host = 'Lumen.com'
 	// var host = window.location.hostname;
 	var element = document.createElement('script')
 	var firstScript = document.getElementsByTagName('script')[0]
@@ -134,7 +134,7 @@
 	}
 
 	makeStub()
-	window.dispatchEvent(new Event('modrinth-cmp-ready'))
+	window.dispatchEvent(new Event('Lumen-cmp-ready'))
 
 	var uspStubFunction = function () {
 		var arg = arguments

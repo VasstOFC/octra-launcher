@@ -92,8 +92,8 @@
 </template>
 
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
-import { RotateCounterClockwiseIcon, XIcon } from '@modrinth/assets'
+import type { Labrinth } from '@lumen/api-client'
+import { RotateCounterClockwiseIcon, XIcon } from '@lumen/assets'
 import { computed, ref, useTemplateRef } from 'vue'
 
 import { Button } from '#ui/components/base/buttons'

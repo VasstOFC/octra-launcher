@@ -14,9 +14,7 @@ const props = withDefaults(
 )
 
 const headingTag = computed(() => `h${props.headingLevel}`)
-const labelId = computed(() =>
-	props.controlId ? `${props.controlId}-label` : undefined,
-)
+const labelId = computed(() => (props.controlId ? `${props.controlId}-label` : undefined))
 </script>
 
 <template>
@@ -31,10 +29,7 @@ const labelId = computed(() =>
 		<div class="mt-2 w-full min-w-0 [&>*]:w-full">
 			<slot :labelled-by="labelId" :control-id="controlId" />
 		</div>
-		<p
-			v-if="description"
-			class="m-0 mt-2 text-sm leading-snug text-secondary"
-		>
+		<p v-if="description" class="m-0 mt-2 text-sm leading-snug text-secondary">
 			{{ description }}
 		</p>
 	</div>

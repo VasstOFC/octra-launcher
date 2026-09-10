@@ -9,7 +9,7 @@
     "message": "全部接受"
   },
   "ads-consent.body": {
-    "message": "廣告使 Modrinth 得以營運，並為創作者提供收益。我們的合作夥伴可能會在網站上儲存或存取 Cookie，以實現個人化廣告並衡量廣告成效。"
+    "message": "廣告使 Lumen 得以營運，並為創作者提供收益。我們的合作夥伴可能會在網站上儲存或存取 Cookie，以實現個人化廣告並衡量廣告成效。"
   },
   "ads-consent.manage": {
     "message": "管理偏好設定"
@@ -18,7 +18,7 @@
     "message": "全部拒絕"
   },
   "ads-consent.title": {
-    "message": "關於你的隱私，以及廣告如何幫助 Modrinth"
+    "message": "關於你的隱私，以及廣告如何幫助 Lumen"
   },
   "analytics.action.add": {
     "message": "新增"
@@ -110,11 +110,11 @@
   "analytics.chart.controls.display": {
     "message": "顯示"
   },
-  "analytics.chart.controls.modrinth-events": {
-    "message": "Modrinth 事件"
+  "analytics.chart.controls.Lumen-events": {
+    "message": "Lumen 事件"
   },
-  "analytics.chart.controls.no-modrinth-events": {
-    "message": "圖表中沒有 Modrinth 事件。"
+  "analytics.chart.controls.no-Lumen-events": {
+    "message": "圖表中沒有 Lumen 事件。"
   },
   "analytics.chart.controls.no-project-events": {
     "message": "圖表中沒有專案事件。"
@@ -144,7 +144,7 @@
     "message": "檢視營利分析詳情"
   },
   "analytics.chart.legend.monetization-details.description": {
-    "message": "只有透過 Modrinth 產生的瀏覽量與下載量才會計入營利，且使用者必須登入才能計算下載量。"
+    "message": "只有透過 Lumen 產生的瀏覽量與下載量才會計入營利，且使用者必須登入才能計算下載量。"
   },
   "analytics.chart.legend.monetization-details.title": {
     "message": "營利分析詳情"
@@ -228,10 +228,10 @@
     "message": "更新"
   },
   "analytics.download-source.app": {
-    "message": "Modrinth App"
+    "message": "Lumen App"
   },
   "analytics.download-source.website": {
-    "message": "Modrinth 網站"
+    "message": "Lumen 網站"
   },
   "analytics.downloads.suffix": {
     "message": "次"
@@ -417,7 +417,7 @@
     "message": "下載量"
   },
   "analytics.stat.monetization-banner.body": {
-    "message": "只有透過 Modrinth 產生的瀏覽量與下載量才會計入營利，且必須通過防詐欺篩選機制。此外，透過 Modrinth App 下載時，使用者也必須處於登入狀態。由於所有專案中可營利的下載比例大致相同，因此即使計入所有下載量，你的收益也不會產生顯著變化。"
+    "message": "只有透過 Lumen 產生的瀏覽量與下載量才會計入營利，且必須通過防詐欺篩選機制。此外，透過 Lumen App 下載時，使用者也必須處於登入狀態。由於所有專案中可營利的下載比例大致相同，因此即使計入所有下載量，你的收益也不會產生顯著變化。"
   },
   "analytics.stat.monetization-banner.learn-more": {
     "message": "了解更多"
@@ -456,7 +456,7 @@
     "message": "{start}至{end}"
   },
   "analytics.table.csv.filename": {
-    "message": "Modrinth 數據分析 - 按{breakdown} - {dateRange}"
+    "message": "Lumen 數據分析 - 按{breakdown} - {dateRange}"
   },
   "analytics.table.csv.header.playtime-seconds": {
     "message": "遊玩時數（秒）"
@@ -564,7 +564,7 @@
     "message": "Linux"
   },
   "app-marketing.download.linux-disclaimer": {
-    "message": "Modrinth App 的 Linux 版本在特定系統與設定上<issues-link>已知存在問題</issues-link>。若 Modrinth App 在你的系統上執行不穩定，我們建議你嘗試使用 <prism-link>Prism Launcher</prism-link> 等其他應用程式，以輕鬆安裝 Modrinth 的內容。"
+    "message": "Lumen App 的 Linux 版本在特定系統與設定上<issues-link>已知存在問題</issues-link>。若 Lumen App 在你的系統上執行不穩定，我們建議你嘗試使用 <prism-link>Prism Launcher</prism-link> 等其他應用程式，以輕鬆安裝 Lumen 的內容。"
   },
   "app-marketing.download.mac": {
     "message": "Mac"
@@ -573,10 +573,10 @@
     "message": "下載選項"
   },
   "app-marketing.download.terms": {
-    "message": "下載 Modrinth App，即表示您同意我們的《<terms-link>使用條款</terms-link>》及《<privacy-link>隱私權政策</privacy-link>》。"
+    "message": "下載 Lumen App，即表示您同意我們的《<terms-link>使用條款</terms-link>》及《<privacy-link>隱私權政策</privacy-link>》。"
   },
   "app-marketing.download.title": {
-    "message": "下載 Modrinth App（Beta 版）"
+    "message": "下載 Lumen App（Beta 版）"
   },
   "app-marketing.download.windows": {
     "message": "Windows"
@@ -588,7 +588,7 @@
     "message": "追蹤專案"
   },
   "app-marketing.features.importing.description": {
-    "message": "從你之前使用的啟動器匯入所有喜愛的設定檔，幾秒鐘內即可輕鬆上手 Modrinth App！"
+    "message": "從你之前使用的啟動器匯入所有喜愛的設定檔，幾秒鐘內即可輕鬆上手 Lumen App！"
   },
   "app-marketing.features.importing.gdlauncher-alt": {
     "message": "GDLauncher"
@@ -606,7 +606,7 @@
     "message": "作者：{author}"
   },
   "app-marketing.features.mod-management.description": {
-    "message": "Modrinth 讓你可以輕鬆集中管理所有模組。你可以一鍵安裝、移除及更新模組。"
+    "message": "Lumen 讓你可以輕鬆集中管理所有模組。你可以一鍵安裝、移除及更新模組。"
   },
   "app-marketing.features.mod-management.installed-mods": {
     "message": "已安裝模組"
@@ -630,7 +630,7 @@
     "message": "離線模式"
   },
   "app-marketing.features.open-source.description": {
-    "message": "Modrinth App 完全開源。你可以在我們的 <github-link>GitHub</github-link> 上查看原始碼！"
+    "message": "Lumen App 完全開源。你可以在我們的 <github-link>GitHub</github-link> 上查看原始碼！"
   },
   "app-marketing.features.open-source.title": {
     "message": "開放原始碼"
@@ -642,7 +642,7 @@
     "message": "% CPU"
   },
   "app-marketing.features.performance.description": {
-    "message": "Modrinth App 的效能優於許多主流的模組管理員，且僅使用 150 MB 記憶體！"
+    "message": "Lumen App 的效能優於許多主流的模組管理員，且僅使用 150 MB 記憶體！"
   },
   "app-marketing.features.performance.discord": {
     "message": "Discord"
@@ -662,8 +662,8 @@
   "app-marketing.features.performance.less-than-150mb": {
     "message": "< 150 MB"
   },
-  "app-marketing.features.performance.modrinth-app": {
-    "message": "Modrinth App"
+  "app-marketing.features.performance.Lumen-app": {
+    "message": "Lumen App"
   },
   "app-marketing.features.performance.one-billion-percent": {
     "message": "10 億 %"
@@ -681,13 +681,13 @@
     "message": "高效能"
   },
   "app-marketing.features.play.description": {
-    "message": "使用 Modrinth App 下載並遊玩你喜愛的模組和模組包。"
+    "message": "使用 Lumen App 下載並遊玩你喜愛的模組和模組包。"
   },
   "app-marketing.features.play.title": {
     "message": "遊玩你喜愛的模組"
   },
   "app-marketing.features.sharing.description": {
-    "message": "透過 Modrinth 上託管的數千種模組與模組包，建立、分享並遊玩你的模組包。"
+    "message": "透過 Lumen 上託管的數千種模組與模組包，建立、分享並遊玩你的模組包。"
   },
   "app-marketing.features.sharing.modpack": {
     "message": "模組包"
@@ -702,7 +702,7 @@
     "message": "前所未有的"
   },
   "app-marketing.features.website.description": {
-    "message": "Modrinth App 已與網站完全整合，你可透過應用程式存取所有喜愛的專案！"
+    "message": "Lumen App 已與網站完全整合，你可透過應用程式存取所有喜愛的專案！"
   },
   "app-marketing.features.website.title": {
     "message": "網站整合"
@@ -711,19 +711,19 @@
     "message": "啟動器體驗"
   },
   "app-marketing.hero.app-screenshot-alt": {
-    "message": "Modrinth App 的螢幕擷取畫面，顯示已開啟 Cobblemon 實例的「內容」頁面。"
+    "message": "Lumen App 的螢幕擷取畫面，顯示已開啟 Cobblemon 實例的「內容」頁面。"
   },
   "app-marketing.hero.description": {
-    "message": "Modrinth App 是一款獨特的開源啟動器，它讓你可以輕鬆遊玩並保持你喜愛模組的最新狀態，所有功能都整合在一個簡潔小巧的應用程式中。"
+    "message": "Lumen App 是一款獨特的開源啟動器，它讓你可以輕鬆遊玩並保持你喜愛模組的最新狀態，所有功能都整合在一個簡潔小巧的應用程式中。"
   },
   "app-marketing.hero.download-button": {
-    "message": "下載 Modrinth App"
+    "message": "下載 Lumen App"
   },
-  "app-marketing.hero.download-modrinth-app": {
-    "message": "下載 Modrinth App"
+  "app-marketing.hero.download-Lumen-app": {
+    "message": "下載 Lumen App"
   },
-  "app-marketing.hero.download-modrinth-app-for-os": {
-    "message": "下載適用於 {os} 的 Modrinth App"
+  "app-marketing.hero.download-Lumen-app-for-os": {
+    "message": "下載適用於 {os} 的 Lumen App"
   },
   "app-marketing.hero.minecraft-screenshot-alt": {
     "message": "Cobblemon 實例主選單的螢幕擷取畫面。"
@@ -792,7 +792,7 @@
     "message": "出生日期是必填欄位"
   },
   "auth.create-account.date-of-birth.under13-helper": {
-    "message": "你未達到建立 Modrinth 帳號的最低年齡限制。"
+    "message": "你未達到建立 Lumen 帳號的最低年齡限制。"
   },
   "auth.create-account.info-panel.source-code-link": {
     "message": "相關原始碼"
@@ -807,7 +807,7 @@
     "message": "安全檢查"
   },
   "auth.create-account.subscribe.label": {
-    "message": "透過電子郵件通知我 Modrinth 的最新動態"
+    "message": "透過電子郵件通知我 Lumen 的最新動態"
   },
   "auth.create-account.title": {
     "message": "建立帳號"
@@ -879,7 +879,7 @@
     "message": "還沒有帳號嗎？"
   },
   "auth.sign-in.sign-in-with": {
-    "message": "登入 Modrinth"
+    "message": "登入 Lumen"
   },
   "auth.sign-in.title": {
     "message": "登入"
@@ -891,7 +891,7 @@
     "message": "使用電子郵件繼續"
   },
   "auth.sign-up.legal-dislaimer": {
-    "message": "建立帳號即表示您同意 Modrinth 的《<terms-link>使用條款</terms-link>》及《<privacy-policy-link>隱私權政策</privacy-policy-link>》。"
+    "message": "建立帳號即表示您同意 Lumen 的《<terms-link>使用條款</terms-link>》及《<privacy-policy-link>隱私權政策</privacy-policy-link>》。"
   },
   "auth.sign-up.show-fewer-options": {
     "message": "顯示較少選項"
@@ -981,7 +981,7 @@
     "message": "確定要刪除這個收藏嗎？"
   },
   "collection.description": {
-    "message": "{description} — 前往 Modrinth 查看 {username} 的收藏「{name}」"
+    "message": "{description} — 前往 Lumen 查看 {username} 的收藏「{name}」"
   },
   "collection.description.following": {
     "message": "由系統自動產生的收藏，包含你正在追蹤的所有專案。"
@@ -1101,7 +1101,7 @@
     "message": "回覆討論串"
   },
   "conversation-thread.reply-modal.help-center-note": {
-    "message": "如果你需要聯絡管理團隊，請前往 <help-center-link>Modrinth 說明中心</help-center-link>，並按一下右下角的藍色對話氣泡以聯絡客服團隊。"
+    "message": "如果你需要聯絡管理團隊，請前往 <help-center-link>Lumen 說明中心</help-center-link>，並按一下右下角的藍色對話氣泡以聯絡客服團隊。"
   },
   "conversation-thread.resubmit-modal.confirmation.description": {
     "message": "確認我解決了管理員提到的問題"
@@ -1509,7 +1509,7 @@
     "message": "稅務表單不完整"
   },
   "dashboard.creator-tax-form-modal.security.description": {
-    "message": "Modrinth 透過第三方供應商 Track1099 安全地收集及儲存你的稅務表單。<security-link>在這裡了解更多。</security-link>"
+    "message": "Lumen 透過第三方供應商 Track1099 安全地收集及儲存你的稅務表單。<security-link>在這裡了解更多。</security-link>"
   },
   "dashboard.creator-tax-form-modal.security.header": {
     "message": "安全措施"
@@ -1683,7 +1683,7 @@
     "message": "如要提領全額可用餘額 <b>{available}</b>，請先完成下方表單。此為稅務申報所需，僅需設定一次即可。"
   },
   "dashboard.creator-withdraw-modal.tax-form-required.body-with-limit": {
-    "message": "你必須填寫 W-9 或 W-8 表單以供 Modrinth 的稅務紀錄使用，以便我們符合稅務法規。"
+    "message": "你必須填寫 W-9 或 W-8 表單以供 Lumen 的稅務紀錄使用，以便我們符合稅務法規。"
   },
   "dashboard.creator-withdraw-modal.tax-form-required.header": {
     "message": "需提交稅務表單"
@@ -1746,7 +1746,7 @@
     "message": "未驗證的電子郵件"
   },
   "dashboard.creator-withdraw-modal.tremendous-details.unverified-email-message": {
-    "message": "你輸入的收件電子郵件地址與你的 Modrinth 帳號並無關聯。若獎勵已寄送至錯誤的電子郵件地址，Modrinth 將無法協助追回。"
+    "message": "你輸入的收件電子郵件地址與你的 Lumen 帳號並無關聯。若獎勵已寄送至錯誤的電子郵件地址，Lumen 將無法協助追回。"
   },
   "dashboard.creator-withdraw-modal.tremendous-details.usd-paypal-warning-header": {
     "message": "可享受較低的手續費"
@@ -1770,7 +1770,7 @@
     "message": "你已用盡你的提領額度：<b>{withdrawLimit}</b>。你必須填寫一份稅務表單才能提領更多金額。"
   },
   "dashboard.discord-roles.banner.body": {
-    "message": "你符合以下身分組的領取資格：{roles}。透過 Modrinth 連結你的 Discord 帳號，我們將自動為你同步。"
+    "message": "你符合以下身分組的領取資格：{roles}。透過 Lumen 連結你的 Discord 帳號，我們將自動為你同步。"
   },
   "dashboard.discord-roles.banner.cta": {
     "message": "連結 Discord 帳號"
@@ -1953,7 +1953,7 @@
     "message": "預估收益在開放領取前可能有所變動。"
   },
   "dashboard.revenue.estimated-tooltip.msg2": {
-    "message": "按這裡了解 Modrinth 如何處理你的收入。"
+    "message": "按這裡了解 Lumen 如何處理你的收入。"
   },
   "dashboard.revenue.estimated-with-date": {
     "message": "預計時間：{date}"
@@ -1974,7 +1974,7 @@
     "message": "提領"
   },
   "dashboard.revenue.tos": {
-    "message": "透過上傳專案至 Modrinth 並從您的帳號中提領款項，即表示您同意我們的《<terms-link>獎勵計畫條款</terms-link>》。請了解更多關於《<info-link>獎勵計畫</info-link>》的資訊。"
+    "message": "透過上傳專案至 Lumen 並從您的帳號中提領款項，即表示您同意我們的《<terms-link>獎勵計畫條款</terms-link>》。請了解更多關於《<info-link>獎勵計畫</info-link>》的資訊。"
   },
   "dashboard.revenue.transactions.btn.download-csv": {
     "message": "下載為 CSV 檔案"
@@ -2163,7 +2163,7 @@
     "message": "在重設後選擇要安裝的模組包"
   },
   "discover.seo.description": {
-    "message": "在 Modrinth 搜尋並瀏覽數千個 Minecraft {projectType}，即時獲得精準的搜尋結果。我們的篩選功能可協助你快速找到最優質的 Minecraft {projectType}。"
+    "message": "在 Lumen 搜尋並瀏覽數千個 Minecraft {projectType}，即時獲得精準的搜尋結果。我們的篩選功能可協助你快速找到最優質的 Minecraft {projectType}。"
   },
   "discover.seo.title": {
     "message": "搜尋{projectType}"
@@ -2178,7 +2178,7 @@
     "message": "該收藏可能已設為私人。"
   },
   "error.collection.404.list_item.3": {
-    "message": "該收藏可能因違反我們的《<tou-link>使用條款</tou-link>》，已被 Modrinth 的管理團隊下架。"
+    "message": "該收藏可能因違反我們的《<tou-link>使用條款</tou-link>》，已被 Lumen 的管理團隊下架。"
   },
   "error.collection.404.list_title": {
     "message": "原因："
@@ -2205,10 +2205,10 @@
     "message": "因法律原因無法提供內容"
   },
   "error.generic.default.list_item.1": {
-    "message": "前往我們的<status-link>狀態頁面</status-link>，查看 Modrinth 是否停機。"
+    "message": "前往我們的<status-link>狀態頁面</status-link>，查看 Lumen 是否停機。"
   },
   "error.generic.default.list_item.2": {
-    "message": "如果這個問題持續發生，你或許會想加入我們的 <discord-link>Discord 伺服器</discord-link>，通知 Modrinth 團隊。"
+    "message": "如果這個問題持續發生，你或許會想加入我們的 <discord-link>Discord 伺服器</discord-link>，通知 Lumen 團隊。"
   },
   "error.generic.default.list_title": {
     "message": "請在幾分鐘後再試一次。"
@@ -2226,7 +2226,7 @@
     "message": "該組織的擁有者可能已變更網址或已將其刪除。"
   },
   "error.organization.404.list_item.3": {
-    "message": "該組織可能因違反我們的《<tou-link>使用條款</tou-link>》，已被 Modrinth 的管理團隊下架。"
+    "message": "該組織可能因違反我們的《<tou-link>使用條款</tou-link>》，已被 Lumen 的管理團隊下架。"
   },
   "error.organization.404.list_title": {
     "message": "原因："
@@ -2241,7 +2241,7 @@
     "message": "該專案的擁有者可能已變更網址或已將其刪除。"
   },
   "error.project.404.list_item.3": {
-    "message": "該專案可能因違反我們的《<tou-link>使用條款</tou-link>》，已被 Modrinth 的管理團隊下架。"
+    "message": "該專案可能因違反我們的《<tou-link>使用條款</tou-link>》，已被 Lumen 的管理團隊下架。"
   },
   "error.project.404.list_title": {
     "message": "原因："
@@ -2256,7 +2256,7 @@
     "message": "該使用者可能已變更使用者名稱或已刪除帳號。"
   },
   "error.user.404.list_item.3": {
-    "message": "該使用者的帳號可能因違反 Modrinth 的《<tou-link>使用條款</tou-link>》，已被終止。"
+    "message": "該使用者的帳號可能因違反 Lumen 的《<tou-link>使用條款</tou-link>》，已被終止。"
   },
   "error.user.404.list_title": {
     "message": "原因："
@@ -2298,10 +2298,10 @@
     "message": "當你的伺服器負載較重時，我們會暫時讓它使用額外的 CPU 執行緒，幫你緩解延遲飆升與不穩定的情況。這能防止 TPS（每秒刻數）低於 20，確保遊戲體驗盡可能流暢。由於這些額外的 CPU 執行緒只會在高負載期間短暫提供，因此可能不會出現在 Spark 報告或其他效能分析工具中。"
   },
   "hosting-marketing.faq.cpu-kind": {
-    "message": "Modrinth Hosting 伺服器執行於哪種 CPU？"
+    "message": "Lumen Hosting 伺服器執行於哪種 CPU？"
   },
   "hosting-marketing.faq.cpu-kind.answer": {
-    "message": "Modrinth Hosting 伺服器搭載 AMD Ryzen 7900 與 7950X3D 同等級的高效能 CPU，時脈達 5 GHz 以上，並搭配 DDR5 記憶體。"
+    "message": "Lumen Hosting 伺服器搭載 AMD Ryzen 7900 與 7950X3D 同等級的高效能 CPU，時脈達 5 GHz 以上，並搭配 DDR5 記憶體。"
   },
   "hosting-marketing.faq.currency": {
     "message": "價格是以哪種貨幣計算？"
@@ -2310,19 +2310,19 @@
     "message": "所有價格均以美元（USD）標示。"
   },
   "hosting-marketing.faq.ddos-protection": {
-    "message": "Modrinth Hosting 伺服器有 DDoS 防護嗎？"
+    "message": "Lumen Hosting 伺服器有 DDoS 防護嗎？"
   },
   "hosting-marketing.faq.ddos-protection.answer": {
-    "message": "有的。所有 Modrinth Hosting 伺服器都具備 DDoS 防護，部分地區的防禦容量最高可達 17 Tbps。"
+    "message": "有的。所有 Lumen Hosting 伺服器都具備 DDoS 防護，部分地區的防禦容量最高可達 17 Tbps。"
   },
   "hosting-marketing.faq.heading": {
     "message": "常見問題"
   },
   "hosting-marketing.faq.how-fast": {
-    "message": "Modrinth Hosting 伺服器的速度有多快？"
+    "message": "Lumen Hosting 伺服器的速度有多快？"
   },
   "hosting-marketing.faq.how-fast.answer.one": {
-    "message": "Modrinth Hosting 伺服器託管於非常現代的高效能硬體上，但很難確切說明這會如何反映在你的伺服器速度上，因為影響因素很多，像是你在伺服器上執行的模組、資料包、插件，甚至是玩家的行為。"
+    "message": "Lumen Hosting 伺服器託管於非常現代的高效能硬體上，但很難確切說明這會如何反映在你的伺服器速度上，因為影響因素很多，像是你在伺服器上執行的模組、資料包、插件，甚至是玩家的行為。"
   },
   "hosting-marketing.faq.how-fast.answer.two": {
     "message": "大部分的效能問題通常是出自未經最佳化的模組包、模組、資料包或插件，進而導致伺服器卡頓。由於我們的伺服器規格非常高階，只要你針對執行的內容選擇適合的方案，通常不會遇到什麼麻煩。"
@@ -2331,10 +2331,10 @@
     "message": "我可以增加伺服器的儲存空間嗎？"
   },
   "hosting-marketing.faq.increase-storage.answer": {
-    "message": "可以，你可以增加伺服器的儲存空間，而且完全不需要額外費用。如果你需要更多儲存空間，請聯絡 Modrinth 支援團隊。"
+    "message": "可以，你可以增加伺服器的儲存空間，而且完全不需要額外費用。如果你需要更多儲存空間，請聯絡 Lumen 支援團隊。"
   },
   "hosting-marketing.faq.location": {
-    "message": "Modrinth Hosting 伺服器位於哪裡？我可以選擇區域嗎？"
+    "message": "Lumen Hosting 伺服器位於哪裡？我可以選擇區域嗎？"
   },
   "hosting-marketing.faq.location.answer": {
     "message": "我們目前在北美、歐洲、東南亞與澳洲設有伺服器，你可以在購買時選擇。未來還會推出更多區域！如果你想切換區域，請聯絡支援團隊。"
@@ -2343,7 +2343,7 @@
     "message": "可以使用哪些 Minecraft 版本與載入器？"
   },
   "hosting-marketing.faq.versions-loaders.answer.one": {
-    "message": "Modrinth Hosting 伺服器支援自 1.2.5 起的任何 Minecraft Java 版版本，包含快照版本也能執行。"
+    "message": "Lumen Hosting 伺服器支援自 1.2.5 起的任何 Minecraft Java 版版本，包含快照版本也能執行。"
   },
   "hosting-marketing.faq.versions-loaders.answer.two": {
     "message": "我們也支援多種模組與插件載入器，模組包含 Fabric、Quilt、Forge 與 NeoForge，插件則支援 Paper 與 Purpur。支援狀況取決於該載入器是否支援你選擇的 Minecraft 版本。"
@@ -2360,11 +2360,11 @@
   "hosting-marketing.hero.button.start-your-server": {
     "message": "立即啟動你的伺服器"
   },
-  "hosting-marketing.hero.host-with-modrinth": {
-    "message": "使用 Modrinth Hosting 託⁠管你的下一個伺服器"
+  "hosting-marketing.hero.host-with-Lumen": {
+    "message": "使用 Lumen Hosting 託⁠管你的下一個伺服器"
   },
   "hosting-marketing.hero.hosting-description": {
-    "message": "Modrinth Hosting 可讓你用最簡單的方式，託管個人的 Minecraft Java 版伺服器。你可以直接在 Modrinth 平臺內，無縫安裝並暢玩你喜愛的模組與模組包。"
+    "message": "Lumen Hosting 可讓你用最簡單的方式，託管個人的 Minecraft Java 版伺服器。你可以直接在 Lumen 平臺內，無縫安裝並暢玩你喜愛的模組與模組包。"
   },
   "hosting-marketing.included.advanced-networking": {
     "message": "進階網路管理"
@@ -2382,10 +2382,10 @@
     "message": "自訂網址"
   },
   "hosting-marketing.included.custom-url.description": {
-    "message": "使用自訂的 <contrast>modrinth.gg</contrast> 網址分享你的伺服器。"
+    "message": "使用自訂的 <contrast>Lumen.gg</contrast> 網址分享你的伺服器。"
   },
   "hosting-marketing.included.description": {
-    "message": "每個伺服器都隨附一系列功能，旨在提供唯有 Modrinth 才能帶給你的託管體驗。"
+    "message": "每個伺服器都隨附一系列功能，旨在提供唯有 Lumen 才能帶給你的託管體驗。"
   },
   "hosting-marketing.included.file-manager": {
     "message": "直覺好用的檔案管理員"
@@ -2400,19 +2400,19 @@
     "message": "隨時為你提供協助"
   },
   "hosting-marketing.included.help.description": {
-    "message": "隨時聯絡 Modrinth 團隊來取得伺服器相關協助。"
+    "message": "隨時聯絡 Lumen 團隊來取得伺服器相關協助。"
   },
   "hosting-marketing.included.powerful-console": {
     "message": "強大的主控臺、伺服器設定檔管理員，以及更多功能"
   },
   "hosting-marketing.included.powerful-console.description": {
-    "message": "Modrinth Hosting 配備了多樣強大工具，讓你輕鬆管理你的伺服器。"
+    "message": "Lumen Hosting 配備了多樣強大工具，讓你輕鬆管理你的伺服器。"
   },
   "hosting-marketing.included.sftp-access": {
     "message": "SFTP 存取"
   },
   "hosting-marketing.included.sftp-access.description": {
-    "message": "透過 Modrinth Hosting 內建的 SFTP 功能，直接存取你的伺服器檔案。"
+    "message": "透過 Lumen Hosting 內建的 SFTP 功能，直接存取你的伺服器檔案。"
   },
   "hosting-marketing.included.with-your-server": {
     "message": "伺服器內含功能"
@@ -2453,20 +2453,20 @@
   "hosting-marketing.server-for-everyone": {
     "message": "適合每個人的方案"
   },
-  "hosting-marketing.why.all-on-modrinth": {
-    "message": "在 Modrinth 統籌管理一切"
+  "hosting-marketing.why.all-on-Lumen": {
+    "message": "在 Lumen 統籌管理一切"
   },
-  "hosting-marketing.why.all-on-modrinth.description": {
-    "message": "你的伺服器、模組、玩家等所有資訊都在 Modrinth 上，不需要在多個平臺間切換。"
+  "hosting-marketing.why.all-on-Lumen.description": {
+    "message": "你的伺服器、模組、玩家等所有資訊都在 Lumen 上，不需要在多個平臺間切換。"
   },
   "hosting-marketing.why.consistently-fast": {
     "message": "始終如一的高速體驗"
   },
   "hosting-marketing.why.consistently-fast.description": {
-    "message": "我們的基礎設施絕不過載，這表示你在 Modrinth 託管的伺服器永遠都能發揮完整效能。"
+    "message": "我們的基礎設施絕不過載，這表示你在 Lumen 託管的伺服器永遠都能發揮完整效能。"
   },
   "hosting-marketing.why.description": {
-    "message": "從 Modrinth 上的數千個模組包中挑選，或是打造你專屬的組合。準備好遊玩時，直接邀請你的好友加入。"
+    "message": "從 Lumen 上的數千個模組包中挑選，或是打造你專屬的組合。準備好遊玩時，直接邀請你的好友加入。"
   },
   "hosting-marketing.why.heading": {
     "message": "找到模組包，秒變伺服器。"
@@ -2475,22 +2475,22 @@
     "message": "體驗現代且可靠的託管服務"
   },
   "hosting-marketing.why.modern-reliable-hosting.description": {
-    "message": "Modrinth Hosting 伺服器採用<contrast>高效能 AMD CPU 與 DDR5 記憶體</contrast>，並執行於自研軟體之上，確保你的伺服器執行流暢。"
+    "message": "Lumen Hosting 伺服器採用<contrast>高效能 AMD CPU 與 DDR5 記憶體</contrast>，並執行於自研軟體之上，確保你的伺服器執行流暢。"
   },
   "hosting-marketing.why.where-mods-are": {
     "message": "在模組所在之處盡情暢玩"
   },
   "hosting-marketing.why.where-mods-are.description": {
-    "message": "Modrinth Hosting 將模組與模組包的安裝流程完美整合到你的伺服器中。"
+    "message": "Lumen Hosting 將模組與模組包的安裝流程完美整合到你的伺服器中。"
   },
-  "hosting-marketing.why.why-modrinth-hosting": {
-    "message": "為什麼選擇 Modrinth Hosting？"
+  "hosting-marketing.why.why-Lumen-hosting": {
+    "message": "為什麼選擇 Lumen Hosting？"
   },
   "hosting-marketing.why.your-favorite-mods": {
     "message": "所有你喜愛的模組通通都有"
   },
   "hosting-marketing.why.your-favorite-mods.description": {
-    "message": "自由選擇原版、Fabric、Forge、Quilt 或 NeoForge。只要在 Modrinth 上找得到的，都能在你的伺服器上執行。"
+    "message": "自由選擇原版、Fabric、Forge、Quilt 或 NeoForge。只要在 Lumen 上找得到的，都能在你的伺服器上執行。"
   },
   "hosting.plan.out-of-stock": {
     "message": "缺貨"
@@ -2505,7 +2505,7 @@
     "message": "前往資訊主頁"
   },
   "landing.creator.feature.constantly-evolving.description": {
-    "message": "透過 Modrinth 團隊持續不斷的更新，享受最佳的模組體驗"
+    "message": "透過 Lumen 團隊持續不斷的更新，享受最佳的模組體驗"
   },
   "landing.creator.feature.constantly-evolving.title": {
     "message": "持續進化"
@@ -2550,13 +2550,13 @@
     "message": "追蹤你喜愛的專案"
   },
   "landing.feature.launcher.description": {
-    "message": "Modrinth 的開源 API 讓啟動器能夠深度整合 Modrinth。你可以透過<link>我們的應用程式</link>，以及 ATLauncher、MultiMC 和 Prism Launcher 等熱門啟動器使用 Modrinth。"
+    "message": "Lumen 的開源 API 讓啟動器能夠深度整合 Lumen。你可以透過<link>我們的應用程式</link>，以及 ATLauncher、MultiMC 和 Prism Launcher 等熱門啟動器使用 Lumen。"
   },
   "landing.feature.launcher.heading": {
     "message": "使用你偏好的啟動器遊玩"
   },
   "landing.feature.search.description": {
-    "message": "Modrinth 快如閃電的搜尋與強大的篩選功能，讓你能隨打即找。"
+    "message": "Lumen 快如閃電的搜尋與強大的篩選功能，讓你能隨打即找。"
   },
   "landing.feature.search.heading": {
     "message": "輕鬆快速找到你想要的內容"
@@ -2589,10 +2589,10 @@
     "message": "ATLauncher"
   },
   "landing.launcher.graphic-alt": {
-    "message": "一個簡化的 Minecraft 視窗圖片，其中 Mojang Studios 標誌採用 Modrinth 綠色。"
+    "message": "一個簡化的 Minecraft 視窗圖片，其中 Mojang Studios 標誌採用 Lumen 綠色。"
   },
-  "landing.launcher.modrinth-app-label": {
-    "message": "Modrinth App"
+  "landing.launcher.Lumen-app-label": {
+    "message": "Lumen App"
   },
   "landing.launcher.prism-launcher-label": {
     "message": "Prism Launcher"
@@ -2685,13 +2685,13 @@
     "message": "前往帳號設定"
   },
   "layout.banner.add-email.description": {
-    "message": "為了安全起見，Modrinth 需要你為帳號註冊電子郵件地址。"
+    "message": "為了安全起見，Lumen 需要你為帳號註冊電子郵件地址。"
   },
   "layout.banner.build-fail.always-ignore": {
     "message": "一律忽略"
   },
   "layout.banner.build-fail.description": {
-    "message": "Modrinth 的前端無法從 API 取得資料，導致本次部署失敗。這可能是服務中斷或設定錯誤所致。請在 API 恢復可用時，再重新嘗試。錯誤碼：{errors}；目前的 API 網址是：{url}"
+    "message": "Lumen 的前端無法從 API 取得資料，導致本次部署失敗。這可能是服務中斷或設定錯誤所致。請在 API 恢復可用時，再重新嘗試。錯誤碼：{errors}；目前的 API 網址是：{url}"
   },
   "layout.banner.build-fail.ignore": {
     "message": "忽略"
@@ -2700,16 +2700,16 @@
     "message": "建構時無法從 API 取得狀態資料。"
   },
   "layout.banner.preview.description": {
-    "message": "如果你是想前往 Modrinth 的官方網站，請前往 {url}。這個預覽部署版本僅供 Modrinth 工作人員測試使用。它是基於 {ref} 建構而成。"
+    "message": "如果你是想前往 Lumen 的官方網站，請前往 {url}。這個預覽部署版本僅供 Lumen 工作人員測試使用。它是基於 {ref} 建構而成。"
   },
   "layout.banner.preview.title": {
-    "message": "這是 Modrinth 網站的預覽部署版本。"
+    "message": "這是 Lumen 網站的預覽部署版本。"
   },
   "layout.banner.staging.description": {
-    "message": "預備環境與 Modrinth 的正式資料庫完全獨立。\n它被用於測試與除錯，因此你執行的 Modrinth 後端或前端，可能是比正式實例還要新的開發中版本。"
+    "message": "預備環境與 Lumen 的正式資料庫完全獨立。\n它被用於測試與除錯，因此你執行的 Lumen 後端或前端，可能是比正式實例還要新的開發中版本。"
   },
   "layout.banner.staging.title": {
-    "message": "你正在查看 Modrinth 的預備環境"
+    "message": "你正在查看 Lumen 的預備環境"
   },
   "layout.banner.subscription-payment-failed.button": {
     "message": "更新帳務資訊"
@@ -2724,7 +2724,7 @@
     "message": "填寫稅務表單"
   },
   "layout.banner.tax.description": {
-    "message": "你今年已從 Modrinth 提領超過 {threshold}。為符合稅務法規，你需要填寫一份稅務表單。在提交這個表格之前，你的提領將暫停。"
+    "message": "你今年已從 Lumen 提領超過 {threshold}。為符合稅務法規，你需要填寫一份稅務表單。在提交這個表格之前，你的提領將暫停。"
   },
   "layout.banner.tax.title": {
     "message": "需填寫稅務表單"
@@ -2742,7 +2742,7 @@
     "message": "重新傳送驗證電子郵件"
   },
   "layout.banner.verify-email.description": {
-    "message": "為了安全起見，Modrinth 需要你驗證與你的帳號連結的電子郵件地址。"
+    "message": "為了安全起見，Lumen 需要你驗證與你的帳號連結的電子郵件地址。"
   },
   "layout.footer.about": {
     "message": "關於"
@@ -2798,23 +2798,23 @@
   "layout.footer.legal.terms-of-use": {
     "message": "使用條款"
   },
-  "layout.footer.modrinth-information": {
-    "message": "Modrinth 資訊"
+  "layout.footer.Lumen-information": {
+    "message": "Lumen 資訊"
   },
   "layout.footer.open-source": {
-    "message": "Modrinth 是<github-link>開源專案</github-link>。"
+    "message": "Lumen 是<github-link>開源專案</github-link>。"
   },
   "layout.footer.products": {
     "message": "產品"
   },
   "layout.footer.products.app": {
-    "message": "Modrinth App"
+    "message": "Lumen App"
   },
   "layout.footer.products.plus": {
-    "message": "Modrinth+"
+    "message": "Lumen+"
   },
   "layout.footer.products.servers": {
-    "message": "Modrinth Hosting"
+    "message": "Lumen Hosting"
   },
   "layout.footer.resources": {
     "message": "資源"
@@ -2856,7 +2856,7 @@
     "message": "切換選單"
   },
   "layout.meta.description": {
-    "message": "前往 Modrinth 下載 Minecraft 模組、插件、資料包、光影包、資源包和模組包。使用現代、易於使用的介面和 API 在 Modrinth 上探索及發布專案。"
+    "message": "前往 Lumen 下載 Minecraft 模組、插件、資料包、光影包、資源包和模組包。使用現代、易於使用的介面和 API 在 Lumen 上探索及發布專案。"
   },
   "layout.meta.og-description": {
     "message": "探索及發布 Minecraft 內容！"
@@ -2873,8 +2873,8 @@
   "layout.nav.discover": {
     "message": "探索"
   },
-  "layout.nav.get-modrinth-app": {
-    "message": "取得 Modrinth App"
+  "layout.nav.get-Lumen-app": {
+    "message": "取得 Lumen App"
   },
   "layout.nav.home": {
     "message": "首頁"
@@ -2882,11 +2882,11 @@
   "layout.nav.host-a-server": {
     "message": "託管伺服器"
   },
-  "layout.nav.modrinth-app": {
-    "message": "Modrinth App"
+  "layout.nav.Lumen-app": {
+    "message": "Lumen App"
   },
-  "layout.nav.modrinth-home-page": {
-    "message": "Modrinth 首頁"
+  "layout.nav.Lumen-home-page": {
+    "message": "Lumen 首頁"
   },
   "layout.nav.my-servers": {
     "message": "我的伺服器"
@@ -2909,11 +2909,11 @@
   "layout.nav.search": {
     "message": "搜尋"
   },
-  "layout.nav.upgrade-to-modrinth-plus": {
-    "message": "升級至 Modrinth+"
+  "layout.nav.upgrade-to-Lumen-plus": {
+    "message": "升級至 Lumen+"
   },
   "layout.publish.email-verification-required.description": {
-    "message": "在 Modrinth 上發行內容之前，你必須先驗證你的電子郵件地址。"
+    "message": "在 Lumen 上發行內容之前，你必須先驗證你的電子郵件地址。"
   },
   "layout.publish.email-verification-required.title": {
     "message": "需要驗證電子郵件地址"
@@ -2928,19 +2928,19 @@
     "message": "當共用內容變更時及時更新"
   },
   "modal.shared-instance.open-in-app.get-app": {
-    "message": "取得 Modrinth App"
+    "message": "取得 Lumen App"
   },
   "modal.shared-instance.open-in-app.managed-by": {
     "message": "管理者："
   },
   "modal.shared-instance.open-in-app.opening-automatically": {
-    "message": "Modrinth App 將自動開啟..."
+    "message": "Lumen App 將自動開啟..."
   },
   "modal.shared-instance.open-in-app.title": {
-    "message": "正在開啟 Modrinth App"
+    "message": "正在開啟 Lumen App"
   },
   "modal.shared-instance.open-in-app.why-use": {
-    "message": "為何使用 Modrinth App"
+    "message": "為何使用 Lumen App"
   },
   "moderation.exclude-technical-review": {
     "message": "排除技術審查"
@@ -3360,7 +3360,7 @@
     "message": "重新提交審查"
   },
   "project-moderation-nags.resubmit-for-review-desc": {
-    "message": "你的專案已被 Modrinth 工作人員{status, select, rejected {拒絕} withheld {擱置} other {{status}}}。在大部分情況下，你可以在處理完工作人員的留言訊息後，重新提交審核。"
+    "message": "你的專案已被 Lumen 工作人員{status, select, rejected {拒絕} withheld {擱置} other {{status}}}。在大部分情況下，你可以在處理完工作人員的留言訊息後，重新提交審核。"
   },
   "project-moderation-nags.submit-checklist-tooltip": {
     "message": "你必須完成發布檢查清單中的必要步驟！"
@@ -3477,7 +3477,7 @@
     "message": "審查專案"
   },
   "project.actions.servers-promo.description": {
-    "message": "Modrinth Hosting 是讓你與朋友輕鬆遊玩的最佳方式！"
+    "message": "Lumen Hosting 是讓你與朋友輕鬆遊玩的最佳方式！"
   },
   "project.actions.servers-promo.pricing": {
     "message": "{price} 起<small> / 月</small>"
@@ -3495,10 +3495,10 @@
     "message": "查看{projectType}相依項"
   },
   "project.ai-image-warning-modal.body.1": {
-    "message": "Modrinth 上不允許使用 AI 生成的圖片來呈現你的專案。試圖規避檢測機制可能會導致你的 Modrinth 帳號遭到停權。"
+    "message": "Lumen 上不允許使用 AI 生成的圖片來呈現你的專案。試圖規避檢測機制可能會導致你的 Lumen 帳號遭到停權。"
   },
   "project.ai-image-warning-modal.body.2": {
-    "message": "關於 Modrinth 的生成式 AI 政策的更多資訊，請參閱我們的《<rules>內容規範</rules>》第 6 節。"
+    "message": "關於 Lumen 的生成式 AI 政策的更多資訊，請參閱我們的《<rules>內容規範</rules>》第 6 節。"
   },
   "project.ai-image-warning-modal.title": {
     "message": "不允許使用 AI 生成的圖片"
@@ -3585,13 +3585,13 @@
     "message": "{title} 不支援 {platform} 的 {gameVersion}"
   },
   "project.download.install-with-app": {
-    "message": "使用 Modrinth App 安裝"
+    "message": "使用 Lumen App 安裝"
   },
   "project.download.manually": {
     "message": "手動下載"
   },
   "project.download.no-app": {
-    "message": "還沒有 Modrinth App 嗎？"
+    "message": "還沒有 Lumen App 嗎？"
   },
   "project.download.no-game-versions-found": {
     "message": "找不到遊戲版本"
@@ -3636,7 +3636,7 @@
     "message": "無法下載檔案"
   },
   "project.environment.migration-no-permission.message": {
-    "message": "我們剛剛對 Modrinth 的執行環境系統進行了全面更新，並提供了新的選項。你沒有權限修改這些設定，請通知專案中的其他成員以確定環境詮釋資料否正確。"
+    "message": "我們剛剛對 Lumen 的執行環境系統進行了全面更新，並提供了新的選項。你沒有權限修改這些設定，請通知專案中的其他成員以確定環境詮釋資料否正確。"
   },
   "project.environment.migration-no-permission.title": {
     "message": "環境詮釋資料需要審查"
@@ -3645,7 +3645,7 @@
     "message": "深入了解這項變更"
   },
   "project.environment.migration.message": {
-    "message": "我們剛剛對 Modrinth 的執行環境系統進行了全面更新，並提供了新的選項。請確定詮釋資料是否正確。"
+    "message": "我們剛剛對 Lumen 的執行環境系統進行了全面更新，並提供了新的選項。請確定詮釋資料是否正確。"
   },
   "project.environment.migration.review-button": {
     "message": "審查執行環境設定"
@@ -3672,10 +3672,10 @@
     "message": "你的專案目前設為私人，這代表只有你和你邀請的人才能存取。"
   },
   "project.moderation.admonition.approved.body.public": {
-    "message": "你的專案已在 Modrinth 上發布並可供他人搜尋探索。"
+    "message": "你的專案已在 Lumen 上發布並可供他人搜尋探索。"
   },
   "project.moderation.admonition.approved.body.unlisted": {
-    "message": "你的專案目前設為不公開，這代表專案只能透過直接連結存取，無法在 Modrinth 上被搜尋到。"
+    "message": "你的專案目前設為不公開，這代表專案只能透過直接連結存取，無法在 Lumen 上被搜尋到。"
   },
   "project.moderation.admonition.approved.body.visibility-message": {
     "message": "你可以前往專案的<visibility-settings-link>瀏覽權限設定</visibility-settings-link>來變更瀏覽權限。"
@@ -3684,13 +3684,13 @@
     "message": "專案已獲核准"
   },
   "project.moderation.admonition.draft.body": {
-    "message": "這是一個草稿專案，在送交審查並獲得 Modrinth 管理團隊核准之前，其他人無法查看。"
+    "message": "這是一個草稿專案，在送交審查並獲得 Lumen 管理團隊核准之前，其他人無法查看。"
   },
   "project.moderation.admonition.draft.header": {
     "message": "草稿專案"
   },
   "project.moderation.admonition.draft.submit-for-review": {
-    "message": "完成所有必要步驟，並確保你的專案符合 Modrinth 的《<rules-link>內容規範</rules-link>》後，即可將專案送交審查。"
+    "message": "完成所有必要步驟，並確保你的專案符合 Lumen 的《<rules-link>內容規範</rules-link>》後，即可將專案送交審查。"
   },
   "project.moderation.admonition.rejected.address-all-concerns": {
     "message": "在重新提交專案之前，請先處理管理團隊提出的所有疑慮，包括下方訊息中列出的任何問題。"
@@ -3702,10 +3702,10 @@
     "message": "在未解決管理員提出的所有問題的情況下反覆提交專案，可能會導致帳號被停權。"
   },
   "project.moderation.admonition.under-review.body.1": {
-    "message": "你的專案已在佇列中，等待 Modrinth 管理團隊審查。"
+    "message": "你的專案已在佇列中，等待 Lumen 管理團隊審查。"
   },
   "project.moderation.admonition.under-review.body.2": {
-    "message": "你的專案會先被掃描，再由管理員人工審核，以確保其符合 Modrinth 的《<rules-link>內容規範</rules-link>》與《<terms-link>使用條款</terms-link>》。"
+    "message": "你的專案會先被掃描，再由管理員人工審核，以確保其符合 Lumen 的《<rules-link>內容規範</rules-link>》與《<terms-link>使用條款</terms-link>》。"
   },
   "project.moderation.admonition.under-review.body.3": {
     "message": "你仍可修改專案，這不會影響你在佇列中的位置。"
@@ -3717,7 +3717,7 @@
     "message": "我們的目標是在一週內審查你提交的專案。部分專案可能需要較長時間，但這不代表你的專案有問題。"
   },
   "project.moderation.admonition.under-review.body.5": {
-    "message": "<emphasis>感謝你的耐心等候，我們的管理員正努力維護 Modrinth 的安全，我們期待能協助你分享你的內容！💚</emphasis>"
+    "message": "<emphasis>感謝你的耐心等候，我們的管理員正努力維護 Lumen 的安全，我們期待能協助你分享你的內容！💚</emphasis>"
   },
   "project.moderation.admonition.under-review.header": {
     "message": "專案審查中"
@@ -3738,10 +3738,10 @@
     "message": "大多數的問題無法由內容管理員提供協助，且這個討論串的訊息不會通知工作人員。"
   },
   "project.moderation.thread.help-center-note.2": {
-    "message": "如果你需要協助或有其他疑問，請前往 <help-center-link>Modrinth 說明中心</help-center-link>，然後按一下藍色對話氣泡以聯絡客服團隊。"
+    "message": "如果你需要協助或有其他疑問，請前往 <help-center-link>Lumen 說明中心</help-center-link>，然後按一下藍色對話氣泡以聯絡客服團隊。"
   },
   "project.moderation.thread.private-description": {
-    "message": "這是你與 Modrinth 管理員之間的私人討論串。他們可能會就專案的相關問題向你傳送訊息。"
+    "message": "這是你與 Lumen 管理員之間的私人討論串。他們可能會就專案的相關問題向你傳送訊息。"
   },
   "project.moderation.thread.title": {
     "message": "審核訊息"
@@ -3801,10 +3801,10 @@
     "message": "確定要刪除這個專案嗎？"
   },
   "project.settings.delete-project.description.1": {
-    "message": "將這個專案從 Modrinth 中永久刪除。Modrinth 的工作人員和客服團隊<emphasis>無法還原</emphasis>已刪除的專案。"
+    "message": "將這個專案從 Lumen 中永久刪除。Lumen 的工作人員和客服團隊<emphasis>無法還原</emphasis>已刪除的專案。"
   },
   "project.settings.delete-project.description.2": {
-    "message": "如果上傳到這個專案的檔案目前仍被 Modrinth 上的模組包使用，檔案可能會繼續存在。"
+    "message": "如果上傳到這個專案的檔案目前仍被 Lumen 上的模組包使用，檔案可能會繼續存在。"
   },
   "project.settings.delete-project.title": {
     "message": "刪除專案"
@@ -3813,13 +3813,13 @@
     "message": "如果這個專案包含其他作品的廣告、贊助或宣傳，則必須啟用這個選項。"
   },
   "project.settings.disclosures.advertising.note-placeholder": {
-    "message": "例如：Adds the Modrinth SMP server to your server list automatically."
+    "message": "例如：Adds the Lumen SMP server to your server list automatically."
   },
   "project.settings.disclosures.advertising.title": {
     "message": "包含廣告宣傳"
   },
   "project.settings.disclosures.ai.content-rules": {
-    "message": "請參閱 Modrinth 的《<rules>內容規範</rules>》第 6 節以取得更多資訊。"
+    "message": "請參閱 Lumen 的《<rules>內容規範</rules>》第 6 節以取得更多資訊。"
   },
   "project.settings.disclosures.ai.description": {
     "message": "如果這個專案包含大量由 AI 生成的程式碼、任何主要由 AI 生成的資源、專案的功能仰賴生成式 AI，或是專案頁面的任何元素（例如描述或發布）仰賴生成式 AI，則必須啟用這個選項。"
@@ -3873,7 +3873,7 @@
     "message": "包含衍生內容"
   },
   "project.settings.disclosures.description": {
-    "message": "你必須按照 Modrinth 的《<rules>內容規範</rules>》，在專案中加入任何適用的內容揭露資訊。"
+    "message": "你必須按照 Lumen 的《<rules>內容規範</rules>》，在專案中加入任何適用的內容揭露資訊。"
   },
   "project.settings.disclosures.last-updated": {
     "message": "最後於{date}由 {user} 更新"
@@ -4017,7 +4017,7 @@
     "message": "網址"
   },
   "project.settings.monetization.description": {
-    "message": "Modrinth 上的專案會自動加入<rewards-program-link>獎勵計畫</rewards-program-link>。如果你不想（或因法律原因無法）從專案獲取收益，可在這裡關閉營利功能。"
+    "message": "Lumen 上的專案會自動加入<rewards-program-link>獎勵計畫</rewards-program-link>。如果你不想（或因法律原因無法）從專案獲取收益，可在這裡關閉營利功能。"
   },
   "project.settings.monetization.disabled-description": {
     "message": "這個專案不符合營利資格。如果你有疑問，請<contact-support-link>聯絡客服</contact-support-link>。"
@@ -4035,7 +4035,7 @@
     "message": "未知的外部內容"
   },
   "project.settings.permissions.bad-proof.description": {
-    "message": "Modrinth 的管理團隊拒絕了你針對部分外部內容所提供的授權資訊。請檢視以下被拒絕的項目，並提供可接受的證明文件，或移除該內容。"
+    "message": "Lumen 的管理團隊拒絕了你針對部分外部內容所提供的授權資訊。請檢視以下被拒絕的項目，並提供可接受的證明文件，或移除該內容。"
   },
   "project.settings.permissions.bad-proof.title": {
     "message": "部分證明被拒絕"
@@ -4074,13 +4074,13 @@
     "message": "展開全部"
   },
   "project.settings.permissions.fail.description": {
-    "message": "專案中的部分外部內容可能不具備重新發布權限。如要在 Modrinth 上發布，請移除這些內容，或提供你擁有這些內容重新發布權限的證明。"
+    "message": "專案中的部分外部內容可能不具備重新發布權限。如要在 Lumen 上發布，請移除這些內容，或提供你擁有這些內容重新發布權限的證明。"
   },
   "project.settings.permissions.fail.title": {
     "message": "部分內容無法包含在內"
   },
   "project.settings.permissions.info-banner.description": {
-    "message": "如果你包含的內容並非託管於 Modrinth，你需要告知我們其來源，並確認你擁有重新發布這些檔案的權限。請參閱<link>我們關於這個新系統的公告</link>以了解更多！"
+    "message": "如果你包含的內容並非託管於 Lumen，你需要告知我們其來源，並確認你擁有重新發布這些檔案的權限。請參閱<link>我們關於這個新系統的公告</link>以了解更多！"
   },
   "project.settings.permissions.info-banner.title": {
     "message": "了解引用標註"
@@ -4092,7 +4092,7 @@
     "message": "沒有外部檔案符合你的搜尋字詞。"
   },
   "project.settings.permissions.not-allowed.description": {
-    "message": "部分外部內容因違反我們的《內容規範》，不得在 Modrinth 上發布，並且必須移除。"
+    "message": "部分外部內容因違反我們的《內容規範》，不得在 Lumen 上發布，並且必須移除。"
   },
   "project.settings.permissions.pending-approval-count": {
     "message": "{count, plural, =0 {沒有需要核准的引用標註} other {有 # 個引用標註需要核准}}"
@@ -4293,7 +4293,7 @@
     "message": "找不到{item}"
   },
   "report.for.violation": {
-    "message": "違反 Modrinth《<rules-link>內容規範</rules-link>》或《<terms-link>使用條款</terms-link>》"
+    "message": "違反 Lumen《<rules-link>內容規範</rules-link>》或《<terms-link>使用條款</terms-link>》"
   },
   "report.for.violation.description": {
     "message": "範例包括惡意內容、垃圾內容、冒犯性內容、欺騙性內容、誤導性及違法內容。"
@@ -4350,7 +4350,7 @@
     "message": "你要檢舉什麼類型的內容？"
   },
   "report.question.report-reason": {
-    "message": "這個{item}違反了 Modrinth 的哪一條規則？"
+    "message": "這個{item}違反了 Lumen 的哪一條規則？"
   },
   "report.report-content": {
     "message": "向管理員檢舉內容"
@@ -4557,7 +4557,7 @@
     "message": "寫入檢舉"
   },
   "scopes.sessionAccess.description": {
-    "message": "存取由 Modrinth 提供的工作階段"
+    "message": "存取由 Lumen 提供的工作階段"
   },
   "scopes.sessionAccess.label": {
     "message": "存取工作階段"
@@ -4656,7 +4656,7 @@
     "message": "與伺服器同步"
   },
   "servers.manage.content.title": {
-    "message": "內容 - {serverName} - Modrinth"
+    "message": "內容 - {serverName} - Lumen"
   },
   "servers.notice.actions": {
     "message": "動作"
@@ -4713,13 +4713,13 @@
     "message": "正在生成匯出..."
   },
   "settings.account.data-export.description": {
-    "message": "申請你上傳至 Modrinth 的所有個人資料複本。此程序可能需要幾分鐘的時間才能完成。"
+    "message": "申請你上傳至 Lumen 的所有個人資料複本。此程序可能需要幾分鐘的時間才能完成。"
   },
   "settings.account.data-export.title": {
     "message": "資料匯出"
   },
   "settings.account.delete.confirm.description": {
-    "message": "這個動作將會**立即刪除您的所有使用者資料與追蹤清單**。這不會刪除你的專案。帳號刪除後將無法還原。<br><br>若你需要帳號相關協助，請至 [Modrinth Discord](https://discord.modrinth.com) 取得支援。"
+    "message": "這個動作將會**立即刪除您的所有使用者資料與追蹤清單**。這不會刪除你的專案。帳號刪除後將無法還原。<br><br>若你需要帳號相關協助，請至 [Lumen Discord](https://discord.Lumen.com) 取得支援。"
   },
   "settings.account.delete.confirm.proceed": {
     "message": "刪除這個帳號"
@@ -4995,7 +4995,7 @@
     "message": "確定要刪除這個應用程式？"
   },
   "settings.applications.description.intro": {
-    "message": "應用程式可用於在你的產品中驗證 Modrinth 使用者的身分。如需更多資訊，請參閱 <docs-link>Modrinth 的 API 文件</docs-link>。"
+    "message": "應用程式可用於在你的產品中驗證 Lumen 使用者的身分。如需更多資訊，請參閱 <docs-link>Lumen 的 API 文件</docs-link>。"
   },
   "settings.applications.field.description": {
     "message": "描述"
@@ -5049,7 +5049,7 @@
     "message": "由 {user} 建立"
   },
   "settings.authorizations.description": {
-    "message": "當你使用 Modrinth 帳號授權應用程式時，即代表你授予該應用程式存取你帳號的權限。你可以隨時在這裡管理並審查帳號的存取權。"
+    "message": "當你使用 Lumen 帳號授權應用程式時，即代表你授予該應用程式存取你帳號的權限。你可以隨時在這裡管理並審查帳號的存取權。"
   },
   "settings.authorizations.empty-state.description": {
     "message": "你授權的應用程式將顯示在這裡。"
@@ -5061,7 +5061,7 @@
     "message": "授權"
   },
   "settings.authorizations.official-tooltip": {
-    "message": "這個應用程式由 Modrinth 官方帳號建立。"
+    "message": "這個應用程式由 Lumen 官方帳號建立。"
   },
   "settings.authorizations.revoke.action": {
     "message": "撤銷"
@@ -5073,19 +5073,19 @@
     "message": "確定要撤銷這個應用程式的授權嗎？"
   },
   "settings.authorizations.unofficial-disclosure": {
-    "message": "儘管名稱如此，這個應用程式與 Modrinth 沒有任何關聯。"
+    "message": "儘管名稱如此，這個應用程式與 Lumen 沒有任何關聯。"
   },
   "settings.billing.charges.description": {
-    "message": "你對 Modrinth 帳號的所有過往支付紀錄皆會列於這裡："
+    "message": "你對 Lumen 帳號的所有過往支付紀錄皆會列於這裡："
   },
   "settings.billing.charges.product.medal-trial": {
     "message": "Medal 伺服器試用方案"
   },
   "settings.billing.charges.product.midas": {
-    "message": "Modrinth Plus"
+    "message": "Lumen Plus"
   },
   "settings.billing.charges.product.pyro": {
-    "message": "Modrinth Hosting"
+    "message": "Lumen Hosting"
   },
   "settings.billing.charges.title": {
     "message": "過往支付紀錄"
@@ -5103,13 +5103,13 @@
     "message": "年"
   },
   "settings.billing.midas.benefits.ad-free": {
-    "message": "在 modrinth.com 與 Modrinth App 上享受無廣告的瀏覽體驗"
+    "message": "在 Lumen.com 與 Lumen App 上享受無廣告的瀏覽體驗"
   },
   "settings.billing.midas.benefits.badge": {
-    "message": "在你的個人檔案顯示 Modrinth+ 徽章"
+    "message": "在你的個人檔案顯示 Lumen+ 徽章"
   },
   "settings.billing.midas.benefits.support": {
-    "message": "直接支持 Modrinth 與創作者"
+    "message": "直接支持 Lumen 與創作者"
   },
   "settings.billing.midas.benefits.title": {
     "message": "福利"
@@ -5133,7 +5133,7 @@
     "message": "我們正在處理你的付款。一旦付款完成，系統將立即啟用你的福利。"
   },
   "settings.billing.midas.upsell": {
-    "message": "立即訂閱 Modrinth Plus！"
+    "message": "立即訂閱 Lumen Plus！"
   },
   "settings.billing.modal.cancel.action": {
     "message": "取消訂閱"
@@ -5190,7 +5190,7 @@
     "message": "{shared} 個共用 CPU（最高可爆發至 {bursts} 個 CPU）"
   },
   "settings.billing.pyro.linked-server.not-found": {
-    "message": "找不到與這個訂閱相關聯的伺服器。這可能有幾種原因：如果你才剛購買伺服器，這屬於正常現象，伺服器的佈署過程最多可能需要一小時。若你已購買一段時間，則伺服器可能已被停用。如果這與你的預期不符，請將以下資訊提供給 Modrinth 客服團隊："
+    "message": "找不到與這個訂閱相關聯的伺服器。這可能有幾種原因：如果你才剛購買伺服器，這屬於正常現象，伺服器的佈署過程最多可能需要一小時。若你已購買一段時間，則伺服器可能已被停用。如果這與你的預期不符，請將以下資訊提供給 Lumen 客服團隊："
   },
   "settings.billing.pyro.linked-server.server-id": {
     "message": "伺服器 ID：{id}"
@@ -5202,7 +5202,7 @@
     "message": "{gb} GB 記憶體"
   },
   "settings.billing.pyro.resubscribe.error.text": {
-    "message": "重新訂閱你的 Modrinth 伺服器時發生錯誤。"
+    "message": "重新訂閱你的 Lumen 伺服器時發生錯誤。"
   },
   "settings.billing.pyro.resubscribe.error.title": {
     "message": "重新訂閱時發生錯誤"
@@ -5229,10 +5229,10 @@
     "message": "{gb} GB 置換空間"
   },
   "settings.billing.pyro_subscription.description": {
-    "message": "管理你的 Modrinth 伺服器訂閱。"
+    "message": "管理你的 Lumen 伺服器訂閱。"
   },
   "settings.billing.pyro_subscription.title": {
-    "message": "Modrinth 伺服器訂閱"
+    "message": "Lumen 伺服器訂閱"
   },
   "settings.billing.renews": {
     "message": "將於{date}續訂"
@@ -5247,7 +5247,7 @@
     "message": "訂閱"
   },
   "settings.billing.subscription.description": {
-    "message": "管理你的 Modrinth 訂閱。"
+    "message": "管理你的 Lumen 訂閱。"
   },
   "settings.billing.subscription.title": {
     "message": "訂閱"
@@ -5274,7 +5274,7 @@
     "message": "停用開發人員模式"
   },
   "settings.display.banner.developer-mode.description": {
-    "message": "開發人員模式<strong>已啟用</strong>。這個模式可以讓你查看 Modrinth 各項內容的內部 ID，如果你是使用 Modrinth API 的開發人員，這項功能可能會對你有所幫助。按 5 次頁面底部的 Modrinth 標誌即可切換開發人員模式。"
+    "message": "開發人員模式<strong>已啟用</strong>。這個模式可以讓你查看 Lumen 各項內容的內部 ID，如果你是使用 Lumen API 的開發人員，這項功能可能會對你有所幫助。按 5 次頁面底部的 Lumen 標誌即可切換開發人員模式。"
   },
   "settings.display.notification.developer-mode-deactivated.text": {
     "message": "開發者模式已被停用"
@@ -5289,7 +5289,7 @@
     "message": "建立個人存取權杖"
   },
   "settings.pats.description": {
-    "message": "可用於存取 Modrinth 的 API。你可以隨時建立或撤銷。欲了解更多資訊，請參閱 <doc-link>Modrinth API 文件</doc-link>。"
+    "message": "可用於存取 Lumen 的 API。你可以隨時建立或撤銷。欲了解更多資訊，請參閱 <doc-link>Lumen API 文件</doc-link>。"
   },
   "settings.pats.modal.create.action": {
     "message": "建立個人存取權杖"
@@ -5346,7 +5346,7 @@
     "message": "目前的工作階段"
   },
   "settings.sessions.description": {
-    "message": "你目前已在下列裝置上登入 Modrinth 帳號。你可以分別登出每部裝置。\n\n如果你對某部裝置沒有印象，請立即登出該裝置，並變更你的 Modrinth 帳號密碼。"
+    "message": "你目前已在下列裝置上登入 Lumen 帳號。你可以分別登出每部裝置。\n\n如果你對某部裝置沒有印象，請立即登出該裝置，並變更你的 Lumen 帳號密碼。"
   },
   "settings.sessions.last-accessed-ago": {
     "message": "上次存取時間：{ago}"
@@ -5370,7 +5370,7 @@
     "message": "接受邀請"
   },
   "shared-instance.invite.inviter.unknown": {
-    "message": "一位 Modrinth 使用者"
+    "message": "一位 Lumen 使用者"
   },
   "shared-instance.invite.joined-count": {
     "message": "已有 {count, plural, other {# 人}}加入"
@@ -5382,7 +5382,7 @@
     "message": "{name} 邀請你一起遊玩"
   },
   "shared-instance.invite.trust.description": {
-    "message": "這份邀請是由另一位 Modrinth 使用者建立，並非由 Modrinth 官方建立。請僅接受來自你信任的人的邀請。"
+    "message": "這份邀請是由另一位 Lumen 使用者建立，並非由 Lumen 官方建立。請僅接受來自你信任的人的邀請。"
   },
   "shared-instance.invite.trust.heading": {
     "message": "你認識這位使用者嗎？"
@@ -5394,7 +5394,7 @@
     "message": "這個邀請無法使用"
   },
   "ui.latest-news-row.latest-news": {
-    "message": "Modrinth 的最新消息"
+    "message": "Lumen 的最新消息"
   },
   "ui.latest-news-row.view-all": {
     "message": "查看所有新聞"
@@ -5406,7 +5406,7 @@
     "message": "已訂閱！"
   },
   "ui.newsletter-button.tooltip": {
-    "message": "訂閱 Modrinth 的最新消息"
+    "message": "訂閱 Lumen 的最新消息"
   },
   "version.all-versions": {
     "message": "所有版本"
@@ -5508,10 +5508,10 @@
     "message": "Maven 座標："
   },
   "version.section.content.dev-info.maven-description": {
-    "message": "Modrinth 上的專案會透過 Maven 儲存庫自動提供，以便與 <gradle-link>Gradle</gradle-link> 等 JVM 建構工具搭配使用。<article-link>按這裡</article-link>深入了解 Modrinth Maven API。"
+    "message": "Lumen 上的專案會透過 Maven 儲存庫自動提供，以便與 <gradle-link>Gradle</gradle-link> 等 JVM 建構工具搭配使用。<article-link>按這裡</article-link>深入了解 Lumen Maven API。"
   },
   "version.section.content.dev-info.maven-note": {
-    "message": "注意：如有提供，你應該改用創作者的 Maven 儲存庫，因為該儲存庫包含 Modrinth Maven API 所沒有的遞移相依關係資訊。此外，若你同時使用 Modrinth 與非 Modrinth 的 Maven 儲存庫來取得相依項，可能會導致相依項重複，因為透過 Modrinth Maven API 供應時，群組識別碼將會有所不同。"
+    "message": "注意：如有提供，你應該改用創作者的 Maven 儲存庫，因為該儲存庫包含 Lumen Maven API 所沒有的遞移相依關係資訊。此外，若你同時使用 Lumen 與非 Lumen 的 Maven 儲存庫來取得相依項，可能會導致相依項重複，因為透過 Lumen Maven API 供應時，群組識別碼將會有所不同。"
   },
   "version.section.content.dev-info.version-id": {
     "message": "版本 ID："

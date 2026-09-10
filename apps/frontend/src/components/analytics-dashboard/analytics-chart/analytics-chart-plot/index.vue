@@ -82,8 +82,8 @@
 </template>
 
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
-import { useFormatNumber, useVIntl } from '@modrinth/ui'
+import type { Labrinth } from '@lumen/api-client'
+import { useFormatNumber, useVIntl } from '@lumen/ui'
 
 import type {
 	AnalyticsDashboardStat,

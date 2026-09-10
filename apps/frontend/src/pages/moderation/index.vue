@@ -127,22 +127,22 @@
 	</div>
 </template>
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
-import { ListFilterIcon, ScaleIcon, SortAscIcon, SortDescIcon } from '@modrinth/assets'
-import { Button } from '@modrinth/ui'
+import type { Labrinth } from '@lumen/api-client'
+import { ListFilterIcon, ScaleIcon, SortAscIcon, SortDescIcon } from '@lumen/assets'
+import { Button } from '@lumen/ui'
 import {
 	Combobox,
 	type ComboboxOption,
 	commonMessages,
 	defineMessages,
 	EmptyState,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	Pagination,
 	Toggle,
 	useFormatNumber,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useQuery } from '@tanstack/vue-query'
 import ConfettiExplosion from 'vue-confetti-explosion'
 
@@ -156,7 +156,7 @@ import { getProjectTypeForUrlShorthand } from '~/helpers/projects.js'
 import { useModerationQueue } from '~/services/moderation/queue.ts'
 import { findNextEligibleQueueProject } from '~/services/moderation/queue-eligibility.ts'
 
-useHead({ title: 'Projects queue - Modrinth' })
+useHead({ title: 'Projects queue - Lumen' })
 
 const { formatMessage } = useVIntl()
 const formatNumber = useFormatNumber()
@@ -164,7 +164,7 @@ const { addNotification } = injectNotificationManager()
 const moderationQueue = useModerationQueue()
 const route = useRoute()
 const router = useRouter()
-const client = injectModrinthClient()
+const client = injectLumenClient()
 
 const queueSummaryModal = ref()
 

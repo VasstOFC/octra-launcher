@@ -24,7 +24,7 @@
 		<ButtonLink
 			type="outlined"
 			size="xl"
-			href="https://medal.tv/modrinth"
+			href="https://medal.tv/Lumen"
 			class="z-10 my-auto mt-2 w-full md:mt-0 md:w-auto"
 		>
 			{{ formatMessage(messages.learnMoreButton) }}
@@ -34,14 +34,14 @@
 </template>
 
 <script lang="ts" setup>
-import { ExternalIcon } from '@modrinth/assets'
+import { ExternalIcon } from '@lumen/assets'
 import {
 	ButtonLink,
 	defineMessages,
 	IntlFormatted,
 	MedalBackgroundImage,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 
 import MedalIcon from '~/assets/images/illustrations/medal_icon.svg?component'
 

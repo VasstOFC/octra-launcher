@@ -57,11 +57,11 @@
 </template>
 
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
-import { FilterIcon } from '@modrinth/assets'
-import { formatLoader, useVIntl } from '@modrinth/ui'
-import Checkbox from '@modrinth/ui/src/components/base/Checkbox.vue'
-import ManySelect from '@modrinth/ui/src/components/base/ManySelect.vue'
+import type { Labrinth } from '@lumen/api-client'
+import { FilterIcon } from '@lumen/assets'
+import { formatLoader, useVIntl } from '@lumen/ui'
+import Checkbox from '@lumen/ui/src/components/base/Checkbox.vue'
+import ManySelect from '@lumen/ui/src/components/base/ManySelect.vue'
 import { computed, ref } from 'vue'
 
 const { formatMessage } = useVIntl()

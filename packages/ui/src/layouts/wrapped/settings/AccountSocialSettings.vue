@@ -205,8 +205,8 @@
 
 <script setup lang="ts">
 // TODO this will be moved in with the rest of the xplat settings.
-import type { Labrinth } from '@modrinth/api-client'
-import { LogInIcon, SpinnerIcon, ThinkingRinthbot } from '@modrinth/assets'
+import type { Labrinth } from '@lumen/api-client'
+import { LogInIcon, SpinnerIcon, ThinkingRinthbot } from '@lumen/assets'
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
 import { computed, ref, watch } from 'vue'
 
@@ -451,7 +451,7 @@ const messages = defineMessages({
 	},
 	friendRequestsDescription: {
 		id: 'settings.social.friend-requests.description',
-		defaultMessage: 'Control who can send you friend requests on Modrinth.',
+		defaultMessage: 'Control who can send you friend requests on Lumen.',
 	},
 	sharedInstanceInvitesTitle: {
 		id: 'settings.social.shared-instance-invites.title',
@@ -467,7 +467,7 @@ const messages = defineMessages({
 	},
 	hostingAccessDescription: {
 		id: 'settings.social.hosting-access.description',
-		defaultMessage: 'Control who can invite you to manage a Modrinth Hosting server.',
+		defaultMessage: 'Control who can invite you to manage a Lumen Hosting server.',
 	},
 	everyone: {
 		id: 'settings.social.interaction-source.everyone',
@@ -503,7 +503,7 @@ const messages = defineMessages({
 	},
 	blockedUsersDescription: {
 		id: 'settings.social.blocked-users.description',
-		defaultMessage: 'These are the users you have blocked on Modrinth. They cannot:',
+		defaultMessage: 'These are the users you have blocked on Lumen. They cannot:',
 	},
 	friendRequestsRestriction: {
 		id: 'settings.social.blocked-users.restriction.friend-requests',
@@ -515,7 +515,7 @@ const messages = defineMessages({
 	},
 	hostingRestriction: {
 		id: 'settings.social.blocked-users.restriction.hosting',
-		defaultMessage: 'Invite you to manage a Modrinth Hosting server.',
+		defaultMessage: 'Invite you to manage a Lumen Hosting server.',
 	},
 	userColumn: {
 		id: 'settings.social.blocked-users.column.user',
@@ -543,12 +543,12 @@ const messages = defineMessages({
 	},
 	signInRequiredTitle: {
 		id: 'settings.social.sign-in-required.title',
-		defaultMessage: 'Modrinth account required',
+		defaultMessage: 'Lumen account required',
 	},
 	signInRequiredDescription: {
 		id: 'settings.social.sign-in-required.description',
 		defaultMessage:
-			'You can control who can interact with you, and manage blocked users with a Modrinth Account',
+			'You can control who can interact with you, and manage blocked users with a Lumen Account',
 	},
 	loadError: {
 		id: 'settings.social.blocked-users.load-error',

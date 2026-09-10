@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
-import { ChevronRightIcon, InfoIcon, Settings2Icon, UsersIcon, WrenchIcon } from '@modrinth/assets'
+import type { Labrinth } from '@lumen/api-client'
+import { ChevronRightIcon, InfoIcon, Settings2Icon, UsersIcon, WrenchIcon } from '@lumen/assets'
 import {
 	Avatar,
 	commonMessages,
@@ -8,8 +8,8 @@ import {
 	TabbedModal,
 	type TabbedModalTab,
 	useVIntl,
-} from '@modrinth/ui'
-import type { PlatformTag } from '@modrinth/utils'
+} from '@lumen/ui'
+import type { PlatformTag } from '@lumen/utils'
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
 import { computed, nextTick, ref, watch } from 'vue'
 

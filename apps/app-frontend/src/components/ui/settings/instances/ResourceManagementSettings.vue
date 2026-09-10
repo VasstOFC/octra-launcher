@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { BoxIcon, FolderOpenIcon, FolderSearchIcon, TrashIcon } from '@modrinth/assets'
+import { BoxIcon, FolderOpenIcon, FolderSearchIcon, TrashIcon } from '@lumen/assets'
 import {
 	Button,
 	defineMessages,
@@ -9,7 +9,7 @@ import {
 	Slider,
 	Toggle,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { open } from '@tauri-apps/plugin-dialog'
 import { ref, watch } from 'vue'
 
@@ -39,7 +39,7 @@ const messages = defineMessages({
 	},
 	panelDescription: {
 		id: 'app.settings.resource-management.description',
-		defaultMessage: 'Manage where Octra stores files, cache, and download concurrency.',
+		defaultMessage: 'Manage where Lumen stores files, cache, and download concurrency.',
 	},
 	locationGroup: {
 		id: 'app.settings.resource-management.location.group',
@@ -60,7 +60,7 @@ const messages = defineMessages({
 	appDirectoryDescription: {
 		id: 'app.settings.resource-management.app-directory.description',
 		defaultMessage:
-			'Where Octra App stores instances and other files. Changes take effect after restarting the app.',
+			'Where Lumen App stores instances and other files. Changes take effect after restarting the app.',
 	},
 	selectAppDirectory: {
 		id: 'app.settings.resource-management.app-directory.select',
@@ -89,7 +89,7 @@ const messages = defineMessages({
 	appCacheDescription: {
 		id: 'app.settings.resource-management.app-cache.description',
 		defaultMessage:
-			'Clear cached data and download it again from Modrinth. The app may load more slowly until the cache is rebuilt.',
+			'Clear cached data and download it again from Lumen. The app may load more slowly until the cache is rebuilt.',
 	},
 	maximumConcurrentDownloadsTitle: {
 		id: 'app.settings.resource-management.maximum-concurrent-downloads.title',

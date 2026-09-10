@@ -60,15 +60,15 @@
 	</div>
 </template>
 <script setup>
-import { ChevronRightIcon, HistoryIcon } from '@modrinth/assets'
+import { ChevronRightIcon, HistoryIcon } from '@lumen/assets'
 import {
 	Avatar,
 	ButtonLink,
 	commonMessages,
 	defineMessages,
-	injectModrinthClient,
+	injectLumenClient,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useQuery } from '@tanstack/vue-query'
 
 import NotificationItem from '~/components/ui/NotificationItem.vue'
@@ -113,11 +113,11 @@ const messages = defineMessages({
 })
 
 useHead({
-	title: () => `${formatMessage(messages.headTitle)} - Modrinth`,
+	title: () => `${formatMessage(messages.headTitle)} - Lumen`,
 })
 
 const auth = await useAuth()
-const client = injectModrinthClient()
+const client = injectLumenClient()
 
 const { data, refetch } = useQuery({
 	queryKey: computed(() => ['user', auth.value?.user?.id, 'notifications']),

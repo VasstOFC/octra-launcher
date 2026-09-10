@@ -1,11 +1,5 @@
 <script setup lang="ts">
-import {
-	ClipboardCopyIcon,
-	CurseForgeIcon,
-	FileIcon,
-	LinkIcon,
-	UnknownIcon,
-} from '@modrinth/assets'
+import { ClipboardCopyIcon, CurseForgeIcon, FileIcon, LinkIcon, UnknownIcon } from '@lumen/assets'
 import { Menu } from 'floating-vue'
 import { computed } from 'vue'
 

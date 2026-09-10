@@ -108,7 +108,7 @@
     "defaultMessage": "لم يتم العثور على نتائج لبحثك!"
   },
   "browse.offline": {
-    "defaultMessage": "أنت غير متصل حاليًا. اتصل بالإنترنت لتصفح Modrinth!"
+    "defaultMessage": "أنت غير متصل حاليًا. اتصل بالإنترنت لتصفح Lumen!"
   },
   "browse.search.placeholder": {
     "defaultMessage": "البحث {projectType}..."
@@ -242,8 +242,8 @@
   "button.open-in-folder": {
     "defaultMessage": "فتح في المجلد"
   },
-  "button.open-in-modrinth": {
-    "defaultMessage": "فتح في Modrinth"
+  "button.open-in-Lumen": {
+    "defaultMessage": "فتح في Lumen"
   },
   "button.play": {
     "defaultMessage": "لعب"
@@ -945,7 +945,7 @@
     "defaultMessage": "إزالة الصورة"
   },
   "external-files.permissions-card.editor.proof-warning.title": {
-    "defaultMessage": "قد يتحقق فريق Modrinth من الإثبات المُقدَّم"
+    "defaultMessage": "قد يتحقق فريق Lumen من الإثبات المُقدَّم"
   },
   "external-files.permissions-card.editor.save": {
     "defaultMessage": "حفظ الإسناد"
@@ -1032,7 +1032,7 @@
     "defaultMessage": "تم الإسناد تلقائيًا"
   },
   "external-files.permissions-card.reason.globally-allowed.description": {
-    "defaultMessage": "لقد سبق أن رأينا هذا الملف، وأعددنا لك إسنادًا له. إذا كان هناك شيء غير صحيح، يُرجى التواصل مع دعم Modrinth عبر مركز المساعدة"
+    "defaultMessage": "لقد سبق أن رأينا هذا الملف، وأعددنا لك إسنادًا له. إذا كان هناك شيء غير صحيح، يُرجى التواصل مع دعم Lumen عبر مركز المساعدة"
   },
   "external-files.permissions-card.reason.license": {
     "defaultMessage": "الترخيص"
@@ -1607,7 +1607,7 @@
   "omorphia.component.badge.label.moderator": {
     "defaultMessage": "مشرف"
   },
-  "omorphia.component.badge.label.modrinth-team": {
+  "omorphia.component.badge.label.Lumen-team": {
     "defaultMessage": "فريق مودرنث"
   },
   "omorphia.component.badge.label.pending": {

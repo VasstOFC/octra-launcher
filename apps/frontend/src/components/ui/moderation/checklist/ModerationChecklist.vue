@@ -418,15 +418,15 @@ import {
 	ToggleRightIcon,
 	UndoIcon,
 	XIcon,
-} from '@modrinth/assets'
-import type { Priority } from '@modrinth/moderation'
+} from '@lumen/assets'
+import type { Priority } from '@lumen/moderation'
 import {
 	expandVariables,
 	kebabToTitleCase,
 	moderationSettings,
 	useStages,
-} from '@modrinth/moderation'
-import type { ActiveAction, NodeState, StageNode } from '@modrinth/moderation/src/types/node'
+} from '@lumen/moderation'
+import type { ActiveAction, NodeState, StageNode } from '@lumen/moderation/src/types/node'
 import {
 	CHECKLIST_META_KEY,
 	collectActiveActions,
@@ -440,10 +440,10 @@ import {
 	resolveChildren,
 	setMessageProject,
 	setMissingMdHandler,
-} from '@modrinth/moderation/src/types/node'
-import NodeRenderer from '@modrinth/moderation/src/types/node/components/NodeRenderer.vue'
-import type { FixBuilder } from '@modrinth/moderation/src/types/node/fix'
-import type { Writer } from '@modrinth/moderation/src/types/node/mutate'
+} from '@lumen/moderation/src/types/node'
+import NodeRenderer from '@lumen/moderation/src/types/node/components/NodeRenderer.vue'
+import type { FixBuilder } from '@lumen/moderation/src/types/node/fix'
+import type { Writer } from '@lumen/moderation/src/types/node/mutate'
 import {
 	Avatar,
 	Button,
@@ -451,16 +451,16 @@ import {
 	Collapsible,
 	ConfirmModal,
 	IconButton,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	injectProjectPageContext,
 	MarkdownEditor,
 	TeleportOverflowMenu,
 	Textarea,
 	useDebugLogger,
-} from '@modrinth/ui'
-import type { ProjectStatus } from '@modrinth/utils'
-import { renderHighlightedString } from '@modrinth/utils'
+} from '@lumen/ui'
+import type { ProjectStatus } from '@lumen/utils'
+import { renderHighlightedString } from '@lumen/utils'
 import { useQueryClient } from '@tanstack/vue-query'
 import { useDebounceFn } from '@vueuse/core'
 import type { Component } from 'vue'
@@ -512,7 +512,7 @@ setMissingMdHandler((path) => missingMdPaths.add(path))
 
 const nodeStates = ref<Record<string, Record<string, NodeState>>>({})
 const resolvedStages = ref(useStages(nodeStates))
-const client = injectModrinthClient()
+const client = injectLumenClient()
 
 const moderationQueue = useModerationQueue()
 const queryClient = useQueryClient()

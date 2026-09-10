@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { SearchIcon } from '@modrinth/assets'
+import { SearchIcon } from '@lumen/assets'
 import Fuse from 'fuse.js/dist/fuse.basic'
 import { computed, ref } from 'vue'
 
@@ -55,7 +55,7 @@ const messages = defineMessages({
 	},
 	appCoverageTooltip: {
 		id: 'settings.language.coverage.app-tooltip',
-		defaultMessage: 'About {percentage}% of the Modrinth App is available in this language.',
+		defaultMessage: 'About {percentage}% of the Lumen App is available in this language.',
 	},
 	websiteCoverageTooltip: {
 		id: 'settings.language.coverage.website-tooltip',

@@ -1,13 +1,13 @@
-import type { Labrinth, UploadProgress } from '@modrinth/api-client'
-import { ArrowLeftRightIcon, LeftArrowIcon, SaveIcon, SpinnerIcon, XIcon } from '@modrinth/assets'
+import type { Labrinth, UploadProgress } from '@lumen/api-client'
+import { ArrowLeftRightIcon, LeftArrowIcon, SaveIcon, SpinnerIcon, XIcon } from '@lumen/assets'
 import {
 	createContext,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	injectProjectPageContext,
 	type MultiStageModal,
 	type StageConfigInput,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import JSZip from 'jszip'
 import type { Ref, ShallowRef } from 'vue'
 import { markRaw, toRaw } from 'vue'
@@ -51,7 +51,7 @@ export function createServerCompatibilityContext(
 	modal: ShallowRef<ComponentExposed<typeof MultiStageModal> | null>,
 ): ServerCompatibilityContextValue {
 	const { projectV3, patchProjectV3 } = injectProjectPageContext()
-	const { labrinth } = injectModrinthClient()
+	const { labrinth } = injectLumenClient()
 	const { addNotification } = injectNotificationManager()
 
 	const isSubmitting = ref(false)
@@ -78,7 +78,7 @@ export function createServerCompatibilityContext(
 
 		try {
 			const zip = await JSZip.loadAsync(rawFile)
-			const indexFile = zip.file('modrinth.index.json')
+			const indexFile = zip.file('Lumen.index.json')
 
 			if (indexFile) {
 				const indexContent = await indexFile.async('text')
@@ -104,7 +104,7 @@ export function createServerCompatibilityContext(
 				}
 			}
 		} catch {
-			console.warn('Could not parse modrinth.index.json from mrpack')
+			console.warn('Could not parse Lumen.index.json from mrpack')
 		}
 
 		const draftVersion: Labrinth.Versions.v3.DraftVersion = {

@@ -144,18 +144,18 @@ import {
 	PlusIcon,
 	SearchIcon,
 	XIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import {
 	Avatar,
 	Button,
 	commonMessages,
 	defineMessages,
 	DropdownSelect,
-	injectModrinthClient,
+	injectLumenClient,
 	Input,
 	useCompactNumber,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useQuery } from '@tanstack/vue-query'
 
 import CollectionCreateModal from '~/components/ui/create/CollectionCreateModal.vue'
@@ -223,12 +223,12 @@ definePageMeta({
 })
 
 useHead({
-	title: () => `${formatMessage(messages.collectionsLongTitle)} - Modrinth`,
+	title: () => `${formatMessage(messages.collectionsLongTitle)} - Lumen`,
 })
 
 const auth = await useAuth()
 const user = await useUser()
-const client = injectModrinthClient()
+const client = injectLumenClient()
 
 if (import.meta.client) {
 	await initUserFollows()

@@ -9,7 +9,7 @@ import StyledEmail from '../shared/StyledEmail.vue'
 		title="Project ownership transferred"
 		:manual-links="[
 			{ link: 'https://modrinth.com/project/{project.id}', label: 'Project page' },
-			{ link: 'https://modrinth.com/dashboard/notifications', label: 'Notification dashboard' },
+			{ link: 'https://Lumen.com/dashboard/notifications', label: 'Notification dashboard' },
 			{ link: 'https://support.modrinth.com', label: 'Support Portal' },
 		]"
 	>
@@ -33,10 +33,10 @@ import StyledEmail from '../shared/StyledEmail.vue'
 					{project.name}
 				</VLink>
 			</b>
-			has been successfully transferred to the Modrinth {new_owner.type_capitalized}
+			has been successfully transferred to the Lumen {new_owner.type_capitalized}
 			<b
 				><VLink
-					href="https://modrinth.com/{new_owner.type}/{new_owner.name}"
+					href="https://Lumen.com/{new_owner.type}/{new_owner.name}"
 					class="text-green underline"
 					>{new_owner.name}</VLink
 				></b

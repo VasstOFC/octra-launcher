@@ -7,14 +7,11 @@ import {
 	provideAppearanceSettings,
 	useSavable,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { computed, inject, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
+import { SettingsGroup, SettingsPanelHeader } from '@/components/ui/settings/_shared'
 import AccentColorSettings from '@/components/ui/settings/display/AccentColorSettings.vue'
-import {
-	SettingsGroup,
-	SettingsPanelHeader,
-} from '@/components/ui/settings/_shared'
 import { useAccent } from '@/composables/use-accent.ts'
 import { type ColorTheme, isDarkTheme, useTheme } from '@/composables/use-theme.ts'
 import type { AccentPresetId } from '@/helpers/accent-colors.ts'
@@ -34,19 +31,19 @@ const settings = ref(await get())
 const messages = defineMessages({
 	panelTitle: {
 		id: 'app.settings.appearance.panel.title',
-		defaultMessage: 'Appearance',
+		defaultMessage: 'Wygląd',
 	},
 	panelDescription: {
 		id: 'app.settings.appearance.panel.description',
-		defaultMessage: 'Theme, accent color, and window chrome.',
+		defaultMessage: 'Motyw, kolor akcentu i wystrój okna.',
 	},
 	accentGroup: {
 		id: 'app.settings.appearance.group.accent',
-		defaultMessage: 'Accent',
+		defaultMessage: 'Akcent',
 	},
 	accentGroupDescription: {
 		id: 'app.settings.appearance.group.accent.description',
-		defaultMessage: 'Change the accent color used for buttons, highlights, and selection.',
+		defaultMessage: 'Zmień kolor akcentu używany dla przycisków, podświetleń i zaznaczeń.',
 	},
 })
 
@@ -266,9 +263,7 @@ provideAppearanceSettings({
 			/>
 		</SettingsGroup>
 
-		<section
-			class="settings-group border-0 border-solid border-surface-5 pt-4 mt-4 border-t"
-		>
+		<section class="settings-group border-0 border-solid border-surface-5 pt-4 mt-4 border-t">
 			<AppearanceSettingsLayout />
 		</section>
 	</div>

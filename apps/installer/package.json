@@ -1,5 +1,5 @@
 {
-	"name": "@modrinth/installer",
+	"name": "@lumen/installer",
 	"private": true,
 	"scripts": {
 		"tauri": "tauri",
@@ -11,6 +11,6 @@
 		"@tauri-apps/cli": "2.5.0"
 	},
 	"dependencies": {
-		"@modrinth/installer-frontend": "workspace:*"
+		"@lumen/installer-frontend": "workspace:*"
 	}
 }

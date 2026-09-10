@@ -25,9 +25,9 @@
 </template>
 
 <script setup lang="ts">
-import { NewspaperIcon } from '@modrinth/assets'
-import { articles as rawArticles } from '@modrinth/blog'
-import { ButtonLink, defineMessages, NewsArticleCard, useVIntl } from '@modrinth/ui'
+import { NewspaperIcon } from '@lumen/assets'
+import { articles as rawArticles } from '@lumen/blog'
+import { ButtonLink, defineMessages, NewsArticleCard, useVIntl } from '@lumen/ui'
 import { computed, ref } from 'vue'
 
 const { formatMessage } = useVIntl()
@@ -52,7 +52,7 @@ const articles = ref(
 const messages = defineMessages({
 	latestNews: {
 		id: 'ui.latest-news-row.latest-news',
-		defaultMessage: 'Latest news from Modrinth',
+		defaultMessage: 'Latest news from Lumen',
 	},
 	viewAll: {
 		id: 'ui.latest-news-row.view-all',

@@ -1,12 +1,19 @@
 <template>
 	<Transition name="splash-fade" @after-leave="onAfterLeave">
 		<div v-if="!doneLoading" class="splash-screen" :class="`${theme.active}-mode`">
+			<div class="particles" aria-hidden="true">
+				<span v-for="i in 20" :key="i" class="particle" :style="particleStyle(i)" />
+			</div>
 			<div class="app-logo-wrapper" data-tauri-drag-region>
-				<OctraMark animate class="app-logo" />
-				<p class="app-title">Octra App</p>
+				<div class="logo-glow">
+					<LumenMark animate class="app-logo" />
+				</div>
+				<p class="app-title">Lumen App</p>
 				<p class="app-tagline font-minecraft">{{ formatMessage(messages.tagline) }}</p>
-				<ProgressBar class="loading-bar" :progress="Math.min(loadingProgress, 100)" />
-				<span v-if="message">{{ message }}</span>
+				<div class="progress-wrapper">
+					<ProgressBar class="loading-bar" :progress="Math.min(loadingProgress, 100)" />
+				</div>
+				<span v-if="message" class="loading-message">{{ message }}</span>
 			</div>
 			<div class="gradient-bg" data-tauri-drag-region></div>
 			<div class="cube-bg"></div>
@@ -15,11 +22,11 @@
 	</Transition>
 </template>
 
-<script setup>
-import { defineMessages, injectLoadingState, useVIntl } from '@modrinth/ui'
+<script setup lang="ts">
+import { defineMessages, injectLoadingState, useVIntl } from '@lumen/ui'
 import { ref, watch } from 'vue'
 
-import OctraMark from '@/components/brand/OctraMark.vue'
+import LumenMark from '@/components/brand/LumenMark.vue'
 import ProgressBar from '@/components/ui/ProgressBar.vue'
 import { useAppEvent } from '@/composables/use-app-event'
 import { useTheme } from '@/composables/use-theme.ts'
@@ -33,6 +40,22 @@ const messages = defineMessages({
 		defaultMessage: 'Ready when you are',
 	},
 })
+
+function particleStyle(i: number) {
+	const size = 2 + Math.random() * 3
+	const x = Math.random() * 100
+	const delay = Math.random() * 8
+	const duration = 6 + Math.random() * 10
+	const opacity = 0.15 + Math.random() * 0.35
+	return {
+		width: `${size}px`,
+		height: `${size}px`,
+		left: `${x}%`,
+		animationDelay: `${delay}s`,
+		animationDuration: `${duration}s`,
+		opacity,
+	}
+}
 
 const doneLoading = ref(false)
 const loadingProgress = ref(0)
@@ -95,6 +118,7 @@ useAppEvent('loading', (e) => {
 	position: fixed;
 	inset: 0;
 	z-index: 10000;
+	overflow: hidden;
 
 	--splash-cube-image: url('@/assets/loading/cube.png');
 
@@ -105,13 +129,13 @@ useAppEvent('loading', (e) => {
 
 .splash-fade-leave-active {
 	transition:
-		opacity 0.42s cubic-bezier(0.32, 0.72, 0, 1),
-		filter 0.42s cubic-bezier(0.32, 0.72, 0, 1);
+		opacity 0.5s cubic-bezier(0.32, 0.72, 0, 1),
+		filter 0.5s cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 .splash-fade-leave-to {
 	opacity: 0;
-	filter: blur(4px);
+	filter: blur(8px);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -121,6 +145,40 @@ useAppEvent('loading', (e) => {
 
 	.splash-fade-leave-to {
 		filter: none;
+	}
+}
+
+.particles {
+	position: absolute;
+	inset: 0;
+	z-index: 9999;
+	pointer-events: none;
+	overflow: hidden;
+}
+
+.particle {
+	position: absolute;
+	bottom: -10px;
+	background: #00d4ff;
+	border-radius: 50%;
+	animation: particle-float linear infinite;
+	filter: blur(1px);
+}
+
+@keyframes particle-float {
+	0% {
+		transform: translateY(0) translateX(0) scale(1);
+		opacity: 0;
+	}
+	10% {
+		opacity: var(--particle-opacity, 0.3);
+	}
+	90% {
+		opacity: var(--particle-opacity, 0.3);
+	}
+	100% {
+		transform: translateY(-100vh) translateX(30px) scale(0.5);
+		opacity: 0;
 	}
 }
 
@@ -140,6 +198,21 @@ useAppEvent('loading', (e) => {
 	z-index: 9998;
 }
 
+.logo-glow {
+	position: relative;
+	filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.4)) drop-shadow(0 0 40px rgba(0, 212, 255, 0.2));
+	animation: logo-glow-pulse 3s ease-in-out infinite;
+}
+
+@keyframes logo-glow-pulse {
+	0%, 100% {
+		filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.4)) drop-shadow(0 0 40px rgba(0, 212, 255, 0.2));
+	}
+	50% {
+		filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.6)) drop-shadow(0 0 60px rgba(0, 212, 255, 0.3));
+	}
+}
+
 .app-logo {
 	height: 5.5rem;
 	width: 5.5rem;
@@ -152,6 +225,7 @@ useAppEvent('loading', (e) => {
 	letter-spacing: -0.04em;
 	line-height: 1;
 	animation: splash-copy-in 0.7s cubic-bezier(0.32, 0.72, 0, 1) 0.12s both;
+	text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
 }
 
 .app-tagline {
@@ -163,10 +237,16 @@ useAppEvent('loading', (e) => {
 	animation: splash-copy-in 0.7s cubic-bezier(0.32, 0.72, 0, 1) 0.22s both;
 }
 
-.loading-bar {
+.progress-wrapper {
 	max-width: 20rem;
 	margin-top: 0.35rem;
 	animation: splash-copy-in 0.7s cubic-bezier(0.32, 0.72, 0, 1) 0.3s both;
+}
+
+.loading-message {
+	font-size: 0.75rem;
+	color: var(--color-secondary);
+	animation: splash-copy-in 0.4s ease both;
 }
 
 @keyframes splash-copy-in {
@@ -183,7 +263,16 @@ useAppEvent('loading', (e) => {
 @media (prefers-reduced-motion: reduce) {
 	.app-title,
 	.app-tagline,
-	.loading-bar {
+	.progress-wrapper,
+	.loading-message {
+		animation: none;
+	}
+
+	.particle {
+		animation: none;
+	}
+
+	.logo-glow {
 		animation: none;
 	}
 }

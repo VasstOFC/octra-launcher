@@ -1,6 +1,6 @@
-<!-- TODO: After checklist v1.5, move everything into src directory. -->
+﻿<!-- TODO: After checklist v1.5, move everything into src directory. -->
 
-# @modrinth/moderation
+# @lumen/moderation
 
 This package contains both the moderation checklist system used by moderators for reviewing projects on Modrinth, and the publishing checklist (nag system) that provides automated feedback to project authors during the submission process.
 
@@ -10,24 +10,24 @@ The package is organized as follows:
 
 ```
 /packages/moderation/
-├── data/
-│   ├── checklist.ts        # Main moderation checklist definition - imports and exports all stages
-│   ├── messages/           # Markdown files containing message templates for moderation
-│   │   ├── title/          # Messages for the title stage
-│   │   ├── description/    # Messages for the description stage
-│   │   └── ...             # One directory per stage
-│   ├── stages/             # Moderation stage definition files
-│   │   ├── title.ts        # Title stage definition
-│   │   ├── description.ts  # Description stage definition
-│   │   └── ...             # One file per stage
-│   └── nags/               # Publishing checklist (nag system) files
-│       ├── core.ts         # Core nags (required fields, basic validation)
-│       └── ...
-└── types/                  # Type definitions
-    ├── actions.ts          # Action-related types (moderation)
-    ├── messages.ts         # Message-related types (moderation)
-    ├── stage.ts            # Stage-related types (moderation)
-    └── nags.ts             # Nag-related types (publishing checklist)
+â”śâ”€â”€ data/
+â”‚   â”śâ”€â”€ checklist.ts        # Main moderation checklist definition - imports and exports all stages
+â”‚   â”śâ”€â”€ messages/           # Markdown files containing message templates for moderation
+â”‚   â”‚   â”śâ”€â”€ title/          # Messages for the title stage
+â”‚   â”‚   â”śâ”€â”€ description/    # Messages for the description stage
+â”‚   â”‚   â””â”€â”€ ...             # One directory per stage
+â”‚   â”śâ”€â”€ stages/             # Moderation stage definition files
+â”‚   â”‚   â”śâ”€â”€ title.ts        # Title stage definition
+â”‚   â”‚   â”śâ”€â”€ description.ts  # Description stage definition
+â”‚   â”‚   â””â”€â”€ ...             # One file per stage
+â”‚   â””â”€â”€ nags/               # Publishing checklist (nag system) files
+â”‚       â”śâ”€â”€ core.ts         # Core nags (required fields, basic validation)
+â”‚       â””â”€â”€ ...
+â””â”€â”€ types/                  # Type definitions
+    â”śâ”€â”€ actions.ts          # Action-related types (moderation)
+    â”śâ”€â”€ messages.ts         # Message-related types (moderation)
+    â”śâ”€â”€ stage.ts            # Stage-related types (moderation)
+    â””â”€â”€ nags.ts             # Nag-related types (publishing checklist)
 ```
 
 ## Moderation Checklist System

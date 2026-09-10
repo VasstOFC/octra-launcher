@@ -1,8 +1,8 @@
-import type { AbstractModrinthClient } from '@modrinth/api-client'
-import { provideUserCountry } from '@modrinth/ui'
+import type { AbstractLumenClient } from '@lumen/api-client'
+import { provideUserCountry } from '@lumen/ui'
 import { ref } from 'vue'
 
-export function setupUserCountryProvider(client: AbstractModrinthClient) {
+export function setupUserCountryProvider(client: AbstractLumenClient) {
 	const country = ref('US')
 
 	void client.labrinth.geoip

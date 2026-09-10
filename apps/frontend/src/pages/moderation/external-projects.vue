@@ -108,9 +108,9 @@
 	</div>
 </template>
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
-import { BinaryIcon, EditIcon, HashIcon, SearchIcon } from '@modrinth/assets'
-import { Button } from '@modrinth/ui'
+import type { Labrinth } from '@lumen/api-client'
+import { BinaryIcon, EditIcon, HashIcon, SearchIcon } from '@lumen/assets'
+import { Button } from '@lumen/ui'
 import {
 	Combobox,
 	type ComboboxOption,
@@ -118,22 +118,22 @@ import {
 	type ExternalLicenseStatus,
 	externalProjectLicenseStatusMessages,
 	ExternalProjectLookupCard,
-	injectModrinthClient,
+	injectLumenClient,
 	Input,
 	NewModal,
 	Textarea,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 
 const { formatMessage } = useVIntl()
 
 const query = ref('')
 const isLoading = ref(false)
 const isSavingEdit = ref(false)
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const editModal = useTemplateRef<InstanceType<typeof NewModal>>('editModal')
 
-useHead({ title: 'External projects - Modrinth' })
+useHead({ title: 'External projects - Lumen' })
 
 type ExternalProject = {
 	id: number

@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { DownloadIcon, RightArrowIcon, XIcon } from '@modrinth/assets'
+import { DownloadIcon, RightArrowIcon, XIcon } from '@lumen/assets'
 import {
 	Button,
 	commonMessages,
@@ -36,7 +36,7 @@ import {
 	IntlFormatted,
 	NewModal,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { ref } from 'vue'
 
 const { formatMessage } = useVIntl()

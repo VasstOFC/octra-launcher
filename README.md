@@ -1,6 +1,6 @@
 # Octra App
 
-Minecraft launcher based on [Modrinth Theseus](https://github.com/modrinth/code). Catalog still uses Modrinth’s API.
+Minecraft launcher based on [Modrinth Theseus](https://github.com/VasstOFC/octra-launcher). Catalog still uses Modrinth's API.
 
 **Downloads / auto-update:** [Releases](https://github.com/VasstOFC/octra-launcher/releases)
 
@@ -32,7 +32,7 @@ If you discover a security vulnerability within our codebase, please follow our 
 
 ## Support
 
-If you need help with the Modrinth web interface or app, please visit our [support page](https://support.modrinth.com). For general inquiries, you can also join our [Discord server](https://discord.modrinth.com).
+If you need help with the Octra launcher, please visit our [support page](https://support.modrinth.com). For general inquiries, you can also join our [Discord server](https://discord.modrinth.com).
 
 ## License
 

@@ -435,7 +435,7 @@
 									</template>
 									<template #article-link="{ children }">
 										<a
-											href="https://support.modrinth.com/en/articles/8801191-modrinth-maven"
+											href="https://support.modrinth.com/en/articles/8801191-Lumen-maven"
 											class="text-link"
 											target="_blank"
 											rel="noopener"
@@ -497,7 +497,7 @@
 	</div>
 </template>
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
+import type { Labrinth } from '@lumen/api-client'
 import {
 	BoxIcon,
 	ChevronLeftIcon,
@@ -516,8 +516,8 @@ import {
 	SettingsIcon,
 	TrashIcon,
 	XIcon,
-} from '@modrinth/assets'
-import { moderationSettings } from '@modrinth/moderation'
+} from '@lumen/assets'
+import { moderationSettings } from '@lumen/moderation'
 import {
 	Admonition,
 	BackToParentLink,
@@ -531,7 +531,7 @@ import {
 	defineMessages,
 	formatLoader,
 	IconButton,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	injectProjectPageContext,
 	IntlFormatted,
@@ -542,8 +542,8 @@ import {
 	useFormatDateTime,
 	useVIntl,
 	VersionPage,
-} from '@modrinth/ui'
-import { isStaff } from '@modrinth/utils'
+} from '@lumen/ui'
+import { isStaff } from '@lumen/utils'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
 import { onServerPrefetch } from 'vue'
 
@@ -565,7 +565,7 @@ const router = useRouter()
 const modSettings = useModerationSettings()
 const auth = await useAuth()
 const tags = useGeneratedState()
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const queryClient = useQueryClient()
 const { addNotification } = injectNotificationManager()
 const { createProjectDownloadUrl } = useCdnDownloadContext()
@@ -792,7 +792,7 @@ const description = computed(() => {
 
 	return `Download ${project.value.title} ${
 		version.value.version_number
-	} on Modrinth. Supports ${(data as any).$formatVersion(version.value.game_versions)} ${(
+	} on Lumen. Supports ${(data as any).$formatVersion(version.value.game_versions)} ${(
 		version.value.loaders ?? []
 	)
 		.map((x: string) => x.charAt(0).toUpperCase() + x.slice(1))
@@ -1086,11 +1086,11 @@ const messages = defineMessages({
 	mavenDescription: {
 		id: 'version.section.content.dev-info.maven-description',
 		defaultMessage:
-			'Projects on Modrinth are automatically available through a Maven repository for use with JVM build tools such as <gradle-link>Gradle</gradle-link>. To learn more about the Modrinth Maven API, <article-link>click here</article-link>.',
+			'Projects on Lumen are automatically available through a Maven repository for use with JVM build tools such as <gradle-link>Gradle</gradle-link>. To learn more about the Lumen Maven API, <article-link>click here</article-link>.',
 	},
 	mavenNote: {
 		id: 'version.section.content.dev-info.maven-note',
-		defaultMessage: `Note: When available, you should use the creator's maven repo instead as it will have transitive dependency information that the Modrinth Maven API does not. You may also end up with duplicate dependencies if you use a mix of Modrinth and non-Modrinth Maven repositories for your dependencies, because the group identifier will be different when served through the Modrinth Maven API.`,
+		defaultMessage: `Note: When available, you should use the creator's maven repo instead as it will have transitive dependency information that the Lumen Maven API does not. You may also end up with duplicate dependencies if you use a mix of Lumen and non-Lumen Maven repositories for your dependencies, because the group identifier will be different when served through the Lumen Maven API.`,
 	},
 	mavenCoordinates: {
 		id: 'version.section.content.dev-info.maven-coordinates',
@@ -1206,19 +1206,19 @@ function createDependencyLink(context: {
 		: undefined
 }
 
-const coordinatesSnippet = computed(() => `maven.modrinth:${project.value.id}:${version.value?.id}`)
+const coordinatesSnippet = computed(() => `maven.Lumen:${project.value.id}:${version.value?.id}`)
 const gradleSnippet = computed(
 	() => `repositories {
     exclusiveContent {
         forRepository {
             maven {
-                name = "Modrinth"
+                name = "Lumen"
                 url = "https://api.modrinth.com/maven"
             }
         }
         // forRepositories(fg.repository) // Uncomment when using ForgeGradle
         filter {
-            includeGroup "maven.modrinth"
+            includeGroup "maven.Lumen"
         }
     }
 }

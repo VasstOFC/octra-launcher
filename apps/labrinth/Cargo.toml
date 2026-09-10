@@ -69,8 +69,8 @@ image = { workspace = true, features = [
 itertools = { workspace = true }
 json-patch = { workspace = true }
 lettre = { workspace = true }
-modrinth-content-management = { workspace = true }
-modrinth-util = { workspace = true, features = ["decimal", "sentry", "utoipa"] }
+lumen-content-management = { workspace = true }
+lumen-util = { workspace = true, features = ["decimal", "sentry", "utoipa"] }
 muralpay = { workspace = true, features = ["client", "mock", "utoipa"] }
 murmur2 = { workspace = true }
 neverbounce = { workspace = true }

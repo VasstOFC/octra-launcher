@@ -22,7 +22,7 @@ importers:
       '@formatjs/icu-messageformat-parser':
         specifier: ^2.11.4
         version: 2.11.4
-      '@modrinth/tooling-config':
+      '@lumen/tooling-config':
         specifier: workspace:*
         version: link:packages/tooling-config
       '@tailwindcss/container-queries':
@@ -64,13 +64,13 @@ importers:
 
   apps/app:
     dependencies:
-      '@modrinth/app-frontend':
+      '@lumen/app-frontend':
         specifier: workspace:*
         version: link:../app-frontend
-      '@modrinth/app-lib':
+      '@lumen/app-lib':
         specifier: workspace:*
         version: link:../../packages/app-lib
-      '@modrinth/daedalus':
+      '@lumen/daedalus':
         specifier: workspace:*
         version: link:../../packages/daedalus
     devDependencies:
@@ -83,16 +83,19 @@ importers:
       '@dnd-kit/vue':
         specifier: ^0.5.0
         version: 0.5.0(vue@3.5.27(typescript@5.9.3))
-      '@modrinth/api-client':
+      '@lumen/api-client':
         specifier: workspace:^
         version: link:../../packages/api-client
-      '@modrinth/assets':
+      '@lumen/assets':
         specifier: workspace:*
         version: link:../../packages/assets
-      '@modrinth/ui':
+      '@lumen/blog':
+        specifier: workspace:*
+        version: link:../../packages/blog
+      '@lumen/ui':
         specifier: workspace:*
         version: link:../../packages/ui
-      '@modrinth/utils':
+      '@lumen/utils':
         specifier: workspace:*
         version: link:../../packages/utils
       '@sentry/vue':
@@ -189,7 +192,7 @@ importers:
       '@formatjs/cli':
         specifier: ^6.2.12
         version: 6.12.2(@vue/compiler-core@3.5.27)(vue@3.5.27(typescript@5.9.3))
-      '@modrinth/tooling-config':
+      '@lumen/tooling-config':
         specifier: workspace:*
         version: link:../../packages/tooling-config
       '@nuxt/eslint-config':
@@ -239,7 +242,7 @@ importers:
 
   apps/daedalus_client:
     dependencies:
-      '@modrinth/daedalus':
+      '@lumen/daedalus':
         specifier: workspace:*
         version: link:../../packages/daedalus
 
@@ -251,7 +254,7 @@ importers:
       '@astrojs/starlight':
         specifier: ^0.32.2
         version: 0.32.6(astro@5.17.1(@types/node@24.12.2)(db0@0.3.4)(ioredis@5.9.2)(jiti@2.6.1)(lightningcss@1.32.0)(rollup@4.57.1)(sass@1.97.3)(terser@5.46.0)(typescript@5.9.3)(yaml@2.8.2))
-      '@modrinth/assets':
+      '@lumen/assets':
         specifier: workspace:*
         version: link:../../packages/assets
       astro:
@@ -278,22 +281,22 @@ importers:
       '@ltd/j-toml':
         specifier: ^1.38.0
         version: 1.38.0
-      '@modrinth/api-client':
+      '@lumen/api-client':
         specifier: workspace:*
         version: link:../../packages/api-client
-      '@modrinth/assets':
+      '@lumen/assets':
         specifier: workspace:*
         version: link:../../packages/assets
-      '@modrinth/blog':
+      '@lumen/blog':
         specifier: workspace:*
         version: link:../../packages/blog
-      '@modrinth/moderation':
+      '@lumen/moderation':
         specifier: workspace:*
         version: link:../../packages/moderation
-      '@modrinth/ui':
+      '@lumen/ui':
         specifier: workspace:*
         version: link:../../packages/ui
-      '@modrinth/utils':
+      '@lumen/utils':
         specifier: workspace:*
         version: link:../../packages/utils
       '@sentry/nuxt':
@@ -402,7 +405,7 @@ importers:
       '@formatjs/cli':
         specifier: ^6.2.12
         version: 6.12.2(@vue/compiler-core@3.5.27)(vue@3.5.27(typescript@5.9.3))
-      '@modrinth/tooling-config':
+      '@lumen/tooling-config':
         specifier: workspace:*
         version: link:../../packages/tooling-config
       '@types/dompurify':
@@ -459,7 +462,7 @@ importers:
 
   apps/installer:
     dependencies:
-      '@modrinth/installer-frontend':
+      '@lumen/installer-frontend':
         specifier: workspace:*
         version: link:../installer-frontend
     devDependencies:
@@ -469,7 +472,7 @@ importers:
 
   apps/installer-frontend:
     dependencies:
-      '@modrinth/assets':
+      '@lumen/assets':
         specifier: workspace:*
         version: link:../../packages/assets
       '@tauri-apps/api':
@@ -482,7 +485,7 @@ importers:
         specifier: ^3.5.13
         version: 3.5.27(typescript@5.9.3)
     devDependencies:
-      '@modrinth/tooling-config':
+      '@lumen/tooling-config':
         specifier: workspace:*
         version: link:../../packages/tooling-config
       '@vitejs/plugin-vue':
@@ -521,12 +524,12 @@ importers:
         specifier: ^1.4.1
         version: 1.5.1
     devDependencies:
+      '@lumen/tooling-config':
+        specifier: workspace:*
+        version: link:../tooling-config
       '@microsoft/api-extractor':
         specifier: ^7.58.9
         version: 7.58.9(@types/node@24.12.2)
-      '@modrinth/tooling-config':
-        specifier: workspace:*
-        version: link:../tooling-config
       '@tauri-apps/plugin-http':
         specifier: ^2.0.0
         version: 2.5.7
@@ -544,7 +547,7 @@ importers:
 
   packages/assets:
     devDependencies:
-      '@modrinth/tooling-config':
+      '@lumen/tooling-config':
         specifier: workspace:*
         version: link:../tooling-config
       '@types/node':
@@ -562,7 +565,7 @@ importers:
 
   packages/blog:
     dependencies:
-      '@modrinth/utils':
+      '@lumen/utils':
         specifier: workspace:*
         version: link:../utils
       dayjs:
@@ -584,7 +587,7 @@ importers:
         specifier: ^0.6.2
         version: 0.6.2
     devDependencies:
-      '@modrinth/tooling-config':
+      '@lumen/tooling-config':
         specifier: workspace:*
         version: link:../tooling-config
       '@types/glob':
@@ -607,13 +610,13 @@ importers:
 
   packages/moderation:
     dependencies:
-      '@modrinth/api-client':
+      '@lumen/api-client':
         specifier: workspace:*
         version: link:../api-client
-      '@modrinth/assets':
+      '@lumen/assets':
         specifier: workspace:*
         version: link:../assets
-      '@modrinth/utils':
+      '@lumen/utils':
         specifier: workspace:*
         version: link:../utils
       vue:
@@ -623,10 +626,10 @@ importers:
       '@formatjs/cli':
         specifier: ^6.2.12
         version: 6.12.2(@vue/compiler-core@3.5.27)(vue@3.5.27(typescript@5.9.3))
-      '@modrinth/tooling-config':
+      '@lumen/tooling-config':
         specifier: workspace:*
         version: link:../tooling-config
-      '@modrinth/ui':
+      '@lumen/ui':
         specifier: workspace:*
         version: link:../ui
       typescript:
@@ -711,16 +714,16 @@ importers:
       '@intercom/messenger-js-sdk':
         specifier: ^0.0.14
         version: 0.0.14
-      '@modrinth/api-client':
+      '@lumen/api-client':
         specifier: workspace:*
         version: link:../api-client
-      '@modrinth/assets':
+      '@lumen/assets':
         specifier: workspace:*
         version: link:../assets
-      '@modrinth/blog':
+      '@lumen/blog':
         specifier: workspace:*
         version: link:../blog
-      '@modrinth/utils':
+      '@lumen/utils':
         specifier: workspace:*
         version: link:../utils
       '@tanstack/vue-query':
@@ -838,7 +841,7 @@ importers:
       '@formatjs/cli':
         specifier: ^6.2.12
         version: 6.12.2(@vue/compiler-core@3.5.27)(vue@3.5.27(typescript@5.9.3))
-      '@modrinth/tooling-config':
+      '@lumen/tooling-config':
         specifier: workspace:*
         version: link:../tooling-config
       '@storybook/addon-a11y':
@@ -941,10 +944,10 @@ importers:
         specifier: ^1.0.14
         version: 1.0.15
     devDependencies:
-      '@modrinth/api-client':
+      '@lumen/api-client':
         specifier: workspace:*
         version: link:../api-client
-      '@modrinth/tooling-config':
+      '@lumen/tooling-config':
         specifier: workspace:*
         version: link:../tooling-config
 
@@ -1028,6 +1031,10 @@ packages:
     resolution: {integrity: sha512-9NhCeYjq9+3uxgdtp20LSiJXJvN0FeCtNGpJxuMFZ1Kv3cWUNb6DOhJwUvcVCzKGR66cw4njwM6hrJLqgOwbcw==}
     engines: {node: '>=6.9.0'}
 
+  '@babel/code-frame@7.29.7':
+    resolution: {integrity: sha512-Aup7aUOfpbAUg2ROOJN6Iw5f9DMBlzu0mIkm/malLQFN/YQgO48wCj0Kxa3sEHJvPVFg7siR+qRInwXd2qhQKw==}
+    engines: {node: '>=6.9.0'}
+
   '@babel/compat-data@7.29.0':
     resolution: {integrity: sha512-T1NCJqT/j9+cn8fvkt7jtwbLBfLC/1y1c7NtCeXFRgzGTsafi68MRv8yzkYSapBnFA6L3U2VSc02ciDzoAJhJg==}
     engines: {node: '>=6.9.0'}
@@ -1098,6 +1105,10 @@ packages:
     resolution: {integrity: sha512-qSs4ifwzKJSV39ucNjsvc6WVHs6b7S03sOh2OcHF9UHfVPqWWALUsNUVzhSBiItjRZoLHx7nIarVjqKVusUZ1Q==}
     engines: {node: '>=6.9.0'}
 
+  '@babel/helper-validator-identifier@7.29.7':
+    resolution: {integrity: sha512-qehxGkRj55h/ff8EMaJ+cYhyaKlHIxqYDn682wQD7RNp9UujOQsHog2uS0r2vzr4pW+sXf90NeeayjcNaX3fFg==}
+    engines: {node: '>=6.9.0'}
+
   '@babel/helper-validator-option@7.27.1':
     resolution: {integrity: sha512-YvjJow9FxbhFFKDSuFnVCe2WxXk1zWc22fFePVNEaWJEu8IrZVlda6N0uHwzZrUM1il7NC9Mlp4MaJYbYd9JSg==}
     engines: {node: '>=6.9.0'}
@@ -1131,6 +1142,10 @@ packages:
 
   '@babel/runtime@7.28.6':
     resolution: {integrity: sha512-05WQkdpL9COIMz4LjTxGpPNCdlpyimKppYNoJ5Di5EUObifl8t4tuLuUBBZEpoLYOmfvIWrsp9fCl0HoPRVTdA==}
+    engines: {node: '>=6.9.0'}
+
+  '@babel/runtime@7.29.7':
+    resolution: {integrity: sha512-Nq8OhGWiZIZGV6hLHoyAKLLcJihP/xFeBMGJoUrxTX2psI8dCifzLhZISFb+VWS3wFMRDmCGw5R+dOySCqPLhw==}
     engines: {node: '>=6.9.0'}
 
   '@babel/template@7.28.6':
@@ -10998,6 +11013,12 @@ snapshots:
       js-tokens: 4.0.0
       picocolors: 1.1.1
 
+  '@babel/code-frame@7.29.7':
+    dependencies:
+      '@babel/helper-validator-identifier': 7.29.7
+      js-tokens: 4.0.0
+      picocolors: 1.1.1
+
   '@babel/compat-data@7.29.0': {}
 
   '@babel/core@7.29.0':
@@ -11104,6 +11125,8 @@ snapshots:
 
   '@babel/helper-validator-identifier@7.28.5': {}
 
+  '@babel/helper-validator-identifier@7.29.7': {}
+
   '@babel/helper-validator-option@7.27.1': {}
 
   '@babel/helpers@7.28.6':
@@ -11137,6 +11160,8 @@ snapshots:
       - supports-color
 
   '@babel/runtime@7.28.6': {}
+
+  '@babel/runtime@7.29.7': {}
 
   '@babel/template@7.28.6':
     dependencies:
@@ -14403,8 +14428,8 @@ snapshots:
 
   '@testing-library/dom@10.4.1':
     dependencies:
-      '@babel/code-frame': 7.29.0
-      '@babel/runtime': 7.28.6
+      '@babel/code-frame': 7.29.7
+      '@babel/runtime': 7.29.7
       '@types/aria-query': 5.0.4
       aria-query: 5.3.0
       dom-accessibility-api: 0.5.16

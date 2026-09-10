@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { StarIcon } from '@modrinth/assets'
-import { ContextMenu, defineMessages, useVIntl } from '@modrinth/ui'
+import { StarIcon } from '@lumen/assets'
+import { ContextMenu, defineMessages, useVIntl } from '@lumen/ui'
 import { computed, nextTick, onDeactivated, onUnmounted, ref, toRef, watch } from 'vue'
 import Draggable from 'vuedraggable'
 

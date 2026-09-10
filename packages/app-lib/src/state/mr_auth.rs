@@ -28,7 +28,7 @@ impl ModrinthCredentials {
 
                 let resp = fetch_advanced(
                     Method::POST,
-                    concat!(env!("MODRINTH_API_URL"), "session/refresh"),
+                    concat!(env!("LUMEN_API_URL"), "session/refresh"),
                     None,
                     None,
                     Some(("Authorization", &*creds.session)),
@@ -194,11 +194,11 @@ impl ModrinthCredentials {
 }
 
 pub const fn get_login_url() -> &'static str {
-    concat!(env!("MODRINTH_URL"), "auth/sign-in")
+    concat!(env!("LUMEN_URL"), "auth/sign-in")
 }
 
 pub const fn get_signup_url() -> &'static str {
-    concat!(env!("MODRINTH_URL"), "auth/sign-up")
+    concat!(env!("LUMEN_URL"), "auth/sign-up")
 }
 
 pub async fn finish_login_flow(
@@ -229,7 +229,7 @@ async fn fetch_info(
 ) -> crate::Result<crate::state::cache::User> {
     let result = fetch_advanced(
         Method::GET,
-        concat!(env!("MODRINTH_API_URL"), "user"),
+        concat!(env!("LUMEN_API_URL"), "user"),
         None,
         None,
         Some(("Authorization", token)),

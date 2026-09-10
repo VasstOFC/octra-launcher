@@ -46,7 +46,7 @@ info:
     - those which access private data (such as draft projects, notifications, emails, and payout data)
 
     Each request requiring authentication has a certain scope. For example, to view the email of the user being requested, the token must have the `USER_READ_EMAIL` scope.
-    You can find the list of available scopes [on GitHub](https://github.com/modrinth/labrinth/blob/master/src/models/pats.rs#L15). Making a request with an invalid scope will return a 401 error.
+    You can find the list of available scopes [on GitHub](https://github.com/VasstOFC/octra-launcher/blob/master/src/models/pats.rs#L15). Making a request with an invalid scope will return a 401 error.
 
     Please note that certain scopes and requests cannot be completed with a personal access token or using OAuth.
     For example, deleting a user account can only be done through Modrinth's frontend.
@@ -111,7 +111,7 @@ info:
     ### Migrations
     Inside the following spoiler, you will be able to find all changes between versions of the Modrinth API, accompanied by tips and a guide to migrate applications to newer versions.
 
-    Here, you can also find changes for [Minotaur](https://github.com/modrinth/minotaur), Modrinth's official Gradle plugin. Major versions of Minotaur directly correspond to major versions of the Modrinth API.
+    Here, you can also find changes for [Minotaur](https://github.com/VasstOFC/octra-launcher), Modrinth's official Gradle plugin. Major versions of Minotaur directly correspond to major versions of the Modrinth API.
 
     <details><summary>API v1 to API v2</summary>
 
@@ -365,7 +365,7 @@ components:
       required:
         - dependency_type
 
-    # https://github.com/modrinth/labrinth/blob/master/src/routes/versions.rs#L169-L190
+    # https://github.com/VasstOFC/octra-launcher/blob/master/src/routes/versions.rs#L169-L190
     EditableVersion:
       allOf:
         - $ref: '#/components/schemas/BaseVersion'
@@ -402,7 +402,7 @@ components:
         - algorithm
         - hash
         - file_type
-    # https://github.com/modrinth/code/blob/main/apps/labrinth/src/models/v3/projects.rs#L981-990
+    # https://github.com/VasstOFC/octra-launcher/blob/main/apps/labrinth/src/models/v3/projects.rs#L981-990
     FileTypeEnum:
       type: string
       enum:
@@ -462,7 +462,7 @@ components:
         - client_or_server_prefers_both
       example: client_and_server
       description: 'The environment a version supports. For an explanation of each environment, see the blog post here: https://modrinth.com/news/article/new-environments/#new-system'
-    # https://github.com/modrinth/code/blob/main/apps/labrinth/src/routes/v2/version_creation.rs#L32-L76
+    # https://github.com/VasstOFC/octra-launcher/blob/main/apps/labrinth/src/routes/v2/version_creation.rs#L32-L76
     CreatableVersion:
       allOf:
         - $ref: '#/components/schemas/BaseVersion'
@@ -880,17 +880,17 @@ components:
         issues_url:
           type: string
           description: An optional link to where to submit bugs or issues with the project
-          example: https://github.com/modrinth/code/issues
+          example: https://github.com/VasstOFC/octra-launcher/issues
           nullable: true
         source_url:
           type: string
           description: An optional link to the source code of the project
-          example: https://github.com/modrinth/code
+          example: https://github.com/VasstOFC/octra-launcher
           nullable: true
         wiki_url:
           type: string
           description: An optional link to the project's wiki page or other relevant information
-          example: https://github.com/modrinth/code/wiki
+          example: https://github.com/VasstOFC/octra-launcher/wiki
           nullable: true
         discord_url:
           type: string
@@ -943,7 +943,7 @@ components:
               type: string
               description: The URL to this license
               nullable: true
-    # Fields that can be edited through a PATCH request. https://github.com/modrinth/labrinth/blob/master/src/routes/projects.rs#L195-L269
+    # Fields that can be edited through a PATCH request. https://github.com/VasstOFC/octra-launcher/blob/master/src/routes/projects.rs#L195-L269
     EditableProject:
       allOf:
         - $ref: '#/components/schemas/ModifiableProject'
@@ -957,7 +957,7 @@ components:
               type: string
               description: The body of the moderators' message for the project
               nullable: true
-    # Fields only available for project creation. https://github.com/modrinth/labrinth/blob/master/src/routes/project_creation.rs#L129-L197
+    # Fields only available for project creation. https://github.com/VasstOFC/octra-launcher/blob/master/src/routes/project_creation.rs#L129-L197
     CreatableProject:
       allOf:
         - $ref: '#/components/schemas/ModifiableProject'
@@ -1171,17 +1171,17 @@ components:
         issues_url:
           type: string
           description: An optional link to where to submit bugs or issues with the project
-          example: https://github.com/modrinth/code/issues
+          example: https://github.com/VasstOFC/octra-launcher/issues
           nullable: true
         source_url:
           type: string
           description: An optional link to the source code of the project
-          example: https://github.com/modrinth/code
+          example: https://github.com/VasstOFC/octra-launcher
           nullable: true
         wiki_url:
           type: string
           description: An optional link to the project's wiki page or other relevant information
-          example: https://github.com/modrinth/code/wiki
+          example: https://github.com/VasstOFC/octra-launcher/wiki
           nullable: true
         discord_url:
           type: string
@@ -3139,7 +3139,7 @@ paths:
                 $ref: '#/components/schemas/HashVersionMap'
         '400':
           description: Request was invalid, see given error
-  # TODO check this out? https://github.com/modrinth/labrinth/blob/ec80c2b9dbf0bae98eb41714d3455b98095563b7/src/routes/v2/version_file.rs#L381
+  # TODO check this out? https://github.com/VasstOFC/octra-launcher/blob/ec80c2b9dbf0bae98eb41714d3455b98095563b7/src/routes/v2/version_file.rs#L381
   #/version_files/project:
   #  post:
   #    summary: Get projects from hashes

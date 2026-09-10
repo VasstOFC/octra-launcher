@@ -93,28 +93,21 @@
 </template>
 
 <script setup lang="ts">
-import {
-	DownloadIcon,
-	FileTextIcon,
-	LinkIcon,
-	SearchIcon,
-	SpinnerIcon,
-	XIcon,
-} from '@modrinth/assets'
+import { DownloadIcon, FileTextIcon, LinkIcon, SearchIcon, SpinnerIcon, XIcon } from '@lumen/assets'
 import { computed, nextTick, ref } from 'vue'
 
 import { Button } from '#ui/components/base/buttons'
 import Input from '#ui/components/base/inputs/Input.vue'
 import NewModal from '#ui/components/modal/NewModal.vue'
 import { defineMessages, useVIntl } from '#ui/composables/i18n'
-import { injectModrinthClient } from '#ui/providers/api-client'
+import { injectLumenClient } from '#ui/providers/api-client'
 import { injectNotificationManager } from '#ui/providers/web-notifications'
 import { commonMessages } from '#ui/utils/common-messages'
 
 import InlineBackupCreator from '../../../content-tab/components/modals/InlineBackupCreator.vue'
 
 const { addNotification } = injectNotificationManager()
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const { formatMessage } = useVIntl()
 
 const props = withDefaults(

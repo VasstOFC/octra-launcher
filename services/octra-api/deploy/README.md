@@ -128,7 +128,22 @@ openssl rand -hex 32   # JWT_SECRET
 openssl rand -hex 16   # API_KEY (opcjonalnie, dla starych launcherów)
 ```
 
-`API_KEY` musi zgadzać się z `SKINS_API_KEY` w `packages/app-lib/src/nervia.rs` (fallback bez konta Octra).
+`API_KEY` is optional (legacy `X-Octra-Key` uploads). Current Octra App builds use Bearer JWT and do **not** embed an API key. For transitional/dev builds only, set env `LUMEN_SKINS_API_KEY` on the client to match this `API_KEY`.
+
+Optional featured pack CMS: host `GET /featured-pack.json` on the same origin as the skins API, for example:
+
+```json
+{
+  "enabled": true,
+  "title": "Cobblemon Vasst",
+  "blurb": "Catch, battle, explore — install once and jump straight in.",
+  "url": "http://92.5.186.6/packs/Cobblemon-vasst.mrpack",
+  "version": "1.0.0",
+  "cacheName": "cobblemon-vasst.mrpack"
+}
+```
+
+The launcher falls back to compile-time defaults when the file is missing.
 
 ## 5. systemd
 
@@ -314,10 +329,10 @@ Na maszynie z launcherem:
 
 ```bash
 # Windows PowerShell
-$env:OCTRA_SKINS_URL = "https://skins.twojadomena.pl"
+$env:LUMEN_SKINS_URL = "https://skins.twojadomena.pl"
 
 # Linux / macOS
-export OCTRA_SKINS_URL=https://skins.twojadomena.pl
+export LUMEN_SKINS_URL=https://skins.twojadomena.pl
 ```
 
 Produkcyjne buildy i tak powinny mieć poprawny `SKINS_URL` w `nervia.rs` — env jest tylko wygodą lokalną.

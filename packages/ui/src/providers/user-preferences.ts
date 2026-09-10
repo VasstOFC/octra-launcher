@@ -1,4 +1,4 @@
-import type { Labrinth } from '@modrinth/api-client'
+import type { Labrinth } from '@lumen/api-client'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
 import { computed, type ComputedRef } from 'vue'
 
@@ -31,7 +31,7 @@ const messages = defineMessages({
 	},
 	updateFailedDescription: {
 		id: 'settings.preferences.update-failed.description',
-		defaultMessage: 'Your settings could not be saved to your Modrinth account. Please try again.',
+		defaultMessage: 'Your settings could not be saved to your Lumen account. Please try again.',
 	},
 })
 

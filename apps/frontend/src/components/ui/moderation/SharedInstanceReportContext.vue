@@ -10,19 +10,19 @@ import {
 	UserPlusIcon,
 	UsersIcon,
 	VersionIcon,
-} from '@modrinth/assets'
-import { Button, IconButton } from '@modrinth/ui'
+} from '@lumen/assets'
+import { Button, IconButton } from '@lumen/ui'
 import {
 	Avatar,
 	ConfirmLeaveModal,
 	type ContentItem,
-	injectModrinthClient,
+	injectLumenClient,
 	ManagedContentModal,
 	Table,
 	type TableColumn,
 	useFormatDateTime,
 	useRelativeTime,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useQuery } from '@tanstack/vue-query'
 import { computed, ref } from 'vue'
 
@@ -84,7 +84,7 @@ const emit = defineEmits<{
 
 const contentModal = ref<InstanceType<typeof ManagedContentModal> | null>(null)
 const banModal = ref<InstanceType<typeof ConfirmLeaveModal> | null>(null)
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const contentByVersion = new Map<string, ContentItem[]>()
 const contentInstance = ref<Pick<SharedInstanceOwnerInstance, 'id' | 'name' | 'icon_url'>>({
 	id: props.details.id,

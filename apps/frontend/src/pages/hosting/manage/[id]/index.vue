@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { injectModrinthServerContext, ServersManageOverviewPage } from '@modrinth/ui'
+import { injectLumenServerContext, ServersManageOverviewPage } from '@lumen/ui'
 
-const { server } = injectModrinthServerContext()
+const { server } = injectLumenServerContext()
 const flags = useFeatureFlags()
 
 useHead({
-	title: computed(() => `Overview - ${server.value?.name ?? 'Server'} - Modrinth`),
+	title: computed(() => `Overview - ${server.value?.name ?? 'Server'} - Lumen`),
 })
 </script>
 

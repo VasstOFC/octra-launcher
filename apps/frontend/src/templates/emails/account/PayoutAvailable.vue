@@ -8,7 +8,7 @@ import StyledEmail from '../shared/StyledEmail.vue'
 	<StyledEmail
 		title="Revenue available to withdraw!"
 		:manual-links="[
-			{ link: 'https://modrinth.com/dashboard/revenue', label: 'Revenue dashboard' },
+			{ link: 'https://Lumen.com/dashboard/revenue', label: 'Revenue dashboard' },
 			{ link: 'https://support.modrinth.com', label: 'Support Portal' },
 		]"
 	>
@@ -23,7 +23,7 @@ import StyledEmail from '../shared/StyledEmail.vue'
 
 		<Section class="mb-4 mt-4">
 			<Button
-				href="https://modrinth.com/dashboard/revenue"
+				href="https://Lumen.com/dashboard/revenue"
 				target="_blank"
 				class="text-accentContrast inline-block rounded-[12px] bg-brand pb-3 pl-4 pr-4 pt-3 text-[14px] font-bold"
 			>
@@ -38,6 +38,6 @@ import StyledEmail from '../shared/StyledEmail.vue'
 			>.
 		</Text>
 
-		<Text class="text-base">Thank you for being a creator on Modrinth!</Text>
+		<Text class="text-base">Thank you for being a creator on Lumen!</Text>
 	</StyledEmail>
 </template>

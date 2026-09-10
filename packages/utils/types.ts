@@ -1,7 +1,7 @@
 export const BASE62_CHARS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
 export type Base62Char = (typeof BASE62_CHARS)[number]
 
-export type ModrinthId = string
+export type LumenId = string
 
 export type Environment = 'required' | 'optional' | 'unsupported' | 'unknown'
 
@@ -50,12 +50,12 @@ export interface GalleryImage {
 }
 
 export interface ProjectV3 {
-	id: ModrinthId
+	id: LumenId
 	slug?: string
 	project_types: string[]
 	games: string[]
-	team_id: ModrinthId
-	organization?: ModrinthId
+	team_id: LumenId
+	organization?: LumenId
 	name: string
 	summary: string
 	description: string
@@ -87,7 +87,7 @@ export interface ProjectV3 {
 	additional_categories: string[]
 	loaders: string[]
 
-	versions: ModrinthId[]
+	versions: LumenId[]
 	icon_url?: string
 	raw_icon_url?: string
 
@@ -111,7 +111,7 @@ export interface ProjectV3 {
 	}[]
 
 	color?: number
-	thread_id: ModrinthId
+	thread_id: LumenId
 	monetization_status: MonetizationStatus
 	side_types_migration_review_status: EnvironmentMigrationReviewStatus
 
@@ -119,7 +119,7 @@ export interface ProjectV3 {
 }
 
 export interface Project {
-	id: ModrinthId
+	id: LumenId
 	project_type: ProjectType
 	slug: string
 	title: string
@@ -142,10 +142,10 @@ export interface Project {
 	client_side: Environment
 	server_side: Environment
 
-	team?: ModrinthId
-	team_id: ModrinthId
-	thread_id: ModrinthId
-	organization: ModrinthId
+	team?: LumenId
+	team_id: LumenId
+	thread_id: LumenId
+	organization: LumenId
 
 	issues_url: string | null
 	source_url: string | null
@@ -162,7 +162,7 @@ export interface Project {
 	game_versions: GameVersion[]
 	loaders: Platform[]
 
-	versions: ModrinthId[]
+	versions: LumenId[]
 	gallery?: GalleryImage[]
 
 	license: {
@@ -193,7 +193,7 @@ export interface ProjectV3Partial {
 }
 
 export interface SearchResult {
-	id: ModrinthId
+	id: LumenId
 	project_type: ProjectType
 	slug: string
 	title: string
@@ -226,10 +226,10 @@ export interface SearchResult {
 }
 
 export type Organization = {
-	id: ModrinthId
+	id: LumenId
 	slug: string
 	name: string
-	team_id: ModrinthId
+	team_id: LumenId
 	description: string
 	icon_url: string
 	raw_icon_url: string | null
@@ -240,7 +240,7 @@ export type Organization = {
 export type OrganizationPermissions = number
 
 export type OrganizationMember = {
-	team_id: ModrinthId
+	team_id: LumenId
 	user: User
 	role: string
 	is_owner: boolean
@@ -252,7 +252,7 @@ export type OrganizationMember = {
 }
 
 export type Collection = {
-	id: ModrinthId
+	id: LumenId
 	user: User
 	name: string
 	description: string
@@ -262,7 +262,7 @@ export type Collection = {
 	status: CollectionStatus
 	created: string
 	updated: string
-	projects: ModrinthId[]
+	projects: LumenId[]
 }
 
 export type CollectionStatus = 'listed' | 'unlisted' | 'private' | 'unknown'
@@ -320,9 +320,9 @@ export interface Version {
 	loaders: Platform[]
 	featured: boolean
 	status: VersionStatus
-	id: ModrinthId
-	project_id: ModrinthId
-	author_id: ModrinthId
+	id: LumenId
+	project_id: LumenId
+	author_id: LumenId
 	date_published: string
 	downloads: number
 	files: VersionFile[]
@@ -355,7 +355,7 @@ export interface User {
 	email?: string
 	bio?: string
 	payout_data?: PayoutData
-	id: ModrinthId
+	id: LumenId
 	avatar_url: string
 	created: string
 	role: UserRole
@@ -382,7 +382,7 @@ export enum TeamMemberPermission {
 export type TeamMemberPermissions = number
 
 export interface TeamMember {
-	team_id: ModrinthId
+	team_id: LumenId
 	user: User
 	role: string
 	permissions: TeamMemberPermissions
@@ -393,12 +393,12 @@ export interface TeamMember {
 }
 
 export type Report = {
-	id: ModrinthId
-	item_id: ModrinthId
+	id: LumenId
+	item_id: LumenId
 	item_type: 'project' | 'version' | 'user'
 	report_type: string
-	reporter: ModrinthId
-	thread_id: ModrinthId
+	reporter: LumenId
+	thread_id: LumenId
 	closed: boolean
 	created: string
 	body: string
@@ -604,8 +604,8 @@ export interface DelphiReport {
 		| 'malware_simplyloader'
 	file_path: string
 	// pending = not reviewed yet.
-	// approved = approved as malicious, removed from modrinth
-	// rejected = not approved as malicious, remains on modrinth?
+	// approved = approved as malicious, removed from Lumen
+	// rejected = not approved as malicious, remains on Lumen?
 	status: 'pending' | 'approved' | 'rejected'
 	content?: string
 }

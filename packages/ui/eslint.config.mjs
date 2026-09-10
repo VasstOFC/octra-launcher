@@ -1,4 +1,4 @@
-import baseConfig from '@modrinth/tooling-config/eslint/nuxt.mjs'
+import baseConfig from '@lumen/tooling-config/eslint/nuxt.mjs'
 import storybook from 'eslint-plugin-storybook'
 
 export default baseConfig.append([

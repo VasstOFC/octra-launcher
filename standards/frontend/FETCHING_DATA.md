@@ -1,4 +1,4 @@
-- [TanStack Query](#tanstack-query)
+﻿- [TanStack Query](#tanstack-query)
 	- [Setup](#setup)
 	- [Queries](#queries)
 		- [Query-option factories](#query-option-factories)
@@ -29,7 +29,7 @@ The default stale time is 5 seconds. Get the `QueryClient` with `useQueryClient(
 Use `useQuery` with `api-client` to get data:
 
 ```ts
-const client = injectModrinthClient()
+const client = injectLumenClient()
 
 const { data, isPending, isError, error } = useQuery({
 	queryKey: ['project', 'v3', projectId],
@@ -94,7 +94,7 @@ Use `useMutation` for create, update, and delete operations. Invalidate related 
 
 ```ts
 const queryClient = useQueryClient()
-const client = injectModrinthClient()
+const client = injectLumenClient()
 
 const createMutation = useMutation({
 	mutationFn: (name: string) => client.archon.backups_v0.create(serverId, { name }),

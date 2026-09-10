@@ -10,7 +10,6 @@
 			:resolve-viewer="resolveViewer"
 			:show-copy-id-action="appSettings.devMode"
 			:auth-user="authUser"
-			:navigate-to-billing="() => openUrl('https://modrinth.com/settings/billing')"
 			:navigate-to-servers="() => router.push('/hosting/manage')"
 			:browse-modpacks="
 				({ serverId: sid, worldId: wid, from }) => {
@@ -47,17 +46,16 @@
 </template>
 
 <script setup lang="ts">
-import type { Archon, Labrinth } from '@modrinth/api-client'
-import { ServerStackIcon } from '@modrinth/assets'
+import type { Archon, Labrinth } from '@lumen/api-client'
+import { ServerStackIcon } from '@lumen/assets'
 import {
 	commonMessages,
 	injectAuth,
-	injectModrinthClient,
+	injectLumenClient,
 	ServersManageRootLayout,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
-import { openUrl } from '@tauri-apps/plugin-opener'
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -69,7 +67,7 @@ import { provideBreadcrumbParent, useBreadcrumb } from '@/providers/breadcrumbs'
 const route = useRoute()
 const router = useRouter()
 const auth = injectAuth()
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const queryClient = useQueryClient()
 const appSettings = useAppSettings()
 const { formatMessage } = useVIntl()

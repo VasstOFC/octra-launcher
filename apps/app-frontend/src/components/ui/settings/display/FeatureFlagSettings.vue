@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { SearchIcon } from '@modrinth/assets'
-import { Button, Input, Toggle } from '@modrinth/ui'
+import { SearchIcon } from '@lumen/assets'
+import { Button, Input, Toggle } from '@lumen/ui'
 import Fuse from 'fuse.js'
 import { computed, ref, watch } from 'vue'
 

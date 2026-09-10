@@ -1,5 +1,5 @@
-import type { AbstractWebNotificationManager } from '@modrinth/ui'
-import { provideInstanceImport } from '@modrinth/ui'
+import type { AbstractWebNotificationManager } from '@lumen/ui'
+import { provideInstanceImport } from '@lumen/ui'
 import { open } from '@tauri-apps/plugin-dialog'
 
 import {

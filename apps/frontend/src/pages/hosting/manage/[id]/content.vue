@@ -2,22 +2,22 @@
 import {
 	commonMessages,
 	defineMessages,
-	injectModrinthClient,
-	injectModrinthServerContext,
+	injectLumenClient,
+	injectLumenServerContext,
 	ServersManageContentPage,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useQueryClient } from '@tanstack/vue-query'
 
-const client = injectModrinthClient()
-const { server, serverId, worldId } = injectModrinthServerContext()
+const client = injectLumenClient()
+const { server, serverId, worldId } = injectLumenServerContext()
 const queryClient = useQueryClient()
 const { formatMessage } = useVIntl()
 
 const messages = defineMessages({
 	title: {
 		id: 'servers.manage.content.title',
-		defaultMessage: 'Content - {serverName} - Modrinth',
+		defaultMessage: 'Content - {serverName} - Lumen',
 	},
 })
 
@@ -45,7 +45,7 @@ if (contentWorldId) {
 		})
 
 		const modpackProjectId =
-			content.modpack?.spec.platform === 'modrinth' ? content.modpack.spec.project_id : null
+			content.modpack?.spec.platform === 'Lumen' ? content.modpack.spec.project_id : null
 
 		if (modpackProjectId) {
 			await queryClient.ensureQueryData({

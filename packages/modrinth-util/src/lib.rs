@@ -6,7 +6,7 @@ mod error;
 pub mod decimal;
 
 pub use error::*;
-pub use modrinth_log as log;
+pub use lumen_log as log;
 
 use eyre::{Result, eyre};
 

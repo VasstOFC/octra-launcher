@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineMessages, injectNotificationManager, useVIntl } from '@modrinth/ui'
+import { defineMessages, injectNotificationManager, useVIntl } from '@lumen/ui'
 import { ref } from 'vue'
 
 import JavaSelector from '@/components/ui/JavaSelector.vue'
@@ -21,7 +21,7 @@ const messages = defineMessages({
 	},
 	panelDescription: {
 		id: 'app.settings.java-installations.description',
-		defaultMessage: 'Choose which Java installations Octra uses for each major version.',
+		defaultMessage: 'Choose which Java installations Lumen uses for each major version.',
 	},
 	installationsGroup: {
 		id: 'app.settings.java-installations.group',
@@ -61,7 +61,10 @@ async function updateJavaVersion(version: { path?: string } | null | undefined) 
 		/>
 
 		<SettingsGroup :label="formatMessage(messages.installationsGroup)">
-			<SettingsTwoCol v-for="([leftVersion, rightVersion], pairIndex) in javaPairs" :key="pairIndex">
+			<SettingsTwoCol
+				v-for="([leftVersion, rightVersion], pairIndex) in javaPairs"
+				:key="pairIndex"
+			>
 				<template #left>
 					<SettingsStack
 						:control-id="`java-selector-${leftVersion}`"

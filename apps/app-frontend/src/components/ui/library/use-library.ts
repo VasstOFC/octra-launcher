@@ -1,4 +1,4 @@
-import type { Labrinth } from '@modrinth/api-client'
+import type { Labrinth } from '@lumen/api-client'
 import {
 	ClipboardCopyIcon,
 	EditIcon,
@@ -12,9 +12,9 @@ import {
 	StopCircleIcon,
 	TrashIcon,
 	UploadIcon,
-} from '@modrinth/assets'
-import type { ButtonMenuLeafOption, ButtonMenuOption } from '@modrinth/ui'
-import { defineMessages, formatLoader, injectNotificationManager, useVIntl } from '@modrinth/ui'
+} from '@lumen/assets'
+import type { ButtonMenuLeafOption, ButtonMenuOption } from '@lumen/ui'
+import { defineMessages, formatLoader, injectNotificationManager, useVIntl } from '@lumen/ui'
 import { open as openDialog } from '@tauri-apps/plugin-dialog'
 import { useEventListener, useStorage } from '@vueuse/core'
 import dayjs from 'dayjs'

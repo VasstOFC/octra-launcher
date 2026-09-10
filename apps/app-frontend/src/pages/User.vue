@@ -4,7 +4,7 @@
 			:user-id="userId"
 			:project-type="projectType"
 			variant="app"
-			site-url="https://modrinth.com"
+			site-url="https://Lumen.com"
 			project-link-mode="app"
 			:edit-profile-link="openProfileSettings"
 			external-navigation
@@ -36,8 +36,8 @@
 </template>
 
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
-import { DownloadIcon, PlusIcon, SpinnerIcon } from '@modrinth/assets'
+import type { Labrinth } from '@lumen/api-client'
+import { DownloadIcon, PlusIcon, SpinnerIcon } from '@lumen/assets'
 import {
 	Button,
 	commonMessages,
@@ -46,7 +46,7 @@ import {
 	provideUserProfile,
 	UserProfilePageLayout,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
 import { computed, inject, ref, watch } from 'vue'
 import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router'

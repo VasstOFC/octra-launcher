@@ -27,7 +27,7 @@
     "message": "Linux"
   },
   "app-marketing.download.linux-disclaimer": {
-    "message": "Versiunea de Linux a Modrinth App <issues-link>este cunoscută să aiba probleme</issues-link> pe anumite sisteme și configurări. Dacă Modrinth App este instabilă pe sistemul tău, te încurajăm să încerci și alte aplicații precum <prism-link>Prism Launcher</prism-link> pentru a instala ușor conținut de pe Modrinth."
+    "message": "Versiunea de Linux a Lumen App <issues-link>este cunoscută să aiba probleme</issues-link> pe anumite sisteme și configurări. Dacă Lumen App este instabilă pe sistemul tău, te încurajăm să încerci și alte aplicații precum <prism-link>Prism Launcher</prism-link> pentru a instala ușor conținut de pe Lumen."
   },
   "app-marketing.download.mac": {
     "message": "Mac"
@@ -36,7 +36,7 @@
     "message": "Opțiuni descărcare"
   },
   "app-marketing.download.title": {
-    "message": "Descarcă Modrinth App (Beta)"
+    "message": "Descarcă Lumen App (Beta)"
   },
   "app-marketing.download.windows": {
     "message": "Windows"
@@ -48,7 +48,7 @@
     "message": "Urmărește proiecte"
   },
   "app-marketing.features.importing.description": {
-    "message": "Importă toate profilurile tale favorite de pe aplicația pe care o foloseai înainte, și începe cu Modrinth App în secunde!"
+    "message": "Importă toate profilurile tale favorite de pe aplicația pe care o foloseai înainte, și începe cu Lumen App în secunde!"
   },
   "app-marketing.features.importing.gdlauncher-alt": {
     "message": "GDLauncher"
@@ -66,7 +66,7 @@
     "message": "de {author}"
   },
   "app-marketing.features.mod-management.description": {
-    "message": "Modrinth face mai ușor de administrat toate modurile tale într-un singur loc. Poți instala, dezinstala, și actualiza modurile cu un singur click."
+    "message": "Lumen face mai ușor de administrat toate modurile tale într-un singur loc. Poți instala, dezinstala, și actualiza modurile cu un singur click."
   },
   "app-marketing.features.mod-management.installed-mods": {
     "message": "Moduri instalate"
@@ -90,7 +90,7 @@
     "message": "Modul offline"
   },
   "app-marketing.features.open-source.description": {
-    "message": "Lansatorul Modrinth este complet cu sursă deschisă. Poți vedea codul sursă pe <github-link>GitHub</github-link>-ul nostru!"
+    "message": "Lansatorul Lumen este complet cu sursă deschisă. Poți vedea codul sursă pe <github-link>GitHub</github-link>-ul nostru!"
   },
   "app-marketing.features.open-source.title": {
     "message": "Sursă deschisă"
@@ -116,8 +116,8 @@
   "app-marketing.features.performance.less-than-150mb": {
     "message": "< 150 MB"
   },
-  "app-marketing.features.performance.modrinth-app": {
-    "message": "Modrinth App"
+  "app-marketing.features.performance.Lumen-app": {
+    "message": "Lumen App"
   },
   "app-marketing.features.performance.one-billion-percent": {
     "message": "1 miliard %"
@@ -135,13 +135,13 @@
     "message": "Performant"
   },
   "app-marketing.features.play.description": {
-    "message": "Folosește Modrinth App pentru a descărca și a te juca împreună cu modurile și pachetele de moduri preferate."
+    "message": "Folosește Lumen App pentru a descărca și a te juca împreună cu modurile și pachetele de moduri preferate."
   },
   "app-marketing.features.play.title": {
     "message": "Joacă-te cu modurile tale favorite"
   },
   "app-marketing.features.sharing.description": {
-    "message": "Construiește, distribuie și joacă pachete de moduri cu oricare dintre miile de moduri și pachete de moduri găzduite aici pe Modrinth."
+    "message": "Construiește, distribuie și joacă pachete de moduri cu oricare dintre miile de moduri și pachete de moduri găzduite aici pe Lumen."
   },
   "app-marketing.features.sharing.modpack": {
     "message": "Pachet de Moduri"
@@ -156,7 +156,7 @@
     "message": "Diferit de orice alt lansator pe care l-ai folosit vreodată"
   },
   "app-marketing.features.website.description": {
-    "message": "Modrinth App este complet integrat cu site-ul, astfel că poți accesa toate proiectele tale preferate direct din aplicație!"
+    "message": "Lumen App este complet integrat cu site-ul, astfel că poți accesa toate proiectele tale preferate direct din aplicație!"
   },
   "app-marketing.features.website.title": {
     "message": "Integrare cu site-ul web"
@@ -165,19 +165,19 @@
     "message": "pe care le-ai folosit anterior"
   },
   "app-marketing.hero.app-screenshot-alt": {
-    "message": "Captură de ecran a Modrinth App cu o instanță Cobblemon deschisă la pagina 'Conținut'."
+    "message": "Captură de ecran a Lumen App cu o instanță Cobblemon deschisă la pagina 'Conținut'."
   },
   "app-marketing.hero.description": {
-    "message": "Modrinth App este un lansator unic, cu sursă deschisă, care îți permite să joci modurile tale preferate și să le menții mereu actualizate, totul într-un pachet mic și ordonat."
+    "message": "Lumen App este un lansator unic, cu sursă deschisă, care îți permite să joci modurile tale preferate și să le menții mereu actualizate, totul într-un pachet mic și ordonat."
   },
   "app-marketing.hero.download-button": {
-    "message": "Descarcă Modrinth App"
+    "message": "Descarcă Lumen App"
   },
-  "app-marketing.hero.download-modrinth-app": {
-    "message": "Descarcă Modrinth App"
+  "app-marketing.hero.download-Lumen-app": {
+    "message": "Descarcă Lumen App"
   },
-  "app-marketing.hero.download-modrinth-app-for-os": {
-    "message": "Descarcă Modrinth App pentru {os}"
+  "app-marketing.hero.download-Lumen-app-for-os": {
+    "message": "Descarcă Lumen App pentru {os}"
   },
   "app-marketing.hero.minecraft-screenshot-alt": {
     "message": "Captură de ecran a ecranului principal al meniului instanței Cobblemon."
@@ -252,7 +252,7 @@
     "message": "Conectare"
   },
   "auth.sign-up.legal-dislaimer": {
-    "message": "Prin crearea unui cont, ești de acord cu <terms-link>Termenii</terms-link> și <privacy-policy-link>Politica de confidențialitate</privacy-policy-link> Modrinth."
+    "message": "Prin crearea unui cont, ești de acord cu <terms-link>Termenii</terms-link> și <privacy-policy-link>Politica de confidențialitate</privacy-policy-link> Lumen."
   },
   "auth.sign-up.sign-in-option.title": {
     "message": "Aveți deja un cont?"
@@ -312,7 +312,7 @@
     "message": "Sunteți sigur(ă) că doriți să ștergeți această colecție?"
   },
   "collection.description": {
-    "message": "{description} - Vizualizați colecția {name} de la {username} pe Modrinth"
+    "message": "{description} - Vizualizați colecția {name} de la {username} pe Lumen"
   },
   "collection.description.following": {
     "message": "Colecție generată automat cu toate proiectele pe care le urmăriți."
@@ -513,7 +513,7 @@
     "message": "Formular fiscal"
   },
   "dashboard.creator-tax-form-modal.security.description": {
-    "message": "Modrinth folosește furnizorul terț Track1099 pentru a colecta și stoca în siguranță formularele tale fiscale. <security-link>Află mai multe aici.</security-link>"
+    "message": "Lumen folosește furnizorul terț Track1099 pentru a colecta și stoca în siguranță formularele tale fiscale. <security-link>Află mai multe aici.</security-link>"
   },
   "dashboard.creator-tax-form-modal.security.header": {
     "message": "Practici de securitate"
@@ -633,7 +633,7 @@
     "message": "Colecția se poate să fie privată."
   },
   "error.collection.404.list_item.3": {
-    "message": "Colecția se poate să fie blocată de către moderatorii Modrinth pentru violarea <tou-link>Termenilor de Utilizare</tou-link>."
+    "message": "Colecția se poate să fie blocată de către moderatorii Lumen pentru violarea <tou-link>Termenilor de Utilizare</tou-link>."
   },
   "error.collection.404.list_title": {
     "message": "De ce?"
@@ -654,10 +654,10 @@
     "message": "Conținut indisponibil din motive legale"
   },
   "error.generic.default.list_item.1": {
-    "message": "Verifică dacă Modrinth este picat pe a noastră <status-link>Pagină de status</status-link>."
+    "message": "Verifică dacă Lumen este picat pe a noastră <status-link>Pagină de status</status-link>."
   },
   "error.generic.default.list_item.2": {
-    "message": "Dacă asta continuă să se întâmple, poate vrei să anunți echipa Modrinth alăturându-te serverului nostru de <discord-link>Discord</discord-link>."
+    "message": "Dacă asta continuă să se întâmple, poate vrei să anunți echipa Lumen alăturându-te serverului nostru de <discord-link>Discord</discord-link>."
   },
   "error.generic.default.list_title": {
     "message": "Te rog încercă din nou în câteva minute."
@@ -675,7 +675,7 @@
     "message": "Deținătorul organizației a schimbat URL-ul sau l-a șters."
   },
   "error.organization.404.list_item.3": {
-    "message": "Organizația se poate să fie ștearsă de către moderatorii Modrinth pentru violarea <tou-link>Termenilor de Utilizare</tou-link>."
+    "message": "Organizația se poate să fie ștearsă de către moderatorii Lumen pentru violarea <tou-link>Termenilor de Utilizare</tou-link>."
   },
   "error.organization.404.list_title": {
     "message": "De ce?"
@@ -690,7 +690,7 @@
     "message": "Proprietarul proiectului s-ar putea să fi schimbat URL-ul, să fi făcut proiectul privat sau să-l fi șters."
   },
   "error.project.404.list_item.3": {
-    "message": "Proiectul se poate să fie blocat de către moderatorii Modrinth pentru violarea <tou-link>Termenilor de Utilizare</tou-link>."
+    "message": "Proiectul se poate să fie blocat de către moderatorii Lumen pentru violarea <tou-link>Termenilor de Utilizare</tou-link>."
   },
   "error.project.404.list_title": {
     "message": "De ce?"
@@ -705,7 +705,7 @@
     "message": "Acest utilizator se poate să-și fi schimbat numele sau șters contul."
   },
   "error.user.404.list_item.3": {
-    "message": "Acest utilizator se poate să aibă contul terminat pentru violarea <tou-link>Termenilor de Utilizare</tou-link> Modrinth."
+    "message": "Acest utilizator se poate să aibă contul terminat pentru violarea <tou-link>Termenilor de Utilizare</tou-link> Lumen."
   },
   "error.user.404.list_title": {
     "message": "De ce?"
@@ -735,19 +735,19 @@
     "message": "Cum funcționează extinderea de CPU?"
   },
   "hosting-marketing.faq.cpu-kind": {
-    "message": "Ce fel de CPU-uri folosesc serverele Modrinth Hosting?"
+    "message": "Ce fel de CPU-uri folosesc serverele Lumen Hosting?"
   },
   "hosting-marketing.faq.cpu-kind.answer": {
-    "message": "Serverele Modrinth Hosting folosesc AMD Ryzen 7900 si 7950X3D sau echivalent la 5+ GHz, împreuna cu memorie DDR5."
+    "message": "Serverele Lumen Hosting folosesc AMD Ryzen 7900 si 7950X3D sau echivalent la 5+ GHz, împreuna cu memorie DDR5."
   },
   "hosting-marketing.faq.ddos-protection": {
-    "message": "Au serverele Modrinth Hosting protectie DDos?"
+    "message": "Au serverele Lumen Hosting protectie DDos?"
   },
   "hosting-marketing.faq.heading": {
     "message": "Intrebari frecvente"
   },
   "hosting-marketing.faq.how-fast": {
-    "message": "Cat de rapide sunt serverele Modrinth Hosting?"
+    "message": "Cat de rapide sunt serverele Lumen Hosting?"
   },
   "hosting-marketing.faq.increase-storage": {
     "message": "Pot sa extind stocarea de pe server-ul meu?"
@@ -785,14 +785,14 @@
   "hosting-marketing.why.where-mods-are": {
     "message": "Joaca-te unde modurile tale se afla"
   },
-  "hosting-marketing.why.why-modrinth-hosting": {
-    "message": "De ce Modrinth Hosting?"
+  "hosting-marketing.why.why-Lumen-hosting": {
+    "message": "De ce Lumen Hosting?"
   },
   "hosting-marketing.why.your-favorite-mods": {
     "message": "Toate modurile tale preferate"
   },
   "hosting-marketing.why.your-favorite-mods.description": {
-    "message": "Alege intre Vanilla, Fabric, Forge, Quilt si NeoForge. Daca e pe Modrinth, poate să ruleze pe serverul tău."
+    "message": "Alege intre Vanilla, Fabric, Forge, Quilt si NeoForge. Daca e pe Lumen, poate să ruleze pe serverul tău."
   },
   "hosting.plan.out-of-stock": {
     "message": "Fara stoc"
@@ -807,7 +807,7 @@
     "message": "Du-te la panoul principal"
   },
   "landing.creator.feature.constantly-evolving.description": {
-    "message": "Obține cea mai bună experiență posibilă, cu actualizări constante de la echipa Modrinth."
+    "message": "Obține cea mai bună experiență posibilă, cu actualizări constante de la echipa Lumen."
   },
   "landing.creator.feature.constantly-evolving.title": {
     "message": "Evoluare Constantă"
@@ -852,7 +852,7 @@
     "message": "Urmărește proiectele pe care le iubești"
   },
   "landing.feature.launcher.description": {
-    "message": "API-ul nostru permite lansatoarelor să adauge o integrare avansată cu Modrinth. Poți folosi <link>aplicația noastră</link> sau unul dintre cele mai populare lansatoare, precum ATLauncher, MultiMC și Prism Launcher."
+    "message": "API-ul nostru permite lansatoarelor să adauge o integrare avansată cu Lumen. Poți folosi <link>aplicația noastră</link> sau unul dintre cele mai populare lansatoare, precum ATLauncher, MultiMC și Prism Launcher."
   },
   "landing.feature.launcher.heading": {
     "message": "Joacă-te cu lansatorul tău preferat"
@@ -891,10 +891,10 @@
     "message": "ATLauncher"
   },
   "landing.launcher.graphic-alt": {
-    "message": "O reprezentare simplificată a unei ferestre Minecraft, cu logo-ul Mojang Studios în verdele Modrinth."
+    "message": "O reprezentare simplificată a unei ferestre Minecraft, cu logo-ul Mojang Studios în verdele Lumen."
   },
-  "landing.launcher.modrinth-app-label": {
-    "message": "Modrinth App"
+  "landing.launcher.Lumen-app-label": {
+    "message": "Lumen App"
   },
   "landing.launcher.prism-launcher-label": {
     "message": "Prism Launcher"
@@ -960,19 +960,19 @@
     "message": "Vizitați setările contului"
   },
   "layout.banner.add-email.description": {
-    "message": "Din motive de securitate, pe Modrinth este necesar să înregistrezi contul cu o adresă de email."
+    "message": "Din motive de securitate, pe Lumen este necesar să înregistrezi contul cu o adresă de email."
   },
   "layout.banner.build-fail.description": {
-    "message": "Această implementare a interfeței Modrinth a eșuat în generarea stării din API. Acest lucru poate fi cauzat de o întrerupere sau de o eroare de configurare. Reconstruiește atunci când API-ul este disponibil. Coduri de eroare: {errors}; URL-ul curent al API-ului este: {url}"
+    "message": "Această implementare a interfeței Lumen a eșuat în generarea stării din API. Acest lucru poate fi cauzat de o întrerupere sau de o eroare de configurare. Reconstruiește atunci când API-ul este disponibil. Coduri de eroare: {errors}; URL-ul curent al API-ului este: {url}"
   },
   "layout.banner.build-fail.title": {
     "message": "Eroare la generarea stării din API în timpul construirii."
   },
   "layout.banner.staging.description": {
-    "message": "Mediul de stagiu este complet separat de baza de date Modrinth de producție. Acesta este folosit pentru testare și depanare și poate rula versiuni în dezvoltare ale backend-ului sau frontend-ului Modrinth, mai noi decât instanța de producție."
+    "message": "Mediul de stagiu este complet separat de baza de date Lumen de producție. Acesta este folosit pentru testare și depanare și poate rula versiuni în dezvoltare ale backend-ului sau frontend-ului Lumen, mai noi decât instanța de producție."
   },
   "layout.banner.staging.title": {
-    "message": "Vizualizați mediul de testare Modrinth"
+    "message": "Vizualizați mediul de testare Lumen"
   },
   "layout.banner.subscription-payment-failed.button": {
     "message": "Actualizează informația facturii"
@@ -993,7 +993,7 @@
     "message": "Retrimiteți emailul de verificare"
   },
   "layout.banner.verify-email.description": {
-    "message": "Din motive de securitate, pe Modrinth este necesar să verifici adresa de email asociată contului."
+    "message": "Din motive de securitate, pe Lumen este necesar să verifici adresa de email asociată contului."
   },
   "layout.footer.about": {
     "message": "Despre"
@@ -1034,20 +1034,20 @@
   "layout.footer.legal.terms-of-use": {
     "message": "Termeni de Utilizare"
   },
-  "layout.footer.modrinth-information": {
-    "message": "Informații Modrinth"
+  "layout.footer.Lumen-information": {
+    "message": "Informații Lumen"
   },
   "layout.footer.open-source": {
-    "message": "Modrinth are <github-link>sursa deschisă</github-link>."
+    "message": "Lumen are <github-link>sursa deschisă</github-link>."
   },
   "layout.footer.products": {
     "message": "Produse"
   },
   "layout.footer.products.app": {
-    "message": "Modrinth App"
+    "message": "Lumen App"
   },
   "layout.footer.products.plus": {
-    "message": "Modrinth+"
+    "message": "Lumen+"
   },
   "layout.footer.resources": {
     "message": "Resurse"
@@ -1080,7 +1080,7 @@
     "message": "Comută meniul"
   },
   "layout.meta.description": {
-    "message": "Descarcă moduri, pluginuri, pachete de date, shadere, pachete de resurse și pachete de moduri pentru Minecraft de pe Modrinth. Descoperă și publică proiecte pe Modrinth cu o interfață modernă și ușor de folosit și cu un API accesibil."
+    "message": "Descarcă moduri, pluginuri, pachete de date, shadere, pachete de resurse și pachete de moduri pentru Minecraft de pe Lumen. Descoperă și publică proiecte pe Lumen cu o interfață modernă și ușor de folosit și cu un API accesibil."
   },
   "layout.meta.og-description": {
     "message": "Descoperă și publică conținut pentru Minecraft!"
@@ -1097,8 +1097,8 @@
   "layout.nav.discover": {
     "message": "Descoperă"
   },
-  "layout.nav.get-modrinth-app": {
-    "message": "Ia-ți Modrinth App"
+  "layout.nav.get-Lumen-app": {
+    "message": "Ia-ți Lumen App"
   },
   "layout.nav.home": {
     "message": "Acasă"
@@ -1106,11 +1106,11 @@
   "layout.nav.host-a-server": {
     "message": "Găzduiește un server"
   },
-  "layout.nav.modrinth-app": {
-    "message": "Modrinth App"
+  "layout.nav.Lumen-app": {
+    "message": "Lumen App"
   },
-  "layout.nav.modrinth-home-page": {
-    "message": "Pagina de pornire Modrinth"
+  "layout.nav.Lumen-home-page": {
+    "message": "Pagina de pornire Lumen"
   },
   "layout.nav.my-servers": {
     "message": "Serverele mele"
@@ -1133,8 +1133,8 @@
   "layout.nav.search": {
     "message": "Caută"
   },
-  "layout.nav.upgrade-to-modrinth-plus": {
-    "message": "Treci la Modrinth+"
+  "layout.nav.upgrade-to-Lumen-plus": {
+    "message": "Treci la Lumen+"
   },
   "moderation.moderate": {
     "message": "Moderare"
@@ -1332,7 +1332,7 @@
     "message": "{title} nu este compatibil cu {gameVersion} pentru {platform}"
   },
   "project.download.no-app": {
-    "message": "Nu ai Modrinth App?"
+    "message": "Nu ai Lumen App?"
   },
   "project.download.platform-unsupported-tooltip": {
     "message": "{title} nu este compatibil cu {platform} pentru {gameVersion}"
@@ -1350,7 +1350,7 @@
     "message": "Descarcă {title}"
   },
   "project.environment.migration-no-permission.message": {
-    "message": "Am refăcut sistemul de medii pe Modrinth, iar acum sunt disponibile opțiuni noi. Nu ai permisiunea de a modifica aceste setări, dar te rugăm să informezi un alt membru al proiectului că metadatele mediului trebuie verificate."
+    "message": "Am refăcut sistemul de medii pe Lumen, iar acum sunt disponibile opțiuni noi. Nu ai permisiunea de a modifica aceste setări, dar te rugăm să informezi un alt membru al proiectului că metadatele mediului trebuie verificate."
   },
   "project.environment.migration-no-permission.title": {
     "message": "Metadatele mediului trebuie revizuite"
@@ -1452,7 +1452,7 @@
     "message": "Te rugăm să oferi context suplimentar raportului tău"
   },
   "report.for.violation": {
-    "message": "Încălcarea <rules-link>Regulilor</rules-link> sau a <terms-link>Termenilor de Utilizare</terms-link> Modrinth"
+    "message": "Încălcarea <rules-link>Regulilor</rules-link> sau a <terms-link>Termenilor de Utilizare</terms-link> Lumen"
   },
   "report.for.violation.description": {
     "message": "Exemplele includ conținut rău intenționat, spam, ofensator, înșelător, care poate induce în eroare sau ilegal."
@@ -1875,13 +1875,13 @@
     "message": "Metode de plată"
   },
   "settings.billing.pyro_subscription.description": {
-    "message": "Gestionează-ți abonamentele la Modrinth Server."
+    "message": "Gestionează-ți abonamentele la Lumen Server."
   },
   "settings.billing.pyro_subscription.title": {
-    "message": "Abonamente pentru Modrinth Servers"
+    "message": "Abonamente pentru Lumen Servers"
   },
   "settings.billing.subscription.description": {
-    "message": "Administrează-ți abonamentele Modrinth."
+    "message": "Administrează-ți abonamentele Lumen."
   },
   "settings.billing.subscription.title": {
     "message": "Abonamente"
@@ -1890,7 +1890,7 @@
     "message": "Dezactivați modul de dezvoltator"
   },
   "settings.display.banner.developer-mode.description": {
-    "message": "<strong>Modul de dezvoltator</strong> este activ. Acest lucru vă va permite să vizualizați ID-urile interne ale diverselor lucruri din Modrinth, ceea ce poate fi util dacă sunteți un dezvoltator care folosește API-ul Modrinth. Faceți clic pe sigla Modrinth din partea de jos a paginii de 5 ori pentru a activa sau dezactiva modul de dezvoltator."
+    "message": "<strong>Modul de dezvoltator</strong> este activ. Acest lucru vă va permite să vizualizați ID-urile interne ale diverselor lucruri din Lumen, ceea ce poate fi util dacă sunteți un dezvoltator care folosește API-ul Lumen. Faceți clic pe sigla Lumen din partea de jos a paginii de 5 ori pentru a activa sau dezactiva modul de dezvoltator."
   },
   "settings.pats.action.create": {
     "message": "Creează un token PAT"
@@ -1950,7 +1950,7 @@
     "message": "Sesiune curentă"
   },
   "settings.sessions.description": {
-    "message": "Acestea sunt toate dispozitivele pe care ești conectat(ă) la contul tău Modrinth. Te poți deconecta de pe fiecare în parte.\n\nDacă observi o intrare pe care nu o recunoști, deconectează-te de pe acel dispozitiv și schimbă imediat parola contului tău Modrinth."
+    "message": "Acestea sunt toate dispozitivele pe care ești conectat(ă) la contul tău Lumen. Te poți deconecta de pe fiecare în parte.\n\nDacă observi o intrare pe care nu o recunoști, deconectează-te de pe acel dispozitiv și schimbă imediat parola contului tău Lumen."
   },
   "settings.sessions.last-accessed-ago": {
     "message": "Ultima accesare în urmă cu {ago}"
@@ -1962,7 +1962,7 @@
     "message": "Platformă necunoscută"
   },
   "ui.latest-news-row.latest-news": {
-    "message": "Cele mai recente noutăți de pe Modrinth"
+    "message": "Cele mai recente noutăți de pe Lumen"
   },
   "ui.latest-news-row.view-all": {
     "message": "Vedeți toate noutățile"

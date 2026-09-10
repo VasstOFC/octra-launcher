@@ -1,4 +1,4 @@
-export const ACCENT_PRESET_IDS = ['octra', 'cobalt', 'ember', 'mint', 'rose', 'aurora'] as const
+export const ACCENT_PRESET_IDS = ['Lumen', 'cobalt', 'ember', 'mint', 'rose', 'aurora'] as const
 
 export type AccentPresetId = (typeof ACCENT_PRESET_IDS)[number] | 'custom'
 
@@ -14,7 +14,7 @@ export interface AccentPresetDefinition {
 }
 
 export const ACCENT_PRESETS: readonly AccentPresetDefinition[] = [
-	{ id: 'octra', light: '#5B35D9', dark: '#C4A8FF' },
+	{ id: 'Lumen', light: '#5B35D9', dark: '#C4A8FF' },
 	{ id: 'cobalt', light: '#1f68c0', dark: '#5196df' },
 	{ id: 'ember', light: '#c96b35', dark: '#e49a4a' },
 	{ id: 'mint', light: '#00af5c', dark: '#33f598' },
@@ -23,7 +23,7 @@ export const ACCENT_PRESETS: readonly AccentPresetDefinition[] = [
 ]
 
 export const DEFAULT_ACCENT: AccentPreference = {
-	preset: 'octra',
+	preset: 'Lumen',
 	customHex: '#5B35D9',
 }
 

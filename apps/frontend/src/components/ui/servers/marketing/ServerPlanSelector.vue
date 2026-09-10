@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type MessageDescriptor, useFormatPrice } from '@modrinth/ui'
+import { type MessageDescriptor, useFormatPrice } from '@lumen/ui'
 import {
 	Button,
 	commonMessages,
@@ -7,7 +7,7 @@ import {
 	defineMessages,
 	ServersSpecs,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 
 const { formatMessage } = useVIntl()
 const formatPrice = useFormatPrice()

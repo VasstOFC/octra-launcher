@@ -31,8 +31,8 @@ import StyledDoc from '../shared/StyledDoc.vue'
 					<Text class="m-0 text-sm leading-tight text-secondary">Suite 304 #3133</Text>
 					<Text class="m-0 text-sm leading-tight text-secondary">Wilmington, DE 19801</Text>
 					<Text class="m-0 mt-2 text-sm text-secondary">
-						<VLink href="mailto:support@modrinth.com" class="text-blue no-underline">
-							support@modrinth.com
+						<VLink href="mailto:support@Lumen.com" class="text-blue no-underline">
+							support@Lumen.com
 						</VLink>
 					</Text>
 				</div>
@@ -90,7 +90,7 @@ import StyledDoc from '../shared/StyledDoc.vue'
 				Purpose of Payment
 			</Text>
 			<Text class="m-0 text-sm leading-relaxed text-secondary">
-				This payout reflects the creator's earnings from their activity on the Modrinth platform.
+				This payout reflects the creator's earnings from their activity on the Lumen platform.
 				Such earnings are based on advertising revenue derived from user engagement with the
 				creator's published projects and/or affiliate commissions in accordance with the Rewards
 				Program Terms.

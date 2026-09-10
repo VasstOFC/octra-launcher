@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'modrinth-account-appearances'
+const STORAGE_KEY = 'Lumen-account-appearances'
 
 function readCache(): Record<string, { auto: boolean; theme: string }> {
 	try {

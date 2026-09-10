@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { BanIcon, SpinnerIcon, TagCategoryWandSparklesIcon, XIcon } from '@modrinth/assets'
+import { BanIcon, SpinnerIcon, TagCategoryWandSparklesIcon, XIcon } from '@lumen/assets'
 import {
 	Avatar,
 	Button,
@@ -8,7 +8,7 @@ import {
 	injectNotificationManager,
 	NewModal,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { nextTick, ref, useTemplateRef } from 'vue'
 
 import IconEditorModal from '@/components/ui/instance_settings/icon-editor-modal/index.vue'
@@ -50,7 +50,7 @@ const messages = defineMessages({
 	description: {
 		id: 'app.icon-editor.apply-icons-modal.description',
 		defaultMessage:
-			'Create custom icons for your instances right in the Modrinth App. Mix and match backgrounds with symbols from Minecraft and popular mods!',
+			'Create custom icons for your instances right in the Lumen App. Mix and match backgrounds with symbols from Minecraft and popular mods!',
 	},
 	instancesWithoutIcons: {
 		id: 'app.icon-editor.apply-icons-modal.instances-without-icons',

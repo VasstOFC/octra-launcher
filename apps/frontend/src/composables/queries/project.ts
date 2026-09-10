@@ -1,4 +1,4 @@
-import type { AbstractModrinthClient } from '@modrinth/api-client'
+import type { AbstractLumenClient } from '@lumen/api-client'
 import type { QueryClient } from '@tanstack/query-core'
 
 export const STALE_TIME = 1000 * 60 * 5 // 5 minutes
@@ -38,46 +38,46 @@ export function warmProjectCheckCaches(
  */
 export const projectQueryOptions = {
 	/** Resolve a slug or ID to the canonical project ID. */
-	check: (idOrSlug: string, client: AbstractModrinthClient) => ({
+	check: (idOrSlug: string, client: AbstractLumenClient) => ({
 		queryKey: ['project', 'check', idOrSlug] as const,
 		queryFn: () => client.labrinth.projects_v2.check(idOrSlug),
 		staleTime: STALE_TIME,
 	}),
 
 	/** @param projectId Canonical project ID (not slug) */
-	v2: (projectId: string, client: AbstractModrinthClient) => ({
+	v2: (projectId: string, client: AbstractLumenClient) => ({
 		queryKey: ['project', 'v2', projectId] as const,
 		queryFn: () => client.labrinth.projects_v2.get(projectId),
 		staleTime: STALE_TIME,
 	}),
 
 	/** @param projectId Canonical project ID (not slug) */
-	v3: (projectId: string, client: AbstractModrinthClient) => ({
+	v3: (projectId: string, client: AbstractLumenClient) => ({
 		queryKey: ['project', 'v3', projectId] as const,
 		queryFn: () => client.labrinth.projects_v3.get(projectId),
 		staleTime: STALE_TIME,
 	}),
 
-	members: (projectId: string, client: AbstractModrinthClient) => ({
+	members: (projectId: string, client: AbstractLumenClient) => ({
 		queryKey: ['project', projectId, 'members'] as const,
 		queryFn: () => client.labrinth.projects_v3.getMembers(projectId),
 		staleTime: STALE_TIME,
 	}),
 
-	dependencies: (projectId: string, client: AbstractModrinthClient) => ({
+	dependencies: (projectId: string, client: AbstractLumenClient) => ({
 		queryKey: ['project', projectId, 'dependencies'] as const,
 		queryFn: () => client.labrinth.projects_v2.getDependencies(projectId),
 		staleTime: STALE_TIME,
 	}),
 
-	versionsV2: (projectId: string, client: AbstractModrinthClient) => ({
+	versionsV2: (projectId: string, client: AbstractLumenClient) => ({
 		queryKey: ['project', projectId, 'versions', 'v2'] as const,
 		queryFn: () =>
 			client.labrinth.versions_v3.getProjectVersions(projectId, { include_changelog: false }),
 		staleTime: STALE_TIME,
 	}),
 
-	versionsV3: (projectId: string, client: AbstractModrinthClient) => ({
+	versionsV3: (projectId: string, client: AbstractLumenClient) => ({
 		queryKey: ['project', projectId, 'versions', 'v3'] as const,
 		queryFn: () =>
 			client.labrinth.versions_v3.getProjectVersions(projectId, {
@@ -87,7 +87,7 @@ export const projectQueryOptions = {
 		staleTime: STALE_TIME,
 	}),
 
-	organization: (projectId: string, client: AbstractModrinthClient) => ({
+	organization: (projectId: string, client: AbstractLumenClient) => ({
 		queryKey: ['project', projectId, 'organization'] as const,
 		queryFn: () => client.labrinth.projects_v3.getOrganization(projectId),
 		staleTime: STALE_TIME,

@@ -104,8 +104,8 @@ import {
 	Tabs,
 	type TabsTab,
 	useVIntl,
-} from '@modrinth/ui'
-import { acceptFileFromProjectType } from '@modrinth/utils'
+} from '@lumen/ui'
+import { acceptFileFromProjectType } from '@lumen/utils'
 
 import { injectManageVersionContext } from '~/providers/version/manage-version-modal'
 

@@ -42,19 +42,19 @@
 </template>
 
 <script setup lang="ts">
-import { MessageIcon } from '@modrinth/assets'
+import { MessageIcon } from '@lumen/assets'
 import {
 	Admonition,
 	ButtonLink,
 	defineMessages,
-	injectModrinthClient,
+	injectLumenClient,
 	useVIntl,
-} from '@modrinth/ui'
-import { capitalizeString } from '@modrinth/utils'
+} from '@lumen/ui'
+import { capitalizeString } from '@lumen/utils'
 import { useQuery } from '@tanstack/vue-query'
 import { computed, watch } from 'vue'
 
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const { formatMessage } = useVIntl()
 
 const messages = defineMessages({

@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { commonProjectSettingsMessages } from '@modrinth/ui'
+import { commonProjectSettingsMessages } from '@lumen/ui'
 
 import AnalyticsDashboard from '~/components/analytics-dashboard/index.vue'
 

@@ -2,7 +2,7 @@ use crate::database::PgPool;
 use chrono::Utc;
 use eyre::{Result, eyre};
 use futures::{StreamExt, TryFutureExt, stream::FuturesUnordered};
-use modrinth_util::decimal::Decimal2dp;
+use lumen_util::decimal::Decimal2dp;
 use rust_decimal::{Decimal, prelude::ToPrimitive};
 use serde::{Deserialize, Serialize};
 use tracing::{info, trace, warn};

@@ -1,11 +1,6 @@
-import type { Labrinth } from '@modrinth/api-client'
-import type { ContentInstallInstance, ContentInstallProjectInfo, ContentItem } from '@modrinth/ui'
-import {
-	createContext,
-	defineMessage,
-	getLatestMatchingInstallVersion,
-	useVIntl,
-} from '@modrinth/ui'
+import type { Labrinth } from '@lumen/api-client'
+import type { ContentInstallInstance, ContentInstallProjectInfo, ContentItem } from '@lumen/ui'
+import { createContext, defineMessage, getLatestMatchingInstallVersion, useVIntl } from '@lumen/ui'
 import { openUrl } from '@tauri-apps/plugin-opener'
 import dayjs from 'dayjs'
 import { nextTick, type Ref, ref } from 'vue'
@@ -458,7 +453,7 @@ export function createContentInstall(opts: {
 									name: org.name,
 									iconUrl: org.icon_url,
 									circle: false,
-									link: () => openUrl(`https://modrinth.com/organization/${orgSlug}`),
+									link: () => openUrl(`https://Lumen.com/organization/${orgSlug}`),
 								},
 							}
 						}

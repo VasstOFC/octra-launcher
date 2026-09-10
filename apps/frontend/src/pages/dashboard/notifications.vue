@@ -65,17 +65,17 @@
 	</div>
 </template>
 <script setup>
-import { CheckCheckIcon, HistoryIcon } from '@modrinth/assets'
+import { CheckCheckIcon, HistoryIcon } from '@lumen/assets'
 import {
 	Button,
 	Chips,
 	commonMessages,
 	defineMessages,
-	injectModrinthClient,
+	injectLumenClient,
 	Pagination,
 	useVIntl,
-} from '@modrinth/ui'
-import { formatProjectType } from '@modrinth/utils'
+} from '@lumen/ui'
+import { formatProjectType } from '@lumen/utils'
 import { useQuery } from '@tanstack/vue-query'
 
 import Breadcrumbs from '~/components/ui/Breadcrumbs.vue'
@@ -119,7 +119,7 @@ const messages = defineMessages({
 	},
 })
 
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const auth = await useAuth()
 const route = useNativeRoute()
 const router = useNativeRouter()
@@ -128,7 +128,7 @@ const history = computed(() => route.name === 'dashboard-notifications-history')
 
 useHead({
 	title: () =>
-		`${formatMessage(history.value ? messages.notificationHistoryTitle : commonMessages.notificationsLabel)} - Modrinth`,
+		`${formatMessage(history.value ? messages.notificationHistoryTitle : commonMessages.notificationsLabel)} - Lumen`,
 })
 
 const selectedType = ref('all')

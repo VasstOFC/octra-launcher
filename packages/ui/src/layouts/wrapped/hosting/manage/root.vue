@@ -59,7 +59,7 @@
 	>
 		<ErrorInformationCard
 			title="An error occured."
-			description="Please contact Modrinth Support."
+			description="Please contact Lumen Support."
 			:icon="TransferIcon"
 			icon-color="orange"
 			:error-details="generalErrorDetails"
@@ -80,16 +80,16 @@
 			<template #description>
 				<div class="text-md space-y-4">
 					<p class="leading-[170%] text-secondary">
-						Your server's node, where your Modrinth Server is physically hosted, is not accessible
-						at the moment. We are working to resolve the issue as quickly as possible.
+						Your server's node, where your Lumen Server is physically hosted, is not accessible at
+						the moment. We are working to resolve the issue as quickly as possible.
 					</p>
 					<p class="leading-[170%] text-secondary">
 						Your data is safe and will not be lost, and your server will be back online as soon as
 						the issue is resolved.
 					</p>
 					<p class="leading-[170%] text-secondary">
-						If reloading does not work initially, please contact Modrinth Support via the chat
-						bubble in the bottom right corner and we'll be happy to help.
+						If reloading does not work initially, please contact Lumen Support via the chat bubble
+						in the bottom right corner and we'll be happy to help.
 					</p>
 				</div>
 			</template>
@@ -153,7 +153,7 @@
 									tooltip="Copy server address"
 									:action="copyServerAddress"
 								>
-									{{ serverData.net.domain }}.modrinth.gg
+									{{ serverData.net.domain }}.Lumen.gg
 								</PageHeaderMetadataItem>
 								<PageHeaderMetadataItem v-if="showServerUptime" :icon="TimerIcon">
 									{{ formattedUptime }}
@@ -306,8 +306,8 @@
 </template>
 
 <script setup lang="ts">
-import type { Archon, Labrinth } from '@modrinth/api-client'
-import { ModrinthApiError, NuxtModrinthClient } from '@modrinth/api-client'
+import type { Archon, Labrinth } from '@lumen/api-client'
+import { LumenApiError, NuxtLumenClient } from '@lumen/api-client'
 import {
 	BoxesIcon,
 	CopyIcon,
@@ -326,7 +326,7 @@ import {
 	TriangleAlertIcon,
 	UsersIcon,
 	XIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
 import { useStorage } from '@vueuse/core'
 import DOMPurify from 'dompurify'
@@ -354,7 +354,7 @@ import {
 	hasServerPermission,
 	useDebugLogger,
 	useLoadingBarToken,
-	useModrinthServersConsole,
+	useLumenServersConsole,
 	useReadyState,
 	useServerImage,
 	useServerProject,
@@ -370,7 +370,7 @@ import { useServerPanelSync } from '#ui/composables/server-panel-sync'
 import type { LogLine } from '#ui/layouts/shared/console'
 import type { ServerSettingsTabId } from '#ui/layouts/shared/server-settings'
 import {
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	provideServerSettingsModal,
 } from '#ui/providers'
@@ -465,10 +465,10 @@ const settingsHintMessages = defineMessages({
 const DISABLE_LOADING_ANIM = true
 
 const { addNotification } = injectNotificationManager()
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const constrainWidth = computed(() => props.constrainWidth)
 const containedLayout = computed(() => props.layoutMode === 'contained')
-const isNuxt = computed(() => client instanceof NuxtModrinthClient)
+const isNuxt = computed(() => client instanceof NuxtLumenClient)
 const queryClient = useQueryClient()
 const route = useRoute()
 const router = useRouter()
@@ -515,8 +515,8 @@ function updateServerData(patch: Partial<Archon.Servers.v0.Server>) {
 
 const serverError = computed(() => {
 	const err = serverQueryError.value
-	if (err instanceof ModrinthApiError) return err
-	return err ? ModrinthApiError.fromUnknown(err) : null
+	if (err instanceof LumenApiError) return err
+	return err ? LumenApiError.fromUnknown(err) : null
 })
 
 const { data: serverFull } = useQuery({
@@ -593,7 +593,7 @@ const {
 })
 
 const serverHeaderImage = computed(() =>
-	serverData.value?.is_medal ? 'https://cdn-raw.modrinth.com/medal_icon.webp' : serverImage.value,
+	serverData.value?.is_medal ? 'https://cdn-raw.Lumen.com/medal_icon.webp' : serverImage.value,
 )
 
 const showServerUptime = computed(() => props.showUptime && serverPowerState.value === 'running')
@@ -638,7 +638,7 @@ function copyServerAddress() {
 	const domain = serverData.value?.net?.domain
 	if (!domain) return
 
-	void navigator.clipboard.writeText(`${domain}.modrinth.gg`)
+	void navigator.clipboard.writeText(`${domain}.Lumen.gg`)
 	addNotification({
 		title: 'Server address copied',
 		text: "Your server's address has been copied to your clipboard.",
@@ -700,7 +700,7 @@ type CachedWsState = {
 	consoleLines: LogLine[]
 }
 
-const modrinthServersConsole = useModrinthServersConsole()
+const LumenServersConsole = useLumenServersConsole()
 const wsStateCacheKey = ['servers', 'ws-state', props.serverId] as const
 const cachedWsState = queryClient.getQueryData<CachedWsState>(wsStateCacheKey)
 if (cachedWsState) {
@@ -729,7 +729,7 @@ const saveWsStateToCache = () => {
 		ramData: ramData.value,
 		powerState: serverPowerState.value,
 		uptimeSeconds: uptimeSeconds.value,
-		consoleLines: modrinthServersConsole.output.value,
+		consoleLines: LumenServersConsole.output.value,
 	} satisfies CachedWsState)
 }
 
@@ -1057,7 +1057,7 @@ const onReinstall = async (
 		}
 	}
 
-	modrinthServersConsole.clear()
+	LumenServersConsole.clear()
 }
 
 const onReinstallFailed = () => {
@@ -1174,12 +1174,12 @@ const nodeUnavailableDetails = computed(() => [
 
 const suspendedDescription = computed(() => {
 	if (serverData.value?.suspension_reason === 'cancelled') {
-		return 'Your subscription has been cancelled.\nContact Modrinth Support if you believe this is an error.'
+		return 'Your subscription has been cancelled.\nContact Lumen Support if you believe this is an error.'
 	}
 	if (serverData.value?.suspension_reason) {
-		return `Your server has been suspended: ${serverData.value.suspension_reason}\nContact Modrinth Support if you believe this is an error.`
+		return `Your server has been suspended: ${serverData.value.suspension_reason}\nContact Lumen Support if you believe this is an error.`
 	}
-	return 'Your server has been suspended.\nContact Modrinth Support if you believe this is an error.'
+	return 'Your server has been suspended.\nContact Lumen Support if you believe this is an error.'
 })
 
 const generalErrorDetails = computed(() => [
@@ -1309,8 +1309,8 @@ function initializeServer() {
 			.then((connected) => {
 				nodeAccessible.value = connected
 				if (connected && cachedWsState?.consoleLines?.length) {
-					modrinthServersConsole.clear()
-					modrinthServersConsole.addLines(cachedWsState.consoleLines)
+					LumenServersConsole.clear()
+					LumenServersConsole.addLines(cachedWsState.consoleLines)
 				}
 			})
 			.finally(() => {

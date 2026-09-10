@@ -237,7 +237,7 @@ async fn run_credentials(
             Ok(resp) if resp.status().is_success() => {
                 let result = fetch::post_json(
                     concat!(
-                        env!("MODRINTH_API_BASE_URL"),
+                        env!("LUMEN_API_BASE_URL"),
                         "analytics/minecraft-server-play"
                     ),
                     json!({
@@ -360,7 +360,7 @@ pub async fn try_update_playtime_by_instance_id(
         }
 
         fetch::post_json(
-            concat!(env!("MODRINTH_API_BASE_URL"), "analytics/playtime"),
+            concat!(env!("LUMEN_API_BASE_URL"), "analytics/playtime"),
             serde_json::to_value(hashmap)?,
             &state.api_semaphore,
             &state.pool,

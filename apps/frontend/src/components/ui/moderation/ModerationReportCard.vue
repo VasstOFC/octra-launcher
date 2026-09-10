@@ -279,16 +279,16 @@
 	</div>
 </template>
 <script setup lang="ts">
-import type { Labrinth, SharedInstances } from '@modrinth/api-client'
+import type { Labrinth, SharedInstances } from '@lumen/api-client'
 import {
 	CheckCircleIcon,
 	ClipboardCopyIcon,
 	ExternalIcon,
 	LoaderCircleIcon,
 	LockIcon,
-} from '@modrinth/assets'
-import { type ExtendedReport, reportQuickReplies } from '@modrinth/moderation'
-import { Button, ButtonLink, IconButton } from '@modrinth/ui'
+} from '@lumen/assets'
+import { type ExtendedReport, reportQuickReplies } from '@lumen/moderation'
+import { Button, ButtonLink, IconButton } from '@lumen/ui'
 import {
 	Avatar,
 	CollapsibleRegion,
@@ -296,13 +296,13 @@ import {
 	CopyCode,
 	formatReportType,
 	getProjectTypeIcon,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	useFormatDateTime,
 	useRelativeTime,
 	useVIntl,
-} from '@modrinth/ui'
-import { formatProjectType } from '@modrinth/utils'
+} from '@lumen/ui'
+import { formatProjectType } from '@lumen/utils'
 import { useQueryClient } from '@tanstack/vue-query'
 import { computed, onUnmounted, ref, watch } from 'vue'
 
@@ -317,7 +317,7 @@ import SharedInstanceReportContext, {
 
 const { addNotification } = injectNotificationManager()
 const { formatMessage } = useVIntl()
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const queryClient = useQueryClient()
 const auth = useAuthState()
 
@@ -694,7 +694,7 @@ async function loadSharedInstanceVersionContent(
 	const instanceVersion = await getSharedInstanceVersion(instanceId, versionNumber)
 
 	const modpackVersionId = instanceVersion.modpack_id
-	const directVersionIds = (instanceVersion.modrinth_ids ?? []).filter(
+	const directVersionIds = (instanceVersion.Lumen_ids ?? []).filter(
 		(versionId) => versionId !== modpackVersionId,
 	)
 	const modpackVersion = modpackVersionId

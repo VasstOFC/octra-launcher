@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ChevronRightIcon } from '@modrinth/assets'
-import { Avatar } from '@modrinth/ui'
+import { ChevronRightIcon } from '@lumen/assets'
+import { Avatar } from '@lumen/ui'
 
 import { getInstanceIconUrl } from '@/helpers/instance'
 import type { GameInstance } from '@/helpers/types'

@@ -148,18 +148,18 @@ import {
 	RightArrowIcon,
 	SteamColorIcon,
 	UserKeyIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import {
 	Avatar,
 	Button,
 	ButtonLink,
 	commonMessages,
 	defineMessages,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	Input,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
 import { useStorage } from '@vueuse/core'
 import type { LocationQueryValue } from 'vue-router'
@@ -219,7 +219,7 @@ const getErrorMessage = (error: unknown): string => {
 	return String(error)
 }
 
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const queryClient = useQueryClient()
 const { addNotification } = injectNotificationManager()
 const { formatMessage } = useVIntl()
@@ -269,7 +269,7 @@ const messages = defineMessages({
 
 useHead({
 	title() {
-		return `${formatMessage(messages.pageTitle)} - Modrinth`
+		return `${formatMessage(messages.pageTitle)} - Lumen`
 	},
 })
 

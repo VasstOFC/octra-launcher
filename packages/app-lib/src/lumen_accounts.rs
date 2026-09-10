@@ -1,0 +1,918 @@
+//! Octra cloud account (registration, login, JWT for skin uploads).
+//!
+//! Registration ("skin passport") binds to the launcher's active Minecraft
+//! Credentials (nick + profile UUID). Octra login username equals that nick.
+
+use std::time::Duration;
+
+use serde::{Deserialize, Serialize};
+
+use crate::nervia;
+use crate::state::{Credentials, State};
+use crate::util::fetch::INSECURE_REQWEST_CLIENT;
+
+const TOKEN_KEY: &str = "octra_account_token";
+const USERNAME_KEY: &str = "octra_account_username";
+const MINECRAFT_NICK_KEY: &str = "octra_account_minecraft_nick";
+const PROFILE_UUID_KEY: &str = "octra_account_profile_uuid";
+const ACCOUNT_TYPE_KEY: &str = "octra_account_account_type";
+const SHARED_JOIN_ADDRESS_KEY: &str = "octra_shared_join_address";
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct OctraAccountSession {
+	pub token: String,
+	pub username: String,
+	pub minecraft_nick: String,
+	pub profile_uuid: String,
+	#[serde(default = "default_account_type")]
+	pub account_type: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct OctraCommunityMember {
+	pub id: i64,
+	pub minecraft_nick: String,
+	pub profile_uuid: String,
+	#[serde(default = "default_account_type")]
+	pub account_type: String,
+	pub created_at: String,
+	pub avatar_url: String,
+	#[serde(default = "default_presence")]
+	pub presence: String,
+	#[serde(default)]
+	pub instance_name: Option<String>,
+	#[serde(default)]
+	pub join_address: Option<String>,
+	#[serde(default)]
+	pub pack_project_id: Option<String>,
+	#[serde(default)]
+	pub pack_version_id: Option<String>,
+	#[serde(default)]
+	pub last_seen: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct OctraCommunitySnapshot {
+	pub connected: bool,
+	pub members: Vec<OctraCommunityMember>,
+}
+
+fn default_account_type() -> String {
+	"offline".to_string()
+}
+
+fn default_presence() -> String {
+	"offline".to_string()
+}
+
+#[derive(Deserialize)]
+struct AuthResponse {
+	token: String,
+	username: String,
+	minecraft_nick: String,
+	profile_uuid: String,
+	#[serde(default = "default_account_type")]
+	account_type: String,
+}
+
+#[derive(Deserialize)]
+struct CommunityMemberApi {
+	id: i64,
+	minecraft_nick: String,
+	profile_uuid: String,
+	#[serde(default = "default_account_type")]
+	account_type: String,
+	created_at: String,
+	#[serde(default = "default_presence")]
+	presence: String,
+	#[serde(default)]
+	instance_name: Option<String>,
+	#[serde(default)]
+	join_address: Option<String>,
+	#[serde(default)]
+	pack_project_id: Option<String>,
+	#[serde(default)]
+	pack_version_id: Option<String>,
+	#[serde(default)]
+	last_seen: Option<String>,
+}
+
+pub async fn session() -> crate::Result<Option<OctraAccountSession>> {
+	let state = State::get().await?;
+	let token = get_metadata(&state, TOKEN_KEY).await?;
+	let username = get_metadata(&state, USERNAME_KEY).await?;
+	let minecraft_nick = get_metadata(&state, MINECRAFT_NICK_KEY).await?;
+	let profile_uuid = get_metadata(&state, PROFILE_UUID_KEY).await?;
+	let account_type = get_metadata(&state, ACCOUNT_TYPE_KEY)
+		.await?
+		.unwrap_or_else(default_account_type);
+	match (token, username, minecraft_nick, profile_uuid) {
+		(Some(token), Some(username), Some(minecraft_nick), Some(profile_uuid))
+			if !token.is_empty() =>
+		{
+			let _ = crate::onboarding_checklist::mark_logged_into_modrinth().await;
+			Ok(Some(OctraAccountSession {
+				token,
+				username,
+				minecraft_nick,
+				profile_uuid,
+				account_type,
+			}))
+		}
+		_ => Ok(None),
+	}
+}
+
+/// Register an Octra account linked to the default Minecraft Credentials.
+/// Does not create a Minecraft account — one must already be signed in.
+pub async fn register(password: &str) -> crate::Result<OctraAccountSession> {
+	let state = State::get().await?;
+	let credentials = Credentials::get_default_credential(&state.pool)
+		.await?
+		.ok_or_else(|| {
+			crate::ErrorKind::OtherError(
+				"Add a Microsoft or offline Minecraft account before creating an Octra account"
+					.to_string(),
+			)
+		})?;
+
+	let minecraft_nick = credentials.offline_profile.name.clone();
+	let profile_uuid = credentials.offline_profile.id.to_string();
+	let account_type = if credentials.is_offline() {
+		"offline"
+	} else {
+		"premium"
+	};
+
+	let body = serde_json::json!({
+		"password": password,
+		"minecraft_nick": minecraft_nick,
+		"profile_uuid": profile_uuid,
+		"account_type": account_type,
+	});
+	let response = post_auth("/api/v1/auth/register", &body).await?;
+	save_session(&response).await?;
+	let _ = sync_presence().await;
+	Ok(response)
+}
+
+pub async fn login(username: &str, password: &str) -> crate::Result<OctraAccountSession> {
+	let body = serde_json::json!({
+		"username": username,
+		"password": password,
+	});
+	let response = post_auth("/api/v1/auth/login", &body).await?;
+	save_session(&response).await?;
+	let _ = sync_presence().await;
+	Ok(response)
+}
+
+pub async fn logout() -> crate::Result<()> {
+	let _ = publish_presence("offline", None, None, None, None).await;
+	let state = State::get().await?;
+	for key in [
+		TOKEN_KEY,
+		USERNAME_KEY,
+		MINECRAFT_NICK_KEY,
+		PROFILE_UUID_KEY,
+		ACCOUNT_TYPE_KEY,
+	] {
+		sqlx::query!("DELETE FROM app_metadata WHERE key = ?", key)
+			.execute(&state.pool)
+			.await?;
+	}
+	Ok(())
+}
+
+pub async fn community() -> crate::Result<OctraCommunitySnapshot> {
+	let Some(session) = session().await? else {
+		return Ok(OctraCommunitySnapshot {
+			connected: false,
+			members: Vec::new(),
+		});
+	};
+
+	let url = format!("{}/api/v1/community", nervia::skins_url());
+	let response = match INSECURE_REQWEST_CLIENT
+		.get(&url)
+		.header("Authorization", format!("Bearer {}", session.token))
+		.timeout(Duration::from_secs(15))
+		.send()
+		.await
+	{
+		Ok(response) => response,
+		Err(error) => {
+			tracing::warn!("octra community request failed: {error}");
+			return Ok(OctraCommunitySnapshot {
+				connected: false,
+				members: Vec::new(),
+			});
+		}
+	};
+
+	let status = response.status();
+	let text = response.text().await.unwrap_or_default();
+	if !status.is_success() {
+		tracing::warn!("octra community HTTP {status}: {text}");
+		return Ok(OctraCommunitySnapshot {
+			connected: false,
+			members: Vec::new(),
+		});
+	}
+
+	let parsed: Vec<CommunityMemberApi> = match serde_json::from_str(&text) {
+		Ok(parsed) => parsed,
+		Err(error) => {
+			tracing::warn!("octra community response parse failed: {error}");
+			return Ok(OctraCommunitySnapshot {
+				connected: false,
+				members: Vec::new(),
+			});
+		}
+	};
+	let base = nervia::skins_url();
+	Ok(OctraCommunitySnapshot {
+		connected: true,
+		members: parsed
+			.into_iter()
+			.map(|member| {
+				// Prefer the legacy nick PNG path (same as authlib / SkinsRestorer).
+				// The UI crops this full skin atlas into a player head — do not
+				// display the raw texture in Avatar.
+				let avatar_url = format!(
+					"{}/skins/MinecraftSkins/{}.png",
+					base, member.minecraft_nick
+				);
+				OctraCommunityMember {
+					id: member.id,
+					minecraft_nick: member.minecraft_nick,
+					profile_uuid: member.profile_uuid,
+					account_type: member.account_type,
+					created_at: member.created_at,
+					avatar_url,
+					presence: member.presence,
+					instance_name: member.instance_name,
+					join_address: member.join_address,
+					pack_project_id: member.pack_project_id,
+					pack_version_id: member.pack_version_id,
+					last_seen: member.last_seen,
+				}
+			})
+			.collect(),
+	})
+}
+
+pub async fn publish_presence(
+	status: &str,
+	instance_name: Option<&str>,
+	join_address: Option<&str>,
+	pack_project_id: Option<&str>,
+	pack_version_id: Option<&str>,
+) -> crate::Result<()> {
+	let Some(session) = session().await? else {
+		return Ok(());
+	};
+
+	let url = format!("{}/api/v1/presence", nervia::skins_url());
+	let body = serde_json::json!({
+		"status": status,
+		"instance_name": instance_name,
+		"join_address": join_address,
+		"pack_project_id": pack_project_id,
+		"pack_version_id": pack_version_id,
+	});
+	let response = INSECURE_REQWEST_CLIENT
+		.post(&url)
+		.header("Authorization", format!("Bearer {}", session.token))
+		.json(&body)
+		.timeout(Duration::from_secs(8))
+		.send()
+		.await
+		.map_err(|e| {
+			crate::ErrorKind::OtherError(format!("octra presence request failed: {e}"))
+		})?;
+	if !response.status().is_success() {
+		let text = response.text().await.unwrap_or_default();
+		return Err(crate::ErrorKind::OtherError(format!(
+			"octra presence failed: {text}"
+		))
+		.into());
+	}
+	Ok(())
+}
+
+async fn pack_ids_for_instance(
+	instance_id: &str,
+) -> (Option<String>, Option<String>) {
+	let Ok(Some(meta)) = crate::api::instance::get(instance_id).await else {
+		return (None, None);
+	};
+	let (project, version) = match &meta.link {
+		crate::state::InstanceLink::ModrinthModpack {
+			project_id,
+			version_id,
+		} => (Some(project_id.clone()), Some(version_id.clone())),
+		crate::state::InstanceLink::ServerProject { project_id } => {
+			(Some(project_id.clone()), None)
+		}
+		crate::state::InstanceLink::ServerProjectModpack {
+			content_project_id,
+			content_version_id,
+			..
+		} => (Some(content_project_id.clone()), Some(content_version_id.clone())),
+		crate::state::InstanceLink::ImportedModpack {
+			project_id,
+			version_id,
+			..
+		} => (project_id.clone(), version_id.clone()),
+		crate::state::InstanceLink::SharedInstance {
+			modpack_project_id,
+			modpack_version_id,
+			..
+		} => (modpack_project_id.clone(), modpack_version_id.clone()),
+		crate::state::InstanceLink::Unmanaged
+		| crate::state::InstanceLink::ModrinthHosting { .. } => (None, None),
+	};
+	(project, version)
+}
+
+pub async fn sync_presence() -> crate::Result<()> {
+	if session().await?.is_none() {
+		return Ok(());
+	}
+	let state = State::get().await?;
+	let processes = state.process_manager.get_all();
+	if let Some(process) = processes.first() {
+		let shared = get_metadata(&state, SHARED_JOIN_ADDRESS_KEY).await?;
+		let join = process
+			.join_address
+			.clone()
+			.or(shared)
+			.filter(|value| !value.trim().is_empty());
+		let (pack_project_id, pack_version_id) =
+			pack_ids_for_instance(&process.instance_id).await;
+		publish_presence(
+			"ingame",
+			Some(&process.instance_name),
+			join.as_deref(),
+			pack_project_id.as_deref(),
+			pack_version_id.as_deref(),
+		)
+		.await
+	} else {
+		let _ = set_metadata(&state, SHARED_JOIN_ADDRESS_KEY, "").await;
+		publish_presence("launcher", None, None, None, None).await
+	}
+}
+
+pub fn spawn_presence_heartbeat() {
+	tokio::spawn(async {
+		loop {
+			if let Err(error) = sync_presence().await {
+				tracing::debug!("octra presence heartbeat: {error}");
+			}
+			tokio::time::sleep(Duration::from_secs(20)).await;
+		}
+	});
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct OctraChatMember {
+	pub id: i64,
+	pub minecraft_nick: String,
+	pub profile_uuid: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct OctraChatChannel {
+	pub id: i64,
+	pub kind: String,
+	pub name: Option<String>,
+	pub created_at: String,
+	#[serde(default)]
+	pub last_body: Option<String>,
+	#[serde(default)]
+	pub last_at: Option<String>,
+	#[serde(default)]
+	pub last_id: Option<i64>,
+	#[serde(default)]
+	pub last_read_id: i64,
+	#[serde(default)]
+	pub unread_count: i64,
+	#[serde(default)]
+	pub members: Vec<OctraChatMember>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct OctraChatReaction {
+	pub emoji: String,
+	pub count: i64,
+	#[serde(default)]
+	pub user_ids: Vec<i64>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct OctraChatMessage {
+	pub id: i64,
+	#[serde(default)]
+	pub channel_id: i64,
+	pub user_id: i64,
+	pub minecraft_nick: String,
+	pub body: String,
+	pub created_at: String,
+	#[serde(default)]
+	pub pinned: bool,
+	#[serde(default)]
+	pub deleted: bool,
+	#[serde(default)]
+	pub attachment_url: Option<String>,
+	#[serde(default)]
+	pub reactions: Vec<OctraChatReaction>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct OctraChatAttachment {
+	pub url: String,
+	pub path: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct OctraSharedServer {
+	pub id: i64,
+	pub name: String,
+	pub address: String,
+	pub created_by: i64,
+	#[serde(default)]
+	pub created_by_nick: Option<String>,
+	pub created_at: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct OctraChatDeleteVote {
+	pub active: bool,
+	pub channel_id: i64,
+	pub member_count: i64,
+	pub yes_count: i64,
+	pub no_count: i64,
+	pub needed: i64,
+	#[serde(default)]
+	pub my_vote: Option<bool>,
+	#[serde(default)]
+	pub deleted: bool,
+}
+
+async fn chat_auth_get(path: &str) -> crate::Result<reqwest::Response> {
+	let Some(session) = session().await? else {
+		return Err(crate::ErrorKind::OtherError(
+			"not signed in to Octra".to_string(),
+		)
+		.into());
+	};
+	let url = format!("{}{}", nervia::skins_url(), path);
+	INSECURE_REQWEST_CLIENT
+		.get(&url)
+		.header("Authorization", format!("Bearer {}", session.token))
+		.timeout(Duration::from_secs(15))
+		.send()
+		.await
+		.map_err(|e| {
+			crate::ErrorKind::OtherError(format!("octra chat request failed: {e}")).into()
+		})
+}
+
+async fn chat_auth_post(
+	path: &str,
+	body: &serde_json::Value,
+) -> crate::Result<reqwest::Response> {
+	let Some(session) = session().await? else {
+		return Err(crate::ErrorKind::OtherError(
+			"not signed in to Octra".to_string(),
+		)
+		.into());
+	};
+	let url = format!("{}{}", nervia::skins_url(), path);
+	INSECURE_REQWEST_CLIENT
+		.post(&url)
+		.header("Authorization", format!("Bearer {}", session.token))
+		.json(body)
+		.timeout(Duration::from_secs(15))
+		.send()
+		.await
+		.map_err(|e| {
+			crate::ErrorKind::OtherError(format!("octra chat request failed: {e}")).into()
+		})
+}
+
+async fn chat_auth_delete(path: &str) -> crate::Result<reqwest::Response> {
+	let Some(session) = session().await? else {
+		return Err(crate::ErrorKind::OtherError(
+			"not signed in to Octra".to_string(),
+		)
+		.into());
+	};
+	let url = format!("{}{}", nervia::skins_url(), path);
+	INSECURE_REQWEST_CLIENT
+		.delete(&url)
+		.header("Authorization", format!("Bearer {}", session.token))
+		.timeout(Duration::from_secs(15))
+		.send()
+		.await
+		.map_err(|e| {
+			crate::ErrorKind::OtherError(format!("octra chat request failed: {e}")).into()
+		})
+}
+
+async fn read_chat_error(response: reqwest::Response) -> crate::Result<String> {
+	let status = response.status();
+	let text_body = response.text().await.unwrap_or_default();
+	if status.is_success() {
+		return Ok(text_body);
+	}
+	let detail = serde_json::from_str::<serde_json::Value>(&text_body)
+		.ok()
+		.and_then(|v| {
+			v.get("detail")
+				.and_then(|d| d.as_str())
+				.map(ToOwned::to_owned)
+		})
+		.filter(|d| !d.is_empty())
+		.unwrap_or_else(|| text_body.trim().to_string());
+	let message = if detail.is_empty() {
+		format!("octra chat request failed ({status})")
+	} else if status.as_u16() == 404
+		&& detail.eq_ignore_ascii_case("Not Found")
+	{
+		format!(
+			"chat attachments endpoint missing on server ({status}) — redeploy octra-api"
+		)
+	} else {
+		detail
+	};
+	Err(crate::ErrorKind::OtherError(message).into())
+}
+
+pub async fn chat_channels() -> crate::Result<Vec<OctraChatChannel>> {
+	if session().await?.is_none() {
+		return Ok(Vec::new());
+	}
+	let response = chat_auth_get("/api/v1/chat/channels").await?;
+	let text = read_chat_error(response).await?;
+	serde_json::from_str(&text).map_err(|e| {
+		crate::ErrorKind::OtherError(format!("octra chat channels parse failed: {e}")).into()
+	})
+}
+
+pub async fn chat_open_dm(user_id: i64) -> crate::Result<OctraChatChannel> {
+	let response = chat_auth_post(
+		"/api/v1/chat/channels/dm",
+		&serde_json::json!({ "user_id": user_id }),
+	)
+	.await?;
+	let text = read_chat_error(response).await?;
+	serde_json::from_str(&text).map_err(|e| {
+		crate::ErrorKind::OtherError(format!("octra chat dm parse failed: {e}")).into()
+	})
+}
+
+pub async fn chat_create_group(
+	name: &str,
+	member_ids: &[i64],
+) -> crate::Result<OctraChatChannel> {
+	let response = chat_auth_post(
+		"/api/v1/chat/channels/group",
+		&serde_json::json!({
+			"name": name,
+			"member_ids": member_ids,
+		}),
+	)
+	.await?;
+	let text = read_chat_error(response).await?;
+	serde_json::from_str(&text).map_err(|e| {
+		crate::ErrorKind::OtherError(format!("octra chat group parse failed: {e}")).into()
+	})
+}
+
+pub async fn chat_list(channel_id: i64, after_id: i64) -> crate::Result<Vec<OctraChatMessage>> {
+	if session().await?.is_none() {
+		return Ok(Vec::new());
+	}
+	let path = format!(
+		"/api/v1/chat/channels/{channel_id}/messages?after_id={}",
+		after_id.max(0)
+	);
+	let response = chat_auth_get(&path).await?;
+	let text = read_chat_error(response).await?;
+	serde_json::from_str(&text).map_err(|e| {
+		crate::ErrorKind::OtherError(format!("octra chat response parse failed: {e}")).into()
+	})
+}
+
+async fn chat_auth_post_bytes(
+	path: &str,
+	bytes: Vec<u8>,
+	content_type: &str,
+) -> crate::Result<reqwest::Response> {
+	let Some(session) = session().await? else {
+		return Err(crate::ErrorKind::OtherError(
+			"not signed in to Octra".to_string(),
+		)
+		.into());
+	};
+	let url = format!("{}{}", nervia::skins_url(), path);
+	INSECURE_REQWEST_CLIENT
+		.post(&url)
+		.header("Authorization", format!("Bearer {}", session.token))
+		.header("Content-Type", content_type)
+		.body(bytes)
+		.timeout(Duration::from_secs(60))
+		.send()
+		.await
+		.map_err(|e| {
+			crate::ErrorKind::OtherError(format!("octra chat upload failed: {e}")).into()
+		})
+}
+
+pub async fn chat_upload_image(image_path: &str) -> crate::Result<OctraChatAttachment> {
+	let path = std::path::Path::new(image_path);
+	if !path.is_file() {
+		return Err(crate::ErrorKind::OtherError("image file not found".to_string()).into());
+	}
+	let bytes = match tokio::fs::read(path).await {
+		Ok(data) => data,
+		Err(e) => {
+			return Err(
+				crate::ErrorKind::OtherError(format!("failed to read image: {e}")).into(),
+			);
+		}
+	};
+	if bytes.is_empty() {
+		return Err(crate::ErrorKind::OtherError("empty image file".to_string()).into());
+	}
+	let content_type = if bytes.starts_with(b"\x89PNG\r\n\x1a\n") {
+		"image/png"
+	} else if bytes.starts_with(&[0xff, 0xd8, 0xff]) {
+		"image/jpeg"
+	} else if bytes.len() >= 12 && &bytes[0..4] == b"RIFF" && &bytes[8..12] == b"WEBP" {
+		"image/webp"
+	} else {
+		return Err(crate::ErrorKind::OtherError(
+			"unsupported image type (png/jpeg/webp)".to_string(),
+		)
+		.into());
+	};
+	let response = chat_auth_post_bytes("/api/v1/chat/attachments", bytes, content_type).await?;
+	let text = read_chat_error(response).await?;
+	serde_json::from_str(&text).map_err(|e| {
+		crate::ErrorKind::OtherError(format!("octra chat upload parse failed: {e}")).into()
+	})
+}
+
+pub async fn chat_post(
+	channel_id: i64,
+	text: &str,
+	attachment_url: Option<&str>,
+) -> crate::Result<OctraChatMessage> {
+	let mut body = serde_json::json!({ "text": text });
+	if let Some(url) = attachment_url.filter(|u| !u.is_empty()) {
+		body["attachment_url"] = serde_json::Value::String(url.to_string());
+	}
+	let response = chat_auth_post(
+		&format!("/api/v1/chat/channels/{channel_id}/messages"),
+		&body,
+	)
+	.await?;
+	let text_body = read_chat_error(response).await?;
+	serde_json::from_str(&text_body).map_err(|e| {
+		crate::ErrorKind::OtherError(format!("octra chat post parse failed: {e}")).into()
+	})
+}
+
+pub async fn chat_add_group_members(
+	channel_id: i64,
+	member_ids: &[i64],
+) -> crate::Result<OctraChatChannel> {
+	let response = chat_auth_post(
+		&format!("/api/v1/chat/channels/{channel_id}/members"),
+		&serde_json::json!({ "member_ids": member_ids }),
+	)
+	.await?;
+	let text = read_chat_error(response).await?;
+	serde_json::from_str(&text).map_err(|e| {
+		crate::ErrorKind::OtherError(format!("octra chat add members parse failed: {e}")).into()
+	})
+}
+
+pub async fn chat_mark_read(channel_id: i64, last_read_id: i64) -> crate::Result<()> {
+	let response = chat_auth_post(
+		&format!("/api/v1/chat/channels/{channel_id}/read"),
+		&serde_json::json!({ "last_read_id": last_read_id }),
+	)
+	.await?;
+	let _ = read_chat_error(response).await?;
+	Ok(())
+}
+
+pub async fn chat_delete_message(message_id: i64) -> crate::Result<OctraChatMessage> {
+	let response =
+		chat_auth_delete(&format!("/api/v1/chat/messages/{message_id}")).await?;
+	let text = read_chat_error(response).await?;
+	serde_json::from_str(&text).map_err(|e| {
+		crate::ErrorKind::OtherError(format!("octra chat delete parse failed: {e}")).into()
+	})
+}
+
+pub async fn chat_pin_message(message_id: i64, pinned: bool) -> crate::Result<OctraChatMessage> {
+	let response = chat_auth_post(
+		&format!("/api/v1/chat/messages/{message_id}/pin"),
+		&serde_json::json!({ "pinned": pinned }),
+	)
+	.await?;
+	let text = read_chat_error(response).await?;
+	serde_json::from_str(&text).map_err(|e| {
+		crate::ErrorKind::OtherError(format!("octra chat pin parse failed: {e}")).into()
+	})
+}
+
+pub async fn chat_react_message(
+	message_id: i64,
+	emoji: &str,
+) -> crate::Result<OctraChatMessage> {
+	let response = chat_auth_post(
+		&format!("/api/v1/chat/messages/{message_id}/reactions"),
+		&serde_json::json!({ "emoji": emoji }),
+	)
+	.await?;
+	let text = read_chat_error(response).await?;
+	serde_json::from_str(&text).map_err(|e| {
+		crate::ErrorKind::OtherError(format!("octra chat react parse failed: {e}")).into()
+	})
+}
+
+pub async fn chat_get_delete_vote(channel_id: i64) -> crate::Result<OctraChatDeleteVote> {
+	let response =
+		chat_auth_get(&format!("/api/v1/chat/channels/{channel_id}/delete-vote")).await?;
+	let text = read_chat_error(response).await?;
+	serde_json::from_str(&text).map_err(|e| {
+		crate::ErrorKind::OtherError(format!("octra chat delete-vote parse failed: {e}")).into()
+	})
+}
+
+pub async fn chat_cast_delete_vote(
+	channel_id: i64,
+	yes: bool,
+) -> crate::Result<OctraChatDeleteVote> {
+	let response = chat_auth_post(
+		&format!("/api/v1/chat/channels/{channel_id}/delete-vote"),
+		&serde_json::json!({ "yes": yes }),
+	)
+	.await?;
+	let text = read_chat_error(response).await?;
+	serde_json::from_str(&text).map_err(|e| {
+		crate::ErrorKind::OtherError(format!("octra chat delete-vote cast failed: {e}")).into()
+	})
+}
+
+pub async fn share_join_address(address: &str) -> crate::Result<()> {
+	let trimmed = address.trim();
+	if trimmed.is_empty() {
+		return Err(crate::ErrorKind::OtherError("address required".into()).into());
+	}
+	let state = State::get().await?;
+	let processes = state.process_manager.get_all();
+	let instance_name = processes.first().map(|p| p.instance_name.clone());
+	if instance_name.is_none() {
+		return Err(crate::ErrorKind::OtherError(
+			"start minecraft before sharing an address".into(),
+		)
+		.into());
+	}
+	set_metadata(&state, SHARED_JOIN_ADDRESS_KEY, trimmed).await?;
+	let (pack_project_id, pack_version_id) = if let Some(process) = processes.first() {
+		pack_ids_for_instance(&process.instance_id).await
+	} else {
+		(None, None)
+	};
+	publish_presence(
+		"ingame",
+		instance_name.as_deref(),
+		Some(trimmed),
+		pack_project_id.as_deref(),
+		pack_version_id.as_deref(),
+	)
+	.await
+}
+
+pub async fn shared_servers_list() -> crate::Result<Vec<OctraSharedServer>> {
+	if session().await?.is_none() {
+		return Ok(Vec::new());
+	}
+	let response = chat_auth_get("/api/v1/servers").await?;
+	let text = read_chat_error(response).await?;
+	serde_json::from_str(&text).map_err(|e| {
+		crate::ErrorKind::OtherError(format!("octra servers parse failed: {e}")).into()
+	})
+}
+
+pub async fn shared_servers_add(name: &str, address: &str) -> crate::Result<OctraSharedServer> {
+	let response = chat_auth_post(
+		"/api/v1/servers",
+		&serde_json::json!({ "name": name, "address": address }),
+	)
+	.await?;
+	let text = read_chat_error(response).await?;
+	let server: OctraSharedServer = serde_json::from_str(&text).map_err(|e| {
+		crate::ErrorKind::OtherError(format!("octra servers add parse failed: {e}"))
+	})?;
+	if let Err(error) =
+		crate::api::instance::refresh_octra_shared_servers_overlay().await
+	{
+		tracing::warn!("Failed to inject Octra shared servers into Minecraft: {error}");
+	}
+	Ok(server)
+}
+
+pub async fn shared_servers_delete(server_id: i64) -> crate::Result<()> {
+	let response = chat_auth_delete(&format!("/api/v1/servers/{server_id}")).await?;
+	let _ = read_chat_error(response).await?;
+	if let Err(error) =
+		crate::api::instance::refresh_octra_shared_servers_overlay().await
+	{
+		tracing::warn!("Failed to refresh Octra shared servers in Minecraft: {error}");
+	}
+	Ok(())
+}
+
+pub async fn bearer_token() -> Option<String> {
+	session().await.ok().flatten().map(|s| s.token)
+}
+
+async fn post_auth(path: &str, body: &serde_json::Value) -> crate::Result<OctraAccountSession> {
+	let url = format!("{}{}", nervia::skins_url(), path);
+	let response = INSECURE_REQWEST_CLIENT
+		.post(&url)
+		.json(body)
+		.timeout(Duration::from_secs(15))
+		.send()
+		.await
+		.map_err(|e| {
+			crate::ErrorKind::OtherError(format!("octra account request failed: {e}"))
+		})?;
+
+	let status = response.status();
+	let text = response.text().await.unwrap_or_default();
+	if !status.is_success() {
+		let detail = serde_json::from_str::<serde_json::Value>(&text)
+			.ok()
+			.and_then(|v| v.get("detail").and_then(|d| d.as_str()).map(ToOwned::to_owned))
+			.unwrap_or(text);
+		return Err(crate::ErrorKind::OtherError(detail).into());
+	}
+
+	let parsed: AuthResponse = serde_json::from_str(&text).map_err(|e| {
+		crate::ErrorKind::OtherError(format!("octra account response parse failed: {e}"))
+	})?;
+	Ok(OctraAccountSession {
+		token: parsed.token,
+		username: parsed.username,
+		minecraft_nick: parsed.minecraft_nick,
+		profile_uuid: parsed.profile_uuid,
+		account_type: parsed.account_type,
+	})
+}
+
+async fn save_session(session: &OctraAccountSession) -> crate::Result<()> {
+	let state = State::get().await?;
+	set_metadata(&state, TOKEN_KEY, &session.token).await?;
+	set_metadata(&state, USERNAME_KEY, &session.username).await?;
+	set_metadata(&state, MINECRAFT_NICK_KEY, &session.minecraft_nick).await?;
+	set_metadata(&state, PROFILE_UUID_KEY, &session.profile_uuid).await?;
+	set_metadata(&state, ACCOUNT_TYPE_KEY, &session.account_type).await?;
+	// Reuses the onboarding "logged into Modrinth" flag for Octra cloud accounts.
+	crate::onboarding_checklist::mark_logged_into_modrinth().await?;
+	Ok(())
+}
+
+async fn get_metadata(state: &State, key: &str) -> crate::Result<Option<String>> {
+	let row = sqlx::query_scalar!(
+		r#"SELECT value FROM app_metadata WHERE key = ?"#,
+		key
+	)
+	.fetch_optional(&state.pool)
+	.await?;
+	Ok(row)
+}
+
+async fn set_metadata(state: &State, key: &str, value: &str) -> crate::Result<()> {
+	sqlx::query!(
+		r#"
+		INSERT INTO app_metadata (key, value, updated_at)
+		VALUES (?, ?, unixepoch())
+		ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = unixepoch()
+		"#,
+		key,
+		value
+	)
+	.execute(&state.pool)
+	.await?;
+	Ok(())
+}

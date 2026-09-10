@@ -1,13 +1,13 @@
-<script setup>
+﻿<script setup>
 import {
 	AuthFeature,
-	ModrinthApiError,
+	LumenApiError,
 	NodeAuthFeature,
 	nodeAuthState,
 	PanelVersionFeature,
-	TauriModrinthClient,
+	TauriLumenClient,
 	VerboseLoggingFeature,
-} from '@modrinth/api-client'
+} from '@lumen/api-client'
 import {
 	ArrowBigUpDashIcon,
 	ChevronLeftIcon,
@@ -26,7 +26,7 @@ import {
 	UserIcon,
 	UserPlusIcon,
 	UsersIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import {
 	AccountSwitchOverlay,
 	Admonition,
@@ -41,8 +41,8 @@ import {
 	LoadingBar,
 	NotificationPanel,
 	PopupNotificationPanel,
+	provideLumenClient,
 	provideModalBehavior,
-	provideModrinthClient,
 	provideNotificationManager,
 	providePageContext,
 	providePopupNotificationManager,
@@ -51,8 +51,8 @@ import {
 	useFormatBytes,
 	useHostingIntercom,
 	useVIntl,
-} from '@modrinth/ui'
-import { renderString } from '@modrinth/utils'
+} from '@lumen/ui'
+import { renderString } from '@lumen/utils'
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
 import { getVersion } from '@tauri-apps/api/app'
 import { convertFileSrc, invoke } from '@tauri-apps/api/core'
@@ -65,14 +65,14 @@ import { saveWindowState, StateFlags } from '@tauri-apps/plugin-window-state'
 import { computed, nextTick, onMounted, onUnmounted, provide, ref, watch } from 'vue'
 import { RouterView, useRoute, useRouter } from 'vue-router'
 
-import OctraMark from '@/components/brand/OctraMark.vue'
-import OctraWordmark from '@/components/brand/OctraWordmark.vue'
+import LumenMark from '@/components/brand/LumenMark.vue'
+import LumenWordmark from '@/components/brand/LumenWordmark.vue'
 import AccountsCard from '@/components/ui/AccountsCard.vue'
 import AddOfflineAccountModal from '@/components/ui/AddOfflineAccountModal.vue'
 import AppActionBar from '@/components/ui/AppActionBar.vue'
 import Breadcrumbs from '@/components/ui/Breadcrumbs.vue'
 import ErrorModal from '@/components/ui/ErrorModal.vue'
-import OctraCommunityList from '@/components/ui/friends/OctraCommunityList.vue'
+import LumenCommunityList from '@/components/ui/friends/LumenCommunityList.vue'
 import HostingUpdateRequired from '@/components/ui/HostingUpdateRequired.vue'
 import AddServerToInstanceModal from '@/components/ui/install_flow/AddServerToInstanceModal.vue'
 import UnknownPackWarningModal from '@/components/ui/install_flow/UnknownPackWarningModal.vue'
@@ -81,13 +81,15 @@ import MinecraftAuthErrorModal from '@/components/ui/minecraft-auth-error-modal/
 import MinecraftRequiredModal from '@/components/ui/minecraft-required-modal/MinecraftRequiredModal.vue'
 import AppSettingsModal from '@/components/ui/modal/AppSettingsModal.vue'
 import InstallToPlayModal from '@/components/ui/modal/InstallToPlayModal.vue'
+import LumenAccountRequiredModal from '@/components/ui/modal/LumenAccountRequiredModal.vue'
 import ModpackAlreadyInstalledModal from '@/components/ui/modal/ModpackAlreadyInstalledModal.vue'
-import ModrinthAccountRequiredModal from '@/components/ui/modal/ModrinthAccountRequiredModal.vue'
 import UpdateToPlayModal from '@/components/ui/modal/UpdateToPlayModal.vue'
 import NavButton from '@/components/ui/NavButton.vue'
 import NewIconEditorNotification from '@/components/ui/new-icon-editor-notification/index.vue'
 import { shouldShowNewIconEditorNotification } from '@/components/ui/new-icon-editor-notification/show-notification'
-import OctraAccountModal from '@/components/ui/OctraAccountModal.vue'
+import LumenAccountModal from '@/components/ui/LumenAccountModal.vue'
+import LumenLoginRequired from '@/components/ui/LumenLoginRequired.vue'
+import OnboardingChecklist from '@/components/ui/onboarding-checklist/index.vue'
 import PromotionWrapper from '@/components/ui/PromotionWrapper.vue'
 import QuickInstanceSwitcher from '@/components/ui/QuickInstanceSwitcher.vue'
 import SharedInstanceInviteHandler from '@/components/ui/shared-instances/shared-instance-invite-handler/index.vue'
@@ -99,12 +101,11 @@ import { useCheckDisableMouseover } from '@/composables/macCssFix.js'
 import { bootstrapAccent } from '@/composables/use-accent.ts'
 import { useAppEvent } from '@/composables/use-app-event'
 import { useAppSettings } from '@/composables/use-app-settings.ts'
-import { useError } from '@/composables/use-error.js'
+import { handleSevereError, useError } from '@/composables/use-error.js'
 import { useMinecraftAccountAvatar } from '@/composables/use-minecraft-account-avatar.ts'
 import { isDarkTheme, useTheme } from '@/composables/use-theme.ts'
 import { config } from '@/config'
 import { rememberAccountAppearance } from '@/helpers/account-appearance.ts'
-import { hide_ads_window, release_ads_window_hold, take_ads_window_hold } from '@/helpers/ads.js'
 import { trackEvent } from '@/helpers/analytics'
 import {
 	check_reachable,
@@ -126,15 +127,15 @@ import {
 } from '@/helpers/instance'
 import { get as getCreds, removeUser } from '@/helpers/mr_auth.ts'
 import {
-	octraAccountLogout,
-	octraAccountSession,
-	octraChatChannels,
-} from '@/helpers/octra-account.js'
+	LumenAccountLogout,
+	LumenAccountSession,
+	LumenChatChannels,
+} from '@/helpers/lumen-account.js'
 import { get_all as getAllProcesses } from '@/helpers/process'
-import { mergeUrlQuery, parseModrinthLink } from '@/helpers/project-links.ts'
+import { mergeUrlQuery, parseLumenLink } from '@/helpers/project-links.ts'
 import { get as getSettings, set as setSettings } from '@/helpers/settings.ts'
 import { get_opening_command, initialize_state } from '@/helpers/state'
-import { parse_modrinth_user_link } from '@/helpers/users'
+import { parse_Lumen_user_link } from '@/helpers/users'
 import {
 	areUpdatesEnabled,
 	enqueueUpdateForInstallation,
@@ -169,6 +170,7 @@ import { setupAppEventsProvider } from '@/providers/setup/app-events'
 import { setupAuthProvider } from '@/providers/setup/auth'
 import { setupLoadingStateProvider } from '@/providers/setup/loading-state'
 import { setupAppUserPreferencesProvider } from '@/providers/setup/user-preferences.ts'
+
 import { generateSkinPreviews } from './helpers/rendering/batch-skin-renderer'
 import { get_available_capes, get_available_skins } from './helpers/skins'
 import { AppNotificationManager } from './providers/app-notifications'
@@ -195,25 +197,6 @@ function updateHistoryNavigationState() {
 	canNavigateForward.value = historyState?.forward != null
 }
 
-let fullscreenAdsWindowHold = false
-
-async function handleFullscreenChange() {
-	const fullscreen = document.fullscreenElement !== null
-	if (fullscreen === fullscreenAdsWindowHold) return
-
-	fullscreenAdsWindowHold = fullscreen
-	try {
-		if (fullscreen) {
-			await take_ads_window_hold()
-		} else {
-			await release_ads_window_hold()
-		}
-	} catch (error) {
-		fullscreenAdsWindowHold = !fullscreen
-		handleError(error)
-	}
-}
-
 updateHistoryNavigationState()
 
 const APP_LEFT_NAV_WIDTH_COLLAPSED = '4rem'
@@ -223,12 +206,12 @@ const INTERCOM_BUBBLE_DEFAULT_PADDING = 20
 const credentials = ref()
 let credentialsRefreshId = 0
 const forceSidebar = computed(() => route.path.startsWith('/project'))
-const SIDEBAR_STORAGE_KEY = 'octra.sidebarExpanded'
+const SIDEBAR_STORAGE_KEY = 'Lumen.sidebarExpanded'
 const sidebarExpandedPreference = ref(localStorage.getItem(SIDEBAR_STORAGE_KEY) === '1')
 watch(sidebarExpandedPreference, (value) => {
 	localStorage.setItem(SIDEBAR_STORAGE_KEY, value ? '1' : '0')
 })
-const RAIL_STORAGE_KEY = 'octra.railExpanded'
+const RAIL_STORAGE_KEY = 'Lumen.railExpanded'
 const railExpanded = ref(localStorage.getItem(RAIL_STORAGE_KEY) !== '0')
 watch(railExpanded, (value) => {
 	localStorage.setItem(RAIL_STORAGE_KEY, value ? '1' : '0')
@@ -237,7 +220,7 @@ const leftBarWidth = computed(() =>
 	railExpanded.value ? APP_LEFT_NAV_WIDTH_EXPANDED : APP_LEFT_NAV_WIDTH_COLLAPSED,
 )
 const sidebarVisible = computed(() => forceSidebar.value || sidebarExpandedPreference.value)
-const octraCommunityList = ref(null)
+	const lumenCommunityList = ref(null)
 const chatUnreadTotal = ref(0)
 const lastPolledUnreadTotal = ref(0)
 const chatUnreadReady = ref(false)
@@ -268,13 +251,13 @@ function onChatUnreadChanged(total) {
 }
 
 async function pollChatUnread() {
-	if (!octraSession.value) {
+	if (!lumenSession.value) {
 		chatUnreadTotal.value = 0
 		lastPolledUnreadTotal.value = 0
 		return
 	}
 	try {
-		const channels = await octraChatChannels()
+		const channels = await LumenChatChannels()
 		const total = (channels || []).reduce((sum, channel) => sum + (channel.unread_count ?? 0), 0)
 		if (!chatViewActive.value && chatUnreadReady.value && total > lastPolledUnreadTotal.value) {
 			addNotification({
@@ -373,11 +356,10 @@ useAppEvent(
 const popupNotificationManager = new AppPopupNotificationManager()
 providePopupNotificationManager(popupNotificationManager)
 const { addPopupNotification } = popupNotificationManager
-useAppEvent('ads_consent_required', handleAdsConsentRequired, appEvents)
 
 const appVersion = getVersion()
-const tauriApiClient = new TauriModrinthClient({
-	userAgent: async () => `octra/theseus/${await appVersion}`,
+const tauriApiClient = new TauriLumenClient({
+	userAgent: async () => `Lumen/theseus/${await appVersion}`,
 	labrinthBaseUrl: config.labrinthBaseUrl,
 	archonBaseUrl: config.archonBaseUrl,
 	sharedInstancesBaseUrl: config.sharedInstancesBaseUrl,
@@ -397,7 +379,7 @@ const tauriApiClient = new TauriModrinthClient({
 		new VerboseLoggingFeature(),
 	],
 })
-provideModrinthClient(tauriApiClient)
+provideLumenClient(tauriApiClient)
 useQuery({
 	queryKey: computed(() => ['authenticated-user', 'campaigns', credentials.value?.user?.id]),
 	queryFn: () => tauriApiClient.labrinth.users_v3.getAuthenticated(),
@@ -435,8 +417,6 @@ providePageContext({
 })
 provideModalBehavior({
 	noblur: computed(() => !appTheme.advancedRendering),
-	onShow: () => take_ads_window_hold(),
-	onHide: () => release_ads_window_hold(),
 })
 
 const creationIconEditorModal = ref(null)
@@ -581,7 +561,6 @@ onMounted(async () => {
 	document.querySelector('body').addEventListener('click', handleClick)
 	document.querySelector('body').addEventListener('auxclick', handleAuxClick)
 	document.querySelector('body').addEventListener('contextmenu', handleContextMenu)
-	document.addEventListener('fullscreenchange', handleFullscreenChange)
 
 	checkUpdates()
 })
@@ -590,15 +569,10 @@ onUnmounted(async () => {
 	document.querySelector('body').removeEventListener('click', handleClick)
 	document.querySelector('body').removeEventListener('auxclick', handleAuxClick)
 	document.querySelector('body').removeEventListener('contextmenu', handleContextMenu)
-	document.removeEventListener('fullscreenchange', handleFullscreenChange)
 	unlistenEditMenu?.()
 	clearDelayedUpdatePopup()
 	stopChatUnreadPoll()
 
-	if (fullscreenAdsWindowHold) {
-		fullscreenAdsWindowHold = false
-		await release_ads_window_hold().catch(handleError)
-	}
 	await unlistenUpdateDownload?.()
 })
 
@@ -631,27 +605,6 @@ const messages = defineMessages({
 		defaultMessage:
 			'Minecraft authentication servers may be down right now. Check your internet connection and try again later.',
 	},
-	adsConsentTitle: {
-		id: 'app.ads-consent.title',
-		defaultMessage: 'Your privacy and how ads support Modrinth',
-	},
-	adsConsentBody: {
-		id: 'app.ads-consent.body',
-		defaultMessage:
-			'Ads make Modrinth possible and fund creator payouts. Our partners may store or access cookies in the app to personalize ads and measure performance.',
-	},
-	adsConsentManage: {
-		id: 'app.ads-consent.manage',
-		defaultMessage: 'Manage preferences',
-	},
-	adsConsentReject: {
-		id: 'app.ads-consent.reject',
-		defaultMessage: 'Reject all',
-	},
-	adsConsentAccept: {
-		id: 'app.ads-consent.accept',
-		defaultMessage: 'Accept all',
-	},
 	home: {
 		id: 'app.nav.home',
 		defaultMessage: 'Home',
@@ -678,11 +631,11 @@ const messages = defineMessages({
 	},
 	collapseSidebar: {
 		id: 'app.nav.collapse-sidebar',
-		defaultMessage: 'Hide sidebar',
+		defaultMessage: 'Ukryj panel',
 	},
 	expandSidebar: {
 		id: 'app.nav.expand-sidebar',
-		defaultMessage: 'Show friends',
+		defaultMessage: 'Pokaż znajomych',
 	},
 	servers: {
 		id: 'app.nav.servers',
@@ -696,9 +649,9 @@ const messages = defineMessages({
 		id: 'app.nav.create-new-instance',
 		defaultMessage: 'Create new instance',
 	},
-	modrinthAccount: {
-		id: 'app.nav.modrinth-account',
-		defaultMessage: 'Octra account',
+	LumenAccount: {
+		id: 'app.nav.Lumen-account',
+		defaultMessage: 'Lumen account',
 	},
 	viewProfile: {
 		id: 'app.nav.view-profile',
@@ -708,9 +661,9 @@ const messages = defineMessages({
 		id: 'friends.action.add-friend',
 		defaultMessage: 'Add a friend',
 	},
-	signInToModrinthAccount: {
-		id: 'app.nav.sign-in-to-modrinth-account',
-		defaultMessage: 'Log in to Octra',
+	signInToLumenAccount: {
+		id: 'app.nav.sign-in-to-Lumen-account',
+		defaultMessage: 'Log in to Lumen',
 	},
 	loadingProfile: {
 		id: 'app.nav.loading-profile',
@@ -732,12 +685,12 @@ const messages = defineMessages({
 		id: 'app.restarting',
 		defaultMessage: 'Restarting...',
 	},
-	upgradeToModrinthPlus: {
-		id: 'app.nav.upgrade-to-modrinth-plus',
-		defaultMessage: 'Connect Octra account',
+	upgradeToLumenPlus: {
+		id: 'app.nav.upgrade-to-Lumen-plus',
+		defaultMessage: 'Connect Lumen account',
 	},
-	octraLogout: {
-		id: 'octra-account.logout',
+	LumenLogout: {
+		id: 'Lumen-account.logout',
 		defaultMessage: 'Log out',
 	},
 	news: {
@@ -750,7 +703,7 @@ const messages = defineMessages({
 	},
 	playingAs: {
 		id: 'app.sidebar.playing-as',
-		defaultMessage: 'Playing as',
+		defaultMessage: 'Grasz jako',
 	},
 	minecraftAccount: {
 		id: 'minecraft-account.label',
@@ -776,37 +729,37 @@ const messages = defineMessages({
 		id: 'app.nav.identity-minecraft-section',
 		defaultMessage: 'Minecraft',
 	},
-	identityOctraSection: {
-		id: 'app.nav.identity-octra-section',
-		defaultMessage: 'Octra',
+	identityLumenSection: {
+		id: 'app.nav.identity-Lumen-section',
+		defaultMessage: 'Lumen',
 	},
-	identityOctraRow: {
-		id: 'app.nav.identity-octra-row',
-		defaultMessage: 'Octra · {name}',
+	identityLumenRow: {
+		id: 'app.nav.identity-Lumen-row',
+		defaultMessage: 'Lumen Â· {name}',
 	},
-	identityOctraSignIn: {
-		id: 'app.nav.identity-octra-sign-in',
-		defaultMessage: 'Sign in to Octra',
+	identityLumenSignIn: {
+		id: 'app.nav.identity-Lumen-sign-in',
+		defaultMessage: 'Sign in to Lumen',
 	},
 	identityTooltip: {
 		id: 'app.nav.identity-tooltip',
-		defaultMessage: 'MC · {minecraft} · Octra · {octra}',
+		defaultMessage: 'MC Â· {minecraft} Â· Lumen Â· {Lumen}',
 	},
-	octraLogin: {
-		id: 'octra-account.login',
+	LumenLogin: {
+		id: 'Lumen-account.login',
 		defaultMessage: 'Log in',
 	},
-	octraRegister: {
-		id: 'octra-account.register',
+	LumenRegister: {
+		id: 'Lumen-account.register',
 		defaultMessage: 'Connect',
 	},
 	chatNewMessage: {
-		id: 'octra.chat.new-message-toast',
+		id: 'Lumen.chat.new-message-toast',
 		defaultMessage: 'New chat message',
 	},
 	identityInGame: {
 		id: 'app.nav.identity-in-game',
-		defaultMessage: 'In game · {name}',
+		defaultMessage: 'In game Â· {name}',
 	},
 	identityInGameUnknown: {
 		id: 'app.nav.identity-in-game-unknown',
@@ -814,11 +767,7 @@ const messages = defineMessages({
 	},
 })
 
-function handleAdsConsentRequired(_required) {
-	// Ads are disabled in Octra App.
-}
-
-function applyForcedLocale() {
+function applyForcedPolishLocale() {
 	i18n.global.locale.value = DEFAULT_APP_LOCALE
 	document.documentElement.lang = 'pl'
 }
@@ -848,7 +797,7 @@ async function setupApp() {
 		pending_update_toast_for_version,
 	} = await getSettings()
 
-	applyForcedLocale()
+	applyForcedPolishLocale()
 	if (locale !== DEFAULT_APP_LOCALE || telemetry) {
 		const settings = await getSettings()
 		settings.locale = DEFAULT_APP_LOCALE
@@ -902,7 +851,7 @@ async function setupApp() {
 
 	get_opening_command().then(handleCommand)
 	fetchCredentials()
-	refreshOctraAccount()
+	refreshLumenAccount()
 	void refreshRunningInstancePresence()
 	displayedAppVersion.value = version
 	await nextTick()
@@ -1016,34 +965,7 @@ watch(stateInitialized, (ready) => {
 
 		queryClient.prefetchQuery({
 			queryKey: ['servers'],
-			queryFn: async () => {
-				const response = await tauriApiClient.archon.servers_v0.list({ limit: 100 })
-				const hasMedalServers = response.servers.some((s) => s.is_medal)
-				if (hasMedalServers) {
-					const subscriptions = await tauriApiClient.labrinth.billing_internal.getSubscriptions()
-					for (const server of response.servers) {
-						if (server.is_medal) {
-							const sub = subscriptions.find((s) => s.metadata?.id === server.server_id)
-							if (sub) {
-								server.medal_expires = new Date(
-									new Date(sub.created).getTime() + 5 * 86400000,
-								).toISOString()
-							}
-						}
-					}
-				}
-				return response
-			},
-			staleTime: 30_000,
-		})
-		queryClient.prefetchQuery({
-			queryKey: ['billing', 'subscriptions'],
-			queryFn: () => tauriApiClient.labrinth.billing_internal.getSubscriptions(),
-			staleTime: 30_000,
-		})
-		queryClient.prefetchQuery({
-			queryKey: ['billing', 'payments'],
-			queryFn: () => tauriApiClient.labrinth.billing_internal.getPayments(),
+			queryFn: () => tauriApiClient.archon.servers_v0.list({ limit: 100 }),
 			staleTime: 30_000,
 		})
 	}
@@ -1140,7 +1062,7 @@ const installToPlayModal = ref()
 const sharedInstanceInviteHandler = ref()
 const updateToPlayModal = ref()
 
-const modrinthLoginModal = ref()
+const lumenLoginModal = ref()
 const appSettingsModal = ref()
 provide(appSettingsModalOpenProfileKey, () => appSettingsModal.value?.showAccount())
 provide(appSettingsModalOpenSyncedOptionsKey, () => appSettingsModal.value?.showSyncedOptions())
@@ -1185,7 +1107,7 @@ watch(
 				if (appTheme.syncAcrossDevices && appTheme.preferred !== selectedTheme) {
 					appTheme.preferred = selectedTheme
 				}
-				applyForcedLocale()
+				applyForcedPolishLocale()
 
 				if (appTheme.syncAcrossDevices && settings.theme !== selectedTheme) {
 					settings.theme = selectedTheme
@@ -1275,30 +1197,30 @@ async function fetchCredentials() {
 }
 
 async function signIn(_flow = 'sign-in', _addAccount = false) {
-	openOctraAccount('login')
+	openLumenAccount('login')
 }
 
 async function requestSignIn(_flow = 'sign-in', addAccount = false) {
-	openOctraAccount(addAccount ? 'register' : 'login')
+	openLumenAccount(addAccount ? 'register' : 'login')
 }
 
-async function requestModrinthAuth(flow = 'sign-in', addAccount = false) {
+async function requestLumenAuth(flow = 'sign-in', addAccount = false) {
 	await signIn(flow, addAccount)
 	return !!credentials.value?.session
 }
 
-const identityOctraLabel = computed(() => {
-	if (octraSessionLoading.value) return formatMessage(messages.loadingProfile)
-	if (octraSession.value) return octraSession.value.username
-	return formatMessage(messages.identityOctraSignIn)
+const identityLumenLabel = computed(() => {
+	if (lumenSessionLoading.value) return formatMessage(messages.loadingProfile)
+	if (lumenSession.value) return lumenSession.value.username
+	return formatMessage(messages.identityLumenSignIn)
 })
 
-const identityOctraRowText = computed(() => {
-	if (octraSessionLoading.value) return formatMessage(messages.loadingProfile)
-	if (octraSession.value) {
-		return formatMessage(messages.identityOctraRow, { name: octraSession.value.username })
+const identityLumenRowText = computed(() => {
+	if (lumenSessionLoading.value) return formatMessage(messages.loadingProfile)
+	if (lumenSession.value) {
+		return formatMessage(messages.identityLumenRow, { name: lumenSession.value.username })
 	}
-	return formatMessage(messages.identityOctraSignIn)
+	return formatMessage(messages.identityLumenSignIn)
 })
 
 const identityAccountTooltip = computed(() => {
@@ -1306,7 +1228,7 @@ const identityAccountTooltip = computed(() => {
 		selectedMinecraftAccount.value?.profile?.name ?? formatMessage(messages.minecraftAccount)
 	return formatMessage(messages.identityTooltip, {
 		minecraft,
-		octra: identityOctraLabel.value,
+		Lumen: identityLumenLabel.value,
 	})
 })
 
@@ -1338,14 +1260,6 @@ async function fetchIntercomToken() {
 	return await response.json()
 }
 
-watch(
-	[showAd, adConsentAvailable],
-	async () => {
-		await hide_ads_window(true)
-	},
-	{ immediate: true },
-)
-
 onMounted(() => {
 	invoke('show_window')
 
@@ -1363,33 +1277,40 @@ onMounted(() => {
 })
 
 const accounts = ref(null)
-const octraAccountModal = ref(null)
-const octraSession = ref(null)
-const octraSessionLoading = ref(true)
+const lumenAccountModal = ref(null)
+const lumenSession = ref(null)
+const lumenSessionLoading = ref(true)
+const lumenAuthReady = ref(false)
 
-async function refreshOctraAccount() {
-	octraSessionLoading.value = true
+async function refreshLumenAccount() {
+	lumenSessionLoading.value = true
 	try {
-		octraSession.value = await octraAccountSession()
+		lumenSession.value = await LumenAccountSession()
 	} catch {
-		octraSession.value = null
+		lumenSession.value = null
 	} finally {
-		octraSessionLoading.value = false
+		lumenSessionLoading.value = false
+		lumenAuthReady.value = true
 	}
 }
 
-function openOctraAccount(mode = 'login') {
-	octraAccountModal.value?.show(mode)
+function openLumenAccount(mode = 'login') {
+	lumenAccountModal.value?.show(mode)
 }
 
-async function onOctraAccountSuccess() {
-	await refreshOctraAccount()
+async function onLumenAccountSuccess() {
+	await refreshLumenAccount()
 	await accounts.value?.refreshValues?.()
 }
 
-async function logoutOctraAccount() {
-	await octraAccountLogout().catch(handleError)
-	octraSession.value = null
+async function onLumenLoginRequiredSuccess() {
+	await refreshLumenAccount()
+	await accounts.value?.refreshValues?.()
+}
+
+async function logoutLumenAccount() {
+	await LumenAccountLogout().catch(handleError)
+	lumenSession.value = null
 	await accounts.value?.refreshValues?.()
 }
 provide('accountsCard', accounts)
@@ -1397,34 +1318,30 @@ provide('openFriendsSidebar', (tab) => {
 	sidebarExpandedPreference.value = true
 	void nextTick(() => {
 		const resolved =
-			tab === 'chat' || tab === 'friends'
-				? tab
-				: chatUnreadTotal.value > 0
-					? 'chat'
-					: null
+			tab === 'chat' || tab === 'friends' ? tab : chatUnreadTotal.value > 0 ? 'chat' : null
 		if (resolved) {
-			octraCommunityList.value?.setTab?.(resolved)
+			lumenCommunityList.value?.setTab?.(resolved)
 		}
 	})
 })
 
-provide('openOctraChatDm', async (userId) => {
+provide('openLumenChatDm', async (userId) => {
 	sidebarExpandedPreference.value = true
 	await nextTick()
-	await octraCommunityList.value?.openChatDm?.(userId)
+		await lumenCommunityList.value?.openChatDm?.(userId)
 })
 
 function openSocialSidebar() {
 	sidebarExpandedPreference.value = true
 	void nextTick(() => {
 		if (chatUnreadTotal.value > 0) {
-			octraCommunityList.value?.setTab?.('chat')
+			lumenCommunityList.value?.setTab?.('chat')
 		}
 	})
 }
 
 watch(
-	() => octraSession.value?.username ?? null,
+	() => lumenSession.value?.username ?? null,
 	(username) => {
 		chatUnreadReady.value = false
 		if (username) {
@@ -1503,7 +1420,7 @@ async function setMinecraftAccount(account) {
 async function addMicrosoftMinecraftAccount() {
 	accounts.value?.setLoginDisabled?.(true)
 	try {
-		const loggedIn = await loginMinecraft().catch(handleError)
+		const loggedIn = await loginMinecraft().catch(handleSevereError)
 		if (loggedIn) {
 			await set_default_user(loggedIn.profile.id).catch(handleError)
 			await refreshMinecraftAccounts()
@@ -1593,30 +1510,30 @@ const identityAccountMenuOptions = computed(() => {
 	options.push({ type: 'divider' })
 	options.push({
 		type: 'heading',
-		id: 'identity-octra-heading',
-		label: formatMessage(messages.identityOctraSection),
+		id: 'identity-Lumen-heading',
+		label: formatMessage(messages.identityLumenSection),
 	})
 
-	if (octraSession.value) {
+	if (lumenSession.value) {
 		options.push({
-			id: 'octra-logout',
-			label: formatMessage(messages.octraLogout),
+			id: 'Lumen-logout',
+			label: formatMessage(messages.LumenLogout),
 			icon: LogOutIcon,
 			tone: 'red',
-			action: () => logoutOctraAccount(),
+			action: () => logoutLumenAccount(),
 		})
 	} else {
 		options.push({
-			id: 'octra-login',
-			label: formatMessage(messages.octraLogin),
+			id: 'Lumen-login',
+			label: formatMessage(messages.LumenLogin),
 			icon: LogInIcon,
-			action: () => openOctraAccount('login'),
+			action: () => openLumenAccount('login'),
 		})
 		options.push({
-			id: 'octra-register',
-			label: formatMessage(messages.octraRegister),
+			id: 'Lumen-register',
+			label: formatMessage(messages.LumenRegister),
 			icon: UserPlusIcon,
-			action: () => openOctraAccount('register'),
+			action: () => openLumenAccount('register'),
 		})
 	}
 
@@ -1651,7 +1568,7 @@ async function markLiveNotificationRead(notification) {
 	try {
 		await tauriApiClient.labrinth.notifications_v2.markAsRead(notification.id)
 	} catch (error) {
-		if (error instanceof ModrinthApiError && error.statusCode === 404) {
+		if (error instanceof LumenApiError && error.statusCode === 404) {
 			console.warn(`notification ${notification.id} could not be marked as read`, error)
 			return
 		}
@@ -1825,16 +1742,16 @@ const updatePopupMessages = defineMessages({
 	},
 	meteredBody: {
 		id: 'app.update-popup.body.metered',
-		defaultMessage: `Octra App v{version} is available now! Since you're on a metered network, we didn't automatically download it.`,
+		defaultMessage: `Lumen App v{version} is available now! Since you're on a metered network, we didn't automatically download it.`,
 	},
 	downloadedBody: {
 		id: 'app.update-popup.body.download-complete',
-		defaultMessage: `Octra App v{version} has finished downloading. Reload to update now, or automatically when you close Octra App.`,
+		defaultMessage: `Lumen App v{version} has finished downloading. Reload to update now, or automatically when you close Lumen App.`,
 	},
 	linuxBody: {
 		id: 'app.update-popup.body.linux',
 		defaultMessage:
-			'Octra App v{version} is available. Use your package manager to update for the latest features and fixes!',
+			'Lumen App v{version} is available. Use your package manager to update for the latest features and fixes!',
 	},
 	reload: {
 		id: 'app.update-popup.reload',
@@ -2116,11 +2033,11 @@ async function installUpdate() {
 setAppUpdateActions({
 	download: downloadAvailableUpdate,
 	install: installUpdate,
-	changelog: () => openUrl('https://github.com/VasstOFC/octra-launcher/releases'),
+	changelog: () => openUrl('https://github.com/VasstOFC/Lumen-launcher/releases'),
 	check: manualCheckForUpdates,
 })
 
-async function openModrinthProjectLinkInApp(parsed) {
+async function openLumenProjectLinkInApp(parsed) {
 	const { slug, pathSuffix, url } = parsed
 	const loadToken = loading.begin()
 	try {
@@ -2132,7 +2049,7 @@ async function openModrinthProjectLinkInApp(parsed) {
 			hash: url.hash || undefined,
 		})
 	} catch (err) {
-		if (err instanceof ModrinthApiError && err.statusCode === 404) {
+		if (err instanceof LumenApiError && err.statusCode === 404) {
 			openUrl(url.href)
 		} else {
 			handleError(err)
@@ -2154,12 +2071,12 @@ function handleClick(e) {
 				!target.href.startsWith('https://tauri.localhost') &&
 				!target.href.startsWith('http://tauri.localhost')
 			) {
-				const userPath = parse_modrinth_user_link(target.href)
-				const parsed = parseModrinthLink(target.href)
+				const userPath = parse_Lumen_user_link(target.href)
+				const parsed = parseLumenLink(target.href)
 				if (userPath) {
 					void router.push(userPath)
 				} else if (target.target !== '_blank' && parsed) {
-					void openModrinthProjectLinkInApp(parsed)
+					void openLumenProjectLinkInApp(parsed)
 				} else {
 					openUrl(target.href)
 				}
@@ -2218,8 +2135,12 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	<SplashScreen v-if="!stateFailed" ref="splashScreen" data-tauri-drag-region />
 	<div id="teleports"></div>
 	<AccountSwitchOverlay :show="isSwitchingAccount" />
+	<LumenLoginRequired
+		v-if="stateInitialized && lumenAuthReady && !lumenSession"
+		@success="onLumenLoginRequiredSuccess"
+	/>
 	<div
-		v-if="stateInitialized"
+		v-if="stateInitialized && (!lumenAuthReady || lumenSession)"
 		class="app-grid-layout relative"
 		:class="{
 			'disable-advanced-rendering': !appTheme.advancedRendering,
@@ -2245,7 +2166,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 			<AppSettingsModal ref="appSettingsModal" />
 		</Suspense>
 		<Suspense>
-			<ModrinthAccountRequiredModal ref="modrinthLoginModal" :request-auth="requestModrinthAuth" />
+			<LumenAccountRequiredModal ref="lumenLoginModal" :request-auth="requestLumenAuth" />
 		</Suspense>
 		<CreationFlowModal
 			ref="installationModal"
@@ -2275,8 +2196,8 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 				class="library-dock__brand flex shrink-0 items-center"
 				:class="railExpanded ? 'gap-2.5 px-1 py-1' : 'justify-center py-1'"
 			>
-				<OctraMark v-if="!railExpanded" class="size-8 shrink-0" />
-				<OctraWordmark v-else class="h-5 w-auto min-w-0 pointer-events-none" />
+				<LumenMark v-if="!railExpanded" class="size-8 shrink-0" />
+				<LumenWordmark v-else class="h-5 w-auto min-w-0 pointer-events-none" />
 			</div>
 			<NavButton
 				v-tooltip.right="railExpanded ? undefined : formatMessage(messages.createNewInstance)"
@@ -2288,6 +2209,12 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 				<PlusIcon class="size-5 shrink-0" />
 			</NavButton>
 			<div class="flex min-h-0 flex-1 flex-col overflow-hidden">
+				<OnboardingChecklist
+					v-if="railExpanded"
+					@create-instance="installationModal?.show()"
+					@login-minecraft="addMicrosoftMinecraftAccount"
+					@login-Lumen="openLumenAccount('login')"
+				/>
 				<Suspense>
 					<QuickInstanceSwitcher :expanded="railExpanded" dock />
 				</Suspense>
@@ -2336,7 +2263,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 								class="flex min-w-0 items-center gap-1 text-[11px] leading-tight text-secondary"
 							>
 								<UserIcon class="size-3 shrink-0 opacity-80" />
-								<span class="min-w-0 truncate">{{ identityOctraRowText }}</span>
+								<span class="min-w-0 truncate">{{ identityLumenRowText }}</span>
 							</span>
 							<span
 								v-if="runningInstanceName !== null"
@@ -2416,7 +2343,8 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 					:is-primary="(r) => r.path === '/'"
 					:is-subpage="
 						() =>
-							(route.path.startsWith('/browse') || route.path.startsWith('/project')) && route.query.i
+							(route.path.startsWith('/browse') || route.path.startsWith('/project')) &&
+							route.query.i
 					"
 					expanded
 					class="stage-dest"
@@ -2433,20 +2361,13 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 				>
 					<GlobeIcon class="size-4 shrink-0" />
 				</NavButton>
-				<NavButton
-					to="/skins"
-					expanded
-					class="stage-dest"
-					:label="formatMessage(messages.locker)"
-				>
+				<NavButton to="/skins" expanded class="stage-dest" :label="formatMessage(messages.locker)">
 					<ShirtIcon class="size-4 shrink-0" />
 				</NavButton>
 				<NavButton
 					to="/browse/modpack"
 					:is-primary="() => route.path.startsWith('/browse') && !route.query.i && !route.query.sid"
-					:is-subpage="
-						(r) => r.path.startsWith('/project') && !r.query.i && !r.query.sid
-					"
+					:is-subpage="(r) => r.path.startsWith('/project') && !r.query.i && !r.query.sid"
 					expanded
 					class="stage-dest"
 					:label="formatMessage(commonMessages.discoverContentLabel)"
@@ -2494,7 +2415,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 		</div>
 	</div>
 	<div
-		v-if="stateInitialized"
+		v-if="stateInitialized && (!lumenAuthReady || lumenSession)"
 		class="app-contents flex"
 		:class="{
 			'rail-expanded': railExpanded,
@@ -2581,15 +2502,15 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 					class="flex flex-1 flex-col px-3 py-3"
 					:class="chatViewActive ? 'h-full min-h-0' : 'min-h-full'"
 				>
-					<OctraCommunityList
-						ref="octraCommunityList"
+					<LumenCommunityList
+						ref="lumenCommunityList"
 						class="min-h-0 flex-1"
-						:session="octraSession"
-						:loading-session="octraSessionLoading"
+						:session="lumenSession"
+						:loading-session="lumenSessionLoading"
 						:panel-active="sidebarVisible"
 						:unread-total="chatUnreadTotal"
-						@sign-in="openOctraAccount('login')"
-						@register="openOctraAccount('register')"
+						@sign-in="openLumenAccount('login')"
+						@register="openLumenAccount('register')"
 						@unread-changed="onChatUnreadChanged"
 						@chat-active="onCommunityChatActive"
 					/>
@@ -2610,12 +2531,12 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 			</button>
 			<template v-if="false">
 				<a
-					href="https://modrinth.plus?app"
+					href="https://Lumen.plus?app"
 					class="absolute bottom-[250px] w-full flex justify-center items-center gap-1 px-4 py-3 text-brand font-medium hover:underline z-10"
 					target="_blank"
 				>
 					<ArrowBigUpDashIcon class="text-2xl" />
-					{{ formatMessage(messages.upgradeToModrinthPlus) }}
+					{{ formatMessage(messages.upgradeToLumenPlus) }}
 				</a>
 				<PromotionWrapper />
 			</template>
@@ -2625,8 +2546,8 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 		<button
 			v-if="stateInitialized && showFriendsFab"
 			type="button"
-			class="friends-fab fixed z-40 flex size-12 items-center justify-center rounded-full border-none bg-button-bg text-secondary shadow-raised cursor-pointer hover:bg-button-bg hover:text-contrast hover:brightness-[--hover-brightness]"
-			:class="{ 'friends-fab--presence': !!octraSession }"
+			class="friends-fab fixed z-40 flex size-12 items-center justify-center rounded-full cursor-pointer"
+			:class="{ 'friends-fab--presence': !!lumenSession }"
 			:aria-label="formatMessage(messages.expandSidebar)"
 			:title="formatMessage(messages.expandSidebar)"
 			@click="openSocialSidebar"
@@ -2650,7 +2571,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 		@accounts-changed="refreshMinecraftAccounts"
 	/>
 	<AddOfflineAccountModal ref="addOfflineAccountModal" @added="onOfflineMinecraftAccountAdded" />
-	<OctraAccountModal ref="octraAccountModal" @success="onOctraAccountSuccess" />
+	<LumenAccountModal ref="lumenAccountModal" @success="onLumenAccountSuccess" />
 	<WhatsNewModal ref="whatsNewModal" :version="displayedAppVersion" />
 	<ContentInstallModal
 		ref="modInstallModal"
@@ -2705,13 +2626,13 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 <style lang="scss" scoped>
 .app-grid-layout,
 .app-contents {
-	--top-bar-height: 3rem;
-	--left-bar-width: 4rem;
+	--top-bar-height: 3.25rem;
+	--left-bar-width: 4.25rem;
 	--right-bar-width: 0px;
 	--shell-motion: 0.28s cubic-bezier(0.32, 0.72, 0, 1);
 
 	&.rail-expanded {
-		--left-bar-width: 17.5rem;
+		--left-bar-width: 18rem;
 	}
 }
 
@@ -2725,7 +2646,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	grid-template-columns: auto 1fr;
 	grid-template-rows: auto 1fr;
 	position: relative;
-	background-color: var(--color-raised-bg);
+	background-color: #0a0a0f;
 	height: 100vh;
 }
 
@@ -2735,8 +2656,10 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	z-index: 2;
 	width: var(--left-bar-width);
 	transition: width var(--shell-motion);
-	border-right: 1px solid var(--color-divider);
-	background: var(--surface-2);
+	background: rgba(10, 10, 15, 0.95);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+	border-right: 1px solid rgba(255, 255, 255, 0.06);
 
 	@media (prefers-reduced-motion: reduce) {
 		transition: none;
@@ -2766,10 +2689,10 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 
 .nav-rail-slot {
 	transition:
-		background-color var(--shell-motion),
-		color var(--shell-motion),
-		box-shadow var(--shell-motion),
-		transform var(--shell-motion);
+		background-color 0.2s ease,
+		color 0.2s ease,
+		box-shadow 0.2s ease,
+		transform 0.15s ease;
 
 	@media (prefers-reduced-motion: reduce) {
 		transition: none;
@@ -2777,8 +2700,8 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 }
 
 .nav-rail-slot--active {
-	background: var(--surface-3);
-	box-shadow: none;
+	background: rgba(0, 212, 255, 0.1) !important;
+	box-shadow: 0 0 12px rgba(0, 212, 255, 0.12) !important;
 
 	&::before {
 		content: '';
@@ -2789,7 +2712,8 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 		height: 1.25rem;
 		width: 2px;
 		border-radius: 1px;
-		background: var(--color-brand);
+		background: #00d4ff;
+		box-shadow: 0 0 8px rgba(0, 212, 255, 0.6);
 	}
 }
 
@@ -2800,7 +2724,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 .nav-rail-footer {
 	margin-top: 0.25rem;
 	padding-top: 0.35rem;
-	border-top: 1px solid color-mix(in srgb, var(--surface-5) 80%, transparent);
+	border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .nav-rail-account {
@@ -2809,15 +2733,13 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	background: transparent !important;
 	box-shadow: none !important;
 	color: var(--color-primary) !important;
-	transition:
-		background-color var(--shell-motion),
-		color var(--shell-motion),
-		box-shadow var(--shell-motion);
+	transition: all 0.2s ease;
 
 	&:hover,
 	&:focus-visible {
-		background: var(--color-button-bg) !important;
+		background: rgba(0, 212, 255, 0.08) !important;
 		color: var(--color-contrast) !important;
+		box-shadow: 0 0 10px rgba(0, 212, 255, 0.1);
 	}
 
 	&:not(.nav-rail-account--expanded) {
@@ -2850,9 +2772,11 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	padding-right: var(--window-controls-width, 0px);
 	position: relative;
 	z-index: 2;
-	background: var(--color-raised-bg);
-	border-bottom: 1px solid var(--surface-5);
-	box-shadow: none;
+	background: rgba(10, 10, 15, 0.9);
+	backdrop-filter: blur(16px);
+	-webkit-backdrop-filter: blur(16px);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+	box-shadow: 0 1px 0 rgba(0, 212, 255, 0.05);
 }
 
 [data-tauri-drag-region-exclude] {
@@ -2867,7 +2791,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	right: 0;
 	bottom: 0;
 	height: calc(100vh - var(--top-bar-height));
-	background-color: var(--surface-1);
+	background-color: #0a0a0f;
 	border-top-left-radius: var(--radius-lg);
 	overflow: hidden;
 }
@@ -2884,7 +2808,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	overflow-x: hidden;
 	scrollbar-gutter: stable;
 	position: relative;
-	background: var(--surface-1);
+	background: #0a0a0f;
 	transition: margin-right var(--shell-motion);
 
 	&.sidebar-open {
@@ -2905,10 +2829,14 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	overflow: hidden;
 	width: 300px;
 	height: 100%;
-	background: var(--surface-2);
+	background: rgba(15, 15, 25, 0.85);
+	backdrop-filter: blur(20px);
+	-webkit-backdrop-filter: blur(20px);
+	border-left: 1px solid rgba(255, 255, 255, 0.06);
 	transform: translateX(100%);
 	pointer-events: none;
 	transition: transform var(--shell-motion);
+	box-shadow: -10px 0 30px rgba(0, 0, 0, 0.3);
 
 	&.open {
 		transform: translateX(0);
@@ -2944,7 +2872,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	left: 0;
 	right: 0;
 	height: 5rem;
-	background: var(--brand-gradient-fade-out-color);
+	background: linear-gradient(to bottom, rgba(15, 15, 25, 0), rgba(10, 10, 15, 0.9));
 	pointer-events: none;
 }
 
@@ -2955,6 +2883,24 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 .friends-fab {
 	right: 1.25rem;
 	bottom: 1.25rem;
+	background: rgba(0, 212, 255, 0.18) !important;
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+	border: 1px solid rgba(0, 212, 255, 0.25) !important;
+	box-shadow: 0 0 20px rgba(0, 212, 255, 0.25) !important;
+	color: rgba(255, 255, 255, 0.8);
+	opacity: 1 !important;
+
+	&:hover {
+		background: rgba(0, 212, 255, 0.28) !important;
+		box-shadow: 0 0 30px rgba(0, 212, 255, 0.35) !important;
+		transform: scale(1.05);
+		color: #ffffff;
+	}
+
+	&:active {
+		transform: scale(0.95);
+	}
 }
 
 .friends-fab__badge {
@@ -2962,39 +2908,21 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 }
 
 .friends-fab--presence {
-	color: var(--color-brand);
-	box-shadow: inset 0 0 0 2px var(--color-brand);
+	color: #00d4ff !important;
+	box-shadow: inset 0 0 0 2px #00d4ff, 0 0 15px rgba(0, 212, 255, 0.3);
 }
 
 .friends-fab-enter-active,
 .friends-fab-leave-active {
 	transition:
-		opacity var(--shell-motion),
-		transform var(--shell-motion);
+		opacity 0.3s ease,
+		transform 0.3s ease;
 }
 
 .friends-fab-enter-from,
 .friends-fab-leave-to {
-	opacity: 0;
+	opacity: 0 !important;
 	transform: scale(0.82);
-}
-
-@media (prefers-reduced-motion: no-preference) {
-	.friends-fab {
-		transition:
-			transform 0.15s ease,
-			background-color var(--shell-motion),
-			color var(--shell-motion),
-			box-shadow var(--shell-motion);
-	}
-
-	.friends-fab:hover {
-		transform: scale(1.03);
-	}
-
-	.friends-fab:active {
-		transform: scale(0.97);
-	}
 }
 
 @media (prefers-reduced-motion: reduce) {

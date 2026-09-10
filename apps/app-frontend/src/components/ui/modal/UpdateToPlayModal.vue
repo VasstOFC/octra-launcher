@@ -18,21 +18,21 @@
 </template>
 
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
-import { DownloadIcon } from '@modrinth/assets'
+import type { Labrinth } from '@lumen/api-client'
+import { DownloadIcon } from '@lumen/assets'
 import {
 	commonMessages,
 	type ContentDiffItem,
 	ContentDiffModal,
 	defineMessages,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import dayjs from 'dayjs'
 import { computed, ref } from 'vue'
 
 import { get_project_many, get_version, get_version_many } from '@/helpers/cache.js'
 import { wait_for_install_job } from '@/helpers/install'
-import { update_managed_modrinth_version } from '@/helpers/instance'
+import { update_managed_Lumen_version } from '@/helpers/instance'
 import type { GameInstance } from '@/helpers/types'
 import { injectAppEvents } from '@/providers/app-events'
 import { injectServerInstall } from '@/providers/server-install'
@@ -254,7 +254,7 @@ async function handleUpdate() {
 	if (serverProjectId) startInstallingServer(serverProjectId)
 	try {
 		if (modpackVersionId.value && instance.value) {
-			const job = await update_managed_modrinth_version(instance.value.id, modpackVersionId.value)
+			const job = await update_managed_Lumen_version(instance.value.id, modpackVersionId.value)
 			await wait_for_install_job(appEvents, job.job_id)
 			await onUpdateComplete.value()
 		}
@@ -310,7 +310,7 @@ const messages = defineMessages({
 	externalWarningDescription: {
 		id: 'app.modal.update-to-play.server-modpack-unknown-files-description',
 		defaultMessage:
-			'This server modpack update contains files that aren’t published on Modrinth. We strongly recommend only installing files from sources you trust.',
+			'This server modpack update contains files that aren’t published on Lumen. We strongly recommend only installing files from sources you trust.',
 	},
 })
 

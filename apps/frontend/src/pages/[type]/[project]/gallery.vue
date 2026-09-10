@@ -236,7 +236,7 @@ import {
 	TrashIcon,
 	UploadIcon,
 	XIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import {
 	Button,
 	ConfirmModal,
@@ -249,7 +249,7 @@ import {
 	Textarea,
 	useFormatDateTime,
 	useFullImageContextMenu,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 
 import AiImageWarningModal from '~/components/ui/AiImageWarningModal.vue'
 import { fileDeclaresAi } from '~/helpers/c2pa'
@@ -280,7 +280,7 @@ const galleryViewer = useTemplateRef('galleryViewer')
 // SEO
 const title = computed(() => `${project.value.title} - Gallery`)
 const description = computed(
-	() => `View ${project.value.gallery?.length ?? 0} images of ${project.value.title} on Modrinth.`,
+	() => `View ${project.value.gallery?.length ?? 0} images of ${project.value.title} on Lumen.`,
 )
 
 useSeoMeta({

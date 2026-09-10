@@ -7,10 +7,10 @@ import {
 	nodeAuthState,
 	NuxtCircuitBreakerStorage,
 	type NuxtClientConfig,
-	NuxtModrinthClient,
+	NuxtLumenClient,
 	PanelVersionFeature,
 	VerboseLoggingFeature,
-} from '@modrinth/api-client'
+} from '@lumen/api-client'
 import type { Ref } from 'vue'
 
 import { useFeatureFlags } from '~/composables/featureFlags.ts'
@@ -19,7 +19,7 @@ import { withStagingArchonBaseUrl } from '~/helpers/archon.ts'
 import { readEnv } from '~/helpers/env.ts'
 import { getFrontendUserAgent, VISITOR_USER_AGENT_HEADER } from '~/helpers/user-agent.ts'
 
-export function createModrinthClient(
+export function createLumenClient(
 	auth: Ref<{ token: string | undefined }>,
 	config: {
 		apiBaseUrl: string
@@ -28,7 +28,7 @@ export function createModrinthClient(
 		commitHash: string
 		rateLimitKey?: string
 	},
-): NuxtModrinthClient {
+): NuxtLumenClient {
 	const flags = useFeatureFlags()
 	const visitorUserAgent = useVisitorUserAgent()
 	const optionalFeatures = [
@@ -45,7 +45,7 @@ export function createModrinthClient(
 		archonSentryCapture: () => flags.value.archonSentryCapture,
 		rateLimitKey: config.rateLimitKey || (() => readEnv('RATE_LIMIT_IGNORE_KEY')),
 		features: [
-			// for modrinth hosting
+			// for Lumen hosting
 			// is skipped for normal reqs
 			new NodeAuthFeature({
 				getAuth: () => nodeAuthState.getAuth?.() ?? null,
@@ -68,5 +68,5 @@ export function createModrinthClient(
 		],
 	}
 
-	return new NuxtModrinthClient(clientConfig)
+	return new NuxtLumenClient(clientConfig)
 }

@@ -1,8 +1,8 @@
-import { type Labrinth, ModrinthApiError } from '@modrinth/api-client'
+import { type Labrinth, LumenApiError } from '@lumen/api-client'
 import { SignJWT } from 'jose'
 
 import { readEnv } from '~/helpers/env'
-import { useServerModrinthClient } from '~/server/utils/api-client'
+import { useServerLumenClient } from '~/server/utils/api-client'
 
 type IntercomTokenResponse = {
 	token: string
@@ -71,7 +71,7 @@ export default defineEventHandler(async (event): Promise<IntercomTokenResponse> 
 		})
 	}
 
-	const client = useServerModrinthClient({
+	const client = useServerLumenClient({
 		event,
 		authToken,
 	})
@@ -90,7 +90,7 @@ export default defineEventHandler(async (event): Promise<IntercomTokenResponse> 
 			created: currentUser.created,
 		}
 	} catch (error) {
-		if (error instanceof ModrinthApiError && error.statusCode === 401) {
+		if (error instanceof LumenApiError && error.statusCode === 401) {
 			throw createError({
 				statusCode: 401,
 				message: 'Authentication required',

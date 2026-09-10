@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { DownloadIcon, SpinnerIcon } from '@modrinth/assets'
-import { Button, defineMessages, injectNotificationManager, useVIntl } from '@modrinth/ui'
+import { DownloadIcon, SpinnerIcon } from '@lumen/assets'
+import { Button, defineMessages, injectNotificationManager, useVIntl } from '@lumen/ui'
 import { onMounted, ref } from 'vue'
 
 import { toError } from '@/helpers/errors'

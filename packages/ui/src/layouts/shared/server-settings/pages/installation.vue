@@ -74,16 +74,16 @@
 </template>
 
 <script setup lang="ts">
-import type { Archon, Labrinth } from '@modrinth/api-client'
-import { RotateCounterClockwiseIcon } from '@modrinth/assets'
+import type { Archon, Labrinth } from '@lumen/api-client'
+import { RotateCounterClockwiseIcon } from '@lumen/assets'
 import {
 	commonMessages,
 	ConfirmModal,
 	defineMessages,
 	formatLoaderLabel,
 	type GameVersionOption,
-	injectModrinthClient,
-	injectModrinthServerContext,
+	injectLumenClient,
+	injectLumenServerContext,
 	injectNotificationManager,
 	injectServerSettings,
 	injectTags,
@@ -93,10 +93,10 @@ import {
 	ServerSetupModal,
 	UploadProgressModal,
 	useDebugLogger,
-	useModrinthServersConsole,
+	useLumenServersConsole,
 	useServerPermissions,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
 import { computed, ref, useTemplateRef, watch } from 'vue'
 
@@ -104,7 +104,7 @@ import { Button } from '#ui/components/base/buttons'
 import { injectFilePicker } from '#ui/providers/file-picker'
 
 const debug = useDebugLogger('LoaderPage')
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const {
 	beginInstallation,
 	busyReasons,
@@ -113,7 +113,7 @@ const {
 	server,
 	serverId,
 	worldId,
-} = injectModrinthServerContext()
+} = injectLumenServerContext()
 const { addNotification } = injectNotificationManager()
 const queryClient = useQueryClient()
 const serverDetailQueryKey = ['servers', 'detail', serverId] as const
@@ -122,7 +122,7 @@ const tags = injectTags()
 const { formatMessage } = useVIntl()
 const serverSettings = injectServerSettings()
 const filePicker = injectFilePicker()
-const modrinthServersConsole = useModrinthServersConsole()
+const LumenServersConsole = useLumenServersConsole()
 const { canSetup, canResetServer, permissionDeniedMessage } = useServerPermissions()
 
 const uploadProgressModal =
@@ -254,7 +254,7 @@ const modpack = computed(() => addonsQuery.data.value?.modpack ?? null)
 
 const modpackProjectId = computed(() => {
 	const spec = modpack.value?.spec
-	return spec?.platform === 'modrinth' ? spec.project_id : null
+	return spec?.platform === 'Lumen' ? spec.project_id : null
 })
 
 const modpackVersionsQuery = useQuery({
@@ -285,7 +285,7 @@ function showResetToOnboardingModal() {
 }
 
 const modLoaders = ['fabric', 'forge', 'quilt', 'neoforge']
-const loaderGameVersionPlaceholder = '${modrinth.gameVersion}'
+const loaderGameVersionPlaceholder = '${Lumen.gameVersion}'
 const minecraftServerDownloadsStartTime = Date.parse('2012-04-04T00:00:00Z')
 
 function toApiLoaderName(loader: string): string {
@@ -727,7 +727,7 @@ provideInstallationSettings({
 			}
 			return
 		}
-		if (modpack.value.spec.platform !== 'modrinth') return
+		if (modpack.value.spec.platform !== 'Lumen') return
 		debug(
 			'reinstallModpack: called, project:',
 			modpack.value.spec.project_id,
@@ -745,7 +745,7 @@ provideInstallationSettings({
 			await client.archon.content_v1.installContent(serverId, worldId.value!, {
 				content_variant: 'modpack',
 				spec: {
-					platform: 'modrinth',
+					platform: 'Lumen',
 					project_id: modpack.value.spec.project_id,
 					version_id: modpack.value.spec.version_id,
 				},
@@ -858,7 +858,7 @@ provideInstallationSettings({
 			await client.archon.content_v1.installContent(serverId, worldId.value!, {
 				content_variant: 'modpack',
 				spec: {
-					platform: 'modrinth',
+					platform: 'Lumen',
 					project_id: modpackProjectId.value,
 					version_id: version.id,
 				},
@@ -878,8 +878,7 @@ provideInstallationSettings({
 
 	updaterModalProps: computed(() => ({
 		isApp: serverSettings.isApp.value,
-		currentVersionId:
-			modpack.value?.spec.platform === 'modrinth' ? modpack.value.spec.version_id : '',
+		currentVersionId: modpack.value?.spec.platform === 'Lumen' ? modpack.value.spec.version_id : '',
 		projectIconUrl: modpack.value?.icon_url ?? undefined,
 		projectName:
 			modpack.value?.title ?? modpackProjectId.value ?? formatMessage(commonMessages.modpackLabel),
@@ -889,7 +888,7 @@ provideInstallationSettings({
 
 	isServer: true,
 	isApp: serverSettings.isApp.value,
-	showModpackVersionActions: computed(() => modpack.value?.spec.platform === 'modrinth'),
+	showModpackVersionActions: computed(() => modpack.value?.spec.platform === 'Lumen'),
 	isLocalFile: computed(() => modpack.value?.spec.platform === 'local_file'),
 
 	lockPlatform: false,
@@ -915,19 +914,19 @@ provideInstallationSettings({
 		const addons = await client.archon.content_v1.getAddons(serverId, worldId.value!)
 		const activeAddons = (addons.addons ?? []).filter((a) => !a.disabled)
 
-		const modrinthAddons = activeAddons.filter((a) => a.version?.id)
+		const LumenAddons = activeAddons.filter((a) => a.version?.id)
 		const customAddons = activeAddons.filter((a) => !a.version?.id)
 
 		const incompatibleItems: { kind: (typeof activeAddons)[number]['kind']; filename: string }[] =
 			customAddons.map((a) => ({ kind: a.kind, filename: a.filename }))
 
-		if (modrinthAddons.length > 0) {
-			const versionIds = modrinthAddons.map((a) => a.version!.id)
+		if (LumenAddons.length > 0) {
+			const versionIds = LumenAddons.map((a) => a.version!.id)
 			const versions = await client.labrinth.versions_v2.getVersions(versionIds)
 			const incompatibleVersionIds = new Set(
 				versions.filter((v) => !v.game_versions.includes(targetGameVersion)).map((v) => v.id),
 			)
-			for (const addon of modrinthAddons) {
+			for (const addon of LumenAddons) {
 				if (incompatibleVersionIds.has(addon.version!.id)) {
 					incompatibleItems.push({ kind: addon.kind, filename: addon.filename })
 				}
@@ -1017,7 +1016,7 @@ watch(
 function onReinstall(event?: unknown) {
 	if (resetServerDisabled.value && !installation.value) return
 	installationSettingsLayout.value?.cancelEditing()
-	modrinthServersConsole.clear()
+	LumenServersConsole.clear()
 	queryClient.removeQueries({ queryKey: ['servers', 'ws-state', serverId] })
 	if (!installation.value) {
 		const args = event as
@@ -1057,7 +1056,7 @@ async function confirmResetToOnboarding() {
 	try {
 		isResettingToOnboarding.value = true
 		await client.archon.servers_v1.resetToOnboarding(serverId, worldId.value)
-		modrinthServersConsole.clear()
+		LumenServersConsole.clear()
 		try {
 			await client.kyros.logs_v1.clear()
 		} catch (error) {

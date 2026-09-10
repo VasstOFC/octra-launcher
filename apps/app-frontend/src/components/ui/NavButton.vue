@@ -69,13 +69,17 @@ defineOptions({
 	border-radius: 9999px;
 	justify-content: center;
 	font-size: 1.5rem;
-	transition:
-		background-color var(--shell-motion, 0.28s cubic-bezier(0.32, 0.72, 0, 1)),
-		color var(--shell-motion, 0.28s cubic-bezier(0.32, 0.72, 0, 1)),
-		box-shadow var(--shell-motion, 0.28s cubic-bezier(0.32, 0.72, 0, 1)),
-		width var(--shell-motion, 0.28s cubic-bezier(0.32, 0.72, 0, 1)),
-		border-radius var(--shell-motion, 0.28s cubic-bezier(0.32, 0.72, 0, 1)),
-		transform var(--shell-motion, 0.28s cubic-bezier(0.32, 0.72, 0, 1));
+	transition: all 0.2s ease;
+
+	&:hover:not(.router-link-active):not(.disabled) {
+		transform: scale(1.08);
+		background: rgba(0, 212, 255, 0.08);
+		box-shadow: 0 0 15px rgba(0, 212, 255, 0.1);
+	}
+
+	&:active:not(.disabled) {
+		transform: scale(0.95);
+	}
 
 	&.expanded {
 		width: 100%;
@@ -100,20 +104,31 @@ defineOptions({
 }
 
 .router-link-active {
-	color: var(--color-brand);
-	background: var(--surface-3);
-	box-shadow: none;
+	color: #00d4ff !important;
+	background: rgba(0, 212, 255, 0.12) !important;
+	box-shadow: 0 0 15px rgba(0, 212, 255, 0.15);
+	animation: nav-glow 2s ease-in-out infinite;
+}
+
+@keyframes nav-glow {
+	0%, 100% {
+		box-shadow: 0 0 12px rgba(0, 212, 255, 0.12);
+	}
+	50% {
+		box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+	}
 }
 
 .router-link-active.expanded,
 button.expanded.router-link-active {
-	color: var(--color-brand);
-	background: var(--surface-3);
-	box-shadow: none;
+	color: #00d4ff !important;
+	background: rgba(0, 212, 255, 0.12) !important;
+	box-shadow: 0 0 15px rgba(0, 212, 255, 0.15);
 }
 
 .subpage-active {
-	@apply text-contrast bg-button-bg;
+	color: var(--color-contrast) !important;
+	background: var(--surface-3) !important;
 }
 
 .router-link-active::before {
@@ -125,9 +140,10 @@ button.expanded.router-link-active {
 	height: 1.25rem;
 	width: 2px;
 	border-radius: 1px;
-	background: var(--color-brand);
+	background: #00d4ff;
+	box-shadow: 0 0 8px rgba(0, 212, 255, 0.6), 0 0 16px rgba(0, 212, 255, 0.3);
 	opacity: 1;
-	transition: opacity var(--shell-motion, 0.28s cubic-bezier(0.32, 0.72, 0, 1));
+	transition: opacity 0.2s ease;
 }
 
 .router-link-active.expanded::before {
@@ -138,6 +154,14 @@ button.expanded.router-link-active {
 @media (prefers-reduced-motion: reduce) {
 	.router-link-active::before {
 		transition: none;
+	}
+
+	.nav-button:hover:not(.router-link-active):not(.disabled) {
+		transform: none;
+	}
+
+	.router-link-active {
+		animation: none;
 	}
 }
 </style>

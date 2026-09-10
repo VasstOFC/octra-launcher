@@ -152,27 +152,27 @@
 										>
 											<div class="flex w-full items-center justify-between gap-2">
 												<div class="flex items-center gap-2">
-													<component
-														:is="item.icon"
-														v-if="item.icon"
-														class="h-5 w-5"
-														:class="item.value === modelValue ? 'text-green' : 'text-primary'"
-													/>
-													<div class="flex flex-col gap-1.5">
-														<span
-															class="font-semibold leading-tight"
-															:class="item.value === modelValue ? 'text-green' : 'text-primary'"
-														>
-															{{ item.label }}
-														</span>
-														<span
-															v-if="item.subLabel"
-															class="text-sm"
-															:class="item.value === modelValue ? 'text-green' : 'text-secondary'"
-														>
-															{{ item.subLabel }}
-														</span>
-													</div>
+												<component
+													:is="item.icon"
+													v-if="item.icon"
+													class="h-5 w-5"
+													:class="item.value === modelValue ? 'text-brand' : 'text-primary'"
+												/>
+												<div class="flex flex-col gap-1.5">
+													<span
+														class="font-semibold leading-tight"
+														:class="item.value === modelValue ? 'text-brand' : 'text-primary'"
+													>
+														{{ item.label }}
+													</span>
+													<span
+														v-if="item.subLabel"
+														class="text-sm"
+														:class="item.value === modelValue ? 'text-brand' : 'text-secondary'"
+													>
+														{{ item.subLabel }}
+													</span>
+												</div>
 												</div>
 												<slot name="option-suffix" :item="item"></slot>
 											</div>
@@ -197,7 +197,7 @@
 <script setup lang="ts" generic="T">
 import 'overlayscrollbars/overlayscrollbars.css'
 
-import { ChevronLeftIcon, SearchIcon } from '@modrinth/assets'
+import { ChevronLeftIcon, SearchIcon } from '@lumen/assets'
 import { onClickOutside } from '@vueuse/core'
 import { OverlayScrollbars, type PartialOptions } from 'overlayscrollbars'
 import {
@@ -253,7 +253,7 @@ const OPTIONS_OVERLAY_SCROLLBARS_OPTIONS = Object.freeze<PartialOptions>({
 		y: 'scroll',
 	},
 	scrollbars: {
-		theme: 'os-theme-modrinth',
+		theme: 'os-theme-Lumen',
 		autoHide: 'leave',
 		autoHideSuspend: true,
 	},
@@ -464,7 +464,7 @@ function getOptionClasses(item: ComboboxOption<T> & { key: string }, _index: num
 		item.class,
 		{
 			'bg-surface-4 text-contrast hover:brightness-[115%] focus:brightness-[115%]': !isSelected,
-			'bg-highlight-green text-green hover:bg-highlight-green focus:bg-highlight-green': isSelected,
+			'bg-brand-highlight text-brand hover:bg-brand-highlight focus:bg-brand-highlight': isSelected,
 			'cursor-not-allowed opacity-50 pointer-events-none': item.disabled,
 		},
 	]
@@ -1105,7 +1105,7 @@ watch(
 </script>
 
 <style scoped>
-.combobox-options-scrollbar :deep(.os-theme-modrinth) {
+.combobox-options-scrollbar :deep(.os-theme-Lumen) {
 	--os-size: 8px;
 	--os-padding-perpendicular: 0px;
 	--os-padding-axis: 0px;

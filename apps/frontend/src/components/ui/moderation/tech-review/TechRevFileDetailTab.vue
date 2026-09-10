@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
+import type { Labrinth } from '@lumen/api-client'
 import {
 	CheckIcon,
 	ChevronDownIcon,
 	ChevronRightIcon,
 	CopyIcon,
 	LoaderCircleIcon,
-} from '@modrinth/assets'
-import { Collapsible, IconButton, injectNotificationManager, Toggle } from '@modrinth/ui'
-import { capitalizeString, highlightCodeLines } from '@modrinth/utils'
+} from '@lumen/assets'
+import { Collapsible, IconButton, injectNotificationManager, Toggle } from '@lumen/ui'
+import { capitalizeString, highlightCodeLines } from '@lumen/utils'
 import { computed, nextTick, reactive, ref, watch } from 'vue'
 
 import {

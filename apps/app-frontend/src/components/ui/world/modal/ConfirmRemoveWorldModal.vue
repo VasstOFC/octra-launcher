@@ -1,13 +1,6 @@
 <script setup lang="ts">
-import { TrashIcon, XIcon } from '@modrinth/assets'
-import {
-	Admonition,
-	Button,
-	commonMessages,
-	defineMessages,
-	NewModal,
-	useVIntl,
-} from '@modrinth/ui'
+import { TrashIcon, XIcon } from '@lumen/assets'
+import { Admonition, Button, commonMessages, defineMessages, NewModal, useVIntl } from '@lumen/ui'
 import { computed, ref } from 'vue'
 
 import type { World } from '@/helpers/worlds.ts'

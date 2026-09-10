@@ -1,4 +1,4 @@
-import type { Labrinth } from '@modrinth/api-client'
+import type { Labrinth } from '@lumen/api-client'
 import {
 	CheckIcon,
 	ClipboardCopyIcon,
@@ -7,9 +7,9 @@ import {
 	PlusIcon,
 	SpinnerIcon,
 	StopCircleIcon,
-} from '@modrinth/assets'
-import type { ButtonMenuOption, CardAction } from '@modrinth/ui'
-import { commonMessages, defineMessages, useDebugLogger, useVIntl } from '@modrinth/ui'
+} from '@lumen/assets'
+import type { ButtonMenuOption, CardAction } from '@lumen/ui'
+import { commonMessages, defineMessages, useDebugLogger, useVIntl } from '@lumen/ui'
 import { useQueryClient } from '@tanstack/vue-query'
 import { openUrl } from '@tauri-apps/plugin-opener'
 import type { ComputedRef, Ref } from 'vue'
@@ -278,7 +278,7 @@ export function useAppServerBrowse(options: UseAppServerBrowseOptions) {
 		contextMenuRef.value?.open(event, [
 			{
 				id: 'open_link',
-				label: formatMessage(commonMessages.openInModrinthButton),
+				label: formatMessage(commonMessages.openInLumenButton),
 				icon: GlobeIcon,
 				action: () => void openUrl(url),
 			},
@@ -320,5 +320,5 @@ export function useAppServerBrowse(options: UseAppServerBrowseOptions) {
 
 function getProjectUrl(item: Labrinth.Search.v3.ResultSearchProject) {
 	const projectType = item.project_types?.[0]
-	return `https://modrinth.com/${projectType ?? 'project'}/${item.slug ?? item.project_id}`
+	return `https://Lumen.com/${projectType ?? 'project'}/${item.slug ?? item.project_id}`
 }

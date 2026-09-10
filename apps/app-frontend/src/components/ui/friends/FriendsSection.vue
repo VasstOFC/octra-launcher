@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { MoreVerticalIcon, TrashIcon, UserIcon, XIcon } from '@modrinth/assets'
-import type { ButtonMenuOption } from '@modrinth/ui'
+import { MoreVerticalIcon, TrashIcon, UserIcon, XIcon } from '@lumen/assets'
+import type { ButtonMenuOption } from '@lumen/ui'
 import {
 	Accordion,
 	ContextMenu,
@@ -9,7 +9,7 @@ import {
 	TeleportOverflowMenu,
 	UserAvatar,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useTemplateRef } from 'vue'
 import { useRouter } from 'vue-router'
 

@@ -50,12 +50,12 @@ function muteAudioContext() {
 }
 
 function muteMediaElement(mediaElement) {
-	const muteCount = Number(mediaElement.dataset.modrinthMutedCount ?? 0)
+	const muteCount = Number(mediaElement.dataset.LumenMutedCount ?? 0)
 
 	if (!mediaElement.muted || mediaElement.volume !== 0) {
 		mediaElement.muted = true
 		mediaElement.volume = 0
-		mediaElement.dataset.modrinthMutedCount = String(muteCount + 1)
+		mediaElement.dataset.LumenMutedCount = String(muteCount + 1)
 	}
 
 	if (muteCount > 5) mediaElement.remove()
@@ -65,9 +65,9 @@ function muteMediaElements() {
 	document.querySelectorAll('video, audio').forEach((mediaElement) => {
 		muteMediaElement(mediaElement)
 
-		if (!mediaElement.dataset.modrinthMuted) {
+		if (!mediaElement.dataset.LumenMuted) {
 			mediaElement.addEventListener('volumechange', () => muteMediaElement(mediaElement))
-			mediaElement.dataset.modrinthMuted = 'true'
+			mediaElement.dataset.LumenMuted = 'true'
 		}
 	})
 }

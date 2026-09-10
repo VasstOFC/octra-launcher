@@ -30,13 +30,13 @@
 				</Button>
 			</div>
 		</div>
-		<CopyCode :text="`https://modrinth.gg?afl=${affiliate.id}`" />
+		<CopyCode :text="`https://Lumen.gg?afl=${affiliate.id}`" />
 	</div>
 </template>
 
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
-import { AffiliateIcon, XCircleIcon } from '@modrinth/assets'
+import type { Labrinth } from '@lumen/api-client'
+import { AffiliateIcon, XCircleIcon } from '@lumen/assets'
 
 import { Button } from '#ui/components/base/buttons'
 

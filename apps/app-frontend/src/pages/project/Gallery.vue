@@ -34,8 +34,8 @@
 </template>
 
 <script setup>
-import { CalendarIcon, ExternalIcon } from '@modrinth/assets'
-import { Button, Card, ImageViewerEditor, useFormatDateTime } from '@modrinth/ui'
+import { CalendarIcon, ExternalIcon } from '@lumen/assets'
+import { Button, Card, ImageViewerEditor, useFormatDateTime } from '@lumen/ui'
 import { openUrl } from '@tauri-apps/plugin-opener'
 import { computed, ref } from 'vue'
 

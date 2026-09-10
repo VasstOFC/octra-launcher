@@ -936,7 +936,7 @@ impl Process {
         clear_persisted_process(&state, persisted_process).await;
         let instance_full_path =
             state.directories.instances_dir().join(&instance_path);
-        crate::octra_skins::cleanup_ephemeral_client_skins(&instance_full_path)
+        crate::lumen_skins::cleanup_ephemeral_client_skins(&instance_full_path)
             .await;
         emit_process(
             &instance_id,
@@ -1002,7 +1002,7 @@ impl Process {
         let _ = state.discord_rpc.clear_to_default(true).await;
 
         let _ = state.friends_socket.update_status(None).await;
-        let _ = crate::octra_accounts::sync_presence().await;
+        let _ = crate::lumen_accounts::sync_presence().await;
 
         // If in tauri, window should show itself again after process exists if it was hidden
         #[cfg(feature = "tauri")]

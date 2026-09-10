@@ -26,11 +26,11 @@ async function readMrpackManifest(rawFile: RawFile): Promise<string> {
 	try {
 		const entries = await reader.getEntries()
 		const manifest = entries.find(
-			(entry) => !entry.directory && entry.filename === 'modrinth.index.json',
+			(entry) => !entry.directory && entry.filename === 'Lumen.index.json',
 		)
 
 		if (!manifest || manifest.directory) {
-			throw new Error('Missing modrinth.index.json')
+			throw new Error('Missing Lumen.index.json')
 		}
 
 		return await manifest.getData(new TextWriter())
@@ -81,7 +81,7 @@ export const inferVersionInfo = async function (
 
 	if (fileName.endsWith('.mrpack') || fileName.endsWith('.mrpack-primary')) {
 		const manifest = await readMrpackManifest(rawFile)
-		const result = loaderParsers['modrinth.index.json'](manifest)
+		const result = loaderParsers['Lumen.index.json'](manifest)
 		return fillMissingFromFilename(result, rawFile.name, project.title)
 	}
 

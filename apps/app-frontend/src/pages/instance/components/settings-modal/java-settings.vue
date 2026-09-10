@@ -7,7 +7,7 @@ import {
 	SearchIcon,
 	SpinnerIcon,
 	XCircleIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import {
 	Button,
 	defineMessages,
@@ -16,7 +16,7 @@ import {
 	Slider,
 	Toggle,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { open } from '@tauri-apps/plugin-dialog'
 import { computed, readonly, ref, watch } from 'vue'
 

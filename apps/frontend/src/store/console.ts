@@ -1,1 +1,1 @@
-export { useModrinthServersConsole } from '@modrinth/ui'
+export { useLumenServersConsole } from '@lumen/ui'

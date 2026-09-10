@@ -76,13 +76,7 @@
 </template>
 
 <script setup lang="ts">
-import {
-	LoaderCircleIcon,
-	PlayIcon,
-	SlashIcon,
-	StopCircleIcon,
-	UpdatedIcon,
-} from '@modrinth/assets'
+import { LoaderCircleIcon, PlayIcon, SlashIcon, StopCircleIcon, UpdatedIcon } from '@lumen/assets'
 import { computed } from 'vue'
 
 import type { ButtonMenuOption } from '#ui/components/base/buttons'

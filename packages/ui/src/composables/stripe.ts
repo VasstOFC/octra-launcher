@@ -1,10 +1,10 @@
-import type { Labrinth } from '@modrinth/api-client'
+import type { Labrinth } from '@lumen/api-client'
 import { loadStripe, type Stripe as StripeJs, type StripeElements } from '@stripe/stripe-js'
 import type { ContactOption } from '@stripe/stripe-js/dist/stripe-js/elements/address'
 import type Stripe from 'stripe'
 import { computed, type Ref, ref } from 'vue'
 
-import type { ServerBillingInterval } from '../components/billing/ModrinthServersPurchaseModal.vue'
+import type { ServerBillingInterval } from '../components/billing/LumenServersPurchaseModal.vue'
 import { getPriceForInterval } from '../utils/product-utils'
 import { useDebugLogger } from './debug-logger'
 

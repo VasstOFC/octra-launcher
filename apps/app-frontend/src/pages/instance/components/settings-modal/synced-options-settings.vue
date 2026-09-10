@@ -5,7 +5,7 @@ import {
 	RotateCounterClockwiseIcon,
 	SpinnerIcon,
 	XIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import {
 	Button,
 	commonMessages,
@@ -14,7 +14,7 @@ import {
 	NewModal,
 	Toggle,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
 import { computed, inject, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'

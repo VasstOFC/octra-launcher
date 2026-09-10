@@ -1,6 +1,6 @@
-import type { Labrinth } from '@modrinth/api-client'
-import { DownloadIcon, MoreVerticalIcon } from '@modrinth/assets'
-import type { GameVersionTag, Version } from '@modrinth/utils'
+import type { Labrinth } from '@lumen/api-client'
+import { DownloadIcon, MoreVerticalIcon } from '@lumen/assets'
+import type { GameVersionTag, Version } from '@lumen/utils'
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 
 import { ButtonLink, IconButton } from '../../components/base/buttons'

@@ -39,9 +39,9 @@
 </template>
 
 <script lang="ts" setup>
-import type { Labrinth } from '@modrinth/api-client'
-import { getLoaderIcon } from '@modrinth/assets'
-import { Chips, FormattedTag, TagItem } from '@modrinth/ui'
+import type { Labrinth } from '@lumen/api-client'
+import { getLoaderIcon } from '@lumen/assets'
+import { Chips, FormattedTag, TagItem } from '@lumen/ui'
 
 const selectedLoaders = defineModel<string[]>({ default: [] })
 

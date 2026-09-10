@@ -1,4 +1,4 @@
----
+﻿---
 name: tanstack-query
 description: Convert Vue server-state code to TanStack Query. Use for useQuery, useMutation, cache invalidation, optimistic updates, or replacement of useAsyncData and manual ref patterns.
 ---
@@ -16,7 +16,7 @@ Read [the TanStack Query standard](../../../standards/frontend/FETCHING_DATA.md)
 For queries:
 
 1. Replace manual fetch logic with `useQuery`.
-2. Get `api-client` with `injectModrinthClient()`.
+2. Get `api-client` with `injectLumenClient()`.
 3. Use a hierarchical query key with the resource, qualifier, and parameters.
 4. Use a computed query key for reactive parameters.
 5. Use a computed `enabled` option when the query depends on other data.

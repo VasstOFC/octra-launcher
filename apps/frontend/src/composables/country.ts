@@ -1,5 +1,5 @@
-import type { ISO3166 } from '@modrinth/api-client'
-import { useUserCountry as useInjectedUserCountry } from '@modrinth/ui'
+import type { ISO3166 } from '@lumen/api-client'
+import { useUserCountry as useInjectedUserCountry } from '@lumen/ui'
 
 import { countries, subdivisions } from '~/generated/state.json'
 

@@ -115,7 +115,7 @@
 						type="colored"
 						color="brand"
 						class="flex-1"
-						href="https://modrinth.com/app"
+						href="https://Lumen.com/app"
 						target="_blank"
 						rel="noopener noreferrer"
 					>
@@ -129,8 +129,8 @@
 </template>
 
 <script setup lang="ts">
-import { CheckIcon, DownloadIcon, XIcon } from '@modrinth/assets'
-import { Avatar, Button, ButtonLink, commonMessages, defineMessages, useVIntl } from '@modrinth/ui'
+import { CheckIcon, DownloadIcon, XIcon } from '@lumen/assets'
+import { Avatar, Button, ButtonLink, commonMessages, defineMessages, useVIntl } from '@lumen/ui'
 import { computed, nextTick, onUnmounted, ref } from 'vue'
 
 const { formatMessage } = useVIntl()
@@ -138,7 +138,7 @@ const { formatMessage } = useVIntl()
 const messages = defineMessages({
 	openingApp: {
 		id: 'modal.shared-instance.open-in-app.title',
-		defaultMessage: 'Opening Modrinth App',
+		defaultMessage: 'Opening Lumen App',
 	},
 	managedBy: {
 		id: 'modal.shared-instance.open-in-app.managed-by',
@@ -146,7 +146,7 @@ const messages = defineMessages({
 	},
 	whyUseApp: {
 		id: 'modal.shared-instance.open-in-app.why-use',
-		defaultMessage: 'Why use the Modrinth App',
+		defaultMessage: 'Why use the Lumen App',
 	},
 	benefitJoin: {
 		id: 'modal.shared-instance.open-in-app.benefit.join',
@@ -162,11 +162,11 @@ const messages = defineMessages({
 	},
 	openingAutomatically: {
 		id: 'modal.shared-instance.open-in-app.opening-automatically',
-		defaultMessage: 'The Modrinth App will open automatically...',
+		defaultMessage: 'The Lumen App will open automatically...',
 	},
 	getApp: {
 		id: 'modal.shared-instance.open-in-app.get-app',
-		defaultMessage: 'Get Modrinth App',
+		defaultMessage: 'Get Lumen App',
 	},
 })
 
@@ -197,7 +197,7 @@ let hideTimeout: ReturnType<typeof setTimeout> | null = null
 
 const circumference = 2 * Math.PI * 45
 const strokeDashoffset = computed(() => circumference * (1 - countdownProgress.value))
-const appLink = computed(() => `modrinth://share/${encodeURIComponent(instance.value.inviteId)}`)
+const appLink = computed(() => `Lumen://share/${encodeURIComponent(instance.value.inviteId)}`)
 
 function startCountdown() {
 	countdown.value = 3

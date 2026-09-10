@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { PlayIcon, PlusIcon } from '@modrinth/assets'
-import { ContextMenu, defineMessages, injectNotificationManager, useVIntl } from '@modrinth/ui'
+import { PlayIcon, PlusIcon } from '@lumen/assets'
+import { ContextMenu, defineMessages, injectNotificationManager, useVIntl } from '@lumen/ui'
 import dayjs from 'dayjs'
 import { computed, inject, onActivated, ref } from 'vue'
 

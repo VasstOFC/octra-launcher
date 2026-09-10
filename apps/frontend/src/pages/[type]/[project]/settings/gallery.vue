@@ -286,7 +286,7 @@ import {
 	TrashIcon,
 	UploadIcon,
 	XIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import {
 	Button,
 	ButtonLink,
@@ -301,7 +301,7 @@ import {
 	Textarea,
 	useFormatDateTime,
 	useFullImageContextMenu,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 
 import AiImageWarningModal from '~/components/ui/AiImageWarningModal.vue'
 import { fileDeclaresAi } from '~/helpers/c2pa'

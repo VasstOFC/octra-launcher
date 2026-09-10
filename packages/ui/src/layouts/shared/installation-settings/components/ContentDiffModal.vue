@@ -204,7 +204,7 @@ import {
 	RefreshCwIcon,
 	ReportIcon,
 	XIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import { type Component, computed, ref } from 'vue'
 
 import Admonition from '#ui/components/base/Admonition.vue'
@@ -412,7 +412,7 @@ const messages = defineMessages({
 	unknownFilesDescription: {
 		id: 'content.diff-modal.unknown-files-description',
 		defaultMessage:
-			'This update contains files that aren’t published on Modrinth. We strongly recommend only installing files from sources you trust.',
+			'This update contains files that aren’t published on Lumen. We strongly recommend only installing files from sources you trust.',
 	},
 	unknownProject: {
 		id: 'content.diff-modal.unknown-project',
@@ -420,7 +420,7 @@ const messages = defineMessages({
 	},
 	reviewedFiles: {
 		id: 'content.diff-modal.reviewed-files',
-		defaultMessage: "Files that aren't published to Modrinth aren't reviewed.",
+		defaultMessage: "Files that aren't published to Lumen aren't reviewed.",
 	},
 	installAnyway: {
 		id: 'content.diff-modal.install-anyway',

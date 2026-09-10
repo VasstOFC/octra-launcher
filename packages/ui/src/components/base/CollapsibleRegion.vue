@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { DropdownIcon } from '@modrinth/assets'
+import { DropdownIcon } from '@lumen/assets'
 
 import { Button } from '#ui/components/base/buttons'
 

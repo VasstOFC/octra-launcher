@@ -67,8 +67,8 @@
 </template>
 
 <script setup lang="ts">
-import { SpinnerIcon } from '@modrinth/assets'
-import { Button, defineMessages, Input, NewModal, useVIntl } from '@modrinth/ui'
+import { SpinnerIcon } from '@lumen/assets'
+import { Button, defineMessages, Input, NewModal, useVIntl } from '@lumen/ui'
 import { computed, inject, type Ref, ref } from 'vue'
 
 import steveImage from '@/assets/steve-look-up-left.webp'
@@ -91,16 +91,16 @@ const emit = defineEmits<{
 const messages = defineMessages({
 	header: {
 		id: 'minecraft-required.header',
-		defaultMessage: 'Log in to Octra',
+		defaultMessage: 'Log in to Lumen',
 	},
 	descriptionHeader: {
 		id: 'minecraft-required.description-header',
-		defaultMessage: 'Log in to Octra',
+		defaultMessage: 'Log in to Lumen',
 	},
 	description: {
 		id: 'minecraft-required.description',
 		defaultMessage:
-			'Sign in with Microsoft, or play offline with a nickname. Your skin is published to the Octra cloud so you and friends see it in-game — no extra mods required. SkinsRestorer remains optional for dedicated servers.',
+			'Sign in with Microsoft, or play offline with a nickname. Your skin is published to the Lumen cloud so you and friends see it in-game — no extra mods required. SkinsRestorer remains optional for dedicated servers.',
 	},
 	signIn: {
 		id: 'minecraft-required.sign-in',

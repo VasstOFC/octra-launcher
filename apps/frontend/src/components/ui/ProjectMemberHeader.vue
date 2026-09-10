@@ -19,16 +19,16 @@
 </template>
 
 <script setup lang="ts">
-import { CheckIcon, XIcon } from '@modrinth/assets'
-import { Button } from '@modrinth/ui'
+import { CheckIcon, XIcon } from '@lumen/assets'
+import { Button } from '@lumen/ui'
 import {
 	commonMessages,
 	defineMessages,
 	injectNotificationManager,
 	type MessageDescriptor,
 	useVIntl,
-} from '@modrinth/ui'
-import type { Project, User, Version } from '@modrinth/utils'
+} from '@lumen/ui'
+import type { Project, User, Version } from '@lumen/utils'
 import { computed } from 'vue'
 
 import { acceptTeamInvite, removeTeamMember } from '~/helpers/teams.js'

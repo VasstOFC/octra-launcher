@@ -77,15 +77,15 @@
 </template>
 
 <script setup lang="ts">
-import type { Archon } from '@modrinth/api-client'
-import { GlobeIcon, PackageIcon, RightArrowIcon, SpinnerIcon, UsersIcon } from '@modrinth/assets'
+import type { Archon } from '@lumen/api-client'
+import { GlobeIcon, PackageIcon, RightArrowIcon, SpinnerIcon, UsersIcon } from '@lumen/assets'
 import {
 	defineMessages,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	useServerPermissions,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useQueryClient } from '@tanstack/vue-query'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -93,9 +93,9 @@ import { useRoute, useRouter } from 'vue-router'
 import type { CreationFlowContextValue } from '#ui/components'
 import { CreationFlowModal } from '#ui/components'
 import { Button } from '#ui/components/base/buttons'
-import { injectModrinthServerContext } from '#ui/providers'
+import { injectLumenServerContext } from '#ui/providers'
 
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const { addNotification } = injectNotificationManager()
 const { formatMessage } = useVIntl()
 const { canSetup, permissionDeniedMessage } = useServerPermissions()
@@ -103,7 +103,7 @@ const { canSetup, permissionDeniedMessage } = useServerPermissions()
 const messages = defineMessages({
 	welcomeTitle: {
 		id: 'servers.setup.onboarding.welcome.title',
-		defaultMessage: 'Welcome to Modrinth Hosting',
+		defaultMessage: 'Welcome to Lumen Hosting',
 	},
 	welcomeDescription: {
 		id: 'servers.setup.onboarding.welcome.description',
@@ -144,7 +144,7 @@ const messages = defineMessages({
 	chooseWhatToPlayDescription: {
 		id: 'servers.setup.onboarding.step.choose.description',
 		defaultMessage:
-			'Pick your favorite modpack from Modrinth, or choose a loader and add the mods you want.',
+			'Pick your favorite modpack from Lumen, or choose a loader and add the mods you want.',
 	},
 	configureWorldTitle: {
 		id: 'servers.setup.onboarding.step.configure-world.title',
@@ -178,7 +178,7 @@ async function getProjectVersions(projectId: string) {
 	const versions = await client.labrinth.versions_v3.getProjectVersions(projectId)
 	return versions.map((v) => ({ id: v.id }))
 }
-const { serverId, worldId, server } = injectModrinthServerContext()
+const { serverId, worldId, server } = injectLumenServerContext()
 const route = useRoute()
 const router = useRouter()
 const queryClient = useQueryClient()
@@ -330,7 +330,7 @@ const onCreate = async (config: CreationFlowContextValue) => {
 		request = {
 			content_variant: 'modpack',
 			spec: {
-				platform: 'modrinth',
+				platform: 'Lumen',
 				project_id: config.modpackSelection.value.projectId,
 				version_id: config.modpackSelection.value.versionId,
 			},

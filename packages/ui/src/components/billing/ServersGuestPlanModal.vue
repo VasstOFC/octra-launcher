@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
-import { ChevronRightIcon, ExternalIcon, XIcon } from '@modrinth/assets'
+import type { Labrinth } from '@lumen/api-client'
+import { ChevronRightIcon, ExternalIcon, XIcon } from '@lumen/assets'
 import { computed, ref, useTemplateRef } from 'vue'
 
 import { Button, IconButton } from '#ui/components/base/buttons'
 
 import NewModal from '../modal/NewModal.vue'
-import type { ServerBillingInterval } from './ModrinthServersPurchaseModal.vue'
+import type { ServerBillingInterval } from './LumenServersPurchaseModal.vue'
 import PlanSelector from './ServersPurchase0Plan.vue'
 
 const props = withDefaults(
@@ -152,7 +152,7 @@ defineExpose({
 					<div class="mx-auto flex max-w-xl flex-col items-center gap-4 text-center">
 						<div class="flex flex-col gap-2">
 							<div class="font-semibold text-contrast">Sign in to continue your purchase</div>
-							<div class="">You need a Modrinth account to add your billing details.</div>
+							<div class="">You need a Lumen account to add your billing details.</div>
 						</div>
 						<Button type="colored" color="brand" class="mt-2" @click="continueToAuth">
 							Sign in or create an account

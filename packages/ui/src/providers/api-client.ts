@@ -1,8 +1,8 @@
-import type { AbstractModrinthClient } from '@modrinth/api-client'
+import type { AbstractLumenClient } from '@lumen/api-client'
 
 import { createContext } from './create-context'
 
-export const [injectModrinthClient, provideModrinthClient] = createContext<AbstractModrinthClient>(
+export const [injectLumenClient, provideLumenClient] = createContext<AbstractLumenClient>(
 	'root',
-	'modrinthClient',
+	'LumenClient',
 )

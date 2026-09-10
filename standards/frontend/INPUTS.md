@@ -1,4 +1,4 @@
-# Inputs
+﻿# Inputs
 
 Use the input components in `packages/ui/src/components/base/inputs/`. Use them for
 text, numbers, and dates. These components have the same sizes, focus style,
@@ -22,11 +22,11 @@ into application code.
 Use a dedicated component for each other type of control. Do not use `Input` instead
 of a select, checkbox, radio group, toggle, or file picker.
 
-Import the public input components from `@modrinth/ui`. In `packages/ui`, import them
+Import the public input components from `@lumen/ui`. In `packages/ui`, import them
 from `#ui/components/base/inputs`:
 
 ```ts
-import { DateInput, DatePicker, Input, Textarea } from '@modrinth/ui'
+import { DateInput, DatePicker, Input, Textarea } from '@lumen/ui'
 ```
 
 ## Labels and field descriptions

@@ -283,17 +283,17 @@
 </template>
 
 <script setup>
-import { SaveIcon, TriangleAlertIcon } from '@modrinth/assets'
-import { commonLinkDomains, isCommonUrl, isDiscordUrl, isLinkShortener } from '@modrinth/moderation'
+import { SaveIcon, TriangleAlertIcon } from '@lumen/assets'
+import { commonLinkDomains, isCommonUrl, isDiscordUrl, isLinkShortener } from '@lumen/moderation'
 import {
 	Button,
 	Combobox,
 	commonProjectSettingsMessages,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	injectProjectPageContext,
 	Input,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 
 const tags = useGeneratedState()
 
@@ -311,7 +311,7 @@ const {
 	patchProject,
 	invalidate,
 } = injectProjectPageContext()
-const { labrinth } = injectModrinthClient()
+const { labrinth } = injectLumenClient()
 const { addNotification } = injectNotificationManager()
 
 useProjectSettingsHeadTitle(commonProjectSettingsMessages.links)

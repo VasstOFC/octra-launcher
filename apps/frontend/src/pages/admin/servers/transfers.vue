@@ -108,27 +108,27 @@
 </template>
 
 <script setup lang="ts">
-import type { Archon } from '@modrinth/api-client'
-import { PlusIcon, XCircleIcon } from '@modrinth/assets'
+import type { Archon } from '@lumen/api-client'
+import { PlusIcon, XCircleIcon } from '@lumen/assets'
 import {
 	Avatar,
 	Button,
 	ConfirmModal,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	Pagination,
 	TagItem,
 	useFormatDateTime,
 	useRelativeTime,
-} from '@modrinth/ui'
-import type { User } from '@modrinth/utils'
+} from '@lumen/ui'
+import type { User } from '@lumen/utils'
 import dayjs from 'dayjs'
 import { computed, ref } from 'vue'
 
 import TransferModal from '~/components/ui/admin/TransferModal.vue'
 
 const { addNotification } = injectNotificationManager()
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const formatRelativeTime = useRelativeTime()
 const formatDateTime = useFormatDateTime({
 	timeStyle: 'short',

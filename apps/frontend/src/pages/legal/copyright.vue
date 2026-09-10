@@ -44,7 +44,7 @@
 			&emsp;Suite 304 #3133<br />
 			&emsp;Wilmington, DE 19801<br />
 			&emsp;Phone: +1 (201) 431-5015<br />
-			&emsp;<a href="mailto:dmca@modrinth.com">dmca@modrinth.com</a><br />
+			&emsp;<a href="mailto:dmca@Lumen.com">dmca@Lumen.com</a><br />
 		</p>
 		<p>
 			If you fail to comply with all of the requirements of Section 512(c)(3) of the DMCA, your DMCA
@@ -106,10 +106,10 @@
 
 <script setup>
 const description =
-	'The Copyright Policy of Modrinth, an open source modding platform focused on Minecraft.'
+	'The Copyright Policy of Lumen, an open source modding platform focused on Minecraft.'
 
 useSeoMeta({
-	title: 'Copyright Policy - Modrinth',
+	title: 'Copyright Policy - Lumen',
 	description,
 	ogTitle: 'Copyright Policy',
 	ogDescription: description,

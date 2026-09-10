@@ -351,7 +351,7 @@ export function createLoaderParsers(
 			}
 		},
 		// Modpacks
-		'modrinth.index.json': (file: string): InferredVersionInfo => {
+		'Lumen.index.json': (file: string): InferredVersionInfo => {
 			const metadata = JSON.parse(file) as any
 
 			const loaders = []

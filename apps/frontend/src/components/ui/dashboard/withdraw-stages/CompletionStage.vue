@@ -131,7 +131,7 @@ import {
 	useFormatDateTime,
 	useFormatMoney,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { computed, onMounted, ref } from 'vue'
 import ConfettiExplosion from 'vue-confetti-explosion'
 

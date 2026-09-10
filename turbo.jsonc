@@ -8,10 +8,10 @@
 		"packages/app-lib/.env"
 	],
 	"globalEnv": [
-		"MODRINTH_URL",
-		"MODRINTH_API_BASE_URL",
+		"Lumen_URL",
+		"Lumen_API_BASE_URL",
 		"SHARED_INSTANCES_API_BASE_URL",
-		"MODRINTH_ARCHON_BASE_URL",
+		"Lumen_ARCHON_BASE_URL",
 		"VITE_STRIPE_PUBLISHABLE_KEY"
 	],
 	"tasks": {

@@ -1,4 +1,4 @@
-import { Checkbox, Combobox, Input, MarkdownEditor, Toggle } from '@modrinth/ui'
+import { Checkbox, Combobox, Input, MarkdownEditor, Toggle } from '@lumen/ui'
 import { markRaw } from 'vue'
 
 import { withAutoProps, withChildren } from './builder'

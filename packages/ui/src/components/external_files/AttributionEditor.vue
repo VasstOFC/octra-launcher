@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
+import type { Labrinth } from '@lumen/api-client'
 import {
 	CheckIcon,
 	InfoIcon,
@@ -9,8 +9,8 @@ import {
 	TrashIcon,
 	UploadIcon,
 	XIcon,
-} from '@modrinth/assets'
-import { builtinLicenses } from '@modrinth/utils'
+} from '@lumen/assets'
+import { builtinLicenses } from '@lumen/utils'
 import { useMutation, useQueryClient } from '@tanstack/vue-query'
 import { computed, ref, watch } from 'vue'
 
@@ -20,7 +20,7 @@ import { Button, IconButton } from '#ui/components/base/buttons'
 import { commonMessages } from '#ui/utils'
 
 import { defineMessage, defineMessages, useVIntl } from '../../composables/i18n'
-import { injectModrinthClient } from '../../providers'
+import { injectLumenClient } from '../../providers'
 import {
 	attributionLinkToWork,
 	attributionProofValidationError,
@@ -47,7 +47,7 @@ const emit = defineEmits<{
 }>()
 
 const { formatMessage } = useVIntl()
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const queryClient = useQueryClient()
 
 const initialAttribution = computed<Labrinth.Attribution.Internal.AttributionResolution | null>(
@@ -91,7 +91,7 @@ const messages = defineMessages({
 	},
 	proofWarningTitle: {
 		id: 'external-files.permissions-card.editor.proof-warning.title',
-		defaultMessage: 'Modrinth staff may verify submitted proof',
+		defaultMessage: 'Lumen staff may verify submitted proof',
 	},
 	proofWarningBody: {
 		id: 'external-files.permissions-card.editor.proof-warning.body',
@@ -142,9 +142,9 @@ const messages = defineMessages({
 		id: 'external-files.permissions-card.editor.proof-image-remove',
 		defaultMessage: 'Remove image',
 	},
-	modrinthLinkToWork: {
-		id: 'external-files.permissions-card.editor.modrinth-link-to-work',
-		defaultMessage: `This appears to be a Modrinth link. If this content is available on Modrinth, your pack was likely exported incorrectly. If you downloaded it from another site, try downloading the Modrinth version instead; sometimes they are not identical files.`,
+	LumenLinkToWork: {
+		id: 'external-files.permissions-card.editor.Lumen-link-to-work',
+		defaultMessage: `This appears to be a Lumen link. If this content is available on Lumen, your pack was likely exported incorrectly. If you downloaded it from another site, try downloading the Lumen version instead; sometimes they are not identical files.`,
 	},
 	arrLabel: {
 		id: 'external-files.permissions-card.editor.all-rights-reserved',
@@ -483,12 +483,12 @@ function cancelEditing() {
 			/>
 			<span
 				v-if="
-					linkInput.startsWith('https://modrinth.com/') ||
-					linkInput.startsWith('https://www.modrinth.com/')
+					linkInput.startsWith('https://Lumen.com/') ||
+					linkInput.startsWith('https://www.Lumen.com/')
 				"
 				class="flex text-orange gap-2 font-medium mt-2"
 			>
-				<IssuesIcon class="shrink-0 mt-0.5" /> {{ formatMessage(messages.modrinthLinkToWork) }}
+				<IssuesIcon class="shrink-0 mt-0.5" /> {{ formatMessage(messages.LumenLinkToWork) }}
 			</span>
 		</div>
 		<div v-if="permissionReasonFields.includes('license_id')" class="flex flex-col gap-2">

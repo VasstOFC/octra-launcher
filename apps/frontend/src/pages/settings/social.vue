@@ -17,21 +17,21 @@
 </template>
 
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
+import type { Labrinth } from '@lumen/api-client'
 import {
 	AccountSocialSettings,
 	commonSettingsMessages,
-	injectModrinthClient,
+	injectLumenClient,
 	UnsavedChangesPopup,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 
 definePageMeta({
 	middleware: 'auth',
 })
 
 const auth = await useAuth()
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const { formatMessage } = useVIntl()
 const socialSettings = ref<InstanceType<typeof AccountSocialSettings> | null>(null)
 const emptySocialState = {
@@ -53,6 +53,6 @@ function unblockUser(userId: string): Promise<void> {
 }
 
 useHead({
-	title: () => `${formatMessage(commonSettingsMessages.social)} - Modrinth`,
+	title: () => `${formatMessage(commonSettingsMessages.social)} - Lumen`,
 })
 </script>

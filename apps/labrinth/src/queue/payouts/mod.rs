@@ -19,7 +19,7 @@ use chrono::{DateTime, Datelike, Duration, NaiveTime, TimeZone, Utc};
 use dashmap::DashMap;
 use eyre::Result;
 use futures::TryStreamExt;
-use modrinth_util::decimal::Decimal2dp;
+use lumen_util::decimal::Decimal2dp;
 use muralpay::FiatAndRailCode;
 use reqwest::Method;
 use rust_decimal::Decimal;

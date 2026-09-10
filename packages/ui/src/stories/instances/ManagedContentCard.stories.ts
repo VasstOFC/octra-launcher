@@ -35,9 +35,9 @@ const modpackCard = {
 const serverCard = {
 	kind: 'server',
 	manager: {
-		name: 'Modrinth SMP',
+		name: 'Lumen SMP',
 		iconUrl: serverIcon,
-		link: '/server/modrinth-smp',
+		link: '/server/Lumen-smp',
 	},
 	summary: figmaSummary,
 	syncedAt: fiveMinutesAgo,
@@ -131,7 +131,7 @@ export const MissingManagerIcon: Story = {
 		data: {
 			...serverCard,
 			manager: {
-				name: 'Modrinth SMP',
+				name: 'Lumen SMP',
 			},
 		},
 	},

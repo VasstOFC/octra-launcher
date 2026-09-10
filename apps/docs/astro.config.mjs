@@ -25,9 +25,9 @@ export default defineConfig({
 				replacesTitle: true,
 			},
 			customCss: [
-				'@modrinth/assets/styles/variables.scss',
-				'@modrinth/assets/styles/inter.scss',
-				'./src/styles/modrinth.css',
+				'@lumen/assets/styles/variables.scss',
+				'@lumen/assets/styles/inter.scss',
+				'./src/styles/lumen.css',
 			],
 			plugins: [
 				// Generate the OpenAPI documentation pages.

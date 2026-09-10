@@ -1005,9 +1005,8 @@ async fn _get_server_status_new(
         ServerDescription::Plain(text) => {
             serde_json::value::to_raw_value(&text).ok()
         }
-        ServerDescription::Object { text } => {
-            // TODO: `text` always seems to be empty?
-            RawValue::from_string(text.clone()).ok()
+        ServerDescription::Component(value) => {
+            RawValue::from_string(value.to_string()).ok()
         }
     };
 

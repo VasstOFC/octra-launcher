@@ -1,9 +1,9 @@
-import type { Labrinth } from '@modrinth/api-client'
+import type { Labrinth } from '@lumen/api-client'
 import { type Ref, ref, watch } from 'vue'
 
 import { createContext } from '.'
 
-const PURCHASE_INTENT_STORAGE_KEY = 'modrinth:servers-purchase-intent'
+const PURCHASE_INTENT_STORAGE_KEY = 'Lumen:servers-purchase-intent'
 
 export type ServerBillingInterval = 'monthly' | 'quarterly' | 'yearly'
 

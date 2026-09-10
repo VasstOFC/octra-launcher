@@ -344,7 +344,7 @@ import {
 	TrashIcon,
 	TriangleAlertIcon,
 	XIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import {
 	Button,
 	ButtonLink,
@@ -354,7 +354,7 @@ import {
 	defineMessages,
 	FloatingActionBar,
 	IconButton,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	Input,
 	IntlFormatted,
@@ -362,8 +362,8 @@ import {
 	ProjectStatusBadge,
 	Table,
 	useVIntl,
-} from '@modrinth/ui'
-import { formatProjectType } from '@modrinth/utils'
+} from '@lumen/ui'
+import { formatProjectType } from '@lumen/utils'
 import { useQuery } from '@tanstack/vue-query'
 
 import ModalCreation from '~/components/ui/create/ProjectCreateModal.vue'
@@ -373,7 +373,7 @@ import { injectOrganizationContext } from '~/providers/organization-context.ts'
 
 const EDIT_DETAILS = 1 << 2
 
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const { addNotification } = injectNotificationManager()
 const { formatMessage } = useVIntl()
 

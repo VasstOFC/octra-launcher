@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-import OctraMark from '@/components/OctraMark.vue'
+import LumenMark from '@/components/LumenMark.vue'
 import ProgressBar from '@/components/ProgressBar.vue'
 import { useInstaller } from '@/composables/use-installer'
 
@@ -55,26 +55,26 @@ function goNext() {
 
 		<header class="installer-shell__header" data-tauri-drag-region>
 			<div class="installer-shell__brand">
-				<OctraMark class="installer-shell__logo" />
+				<LumenMark class="installer-shell__logo" />
 				<div>
-					<p class="installer-shell__title">Octra Setup</p>
-					<p class="installer-shell__subtitle">Instalator Octra App</p>
+					<p class="installer-shell__title">Lumen Setup</p>
+					<p class="installer-shell__subtitle">Instalator Lumen App</p>
 				</div>
 			</div>
 		</header>
 
 		<main class="installer-shell__content">
 			<section v-if="step === 'welcome'">
-				<h1 class="installer-step-title">Witaj w Octra App</h1>
+				<h1 class="installer-step-title">Witaj w Lumen App</h1>
 				<p class="installer-step-desc">
-					Ten kreator zainstaluje Octra App na Twoim komputerze. Możesz wybrać folder
+					Ten kreator zainstaluje Lumen App na Twoim komputerze. Możesz wybrać folder
 					instalacji, utworzyć skrót na pulpicie i od razu uruchomić aplikację po zakończeniu.
 				</p>
 			</section>
 
 			<section v-else-if="step === 'destination'">
 				<h1 class="installer-step-title">Folder instalacji</h1>
-				<p class="installer-step-desc">Wybierz, gdzie ma zostać zainstalowana Octra App.</p>
+				<p class="installer-step-desc">Wybierz, gdzie ma zostać zainstalowana Lumen App.</p>
 				<div class="installer-field">
 					<label for="install-dir">Lokalizacja</label>
 					<div class="installer-field__row">
@@ -95,7 +95,7 @@ function goNext() {
 				</label>
 				<label class="installer-option">
 					<input v-model="launchAfter" type="checkbox" />
-					Uruchom Octra App po instalacji
+					Uruchom Lumen App po instalacji
 				</label>
 				<p v-if="error" class="installer-error">{{ error }}</p>
 			</section>
@@ -110,7 +110,7 @@ function goNext() {
 			<section v-else>
 				<h1 class="installer-step-title">Gotowe!</h1>
 				<p class="installer-step-desc">
-					Octra App została zainstalowana w
+					Lumen App została zainstalowana w
 					<strong class="text-brand">{{ installDir }}</strong
 					>.
 				</p>

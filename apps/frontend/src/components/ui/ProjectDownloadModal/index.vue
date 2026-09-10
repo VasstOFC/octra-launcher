@@ -14,7 +14,7 @@
 		</template>
 		<template #default>
 			<div v-if="project" class="mx-auto flex w-full flex-col gap-4">
-				<InstallWithModrinthApp :project="project" />
+				<InstallWithLumenApp :project="project" />
 				<DownloadProject
 					:project="project"
 					:versions="versions"
@@ -99,15 +99,15 @@
 </template>
 
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
-import { DownloadIcon, SpinnerIcon } from '@modrinth/assets'
+import type { Labrinth } from '@lumen/api-client'
+import { DownloadIcon, SpinnerIcon } from '@lumen/assets'
 import {
 	Avatar,
 	Button,
 	type ButtonMenuOption,
 	type CdnDownloadReason,
 	defineMessages,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	NewModal,
 	ServersPromo,
@@ -115,8 +115,8 @@ import {
 	truncatedTooltip,
 	useDebugLogger,
 	useVIntl,
-} from '@modrinth/ui'
-import type { DisplayProjectType } from '@modrinth/utils'
+} from '@lumen/ui'
+import type { DisplayProjectType } from '@lumen/utils'
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
 import dayjs from 'dayjs'
 import JSZip from 'jszip'
@@ -129,7 +129,7 @@ import { STALE_TIME, STALE_TIME_LONG } from '~/composables/queries/project'
 import { provideDownloadModalProvider } from './download-modal-provider'
 import DownloadDependencies from './DownloadDependencies.vue'
 import DownloadProject from './DownloadProject.vue'
-import InstallWithModrinthApp from './InstallWithModrinthApp.vue'
+import InstallWithLumenApp from './InstallWithLumenApp.vue'
 
 type DownloadModalProject = Omit<Labrinth.Projects.v2.Project, 'project_type'> & {
 	project_type: DisplayProjectType
@@ -192,7 +192,7 @@ const emit = defineEmits<{
 const route = useRoute()
 const flags = useFeatureFlags()
 const tags = useGeneratedState()
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const queryClient = useQueryClient()
 const { createProjectDownloadUrl } = useCdnDownloadContext()
 const { addNotification } = injectNotificationManager()

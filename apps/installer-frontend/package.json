@@ -1,5 +1,5 @@
 {
-	"name": "@modrinth/installer-frontend",
+	"name": "@lumen/installer-frontend",
 	"private": true,
 	"version": "1.0.0-local",
 	"type": "module",
@@ -9,13 +9,13 @@
 		"lint": "eslint . && prettier --check ."
 	},
 	"dependencies": {
-		"@modrinth/assets": "workspace:*",
+		"@lumen/assets": "workspace:*",
 		"@tauri-apps/api": "^2.5.0",
 		"@tauri-apps/plugin-dialog": "^2.2.1",
 		"vue": "^3.5.13"
 	},
 	"devDependencies": {
-		"@modrinth/tooling-config": "workspace:*",
+		"@lumen/tooling-config": "workspace:*",
 		"@vitejs/plugin-vue": "^6.0.3",
 		"autoprefixer": "^10.4.19",
 		"postcss": "^8.4.39",

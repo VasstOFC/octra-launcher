@@ -17,8 +17,8 @@
 </template>
 
 <script setup lang="ts">
-import { TrashIcon } from '@modrinth/assets'
-import { Admonition, Button, defineMessages, useVIntl } from '@modrinth/ui'
+import { TrashIcon } from '@lumen/assets'
+import { Admonition, Button, defineMessages, useVIntl } from '@lumen/ui'
 
 import type { SharedInstanceUnavailableReason } from '@/helpers/install'
 import {

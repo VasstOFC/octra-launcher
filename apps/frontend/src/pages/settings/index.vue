@@ -31,8 +31,8 @@
 </template>
 
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
-import { CodeIcon } from '@modrinth/assets'
+import type { Labrinth } from '@lumen/api-client'
+import { CodeIcon } from '@lumen/assets'
 import {
 	Admonition,
 	AppearanceSettingsLayout,
@@ -52,7 +52,7 @@ import {
 	UnsavedChangesPopup,
 	useSavable,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 
 import { isDarkTheme, type Theme } from '~/plugins/theme/index.ts'
 
@@ -72,7 +72,7 @@ const developerModeBanner = defineMessages({
 	description: {
 		id: 'settings.display.banner.developer-mode.description',
 		defaultMessage:
-			"<strong>Developer mode</strong> is active. This will allow you to view the internal IDs of various things throughout Modrinth that may be helpful if you're a developer using the Modrinth API. Click on the Modrinth logo at the bottom of the page 5 times to toggle developer mode.",
+			"<strong>Developer mode</strong> is active. This will allow you to view the internal IDs of various things throughout Lumen that may be helpful if you're a developer using the Lumen API. Click on the Lumen logo at the bottom of the page 5 times to toggle developer mode.",
 	},
 	deactivate: {
 		id: 'settings.display.banner.developer-mode.button',
@@ -81,7 +81,7 @@ const developerModeBanner = defineMessages({
 })
 
 useHead({
-	title: () => `${formatMessage(messages.headTitle)} - Modrinth`,
+	title: () => `${formatMessage(messages.headTitle)} - Lumen`,
 })
 
 const notifications = defineMessages({

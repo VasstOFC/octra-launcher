@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { MegaphoneIcon } from '@modrinth/assets'
+import { MegaphoneIcon } from '@lumen/assets'
 import {
 	commonMessages,
 	defineMessages,
@@ -8,7 +8,7 @@ import {
 	SettingsFormGroup,
 	Textarea,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 
 import DisclosureToggleCard from './DisclosureToggleCard.vue'
 import type { DisclosureCardMetaProps, DisclosureLockStatus, NoteDisclosure } from './types'
@@ -34,11 +34,11 @@ const messages = defineMessages({
 	},
 	description2: {
 		id: 'project.settings.disclosures.advertising.description.2',
-		defaultMessage: `If the promotion has no direct monetary value <emphasis>and</emphasis> it is for something that the average person would consider <italic>relevant</italic> and <italic>unobtrusive</italic> (such as a link to your Modrinth profile in the corner of the settings page for your own mod), we would not consider that an advertisement.`,
+		defaultMessage: `If the promotion has no direct monetary value <emphasis>and</emphasis> it is for something that the average person would consider <italic>relevant</italic> and <italic>unobtrusive</italic> (such as a link to your Lumen profile in the corner of the settings page for your own mod), we would not consider that an advertisement.`,
 	},
 	notePlaceholder: {
 		id: 'project.settings.disclosures.advertising.note-placeholder',
-		defaultMessage: 'e.g. Adds the Modrinth SMP server to your server list automatically.',
+		defaultMessage: 'e.g. Adds the Lumen SMP server to your server list automatically.',
 	},
 })
 </script>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { EyeIcon } from '@modrinth/assets'
-import { commonMessages, defineMessages, SettingsFormGroup, Textarea, useVIntl } from '@modrinth/ui'
+import { EyeIcon } from '@lumen/assets'
+import { commonMessages, defineMessages, SettingsFormGroup, Textarea, useVIntl } from '@lumen/ui'
 
 import DisclosureToggleCard from './DisclosureToggleCard.vue'
 import type { DisclosureCardMetaProps, DisclosureLockStatus, NoteDisclosure } from './types'

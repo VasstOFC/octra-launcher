@@ -1,4 +1,4 @@
-import { defineMessages, type MessageDescriptor } from '@modrinth/ui'
+import { defineMessages, type MessageDescriptor } from '@lumen/ui'
 
 import backpack from '@/assets/instance-icons/backpack.png'
 import beacon from '@/assets/instance-icons/beacon.png'
@@ -198,7 +198,7 @@ const names = defineMessages({
 	wrench: { id: 'instance.icon-editor.symbol.create-wrench', defaultMessage: 'Wrench' },
 	wrenchRinth: {
 		id: 'instance.icon-editor.symbol.wrenth-rinth',
-		defaultMessage: 'Modrinth Wrench',
+		defaultMessage: 'Lumen Wrench',
 	},
 	zombie: { id: 'instance.icon-editor.symbol.zombie', defaultMessage: 'Zombie' },
 	fabric: { id: 'instance.icon-editor.symbol.fabric', defaultMessage: 'Fabric' },
@@ -439,7 +439,7 @@ export const symbolOptions = [
 	{ id: 'gizmo', name: names.gizmo, asset: gizmo, category: 'modded' },
 	{ id: 'terminal', name: names.terminal, asset: terminal, category: 'modded' },
 
-	// Miscellaneous: Modrinth Wrench, Mr Pack
+	// Miscellaneous: Lumen Wrench, Mr Pack
 	{ id: 'wrenth_rinth', name: names.wrenchRinth, asset: wrenchRinth, category: 'modded' },
 	{ id: 'mr_pack', name: names.mrPack, asset: mrPack, category: 'modded' },
 

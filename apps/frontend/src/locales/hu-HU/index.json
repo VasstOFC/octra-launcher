@@ -9,7 +9,7 @@
     "message": "Összes elfogadása"
   },
   "ads-consent.body": {
-    "message": "A hirdetések teszik lehetővé a Modrinth működését, és biztosítják a tartalomkészítők juttatásait. Partnereink sütiket tárolhatnak vagy érhetnek el a weboldalon a hirdetések személyre szabása és a teljesítmény mérése céljából."
+    "message": "A hirdetések teszik lehetővé a Lumen működését, és biztosítják a tartalomkészítők juttatásait. Partnereink sütiket tárolhatnak vagy érhetnek el a weboldalon a hirdetések személyre szabása és a teljesítmény mérése céljából."
   },
   "ads-consent.manage": {
     "message": "Beállítások kezelése"
@@ -18,7 +18,7 @@
     "message": "Összes elutasítása"
   },
   "ads-consent.title": {
-    "message": "Adataid védelme és a hirdetések szerepe a Modrinth működésében"
+    "message": "Adataid védelme és a hirdetések szerepe a Lumen működésében"
   },
   "analytics.action.add": {
     "message": "Hozzáadás"
@@ -107,11 +107,11 @@
   "analytics.chart.controls.display": {
     "message": "Kijelző"
   },
-  "analytics.chart.controls.modrinth-events": {
-    "message": "Modrinth események"
+  "analytics.chart.controls.Lumen-events": {
+    "message": "Lumen események"
   },
-  "analytics.chart.controls.no-modrinth-events": {
-    "message": "Nincs Modrinth esemény a grafiokonon."
+  "analytics.chart.controls.no-Lumen-events": {
+    "message": "Nincs Lumen esemény a grafiokonon."
   },
   "analytics.chart.controls.no-project-events": {
     "message": "A grafikonon nincs projektesemény."
@@ -141,7 +141,7 @@
     "message": "Bevételszerzési analitikai részletek megtekintése"
   },
   "analytics.chart.legend.monetization-details.description": {
-    "message": "Csak a Modrinthon keresztül történő megtekintések és letöltések számítanak bele a bevételszerzésbe, és a letöltéshez a felhasználóknak be kell jelentkezniük."
+    "message": "Csak a Lumenon keresztül történő megtekintések és letöltések számítanak bele a bevételszerzésbe, és a letöltéshez a felhasználóknak be kell jelentkezniük."
   },
   "analytics.chart.legend.monetization-details.title": {
     "message": "A bevételszerző statisztika részletei"
@@ -222,10 +222,10 @@
     "message": "Frissítés"
   },
   "analytics.download-source.app": {
-    "message": "Modrinth App"
+    "message": "Lumen App"
   },
   "analytics.download-source.website": {
-    "message": "A Modrinth weboldala"
+    "message": "A Lumen weboldala"
   },
   "analytics.downloads.suffix": {
     "message": "letöltéssel"
@@ -408,7 +408,7 @@
     "message": "Letöltések"
   },
   "analytics.stat.monetization-banner.body": {
-    "message": "Csak a Modrinthon keresztül történő megtekintések és letöltések jogosultak bevételszerzésre, és át kell menniük a csalásmegelőző szűrésen. A Modrinth App letöltéséhez a felhasználónak be kell jelentkeznie. Mivel az összes projekt esetében hasonló azoknak a letöltéseknek az aránya, amelyek bevételt generálnak, a bevételed nem változna jelentősen, ha az összes letöltést figyelembe vennénk."
+    "message": "Csak a Lumenon keresztül történő megtekintések és letöltések jogosultak bevételszerzésre, és át kell menniük a csalásmegelőző szűrésen. A Lumen App letöltéséhez a felhasználónak be kell jelentkeznie. Mivel az összes projekt esetében hasonló azoknak a letöltéseknek az aránya, amelyek bevételt generálnak, a bevételed nem változna jelentősen, ha az összes letöltést figyelembe vennénk."
   },
   "analytics.stat.monetization-banner.learn-more": {
     "message": "Tudj meg többet"
@@ -546,7 +546,7 @@
     "message": "Linux"
   },
   "app-marketing.download.linux-disclaimer": {
-    "message": "A Linux verziója a Modrinth Appnak <issues-link>problémái vannak</issues-link> bizonyos rendszereken és a konfigurációkon. Ha a Modrinth App instabil a rendszereden akkor próbáld ki a <prism-link>Prism Launcher</prism-link>t, ahol nagyon könnyen lehet Modrinth tartalmat telepíteni."
+    "message": "A Linux verziója a Lumen Appnak <issues-link>problémái vannak</issues-link> bizonyos rendszereken és a konfigurációkon. Ha a Lumen App instabil a rendszereden akkor próbáld ki a <prism-link>Prism Launcher</prism-link>t, ahol nagyon könnyen lehet Lumen tartalmat telepíteni."
   },
   "app-marketing.download.mac": {
     "message": "Mac"
@@ -555,10 +555,10 @@
     "message": "Letöltési opciók"
   },
   "app-marketing.download.terms": {
-    "message": "A Modrinth App letöltésével elfogadod a <terms-link>feltételeket</terms-link> és a <privacy-link>biztonsági szabályzatot</privacy-link>."
+    "message": "A Lumen App letöltésével elfogadod a <terms-link>feltételeket</terms-link> és a <privacy-link>biztonsági szabályzatot</privacy-link>."
   },
   "app-marketing.download.title": {
-    "message": "A Modrinth App letöltése (béta)"
+    "message": "A Lumen App letöltése (béta)"
   },
   "app-marketing.download.windows": {
     "message": "Windows"
@@ -570,7 +570,7 @@
     "message": "Projektek követése"
   },
   "app-marketing.features.importing.description": {
-    "message": "Importáld az összes kedvenc profilodat a korábban használt indítóból, és néhány másodperc alatt elindíthatod a Modrinth Appot!"
+    "message": "Importáld az összes kedvenc profilodat a korábban használt indítóból, és néhány másodperc alatt elindíthatod a Lumen Appot!"
   },
   "app-marketing.features.importing.gdlauncher-alt": {
     "message": "GDLauncher"
@@ -588,7 +588,7 @@
     "message": "{author} által"
   },
   "app-marketing.features.mod-management.description": {
-    "message": "A Modrinth könnyűvé teszi az összes telepített modod a kezelését egy helyen. Telepíthetsz, eltávolíthatsz és frissíthetsz modokat egyetlen kattintással."
+    "message": "A Lumen könnyűvé teszi az összes telepített modod a kezelését egy helyen. Telepíthetsz, eltávolíthatsz és frissíthetsz modokat egyetlen kattintással."
   },
   "app-marketing.features.mod-management.installed-mods": {
     "message": "Telepített modok"
@@ -612,7 +612,7 @@
     "message": "Offline mód"
   },
   "app-marketing.features.open-source.description": {
-    "message": "A Modrinth inditója teljesen nyílt forráskódú. Ellenőrizheted a forráskódot a <github-link>GitHub</github-link> oldalunkon!"
+    "message": "A Lumen inditója teljesen nyílt forráskódú. Ellenőrizheted a forráskódot a <github-link>GitHub</github-link> oldalunkon!"
   },
   "app-marketing.features.open-source.title": {
     "message": "Nyílt forráskódú"
@@ -624,7 +624,7 @@
     "message": "% CPU"
   },
   "app-marketing.features.performance.description": {
-    "message": "A Modrinth App jobb teljesítményt nyújt, mint sok vezető modkezelő, és csak 150 MB RAM-ot használ!"
+    "message": "A Lumen App jobb teljesítményt nyújt, mint sok vezető modkezelő, és csak 150 MB RAM-ot használ!"
   },
   "app-marketing.features.performance.discord": {
     "message": "Discord"
@@ -644,8 +644,8 @@
   "app-marketing.features.performance.less-than-150mb": {
     "message": "< 150 MB"
   },
-  "app-marketing.features.performance.modrinth-app": {
-    "message": "Modrinth App"
+  "app-marketing.features.performance.Lumen-app": {
+    "message": "Lumen App"
   },
   "app-marketing.features.performance.one-billion-percent": {
     "message": "1 milliárd %"
@@ -663,13 +663,13 @@
     "message": "Teljesítmény"
   },
   "app-marketing.features.play.description": {
-    "message": "Használd a Modrinth Appot kedvenc modjaid és modcsomagjaid letöltéséhez és játszásához."
+    "message": "Használd a Lumen Appot kedvenc modjaid és modcsomagjaid letöltéséhez és játszásához."
   },
   "app-marketing.features.play.title": {
     "message": "Játssz a kedvenc modjaiddal"
   },
   "app-marketing.features.sharing.description": {
-    "message": "Készíts, ossz meg és játssz a Modrinthon fentartott több ezer modok és modcsomagok közül bármelyikkel."
+    "message": "Készíts, ossz meg és játssz a Lumenon fentartott több ezer modok és modcsomagok közül bármelyikkel."
   },
   "app-marketing.features.sharing.modpack": {
     "message": "Modcsomag"
@@ -684,7 +684,7 @@
     "message": "Más, mint bármely indító"
   },
   "app-marketing.features.website.description": {
-    "message": "A Modrinth App teljes mértékben integrálva van a weboldallal, így az alkalmazásból elérheted az összes kedvenc projektedet!"
+    "message": "A Lumen App teljes mértékben integrálva van a weboldallal, így az alkalmazásból elérheted az összes kedvenc projektedet!"
   },
   "app-marketing.features.website.title": {
     "message": "Weboldal integráció"
@@ -693,19 +693,19 @@
     "message": "amit eddig használtál"
   },
   "app-marketing.hero.app-screenshot-alt": {
-    "message": "A Modrinth App képernyőképe, amelyen a Cobblemon modcsomag a „Tartalom” oldalon van megnyitva."
+    "message": "A Lumen App képernyőképe, amelyen a Cobblemon modcsomag a „Tartalom” oldalon van megnyitva."
   },
   "app-marketing.hero.description": {
-    "message": "A Modrinth App egy egyedülálló, nyílt forráskódú kliens, amely lehetővé teszi, hogy kedvenc modjaidat játssz, és naprakészen tartsd őket, mindezt egy kis, praktikus csomagban."
+    "message": "A Lumen App egy egyedülálló, nyílt forráskódú kliens, amely lehetővé teszi, hogy kedvenc modjaidat játssz, és naprakészen tartsd őket, mindezt egy kis, praktikus csomagban."
   },
   "app-marketing.hero.download-button": {
-    "message": "A Modrinth App letöltése"
+    "message": "A Lumen App letöltése"
   },
-  "app-marketing.hero.download-modrinth-app": {
-    "message": "A Modrinth App letöltése"
+  "app-marketing.hero.download-Lumen-app": {
+    "message": "A Lumen App letöltése"
   },
-  "app-marketing.hero.download-modrinth-app-for-os": {
-    "message": "A Modrinth App letöltése {os} rendszerre"
+  "app-marketing.hero.download-Lumen-app-for-os": {
+    "message": "A Lumen App letöltése {os} rendszerre"
   },
   "app-marketing.hero.minecraft-screenshot-alt": {
     "message": "A Cobblemon modcsomag főmenüjének képernyőképe."
@@ -774,7 +774,7 @@
     "message": "A születési dátumod megadása kötelező"
   },
   "auth.create-account.date-of-birth.under13-helper": {
-    "message": "Nem felelsz meg a Modrinth fiók létrehozásához szükséges korhatárnak."
+    "message": "Nem felelsz meg a Lumen fiók létrehozásához szükséges korhatárnak."
   },
   "auth.create-account.info-panel.source-code-link": {
     "message": "Releváns forráskód"
@@ -789,7 +789,7 @@
     "message": "Biztonsági ellenőrzés"
   },
   "auth.create-account.subscribe.label": {
-    "message": "Kérek Emaileket a menő dolgokról amiken a Modrinth dolgozik"
+    "message": "Kérek Emaileket a menő dolgokról amiken a Lumen dolgozik"
   },
   "auth.create-account.title": {
     "message": "Fiók létrehozása"
@@ -861,7 +861,7 @@
     "message": "Nincs fiókja?"
   },
   "auth.sign-in.sign-in-with": {
-    "message": "Bejelentkezés a Modrinthba"
+    "message": "Bejelentkezés a Lumenba"
   },
   "auth.sign-in.title": {
     "message": "Bejelentkezés"
@@ -873,7 +873,7 @@
     "message": "Folytatás e-maillel"
   },
   "auth.sign-up.legal-dislaimer": {
-    "message": "Fiók létrehozásával elfogadod a Modrinth <terms-link>Felhasználási feltételeit</terms-link> és <privacy-policy-link>Adatvédelmi irányelveit</privacy-policy-link>."
+    "message": "Fiók létrehozásával elfogadod a Lumen <terms-link>Felhasználási feltételeit</terms-link> és <privacy-policy-link>Adatvédelmi irányelveit</privacy-policy-link>."
   },
   "auth.sign-up.show-fewer-options": {
     "message": "Kevesebb opció mutatása"
@@ -963,7 +963,7 @@
     "message": "Biztos vagy hogy törölni akarod ezt a gyűjteményt?"
   },
   "collection.description": {
-    "message": "{description}- Nézd meg a {name} nevű gyűjtemény {username} által Modrinth-on"
+    "message": "{description}- Nézd meg a {name} nevű gyűjtemény {username} által Lumen-on"
   },
   "collection.description.following": {
     "message": "Az összes követett projekt automatikusan generált gyűjteménye."
@@ -1062,7 +1062,7 @@
     "message": "A projekted már jóváhagyásra került, ezért a moderátorcsapat nem követi aktívan ezt a témát. Ugyanakkor előfordulhat, hogy meglátják az üzenetedet, ha valami probléma adódik a projekteddel kapcsolatban."
   },
   "conversation-thread.reply-modal.help-center-note": {
-    "message": "Ha kapcsolatba szeretnél lépni a moderátorcsapattal, kérjük, használd a <help-center-link>Modrinth Súgó</help-center-link> oldalt, és kattints a jobb alsó sarokban található kék buborékra az ügyfélszolgálat elérése érdekében."
+    "message": "Ha kapcsolatba szeretnél lépni a moderátorcsapattal, kérjük, használd a <help-center-link>Lumen Súgó</help-center-link> oldalt, és kattints a jobb alsó sarokban található kék buborékra az ügyfélszolgálat elérése érdekében."
   },
   "conversation-thread.resubmit-modal.confirmation.label": {
     "message": "Megerősítem, hogy a moderátorok észrevételeit megfelelően figyelembe vettem."
@@ -1443,7 +1443,7 @@
     "message": "Adóűrlap"
   },
   "dashboard.creator-tax-form-modal.security.description": {
-    "message": "A Modrinth a Track1099 nevű harmadik fél szolgáltatót használja az adóűrlapjaid biztonságos begyűjtésére és tárolására. <security-link>További információ.</security-link>"
+    "message": "A Lumen a Track1099 nevű harmadik fél szolgáltatót használja az adóűrlapjaid biztonságos begyűjtésére és tárolására. <security-link>További információ.</security-link>"
   },
   "dashboard.creator-tax-form-modal.security.header": {
     "message": "Biztonsági gyakorlatok"
@@ -1611,7 +1611,7 @@
     "message": "Ahhoz, hogy kivedd a teljes <b>{available}</b> rendelkezésre álló összeget, kérlek töltsd ki az űrlapot. Szükséges az adóbevalláshoz és csak egyszer kell megcsinálni."
   },
   "dashboard.creator-withdraw-modal.tax-form-required.body-with-limit": {
-    "message": "Ki kell töltened egy W-9 vagy egy W-8 adóbevallási űrlapot Modrinth adóügyi nyilvántartásaihoz, hogy az adóügyi előírásoknak eleget tegyünk."
+    "message": "Ki kell töltened egy W-9 vagy egy W-8 adóbevallási űrlapot Lumen adóügyi nyilvántartásaihoz, hogy az adóügyi előírásoknak eleget tegyünk."
   },
   "dashboard.creator-withdraw-modal.tax-form-required.header": {
     "message": "Adóbevallási űrlap szükséges"
@@ -1659,7 +1659,7 @@
     "message": "Hitelesítetlen e-mail cím"
   },
   "dashboard.creator-withdraw-modal.tremendous-details.unverified-email-message": {
-    "message": "A kiszállítási e-mail cím, amit megadtál nincs hozzákapcsolva a Modrinth fiókodhoz. A Modrinth nem tudja visszaállítani a jutalmakat, amik rossz e-mail címre lettek küldve."
+    "message": "A kiszállítási e-mail cím, amit megadtál nincs hozzákapcsolva a Lumen fiókodhoz. A Lumen nem tudja visszaállítani a jutalmakat, amik rossz e-mail címre lettek küldve."
   },
   "dashboard.creator-withdraw-modal.tremendous-details.usd-paypal-warning-header": {
     "message": "Alacsonyabb díjak elérhetőek"
@@ -1677,7 +1677,7 @@
     "message": "Elérted a(z) <b>{withdrawLimit}</b> kifizetési limitet. További kifizetésekhez ki kell töltened egy adózási űrlapot."
   },
   "dashboard.discord-roles.banner.body": {
-    "message": "Jogosult vagy a következő rangokra: {roles}. Kapcsold össze a Discord fiókodat a Modrinthon keresztül, és automatikusan szinkronizáljuk őket."
+    "message": "Jogosult vagy a következő rangokra: {roles}. Kapcsold össze a Discord fiókodat a Lumenon keresztül, és automatikusan szinkronizáljuk őket."
   },
   "dashboard.discord-roles.banner.cta": {
     "message": "Link a Discordra"
@@ -1842,7 +1842,7 @@
     "message": "A becsült bevételek a rendelkezésre bocsátásig változhatnak."
   },
   "dashboard.revenue.estimated-tooltip.msg2": {
-    "message": "Kattints ide, hogy elolvasd, hogyan kezeli a Modrinth a bevételeidet."
+    "message": "Kattints ide, hogy elolvasd, hogyan kezeli a Lumen a bevételeidet."
   },
   "dashboard.revenue.estimated-with-date": {
     "message": "Becsült {date}"
@@ -1863,7 +1863,7 @@
     "message": "Felvéve"
   },
   "dashboard.revenue.tos": {
-    "message": "A projektek Modrinthra való feltöltésével és a számládról történő pénzfelvétellel elfogadod a <terms-link>jutalomprogram feltételeit</terms-link>. Tudj meg többet a <info-link>jutalomprogramról</info-link>."
+    "message": "A projektek Lumenra való feltöltésével és a számládról történő pénzfelvétellel elfogadod a <terms-link>jutalomprogram feltételeit</terms-link>. Tudj meg többet a <info-link>jutalomprogramról</info-link>."
   },
   "dashboard.revenue.transactions.btn.download-csv": {
     "message": "Letöltés CSV formátumban"
@@ -2049,7 +2049,7 @@
     "message": "Ez a gyűjtemény lehet hogy privát."
   },
   "error.collection.404.list_item.3": {
-    "message": "A gyűjteményt a Modrinth moderációs csapata eltávolította, mert megsértette a <tou-link>Felhasználási feltételeinket</tou-link>."
+    "message": "A gyűjteményt a Lumen moderációs csapata eltávolította, mert megsértette a <tou-link>Felhasználási feltételeinket</tou-link>."
   },
   "error.collection.404.list_title": {
     "message": "Miért?"
@@ -2076,10 +2076,10 @@
     "message": "Tartalom nem elérhető legális okok miatt"
   },
   "error.generic.default.list_item.1": {
-    "message": "Ellenőrizd, hogy a Modrinth elérhető-e az <status-link>állapotoldalon</status-link>."
+    "message": "Ellenőrizd, hogy a Lumen elérhető-e az <status-link>állapotoldalon</status-link>."
   },
   "error.generic.default.list_item.2": {
-    "message": "Ha ez továbbra is történik, valószínűleg tudatni szeretnéd a Modrinth csapatával. Ezt úgy tehetet meg, hogy csatlakozol a <discord-link>Discord szerverünkre</discord-link>."
+    "message": "Ha ez továbbra is történik, valószínűleg tudatni szeretnéd a Lumen csapatával. Ezt úgy tehetet meg, hogy csatlakozol a <discord-link>Discord szerverünkre</discord-link>."
   },
   "error.generic.default.list_title": {
     "message": "Kerjük próbáld újra pár perc múlva."
@@ -2097,7 +2097,7 @@
     "message": "A szervezet készítője megváltoztathatta, vagy törölhette a linket."
   },
   "error.organization.404.list_item.3": {
-    "message": "A szervezet törölve lehetett a Modrinth moderációs csapata által, amiért megsértette a <tou-link>Terms of Use</tou-link>-t."
+    "message": "A szervezet törölve lehetett a Lumen moderációs csapata által, amiért megsértette a <tou-link>Terms of Use</tou-link>-t."
   },
   "error.organization.404.list_title": {
     "message": "Miért?"
@@ -2112,7 +2112,7 @@
     "message": "A projekt lészítője megváltoztathatta a linket, vagy a projektet privátta tette, esetleg ki is törölte."
   },
   "error.project.404.list_item.3": {
-    "message": "A projekt valószínűleg le lett törölve a Modrinth moderációs csapat által, amiért megsértette a <tou-link>Felhasználási feltételek</tou-link>et."
+    "message": "A projekt valószínűleg le lett törölve a Lumen moderációs csapat által, amiért megsértette a <tou-link>Felhasználási feltételek</tou-link>et."
   },
   "error.project.404.list_title": {
     "message": "Miért?"
@@ -2127,7 +2127,7 @@
     "message": "A felhasználó megváltoztathatta a nevét, vagy törölhette fiókját."
   },
   "error.user.404.list_item.3": {
-    "message": "A felhasználó fiókja fel lehet függesztve, amiért megsértette a Modrinth <tou-link>Terms of Use</tou-link>-t."
+    "message": "A felhasználó fiókja fel lehet függesztve, amiért megsértette a Lumen <tou-link>Terms of Use</tou-link>-t."
   },
   "error.user.404.list_title": {
     "message": "Miért?"
@@ -2169,10 +2169,10 @@
     "message": "Amikor a szervered nagy terhelés alatt áll, ideiglenesen további processzorszálakat biztosítunk számára, hogy csökkentsük a lagtüskéket és az instabilitást. Ez segít megakadályozni, hogy a TPS 20 alá essen, így a játékélmény a lehető legsimább marad.\nMivel ezek az extra processzorszálak csak rövid ideig, nagy terhelés esetén érhetők el, előfordulhat, hogy nem jelennek meg a Spark jelentésekben vagy más teljesítményelemző eszközökben."
   },
   "hosting-marketing.faq.cpu-kind": {
-    "message": "Milyen típusú CPU-k futnak a Modrinth Hosting szerverein?"
+    "message": "Milyen típusú CPU-k futnak a Lumen Hosting szerverein?"
   },
   "hosting-marketing.faq.cpu-kind.answer": {
-    "message": "A Modrinth Hosting szerverei AMD Ryzen 7900 és 7950X3D egyenértékű, 5+ GHz-s processzorokkal és DDR5 memóriával vannak felszerelve."
+    "message": "A Lumen Hosting szerverei AMD Ryzen 7900 és 7950X3D egyenértékű, 5+ GHz-s processzorokkal és DDR5 memóriával vannak felszerelve."
   },
   "hosting-marketing.faq.currency": {
     "message": "Milyen pénznemben vannak megadva az árak?"
@@ -2181,19 +2181,19 @@
     "message": "Minden ár amerikai dollárban (USD) van feltüntetve."
   },
   "hosting-marketing.faq.ddos-protection": {
-    "message": "A Modrinth Hosting szerverei rendelkeznek DDoS védelemmel?"
+    "message": "A Lumen Hosting szerverei rendelkeznek DDoS védelemmel?"
   },
   "hosting-marketing.faq.ddos-protection.answer": {
-    "message": "Igen. A Modrinth Hosting összes szerverén DDoS-védelem működik, egyes helyszíneken akár 17 Tbps kapacitással."
+    "message": "Igen. A Lumen Hosting összes szerverén DDoS-védelem működik, egyes helyszíneken akár 17 Tbps kapacitással."
   },
   "hosting-marketing.faq.heading": {
     "message": "Gyakran ismételt kérdések"
   },
   "hosting-marketing.faq.how-fast": {
-    "message": "Milyen gyorsak a Modrinth Hosting szerverek?"
+    "message": "Milyen gyorsak a Lumen Hosting szerverek?"
   },
   "hosting-marketing.faq.how-fast.answer.one": {
-    "message": "A Modrinth Hosting szerverei nagyon modern, nagy teljesítményű hardvereken futnak, de nehéz megmondani, hogy ez pontosan hogyan fogja befolyásolni a szervered sebességét, mert sok tényező hat rá, például a szerveren futó modok, adatcsomagok vagy bővítmények, sőt még a felhasználói viselkedés is."
+    "message": "A Lumen Hosting szerverei nagyon modern, nagy teljesítményű hardvereken futnak, de nehéz megmondani, hogy ez pontosan hogyan fogja befolyásolni a szervered sebességét, mert sok tényező hat rá, például a szerveren futó modok, adatcsomagok vagy bővítmények, sőt még a felhasználói viselkedés is."
   },
   "hosting-marketing.faq.how-fast.answer.two": {
     "message": "A legtöbb teljesítményprobléma általában egy nem optimalizált modcsomag, mod, adatcsomag vagy bővítmény hibájából ered, ami a szerver lagolását okozza. Mivel szervereink nagyon csúcskategóriásak, nem kell sok problémával számolnod, ha a szerveren futtatott tartalomhoz megfelelő csomagot választasz."
@@ -2202,10 +2202,10 @@
     "message": "Növelhetem a szerverem tárhelyét?"
   },
   "hosting-marketing.faq.increase-storage.answer": {
-    "message": "Igen, a szervereden a tárhely további költségek nélkül növelhető. Ha több tárhelyre van szükséged, vedd fel a kapcsolatot a Modrinth ügyfélszolgálatával."
+    "message": "Igen, a szervereden a tárhely további költségek nélkül növelhető. Ha több tárhelyre van szükséged, vedd fel a kapcsolatot a Lumen ügyfélszolgálatával."
   },
   "hosting-marketing.faq.location": {
-    "message": "Hol találhatók a Modrinth Hosting szerverei? Kiválaszthatom a régiót?"
+    "message": "Hol találhatók a Lumen Hosting szerverei? Kiválaszthatom a régiót?"
   },
   "hosting-marketing.faq.location.answer": {
     "message": "Jelenleg Észak-Amerikában, Európában, Délkelet-Ázsiában és Ausztráliában rendelkezünk szerverekkel, amelyeket vásárláskor kiválaszthatsz. A jövőben további régiók érkeznek! Ha régiót szeretnél váltani, kérlek vedd fel a kapcsolatot az ügyfélszolgálattal."
@@ -2214,7 +2214,7 @@
     "message": "Melyik Minecraft verziók és betöltők használhatók?"
   },
   "hosting-marketing.faq.versions-loaders.answer.one": {
-    "message": "A Modrinth Hosting szerverei a Minecraft: Java Edition bármelyik verzióját futtathatják, egészen az 1.2.5-ös verziótól kezdve, beleértve a snapshot verziókat is."
+    "message": "A Lumen Hosting szerverei a Minecraft: Java Edition bármelyik verzióját futtathatják, egészen az 1.2.5-ös verziótól kezdve, beleértve a snapshot verziókat is."
   },
   "hosting-marketing.faq.versions-loaders.answer.two": {
     "message": "Számos mod- és bővítménybetöltőt is támogatunk, többek között a Fabric, Quilt, Forge és NeoForge modokat, valamint a Paper és Purpur bővítményeket. A rendelkezésre állás attól függ, hogy a mod- vagy pluginbetöltő támogatja-e a kiválasztott Minecraft verziót."
@@ -2231,11 +2231,11 @@
   "hosting-marketing.hero.button.start-your-server": {
     "message": "Szervered indítása"
   },
-  "hosting-marketing.hero.host-with-modrinth": {
-    "message": "Hozd létre a következő szerveredet a Modrinth Hostingnál"
+  "hosting-marketing.hero.host-with-Lumen": {
+    "message": "Hozd létre a következő szerveredet a Lumen Hostingnál"
   },
   "hosting-marketing.hero.hosting-description": {
-    "message": "A Modrinth Hosting a legegyszerűbb módja saját Minecraft: Java Edition szerver létrehozásához. Telepítsd és játssz kedvenc modjaiddal és modcsomagjaiddal zökkenőmentesen, mindezt a Modrinth platformon belül."
+    "message": "A Lumen Hosting a legegyszerűbb módja saját Minecraft: Java Edition szerver létrehozásához. Telepítsd és játssz kedvenc modjaiddal és modcsomagjaiddal zökkenőmentesen, mindezt a Lumen platformon belül."
   },
   "hosting-marketing.included.advanced-networking": {
     "message": "Fejlett hálózatkezelés"
@@ -2253,10 +2253,10 @@
     "message": "Egyéni link"
   },
   "hosting-marketing.included.custom-url.description": {
-    "message": "Oszd meg a szerveredet egy egyedi <contrast>modrinth.gg</contrast> linkkel."
+    "message": "Oszd meg a szerveredet egy egyedi <contrast>Lumen.gg</contrast> linkkel."
   },
   "hosting-marketing.included.description": {
-    "message": "Minden szerverhez tartozik egy sor olyan funkció, amelynek célja, hogy olyan tárhelyszolgáltatást nyújtson, amelyet csak a Modrinth tud nyújtani."
+    "message": "Minden szerverhez tartozik egy sor olyan funkció, amelynek célja, hogy olyan tárhelyszolgáltatást nyújtson, amelyet csak a Lumen tud nyújtani."
   },
   "hosting-marketing.included.file-manager": {
     "message": "Könnyen használható fájlkezelő"
@@ -2271,19 +2271,19 @@
     "message": "Segítség, amikor szükséged van rá"
   },
   "hosting-marketing.included.help.description": {
-    "message": "Bármikor fordulhatsz a Modrinth csapatához segítségért a szervereddel kapcsolatban."
+    "message": "Bármikor fordulhatsz a Lumen csapatához segítségért a szervereddel kapcsolatban."
   },
   "hosting-marketing.included.powerful-console": {
     "message": "Erőteljes konzol, szervertulajdonság-kezelő és még sok más"
   },
   "hosting-marketing.included.powerful-console.description": {
-    "message": "A Modrinth Hosting hatékony eszközökkel rendelkezik a szerver kezeléséhez."
+    "message": "A Lumen Hosting hatékony eszközökkel rendelkezik a szerver kezeléséhez."
   },
   "hosting-marketing.included.sftp-access": {
     "message": "SFTP hozzáférés"
   },
   "hosting-marketing.included.sftp-access.description": {
-    "message": "A Modrinth Hosting szolgáltatásba beépített SFTP segítségével közvetlenül elérheti a szerver fájljait."
+    "message": "A Lumen Hosting szolgáltatásba beépített SFTP segítségével közvetlenül elérheti a szerver fájljait."
   },
   "hosting-marketing.included.with-your-server": {
     "message": "A szerverhez tartozik"
@@ -2306,20 +2306,20 @@
   "hosting-marketing.server-for-everyone": {
     "message": "Ez egy szerver mindenkinek"
   },
-  "hosting-marketing.why.all-on-modrinth": {
-    "message": "Kezeld mindezt a Modrinthal"
+  "hosting-marketing.why.all-on-Lumen": {
+    "message": "Kezeld mindezt a Lumenal"
   },
-  "hosting-marketing.why.all-on-modrinth.description": {
-    "message": "A szervered, a modjaid, a játékosaid és még sok más mind a Modrinthon van. Nincs szükség platformok közötti váltásra."
+  "hosting-marketing.why.all-on-Lumen.description": {
+    "message": "A szervered, a modjaid, a játékosaid és még sok más mind a Lumenon van. Nincs szükség platformok közötti váltásra."
   },
   "hosting-marketing.why.consistently-fast": {
     "message": "Állandóan gyors"
   },
   "hosting-marketing.why.consistently-fast.description": {
-    "message": "Infrastruktúránk soha nem terhelt túl, ami azt jelenti, hogy a Modrinth által üzemeltetett minden szerver mindig teljes teljesítményen működik."
+    "message": "Infrastruktúránk soha nem terhelt túl, ami azt jelenti, hogy a Lumen által üzemeltetett minden szerver mindig teljes teljesítményen működik."
   },
   "hosting-marketing.why.description": {
-    "message": "Válassz a Modrinth több ezer modcsomagja közül, vagy készítsd el a sajátodat. Ha készen állsz a játékra, hívd meg barátaidat."
+    "message": "Válassz a Lumen több ezer modcsomagja közül, vagy készítsd el a sajátodat. Ha készen állsz a játékra, hívd meg barátaidat."
   },
   "hosting-marketing.why.heading": {
     "message": "Keress egy modcsomagot. Most már ez egy szerver."
@@ -2328,22 +2328,22 @@
     "message": "Élvezd a modern, megbízható szerverüzemeltetést"
   },
   "hosting-marketing.why.modern-reliable-hosting.description": {
-    "message": "A Modrinth Hosting <contrast>nagy teljesítményű AMD processzorokat és DDR5 memóriát</contrast> használ, valamint egyedi szoftverrel gondoskodik a stabil, zökkenőmentes működésről."
+    "message": "A Lumen Hosting <contrast>nagy teljesítményű AMD processzorokat és DDR5 memóriát</contrast> használ, valamint egyedi szoftverrel gondoskodik a stabil, zökkenőmentes működésről."
   },
   "hosting-marketing.why.where-mods-are": {
     "message": "Játssz ott, ahol a modjaid vannak"
   },
   "hosting-marketing.why.where-mods-are.description": {
-    "message": "A Modrinth Hosting zökkenőmentesen integrálja a mod és modcsomag telepítési folyamatot a szerveredbe."
+    "message": "A Lumen Hosting zökkenőmentesen integrálja a mod és modcsomag telepítési folyamatot a szerveredbe."
   },
-  "hosting-marketing.why.why-modrinth-hosting": {
-    "message": "Miért a Modrinth Hosting?"
+  "hosting-marketing.why.why-Lumen-hosting": {
+    "message": "Miért a Lumen Hosting?"
   },
   "hosting-marketing.why.your-favorite-mods": {
     "message": "Az összes kedvenc modod"
   },
   "hosting-marketing.why.your-favorite-mods.description": {
-    "message": "Válassz a Vanilla, Fabric, Forge, Quilt és NeoForge közül. Ha Modrinthon fut, akkor a szervereden is futtatható."
+    "message": "Válassz a Vanilla, Fabric, Forge, Quilt és NeoForge közül. Ha Lumenon fut, akkor a szervereden is futtatható."
   },
   "hosting.plan.out-of-stock": {
     "message": "Nincs raktáron"
@@ -2358,7 +2358,7 @@
     "message": "Ugrás az irányítópultra"
   },
   "landing.creator.feature.constantly-evolving.description": {
-    "message": "Kapd meg a legjobb modolási élményt folyamatos frissítésekkel a Modrinth csapattól"
+    "message": "Kapd meg a legjobb modolási élményt folyamatos frissítésekkel a Lumen csapattól"
   },
   "landing.creator.feature.constantly-evolving.title": {
     "message": "Folyamatos változás"
@@ -2403,13 +2403,13 @@
     "message": "Kövesd a projekteket, amiket szeretsz"
   },
   "landing.feature.launcher.description": {
-    "message": "A Modrinth nyílt forráskódú API-ja lehetővé teszi az indítók számára a Modrinthal való mély integrációt. A Modrinthot használhatod a <link>saját alkalmazásunkon</link> és néhány népszerű indítón kersztül, mint például az ATLauncher, a MultiMC és a Prism Launcher."
+    "message": "A Lumen nyílt forráskódú API-ja lehetővé teszi az indítók számára a Lumenal való mély integrációt. A Lumenot használhatod a <link>saját alkalmazásunkon</link> és néhány népszerű indítón kersztül, mint például az ATLauncher, a MultiMC és a Prism Launcher."
   },
   "landing.feature.launcher.heading": {
     "message": "Játssz kedvenc indítóddal"
   },
   "landing.feature.search.description": {
-    "message": "A Modrinth villámgyors keresője és hatékony szűrői lehetővé teszik, hogy már a beírás közben megtaláld, amit keresel."
+    "message": "A Lumen villámgyors keresője és hatékony szűrői lehetővé teszik, hogy már a beírás közben megtaláld, amit keresel."
   },
   "landing.feature.search.heading": {
     "message": "Találd meg gyorsan és egyszerűen, amit keresel"
@@ -2442,10 +2442,10 @@
     "message": "ATLauncher"
   },
   "landing.launcher.graphic-alt": {
-    "message": "A Minecraft ablak egyszerűsített ábrázolása, a Mojang Studios logójával Modrinth-zöldben."
+    "message": "A Minecraft ablak egyszerűsített ábrázolása, a Mojang Studios logójával Lumen-zöldben."
   },
-  "landing.launcher.modrinth-app-label": {
-    "message": "Modrinth App"
+  "landing.launcher.Lumen-app-label": {
+    "message": "Lumen App"
   },
   "landing.launcher.prism-launcher-label": {
     "message": "Prism Launcher"
@@ -2538,13 +2538,13 @@
     "message": "Nézd meg fiókbeállításaidat"
   },
   "layout.banner.add-email.description": {
-    "message": "Biztonsági okok miatt a Modrinthon kell egy e-mail cím a fiókodhoz."
+    "message": "Biztonsági okok miatt a Lumenon kell egy e-mail cím a fiókodhoz."
   },
   "layout.banner.build-fail.always-ignore": {
     "message": "Mindig mellőzd"
   },
   "layout.banner.build-fail.description": {
-    "message": "A Modrinth felhasználói felületének jelenlegi telepítése nem tudta az API-ból lekérni az állapotadatokat. Ennek oka lehet egy szolgáltatáskimaradás vagy konfigurációs hiba. Kérlek próbáld meg újra, amikor az API újra elérhetővé válik. Hibakódok: {errors}; Az API jelenlegi linkje: {url}"
+    "message": "A Lumen felhasználói felületének jelenlegi telepítése nem tudta az API-ból lekérni az állapotadatokat. Ennek oka lehet egy szolgáltatáskimaradás vagy konfigurációs hiba. Kérlek próbáld meg újra, amikor az API újra elérhetővé válik. Hibakódok: {errors}; Az API jelenlegi linkje: {url}"
   },
   "layout.banner.build-fail.ignore": {
     "message": "Mellőz"
@@ -2553,13 +2553,13 @@
     "message": "Hiba történt az API állapotának generálása közben a fordítás során."
   },
   "layout.banner.preview.title": {
-    "message": "Ez a Modrinth weboldal előzetes verziója."
+    "message": "Ez a Lumen weboldal előzetes verziója."
   },
   "layout.banner.staging.description": {
-    "message": "Az előkészítési környezet teljesen elkülönül az éles Modrinth-adatbázistól. Tesztelési és hibakeresési célokat szolgál, és a Modrinth háttérrendszerének vagy felhasználói felületének a fejlesztés alatt álló, az éles környezetnél újabb verzióit is futtathatja."
+    "message": "Az előkészítési környezet teljesen elkülönül az éles Lumen-adatbázistól. Tesztelési és hibakeresési célokat szolgál, és a Lumen háttérrendszerének vagy felhasználói felületének a fejlesztés alatt álló, az éles környezetnél újabb verzióit is futtathatja."
   },
   "layout.banner.staging.title": {
-    "message": "A Modrinth színreviteli környezetét nézed"
+    "message": "A Lumen színreviteli környezetét nézed"
   },
   "layout.banner.subscription-payment-failed.button": {
     "message": "Számlázási információ frissítése"
@@ -2574,7 +2574,7 @@
     "message": "Adózási űrlap kitöltése"
   },
   "layout.banner.tax.description": {
-    "message": "Idén már több mint {threshold} összeget vettél ki a Modrinth-ből. Az adózási szabályozásoknak való megfelelés érdekében ki kell töltened egy adóbevallási űrlapot. A kifizetések a nyomtatvány benyújtásáig szünetelnek."
+    "message": "Idén már több mint {threshold} összeget vettél ki a Lumen-ből. Az adózási szabályozásoknak való megfelelés érdekében ki kell töltened egy adóbevallási űrlapot. A kifizetések a nyomtatvány benyújtásáig szünetelnek."
   },
   "layout.banner.tax.title": {
     "message": "Adózási űrlap szükséges"
@@ -2592,7 +2592,7 @@
     "message": "Ellenőrző e-mail újraküldése"
   },
   "layout.banner.verify-email.description": {
-    "message": "Biztonsági okokból a Modrinth megköveteli, hogy igazold a fiókodhoz tartozó e-mail címet."
+    "message": "Biztonsági okokból a Lumen megköveteli, hogy igazold a fiókodhoz tartozó e-mail címet."
   },
   "layout.footer.about": {
     "message": "Rólunk"
@@ -2633,23 +2633,23 @@
   "layout.footer.legal.terms-of-use": {
     "message": "Felhasználási feltételek"
   },
-  "layout.footer.modrinth-information": {
-    "message": "Modrinth infórmáció"
+  "layout.footer.Lumen-information": {
+    "message": "Lumen infórmáció"
   },
   "layout.footer.open-source": {
-    "message": "A Modrinth <github-link>nyílt forráskódú</github-link>."
+    "message": "A Lumen <github-link>nyílt forráskódú</github-link>."
   },
   "layout.footer.products": {
     "message": "Termékek"
   },
   "layout.footer.products.app": {
-    "message": "Modrinth App"
+    "message": "Lumen App"
   },
   "layout.footer.products.plus": {
-    "message": "Modrinth+"
+    "message": "Lumen+"
   },
   "layout.footer.products.servers": {
-    "message": "Modrinth Hosting"
+    "message": "Lumen Hosting"
   },
   "layout.footer.resources": {
     "message": "Források"
@@ -2691,7 +2691,7 @@
     "message": "Menü ki-be"
   },
   "layout.meta.description": {
-    "message": "Tölts le Minecraft modokat, bővítményeket, adatcsomagokat, shadereket, forráscsomagokat és modcsomagokat a Modrinthról. Fedezd fel és tedd közzé projektjeidet a Modrinthon egy modern, könnyen használható felületen és API-n keresztül."
+    "message": "Tölts le Minecraft modokat, bővítményeket, adatcsomagokat, shadereket, forráscsomagokat és modcsomagokat a Lumenról. Fedezd fel és tedd közzé projektjeidet a Lumenon egy modern, könnyen használható felületen és API-n keresztül."
   },
   "layout.meta.og-description": {
     "message": "Fedezz fel és tegyél közzé Minecraft tartalmakat!"
@@ -2708,8 +2708,8 @@
   "layout.nav.discover": {
     "message": "Felfedezés"
   },
-  "layout.nav.get-modrinth-app": {
-    "message": "Szerezd meg a Modrinth Appot"
+  "layout.nav.get-Lumen-app": {
+    "message": "Szerezd meg a Lumen Appot"
   },
   "layout.nav.home": {
     "message": "Kezdőlap"
@@ -2717,11 +2717,11 @@
   "layout.nav.host-a-server": {
     "message": "Hozz létre egy szervert"
   },
-  "layout.nav.modrinth-app": {
-    "message": "Modrinth App"
+  "layout.nav.Lumen-app": {
+    "message": "Lumen App"
   },
-  "layout.nav.modrinth-home-page": {
-    "message": "Modrinth kezdőlap"
+  "layout.nav.Lumen-home-page": {
+    "message": "Lumen kezdőlap"
   },
   "layout.nav.my-servers": {
     "message": "Szervereim"
@@ -2744,11 +2744,11 @@
   "layout.nav.search": {
     "message": "Keresés"
   },
-  "layout.nav.upgrade-to-modrinth-plus": {
-    "message": "Frissíts a Modrinth+-ra"
+  "layout.nav.upgrade-to-Lumen-plus": {
+    "message": "Frissíts a Lumen+-ra"
   },
   "layout.publish.email-verification-required.description": {
-    "message": "A Modrinthon való közzététel előtt hitelesítened kell az e-mail címedet."
+    "message": "A Lumenon való közzététel előtt hitelesítened kell az e-mail címedet."
   },
   "layout.publish.email-verification-required.title": {
     "message": "E-mail hitelesítés szükséges"
@@ -2763,19 +2763,19 @@
     "message": "A megosztott tartalmakat automatikusan naprakészen tartja"
   },
   "modal.shared-instance.open-in-app.get-app": {
-    "message": "Szerezd meg a Modrinth Appot"
+    "message": "Szerezd meg a Lumen Appot"
   },
   "modal.shared-instance.open-in-app.managed-by": {
     "message": "Kezelő:"
   },
   "modal.shared-instance.open-in-app.opening-automatically": {
-    "message": "A Modrinth App automatikusan megnyílik..."
+    "message": "A Lumen App automatikusan megnyílik..."
   },
   "modal.shared-instance.open-in-app.title": {
-    "message": "A Modrinth App megnyitása…"
+    "message": "A Lumen App megnyitása…"
   },
   "modal.shared-instance.open-in-app.why-use": {
-    "message": "Miért érdemes a Modrinth Appot használni?"
+    "message": "Miért érdemes a Lumen Appot használni?"
   },
   "moderation.moderate": {
     "message": "Moderálás"
@@ -3156,7 +3156,7 @@
     "message": "Felülvizsgálatra való benyújtás visszavonása"
   },
   "project-moderation-nags.resubmit-for-review-desc": {
-    "message": "A projektedet {status, select, rejected {elutasították} withheld {visszatartották} other {{status}}} a Modrinth moderátor tagjai. A legtöbb esetben újra beküldheted felülvizsgálatra, miután reagáltál a moderátor üzenetére."
+    "message": "A projektedet {status, select, rejected {elutasították} withheld {visszatartották} other {{status}}} a Lumen moderátor tagjai. A legtöbb esetben újra beküldheted felülvizsgálatra, miután reagáltál a moderátor üzenetére."
   },
   "project-moderation-nags.submit-checklist-tooltip": {
     "message": "El kell végezned a közzétételi ellenőrzőlistán szereplő szükséges lépéseket!"
@@ -3255,7 +3255,7 @@
     "message": "Tekintsd át a projektet"
   },
   "project.actions.servers-promo.description": {
-    "message": "A Modrinth Hosting a legegyszerűbb módja annak, hogy gond nélkül játszhass a barátaiddal!"
+    "message": "A Lumen Hosting a legegyszerűbb módja annak, hogy gond nélkül játszhass a barátaiddal!"
   },
   "project.actions.servers-promo.pricing": {
     "message": "Kezdőár: {price}<small> / hó</small>"
@@ -3264,7 +3264,7 @@
     "message": "Hozz létre egy szervert"
   },
   "project.ai-image-warning-modal.body.2": {
-    "message": "A generatív MI-irányelvünkről további információkat a <rules>Modrinth tartalmi szabályai</rules> 6. szakaszában találsz."
+    "message": "A generatív MI-irányelvünkről további információkat a <rules>Lumen tartalmi szabályai</rules> 6. szakaszában találsz."
   },
   "project.ai-image-warning-modal.title": {
     "message": "Mesterséges Inteligencia által generáltatott képek nem engedélyezettek"
@@ -3351,13 +3351,13 @@
     "message": "A(z) {title} nem támogatja ezt a verziót: {platform} {gameVersion}"
   },
   "project.download.install-with-app": {
-    "message": "Letöltés a Modrinth Appal"
+    "message": "Letöltés a Lumen Appal"
   },
   "project.download.manually": {
     "message": "Letöltés manuálisan"
   },
   "project.download.no-app": {
-    "message": "Nincs meg a Modrinth App? "
+    "message": "Nincs meg a Lumen App? "
   },
   "project.download.no-game-versions-found": {
     "message": "Játékverzió nem található"
@@ -3402,7 +3402,7 @@
     "message": "A fájlokat nem sikerült letölteni"
   },
   "project.environment.migration-no-permission.message": {
-    "message": "Átdolgoztuk a Modrinth Környezetek rendszerét, és új beállítások érhetők el. Nincs jogosultságod módosítani ezeket a beállításokat, de kérlek, jelezd a projekt egy másik tagjának, hogy a környezet metaadatait ellenőrizni kell."
+    "message": "Átdolgoztuk a Lumen Környezetek rendszerét, és új beállítások érhetők el. Nincs jogosultságod módosítani ezeket a beállításokat, de kérlek, jelezd a projekt egy másik tagjának, hogy a környezet metaadatait ellenőrizni kell."
   },
   "project.environment.migration-no-permission.title": {
     "message": "A környezeti metaadatokat felül kell vizsgálni"
@@ -3411,7 +3411,7 @@
     "message": "Tudj meg többet erről a változásról"
   },
   "project.environment.migration.message": {
-    "message": "Átdolgoztuk a Modrinth Környezetek rendszerét, és új lehetőségek érhetők el. Kérjük, ellenőrizd, hogy a metaadatok helyesek-e."
+    "message": "Átdolgoztuk a Lumen Környezetek rendszerét, és új lehetőségek érhetők el. Kérjük, ellenőrizd, hogy a metaadatok helyesek-e."
   },
   "project.environment.migration.review-button": {
     "message": "Környezeti beállítások áttekintése"
@@ -3435,10 +3435,10 @@
     "message": "A projekted privát, vagyis csak te és az általad meghívott személyek férhetnek hozzá."
   },
   "project.moderation.admonition.approved.body.public": {
-    "message": "A projekted publikus, és felfedezhető a Modrinthen."
+    "message": "A projekted publikus, és felfedezhető a Lumenen."
   },
   "project.moderation.admonition.approved.body.unlisted": {
-    "message": "A projekted nem listázott, ami azt jelenti, hogy csak a linkjével érhető el, és nem felfedezhető a Modrinthen."
+    "message": "A projekted nem listázott, ami azt jelenti, hogy csak a linkjével érhető el, és nem felfedezhető a Lumenen."
   },
   "project.moderation.admonition.approved.body.visibility-message": {
     "message": "A projekt láthatóságát a projekt <visibility-settings-link>láthatósági beállításaiban</visibility-settings-link> módosíthatod."
@@ -3447,19 +3447,19 @@
     "message": "Projekt jóváhagyva"
   },
   "project.moderation.admonition.draft.body": {
-    "message": "Ez egy projektvázlat, amelyet mások nem láthatnak, amíg azt felülvizsgálatra nem nyújtják be, és a Modrinth moderátori csapata jóvá nem hagyja."
+    "message": "Ez egy projektvázlat, amelyet mások nem láthatnak, amíg azt felülvizsgálatra nem nyújtják be, és a Lumen moderátori csapata jóvá nem hagyja."
   },
   "project.moderation.admonition.draft.header": {
     "message": "Projektvázlat"
   },
   "project.moderation.admonition.draft.submit-for-review": {
-    "message": "Miután elvégezted az összes szükséges lépést, és meggyőződtél arról, hogy a projekted megfelel a Modrinth <rules-link>Tartalmi szabályainak</rules-link>, benyújthatod a projektedet felülvizsgálatra."
+    "message": "Miután elvégezted az összes szükséges lépést, és meggyőződtél arról, hogy a projekted megfelel a Lumen <rules-link>Tartalmi szabályainak</rules-link>, benyújthatod a projektedet felülvizsgálatra."
   },
   "project.moderation.admonition.rejected.header": {
     "message": "Változtatások kérve lettek"
   },
   "project.moderation.admonition.under-review.body.5": {
-    "message": "<emphasis>Köszönjük türelmedet, amíg moderátoraink keményen dolgoznak a Modrinth biztonságának fenntartásán, és alig várjuk, hogy segíthessünk tartalmaid megosztásában! 💚</emphasis>"
+    "message": "<emphasis>Köszönjük türelmedet, amíg moderátoraink keményen dolgoznak a Lumen biztonságának fenntartásán, és alig várjuk, hogy segíthessünk tartalmaid megosztásában! 💚</emphasis>"
   },
   "project.moderation.admonition.under-review.header": {
     "message": "Projekt áttekintés alatt"
@@ -3504,7 +3504,7 @@
     "message": "Hirdetéseket tartalmaz"
   },
   "project.settings.disclosures.ai.content-rules": {
-    "message": "További információkért olvasd el a <rules>Modrinth tartalmi szabályainak</rules> 6. szakaszát."
+    "message": "További információkért olvasd el a <rules>Lumen tartalmi szabályainak</rules> 6. szakaszát."
   },
   "project.settings.disclosures.ai.description": {
     "message": "Ezt a lehetőséget kötelezően be kell kapcsolnod, ha a projekted jelentős mennyiségű, MI által generált kódot tartalmaz; ha bármely erőforrás nagyrészt MI-vel generált; ha a projekt funkciói generatív MI használatán alapszanak; vagy ha a projekted oldalának bármely eleme – például a leírás vagy a közzététel – generatív MI-re támaszkodik."
@@ -3615,7 +3615,7 @@
     "message": "Ismeretlen külső tartalom"
   },
   "project.settings.permissions.bad-proof.description": {
-    "message": "A Modrinth moderátori csapata elutasította az általad bizonyos külső tartalmakhoz megadott engedélyezési információkat. Kérlek tekintsd át az alábbi elutasított elemeket, és nyújts be elfogadható igazolást, vagy távolítsd el a tartalmat."
+    "message": "A Lumen moderátori csapata elutasította az általad bizonyos külső tartalmakhoz megadott engedélyezési információkat. Kérlek tekintsd át az alábbi elutasított elemeket, és nyújts be elfogadható igazolást, vagy távolítsd el a tartalmat."
   },
   "project.settings.permissions.bad-proof.title": {
     "message": "Néhány bizonyítást elutasítottak"
@@ -3654,13 +3654,13 @@
     "message": "Összes kinyitása"
   },
   "project.settings.permissions.fail.description": {
-    "message": "Lehet, hogy nincs engedélyed a projektedben szereplő egyes külső tartalmak továbbterjesztésére. A Modrinthon való közzétételhez kérjük, távolítsd el ezeket a tartalmakat, vagy nyújts be igazolást arról, hogy rendelkezel a felhasználásukhoz szükséges engedéllyel."
+    "message": "Lehet, hogy nincs engedélyed a projektedben szereplő egyes külső tartalmak továbbterjesztésére. A Lumenon való közzétételhez kérjük, távolítsd el ezeket a tartalmakat, vagy nyújts be igazolást arról, hogy rendelkezel a felhasználásukhoz szükséges engedéllyel."
   },
   "project.settings.permissions.fail.title": {
     "message": "Egyes tartalmak nem szerepelhetnek a projektben"
   },
   "project.settings.permissions.info-banner.description": {
-    "message": "Ha olyan tartalmat tesz közzé, amely nem a Modrinthon van tárolva, akkor jelezned kell nekünk, honnan származik, és igazolnod kell, hogy rendelkezel a fájlok terjesztéséhez szükséges engedéllyel. További információkért nézd meg <link>az új rendszerről szóló bejelentésünket</link>!"
+    "message": "Ha olyan tartalmat tesz közzé, amely nem a Lumenon van tárolva, akkor jelezned kell nekünk, honnan származik, és igazolnod kell, hogy rendelkezel a fájlok terjesztéséhez szükséges engedéllyel. További információkért nézd meg <link>az új rendszerről szóló bejelentésünket</link>!"
   },
   "project.settings.permissions.info-banner.title": {
     "message": "Ismerd meg a terjesztési engedélyeket"
@@ -3672,7 +3672,7 @@
     "message": "Egy külső fájl sem egyezik a kereséssel."
   },
   "project.settings.permissions.not-allowed.description": {
-    "message": "A felvett külső tartalmak közül néhányat nem lehet a Modrinthon terjeszteni, mivel azok megsértik a tartalmi szabályzatunkat, ezért azokat el kell távolítani."
+    "message": "A felvett külső tartalmak közül néhányat nem lehet a Lumenon terjeszteni, mivel azok megsértik a tartalmi szabályzatunkat, ezért azokat el kell távolítani."
   },
   "project.settings.permissions.pending-approval-count": {
     "message": "{count, plural,\n=0 {Nincs jóváhagyásra váró hozzárendelés}\none {# hozzárendelés vár jóváhagyásra}\nother {# hozzárendelés vár jóváhagyásra}\n}"
@@ -3843,7 +3843,7 @@
     "message": "Adj meg további kontextust a jelentéseddel kapcsolatban"
   },
   "report.for.violation": {
-    "message": "A Modrinth <rules-link>Szabályzat</rules-link> vagy <terms-link>Felhasználási feltételek</terms-link> megsértése"
+    "message": "A Lumen <rules-link>Szabályzat</rules-link> vagy <terms-link>Felhasználási feltételek</terms-link> megsértése"
   },
   "report.for.violation.description": {
     "message": "Példák: rosszindulatú, spam, sértő, megtévesztő, félrevezető és illegális tartalom."
@@ -4080,7 +4080,7 @@
     "message": "Jelentések írása"
   },
   "scopes.sessionAccess.description": {
-    "message": "Modrinth által kiadott munkamenetek elérése"
+    "message": "Lumen által kiadott munkamenetek elérése"
   },
   "scopes.sessionAccess.label": {
     "message": "Munkamenetek hozzáférése"
@@ -4179,7 +4179,7 @@
     "message": "Szinkronizálás a szerverrel"
   },
   "servers.manage.content.title": {
-    "message": "Tartalom – {serverName} – Modrinth"
+    "message": "Tartalom – {serverName} – Lumen"
   },
   "servers.notice.actions": {
     "message": "Műveletek"
@@ -4236,13 +4236,13 @@
     "message": "Exportálás..."
   },
   "settings.account.data-export.description": {
-    "message": "Másolatot kér az összes személyes adatról, amelyet a Modrinthra feltöltöttél. A feldolgozás néhány percig is eltarthat."
+    "message": "Másolatot kér az összes személyes adatról, amelyet a Lumenra feltöltöttél. A feldolgozás néhány percig is eltarthat."
   },
   "settings.account.data-export.title": {
     "message": "Adatok exportálása"
   },
   "settings.account.delete.confirm.description": {
-    "message": "Ez **azonnal törli az összes felhasználói adatodat és követőidet**. A projektjeid nem kerülnek törlésre. A fiók törlése visszafordíthatatlan.<br><br>Ha segítségre van szükséged a fiókoddal kapcsolatban, kérj támogatást a [Modrinth Discord](https://discord.modrinth.com)on."
+    "message": "Ez **azonnal törli az összes felhasználói adatodat és követőidet**. A projektjeid nem kerülnek törlésre. A fiók törlése visszafordíthatatlan.<br><br>Ha segítségre van szükséged a fiókoddal kapcsolatban, kérj támogatást a [Lumen Discord](https://discord.Lumen.com)on."
   },
   "settings.account.delete.confirm.proceed": {
     "message": "Fiók törlése"
@@ -4518,7 +4518,7 @@
     "message": "Biztos törölni szeretnéd ezt az alkamazást?"
   },
   "settings.applications.description.intro": {
-    "message": "Az alkalmazások segítségével hitelesítheti a Modrinth felhasználóit a termékeivel. További információkért lásd a <docs-link>Modrinth API dokumentációját</docs-link>."
+    "message": "Az alkalmazások segítségével hitelesítheti a Lumen felhasználóit a termékeivel. További információkért lásd a <docs-link>Lumen API dokumentációját</docs-link>."
   },
   "settings.applications.field.description": {
     "message": "Leírás"
@@ -4572,7 +4572,7 @@
     "message": "Létrehozta: {user}"
   },
   "settings.authorizations.description": {
-    "message": "Amikor engedélyezel egy alkalmazást a Modrinth fiókoddal, hozzáférést biztosítasz számára a fiókodhoz. A fiókodhoz való hozzáférést bármikor kezelheted és ellenőrizheted itt."
+    "message": "Amikor engedélyezel egy alkalmazást a Lumen fiókoddal, hozzáférést biztosítasz számára a fiókodhoz. A fiókodhoz való hozzáférést bármikor kezelheted és ellenőrizheted itt."
   },
   "settings.authorizations.head-title": {
     "message": "Engedélyek"
@@ -4587,16 +4587,16 @@
     "message": "Biztosan visszavonod ezt a kérelmet?"
   },
   "settings.billing.charges.description": {
-    "message": "A Modrinth-számládra korábban leadott összes fiókod itt lesz felsorolva:"
+    "message": "A Lumen-számládra korábban leadott összes fiókod itt lesz felsorolva:"
   },
   "settings.billing.charges.product.medal-trial": {
     "message": "Medal Server próbaverzió"
   },
   "settings.billing.charges.product.midas": {
-    "message": "Modrinth Plus"
+    "message": "Lumen Plus"
   },
   "settings.billing.charges.product.pyro": {
-    "message": "Modrinth Hosting"
+    "message": "Lumen Hosting"
   },
   "settings.billing.charges.title": {
     "message": "Korábbi költségek"
@@ -4614,13 +4614,13 @@
     "message": "év"
   },
   "settings.billing.midas.benefits.ad-free": {
-    "message": "Reklámmentes böngészés a modrinth.com-on és a Modrinth App-ban"
+    "message": "Reklámmentes böngészés a Lumen.com-on és a Lumen App-ban"
   },
   "settings.billing.midas.benefits.badge": {
-    "message": "Modrinth+ jelvény a profilodon"
+    "message": "Lumen+ jelvény a profilodon"
   },
   "settings.billing.midas.benefits.support": {
-    "message": "Támogasd közvetlenül a Modrinth-et és a fejlesztőit"
+    "message": "Támogasd közvetlenül a Lumen-et és a fejlesztőit"
   },
   "settings.billing.midas.benefits.title": {
     "message": "Előnyök"
@@ -4644,7 +4644,7 @@
     "message": "A fizetésed feldolgozás alatt áll. A juttatások a fizetés befejezése után aktiválódnak."
   },
   "settings.billing.midas.upsell": {
-    "message": "Iratkozz fel a Modrinth Plusra!"
+    "message": "Iratkozz fel a Lumen Plusra!"
   },
   "settings.billing.modal.cancel.action": {
     "message": "Előfizetés lemondása"
@@ -4701,7 +4701,7 @@
     "message": "{shared} megosztott CPU (maximum {bursts} CPU-ig terjedő löketek)"
   },
   "settings.billing.pyro.linked-server.not-found": {
-    "message": "Nem található ehhez az előfizetéshez csatolt szerver. Ennek több lehetséges magyarázata is van. Ha nemrég vásároltad meg a szervert, ez normális. A szerver kiépítése akár egy órát is igénybe vehet. Ellenkező esetben, ha egy ideje vásároltad meg ezt a szervert, valószínűleg azóta felfüggesztették. Ha nem erre számítottál, kérjük, vedd fel a kapcsolatot a Modrinth ügyfélszolgálatával a következő információkkal:"
+    "message": "Nem található ehhez az előfizetéshez csatolt szerver. Ennek több lehetséges magyarázata is van. Ha nemrég vásároltad meg a szervert, ez normális. A szerver kiépítése akár egy órát is igénybe vehet. Ellenkező esetben, ha egy ideje vásároltad meg ezt a szervert, valószínűleg azóta felfüggesztették. Ha nem erre számítottál, kérjük, vedd fel a kapcsolatot a Lumen ügyfélszolgálatával a következő információkkal:"
   },
   "settings.billing.pyro.linked-server.server-id": {
     "message": "Szerverazonosító: {id}"
@@ -4713,7 +4713,7 @@
     "message": "{gb} GB RAM"
   },
   "settings.billing.pyro.resubscribe.error.text": {
-    "message": "Hiba történt a Modrinth szerverre való újbóli feliratkozás során."
+    "message": "Hiba történt a Lumen szerverre való újbóli feliratkozás során."
   },
   "settings.billing.pyro.resubscribe.error.title": {
     "message": "Hiba az újbóli feliratkozáskor"
@@ -4743,7 +4743,7 @@
     "message": "Modirinth szerver feliratkozásaid kezelése."
   },
   "settings.billing.pyro_subscription.title": {
-    "message": "Modrinth Szerver Előfizetések"
+    "message": "Lumen Szerver Előfizetések"
   },
   "settings.billing.renews": {
     "message": "Megújul: {date}"
@@ -4782,7 +4782,7 @@
     "message": "A fejlesztői mód letiltása"
   },
   "settings.display.banner.developer-mode.description": {
-    "message": "A <strong>fejlesztői mód</strong> aktív. Ez lehetővé teszi, hogy megtekintsd a Modrinth különböző elemeinek belső azonosítóit, ami hasznos lehet, ha a Modrinth API-t használó fejlesztő vagy. Kattints 5-ször a lap alján található Modrinth logóra a fejlesztői mód bekapcsolásához."
+    "message": "A <strong>fejlesztői mód</strong> aktív. Ez lehetővé teszi, hogy megtekintsd a Lumen különböző elemeinek belső azonosítóit, ami hasznos lehet, ha a Lumen API-t használó fejlesztő vagy. Kattints 5-ször a lap alján található Lumen logóra a fejlesztői mód bekapcsolásához."
   },
   "settings.display.notification.developer-mode-deactivated.text": {
     "message": "A fejlesztői mód le lett tiltva"
@@ -4797,7 +4797,7 @@
     "message": "PAT létrehozása"
   },
   "settings.pats.description": {
-    "message": "A PAT-ek a Modrinth API-hoz való hozzáférést biztosítják. Bármikor létrehozhatók és visszavonhatók. További információkért látogasson el a <doc-link>Modrinth API dokumentációjára</doc-link>."
+    "message": "A PAT-ek a Lumen API-hoz való hozzáférést biztosítják. Bármikor létrehozhatók és visszavonhatók. További információkért látogasson el a <doc-link>Lumen API dokumentációjára</doc-link>."
   },
   "settings.pats.modal.create.action": {
     "message": "PAT létrehozása"
@@ -4854,7 +4854,7 @@
     "message": "Jelenlegi munkamenet"
   },
   "settings.sessions.description": {
-    "message": "Itt találhatók azok az eszközök, amelyek jelenleg be vannak jelentkezve a Modrinth fiókodba. Mindegyikről külön-külön kijelentkezhetsz.\n\nHa nem ismerős bejegyzést látsz, jelentkezz ki az adott eszközről, és azonnal változtasd meg Modrinth fiókod jelszavát."
+    "message": "Itt találhatók azok az eszközök, amelyek jelenleg be vannak jelentkezve a Lumen fiókodba. Mindegyikről külön-külön kijelentkezhetsz.\n\nHa nem ismerős bejegyzést látsz, jelentkezz ki az adott eszközről, és azonnal változtasd meg Lumen fiókod jelszavát."
   },
   "settings.sessions.last-accessed-ago": {
     "message": "Legutoljára hozzáférve {ago}"
@@ -4878,7 +4878,7 @@
     "message": "Meghívó elfogadása"
   },
   "shared-instance.invite.inviter.unknown": {
-    "message": "Egy Modrinth felhasználó"
+    "message": "Egy Lumen felhasználó"
   },
   "shared-instance.invite.joined-count": {
     "message": "{count} személy már csatlakozott"
@@ -4890,7 +4890,7 @@
     "message": "{name} meghívott egy játékprofilba"
   },
   "shared-instance.invite.trust.description": {
-    "message": "Ezt a meghívót nem a Modrinth, hanem egy másik Modrinth-felhasználó hozta létre. Csak olyan személyektől fogadd el a meghívókat, akikben megbízol."
+    "message": "Ezt a meghívót nem a Lumen, hanem egy másik Lumen-felhasználó hozta létre. Csak olyan személyektől fogadd el a meghívókat, akikben megbízol."
   },
   "shared-instance.invite.trust.heading": {
     "message": "Ismered ezt a felhasználót?"
@@ -4902,7 +4902,7 @@
     "message": "Ez a meghívó nem érhető el"
   },
   "ui.latest-news-row.latest-news": {
-    "message": "A legújabb hírek a Modrinthról"
+    "message": "A legújabb hírek a Lumenról"
   },
   "ui.latest-news-row.view-all": {
     "message": "Összes hír"
@@ -4914,7 +4914,7 @@
     "message": "Feliratkozva!"
   },
   "ui.newsletter-button.tooltip": {
-    "message": "Feliratkozás a Modrinth hírlevelére"
+    "message": "Feliratkozás a Lumen hírlevelére"
   },
   "version.all-versions": {
     "message": "Minden egyes verzió"

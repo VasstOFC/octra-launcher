@@ -1,9 +1,4 @@
-import type {
-	AbstractModrinthClient,
-	Kyros,
-	UploadProgress,
-	UploadState,
-} from '@modrinth/api-client'
+import type { AbstractLumenClient, Kyros, UploadProgress, UploadState } from '@lumen/api-client'
 import type { Ref } from 'vue'
 
 import type { CancelUploadHandler } from '#ui/providers/server-context'
@@ -16,7 +11,7 @@ export type UploadSessionUploadFile = {
 export type UploadSessionUploadResult = 'completed' | 'cancelled'
 
 export function useUploadSessionUpload(options: {
-	client: AbstractModrinthClient
+	client: AbstractLumenClient
 	scope: Kyros.UploadSessions.v1.Scope
 	worldId: Ref<string | null>
 	uploadState: Ref<UploadState>

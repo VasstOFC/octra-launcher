@@ -1,4 +1,4 @@
-import type { ModrinthId } from '@modrinth/utils'
+import type { LumenId } from '@lumen/utils'
 
 export type GameInstance = {
 	id: string
@@ -69,50 +69,50 @@ type InstallStage =
 	| 'not_installed'
 
 type InstanceLinkIdentity = {
-	project_id?: ModrinthId | null
-	version_id?: ModrinthId | null
-	server_project_id?: ModrinthId | null
-	content_project_id?: ModrinthId | null
-	content_version_id?: ModrinthId | null
+	project_id?: LumenId | null
+	version_id?: LumenId | null
+	server_project_id?: LumenId | null
+	content_project_id?: LumenId | null
+	content_version_id?: LumenId | null
 }
 
 export type InstanceLink = InstanceLinkIdentity &
 	(
 		| {
 				type: 'modrinth_modpack'
-				project_id: ModrinthId
-				version_id: ModrinthId
+				project_id: LumenId
+				version_id: LumenId
 		  }
 		| {
 				type: 'server_project'
-				project_id: ModrinthId
+				project_id: LumenId
 		  }
 		| {
 				type: 'server_project_modpack'
-				server_project_id: ModrinthId
-				content_project_id?: ModrinthId | null
-				content_version_id: ModrinthId
-				project_id?: ModrinthId
-				version_id?: ModrinthId
+				server_project_id: LumenId
+				content_project_id?: LumenId | null
+				content_version_id: LumenId
+				project_id?: LumenId
+				version_id?: LumenId
 		  }
 		| {
 				type: 'imported_modpack'
-				project_id?: ModrinthId | null
-				version_id?: ModrinthId | null
+				project_id?: LumenId | null
+				version_id?: LumenId | null
 				name?: string | null
 				version_number?: string | null
 				filename?: string | null
 		  }
 		| {
-				type: 'modrinth_hosting'
+				type: 'Lumen_hosting'
 				server_id: string
 				instance_ids: string[]
 				active_instance_id?: string | null
 		  }
 		| {
 				type: 'shared_instance'
-				modpack_project_id?: ModrinthId | null
-				modpack_version_id?: ModrinthId | null
+				modpack_project_id?: LumenId | null
+				modpack_version_id?: LumenId | null
 		  }
 	)
 
@@ -145,7 +145,7 @@ export type ContentSourceKind =
 	| 'local'
 	| 'modrinth_modpack'
 	| 'server_project'
-	| 'modrinth_hosting'
+	| 'Lumen_hosting'
 	| 'imported_modpack'
 	| 'shared_instance'
 

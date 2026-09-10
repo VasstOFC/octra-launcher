@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { Archon, Labrinth } from '@modrinth/api-client'
-import { InfoIcon, SpinnerIcon, XIcon } from '@modrinth/assets'
+import type { Archon, Labrinth } from '@lumen/api-client'
+import { InfoIcon, SpinnerIcon, XIcon } from '@lumen/assets'
 import { computed, onMounted, ref, watch } from 'vue'
 
 import { useFormatPrice } from '../../composables'
@@ -10,7 +10,7 @@ import { regionOverrides } from '../../utils/regions.ts'
 import IntlFormatted from '../base/IntlFormatted.vue'
 import Slider from '../base/Slider.vue'
 import ModalLoadingIndicator from '../modal/ModalLoadingIndicator.vue'
-import type { RegionPing, ServerBillingInterval } from './ModrinthServersPurchaseModal.vue'
+import type { RegionPing, ServerBillingInterval } from './LumenServersPurchaseModal.vue'
 import ServersRegionButton from './ServersRegionButton.vue'
 import ServersSpecs from './ServersSpecs.vue'
 
@@ -172,7 +172,7 @@ const messages = defineMessages({
 	},
 	regionUnsupported: {
 		id: 'servers.region.region-unsupported',
-		defaultMessage: `Region not listed? <link>Let us know where you'd like to see Modrinth Hosting next!</link>`,
+		defaultMessage: `Region not listed? <link>Let us know where you'd like to see Lumen Hosting next!</link>`,
 	},
 	customPrompt: {
 		id: 'servers.region.custom.prompt',
@@ -282,7 +282,7 @@ onMounted(() => {
 							class="text-link"
 							target="_blank"
 							rel="noopener noreferrer"
-							href="https://surveys.modrinth.com/servers-region-waitlist"
+							href="https://surveys.Lumen.com/servers-region-waitlist"
 						>
 							<component :is="() => children" />
 						</a>

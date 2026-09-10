@@ -3,7 +3,7 @@ import type { LauncherMeta } from './types'
 
 export type { LauncherMeta } from './types'
 
-const LAUNCHER_META_BASE_URL = 'https://launcher-meta.modrinth.com'
+const LAUNCHER_META_BASE_URL = 'https://launcher-meta.Lumen.com'
 
 export class LauncherMetaManifestV0Module extends AbstractModule {
 	public getModuleID(): string {

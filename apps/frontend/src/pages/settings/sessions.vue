@@ -42,25 +42,25 @@
 	</div>
 </template>
 <script setup>
-import { XIcon } from '@modrinth/assets'
+import { XIcon } from '@lumen/assets'
 import {
 	Button,
 	commonMessages,
 	commonSettingsMessages,
 	defineMessages,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	useFormatDateTime,
 	useRelativeTime,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
 
 definePageMeta({
 	middleware: 'auth',
 })
 
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const queryClient = useQueryClient()
 const { addNotification } = injectNotificationManager()
 const { formatMessage } = useVIntl()
@@ -86,7 +86,7 @@ const messages = defineMessages({
 	sessionsDescription: {
 		id: 'settings.sessions.description',
 		defaultMessage:
-			"Here are all the devices that are currently logged in with your Modrinth account. You can log out of each one individually.\n\nIf you see an entry you don't recognize, log out of that device and change your Modrinth account password immediately.",
+			"Here are all the devices that are currently logged in with your Lumen account. You can log out of each one individually.\n\nIf you see an entry you don't recognize, log out of that device and change your Lumen account password immediately.",
 	},
 	lastAccessedAgoLabel: {
 		id: 'settings.sessions.last-accessed-ago',
@@ -103,7 +103,7 @@ const messages = defineMessages({
 })
 
 useHead({
-	title: () => `${formatMessage(commonSettingsMessages.sessions)} - Modrinth`,
+	title: () => `${formatMessage(commonSettingsMessages.sessions)} - Lumen`,
 })
 
 const { data: sessions } = useQuery({

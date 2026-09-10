@@ -126,8 +126,8 @@
 </template>
 
 <script setup lang="ts">
-import { EyeIcon, EyeOffIcon, SettingsIcon } from '@modrinth/assets'
-import { commonMessages, defineMessages, IntlFormatted, useVIntl } from '@modrinth/ui'
+import { EyeIcon, EyeOffIcon, SettingsIcon } from '@lumen/assets'
+import { commonMessages, defineMessages, IntlFormatted, useVIntl } from '@lumen/ui'
 import { computed, ref, watch } from 'vue'
 
 import { useDebugLogger } from '#ui/composables/debug-logger'

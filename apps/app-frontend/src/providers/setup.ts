@@ -1,5 +1,5 @@
-import type { AbstractModrinthClient } from '@modrinth/api-client'
-import type { AbstractPopupNotificationManager, AbstractWebNotificationManager } from '@modrinth/ui'
+import type { AbstractLumenClient } from '@lumen/api-client'
+import type { AbstractPopupNotificationManager, AbstractWebNotificationManager } from '@lumen/ui'
 import type { Ref } from 'vue'
 
 import type { InstanceIconConfig } from '@/helpers/types'
@@ -15,7 +15,7 @@ import { setupTagsProvider } from './setup/tags'
 import { setupUserCountryProvider } from './setup/user-country'
 
 export function setupProviders(
-	client: AbstractModrinthClient,
+	client: AbstractLumenClient,
 	notificationManager: AbstractWebNotificationManager,
 	_popupNotificationManager: AbstractPopupNotificationManager,
 	appEvents: AppEvents,

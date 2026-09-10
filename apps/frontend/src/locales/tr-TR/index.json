@@ -9,7 +9,7 @@
     "message": "Tümünü kabul et"
   },
   "ads-consent.body": {
-    "message": "Reklamlar, Modrinth'i mümkün kılar ve içerik oluşturucalara yapılan ödemeleri finanse eder."
+    "message": "Reklamlar, Lumen'i mümkün kılar ve içerik oluşturucalara yapılan ödemeleri finanse eder."
   },
   "ads-consent.manage": {
     "message": "Tercihleri yönet"
@@ -18,7 +18,7 @@
     "message": "Tümünü reddet"
   },
   "ads-consent.title": {
-    "message": "Reklamlar Modrinth'i nasıl destekler ve gizliliğiniz"
+    "message": "Reklamlar Lumen'i nasıl destekler ve gizliliğiniz"
   },
   "analytics.action.add": {
     "message": "Ekle"
@@ -110,11 +110,11 @@
   "analytics.chart.controls.display": {
     "message": "Göster"
   },
-  "analytics.chart.controls.modrinth-events": {
-    "message": "Modrinth etkinlikleri"
+  "analytics.chart.controls.Lumen-events": {
+    "message": "Lumen etkinlikleri"
   },
-  "analytics.chart.controls.no-modrinth-events": {
-    "message": "Grafikte Modrinth etkinlikleri yok."
+  "analytics.chart.controls.no-Lumen-events": {
+    "message": "Grafikte Lumen etkinlikleri yok."
   },
   "analytics.chart.controls.no-project-events": {
     "message": "Grafikte proje etkinliği yok."
@@ -144,7 +144,7 @@
     "message": "Gelir elde edilen analiz detaylarını görüntüle"
   },
   "analytics.chart.legend.monetization-details.description": {
-    "message": "Sadece Modrinth üzerinden yapılan görüntülemeler ve indirmeler para kazanma kriterlerine dahil edilir ve indirmeler için kullanıcıların oturum açmış olması gerekir."
+    "message": "Sadece Lumen üzerinden yapılan görüntülemeler ve indirmeler para kazanma kriterlerine dahil edilir ve indirmeler için kullanıcıların oturum açmış olması gerekir."
   },
   "analytics.chart.legend.monetization-details.title": {
     "message": "Para kazanma analiz detayları"
@@ -228,10 +228,10 @@
     "message": "Güncelleme"
   },
   "analytics.download-source.app": {
-    "message": "Modrinth Uygulaması"
+    "message": "Lumen Uygulaması"
   },
   "analytics.download-source.website": {
-    "message": "Modrinth Websitesi"
+    "message": "Lumen Websitesi"
   },
   "analytics.downloads.suffix": {
     "message": "indirmeler"
@@ -417,7 +417,7 @@
     "message": "İndirmeler"
   },
   "analytics.stat.monetization-banner.body": {
-    "message": "Sadece Modrinth üzerinden yapılan görüntülemeler ve indirmeler para kazanmaya uygundur ve sahtekarlık önleme filtrelerinden geçmelidir. Modrinth Uygulaması indirmeleri ayrıca kullanıcının oturum açmış olmasını gerektirir. Tüm projelerin para kazandıran indirme oranları benzer olduğundan, tüm indirmeler sayılsa bile gelirinizde anlamlı bir değişiklik olmaz."
+    "message": "Sadece Lumen üzerinden yapılan görüntülemeler ve indirmeler para kazanmaya uygundur ve sahtekarlık önleme filtrelerinden geçmelidir. Lumen Uygulaması indirmeleri ayrıca kullanıcının oturum açmış olmasını gerektirir. Tüm projelerin para kazandıran indirme oranları benzer olduğundan, tüm indirmeler sayılsa bile gelirinizde anlamlı bir değişiklik olmaz."
   },
   "analytics.stat.monetization-banner.learn-more": {
     "message": "Daha fazla bilgi edinin"
@@ -456,7 +456,7 @@
     "message": "{start} - {end}"
   },
   "analytics.table.csv.filename": {
-    "message": "Modrinth Analizleri {breakdown} Ayrıntılı Bilgi - {dateRange}"
+    "message": "Lumen Analizleri {breakdown} Ayrıntılı Bilgi - {dateRange}"
   },
   "analytics.table.csv.header.playtime-seconds": {
     "message": "Oynanma süresi (saniye)"
@@ -564,7 +564,7 @@
     "message": "Linux"
   },
   "app-marketing.download.linux-disclaimer": {
-    "message": "Modrinth App'in Linux sürümleri bazı sistemlerde <issues-link>sorunlu olabilir</issues-link>. Modrinth App sisteminizde stabil değilse, <prism-link>Prism Launcher</prism-link> gibi başka uygulamalarla Modrinth içeriklerini indirmenizi tavsiye ediyoruz."
+    "message": "Lumen App'in Linux sürümleri bazı sistemlerde <issues-link>sorunlu olabilir</issues-link>. Lumen App sisteminizde stabil değilse, <prism-link>Prism Launcher</prism-link> gibi başka uygulamalarla Lumen içeriklerini indirmenizi tavsiye ediyoruz."
   },
   "app-marketing.download.mac": {
     "message": "Mac"
@@ -573,10 +573,10 @@
     "message": "İndirme seçenekleri"
   },
   "app-marketing.download.terms": {
-    "message": "Modrinth Uygulamasını indirerek <terms-link>Kullanım Şartları</terms-link> ve <privacy-link>Gizlilik Politikamızı</privacy-link> kabul etmiş olursunuz"
+    "message": "Lumen Uygulamasını indirerek <terms-link>Kullanım Şartları</terms-link> ve <privacy-link>Gizlilik Politikamızı</privacy-link> kabul etmiş olursunuz"
   },
   "app-marketing.download.title": {
-    "message": "Modrinth App'i İndir (Beta)"
+    "message": "Lumen App'i İndir (Beta)"
   },
   "app-marketing.download.windows": {
     "message": "Windows"
@@ -588,7 +588,7 @@
     "message": "Proje takibi"
   },
   "app-marketing.features.importing.description": {
-    "message": "Sevdiğin profilleri önceden kullandığın başlatıcıdan buraya aktar, saniyeler içinde Modrinth App'i kullanmaya başla!"
+    "message": "Sevdiğin profilleri önceden kullandığın başlatıcıdan buraya aktar, saniyeler içinde Lumen App'i kullanmaya başla!"
   },
   "app-marketing.features.importing.gdlauncher-alt": {
     "message": "GDLauncher"
@@ -606,7 +606,7 @@
     "message": "{author} tarafından"
   },
   "app-marketing.features.mod-management.description": {
-    "message": "Modrinth tüm modlarınızı bir yerde toplayıp yönetmenizi kolaylaştırır. Tek tuşla mod kurabilir, silebilir ve güncelleyebilirsiniz."
+    "message": "Lumen tüm modlarınızı bir yerde toplayıp yönetmenizi kolaylaştırır. Tek tuşla mod kurabilir, silebilir ve güncelleyebilirsiniz."
   },
   "app-marketing.features.mod-management.installed-mods": {
     "message": "Yüklü modlar"
@@ -630,7 +630,7 @@
     "message": "Çevrim dışı mod"
   },
   "app-marketing.features.open-source.description": {
-    "message": "Modrinth'in başlatıcısı tamamen açık kaynak kodludur. <github-link>GitHub</github-link> sayfamızda kaynak kodunu inceleyebilirsin!"
+    "message": "Lumen'in başlatıcısı tamamen açık kaynak kodludur. <github-link>GitHub</github-link> sayfamızda kaynak kodunu inceleyebilirsin!"
   },
   "app-marketing.features.open-source.title": {
     "message": "Açık kaynak"
@@ -642,7 +642,7 @@
     "message": "% CPU"
   },
   "app-marketing.features.performance.description": {
-    "message": "Modrinth Uygulaması, yalnızca 150 MB RAM kullanarak birçok önde gelen mod yöneticisinden daha iyi performans gösterir!"
+    "message": "Lumen Uygulaması, yalnızca 150 MB RAM kullanarak birçok önde gelen mod yöneticisinden daha iyi performans gösterir!"
   },
   "app-marketing.features.performance.discord": {
     "message": "Discord"
@@ -662,8 +662,8 @@
   "app-marketing.features.performance.less-than-150mb": {
     "message": "< 150 MB"
   },
-  "app-marketing.features.performance.modrinth-app": {
-    "message": "Modrinth App"
+  "app-marketing.features.performance.Lumen-app": {
+    "message": "Lumen App"
   },
   "app-marketing.features.performance.one-billion-percent": {
     "message": "% 1 milyar"
@@ -681,13 +681,13 @@
     "message": "Verimli"
   },
   "app-marketing.features.play.description": {
-    "message": "Modrinth App ile favori mod ve mod paketlerinizi indirin ve oynayın."
+    "message": "Lumen App ile favori mod ve mod paketlerinizi indirin ve oynayın."
   },
   "app-marketing.features.play.title": {
     "message": "Favori modlarınız ile oynayın"
   },
   "app-marketing.features.sharing.description": {
-    "message": "Modrinth'teki herhangi binlerce mod ile mod paketi oluşturun, paylaşın ve oynayın."
+    "message": "Lumen'teki herhangi binlerce mod ile mod paketi oluşturun, paylaşın ve oynayın."
   },
   "app-marketing.features.sharing.modpack": {
     "message": "Mod Paketi"
@@ -702,7 +702,7 @@
     "message": "Daha önce kullandığınız"
   },
   "app-marketing.features.website.description": {
-    "message": "Modrinth App, web sitesi ile tamamem bağlantılı, yani uygulamadan favori projelerinizin tamamına erişebilirsiniz!"
+    "message": "Lumen App, web sitesi ile tamamem bağlantılı, yani uygulamadan favori projelerinizin tamamına erişebilirsiniz!"
   },
   "app-marketing.features.website.title": {
     "message": "Website entegrasyonu"
@@ -711,19 +711,19 @@
     "message": "hiç bir başlatıcıya benzemez"
   },
   "app-marketing.hero.app-screenshot-alt": {
-    "message": "Cobblemon kurulumunun ‘İçerik’ sayfasında olduğu Modrinth App ekran görüntüsü."
+    "message": "Cobblemon kurulumunun ‘İçerik’ sayfasında olduğu Lumen App ekran görüntüsü."
   },
   "app-marketing.hero.description": {
-    "message": "Modrinth App, favori modlarınızı güncel şekilde oynayabileceğiniz özgün ve açık kaynaklı bir başlatıcıdır."
+    "message": "Lumen App, favori modlarınızı güncel şekilde oynayabileceğiniz özgün ve açık kaynaklı bir başlatıcıdır."
   },
   "app-marketing.hero.download-button": {
-    "message": "Modrinth App İndir"
+    "message": "Lumen App İndir"
   },
-  "app-marketing.hero.download-modrinth-app": {
-    "message": "Modrinth App İndir"
+  "app-marketing.hero.download-Lumen-app": {
+    "message": "Lumen App İndir"
   },
-  "app-marketing.hero.download-modrinth-app-for-os": {
-    "message": "{os} için Modrinth App İndir"
+  "app-marketing.hero.download-Lumen-app-for-os": {
+    "message": "{os} için Lumen App İndir"
   },
   "app-marketing.hero.minecraft-screenshot-alt": {
     "message": "Cobblemon kurulumunun ana menü ekranının ekran görüntüsü."
@@ -792,7 +792,7 @@
     "message": "Doğum tarihi gerekli"
   },
   "auth.create-account.date-of-birth.under13-helper": {
-    "message": "Modrinth'de hesap oluşturmak için yaş gereksinimini karşılamıyorsunuz."
+    "message": "Lumen'de hesap oluşturmak için yaş gereksinimini karşılamıyorsunuz."
   },
   "auth.create-account.info-panel.source-code-link": {
     "message": "Alakalı kaynak kodu"
@@ -807,7 +807,7 @@
     "message": "Güvenlik kontrolü"
   },
   "auth.create-account.subscribe.label": {
-    "message": "Modrinth'in çalıştığı güzel şeylerden beni email ile bilgilendir"
+    "message": "Lumen'in çalıştığı güzel şeylerden beni email ile bilgilendir"
   },
   "auth.create-account.title": {
     "message": "Hesap oluştur"
@@ -879,7 +879,7 @@
     "message": "Hesabınız yok mu?"
   },
   "auth.sign-in.sign-in-with": {
-    "message": "Modrinth'e giriş yapın"
+    "message": "Lumen'e giriş yapın"
   },
   "auth.sign-in.title": {
     "message": "Giriş Yap"
@@ -891,7 +891,7 @@
     "message": "Email ile devam edin"
   },
   "auth.sign-up.legal-dislaimer": {
-    "message": "Bir hesap oluşturarak, Modrinth'in <terms-link>Kurallar</terms-link> ve <privacy-policy-link>Gizlilik İlkeleri </privacy-policy-link>'ni kabul etmiş bulunursunuz."
+    "message": "Bir hesap oluşturarak, Lumen'in <terms-link>Kurallar</terms-link> ve <privacy-policy-link>Gizlilik İlkeleri </privacy-policy-link>'ni kabul etmiş bulunursunuz."
   },
   "auth.sign-up.show-fewer-options": {
     "message": "Daha az seçenek göster"
@@ -981,7 +981,7 @@
     "message": "Bu koleksiyonu silmek istediğinizden emin misiniz?"
   },
   "collection.description": {
-    "message": "{description} - Modrinth'te {username} tarafından oluşturulan {name} koleksiyonunu göster"
+    "message": "{description} - Lumen'te {username} tarafından oluşturulan {name} koleksiyonunu göster"
   },
   "collection.description.following": {
     "message": "Takip ettiğin projelerden oluşturulmuş otomatik koleksiyon."
@@ -1101,7 +1101,7 @@
     "message": "Konuyu yanıtla"
   },
   "conversation-thread.reply-modal.help-center-note": {
-    "message": "Moderasyon ekibiyle iletişime geçmeniz gerekiyorsa, lütfen <help-center-link>Modrinth Yardım Merkezi</help-center-link> adresini kullanın ve destekle iletişime geçmek için sağ alt köşedeki mavi sohbet simgesine tıklayın."
+    "message": "Moderasyon ekibiyle iletişime geçmeniz gerekiyorsa, lütfen <help-center-link>Lumen Yardım Merkezi</help-center-link> adresini kullanın ve destekle iletişime geçmek için sağ alt köşedeki mavi sohbet simgesine tıklayın."
   },
   "conversation-thread.resubmit-modal.confirmation.description": {
     "message": "Moderatörlerin mesajlarını yanıtladığımı onaylıyorum"
@@ -1509,7 +1509,7 @@
     "message": "Vergi formu tamamlanmamış"
   },
   "dashboard.creator-tax-form-modal.security.description": {
-    "message": "Modrinth, vergi formlarınızı güvenli bir şekilde toplamak ve saklamak için üçüncü taraf sağlayıcı Track1099'u kullanır. <security-link>Buradan daha fazla bilgi edinebilirsiniz.</security-link>"
+    "message": "Lumen, vergi formlarınızı güvenli bir şekilde toplamak ve saklamak için üçüncü taraf sağlayıcı Track1099'u kullanır. <security-link>Buradan daha fazla bilgi edinebilirsiniz.</security-link>"
   },
   "dashboard.creator-tax-form-modal.security.header": {
     "message": "Güvenlik uygulamaları"
@@ -1683,7 +1683,7 @@
     "message": "Mevcut <b>{available}</b> bakiyenizin tamamını çekmek için aşağıdaki formu doldurun. Bu vergi raporlaması için gereklidir ve sadece bir kez yapılması yeterlidir."
   },
   "dashboard.creator-withdraw-modal.tax-form-required.body-with-limit": {
-    "message": "Vergi düzenlemelerine uygun kalmamız için Modrinth'in vergi kayıtları için W-9 veya W-8 formunu doldurmanız gerekir."
+    "message": "Vergi düzenlemelerine uygun kalmamız için Lumen'in vergi kayıtları için W-9 veya W-8 formunu doldurmanız gerekir."
   },
   "dashboard.creator-withdraw-modal.tax-form-required.header": {
     "message": "Vergi formu gerekli"
@@ -1746,7 +1746,7 @@
     "message": "Doğrulanmamış E-posta"
   },
   "dashboard.creator-withdraw-modal.tremendous-details.unverified-email-message": {
-    "message": "Girdiğiniz teslimat e-postası Modrinth hesabınızla ilişkili değil. Modrinth yanlış e-posta adresine gönderilen ödülleri kurtaramaz."
+    "message": "Girdiğiniz teslimat e-postası Lumen hesabınızla ilişkili değil. Lumen yanlış e-posta adresine gönderilen ödülleri kurtaramaz."
   },
   "dashboard.creator-withdraw-modal.tremendous-details.usd-paypal-warning-header": {
     "message": "Daha düşük ücretler mevcut"
@@ -1770,7 +1770,7 @@
     "message": "<b>{withdrawLimit}</b> çekme limitinizi kadarını kullandınız. Daha fazla çekmek için vergi formunu gerekir."
   },
   "dashboard.discord-roles.banner.body": {
-    "message": "{roles} için uygunsun. Discord hesabını Modrinth üzerinden bağla, bizde bunları otomatik olarak senkronize edelim."
+    "message": "{roles} için uygunsun. Discord hesabını Lumen üzerinden bağla, bizde bunları otomatik olarak senkronize edelim."
   },
   "dashboard.discord-roles.banner.cta": {
     "message": "Discord bağla"
@@ -1953,7 +1953,7 @@
     "message": "Tahmini gelir, kullanılabilir hale gelene kadar değişikliğe tabi olabilir."
   },
   "dashboard.revenue.estimated-tooltip.msg2": {
-    "message": "Modrinth'in gelirinizi nasıl işlediği hakkında bilgi almak için tıklayın."
+    "message": "Lumen'in gelirinizi nasıl işlediği hakkında bilgi almak için tıklayın."
   },
   "dashboard.revenue.estimated-with-date": {
     "message": "Tahminen {date}"
@@ -1974,7 +1974,7 @@
     "message": "Çekilen"
   },
   "dashboard.revenue.tos": {
-    "message": "Modrinth'e proje yükleyerek ve hesabınızdan para çekerek <terms-link>Ödül Programı Şartlarımızı</terms-link> kabul etmiş olursunuz. <info-link>Ödül Programı</info-link> hakkında daha fazla bilgi edinin."
+    "message": "Lumen'e proje yükleyerek ve hesabınızdan para çekerek <terms-link>Ödül Programı Şartlarımızı</terms-link> kabul etmiş olursunuz. <info-link>Ödül Programı</info-link> hakkında daha fazla bilgi edinin."
   },
   "dashboard.revenue.transactions.btn.download-csv": {
     "message": "CSV olarak indir"
@@ -2163,7 +2163,7 @@
     "message": "Sıfırlama sonrası yüklenecek mod paketi seçiliyor"
   },
   "discover.seo.description": {
-    "message": "Modrinth'deki binlerce Minecraft {projectType}'ini arayın ve anında, doğru sonuçlarla keşfedin. Filtrelerimiz sayesinde en iyi Minecraft {projectType}'i hızlı bir şekilde bulabilirsiniz."
+    "message": "Lumen'deki binlerce Minecraft {projectType}'ini arayın ve anında, doğru sonuçlarla keşfedin. Filtrelerimiz sayesinde en iyi Minecraft {projectType}'i hızlı bir şekilde bulabilirsiniz."
   },
   "discover.seo.title": {
     "message": "{projectType} türündeki projeleri arayın"
@@ -2178,7 +2178,7 @@
     "message": "Koleksiyon gizli olabilir."
   },
   "error.collection.404.list_item.3": {
-    "message": "Koleksiyon Modrinth'in moderasyon ekibi tarafından <tou-link>Kullanım Koşullarımızı</tou-link> ihlal ettiği için kaldırılmış olabilir."
+    "message": "Koleksiyon Lumen'in moderasyon ekibi tarafından <tou-link>Kullanım Koşullarımızı</tou-link> ihlal ettiği için kaldırılmış olabilir."
   },
   "error.collection.404.list_title": {
     "message": "Neden?"
@@ -2205,10 +2205,10 @@
     "message": "Bu içerik, yasal nedenlerden dolayı erişilemez"
   },
   "error.generic.default.list_item.1": {
-    "message": "<status-link>Durum sayfamızdan</status-link> Modrinth'in çöküp çökmediğini kontrol edin."
+    "message": "<status-link>Durum sayfamızdan</status-link> Lumen'in çöküp çökmediğini kontrol edin."
   },
   "error.generic.default.list_item.2": {
-    "message": "Bu yaşanmaya devam ederse Modrinth Ekibini <discord-link>Discord sunucumuza</discord-link> katılarak bilgilendirmek isteyebilirsin."
+    "message": "Bu yaşanmaya devam ederse Lumen Ekibini <discord-link>Discord sunucumuza</discord-link> katılarak bilgilendirmek isteyebilirsin."
   },
   "error.generic.default.list_title": {
     "message": "Lütfen bir kaç dakika içinde tekrar dene."
@@ -2226,7 +2226,7 @@
     "message": "Organizasyonun sahibi URL'i değiştirmiş veya silmiş olabilir."
   },
   "error.organization.404.list_item.3": {
-    "message": "Organizasyon Modrinth'in moderasyon ekibi tarafından <tou-link>Kullanım Koşullarımızı</tou-link> ihlal ettiği için kaldırılmış olabilir."
+    "message": "Organizasyon Lumen'in moderasyon ekibi tarafından <tou-link>Kullanım Koşullarımızı</tou-link> ihlal ettiği için kaldırılmış olabilir."
   },
   "error.organization.404.list_title": {
     "message": "Neden?"
@@ -2241,7 +2241,7 @@
     "message": "Projenin sahibi URL'i değiştirmiş, projeyi gizlemiş veya silmiş olabilir."
   },
   "error.project.404.list_item.3": {
-    "message": "Proje Modrinth'in moderasyon ekibi tarafından <tou-link>Kullanım Koşullarımızı</tou-link> ihlal ettiği için kaldırılmış olabilir."
+    "message": "Proje Lumen'in moderasyon ekibi tarafından <tou-link>Kullanım Koşullarımızı</tou-link> ihlal ettiği için kaldırılmış olabilir."
   },
   "error.project.404.list_title": {
     "message": "Neden?"
@@ -2256,7 +2256,7 @@
     "message": "Kullanıcı, adını değiştirmiş veya hesabını silmiş olabilir."
   },
   "error.user.404.list_item.3": {
-    "message": "Kullanıcının hesabı Modrinth'in <tou-link>Kullanım Koşullarını</tou-link> ihlal ettiği için kaldırılmış olabilir."
+    "message": "Kullanıcının hesabı Lumen'in <tou-link>Kullanım Koşullarını</tou-link> ihlal ettiği için kaldırılmış olabilir."
   },
   "error.user.404.list_title": {
     "message": "Neden?"
@@ -2298,10 +2298,10 @@
     "message": "Sunucunuz yoğun yük altında olduğunda, gecikme artışlarını ve kararsızlığı azaltmak için geçici olarak ek işlemci iş parçacığı erişimi sağlıyoruz. Bu, TPS'nin 20'nin altına düşmesini önleyerek mümkün olan en sorunsuz deneyimi sağlar. Bu ek işlemci iş parçacıkları yalnızca yüksek yük dönemlerinde kısa süreliğine kullanılabilir olduğundan, Spark raporlarında veya diğer profil oluşturma araçlarında görünmeyebilir."
   },
   "hosting-marketing.faq.cpu-kind": {
-    "message": "Modrinth Hosting sunucuları ne tür işlemcilerle çalışır?"
+    "message": "Lumen Hosting sunucuları ne tür işlemcilerle çalışır?"
   },
   "hosting-marketing.faq.cpu-kind.answer": {
-    "message": "Modrinth Hosting sunucuları, 5+ GHz hızında AMD Ryzen 7900 ve 7950X3D eşdeğer işlemciler ve DDR5 bellek ile çalışır."
+    "message": "Lumen Hosting sunucuları, 5+ GHz hızında AMD Ryzen 7900 ve 7950X3D eşdeğer işlemciler ve DDR5 bellek ile çalışır."
   },
   "hosting-marketing.faq.currency": {
     "message": "Fiyatlar hangi para birimindedir?"
@@ -2310,19 +2310,19 @@
     "message": "Tüm fiyatlar Dolar (USD) birimindedir."
   },
   "hosting-marketing.faq.ddos-protection": {
-    "message": "Modrinth Hosting sunucularında DDoS koruması var mı?"
+    "message": "Lumen Hosting sunucularında DDoS koruması var mı?"
   },
   "hosting-marketing.faq.ddos-protection.answer": {
-    "message": "Evet. Tüm Modrinth Hosting sunucuları DDoS korumasıyla gelir ve bazı konumlarda 17 Tbps’e kadar kapasiteye sahiptir."
+    "message": "Evet. Tüm Lumen Hosting sunucuları DDoS korumasıyla gelir ve bazı konumlarda 17 Tbps’e kadar kapasiteye sahiptir."
   },
   "hosting-marketing.faq.heading": {
     "message": "Sıkça Sorulan Sorular"
   },
   "hosting-marketing.faq.how-fast": {
-    "message": "Modrinth Hosting sunucuları ne kadar hızlı?"
+    "message": "Lumen Hosting sunucuları ne kadar hızlı?"
   },
   "hosting-marketing.faq.how-fast.answer.one": {
-    "message": "Modrinth Hosting sunucuları çok modern ve yüksek performanslı donanımlar kullanmaktadır. Ancak bunun sunucunuzun çalışma hızına tam olarak nasıl yansıyacağını söylemek zordur, çünkü bunu etkileyen birçok faktör vardır, örneğin sunucunuzda çalıştırdığınız modlar, veri paketleri, eklentiler veya kullanıcı davranışları gibi."
+    "message": "Lumen Hosting sunucuları çok modern ve yüksek performanslı donanımlar kullanmaktadır. Ancak bunun sunucunuzun çalışma hızına tam olarak nasıl yansıyacağını söylemek zordur, çünkü bunu etkileyen birçok faktör vardır, örneğin sunucunuzda çalıştırdığınız modlar, veri paketleri, eklentiler veya kullanıcı davranışları gibi."
   },
   "hosting-marketing.faq.how-fast.answer.two": {
     "message": "Ortaya çıkan performans sorunlarının çoğu, sunucunun gecikmesine neden olan optimize edilmemiş bir mod paketi, mod, veri paketi veya eklentinin hatasından kaynaklanmaktadır. Sunucularımız çok yüksek kaliteli olduğundan, sunucuda çalıştırdığınız içerik için uygun bir plan seçtiğiniz sürece çok fazla sorun yaşamazsınız."
@@ -2331,10 +2331,10 @@
     "message": "Sunucumun depolamasını arttırabilir miyim?"
   },
   "hosting-marketing.faq.increase-storage.answer": {
-    "message": "Evet, sunucunuzdaki depolama alanı ek ücret ödemeden artırılabilir. Daha fazla depolama alanına ihtiyacınız varsa Modrinth Destek ekibiyle iletişime geçin."
+    "message": "Evet, sunucunuzdaki depolama alanı ek ücret ödemeden artırılabilir. Daha fazla depolama alanına ihtiyacınız varsa Lumen Destek ekibiyle iletişime geçin."
   },
   "hosting-marketing.faq.location": {
-    "message": "Modrinth Hosting sunucuları nerede bulunuyor? Bölge seçebilir miyim?"
+    "message": "Lumen Hosting sunucuları nerede bulunuyor? Bölge seçebilir miyim?"
   },
   "hosting-marketing.faq.location.answer": {
     "message": "Şu anda Kuzey Amerika, Avrupa, Güneydoğu Asya ve Avustralya'da sunucu seçeneklerimiz mevcuttur ve satın alma sırasında tercih edebilirsiniz. Gelecekte daha fazla bölge de eklenecek! Bölgenizi değiştirmek isterseniz, lütfen destek ekibiyle iletişime geçin."
@@ -2343,7 +2343,7 @@
     "message": "Hangi Minecraft sürümleri ve yükleyiciler kullanılabilir?"
   },
   "hosting-marketing.faq.versions-loaders.answer.one": {
-    "message": "Modrinth Hosting sunucuları, snapshot sürümleri de dahil olmak üzere 1.2.5 sürümüne kadar geriye giden Minecraft: Java Edition'ın tüm sürümlerini çalıştırabilir."
+    "message": "Lumen Hosting sunucuları, snapshot sürümleri de dahil olmak üzere 1.2.5 sürümüne kadar geriye giden Minecraft: Java Edition'ın tüm sürümlerini çalıştırabilir."
   },
   "hosting-marketing.faq.versions-loaders.answer.two": {
     "message": "Ayrıca, modlar için Fabric, Quilt, Forge ve NeoForge, eklentiler için Paper ve Purpur dahil olmak üzere birçok mod ve eklenti yükleyicilerini destekliyoruz. Kullanılabilirlik, mod veya eklenti yükleyicisinin seçilen Minecraft sürümünü destekleyip desteklemediğine bağlıdır."
@@ -2360,11 +2360,11 @@
   "hosting-marketing.hero.button.start-your-server": {
     "message": "Sunucunuzu başlatın"
   },
-  "hosting-marketing.hero.host-with-modrinth": {
-    "message": "Bir sonraki sunucunuzu Modrinth Hosting ile açın"
+  "hosting-marketing.hero.host-with-Lumen": {
+    "message": "Bir sonraki sunucunuzu Lumen Hosting ile açın"
   },
   "hosting-marketing.hero.hosting-description": {
-    "message": "Modrinth Hosting, kendi Minecraft: Java Edition sunucunuzu açmanın en kolay yoludur. Modrinth platformunda en sevdiğiniz modları ve mod paketlerini sorunsuz bir şekilde yükleyin ve oynayın."
+    "message": "Lumen Hosting, kendi Minecraft: Java Edition sunucunuzu açmanın en kolay yoludur. Lumen platformunda en sevdiğiniz modları ve mod paketlerini sorunsuz bir şekilde yükleyin ve oynayın."
   },
   "hosting-marketing.included.advanced-networking": {
     "message": "Gelişmiş ağ yönetimi"
@@ -2382,10 +2382,10 @@
     "message": "Özel URL"
   },
   "hosting-marketing.included.custom-url.description": {
-    "message": "Sunucunuzu özel bir <contrast>modrinth.gg</contrast> URL'si ile paylaşın."
+    "message": "Sunucunuzu özel bir <contrast>Lumen.gg</contrast> URL'si ile paylaşın."
   },
   "hosting-marketing.included.description": {
-    "message": "Her sunucuya, yalnızca Modrinth'in sunabileceği bir deneyim sağlamak için tasarlanmış bir sürü özellik dahildir."
+    "message": "Her sunucuya, yalnızca Lumen'in sunabileceği bir deneyim sağlamak için tasarlanmış bir sürü özellik dahildir."
   },
   "hosting-marketing.included.file-manager": {
     "message": "Kullanımı kolay dosya yöneticisi"
@@ -2400,19 +2400,19 @@
     "message": "İhtiyacınız olduğunda yardım"
   },
   "hosting-marketing.included.help.description": {
-    "message": "Sunucunuzla ilgili yardım için Modrinth ekibine istediğiniz zaman ulaşabilirsiniz."
+    "message": "Sunucunuzla ilgili yardım için Lumen ekibine istediğiniz zaman ulaşabilirsiniz."
   },
   "hosting-marketing.included.powerful-console": {
     "message": "Güçlü bir konsol, sunucu özellikleri yöneticisi ve daha fazlası"
   },
   "hosting-marketing.included.powerful-console.description": {
-    "message": "Modrinth Hosting, sunucunuzu yönetmek için güçlü araçlar sunar."
+    "message": "Lumen Hosting, sunucunuzu yönetmek için güçlü araçlar sunar."
   },
   "hosting-marketing.included.sftp-access": {
     "message": "Güvenli Dosya Aktarım Protokolü erişimi"
   },
   "hosting-marketing.included.sftp-access.description": {
-    "message": "Modrinth Hosting'de yerleşik Güvenli Dosya Aktarım Protokolü ile sunucunuzun dosyalarına doğrudan erişin."
+    "message": "Lumen Hosting'de yerleşik Güvenli Dosya Aktarım Protokolü ile sunucunuzun dosyalarına doğrudan erişin."
   },
   "hosting-marketing.included.with-your-server": {
     "message": "Sunucunuza dahildir"
@@ -2453,20 +2453,20 @@
   "hosting-marketing.server-for-everyone": {
     "message": "Herkes için bir sunucu var"
   },
-  "hosting-marketing.why.all-on-modrinth": {
-    "message": "Modrinth ile her şeyi yönetin"
+  "hosting-marketing.why.all-on-Lumen": {
+    "message": "Lumen ile her şeyi yönetin"
   },
-  "hosting-marketing.why.all-on-modrinth.description": {
-    "message": "Sunucunuz, modlarınız, oyuncular ve daha fazlası Modrinth'te. Platformlar arasında geçiş yapmanıza gerek yok."
+  "hosting-marketing.why.all-on-Lumen.description": {
+    "message": "Sunucunuz, modlarınız, oyuncular ve daha fazlası Lumen'te. Platformlar arasında geçiş yapmanıza gerek yok."
   },
   "hosting-marketing.why.consistently-fast": {
     "message": "Tutarlı şekilde hızlı"
   },
   "hosting-marketing.why.consistently-fast.description": {
-    "message": "Altyapımız asla aşırı yüklenmez, yani Modrinth ile açılan her sunucu her zaman tam performansıyla çalışır."
+    "message": "Altyapımız asla aşırı yüklenmez, yani Lumen ile açılan her sunucu her zaman tam performansıyla çalışır."
   },
   "hosting-marketing.why.description": {
-    "message": "Modrinth'teki binlerce mod paketinden seçin veya kendinizinkini kullanın. Oynamaya hazır olduğunuzda arkadaşlarınızı çağırın."
+    "message": "Lumen'teki binlerce mod paketinden seçin veya kendinizinkini kullanın. Oynamaya hazır olduğunuzda arkadaşlarınızı çağırın."
   },
   "hosting-marketing.why.heading": {
     "message": "Mod paketi bulun sunucu olsun."
@@ -2475,22 +2475,22 @@
     "message": "Modern ve güvenilir hosting deneyimleyin"
   },
   "hosting-marketing.why.modern-reliable-hosting.description": {
-    "message": "Modrinth Hosting sunucuları, <contrast>DDR5 RAM ile yüksek-performans AMD İşlemcilerde</contrast> ve sunucunuzun düzgünce çalışmasını sağlamak için özel yapılmış yazılımda çalışır."
+    "message": "Lumen Hosting sunucuları, <contrast>DDR5 RAM ile yüksek-performans AMD İşlemcilerde</contrast> ve sunucunuzun düzgünce çalışmasını sağlamak için özel yapılmış yazılımda çalışır."
   },
   "hosting-marketing.why.where-mods-are": {
     "message": "Modlarınızın olduğu yerde oynayın"
   },
   "hosting-marketing.why.where-mods-are.description": {
-    "message": "Modrinth Hosting, mod ve mod paketi kurulum sürecini kesintisiz hale getirir."
+    "message": "Lumen Hosting, mod ve mod paketi kurulum sürecini kesintisiz hale getirir."
   },
-  "hosting-marketing.why.why-modrinth-hosting": {
-    "message": "Niye Modrinth Hosting?"
+  "hosting-marketing.why.why-Lumen-hosting": {
+    "message": "Niye Lumen Hosting?"
   },
   "hosting-marketing.why.your-favorite-mods": {
     "message": "Tüm favori modlarınız"
   },
   "hosting-marketing.why.your-favorite-mods.description": {
-    "message": "Vanilla, Fabric, Forge, Quilt ve NeoForge arasından seçin. Modrinth'de varsa sunucunuzda çalışır."
+    "message": "Vanilla, Fabric, Forge, Quilt ve NeoForge arasından seçin. Lumen'de varsa sunucunuzda çalışır."
   },
   "hosting.plan.out-of-stock": {
     "message": "Stokta yok"
@@ -2505,7 +2505,7 @@
     "message": "Panele git"
   },
   "landing.creator.feature.constantly-evolving.description": {
-    "message": "Modrinth ekibinden sürekli güncellemelerle mümkün olan en iyi modlama deneyimini edinin."
+    "message": "Lumen ekibinden sürekli güncellemelerle mümkün olan en iyi modlama deneyimini edinin."
   },
   "landing.creator.feature.constantly-evolving.title": {
     "message": "Sürekli Gelişen"
@@ -2550,13 +2550,13 @@
     "message": "Sevdiğiniz projeleri takip edin"
   },
   "landing.feature.launcher.description": {
-    "message": "Modrinth'in açık-kaynak API'ı başlatıcıların Modrinth ile tam bağlantı kurmasını sağlar. Modrinth; <link>kendi uygulamamız</link> veya ATLauncher, MultiMC ve Prism Launcher gibi öne çıkan başlatıcılar aracığılıyla kullanılabilir."
+    "message": "Lumen'in açık-kaynak API'ı başlatıcıların Lumen ile tam bağlantı kurmasını sağlar. Lumen; <link>kendi uygulamamız</link> veya ATLauncher, MultiMC ve Prism Launcher gibi öne çıkan başlatıcılar aracığılıyla kullanılabilir."
   },
   "landing.feature.launcher.heading": {
     "message": "Favori başlatıcınız ile oynayın"
   },
   "landing.feature.search.description": {
-    "message": "Modrinth'in ışık hızı araması ve güçlü filtreleriyle istediğinizi bulun."
+    "message": "Lumen'in ışık hızı araması ve güçlü filtreleriyle istediğinizi bulun."
   },
   "landing.feature.search.heading": {
     "message": "İstediğinizi kolay ve hızlıca bulun"
@@ -2589,10 +2589,10 @@
     "message": "ATLauncher"
   },
   "landing.launcher.graphic-alt": {
-    "message": "Basitleştirilmiş bir Minecraft penceresinin temsili, Mojang Studios logosu Modrinth yeşilli."
+    "message": "Basitleştirilmiş bir Minecraft penceresinin temsili, Mojang Studios logosu Lumen yeşilli."
   },
-  "landing.launcher.modrinth-app-label": {
-    "message": "Modrinth App"
+  "landing.launcher.Lumen-app-label": {
+    "message": "Lumen App"
   },
   "landing.launcher.prism-launcher-label": {
     "message": "Prism Launcher"
@@ -2685,13 +2685,13 @@
     "message": "Hesap ayarlarını ziyaret et"
   },
   "layout.banner.add-email.description": {
-    "message": "Güvenlik sebebiyle Modrinth hesabınıza bir e-posta adresi kaydetmeniz gerek."
+    "message": "Güvenlik sebebiyle Lumen hesabınıza bir e-posta adresi kaydetmeniz gerek."
   },
   "layout.banner.build-fail.always-ignore": {
     "message": "Her zaman yok say"
   },
   "layout.banner.build-fail.description": {
-    "message": "Modrinth'in önucunun bu dağıtımı API'den durum oluşturamadı. Bu bir kesintiden veya yapılandırmadaki bir hatadan kaynaklı olabilir. API mevcutken tekrar derleyin. Hata kodları: {errors}; şu anki API adresi: {url}"
+    "message": "Lumen'in önucunun bu dağıtımı API'den durum oluşturamadı. Bu bir kesintiden veya yapılandırmadaki bir hatadan kaynaklı olabilir. API mevcutken tekrar derleyin. Hata kodları: {errors}; şu anki API adresi: {url}"
   },
   "layout.banner.build-fail.ignore": {
     "message": "Yok say"
@@ -2700,16 +2700,16 @@
     "message": "Derleme esnasında API'den durum oluştururken hata."
   },
   "layout.banner.preview.description": {
-    "message": "Eğer resmi Modrinth web sitesine erişmek istiyorsanız, {url} adresini ziyaret edin. Bu önizleme sürümü Modrinth ekibi tarafından test amaçlı kullanılmaktadır. {ref} kullanılarak derlenmiştir."
+    "message": "Eğer resmi Lumen web sitesine erişmek istiyorsanız, {url} adresini ziyaret edin. Bu önizleme sürümü Lumen ekibi tarafından test amaçlı kullanılmaktadır. {ref} kullanılarak derlenmiştir."
   },
   "layout.banner.preview.title": {
-    "message": "Bu, Modrinth web sitesinin önizleme dağıtımıdır."
+    "message": "Bu, Lumen web sitesinin önizleme dağıtımıdır."
   },
   "layout.banner.staging.description": {
-    "message": "Hazırlama ortamı, Modrinth yapım veritabanından tamamen ayrıdır. Bu test ve hata ayıklama amaçları için kullanılır ve yapım profilinden daha yeni olan Modrinth'in arka ucunun veya ön ucunun geliştirmekte olan sürümlerini çalıştırıyor olabilir. "
+    "message": "Hazırlama ortamı, Lumen yapım veritabanından tamamen ayrıdır. Bu test ve hata ayıklama amaçları için kullanılır ve yapım profilinden daha yeni olan Lumen'in arka ucunun veya ön ucunun geliştirmekte olan sürümlerini çalıştırıyor olabilir. "
   },
   "layout.banner.staging.title": {
-    "message": "Modrinth'in hazırlama ortamını görüntülüyorsunuz"
+    "message": "Lumen'in hazırlama ortamını görüntülüyorsunuz"
   },
   "layout.banner.subscription-payment-failed.button": {
     "message": "Fatura bilgisini güncelle"
@@ -2724,7 +2724,7 @@
     "message": "Vergi formunu doldurun"
   },
   "layout.banner.tax.description": {
-    "message": "Bu yıl Modrinth'ten {threshold} üzerinde çekim yaptınız. Vergi düzenlemelerine uymak için bir vergi formu doldurmanız gerekmektedir. Bu form teslim edilene kadar para çekme işlemleriniz durdurulmuştur."
+    "message": "Bu yıl Lumen'ten {threshold} üzerinde çekim yaptınız. Vergi düzenlemelerine uymak için bir vergi formu doldurmanız gerekmektedir. Bu form teslim edilene kadar para çekme işlemleriniz durdurulmuştur."
   },
   "layout.banner.tax.title": {
     "message": "Vergi formu gereklidir"
@@ -2742,7 +2742,7 @@
     "message": "Doğrulama e-postasını yeniden gönder"
   },
   "layout.banner.verify-email.description": {
-    "message": "Güvenlik sebebiyle Modrinth hesabınızın e-posta adresini doğrulamanız gerek."
+    "message": "Güvenlik sebebiyle Lumen hesabınızın e-posta adresini doğrulamanız gerek."
   },
   "layout.footer.about": {
     "message": "Hakkında"
@@ -2798,23 +2798,23 @@
   "layout.footer.legal.terms-of-use": {
     "message": "Kullanım Koşulları"
   },
-  "layout.footer.modrinth-information": {
-    "message": "Modrinth bilgileri"
+  "layout.footer.Lumen-information": {
+    "message": "Lumen bilgileri"
   },
   "layout.footer.open-source": {
-    "message": "Modrinth <github-link>açık kaynaklıdır</github-link>."
+    "message": "Lumen <github-link>açık kaynaklıdır</github-link>."
   },
   "layout.footer.products": {
     "message": "Ürünler"
   },
   "layout.footer.products.app": {
-    "message": "Modrinth App"
+    "message": "Lumen App"
   },
   "layout.footer.products.plus": {
-    "message": "Modrinth+"
+    "message": "Lumen+"
   },
   "layout.footer.products.servers": {
-    "message": "Modrinth Hosting"
+    "message": "Lumen Hosting"
   },
   "layout.footer.resources": {
     "message": "Kaynaklar"
@@ -2856,7 +2856,7 @@
     "message": "Menü aç/kapa"
   },
   "layout.meta.description": {
-    "message": "Modrinth üzerinden Minecraft modları, pluginleri, veri paketleri, shaderları, kaynak paketleri ve mod paketleri indir. Modern ve kullanımı kolay bir arayüz ve API ile Modrinth üzerinden projeler keşfet ve yayınla."
+    "message": "Lumen üzerinden Minecraft modları, pluginleri, veri paketleri, shaderları, kaynak paketleri ve mod paketleri indir. Modern ve kullanımı kolay bir arayüz ve API ile Lumen üzerinden projeler keşfet ve yayınla."
   },
   "layout.meta.og-description": {
     "message": "Minecraft içeriği keşfet ve yayınla!"
@@ -2873,8 +2873,8 @@
   "layout.nav.discover": {
     "message": "Keşfet"
   },
-  "layout.nav.get-modrinth-app": {
-    "message": "Modrinth App yükle"
+  "layout.nav.get-Lumen-app": {
+    "message": "Lumen App yükle"
   },
   "layout.nav.home": {
     "message": "Anasayfa"
@@ -2882,11 +2882,11 @@
   "layout.nav.host-a-server": {
     "message": "Sunucu kur"
   },
-  "layout.nav.modrinth-app": {
-    "message": "Modrinth App"
+  "layout.nav.Lumen-app": {
+    "message": "Lumen App"
   },
-  "layout.nav.modrinth-home-page": {
-    "message": "Modrinth ana sayfası"
+  "layout.nav.Lumen-home-page": {
+    "message": "Lumen ana sayfası"
   },
   "layout.nav.my-servers": {
     "message": "Sunucularım"
@@ -2909,11 +2909,11 @@
   "layout.nav.search": {
     "message": "Arama"
   },
-  "layout.nav.upgrade-to-modrinth-plus": {
-    "message": "Modrinth+ Kullan"
+  "layout.nav.upgrade-to-Lumen-plus": {
+    "message": "Lumen+ Kullan"
   },
   "layout.publish.email-verification-required.description": {
-    "message": "Modrinth'e paylaşmadan önce e-postanızı doğrulamanız lazım."
+    "message": "Lumen'e paylaşmadan önce e-postanızı doğrulamanız lazım."
   },
   "layout.publish.email-verification-required.title": {
     "message": "E-posta doğrulaması gerekli"
@@ -2928,19 +2928,19 @@
     "message": "Paylaşılmış içerikler değiştikçe güncel tut"
   },
   "modal.shared-instance.open-in-app.get-app": {
-    "message": "Modrinth App'i indir"
+    "message": "Lumen App'i indir"
   },
   "modal.shared-instance.open-in-app.managed-by": {
     "message": "Tarafından yönetiliyor"
   },
   "modal.shared-instance.open-in-app.opening-automatically": {
-    "message": "Modrinth App otomatik olarak açılacaktır..."
+    "message": "Lumen App otomatik olarak açılacaktır..."
   },
   "modal.shared-instance.open-in-app.title": {
-    "message": "Modrinth App açılıyor"
+    "message": "Lumen App açılıyor"
   },
   "modal.shared-instance.open-in-app.why-use": {
-    "message": "Neden Modrinth App'i kullanmalısın"
+    "message": "Neden Lumen App'i kullanmalısın"
   },
   "moderation.exclude-technical-review": {
     "message": "TR Hariç"
@@ -3351,7 +3351,7 @@
     "message": "İncelemeye yeniden gönder"
   },
   "project-moderation-nags.resubmit-for-review-desc": {
-    "message": "Projeniz Modrinth personeli tarafından {status, select, rejected {reddedildi} withheld {alıkonuldu} other {{status}}}. Çoğu durumda, personelin mesajında belirtilen konuları ele aldıktan sonra inceleme için yeniden gönderebilirsiniz."
+    "message": "Projeniz Lumen personeli tarafından {status, select, rejected {reddedildi} withheld {alıkonuldu} other {{status}}}. Çoğu durumda, personelin mesajında belirtilen konuları ele aldıktan sonra inceleme için yeniden gönderebilirsiniz."
   },
   "project-moderation-nags.submit-checklist-tooltip": {
     "message": "Yayımlama kontrol listesindeki gerekli adımları tamamlamalısınız!"
@@ -3465,7 +3465,7 @@
     "message": "Projeyi incele"
   },
   "project.actions.servers-promo.description": {
-    "message": "Modrinth Hosting arkadaşlarınla uğraşsız oynamanın en kolay yolu!"
+    "message": "Lumen Hosting arkadaşlarınla uğraşsız oynamanın en kolay yolu!"
   },
   "project.actions.servers-promo.pricing": {
     "message": "{price}<small> / ay</small>'dan başlayan fiyatlarla"
@@ -3483,10 +3483,10 @@
     "message": "{projectType} bağımlılıklarını görüntüle"
   },
   "project.ai-image-warning-modal.body.1": {
-    "message": "AI ile oluşturulmuş görselleri projenizi temsil etmek için kullanmak yasaktır. Tespiti atlatmaya çalışmak, Modrinth hesabınızın askıya alınmasına yol açabilir."
+    "message": "AI ile oluşturulmuş görselleri projenizi temsil etmek için kullanmak yasaktır. Tespiti atlatmaya çalışmak, Lumen hesabınızın askıya alınmasına yol açabilir."
   },
   "project.ai-image-warning-modal.body.2": {
-    "message": "Üretken AI politikamız hakkında daha fazla bilgi için <rules>Modrinth İçerik Kuralları</rules>’nın 6. bölümüne bakın."
+    "message": "Üretken AI politikamız hakkında daha fazla bilgi için <rules>Lumen İçerik Kuralları</rules>’nın 6. bölümüne bakın."
   },
   "project.ai-image-warning-modal.title": {
     "message": "AI tarafından oluşturulmuş resimler kabul edilmiyor"
@@ -3573,13 +3573,13 @@
     "message": "{title}, {platform} için {gameVersion} sürümünü desteklemiyor"
   },
   "project.download.install-with-app": {
-    "message": "Modrinth App'le indir"
+    "message": "Lumen App'le indir"
   },
   "project.download.manually": {
     "message": "Manuel Yükle"
   },
   "project.download.no-app": {
-    "message": "Modrinth App Yok Mu?"
+    "message": "Lumen App Yok Mu?"
   },
   "project.download.no-game-versions-found": {
     "message": "Oyun sürümleri bulunamadı"
@@ -3624,7 +3624,7 @@
     "message": "Dosyalar indirilemedi"
   },
   "project.environment.migration-no-permission.message": {
-    "message": "Daha yeni Modrinth'in Çevre sistemini yeniledik ve yeni seçenekler mevcut. Bu ayarları değiştirmek için yetkiniz yok ama projenin başka bir üyesine çevre meta verisinin doğrulanması gerektiği haberini verebilirsiniz."
+    "message": "Daha yeni Lumen'in Çevre sistemini yeniledik ve yeni seçenekler mevcut. Bu ayarları değiştirmek için yetkiniz yok ama projenin başka bir üyesine çevre meta verisinin doğrulanması gerektiği haberini verebilirsiniz."
   },
   "project.environment.migration-no-permission.title": {
     "message": "Çevre meta verisi gözden geçirilmesi gerekiyor"
@@ -3633,7 +3633,7 @@
     "message": "Bu değişiklik hakkında daha fazla öğren"
   },
   "project.environment.migration.message": {
-    "message": "Modrinth’te Ortamlar sistemini baştan sona yeniledik ve artık yeni seçenekler mevcut. Lütfen meta verilerin doğru olduğunu doğrulayın."
+    "message": "Lumen’te Ortamlar sistemini baştan sona yeniledik ve artık yeni seçenekler mevcut. Lütfen meta verilerin doğru olduğunu doğrulayın."
   },
   "project.environment.migration.review-button": {
     "message": "Ortam ayarlarını incele"
@@ -3660,10 +3660,10 @@
     "message": "Projeniz özeldir, yani yalnızca siz ve davet ettiğiniz kişiler tarafından erişilebilir."
   },
   "project.moderation.admonition.approved.body.public": {
-    "message": "Projeniz Modrinth'te yayınlandı ve keşfedilebilir."
+    "message": "Projeniz Lumen'te yayınlandı ve keşfedilebilir."
   },
   "project.moderation.admonition.approved.body.unlisted": {
-    "message": "Projeniz liste dışıdır, yani yalnızca doğrudan bir bağlantıyla erişilebilir ve Modrinth'te keşfedilemez."
+    "message": "Projeniz liste dışıdır, yani yalnızca doğrudan bir bağlantıyla erişilebilir ve Lumen'te keşfedilemez."
   },
   "project.moderation.admonition.approved.body.visibility-message": {
     "message": "Projenizin görünürlüğünü projenizin <visibility-settings-link>görünürlük ayarları</visibility-settings-link> bölümünden değiştirebilirsiniz."
@@ -3672,7 +3672,7 @@
     "message": "Proje onaylandı"
   },
   "project.moderation.admonition.draft.body": {
-    "message": "Bu, Modrinth'in moderasyon ekibi tarafından incelenmek ve onaylanmak üzere sunulana kadar başkaları tarafından görülemeyen bir taslak projedir."
+    "message": "Bu, Lumen'in moderasyon ekibi tarafından incelenmek ve onaylanmak üzere sunulana kadar başkaları tarafından görülemeyen bir taslak projedir."
   },
   "project.moderation.admonition.draft.header": {
     "message": "Taslak proje"
@@ -3687,7 +3687,7 @@
     "message": "Projenizi düzenli olarak göndermeden önce tüm moderasyon sorunlarını çözmemeniz durumunda, hesabınızın askıya alınması söz konusu olabilir."
   },
   "project.moderation.admonition.under-review.body.1": {
-    "message": "Projeniz Modrinth'in moderasyon ekibi tarafından incelenmek üzere sıraya alındı."
+    "message": "Projeniz Lumen'in moderasyon ekibi tarafından incelenmek üzere sıraya alındı."
   },
   "project.moderation.admonition.under-review.body.3": {
     "message": "Projenizi değiştirmeye devam edebilirsiniz, bu kuyruktaki konumunuzu etkilemeyecektir."
@@ -3699,7 +3699,7 @@
     "message": "Gönderileri bir hafta içinde incelemeyi amaçlıyoruz, ancak bazı projelerde gecikmeler yaşanabilir. Bu durum, gönderinizle ilgili bir sorun olduğu anlamına gelmez."
   },
   "project.moderation.admonition.under-review.body.5": {
-    "message": "<emphasis>Moderatörlerimiz Modrinth'i güvende tutmak için çok çalışırken gösterdiğiniz sabır için teşekkür ediyor ve içeriğinizi paylaşmanıza yardımcı olmayı dört gözle bekliyoruz! 💚</emphasis>"
+    "message": "<emphasis>Moderatörlerimiz Lumen'i güvende tutmak için çok çalışırken gösterdiğiniz sabır için teşekkür ediyor ve içeriğinizi paylaşmanıza yardımcı olmayı dört gözle bekliyoruz! 💚</emphasis>"
   },
   "project.moderation.admonition.under-review.header": {
     "message": "İncelenmekte olan proje"
@@ -3717,10 +3717,10 @@
     "message": "İçerik moderatörleri çoğu sorun için destek sağlayamaz ve bu konuya gönderilen mesajlar personele bildirilmez."
   },
   "project.moderation.thread.help-center-note.2": {
-    "message": "Yardıma ihtiyacınız varsa veya ek sorularınız varsa, lütfen <help-center-link>Modrinth Yardım Merkezi'ni</help-center-link> ziyaret edin ve destekle iletişime geçmek için mavi baloncuğa tıklayın."
+    "message": "Yardıma ihtiyacınız varsa veya ek sorularınız varsa, lütfen <help-center-link>Lumen Yardım Merkezi'ni</help-center-link> ziyaret edin ve destekle iletişime geçmek için mavi baloncuğa tıklayın."
   },
   "project.moderation.thread.private-description": {
-    "message": "Bu, Modrinth moderatörleri ile özel bir konuşma başlığıdır. Bu projeyle ilgili konularda size mesaj gönderebilirler."
+    "message": "Bu, Lumen moderatörleri ile özel bir konuşma başlığıdır. Bu projeyle ilgili konularda size mesaj gönderebilirler."
   },
   "project.moderation.thread.title": {
     "message": "Moderasyon mesajları"
@@ -3765,10 +3765,10 @@
     "message": "Bu projeyi silmek istediğinizden emin misiniz?"
   },
   "project.settings.delete-project.description.1": {
-    "message": "Proje Modrinth'den kalıcı olarak kaldırıldı. Kaldırılan projeler Modrinth personeli veya destek ekibi tarafından <emphasis>kurtarılamaz</emphasis>."
+    "message": "Proje Lumen'den kalıcı olarak kaldırıldı. Kaldırılan projeler Lumen personeli veya destek ekibi tarafından <emphasis>kurtarılamaz</emphasis>."
   },
   "project.settings.delete-project.description.2": {
-    "message": "Bu projeye yüklenen ve Modrinth’te barındırılan Mod Paketlerinde aktif olarak kullanılan dosyalar varlığını sürdürebilir."
+    "message": "Bu projeye yüklenen ve Lumen’te barındırılan Mod Paketlerinde aktif olarak kullanılan dosyalar varlığını sürdürebilir."
   },
   "project.settings.delete-project.title": {
     "message": "Projeyi kaldır"
@@ -3777,16 +3777,16 @@
     "message": "Projeniz reklam, sponsorluk veya diğer çalışmaların tanıtımını içeriyorsa bunu etkinleştirmeniz gerekir."
   },
   "project.settings.disclosures.advertising.description.2": {
-    "message": "Tanıtımın doğrudan parasal bir değeri yoksa <emphasis>ve</emphasis> ortalama bir kişinin <italic>ilgili</italic> ve <italic>rahatsız etmeyen</italic> olarak değerlendireceği bir şeyse (örneğin kendi modunuzun ayarlar sayfasının köşesinde Modrinth profilinize bir bağlantı), bunu bir reklam olarak değerlendirmeyiz."
+    "message": "Tanıtımın doğrudan parasal bir değeri yoksa <emphasis>ve</emphasis> ortalama bir kişinin <italic>ilgili</italic> ve <italic>rahatsız etmeyen</italic> olarak değerlendireceği bir şeyse (örneğin kendi modunuzun ayarlar sayfasının köşesinde Lumen profilinize bir bağlantı), bunu bir reklam olarak değerlendirmeyiz."
   },
   "project.settings.disclosures.advertising.note-placeholder": {
-    "message": "örn. Modrinth SMP sunucusunu sunucu listenize otomatik olarak ekler."
+    "message": "örn. Lumen SMP sunucusunu sunucu listenize otomatik olarak ekler."
   },
   "project.settings.disclosures.advertising.title": {
     "message": "Reklam içerir"
   },
   "project.settings.disclosures.ai.content-rules": {
-    "message": "Daha fazla bilgi için lütfen <rules>Modrinth İçerik Kuralları</rules>’nın 6. bölümüne bakın."
+    "message": "Daha fazla bilgi için lütfen <rules>Lumen İçerik Kuralları</rules>’nın 6. bölümüne bakın."
   },
   "project.settings.disclosures.ai.note-placeholder": {
     "message": "örn. AI tarafından oluşturulmuş Çince ve Arapça çeviriler."
@@ -3954,7 +3954,7 @@
     "message": "URL"
   },
   "project.settings.monetization.description": {
-    "message": "Modrinth’teki projeler otomatik olarak <rewards-program-link>Ödül Programı</rewards-program-link>’na kaydedilir. Bu projeden gelir elde etmek istemiyorsanız (veya yasal nedenlerle edemiyorsanız), buradan kapatabilirsiniz."
+    "message": "Lumen’teki projeler otomatik olarak <rewards-program-link>Ödül Programı</rewards-program-link>’na kaydedilir. Bu projeden gelir elde etmek istemiyorsanız (veya yasal nedenlerle edemiyorsanız), buradan kapatabilirsiniz."
   },
   "project.settings.monetization.disabled-description": {
     "message": "Bu proje para kazanmaya uygun değil. Bunun bir hata olduğunu düşünüyorsanız lütfen <contact-support-link>destek ile iletişime geçin</contact-support-link>."
@@ -3972,7 +3972,7 @@
     "message": "Bilinmeyen harici içerik"
   },
   "project.settings.permissions.bad-proof.description": {
-    "message": "Modrinth moderasyon ekibi, harici içerikler için sağladığınız izin bilgilerini reddetti. Lütfen aşağıdaki reddedilen öğeleri inceleyin ve kabul edilebilir bir kanıt sağlayın veya içeriği kaldırın."
+    "message": "Lumen moderasyon ekibi, harici içerikler için sağladığınız izin bilgilerini reddetti. Lütfen aşağıdaki reddedilen öğeleri inceleyin ve kabul edilebilir bir kanıt sağlayın veya içeriği kaldırın."
   },
   "project.settings.permissions.bad-proof.title": {
     "message": "Bazı kanıtlar reddedildi"
@@ -4128,7 +4128,7 @@
     "message": "{item} bulunamadı"
   },
   "report.for.violation": {
-    "message": "Modrinth <rules-link>Kuralları</rules-link> veya <terms-link>Kullanım Koşulları</terms-link> İhlali"
+    "message": "Lumen <rules-link>Kuralları</rules-link> veya <terms-link>Kullanım Koşulları</terms-link> İhlali"
   },
   "report.for.violation.description": {
     "message": "Örnekler kötü niyetli, spam, saldırgan, aldatıcı, yanıltıcı ve yasak içerikleri barındırır."
@@ -4173,7 +4173,7 @@
     "message": "Ne tür bir içerik bildiriyorsunuz?"
   },
   "report.question.report-reason": {
-    "message": "{item} hangi Modrinth kuralını ihlal ediyor?"
+    "message": "{item} hangi Lumen kuralını ihlal ediyor?"
   },
   "report.report-content": {
     "message": "Moderatörlere içerik bildir"
@@ -4377,7 +4377,7 @@
     "message": "Bildiri yaz"
   },
   "scopes.sessionAccess.description": {
-    "message": "Modrinth tarafından verilen oturumlara eriş"
+    "message": "Lumen tarafından verilen oturumlara eriş"
   },
   "scopes.sessionAccess.label": {
     "message": "Oturumlara eriş"
@@ -4476,7 +4476,7 @@
     "message": "Sunucuyla eşle"
   },
   "servers.manage.content.title": {
-    "message": "İçerik - {serverName} - Modrinth"
+    "message": "İçerik - {serverName} - Lumen"
   },
   "servers.notice.actions": {
     "message": "Eylemler"
@@ -4530,13 +4530,13 @@
     "message": "Dışa aktarma oluşturuluyor..."
   },
   "settings.account.data-export.description": {
-    "message": "Modrinth'e yüklediğiniz tüm kişisel verilerinizin bir kopyasını talep edin. Bu işlemin tamamlanması birkaç dakika sürebilir."
+    "message": "Lumen'e yüklediğiniz tüm kişisel verilerinizin bir kopyasını talep edin. Bu işlemin tamamlanması birkaç dakika sürebilir."
   },
   "settings.account.data-export.title": {
     "message": "Veri dışa aktarma"
   },
   "settings.account.delete.confirm.description": {
-    "message": "Bu işlem, **tüm kullanıcı verilerinizi ve takip ettiğiniz hesapları anında siler**. Projeleriniz silinmez. Hesabınızı silme işlemi geri alınamaz.<br><br>Hesabınızla ilgili yardıma ihtiyacınız varsa, [Modrinth Discord](https://discord.modrinth.com) üzerinden destek alabilirsiniz."
+    "message": "Bu işlem, **tüm kullanıcı verilerinizi ve takip ettiğiniz hesapları anında siler**. Projeleriniz silinmez. Hesabınızı silme işlemi geri alınamaz.<br><br>Hesabınızla ilgili yardıma ihtiyacınız varsa, [Lumen Discord](https://discord.Lumen.com) üzerinden destek alabilirsiniz."
   },
   "settings.account.delete.confirm.proceed": {
     "message": "Hesabı sil"
@@ -4812,7 +4812,7 @@
     "message": "Bu uygulamayı silmek istediğinizden emin misiniz?"
   },
   "settings.applications.description.intro": {
-    "message": "Uygulamalar, Modrinth kullanıcılarının ürünlerinizde kimlik doğrulaması yapması için kullanılabilir. Daha fazla bilgi için <docs-link>Modrinth'in API belgelerine</docs-link> göz atın."
+    "message": "Uygulamalar, Lumen kullanıcılarının ürünlerinizde kimlik doğrulaması yapması için kullanılabilir. Daha fazla bilgi için <docs-link>Lumen'in API belgelerine</docs-link> göz atın."
   },
   "settings.applications.field.description": {
     "message": "Açıklama"
@@ -4866,7 +4866,7 @@
     "message": "{user} tarafından oluşturuldu"
   },
   "settings.authorizations.description": {
-    "message": "Modrinth hesabınızla bir uygulamayı yetkilendirdiğinizde, ona hesabınıza erişim izni vermiş olursunuz. Hesabınıza verilen erişimi dilediğiniz zaman burada yönetebilir ve gözden geçirebilirsiniz."
+    "message": "Lumen hesabınızla bir uygulamayı yetkilendirdiğinizde, ona hesabınıza erişim izni vermiş olursunuz. Hesabınıza verilen erişimi dilediğiniz zaman burada yönetebilir ve gözden geçirebilirsiniz."
   },
   "settings.authorizations.empty-state.heading": {
     "message": "İzin verilen uygulama bulunamadı"
@@ -4884,16 +4884,16 @@
     "message": "Bu uygulamanın yetkisini kaldırmak istediğinizden emin misiniz?"
   },
   "settings.billing.charges.description": {
-    "message": "Modrinth hesabınıza geçmişte yapılan tüm ödemeleriniz burada listelenir:"
+    "message": "Lumen hesabınıza geçmişte yapılan tüm ödemeleriniz burada listelenir:"
   },
   "settings.billing.charges.product.medal-trial": {
     "message": "Medal Sunucu Denemesi"
   },
   "settings.billing.charges.product.midas": {
-    "message": "Modrinth Plus"
+    "message": "Lumen Plus"
   },
   "settings.billing.charges.product.pyro": {
-    "message": "Modrinth Barındırma"
+    "message": "Lumen Barındırma"
   },
   "settings.billing.charges.title": {
     "message": "Past charges"
@@ -4911,13 +4911,13 @@
     "message": "yıl"
   },
   "settings.billing.midas.benefits.ad-free": {
-    "message": "Modrinth App ve modrinth.com'da reklamsız gezinme"
+    "message": "Lumen App ve Lumen.com'da reklamsız gezinme"
   },
   "settings.billing.midas.benefits.badge": {
-    "message": "Profilinde Modrinth+ rozeti"
+    "message": "Profilinde Lumen+ rozeti"
   },
   "settings.billing.midas.benefits.support": {
-    "message": "Modrinth ve üreticilerini direkt olarak destekleyin"
+    "message": "Lumen ve üreticilerini direkt olarak destekleyin"
   },
   "settings.billing.midas.benefits.title": {
     "message": "Ayrıcalıklar"
@@ -4941,7 +4941,7 @@
     "message": "Ödemeniz işleme alınıyor. Ödeme tamamlandığında avantajlar etkinleştirilecektir."
   },
   "settings.billing.midas.upsell": {
-    "message": "Modrinth Plus’a abone olun!"
+    "message": "Lumen Plus’a abone olun!"
   },
   "settings.billing.modal.cancel.action": {
     "message": "Aboneliği iptal et"
@@ -4998,7 +4998,7 @@
     "message": "{shared} Paylaşımlı CPU ( {bursts} CPU’ya kadar ani yükselme)"
   },
   "settings.billing.pyro.linked-server.not-found": {
-    "message": "Bu abonelik için bağlı bir sunucu bulunamadı. Bunun birkaç olası nedeni vardır. Sunucunuzu yeni satın aldıysanız bu normaldir. Sunucunuzun hazırlanması bir saate kadar sürebilir. Eğer sunucuyu bir süre önce satın aldıysanız, büyük ihtimalle askıya alınmıştır. Eğer bunu beklemiyorsanız, lütfen aşağıdaki bilgilerle birlikte Modrinth Destek ile iletişime geçin:"
+    "message": "Bu abonelik için bağlı bir sunucu bulunamadı. Bunun birkaç olası nedeni vardır. Sunucunuzu yeni satın aldıysanız bu normaldir. Sunucunuzun hazırlanması bir saate kadar sürebilir. Eğer sunucuyu bir süre önce satın aldıysanız, büyük ihtimalle askıya alınmıştır. Eğer bunu beklemiyorsanız, lütfen aşağıdaki bilgilerle birlikte Lumen Destek ile iletişime geçin:"
   },
   "settings.billing.pyro.linked-server.server-id": {
     "message": "Sunucu Kimliği:{id}"
@@ -5010,7 +5010,7 @@
     "message": "{gb} GB RAM"
   },
   "settings.billing.pyro.resubscribe.error.text": {
-    "message": "Modrinth sunucuna yeniden abone olurken hata oluştu."
+    "message": "Lumen sunucuna yeniden abone olurken hata oluştu."
   },
   "settings.billing.pyro.resubscribe.error.title": {
     "message": "Yeniden abone olurken hata"
@@ -5037,10 +5037,10 @@
     "message": "{gb} GB Değişim"
   },
   "settings.billing.pyro_subscription.description": {
-    "message": "Modrinth Sunucu aboneliklerini yönet."
+    "message": "Lumen Sunucu aboneliklerini yönet."
   },
   "settings.billing.pyro_subscription.title": {
-    "message": "Modrinth Sunucu Abonelikleri"
+    "message": "Lumen Sunucu Abonelikleri"
   },
   "settings.billing.renews": {
     "message": "{date} tarihinde yenilenir"
@@ -5055,7 +5055,7 @@
     "message": "Abone ol"
   },
   "settings.billing.subscription.description": {
-    "message": "Modrinth aboneliklerinizi yönetin."
+    "message": "Lumen aboneliklerinizi yönetin."
   },
   "settings.billing.subscription.title": {
     "message": "Abonelikler"
@@ -5082,7 +5082,7 @@
     "message": "Geliştirme modunu devre dışı bırak"
   },
   "settings.display.banner.developer-mode.description": {
-    "message": "<strong>Geliştirme modu</strong> aktif. Modrinth'te bulunan çeşitli şeylerin dahilî kimliklerini gösterir, Modrinth API kullanan bir geliştiriciyseniz kullanışlı olabilir. Sayfanın en altındaki Modrinth logosuna 5 kere tıklayarak açılır ve kapanır."
+    "message": "<strong>Geliştirme modu</strong> aktif. Lumen'te bulunan çeşitli şeylerin dahilî kimliklerini gösterir, Lumen API kullanan bir geliştiriciyseniz kullanışlı olabilir. Sayfanın en altındaki Lumen logosuna 5 kere tıklayarak açılır ve kapanır."
   },
   "settings.display.notification.developer-mode-deactivated.text": {
     "message": "Geliştirme modu kapatıldı"
@@ -5097,7 +5097,7 @@
     "message": "Bir PAT yarat"
   },
   "settings.pats.description": {
-    "message": "PAT'ler Modrinth API’sine erişmek için kullanılabilir. Bunlar istendiği zaman oluşturulabilir ve iptal edilebilir. Daha fazla bilgi için <doc-link>Modrinth API dokümantasyonuna</doc-link> bakın."
+    "message": "PAT'ler Lumen API’sine erişmek için kullanılabilir. Bunlar istendiği zaman oluşturulabilir ve iptal edilebilir. Daha fazla bilgi için <doc-link>Lumen API dokümantasyonuna</doc-link> bakın."
   },
   "settings.pats.modal.create.action": {
     "message": "PAT oluştur"
@@ -5154,7 +5154,7 @@
     "message": "Mevcut oturum"
   },
   "settings.sessions.description": {
-    "message": "Şu an Modrinth hesabınızla giriş yapılmış tüm cihazlar burada. Her birinden teker teker çıkış yapabilirsiniz.\n\nEğer tanımadığınız bir girdi varsa, o cihazdan çıkış yapın ve Modrinth hesabınızın parolasını derhal değiştirin."
+    "message": "Şu an Lumen hesabınızla giriş yapılmış tüm cihazlar burada. Her birinden teker teker çıkış yapabilirsiniz.\n\nEğer tanımadığınız bir girdi varsa, o cihazdan çıkış yapın ve Lumen hesabınızın parolasını derhal değiştirin."
   },
   "settings.sessions.last-accessed-ago": {
     "message": "En son {ago} erişildi"
@@ -5178,7 +5178,7 @@
     "message": "Daveti kabul et"
   },
   "shared-instance.invite.inviter.unknown": {
-    "message": "Bir Modrinth kullanıcısı"
+    "message": "Bir Lumen kullanıcısı"
   },
   "shared-instance.invite.loading": {
     "message": "Davet yükleniyor…"
@@ -5187,7 +5187,7 @@
     "message": "{name} seni oynamak için davet etti"
   },
   "shared-instance.invite.trust.description": {
-    "message": "Bu davetiye Modrinth tarafından değil, başka bir Modrinth kullanıcısı tarafından oluşturulmuştur. Sadece güvendiğiniz kişilerden gelen davetleri kabul edin."
+    "message": "Bu davetiye Lumen tarafından değil, başka bir Lumen kullanıcısı tarafından oluşturulmuştur. Sadece güvendiğiniz kişilerden gelen davetleri kabul edin."
   },
   "shared-instance.invite.trust.heading": {
     "message": "Bu kullanıcıyı tanıyor musun?"
@@ -5196,7 +5196,7 @@
     "message": "Bu davet mevcut değil"
   },
   "ui.latest-news-row.latest-news": {
-    "message": "Modrinth'ten haberler"
+    "message": "Lumen'ten haberler"
   },
   "ui.latest-news-row.view-all": {
     "message": "Bütün haberleri gör"
@@ -5208,7 +5208,7 @@
     "message": "Abone Olundu!"
   },
   "ui.newsletter-button.tooltip": {
-    "message": "Modrinth haber mektuplarına abone ol"
+    "message": "Lumen haber mektuplarına abone ol"
   },
   "version.all-versions": {
     "message": "Tüm sürümler"

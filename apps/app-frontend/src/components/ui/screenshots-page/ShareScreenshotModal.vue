@@ -1,24 +1,18 @@
 <script setup lang="ts">
-import { MessageIcon } from '@modrinth/assets'
-import {
-	Avatar,
-	defineMessages,
-	injectNotificationManager,
-	NewModal,
-	useVIntl,
-} from '@modrinth/ui'
+import { MessageIcon } from '@lumen/assets'
+import { Avatar, defineMessages, injectNotificationManager, NewModal, useVIntl } from '@lumen/ui'
 import { computed, inject, ref, useTemplateRef } from 'vue'
 
-import { useOctraCommunityAvatars } from '@/composables/use-octra-community-avatars'
 import { handleSevereError } from '@/composables/use-error.js'
+import { useLumenCommunityAvatars } from '@/composables/use-lumen-community-avatars'
 import type { InstanceScreenshot } from '@/helpers/instance'
 import {
-	octraAccountSession,
-	octraChatOpenDm,
-	octraChatPost,
-	octraChatUploadImage,
-	octraCommunity,
-} from '@/helpers/octra-account.js'
+	LumenAccountSession,
+	LumenChatOpenDm,
+	LumenChatPost,
+	LumenChatUploadImage,
+	LumenCommunity,
+} from '@/helpers/lumen-account.js'
 
 type CommunityMember = {
 	id: number
@@ -33,7 +27,10 @@ const emit = defineEmits<{
 
 const { formatMessage } = useVIntl()
 const { handleError, addNotification } = injectNotificationManager()
-const openOctraChatDm = inject<(userId: number) => void | Promise<void>>('openOctraChatDm', () => {})
+const openLumenChatDm = inject<(userId: number) => void | Promise<void>>(
+	'openLumenChatDm',
+	() => {},
+)
 
 const modal = useTemplateRef<InstanceType<typeof NewModal>>('modal')
 const screenshot = ref<InstanceScreenshot | null>(null)
@@ -42,7 +39,7 @@ const loading = ref(false)
 const sendingId = ref<number | null>(null)
 const signedIn = ref(false)
 
-const { avatarFor } = useOctraCommunityAvatars(members)
+const { avatarFor } = useLumenCommunityAvatars(members)
 
 const sortedMembers = computed(() =>
 	members.value
@@ -59,11 +56,11 @@ const messages = defineMessages({
 	},
 	hint: {
 		id: 'app.screenshots.share.hint',
-		defaultMessage: 'Pick someone to send this screenshot in Octra chat.',
+		defaultMessage: 'Pick someone to send this screenshot in Lumen chat.',
 	},
 	signIn: {
 		id: 'app.screenshots.share.sign-in',
-		defaultMessage: 'Sign in to Octra to share screenshots with friends.',
+		defaultMessage: 'Sign in to Lumen to share screenshots with friends.',
 	},
 	empty: {
 		id: 'app.screenshots.share.empty',
@@ -85,13 +82,13 @@ async function show(target: InstanceScreenshot) {
 	loading.value = true
 	modal.value?.show()
 	try {
-		const session = await octraAccountSession()
+		const session = await LumenAccountSession()
 		signedIn.value = !!session
 		if (!session) {
 			members.value = []
 			return
 		}
-		const snap = await octraCommunity()
+		const snap = await LumenCommunity()
 		members.value = (snap?.members ?? []).map((member) => ({
 			id: member.id,
 			minecraft_nick: member.minecraft_nick,
@@ -111,14 +108,14 @@ async function shareWith(member: CommunityMember) {
 	if (!screenshot.value || sendingId.value != null) return
 	sendingId.value = member.id
 	try {
-		const channel = await octraChatOpenDm(member.id)
-		const uploaded = await octraChatUploadImage(screenshot.value.path)
+		const channel = await LumenChatOpenDm(member.id)
+		const uploaded = await LumenChatUploadImage(screenshot.value.path)
 		const body = formatMessage(messages.chatBody, {
 			name: screenshot.value.file_name,
 			instance: screenshot.value.instance_name || '—',
 		})
-		await octraChatPost(channel.id, body, uploaded.path)
-		await openOctraChatDm(member.id)
+		await LumenChatPost(channel.id, body, uploaded.path)
+		await openLumenChatDm(member.id)
 		addNotification({
 			type: 'success',
 			title: formatMessage(messages.success, { nick: member.minecraft_nick }),

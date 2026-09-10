@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { MessageIcon } from '@modrinth/assets'
-import { ButtonLink, defineMessages, PagewideBanner, useVIntl } from '@modrinth/ui'
+import { MessageIcon } from '@lumen/assets'
+import { ButtonLink, defineMessages, PagewideBanner, useVIntl } from '@lumen/ui'
 
 const { formatMessage } = useVIntl()
 

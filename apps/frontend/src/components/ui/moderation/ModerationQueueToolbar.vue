@@ -37,8 +37,8 @@
 </template>
 
 <script setup lang="ts">
-import { SearchIcon } from '@modrinth/assets'
-import { commonMessages, Input, Pagination, useVIntl } from '@modrinth/ui'
+import { SearchIcon } from '@lumen/assets'
+import { commonMessages, Input, Pagination, useVIntl } from '@lumen/ui'
 
 const query = defineModel<string>({ required: true })
 

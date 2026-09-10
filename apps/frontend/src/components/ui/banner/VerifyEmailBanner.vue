@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { SettingsIcon } from '@modrinth/assets'
+import { SettingsIcon } from '@lumen/assets'
 import {
 	Button,
 	ButtonLink,
@@ -7,7 +7,7 @@ import {
 	injectNotificationManager,
 	PagewideBanner,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { FetchError } from 'ofetch'
 
 const { addNotification } = injectNotificationManager()
@@ -26,7 +26,7 @@ const verifyEmailBannerMessages = defineMessages({
 	description: {
 		id: 'layout.banner.verify-email.description',
 		defaultMessage:
-			'For security reasons, Modrinth needs you to verify the email address associated with your account.',
+			'For security reasons, Lumen needs you to verify the email address associated with your account.',
 	},
 	action: {
 		id: 'layout.banner.verify-email.action',
@@ -42,7 +42,7 @@ const addEmailBannerMessages = defineMessages({
 	description: {
 		id: 'layout.banner.add-email.description',
 		defaultMessage:
-			'For security reasons, Modrinth needs you to register an email address to your account.',
+			'For security reasons, Lumen needs you to register an email address to your account.',
 	},
 	action: {
 		id: 'layout.banner.add-email.button',

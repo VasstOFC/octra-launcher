@@ -30,7 +30,7 @@
 			<ProjectSidebarCreators
 				:organization="organization"
 				:members="members"
-				:org-link="(slug) => `https://modrinth.com/organization/${slug}`"
+				:org-link="(slug) => `https://Lumen.com/organization/${slug}`"
 				:user-link="(username) => `/user/${encodeURIComponent(username)}`"
 				link-target="_blank"
 				:user-link-target="null"
@@ -249,7 +249,7 @@ import {
 	ReportIcon,
 	SpinnerIcon,
 	StopCircleIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import {
 	BrowseInstallHeader,
 	Button,
@@ -273,7 +273,7 @@ import {
 	SelectedProjectsFloatingBar,
 	TeleportOverflowMenu,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useQueryClient } from '@tanstack/vue-query'
 import { openUrl } from '@tauri-apps/plugin-opener'
 import dayjs from 'dayjs'
@@ -588,7 +588,7 @@ const installButtonIconClass = computed(() =>
 const serverProjectHeaderMoreActions = computed(() => [
 	{
 		id: 'open-in-browser',
-		label: formatMessage(commonMessages.openInModrinthButton),
+		label: formatMessage(commonMessages.openInLumenButton),
 		icon: ExternalIcon,
 		action: openProjectInBrowser,
 	},
@@ -622,7 +622,7 @@ const projectHeaderMoreActions = computed(() => [
 	},
 	{
 		id: 'open-in-browser',
-		label: formatMessage(commonMessages.openInModrinthButton),
+		label: formatMessage(commonMessages.openInLumenButton),
 		icon: ExternalIcon,
 		action: openProjectInBrowser,
 	},
@@ -688,12 +688,12 @@ function handleAddServerToInstance() {
 function openProjectInBrowser() {
 	if (!data.value) return
 	const type = isServerProject.value ? 'project' : data.value.project_type
-	void openUrl(`https://modrinth.com/${type}/${data.value.slug}`)
+	void openUrl(`https://Lumen.com/${type}/${data.value.slug}`)
 }
 
 function reportProject() {
 	if (!data.value) return
-	void openUrl(`https://modrinth.com/report?item=project&itemID=${data.value.id}`)
+	void openUrl(`https://Lumen.com/report?item=project&itemID=${data.value.id}`)
 }
 
 async function fetchProjectData() {
@@ -932,7 +932,7 @@ const handleRightClick = (event) => {
 		{ type: 'divider' },
 		{
 			id: 'open_link',
-			label: formatMessage(commonMessages.openInModrinthButton),
+			label: formatMessage(commonMessages.openInLumenButton),
 			icon: GlobeIcon,
 			action: () => openProjectLink(project),
 		},
@@ -944,7 +944,7 @@ const handleRightClick = (event) => {
 		},
 	])
 }
-const getProjectLink = (project) => `https://modrinth.com/${project.project_type}/${project.slug}`
+const getProjectLink = (project) => `https://Lumen.com/${project.project_type}/${project.slug}`
 const openProjectLink = (project) => openUrl(getProjectLink(project))
 const copyProjectLink = (project) => navigator.clipboard.writeText(getProjectLink(project))
 </script>

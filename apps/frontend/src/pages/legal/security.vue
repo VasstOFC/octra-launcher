@@ -3,7 +3,7 @@
 		<h1>Security Notice</h1>
 
 		<p>
-			This is the security notice for all Modrinth repositories. The notice explains how
+			This is the security notice for all Lumen repositories. The notice explains how
 			vulnerabilities should be reported.
 		</p>
 		<h2>Reporting a Vulnerability</h2>
@@ -13,7 +13,7 @@
 			<strong>Do not open a GitHub issue for a found vulnerability</strong>.
 		</p>
 		<p>
-			Send details to <a href="mailto:support@modrinth.com">support@modrinth.com</a>
+			Send details to <a href="mailto:support@Lumen.com">support@Lumen.com</a>
 			including:
 		</p>
 		<ul>
@@ -54,10 +54,10 @@
 
 <script setup>
 const description =
-	'The Security Notice of Modrinth, an open source modding platform focused on Minecraft.'
+	'The Security Notice of Lumen, an open source modding platform focused on Minecraft.'
 
 useSeoMeta({
-	title: 'Security Notice - Modrinth',
+	title: 'Security Notice - Lumen',
 	description,
 	ogTitle: 'Security Notice',
 	ogDescription: description,

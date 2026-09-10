@@ -1,4 +1,4 @@
-import { defineMessages, type MessageDescriptor } from '@modrinth/ui'
+import { defineMessages, type MessageDescriptor } from '@lumen/ui'
 
 const playtimeMessages = defineMessages({
 	hours: {

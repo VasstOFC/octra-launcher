@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
+import type { Labrinth } from '@lumen/api-client'
 import {
 	CheckIcon,
 	CompassIcon,
@@ -8,8 +8,8 @@ import {
 	PlusIcon,
 	ServerStackIcon,
 	SpinnerIcon,
-} from '@modrinth/assets'
-import type { BrowseInstallContentType, CardAction, ProjectType, Tags } from '@modrinth/ui'
+} from '@lumen/assets'
+import type { BrowseInstallContentType, CardAction, ProjectType, Tags } from '@lumen/ui'
 import {
 	BrowsePageLayout,
 	BrowseSidebar,
@@ -31,7 +31,7 @@ import {
 	useBrowseSearch,
 	useDebugLogger,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
 import type { Ref } from 'vue'
 import { computed, onBeforeUnmount, ref, shallowRef, watch } from 'vue'

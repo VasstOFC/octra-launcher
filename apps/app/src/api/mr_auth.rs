@@ -11,19 +11,19 @@ use tokio::sync::oneshot;
 pub fn init<R: tauri::Runtime>() -> TauriPlugin<R> {
     tauri::plugin::Builder::new("mr-auth")
         .invoke_handler(tauri::generate_handler![
-            modrinth_login,
+            lumen_login,
             logout,
             get,
             get_all,
             set_active,
             remove_account,
-            cancel_modrinth_login,
+            cancel_lumen_login,
         ])
         .build()
 }
 
 #[tauri::command]
-pub async fn modrinth_login<R: Runtime>(
+pub async fn lumen_login<R: Runtime>(
     app: tauri::AppHandle<R>,
     flow: mr_auth::ModrinthAuthFlow,
     add_account: Option<bool>,
@@ -102,6 +102,6 @@ pub async fn remove_account(user_id: String) -> Result<()> {
 }
 
 #[tauri::command]
-pub fn cancel_modrinth_login() {
+pub fn cancel_lumen_login() {
     oauth_utils::auth_code_reply::stop_listeners();
 }

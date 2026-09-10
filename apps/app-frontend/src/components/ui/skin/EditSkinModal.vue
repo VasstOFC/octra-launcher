@@ -131,7 +131,7 @@
 </template>
 
 <script setup lang="ts">
-import { CheckIcon, SaveIcon, SpinnerIcon, UploadIcon, XIcon } from '@modrinth/assets'
+import { CheckIcon, SaveIcon, SpinnerIcon, UploadIcon, XIcon } from '@lumen/assets'
 import {
 	Button,
 	CapeButton,
@@ -144,8 +144,8 @@ import {
 	SkinPreviewRenderer,
 	useScrollIndicator,
 	useVIntl,
-} from '@modrinth/ui'
-import { arrayBufferToBase64 } from '@modrinth/utils'
+} from '@lumen/ui'
+import { arrayBufferToBase64 } from '@lumen/utils'
 import { computed, nextTick, ref, useTemplateRef, watch } from 'vue'
 
 import {

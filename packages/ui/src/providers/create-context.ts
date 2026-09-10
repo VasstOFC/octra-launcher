@@ -43,9 +43,7 @@ export function createContext<ContextValue>(
 			? `${providerComponentName}Context`
 			: contextName
 
-	const injectionKey: InjectionKey<ContextValue | null> = Symbol.for(
-		`modrinth:${symbolDescription}`,
-	)
+	const injectionKey: InjectionKey<ContextValue | null> = Symbol.for(`Lumen:${symbolDescription}`)
 
 	/**
 	 * @param fallback The context value to return if the injection fails.

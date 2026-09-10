@@ -43,12 +43,12 @@ async fn initialize_state(
     app.fs_scope()
         .allow_directory(state.directories.instances_dir(), true)?;
 
-    if let Some(octra_dir) = theseus::octra_sync::octra_launcher_dir() {
-        let octra_instances = octra_dir.join("instances");
-        let _ = app.fs_scope().allow_directory(&octra_instances, true);
+    if let Some(lumen_dir) = theseus::lumen_sync::octra_launcher_dir() {
+        let lumen_instances = lumen_dir.join("instances");
+        let _ = app.fs_scope().allow_directory(&lumen_instances, true);
         let _ = app
             .asset_protocol_scope()
-            .allow_directory(&octra_instances, true);
+            .allow_directory(&lumen_instances, true);
     }
 
     Ok(())
@@ -94,7 +94,7 @@ fn is_dev() -> bool {
 #[tauri::command]
 fn are_updates_enabled() -> bool {
     cfg!(feature = "updater")
-        && env::var("MODRINTH_EXTERNAL_UPDATE_PROVIDER").is_err()
+        && env::var("LUMEN_EXTERNAL_UPDATE_PROVIDER").is_err()
 }
 
 #[cfg(feature = "updater")]
@@ -304,7 +304,7 @@ fn main() {
         .plugin(api::ads::init())
         .plugin(api::friends::init())
         .plugin(api::worlds::init())
-        .plugin(api::octra::init())
+        .plugin(api::lumen::init())
         .manage(PendingUpdateData::default())
         .invoke_handler(tauri::generate_handler![
             initialize_state,

@@ -18,7 +18,7 @@ import {
 	SquarePlusIcon,
 	TrashIcon,
 	XIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import {
 	Avatar,
 	Button,
@@ -39,7 +39,7 @@ import {
 	useReadyState,
 	useScrollViewport,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
 import { save } from '@tauri-apps/plugin-dialog'
 import { readFile } from '@tauri-apps/plugin-fs'
@@ -298,7 +298,7 @@ const messages = defineMessages({
 	zipArchive: { id: 'app.screenshots.selection.zip-archive', defaultMessage: 'ZIP archive' },
 	globalExportFilename: {
 		id: 'app.screenshots.selection.global-export-filename',
-		defaultMessage: 'Modrinth screenshots.zip',
+		defaultMessage: 'Lumen screenshots.zip',
 	},
 	instanceExportFilename: {
 		id: 'app.screenshots.selection.instance-export-filename',

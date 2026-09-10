@@ -7,8 +7,8 @@
 </template>
 
 <script setup lang="ts">
-import { SpinnerIcon } from '@modrinth/assets'
-import { useFormatNumber } from '@modrinth/ui'
+import { SpinnerIcon } from '@lumen/assets'
+import { useFormatNumber } from '@lumen/ui'
 
 defineProps<{
 	label: string

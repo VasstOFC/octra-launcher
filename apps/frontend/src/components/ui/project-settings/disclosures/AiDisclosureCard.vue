@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { SparklesIcon } from '@modrinth/assets'
+import { SparklesIcon } from '@lumen/assets'
 import {
 	Checkbox,
 	commonMessages,
@@ -10,7 +10,7 @@ import {
 	SettingsFormGroup,
 	Textarea,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 
 import DisclosureToggleCard from './DisclosureToggleCard.vue'
 import type { AiDisclosure, AiUsage, DisclosureCardMetaProps, DisclosureLockStatus } from './types'
@@ -42,7 +42,7 @@ const messages = defineMessages({
 	contentRules: {
 		id: 'project.settings.disclosures.ai.content-rules',
 		defaultMessage:
-			"Please refer to Section 6 of <rules>Modrinth's Content Rules</rules> for more information.",
+			"Please refer to Section 6 of <rules>Lumen's Content Rules</rules> for more information.",
 	},
 	typesDescription: {
 		id: 'project.settings.disclosures.ai.types-description',

@@ -1,4 +1,4 @@
-import { DownloadIcon, EyeIcon, FolderOpenIcon } from '@modrinth/assets'
+import { DownloadIcon, EyeIcon, FolderOpenIcon } from '@lumen/assets'
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { fn } from 'storybook/test'
 import { onMounted, onUnmounted, ref } from 'vue'
@@ -557,7 +557,7 @@ export const WithCustomItemButtons: Story = {
 					</IconButton>
 				</template>
 				<template #itemButtonsRight="{ item }">
-					<IconButton type="quiet" label="View on Modrinth" v-tooltip="'View on Modrinth'" @click="console.log('View', item.id)">
+					<IconButton type="quiet" label="View on Lumen" v-tooltip="'View on Lumen'" @click="console.log('View', item.id)">
 						<EyeIcon class="size-5 text-secondary" />
 					</IconButton>
 					<IconButton type="quiet" label="Open folder" v-tooltip="'Open folder'" @click="console.log('Open folder', item.id)">
@@ -760,7 +760,7 @@ export const WithOverflowMenu: Story = {
 				@update:enabled="(id, val) => console.log('Toggle', id, val)"
 				@delete="(id) => console.log('Delete', id)"
 			>
-				<template #view>View on Modrinth</template>
+				<template #view>View on Lumen</template>
 				<template #folder>Open folder</template>
 				<template #remove>Remove</template>
 			</ContentCardTable>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { RadioButtonCheckedIcon, RadioButtonIcon } from '@modrinth/assets'
-import { defineMessages, useVIntl } from '@modrinth/ui'
+import { RadioButtonCheckedIcon, RadioButtonIcon } from '@lumen/assets'
+import { defineMessages, useVIntl } from '@lumen/ui'
 import { computed } from 'vue'
 
 import { ACCENT_PRESETS, type AccentPresetId, normalizeHexColor } from '@/helpers/accent-colors.ts'
@@ -26,23 +26,23 @@ const { formatMessage } = useVIntl()
 const messages = defineMessages({
 	title: {
 		id: 'app.settings.accent.title',
-		defaultMessage: 'Accent color',
+		defaultMessage: 'Kolor akcentu',
 	},
 	description: {
 		id: 'app.settings.accent.description',
-		defaultMessage: 'Change the accent color used for buttons, highlights, and glow effects.',
+		defaultMessage: 'Zmień kolor akcentu używany dla przycisków, podświetleń i efektów glow.',
 	},
 	custom: {
 		id: 'app.settings.accent.custom',
-		defaultMessage: 'Custom',
+		defaultMessage: 'Własny',
 	},
 	customColorLabel: {
 		id: 'app.settings.accent.custom-color-label',
-		defaultMessage: 'Custom accent color',
+		defaultMessage: 'Własny kolor akcentu',
 	},
-	presetOctra: {
-		id: 'app.settings.accent.preset.octra',
-		defaultMessage: 'Octra',
+	presetLumen: {
+		id: 'app.settings.accent.preset.Lumen',
+		defaultMessage: 'Lumen',
 	},
 	presetCobalt: {
 		id: 'app.settings.accent.preset.cobalt',
@@ -67,7 +67,7 @@ const messages = defineMessages({
 })
 
 const presetLabelMessages = {
-	octra: messages.presetOctra,
+	Lumen: messages.presetLumen,
 	cobalt: messages.presetCobalt,
 	ember: messages.presetEmber,
 	mint: messages.presetMint,

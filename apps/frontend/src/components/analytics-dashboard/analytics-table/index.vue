@@ -189,8 +189,8 @@
 </template>
 
 <script setup lang="ts">
-import { DownloadIcon, DropdownIcon, SearchIcon, UserIcon } from '@modrinth/assets'
-import { TeleportOverflowMenu } from '@modrinth/ui'
+import { DownloadIcon, DropdownIcon, SearchIcon, UserIcon } from '@lumen/assets'
+import { TeleportOverflowMenu } from '@lumen/ui'
 import {
 	type ButtonMenuOption,
 	Input,
@@ -198,7 +198,7 @@ import {
 	Table,
 	useFormatNumber,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import type { LocationQuery } from 'vue-router'
 
 import {

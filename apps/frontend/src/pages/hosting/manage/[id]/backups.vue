@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import {
-	injectModrinthClient,
-	injectModrinthServerContext,
+	injectLumenClient,
+	injectLumenServerContext,
 	ServersManageBackupsPage,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useQueryClient } from '@tanstack/vue-query'
 
-const client = injectModrinthClient()
-const { server, serverId, worldId, isServerRunning } = injectModrinthServerContext()
+const client = injectLumenClient()
+const { server, serverId, worldId, isServerRunning } = injectLumenServerContext()
 const queryClient = useQueryClient()
 const flags = useFeatureFlags()
 
@@ -24,7 +24,7 @@ if (worldId.value) {
 }
 
 useHead({
-	title: `Backups - ${server.value?.name ?? 'Server'} - Modrinth`,
+	title: `Backups - ${server.value?.name ?? 'Server'} - Lumen`,
 })
 </script>
 

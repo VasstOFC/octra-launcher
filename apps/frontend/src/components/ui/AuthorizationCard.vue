@@ -76,8 +76,8 @@
 	</div>
 </template>
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
-import { BadgeCheckIcon, CheckIcon, IssuesIcon, XCircleIcon } from '@modrinth/assets'
+import type { Labrinth } from '@lumen/api-client'
+import { BadgeCheckIcon, CheckIcon, IssuesIcon, XCircleIcon } from '@lumen/assets'
 import {
 	Avatar,
 	Button,
@@ -87,8 +87,8 @@ import {
 	PageHeaderMetadata,
 	PageHeaderMetadataItem,
 	useVIntl,
-} from '@modrinth/ui'
-import { isOfficialAccount } from '@modrinth/utils'
+} from '@lumen/ui'
+import { isOfficialAccount } from '@lumen/utils'
 
 import { useScopes } from '~/composables/auth/scopes.ts'
 
@@ -112,7 +112,7 @@ const descriptionId = computed(() => `app-description-${props.authorization.id}`
 const scopeListId = computed(() => `app-scope-list-${props.authorization.id}`)
 
 const unofficialTriggerWords = [
-	'modrinth',
+	'Lumen',
 	'mod rinth',
 	'rnodrinth',
 	'rinth',
@@ -153,11 +153,11 @@ const messages = defineMessages({
 	},
 	unofficialDisclosure: {
 		id: 'settings.authorizations.unofficial-disclosure',
-		defaultMessage: 'This app is not affiliated with Modrinth in any way, despite its name.',
+		defaultMessage: 'This app is not affiliated with Lumen in any way, despite its name.',
 	},
 	officialTooltip: {
 		id: 'settings.authorizations.official-tooltip',
-		defaultMessage: 'This app is created by an official Modrinth account.',
+		defaultMessage: 'This app is created by an official Lumen account.',
 	},
 })
 </script>

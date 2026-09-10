@@ -41,7 +41,7 @@ export const AllBrands: StoryObj = {
 				'kofi',
 				'paypal',
 				'curseforge',
-				'modrinth',
+				'Lumen',
 				'instagram',
 				'facebook',
 				'tiktok',

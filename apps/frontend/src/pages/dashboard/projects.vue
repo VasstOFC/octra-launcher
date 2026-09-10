@@ -340,7 +340,7 @@ import {
 	TrashIcon,
 	TriangleAlertIcon,
 	XIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import {
 	Button,
 	ButtonLink,
@@ -357,8 +357,8 @@ import {
 	ProjectStatusBadge,
 	Table,
 	useVIntl,
-} from '@modrinth/ui'
-import { formatProjectType } from '@modrinth/utils'
+} from '@lumen/ui'
+import { formatProjectType } from '@lumen/utils'
 
 import ModalCreation from '~/components/ui/create/ProjectCreateModal.vue'
 import { getProjectTypeForUrl } from '~/helpers/projects.js'
@@ -508,7 +508,7 @@ const messages = defineMessages({
 	},
 })
 
-useHead({ title: () => `${formatMessage(messages.headTitle)} - Modrinth` })
+useHead({ title: () => `${formatMessage(messages.headTitle)} - Lumen` })
 
 const user = await useUser()
 const projects = ref([])

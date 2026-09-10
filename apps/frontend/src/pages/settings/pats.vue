@@ -123,7 +123,7 @@
 		<p>
 			<IntlFormatted :message-id="messages.description">
 				<template #doc-link="{ children }">
-					<a class="text-link" href="https://docs.modrinth.com">
+					<a class="text-link" href="https://docs.Lumen.com">
 						<component :is="() => children" />
 					</a>
 				</template>
@@ -206,7 +206,7 @@
 	</div>
 </template>
 <script setup>
-import { EditIcon, PlusIcon, SaveIcon, TrashIcon, XIcon } from '@modrinth/assets'
+import { EditIcon, PlusIcon, SaveIcon, TrashIcon, XIcon } from '@lumen/assets'
 import {
 	Button,
 	Checkbox,
@@ -216,7 +216,7 @@ import {
 	CopyCode,
 	DatePicker,
 	defineMessages,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	Input,
 	IntlFormatted,
@@ -224,7 +224,7 @@ import {
 	useFormatDateTime,
 	useRelativeTime,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
 
 import {
@@ -236,7 +236,7 @@ import {
 	useScopes,
 } from '~/composables/auth/scopes.ts'
 
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const queryClient = useQueryClient()
 const { addNotification } = injectNotificationManager()
 const { formatMessage } = useVIntl()
@@ -293,7 +293,7 @@ const messages = defineMessages({
 	description: {
 		id: 'settings.pats.description',
 		defaultMessage:
-			"PATs can be used to access Modrinth's API. They can be created and revoked at any time. For more information, see <doc-link>Modrinth's API documentation</doc-link>.",
+			"PATs can be used to access Lumen's API. They can be created and revoked at any time. For more information, see <doc-link>Lumen's API documentation</doc-link>.",
 	},
 	create: {
 		id: 'settings.pats.action.create',
@@ -333,7 +333,7 @@ definePageMeta({
 })
 
 useHead({
-	title: `${formatMessage(commonSettingsMessages.pats)} - Modrinth`,
+	title: `${formatMessage(commonSettingsMessages.pats)} - Lumen`,
 })
 
 const data = useNuxtApp()

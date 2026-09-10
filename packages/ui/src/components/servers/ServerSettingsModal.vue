@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { Archon } from '@modrinth/api-client'
-import { ChevronRightIcon } from '@modrinth/assets'
+import type { Archon } from '@lumen/api-client'
+import { ChevronRightIcon } from '@lumen/assets'
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
 import { computed, nextTick, ref } from 'vue'
 
@@ -18,8 +18,8 @@ import {
 } from '#ui/layouts/shared/server-settings'
 import { provideServerSettings } from '#ui/layouts/shared/server-settings/providers/server-settings'
 import {
-	injectModrinthClient,
-	injectModrinthServerContext,
+	injectLumenClient,
+	injectLumenServerContext,
 	injectNotificationManager,
 } from '#ui/providers'
 import { commonMessages } from '#ui/utils/common-messages'
@@ -41,7 +41,7 @@ const props = defineProps<{
 
 const { formatMessage } = useVIntl()
 const queryClient = useQueryClient()
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const { addNotification } = injectNotificationManager()
 
 const messages = defineMessages({
@@ -53,7 +53,7 @@ const messages = defineMessages({
 
 const modal = ref<InstanceType<typeof TabbedModal> | null>(null)
 
-const { serverId: currentServerId, worldId, server } = injectModrinthServerContext()
+const { serverId: currentServerId, worldId, server } = injectLumenServerContext()
 
 const currentUserId = ref<string | null>(null)
 const currentUserRole = ref<string | null>(null)
@@ -110,7 +110,7 @@ const tabs = computed<TabbedModalTab[]>(() =>
 			return {
 				name,
 				icon: tab.icon,
-				href: tab.href ? `https://modrinth.com${tab.href(ctx)}` : undefined,
+				href: tab.href ? `https://Lumen.com${tab.href(ctx)}` : undefined,
 				shown,
 			}
 		}

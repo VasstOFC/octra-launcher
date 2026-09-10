@@ -5,9 +5,9 @@ use std::path::PathBuf;
 use engine::InstallOptions;
 use serde::{Deserialize, Serialize};
 
-pub const APP_DISPLAY_NAME: &str = "Octra App";
-pub const APP_EXECUTABLE: &str = "Octra App.exe";
-pub const INSTALLER_EXECUTABLE: &str = "Octra Setup.exe";
+pub const APP_DISPLAY_NAME: &str = "Lumen App";
+pub const APP_EXECUTABLE: &str = "Lumen App.exe";
+pub const INSTALLER_EXECUTABLE: &str = "Lumen Setup.exe";
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]

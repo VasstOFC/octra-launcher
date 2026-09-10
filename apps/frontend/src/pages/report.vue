@@ -266,8 +266,8 @@ import {
 	SpinnerIcon,
 	VersionIcon,
 	XCircleIcon,
-} from '@modrinth/assets'
-import { Button, ButtonLink } from '@modrinth/ui'
+} from '@lumen/assets'
+import { Button, ButtonLink } from '@lumen/ui'
 import {
 	AutoLink,
 	Avatar,
@@ -284,8 +284,8 @@ import {
 	RadialHeader,
 	RadioButtons,
 	useVIntl,
-} from '@modrinth/ui'
-import type { Project, Report, User, Version } from '@modrinth/utils'
+} from '@lumen/ui'
+import type { Project, Report, User, Version } from '@lumen/utils'
 import { useDebounceFn } from '@vueuse/core'
 
 import { useImageUpload } from '~/composables/image-upload.ts'
@@ -576,7 +576,7 @@ const messages = defineMessages({
 	violation: {
 		id: 'report.for.violation',
 		defaultMessage:
-			'Violation of Modrinth <rules-link>Rules</rules-link> or <terms-link>Terms of Use</terms-link>',
+			'Violation of Lumen <rules-link>Rules</rules-link> or <terms-link>Terms of Use</terms-link>',
 	},
 	violationDescription: {
 		id: 'report.for.violation.description',
@@ -609,7 +609,7 @@ const messages = defineMessages({
 	},
 	whatReportReason: {
 		id: 'report.question.report-reason',
-		defaultMessage: "Which of Modrinth's rules is this {item} violating?",
+		defaultMessage: "Which of Lumen's rules is this {item} violating?",
 	},
 	checking: {
 		id: 'report.checking',

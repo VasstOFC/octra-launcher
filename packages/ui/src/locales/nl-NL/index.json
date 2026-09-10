@@ -99,7 +99,7 @@
     "defaultMessage": "Geen resultaten gevonden voor je zoekopdracht!"
   },
   "browse.offline": {
-    "defaultMessage": "Je bent op dit moment offline. Maak verbinding met internet om Modrinth te bekijken!"
+    "defaultMessage": "Je bent op dit moment offline. Maak verbinding met internet om Lumen te bekijken!"
   },
   "browse.search.placeholder": {
     "defaultMessage": "Zoeken naar {projectType}..."
@@ -227,8 +227,8 @@
   "button.open-in-folder": {
     "defaultMessage": "Open in map"
   },
-  "button.open-in-modrinth": {
-    "defaultMessage": "Open in Modrinth"
+  "button.open-in-Lumen": {
+    "defaultMessage": "Open in Lumen"
   },
   "button.play": {
     "defaultMessage": "Speel"
@@ -507,13 +507,13 @@
     "defaultMessage": "{count} verwijderd (uitgeschakeld)"
   },
   "content.diff-modal.reviewed-files": {
-    "defaultMessage": "Bestanden die niet op Modrinth worden gepubliceerd, worden niet beoordeeld."
+    "defaultMessage": "Bestanden die niet op Lumen worden gepubliceerd, worden niet beoordeeld."
   },
   "content.diff-modal.unknown-content-body": {
     "defaultMessage": "Sommige inhoud op je server kon niet worden geanalyseerd en kan door deze wijziging worden beïnvloed."
   },
   "content.diff-modal.unknown-files-description": {
-    "defaultMessage": "Deze update bevat bestanden die niet op Modrinth zijn gepubliceerd. We raden je ten zeerste aan om alleen bestanden te installeren uit bronnen die je vertrouwt."
+    "defaultMessage": "Deze update bevat bestanden die niet op Lumen zijn gepubliceerd. We raden je ten zeerste aan om alleen bestanden te installeren uit bronnen die je vertrouwt."
   },
   "content.diff-modal.unknown-files-warning": {
     "defaultMessage": "Waarschuwing voor onbekende bestanden"
@@ -1025,8 +1025,8 @@
   "external-files.permissions-card.editor.link-to-work-url-placeholder": {
     "defaultMessage": "link-naar-werk"
   },
-  "external-files.permissions-card.editor.modrinth-link-to-work": {
-    "defaultMessage": "Dit lijkt een Modrinth-link te zijn. Als deze inhoud op Modrinth beschikbaar is, is je pakket waarschijnlijk niet correct geëxporteerd. Als je het van een andere site hebt gedownload, probeer dan in plaats daarvan de Modrinth-versie te downloaden; soms zijn het geen identieke bestanden."
+  "external-files.permissions-card.editor.Lumen-link-to-work": {
+    "defaultMessage": "Dit lijkt een Lumen-link te zijn. Als deze inhoud op Lumen beschikbaar is, is je pakket waarschijnlijk niet correct geëxporteerd. Als je het van een andere site hebt gedownload, probeer dan in plaats daarvan de Lumen-versie te downloaden; soms zijn het geen identieke bestanden."
   },
   "external-files.permissions-card.editor.notes-label": {
     "defaultMessage": "Opmerkingen"
@@ -1050,7 +1050,7 @@
     "defaultMessage": "Als blijkt dat je hebt gelogen of de geüploade afbeeldingen hebt gemanipuleerd, kunnen je project en je account worden beëindigd."
   },
   "external-files.permissions-card.editor.proof-warning.title": {
-    "defaultMessage": "Medewerkers van Modrinth kunnen de ingediende bewijsstukken controleren"
+    "defaultMessage": "Medewerkers van Lumen kunnen de ingediende bewijsstukken controleren"
   },
   "external-files.permissions-card.editor.save": {
     "defaultMessage": "Bronvermelding opslaan"
@@ -1137,7 +1137,7 @@
     "defaultMessage": "Automatisch toegewezen"
   },
   "external-files.permissions-card.reason.globally-allowed.description": {
-    "defaultMessage": "We hebben dit bestand al eerder gezien en hebben een bronvermelding voor je opgesteld. Mocht er iets niet kloppen, neem dan contact op met Modrinth Support via de klantenservice"
+    "defaultMessage": "We hebben dit bestand al eerder gezien en hebben een bronvermelding voor je opgesteld. Mocht er iets niet kloppen, neem dan contact op met Lumen Support via de klantenservice"
   },
   "external-files.permissions-card.reason.license": {
     "defaultMessage": "Licentie"
@@ -2628,16 +2628,16 @@
     "defaultMessage": "Houd de bestanden geupdate wanneer de server verandert"
   },
   "modal.open-in-app.get-app": {
-    "defaultMessage": "Krijg de Modrinth App"
+    "defaultMessage": "Krijg de Lumen App"
   },
   "modal.open-in-app.opening-automatically": {
-    "defaultMessage": "De Modrinth App zal automatisch openen..."
+    "defaultMessage": "De Lumen App zal automatisch openen..."
   },
   "modal.open-in-app.title": {
-    "defaultMessage": "Bezig met de Modrinth App openen"
+    "defaultMessage": "Bezig met de Lumen App openen"
   },
   "modal.open-in-app.why-use": {
-    "defaultMessage": "Waarom de Modrinth App gebruiken"
+    "defaultMessage": "Waarom de Lumen App gebruiken"
   },
   "notification.error.title": {
     "defaultMessage": "Er is een fout opgetreden"
@@ -2669,8 +2669,8 @@
   "omorphia.component.badge.label.moderator": {
     "defaultMessage": "Toezichthouder"
   },
-  "omorphia.component.badge.label.modrinth-team": {
-    "defaultMessage": "Modrinth team"
+  "omorphia.component.badge.label.Lumen-team": {
+    "defaultMessage": "Lumen team"
   },
   "omorphia.component.badge.label.pending": {
     "defaultMessage": "In behandeling"
@@ -2790,13 +2790,13 @@
     "defaultMessage": "Visa"
   },
   "profile.bio.fallback.creator": {
-    "defaultMessage": "Een maker op Modrinth."
+    "defaultMessage": "Een maker op Lumen."
   },
   "profile.bio.fallback.user": {
-    "defaultMessage": "Een gebruiker van Modrinth."
+    "defaultMessage": "Een gebruiker van Lumen."
   },
   "profile.block-user.admonition-body": {
-    "defaultMessage": "{username} zal je geen vriendschapsverzoeken kunnen sturen, je niet kunnen uitnodigen voor gedeelde instanties en je ook niet kunnen uitnodigen voor Modrinth Hosting-servers."
+    "defaultMessage": "{username} zal je geen vriendschapsverzoeken kunnen sturen, je niet kunnen uitnodigen voor gedeelde instanties en je ook niet kunnen uitnodigen voor Lumen Hosting-servers."
   },
   "profile.block-user.admonition-title": {
     "defaultMessage": "Weet je zeker dat je deze gebruiker wilt blokkeren?"
@@ -2850,7 +2850,7 @@
     "defaultMessage": "{count, plural, one {# project} other {# projecten}}"
   },
   "profile.details.error.github-popup-blocked": {
-    "defaultMessage": "Schakel pop-ups voor Modrinth in en probeer het vervolgens opnieuw."
+    "defaultMessage": "Schakel pop-ups voor Lumen in en probeer het vervolgens opnieuw."
   },
   "profile.details.error.github-profile-message": {
     "defaultMessage": "Het GitHub-profiel kon niet worden opgehaald. Probeer het nog eens."
@@ -2928,10 +2928,10 @@
     "defaultMessage": "{count, plural, one {project} other {projecten}}"
   },
   "profile.official-account": {
-    "defaultMessage": "Officieel Modrinth-account"
+    "defaultMessage": "Officieel Lumen-account"
   },
   "profile.official-account.bio": {
-    "defaultMessage": "Het officiële gebruikersaccount van Modrinth. Neem contact op met het Helpcentrum via <support-link></support-link> of per e-mail via <email></email>"
+    "defaultMessage": "Het officiële gebruikersaccount van Lumen. Neem contact op met het Helpcentrum via <support-link></support-link> of per e-mail via <email></email>"
   },
   "profile.unblock-user.error-description": {
     "defaultMessage": "Er is een fout opgetreden bij het deblokkeren van deze gebruiker. Probeer het nog eens."
@@ -3264,7 +3264,7 @@
     "defaultMessage": "{count} {countPlural, plural, one {recent play} other {recent plays}}"
   },
   "project.recent-plays.tooltip": {
-    "defaultMessage": "{count} {countPlural, plural, one {recent play} other {recent plays}} van Modrinth in de afgelopen twee weken"
+    "defaultMessage": "{count} {countPlural, plural, one {recent play} other {recent plays}} van Lumen in de afgelopen twee weken"
   },
   "project.server.customModpackTooltip": {
     "defaultMessage": "Dit project maakt gebruik van een op maat gemaakt modpack"
@@ -3576,7 +3576,7 @@
     "defaultMessage": "Je project heeft meerdere omgevingen"
   },
   "project.settings.environment.notice.review-options.description": {
-    "defaultMessage": "We hebben het Environments-systeem op Modrinth zojuist grondig herzien en er zijn nu nieuwe opties beschikbaar. Zorg ervoor dat je hieronder de juiste optie selecteert en klik vervolgens op ‘Verifiëren’ als je klaar bent!"
+    "defaultMessage": "We hebben het Environments-systeem op Lumen zojuist grondig herzien en er zijn nu nieuwe opties beschikbaar. Zorg ervoor dat je hieronder de juiste optie selecteert en klik vervolgens op ‘Verifiëren’ als je klaar bent!"
   },
   "project.settings.environment.notice.review-options.title": {
     "defaultMessage": "Beoordeel onderstaande opties"
@@ -4572,13 +4572,13 @@
     "defaultMessage": "Gebruik hun Minecraft-gebruikersnaam niet."
   },
   "servers.grant-access-modal.target.label": {
-    "defaultMessage": "Modrinth-gebruikersnaam"
+    "defaultMessage": "Lumen-gebruikersnaam"
   },
   "servers.grant-access-modal.target.no-suggestions": {
     "defaultMessage": "Geen overeenkomende gebruikers gevonden."
   },
   "servers.grant-access-modal.target.placeholder": {
-    "defaultMessage": "Voer Modrinth-gebruikersnaam in"
+    "defaultMessage": "Voer Lumen-gebruikersnaam in"
   },
   "servers.grant-access-modal.target.searching": {
     "defaultMessage": "Bezig met zoeken..."
@@ -4592,14 +4592,14 @@
   "servers.list-empty.already-have-server-label": {
     "defaultMessage": "Heb je al een server?"
   },
-  "servers.list-empty.modrinth-hosting-label": {
-    "defaultMessage": "Modrinth Hosting"
+  "servers.list-empty.Lumen-hosting-label": {
+    "defaultMessage": "Lumen Hosting"
   },
   "servers.list-empty.new-server-button": {
     "defaultMessage": "Nieuwe server"
   },
   "servers.list-empty.no-servers-description": {
-    "defaultMessage": "Installeer mods, nodig vrienden uit en speel samen – allemaal via de Modrinth app."
+    "defaultMessage": "Installeer mods, nodig vrienden uit en speel samen – allemaal via de Lumen app."
   },
   "servers.list-empty.one-click-mod-installs-description": {
     "defaultMessage": "Kies je favoriete mods en wij regelen de rest."
@@ -4668,7 +4668,7 @@
     "defaultMessage": "Je abonnement wordt op <date>{formattedDate}</date> opgezegd. "
   },
   "servers.listing.notice.suspended": {
-    "defaultMessage": "Je server is opgeschort. Neem contact op met Modrinth-ondersteuning voor meer informatie."
+    "defaultMessage": "Je server is opgeschort. Neem contact op met Lumen-ondersteuning voor meer informatie."
   },
   "servers.listing.notice.upgrading": {
     "defaultMessage": "De hardware van uw server wordt momenteel geüpgraded en zal binnenkort weer online zijn."
@@ -4701,7 +4701,7 @@
     "defaultMessage": "Bezig met uploaden"
   },
   "servers.manage.contact-support-button": {
-    "defaultMessage": "Contact opnemen met Modrinth-ondersteuning"
+    "defaultMessage": "Contact opnemen met Lumen-ondersteuning"
   },
   "servers.manage.error.alert-notice": {
     "defaultMessage": "Onze systemen waarschuwen ons team automatisch wanneer er een probleem is. We zijn al bezig om ze weer online te krijgen."
@@ -4713,10 +4713,10 @@
     "defaultMessage": "Foutdetails:"
   },
   "servers.manage.error.queue-notice": {
-    "defaultMessage": "Als je kort geleden een Modrinth Hosting-server hebt gekocht, staat deze momenteel in de wachtrij en zal hij hier verschijnen zodra hij klaar is. <warning>Probeer geen nieuwe server aan te schaffen.</warning>"
+    "defaultMessage": "Als je kort geleden een Lumen Hosting-server hebt gekocht, staat deze momenteel in de wachtrij en zal hij hier verschijnen zodra hij klaar is. <warning>Probeer geen nieuwe server aan te schaffen.</warning>"
   },
   "servers.manage.error.support-notice": {
-    "defaultMessage": "Als je persoonlijke ondersteuning nodig hebt met de status van je server, neem dan contact op met Modrinth-ondersteuning."
+    "defaultMessage": "Als je persoonlijke ondersteuning nodig hebt met de status van je server, neem dan contact op met Lumen-ondersteuning."
   },
   "servers.manage.error.title": {
     "defaultMessage": "De servers konden niet worden geladen"
@@ -4746,7 +4746,7 @@
     "defaultMessage": "Opnieuw laden"
   },
   "servers.manage.resubscribe-error.text": {
-    "defaultMessage": "Er is een fout opgetreden bij het opnieuw abonneren op jouw Modrinth server."
+    "defaultMessage": "Er is een fout opgetreden bij het opnieuw abonneren op jouw Lumen server."
   },
   "servers.manage.resubscribe-error.title": {
     "defaultMessage": "Fout bij het opnieuw abonneren"
@@ -4767,7 +4767,7 @@
     "defaultMessage": "Zoek {count} {count, plural, one {server} other {servers}}..."
   },
   "servers.manage.servers-title": {
-    "defaultMessage": "Modrinth Hosting"
+    "defaultMessage": "Lumen Hosting"
   },
   "servers.manage.settings-hint.description": {
     "defaultMessage": "Je vindt ze nu hier!"
@@ -4794,10 +4794,10 @@
     "defaultMessage": "De proefperiode van je Medal-server is afgelopen en je server is opgeschort. Voer een upgrade uit om je server te kunnen blijven gebruiken."
   },
   "servers.medal-listing.notice.suspended": {
-    "defaultMessage": "Je server is opgeschort. Werk je factuurgegevens bij of neem contact op met Modrinth-ondersteuning voor meer informatie."
+    "defaultMessage": "Je server is opgeschort. Werk je factuurgegevens bij of neem contact op met Lumen-ondersteuning voor meer informatie."
   },
   "servers.medal-listing.notice.suspended-with-reason": {
-    "defaultMessage": "Je server is opgeschort met de reden: {reason}. Werk je factuurgegevens bij of neem contact op met Modrinth-ondersteuning voor meer informatie."
+    "defaultMessage": "Je server is opgeschort met de reden: {reason}. Werk je factuurgegevens bij of neem contact op met Lumen-ondersteuning voor meer informatie."
   },
   "servers.medal-listing.notice.upgrading": {
     "defaultMessage": "De hardware van je server wordt momenteel geüpgraded en zal binnenkort weer online zijn."
@@ -4845,7 +4845,7 @@
     "defaultMessage": "Niet negeerbaar"
   },
   "servers.purchase.notification.success.text": {
-    "defaultMessage": "Je aankoop bij Modrinth Hosting is succesvol afgerond."
+    "defaultMessage": "Je aankoop bij Lumen Hosting is succesvol afgerond."
   },
   "servers.purchase.notification.success.title": {
     "defaultMessage": "Aankoop geslaagd"
@@ -4935,7 +4935,7 @@
     "defaultMessage": "Uit welk regio wil je een server?"
   },
   "servers.region.region-unsupported": {
-    "defaultMessage": "Staat jouw regio er niet bij? <link>Laat ons weten waar je Modrinth Hosting graag als volgende zou willen zien!</link>"
+    "defaultMessage": "Staat jouw regio er niet bij? <link>Laat ons weten waar je Lumen Hosting graag als volgende zou willen zien!</link>"
   },
   "servers.region.southeast-asia": {
     "defaultMessage": "Southeast Asia"
@@ -5007,7 +5007,7 @@
     "defaultMessage": "Server instellen"
   },
   "servers.setup.onboarding.step.choose.description": {
-    "defaultMessage": "Kies je favoriete modpack van Modrinth, of kies een loader en voeg de mods toe die je wilt."
+    "defaultMessage": "Kies je favoriete modpack van Lumen, of kies een loader en voeg de mods toe die je wilt."
   },
   "servers.setup.onboarding.step.choose.title": {
     "defaultMessage": "Kies wat je wilt spelen"
@@ -5034,7 +5034,7 @@
     "defaultMessage": "Je server staat klaar. Dit is wat je moet doen om te beginnen met spelen!"
   },
   "servers.setup.onboarding.welcome.title": {
-    "defaultMessage": "Welkom bij Modrinth Hosting"
+    "defaultMessage": "Welkom bij Lumen Hosting"
   },
   "servers.setup.rate-limit.text": {
     "defaultMessage": "Er geldt een verwerkingslimiet. Probeer het later nog eens."
@@ -5142,7 +5142,7 @@
     "defaultMessage": "Profielfoto"
   },
   "settings.profile.public-information.description": {
-    "defaultMessage": "Je profielgegevens zijn openbaar <profile-link>te bekijken op Modrinth</profile-link> en via de <docs-link>Modrinth API</docs-link>."
+    "defaultMessage": "Je profielgegevens zijn openbaar <profile-link>te bekijken op Lumen</profile-link> en via de <docs-link>Lumen API</docs-link>."
   },
   "settings.profile.save-error": {
     "defaultMessage": "Het bijwerken van het profiel is mislukt"
@@ -5151,10 +5151,10 @@
     "defaultMessage": "Er is een fout opgetreden bij het bijwerken van je profiel. Probeer het nog eens."
   },
   "settings.profile.sign-in-required.description": {
-    "defaultMessage": "Log in met een Modrinth-account om je openbare profiel aan te passen."
+    "defaultMessage": "Log in met een Lumen-account om je openbare profiel aan te passen."
   },
   "settings.profile.sign-in-required.title": {
-    "defaultMessage": "Modrinth-account vereist"
+    "defaultMessage": "Lumen-account vereist"
   },
   "settings.profile.username.description": {
     "defaultMessage": "Een unieke, hoofdletterongevoelige naam waarmee je profiel wordt geïdentificeerd."
@@ -5169,7 +5169,7 @@
     "defaultMessage": "Gebruiker"
   },
   "settings.social.blocked-users.description": {
-    "defaultMessage": "Dit zijn de gebruikers die je op Modrinth hebt geblokkeerd. Zij kunnen jou niet:"
+    "defaultMessage": "Dit zijn de gebruikers die je op Lumen hebt geblokkeerd. Zij kunnen jou niet:"
   },
   "settings.social.blocked-users.empty": {
     "defaultMessage": "Je hebt niemand geblokkeerd."
@@ -5184,7 +5184,7 @@
     "defaultMessage": "Een vriendschapsverzoek sturen"
   },
   "settings.social.blocked-users.restriction.hosting": {
-    "defaultMessage": "Uitnodigen om een Modrinth Hosting-server te beheren."
+    "defaultMessage": "Uitnodigen om een Lumen Hosting-server te beheren."
   },
   "settings.social.blocked-users.restriction.shared-instances": {
     "defaultMessage": "Uitnodigen voor gedeelde instanties"
@@ -5208,7 +5208,7 @@
     "defaultMessage": "Avatar van {username}"
   },
   "settings.social.friend-requests.description": {
-    "defaultMessage": "Bepaal zelf wie je vriendschapsverzoeken kan sturen op Modrinth."
+    "defaultMessage": "Bepaal zelf wie je vriendschapsverzoeken kan sturen op Lumen."
   },
   "settings.social.friend-requests.title": {
     "defaultMessage": "Vriendschapsverzoeken"
@@ -5226,10 +5226,10 @@
     "defaultMessage": "Niemand"
   },
   "settings.social.sign-in-required.description": {
-    "defaultMessage": "Met een Modrinth-account kun je bepalen wie er contact met je kan opnemen en kun je geblokkeerde gebruikers beheren"
+    "defaultMessage": "Met een Lumen-account kun je bepalen wie er contact met je kan opnemen en kun je geblokkeerde gebruikers beheren"
   },
   "settings.social.sign-in-required.title": {
-    "defaultMessage": "Modrinth-account vereist"
+    "defaultMessage": "Lumen-account vereist"
   },
   "settings.social.title": {
     "defaultMessage": "Sociaal"
@@ -5322,7 +5322,7 @@
     "defaultMessage": "Opslaan"
   },
   "sharing.invite-players-modal.search-placeholder": {
-    "defaultMessage": "Voer Modrinth-gebruikersnaam in"
+    "defaultMessage": "Voer Lumen-gebruikersnaam in"
   },
   "sharing.invite-players-modal.searching": {
     "defaultMessage": "Bezig met zoeken..."
@@ -5880,34 +5880,34 @@
     "defaultMessage": "Malware wordt vaak verspreid via mod-bestanden door deze te delen op platforms zoals Discord."
   },
   "unknown-file-warning-modal.mod-warning-body": {
-    "defaultMessage": " is niet gepubliceerd op Modrinth. We raden je ten zeerste aan om alleen bestanden te installeren uit bronnen die je vertrouwt."
+    "defaultMessage": " is niet gepubliceerd op Lumen. We raden je ten zeerste aan om alleen bestanden te installeren uit bronnen die je vertrouwt."
   },
   "unknown-file-warning-modal.mod-warning-title": {
     "defaultMessage": "Waarschuwing: onbekend bestand"
   },
   "unknown-file-warning-modal.modpack-warning-body": {
-    "defaultMessage": " bevat bestanden die niet op Modrinth zijn gepubliceerd. We raden je ten zeerste aan om alleen bestanden te installeren uit bronnen die je vertrouwt."
+    "defaultMessage": " bevat bestanden die niet op Lumen zijn gepubliceerd. We raden je ten zeerste aan om alleen bestanden te installeren uit bronnen die je vertrouwt."
   },
   "unknown-file-warning-modal.modpack-warning-title": {
     "defaultMessage": "Waarschuwing voor onbekende bestanden"
   },
   "unknown-file-warning-modal.reviewed-files": {
-    "defaultMessage": "Bestanden die niet op Modrinth worden gepubliceerd, worden niet beoordeeld."
+    "defaultMessage": "Bestanden die niet op Lumen worden gepubliceerd, worden niet beoordeeld."
   },
   "unknown-file-warning-modal.unrecognized-files": {
     "defaultMessage": "Onbekende bestanden"
   },
   "user.profile.badge.alpha.about.1": {
-    "defaultMessage": "Deze gebruiker is al actief sinds Modrinth Alpha, dat in november 2020 afliep."
+    "defaultMessage": "Deze gebruiker is al actief sinds Lumen Alpha, dat in november 2020 afliep."
   },
   "user.profile.badge.alpha.name": {
     "defaultMessage": "Alpha-tester"
   },
   "user.profile.badge.beta.about.1": {
-    "defaultMessage": "Deze gebruiker is al actief sinds Modrinth Beta, dat in februari 2022 afliep."
+    "defaultMessage": "Deze gebruiker is al actief sinds Lumen Beta, dat in februari 2022 afliep."
   },
   "user.profile.badge.beta.link": {
-    "defaultMessage": "Klik hier om meer te lezen over de lancering van Modrinth Beta."
+    "defaultMessage": "Klik hier om meer te lezen over de lancering van Lumen Beta."
   },
   "user.profile.badge.beta.name": {
     "defaultMessage": "Beta-tester"
@@ -5919,67 +5919,67 @@
     "defaultMessage": "{download_sum} Downloads"
   },
   "user.profile.badge.early-datapack-adopter.about.1": {
-    "defaultMessage": "Deze gebruiker heeft ons geholpen bij het testen van gegevenspakketprojecten op Modrinth voordat we deze in januari 2023 lanceerden."
+    "defaultMessage": "Deze gebruiker heeft ons geholpen bij het testen van gegevenspakketprojecten op Lumen voordat we deze in januari 2023 lanceerden."
   },
   "user.profile.badge.early-datapack-adopter.name": {
     "defaultMessage": "Vroege gebruiker van gegevenspakketten"
   },
   "user.profile.badge.early-modpack-adopter.about.1": {
-    "defaultMessage": "Deze gebruiker heeft ons geholpen bij het testen van modpack-projecten op Modrinth voordat we ze in mei 2022 lanceerden."
+    "defaultMessage": "Deze gebruiker heeft ons geholpen bij het testen van modpack-projecten op Lumen voordat we ze in mei 2022 lanceerden."
   },
   "user.profile.badge.early-modpack-adopter.name": {
     "defaultMessage": "Vroege gebruiker van modpacks"
   },
   "user.profile.badge.early-plugin-adopter.about.1": {
-    "defaultMessage": "Deze gebruiker heeft ons geholpen bij het testen van Plugin-projecten op Modrinth voordat we ze in augustus 2022 lanceerden."
+    "defaultMessage": "Deze gebruiker heeft ons geholpen bij het testen van Plugin-projecten op Lumen voordat we ze in augustus 2022 lanceerden."
   },
   "user.profile.badge.early-plugin-adopter.name": {
     "defaultMessage": "Vroege gebruiker van plug-ins"
   },
   "user.profile.badge.early-resourcepack-adopter.about.1": {
-    "defaultMessage": "Deze gebruiker heeft ons geholpen bij het testen van bronpakketprojecten op Modrinth voordat we deze in augustus 2022 lanceerden."
+    "defaultMessage": "Deze gebruiker heeft ons geholpen bij het testen van bronpakketprojecten op Lumen voordat we deze in augustus 2022 lanceerden."
   },
   "user.profile.badge.early-resourcepack-adopter.name": {
     "defaultMessage": "Vroege gebruiker van bronpakketten"
   },
   "user.profile.badge.early-server-adopter.about.1": {
-    "defaultMessage": "Deze gebruiker heeft ons geholpen bij het testen van server-projecten op Modrinth voordat we ze in maart 2026 lanceerden."
+    "defaultMessage": "Deze gebruiker heeft ons geholpen bij het testen van server-projecten op Lumen voordat we ze in maart 2026 lanceerden."
   },
   "user.profile.badge.early-server-adopter.name": {
     "defaultMessage": "Vroege gebruiker van servers"
   },
   "user.profile.badge.early-shader-adopter.about.1": {
-    "defaultMessage": "Deze gebruiker heeft ons geholpen bij het testen van shader-projecten op Modrinth voordat we deze in januari 2023 lanceerden."
+    "defaultMessage": "Deze gebruiker heeft ons geholpen bij het testen van shader-projecten op Lumen voordat we deze in januari 2023 lanceerden."
   },
   "user.profile.badge.early-shader-adopter.name": {
     "defaultMessage": "Vroege gebruiker van shaders"
   },
   "user.profile.badge.hosting-alpha.about.1": {
-    "defaultMessage": "Deze gebruiker heeft deelgenomen aan een besloten alphatest van Modrinth Hosting voordat we in november 2024 de bètaversie van Modrinth Hosting lanceerden."
+    "defaultMessage": "Deze gebruiker heeft deelgenomen aan een besloten alphatest van Lumen Hosting voordat we in november 2024 de bètaversie van Lumen Hosting lanceerden."
   },
   "user.profile.badge.hosting-alpha.name": {
-    "defaultMessage": "Alpha-tester van Modrinth Hosting"
+    "defaultMessage": "Alpha-tester van Lumen Hosting"
   },
   "user.profile.badge.moderator.about.1": {
-    "defaultMessage": "Deze gebruiker werkt bij Modrinth als inhoudsmoderator."
+    "defaultMessage": "Deze gebruiker werkt bij Lumen als inhoudsmoderator."
   },
   "user.profile.badge.moderator.about.2": {
-    "defaultMessage": "Inhoudsmoderatoren op Modrinth beoordelen projecten, behandelen meldingen en helpen Modrinth veilig te houden."
+    "defaultMessage": "Inhoudsmoderatoren op Lumen beoordelen projecten, behandelen meldingen en helpen Lumen veilig te houden."
   },
   "user.profile.badge.moderator.name": {
     "defaultMessage": "Inhoudsmoderator"
   },
   "user.profile.badge.plus.about.1": {
-    "defaultMessage": "Deze gebruiker doet zijn uiterste best om Modrinth en de makers op het platform te steunen."
+    "defaultMessage": "Deze gebruiker doet zijn uiterste best om Lumen en de makers op het platform te steunen."
   },
   "user.profile.badge.plus.link": {
     "defaultMessage": "Klik hier voor meer informatie over hoe je lid kunt worden."
   },
   "user.profile.badge.plus.name": {
-    "defaultMessage": "Modrinth+ lid"
+    "defaultMessage": "Lumen+ lid"
   },
   "user.profile.badge.pride.about.1": {
-    "defaultMessage": "Deze gebruiker heeft deelgenomen aan minstens één van de Pride-inzamelingsacties van Modrinth voor de LGBTQ+-gemeenschap."
+    "defaultMessage": "Deze gebruiker heeft deelgenomen aan minstens één van de Pride-inzamelingsacties van Lumen voor de LGBTQ+-gemeenschap."
   },
   "user.profile.badge.pride.link": {
     "defaultMessage": "Klik hier om onze nieuwste Pride-inzamelingsactie te bekijken."
@@ -5988,10 +5988,10 @@
     "defaultMessage": "Supporter van de Pride-inzamelingsactie"
   },
   "user.profile.badge.staff.about.1": {
-    "defaultMessage": "Deze gebruiker werkt bij Modrinth."
+    "defaultMessage": "Deze gebruiker werkt bij Lumen."
   },
   "user.profile.badge.staff.name": {
-    "defaultMessage": "Modrinth-team"
+    "defaultMessage": "Lumen-team"
   },
   "version.content.name": {
     "defaultMessage": "Naam"

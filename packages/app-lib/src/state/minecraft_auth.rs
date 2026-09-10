@@ -201,8 +201,8 @@ pub async fn login_offline(
     username: &str,
     exec: impl sqlx::Executor<'_, Database = sqlx::Sqlite> + Copy,
 ) -> crate::Result<Credentials> {
-    let name = crate::octra_skins::validate_offline_name(username)?;
-    let id = crate::octra_skins::offline_player_uuid(&name);
+    let name = crate::lumen_skins::validate_offline_name(username)?;
+    let id = crate::lumen_skins::offline_player_uuid(&name);
     let credentials = Credentials {
         offline_profile: MinecraftProfile {
             id,
@@ -210,7 +210,7 @@ pub async fn login_offline(
             ..MinecraftProfile::default()
         },
         access_token: "0".into(),
-        refresh_token: crate::octra_skins::OFFLINE_REFRESH_TOKEN.into(),
+        refresh_token: crate::lumen_skins::OFFLINE_REFRESH_TOKEN.into(),
         expires: Utc
             .timestamp_opt(4_102_444_800, 0)
             .single()
@@ -290,7 +290,7 @@ impl OnlineProfileCacheIntent {
 
 impl Credentials {
     pub fn is_offline(&self) -> bool {
-        self.refresh_token == crate::octra_skins::OFFLINE_REFRESH_TOKEN
+        self.refresh_token == crate::lumen_skins::OFFLINE_REFRESH_TOKEN
     }
 
     /// Refreshes the authentication tokens for this user if they are expired, or

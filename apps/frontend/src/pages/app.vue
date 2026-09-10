@@ -12,7 +12,7 @@ import {
 	SendIcon,
 	TrashIcon,
 	WindowsIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import {
 	Accordion,
 	Avatar,
@@ -25,7 +25,7 @@ import {
 	IconButton,
 	IntlFormatted,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 
 import ATLauncher from '~/assets/images/external/atlauncher.svg?component'
 import CurseForge from '~/assets/images/external/curseforge.svg?component'
@@ -241,22 +241,22 @@ const scrollToSection = () => {
 const { formatMessage } = useVIntl()
 
 const messages = defineMessages({
-	downloadModrinthApp: {
-		id: 'app-marketing.hero.download-modrinth-app',
-		defaultMessage: 'Download Modrinth App',
+	downloadLumenApp: {
+		id: 'app-marketing.hero.download-Lumen-app',
+		defaultMessage: 'Download Lumen App',
 	},
-	downloadModrinthAppForOs: {
-		id: 'app-marketing.hero.download-modrinth-app-for-os',
-		defaultMessage: 'Download Modrinth App for {os}',
+	downloadLumenAppForOs: {
+		id: 'app-marketing.hero.download-Lumen-app-for-os',
+		defaultMessage: 'Download Lumen App for {os}',
 	},
 	description: {
 		id: 'app-marketing.hero.description',
 		defaultMessage:
-			'Modrinth App is a unique, open source launcher that allows you to play your favorite mods, and keep them up to date, all in one neat little package.',
+			'Lumen App is a unique, open source launcher that allows you to play your favorite mods, and keep them up to date, all in one neat little package.',
 	},
-	downloadModrinthAppButton: {
+	downloadLumenAppButton: {
 		id: 'app-marketing.hero.download-button',
-		defaultMessage: 'Download Modrinth App',
+		defaultMessage: 'Download Lumen App',
 	},
 	moreDownloadOptions: {
 		id: 'app-marketing.hero.more-download-options',
@@ -301,7 +301,7 @@ const messages = defineMessages({
 	modManagementDescription: {
 		id: 'app-marketing.features.mod-management.description',
 		defaultMessage:
-			'Modrinth makes it easy to manage all your mods in one place. You can install, uninstall, and update mods with a single click.',
+			'Lumen makes it easy to manage all your mods in one place. You can install, uninstall, and update mods with a single click.',
 	},
 	playWithFavoriteMods: {
 		id: 'app-marketing.features.play.title',
@@ -309,7 +309,7 @@ const messages = defineMessages({
 	},
 	playWithFavoriteModsDescription: {
 		id: 'app-marketing.features.play.description',
-		defaultMessage: 'Use Modrinth App to download and play with your favorite mods and modpacks.',
+		defaultMessage: 'Use Lumen App to download and play with your favorite mods and modpacks.',
 	},
 	shareModpacks: {
 		id: 'app-marketing.features.sharing.title',
@@ -318,7 +318,7 @@ const messages = defineMessages({
 	shareModpacksDescription: {
 		id: 'app-marketing.features.sharing.description',
 		defaultMessage:
-			'Build, share, and play modpacks with any of the thousands of mods and modpacks hosted here on Modrinth.',
+			'Build, share, and play modpacks with any of the thousands of mods and modpacks hosted here on Lumen.',
 	},
 	share: {
 		id: 'app-marketing.features.sharing.share-button',
@@ -348,9 +348,9 @@ const messages = defineMessages({
 		id: 'app-marketing.features.performance.ram',
 		defaultMessage: 'RAM',
 	},
-	modrinthApp: {
-		id: 'app-marketing.features.performance.modrinth-app',
-		defaultMessage: 'Modrinth App',
+	LumenApp: {
+		id: 'app-marketing.features.performance.Lumen-app',
+		defaultMessage: 'Lumen App',
 	},
 	small: {
 		id: 'app-marketing.features.performance.small',
@@ -387,7 +387,7 @@ const messages = defineMessages({
 	performantDescription: {
 		id: 'app-marketing.features.performance.description',
 		defaultMessage:
-			'Modrinth App performs better than many of the leading mod managers, using just 150 MB of RAM!',
+			'Lumen App performs better than many of the leading mod managers, using just 150 MB of RAM!',
 	},
 	websiteIntegration: {
 		id: 'app-marketing.features.website.title',
@@ -396,7 +396,7 @@ const messages = defineMessages({
 	websiteIntegrationDescription: {
 		id: 'app-marketing.features.website.description',
 		defaultMessage:
-			'Modrinth App is fully integrated with the website, so you can access all your favorite projects from the app!',
+			'Lumen App is fully integrated with the website, so you can access all your favorite projects from the app!',
 	},
 	profileImporting: {
 		id: 'app-marketing.features.importing.title',
@@ -405,7 +405,7 @@ const messages = defineMessages({
 	profileImportingDescription: {
 		id: 'app-marketing.features.importing.description',
 		defaultMessage:
-			'Import all your favorite profiles from the launcher you were using before, and get started with Modrinth App in seconds!',
+			'Import all your favorite profiles from the launcher you were using before, and get started with Lumen App in seconds!',
 	},
 	openSource: {
 		id: 'app-marketing.features.open-source.title',
@@ -414,7 +414,7 @@ const messages = defineMessages({
 	openSourceDescription: {
 		id: 'app-marketing.features.open-source.description',
 		defaultMessage:
-			"Modrinth's launcher is fully open source. You can view the source code on our <github-link>GitHub</github-link>!",
+			"Lumen's launcher is fully open source. You can view the source code on our <github-link>GitHub</github-link>!",
 	},
 	offlineMode: {
 		id: 'app-marketing.features.offline.title',
@@ -436,9 +436,9 @@ const messages = defineMessages({
 		id: 'app-marketing.download.options-title',
 		defaultMessage: 'Download options',
 	},
-	downloadModrinthAppBeta: {
+	downloadLumenAppBeta: {
 		id: 'app-marketing.download.title',
-		defaultMessage: 'Download Modrinth App (Beta)',
+		defaultMessage: 'Download Lumen App (Beta)',
 	},
 	downloadDescription: {
 		id: 'app-marketing.download.description',
@@ -492,16 +492,16 @@ const messages = defineMessages({
 	downloadTerms: {
 		id: 'app-marketing.download.terms',
 		defaultMessage:
-			'By downloading Modrinth App, you agree to our <terms-link>Terms</terms-link> and <privacy-link>Privacy Policy</privacy-link>.',
+			'By downloading Lumen App, you agree to our <terms-link>Terms</terms-link> and <privacy-link>Privacy Policy</privacy-link>.',
 	},
 	linuxDisclaimer: {
 		id: 'app-marketing.download.linux-disclaimer',
 		defaultMessage:
-			'The Linux versions of Modrinth App are <issues-link>known to have issues</issues-link> on certain systems and configurations. If Modrinth App is unstable on your system, we encourage you to try other apps like <prism-link>Prism Launcher</prism-link> to easily install Modrinth content.',
+			'The Linux versions of Lumen App are <issues-link>known to have issues</issues-link> on certain systems and configurations. If Lumen App is unstable on your system, we encourage you to try other apps like <prism-link>Prism Launcher</prism-link> to easily install Lumen content.',
 	},
 	appScreenshotAlt: {
 		id: 'app-marketing.hero.app-screenshot-alt',
-		defaultMessage: `Screenshot of Modrinth App with a Cobblemon instance opened to the 'Content' page.`,
+		defaultMessage: `Screenshot of Lumen App with a Cobblemon instance opened to the 'Content' page.`,
 	},
 	minecraftScreenshotAlt: {
 		id: 'app-marketing.hero.minecraft-screenshot-alt',
@@ -517,9 +517,9 @@ const messages = defineMessages({
 	},
 })
 
-const title = 'Download Modrinth App!'
+const title = 'Download Lumen App!'
 const description =
-	'Modrinth App is a unique, open source launcher that allows you to play your favorite mods, and keep them up to date, all in one neat little package.'
+	'Lumen App is a unique, open source launcher that allows you to play your favorite mods, and keep them up to date, all in one neat little package.'
 
 useSeoMeta({
 	title,
@@ -540,8 +540,8 @@ useSeoMeta({
 			<h1 class="main-header max-w-[60rem]">
 				{{
 					os
-						? formatMessage(messages.downloadModrinthAppForOs, { os: osName })
-						: formatMessage(messages.downloadModrinthApp)
+						? formatMessage(messages.downloadLumenAppForOs, { os: osName })
+						: formatMessage(messages.downloadLumenApp)
 				}}
 			</h1>
 			<h2 class="main-subheader">
@@ -552,14 +552,14 @@ useSeoMeta({
 					<LinuxIcon v-if="os === 'Linux'" />
 					<WindowsIcon v-else-if="os === 'Windows'" />
 					<AppleIcon v-else-if="os === 'Mac'" />
-					{{ formatMessage(messages.downloadModrinthAppButton) }}
+					{{ formatMessage(messages.downloadLumenAppButton) }}
 				</Button>
 				<Button type="outlined" size="xl" @click="scrollToSection">
 					<ArrowDownIcon />
 					{{ formatMessage(messages.moreDownloadOptions) }}
 				</Button>
 			</div>
-			<img src="https://cdn-raw.modrinth.com/app-landing/app-screenshot.webp" alt="" />
+			<img src="https://cdn-raw.Lumen.com/app-landing/app-screenshot.webp" alt="" />
 			<div class="bottom-transition" />
 		</div>
 		<div class="features">
@@ -617,12 +617,12 @@ useSeoMeta({
 						<p>{{ formatMessage(messages.playWithFavoriteModsDescription) }}</p>
 					</div>
 					<img
-						src="https://cdn-raw.modrinth.com/app-landing/cobblemon-launcher.webp"
+						src="https://cdn-raw.Lumen.com/app-landing/cobblemon-launcher.webp"
 						:alt="formatMessage(messages.appScreenshotAlt)"
 						class="launcher"
 					/>
 					<img
-						src="https://cdn-raw.modrinth.com/app-landing/cobblemon.webp"
+						src="https://cdn-raw.Lumen.com/app-landing/cobblemon.webp"
 						:alt="formatMessage(messages.minecraftScreenshotAlt)"
 						class="minecraft"
 					/>
@@ -703,12 +703,12 @@ useSeoMeta({
 						<div class="row first">
 							<div class="cell">
 								<div>
-									<div class="icon-logo modrinth">
+									<div class="icon-logo Lumen">
 										<LogoAnimated class="icon" />
 									</div>
 								</div>
 							</div>
-							<div class="cell important">{{ formatMessage(messages.modrinthApp) }}</div>
+							<div class="cell important">{{ formatMessage(messages.LumenApp) }}</div>
 							<div class="cell important">{{ formatMessage(messages.small) }}</div>
 							<div class="cell important">{{ formatMessage(messages.lessThan150MB) }}</div>
 						</div>
@@ -1048,7 +1048,7 @@ useSeoMeta({
 			<div class="section-badge">{{ formatMessage(messages.downloadOptions) }}</div>
 			<div class="section-subheader">
 				<div class="section-subheader-title">
-					{{ formatMessage(messages.downloadModrinthAppBeta) }}
+					{{ formatMessage(messages.downloadLumenAppBeta) }}
 				</div>
 				<div class="section-subheader-description">
 					{{ formatMessage(messages.downloadDescription) }}
@@ -1128,7 +1128,7 @@ useSeoMeta({
 						</div>
 					</div>
 					<div class="description apple">
-						<a href="https://flathub.org/en/apps/com.modrinth.ModrinthApp" target="_blank">
+						<a href="https://flathub.org/en/apps/com.Lumen.LumenApp" target="_blank">
 							<FlathubIcon />
 							<span>{{ formatMessage(messages.getItOnFlathub) }}</span>
 						</a>
@@ -1205,7 +1205,7 @@ useSeoMeta({
 <style scoped lang="scss">
 .landing-hero {
 	position: relative;
-	background: #0f1121 url('https://cdn-raw.modrinth.com/app-landing/cube-black.png') no-repeat
+	background: #0f1121 url('https://cdn-raw.Lumen.com/app-landing/cube-black.png') no-repeat
 		center 4rem;
 	background-size: cover;
 	padding: 6rem 1rem 12rem 1rem;
@@ -1598,7 +1598,7 @@ useSeoMeta({
 				border-radius: var(--radius-sm);
 				background-color: var(--color-button-bg);
 
-				&.modrinth {
+				&.Lumen {
 					background-color: var(--color-brand) !important;
 					border: 1px solid var(--color-accent-contrast) !important;
 
@@ -2376,7 +2376,7 @@ useSeoMeta({
 	}
 
 	.landing-hero {
-		background: url('https://cdn-raw.modrinth.com/app-landing/cube-light.png') no-repeat center 4rem;
+		background: url('https://cdn-raw.Lumen.com/app-landing/cube-light.png') no-repeat center 4rem;
 		background-size: cover;
 	}
 

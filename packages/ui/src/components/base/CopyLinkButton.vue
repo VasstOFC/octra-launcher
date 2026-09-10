@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { CheckIcon, LinkIcon } from '@modrinth/assets'
+import { CheckIcon, LinkIcon } from '@lumen/assets'
 import { computed, onBeforeUnmount, ref } from 'vue'
 
 import { defineMessage, useVIntl } from '../../composables/i18n'

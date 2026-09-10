@@ -149,8 +149,8 @@
   "button.open-in-folder": {
     "defaultMessage": "פתח בתקייה"
   },
-  "button.open-in-modrinth": {
-    "defaultMessage": "פתח בModrinth"
+  "button.open-in-Lumen": {
+    "defaultMessage": "פתח בLumen"
   },
   "button.play": {
     "defaultMessage": "שחק"
@@ -617,8 +617,8 @@
   "omorphia.component.badge.label.moderator": {
     "defaultMessage": "מפקח"
   },
-  "omorphia.component.badge.label.modrinth-team": {
-    "defaultMessage": "צוות Modrinth"
+  "omorphia.component.badge.label.Lumen-team": {
+    "defaultMessage": "צוות Lumen"
   },
   "omorphia.component.badge.label.pending": {
     "defaultMessage": "בהמתנה"

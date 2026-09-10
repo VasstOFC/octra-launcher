@@ -135,8 +135,8 @@
 	</ReadyTransition>
 </template>
 <script setup lang="ts">
-import { CompassIcon, FilterIcon, PlusIcon, RefreshCwIcon, SearchIcon } from '@modrinth/assets'
-import { Button } from '@modrinth/ui'
+import { CompassIcon, FilterIcon, PlusIcon, RefreshCwIcon, SearchIcon } from '@lumen/assets'
+import { Button } from '@lumen/ui'
 import {
 	commonMessages,
 	defineMessages,
@@ -148,7 +148,7 @@ import {
 	ReadyTransition,
 	useReadyState,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
 import { platform } from '@tauri-apps/plugin-os'
 import { computed, onBeforeUnmount, ref, watch } from 'vue'

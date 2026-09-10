@@ -96,7 +96,7 @@
 						type="colored"
 						color="brand"
 						class="flex-1"
-						href="https://modrinth.com/app"
+						href="https://Lumen.com/app"
 						target="_blank"
 						rel="noopener noreferrer"
 					>
@@ -110,8 +110,8 @@
 </template>
 
 <script setup lang="ts">
-import { CheckIcon, DownloadIcon, XIcon } from '@modrinth/assets'
-import { commonMessages } from '@modrinth/ui'
+import { CheckIcon, DownloadIcon, XIcon } from '@lumen/assets'
+import { commonMessages } from '@lumen/ui'
 import { computed, nextTick, onUnmounted, ref } from 'vue'
 
 import { Button, ButtonLink } from '#ui/components/base/buttons'
@@ -126,11 +126,11 @@ const { formatMessage } = useVIntl()
 const messages = defineMessages({
 	openingApp: {
 		id: 'modal.open-in-app.title',
-		defaultMessage: 'Opening Modrinth App',
+		defaultMessage: 'Opening Lumen App',
 	},
 	whyUseApp: {
 		id: 'modal.open-in-app.why-use',
-		defaultMessage: 'Why use the Modrinth App',
+		defaultMessage: 'Why use the Lumen App',
 	},
 	benefitLaunch: {
 		id: 'modal.open-in-app.benefit.launch',
@@ -146,11 +146,11 @@ const messages = defineMessages({
 	},
 	openingAutomatically: {
 		id: 'modal.open-in-app.opening-automatically',
-		defaultMessage: 'The Modrinth App will open automatically...',
+		defaultMessage: 'The Lumen App will open automatically...',
 	},
 	getApp: {
 		id: 'modal.open-in-app.get-app',
-		defaultMessage: 'Get Modrinth App',
+		defaultMessage: 'Get Lumen App',
 	},
 })
 
@@ -184,7 +184,7 @@ const serverProject = ref<ServerProject>({
 	region: '',
 })
 const appLink = computed(() => {
-	return `modrinth://server/${serverProject.value.slug}`
+	return `Lumen://server/${serverProject.value.slug}`
 })
 
 function startCountdown() {

@@ -1,4 +1,4 @@
-import type { Labrinth } from '@modrinth/api-client'
+import type { Labrinth } from '@lumen/api-client'
 import {
 	ArchiveIcon,
 	CircleDollarSignIcon,
@@ -12,8 +12,8 @@ import {
 	RadioTowerIcon,
 	ServerIcon,
 	SparklesIcon,
-} from '@modrinth/assets'
-import { sortedCategories } from '@modrinth/utils'
+} from '@lumen/assets'
+import { sortedCategories } from '@lumen/utils'
 import { type Component, computed, readonly, type Ref, ref } from 'vue'
 import { type LocationQueryRaw, type LocationQueryValue, useRoute } from 'vue-router'
 

@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
-import { BlendIcon, ListFilterIcon, SortAscIcon, SortDescIcon, SpinnerIcon } from '@modrinth/assets'
+import type { Labrinth } from '@lumen/api-client'
+import { BlendIcon, ListFilterIcon, SortAscIcon, SortDescIcon, SpinnerIcon } from '@lumen/assets'
 import {
 	Combobox,
 	type ComboboxOption,
 	commonMessages,
-	injectModrinthClient,
+	injectLumenClient,
 	Pagination,
 	TeleportPopoutMenu,
 	Toggle,
 	useFormatNumber,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useInfiniteQuery, useQueryClient } from '@tanstack/vue-query'
 import Fuse from 'fuse.js'
 import { nextTick, reactive } from 'vue'
@@ -25,9 +25,9 @@ import ModerationTechRevCard from '~/components/ui/moderation/ModerationTechRevC
 import { flattenFileReports } from '~/components/ui/moderation/tech-review/helpers'
 import { useTechReviewSources } from '~/components/ui/moderation/tech-review/use-tech-review-sources'
 
-useHead({ title: 'Tech review queue - Modrinth' })
+useHead({ title: 'Tech review queue - Lumen' })
 
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const queryClient = useQueryClient()
 const keybinds = useModerationKeybinds()
 

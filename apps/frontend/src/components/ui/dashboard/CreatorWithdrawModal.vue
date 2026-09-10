@@ -104,7 +104,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
+import type { Labrinth } from '@lumen/api-client'
 import {
 	ArrowLeftRightIcon,
 	ChevronRightIcon,
@@ -113,7 +113,7 @@ import {
 	RightArrowIcon,
 	SpinnerIcon,
 	XIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import {
 	Button,
 	commonMessages,
@@ -121,7 +121,7 @@ import {
 	injectNotificationManager,
 	NewModal,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { computed, nextTick, onMounted, ref, useTemplateRef, watch } from 'vue'
 
 import {

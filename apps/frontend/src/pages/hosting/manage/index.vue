@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
-import { ServersManagePageIndex } from '@modrinth/ui'
+import type { Labrinth } from '@lumen/api-client'
+import { ServersManagePageIndex } from '@lumen/ui'
 
 import { products } from '~/generated/state.json'
 
@@ -9,7 +9,7 @@ definePageMeta({
 })
 
 useHead({
-	title: 'Hosting - Modrinth',
+	title: 'Hosting - Lumen',
 })
 
 const config = useRuntimeConfig()

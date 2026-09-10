@@ -184,7 +184,7 @@
 </template>
 
 <script setup lang="ts">
-import { FolderOpenIcon, HistoryIcon, SaveIcon, TrashIcon } from '@modrinth/assets'
+import { FolderOpenIcon, HistoryIcon, SaveIcon, TrashIcon } from '@lumen/assets'
 import type { Component } from 'vue'
 import { computed, onMounted, onUnmounted, ref, shallowRef, watch } from 'vue'
 

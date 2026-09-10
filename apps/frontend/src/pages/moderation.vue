@@ -18,9 +18,9 @@
 </template>
 
 <script setup lang="ts">
-import { FolderIcon, GlobeIcon, HashIcon, ReportIcon, ShieldCheckIcon } from '@modrinth/assets'
-import { getMarginTarget } from '@modrinth/moderation'
-import { Chips, defineMessages, NavTabs, useVIntl } from '@modrinth/ui'
+import { FolderIcon, GlobeIcon, HashIcon, ReportIcon, ShieldCheckIcon } from '@lumen/assets'
+import { getMarginTarget } from '@lumen/moderation'
+import { Chips, defineMessages, NavTabs, useVIntl } from '@lumen/ui'
 
 definePageMeta({
 	middleware: ['auth', 'staff'],

@@ -1,5 +1,5 @@
-import type { Labrinth } from '@modrinth/api-client'
-import { prepareThemeColorTransition } from '@modrinth/ui'
+import type { Labrinth } from '@lumen/api-client'
+import { prepareThemeColorTransition } from '@lumen/ui'
 import { ref, watch, watchEffect } from 'vue'
 
 import { useNativeTheme } from './native-theme.ts'

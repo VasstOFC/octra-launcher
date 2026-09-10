@@ -1,11 +1,11 @@
-import { CheckIcon, CopyIcon, UpdatedIcon } from '@modrinth/assets'
+import { CheckIcon, CopyIcon, UpdatedIcon } from '@lumen/assets'
 import {
 	defineMessages,
 	type PopupNotificationButton,
 	type PopupNotificationProgressItem,
 	type PopupNotificationProgressType,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { convertFileSrc } from '@tauri-apps/api/core'
 import { computed, ref } from 'vue'
 import type { Router } from 'vue-router'
@@ -151,9 +151,9 @@ const failureSummaryMessages = defineMessages({
 		id: 'app.action-bar.install.summary.download-failed',
 		defaultMessage: "Download couldn't finish",
 	},
-	modrinthUnreachable: {
-		id: 'app.action-bar.install.summary.modrinth-unreachable',
-		defaultMessage: "Couldn't reach Modrinth",
+	LumenUnreachable: {
+		id: 'app.action-bar.install.summary.Lumen-unreachable',
+		defaultMessage: "Couldn't reach Lumen",
 	},
 	packDownloadFailed: {
 		id: 'app.action-bar.install.summary.pack-download-failed',
@@ -298,7 +298,7 @@ export async function useInstallJobNotifications(opts: {
 						: failureSummaryMessages.downloadFailed,
 				)
 			case 'api_error':
-				return formatMessage(failureSummaryMessages.modrinthUnreachable)
+				return formatMessage(failureSummaryMessages.LumenUnreachable)
 			case 'pack_error':
 				return formatMessage(
 					phase === 'downloading_pack_file'

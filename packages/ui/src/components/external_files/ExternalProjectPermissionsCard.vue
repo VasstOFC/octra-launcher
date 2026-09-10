@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
+import type { Labrinth } from '@lumen/api-client'
 import {
 	CheckCircleIcon,
 	ChevronDownIcon,
@@ -13,8 +13,8 @@ import {
 	VersionIcon,
 	XCircleIcon,
 	XIcon,
-} from '@modrinth/assets'
-import { renderString } from '@modrinth/utils'
+} from '@lumen/assets'
+import { renderString } from '@lumen/utils'
 import { useMutation, useQueryClient } from '@tanstack/vue-query'
 import { computed, ref, useTemplateRef, watch } from 'vue'
 
@@ -26,7 +26,7 @@ import { commonMessages } from '#ui/utils'
 import { defineMessage, defineMessages, useVIntl } from '../../composables/i18n'
 import {
 	injectAttributionModeration,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	injectProjectPageContext,
 } from '../../providers'
@@ -83,7 +83,7 @@ const addToExistingModalRef =
 const deleteGroupModalRef = useTemplateRef<InstanceType<typeof ConfirmModal>>('deleteGroupModalRef')
 
 const { formatMessage } = useVIntl()
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const queryClient = useQueryClient()
 const { addNotification } = injectNotificationManager()
 const { allMembers } = injectProjectPageContext()

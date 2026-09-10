@@ -1,4 +1,4 @@
-import { DownloadIcon, ExternalIcon, HeartIcon, SettingsIcon } from '@modrinth/assets'
+import { DownloadIcon, ExternalIcon, HeartIcon, SettingsIcon } from '@lumen/assets'
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 
 import Button from '../../components/base/buttons/Button.vue'
@@ -199,10 +199,10 @@ export const LinksAndIconButton: Story = {
 		template: /*html*/ `
 			<div class="flex flex-wrap items-center gap-4">
 				<ButtonLink to="/library">Internal link</ButtonLink>
-				<ButtonLink href="https://modrinth.com" target="_blank" type="outlined">
-					Modrinth<ExternalIcon />
+				<ButtonLink href="https://Lumen.com" target="_blank" type="outlined">
+					Lumen<ExternalIcon />
 				</ButtonLink>
-				<ButtonLink href="https://modrinth.com" disabled>Disabled link</ButtonLink>
+				<ButtonLink href="https://Lumen.com" disabled>Disabled link</ButtonLink>
 				<IconButton label="Favorite"><HeartIcon /></IconButton>
 				<IconButton label="Favorite" type="colored"><HeartIcon /></IconButton>
 				<IconButton label="Favorite" type="outlined"><HeartIcon /></IconButton>

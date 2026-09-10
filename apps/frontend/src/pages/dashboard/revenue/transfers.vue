@@ -87,18 +87,18 @@ import {
 	DownloadIcon,
 	GenericListIcon,
 	SpinnerIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import {
 	Combobox,
 	defineMessages,
 	EmptyState,
 	IconButton,
-	injectModrinthClient,
+	injectLumenClient,
 	useFormatDateTime,
 	useFormatMoney,
 	useVIntl,
-} from '@modrinth/ui'
-import { capitalizeString } from '@modrinth/utils'
+} from '@lumen/ui'
+import { capitalizeString } from '@lumen/utils'
 import { useQuery } from '@tanstack/vue-query'
 import dayjs from 'dayjs'
 
@@ -113,7 +113,7 @@ const formatMonth = useFormatDateTime({
 	month: 'long',
 })
 
-const client = injectModrinthClient()
+const client = injectLumenClient()
 
 const messages = defineMessages({
 	transactionsHeader: {
@@ -163,7 +163,7 @@ const messages = defineMessages({
 })
 
 useHead({
-	title: () => `${formatMessage(messages.headTitle)} - Modrinth`,
+	title: () => `${formatMessage(messages.headTitle)} - Lumen`,
 })
 
 const { data: transactions, refetch } = useQuery({
@@ -348,7 +348,7 @@ const downloadTransactionsCSV = () => {
 		const link = document.createElement('a')
 		const url = URL.createObjectURL(blob)
 		const yearSuffix = selectedYear.value === 'all' ? 'all' : selectedYear.value
-		const filename = `modrinth-transactions-${yearSuffix}.csv`
+		const filename = `Lumen-transactions-${yearSuffix}.csv`
 
 		link.setAttribute('href', url)
 		link.setAttribute('download', filename)

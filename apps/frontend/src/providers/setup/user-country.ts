@@ -1,4 +1,4 @@
-import { provideUserCountry } from '@modrinth/ui'
+import { provideUserCountry } from '@lumen/ui'
 import { onMounted } from 'vue'
 
 import { useRequestHeaders, useState } from '#imports'

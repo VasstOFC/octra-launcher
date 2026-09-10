@@ -25,7 +25,7 @@
 			<span class="label">
 				<span class="label__title">Invite a member</span>
 				<span class="label__description">
-					Enter the Modrinth username of the person you'd like to invite to be a member of this
+					Enter the Lumen username of the person you'd like to invite to be a member of this
 					organization.
 				</span>
 			</span>
@@ -244,7 +244,7 @@ import {
 	TransferIcon,
 	UserPlusIcon,
 	UserXIcon as UserRemoveIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import {
 	Avatar,
 	Badge,
@@ -253,7 +253,7 @@ import {
 	IconButton,
 	injectNotificationManager,
 	Input,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { nextTick, ref } from 'vue'
 
 import ConfirmTransferOrgModal from '~/components/ui/ConfirmTransferOrgModal.vue'

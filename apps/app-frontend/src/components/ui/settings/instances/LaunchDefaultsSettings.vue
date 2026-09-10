@@ -6,7 +6,7 @@ import {
 	Slider,
 	Toggle,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { ref, watch } from 'vue'
 
 import {

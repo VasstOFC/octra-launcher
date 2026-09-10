@@ -1314,7 +1314,7 @@ impl CachedEntry {
             CacheValueType::Project => {
                 fetch_original_values!(
                     Project,
-                    env!("MODRINTH_API_URL"),
+                    env!("LUMEN_API_URL"),
                     "projects",
                     Some("/v2/projects"),
                     CacheValue::Project
@@ -1323,7 +1323,7 @@ impl CachedEntry {
             CacheValueType::ProjectV3 => {
                 fetch_original_values!(
                     ProjectV3,
-                    env!("MODRINTH_API_URL_V3"),
+                    env!("LUMEN_API_URL_V3"),
                     "projects",
                     Some("/v3/projects"),
                     CacheValue::ProjectV3
@@ -1332,7 +1332,7 @@ impl CachedEntry {
             CacheValueType::Version => {
                 fetch_original_values!(
                     Version,
-                    env!("MODRINTH_API_URL"),
+                    env!("LUMEN_API_URL"),
                     "versions",
                     Some("/v2/versions"),
                     CacheValue::Version
@@ -1341,7 +1341,7 @@ impl CachedEntry {
             CacheValueType::VersionV3 => {
                 fetch_original_values!(
                     VersionV3,
-                    env!("MODRINTH_API_URL_V3"),
+                    env!("LUMEN_API_URL_V3"),
                     "versions",
                     Some("/v3/versions"),
                     CacheValue::VersionV3
@@ -1350,7 +1350,7 @@ impl CachedEntry {
             CacheValueType::User => {
                 fetch_original_values!(
                     User,
-                    env!("MODRINTH_API_URL"),
+                    env!("LUMEN_API_URL"),
                     "users",
                     Some("/v2/users"),
                     CacheValue::User
@@ -1359,7 +1359,7 @@ impl CachedEntry {
             CacheValueType::Team => {
                 let mut teams = fetch_many_batched::<Vec<TeamMember>>(
                     Method::GET,
-                    env!("MODRINTH_API_URL_V3"),
+                    env!("LUMEN_API_URL_V3"),
                     "teams?ids=",
                     Some("/v3/teams"),
                     &keys,
@@ -1399,7 +1399,7 @@ impl CachedEntry {
             CacheValueType::Organization => {
                 let mut orgs = fetch_many_batched::<Organization>(
                     Method::GET,
-                    env!("MODRINTH_API_URL_V3"),
+                    env!("LUMEN_API_URL_V3"),
                     "organizations?ids=",
                     Some("/v3/organizations"),
                     &keys,
@@ -1455,7 +1455,7 @@ impl CachedEntry {
             CacheValueType::File => {
                 let mut versions = fetch_json::<HashMap<String, Version>>(
                     Method::POST,
-                    concat!(env!("MODRINTH_API_URL"), "version_files"),
+                    concat!(env!("LUMEN_API_URL"), "version_files"),
                     None,
                     Some(serde_json::json!({
                         "algorithm": "sha1",
@@ -1520,7 +1520,7 @@ impl CachedEntry {
                             metadata.loader,
                             format!(
                                 "{}{}",
-                                env!("MODRINTH_LAUNCHER_META_URL"),
+                                env!("LUMEN_LAUNCHER_META_URL"),
                                 metadata.path,
                             ),
                         )
@@ -1559,7 +1559,7 @@ impl CachedEntry {
             CacheValueType::MinecraftManifest => {
                 fetch_original_value!(
                     MinecraftManifest,
-                    env!("MODRINTH_LAUNCHER_META_URL"),
+                    env!("LUMEN_LAUNCHER_META_URL"),
                     format!(
                         "minecraft/v{}/manifest.json",
                         daedalus::minecraft::CURRENT_FORMAT_VERSION
@@ -1571,7 +1571,7 @@ impl CachedEntry {
             CacheValueType::Categories => {
                 fetch_original_value!(
                     Categories,
-                    env!("MODRINTH_API_URL"),
+                    env!("LUMEN_API_URL"),
                     "tag/category",
                     Some("/v2/tag/category"),
                     CacheValue::Categories
@@ -1580,7 +1580,7 @@ impl CachedEntry {
             CacheValueType::ReportTypes => {
                 fetch_original_value!(
                     ReportTypes,
-                    env!("MODRINTH_API_URL"),
+                    env!("LUMEN_API_URL"),
                     "tag/report_type",
                     Some("/v2/tag/report_type"),
                     CacheValue::ReportTypes
@@ -1589,7 +1589,7 @@ impl CachedEntry {
             CacheValueType::Loaders => {
                 fetch_original_value!(
                     Loaders,
-                    env!("MODRINTH_API_URL"),
+                    env!("LUMEN_API_URL"),
                     "tag/loader",
                     Some("/v2/tag/loader"),
                     CacheValue::Loaders
@@ -1598,7 +1598,7 @@ impl CachedEntry {
             CacheValueType::GameVersions => {
                 fetch_original_value!(
                     GameVersions,
-                    env!("MODRINTH_API_URL"),
+                    env!("LUMEN_API_URL"),
                     "tag/game_version",
                     Some("/v2/tag/game_version"),
                     CacheValue::GameVersions
@@ -1607,7 +1607,7 @@ impl CachedEntry {
             CacheValueType::DonationPlatforms => {
                 fetch_original_value!(
                     DonationPlatforms,
-                    env!("MODRINTH_API_URL"),
+                    env!("LUMEN_API_URL"),
                     "tag/donation_platform",
                     Some("/v2/tag/donation_platform"),
                     CacheValue::DonationPlatforms
@@ -1765,7 +1765,7 @@ impl CachedEntry {
                                 >(
                                     Method::POST,
                                     concat!(
-                                        env!("MODRINTH_API_URL"),
+                                        env!("LUMEN_API_URL"),
                                         "version_files/update_many"
                                     ),
                                     None,
@@ -1888,7 +1888,7 @@ impl CachedEntry {
                             x.key().to_string(),
                             format!(
                                 "{}search{}",
-                                env!("MODRINTH_API_URL"),
+                                env!("LUMEN_API_URL"),
                                 x.key()
                             ),
                         )
@@ -1939,7 +1939,7 @@ impl CachedEntry {
                     let project_id = key.to_string();
                     let url = format!(
                         "{}project/{}/version?include_changelog=false",
-                        env!("MODRINTH_API_URL"),
+                        env!("LUMEN_API_URL"),
                         project_id
                     );
 
@@ -1986,7 +1986,7 @@ impl CachedEntry {
                             x.key().to_string(),
                             format!(
                                 "{}search{}",
-                                env!("MODRINTH_API_URL_V3"),
+                                env!("LUMEN_API_URL_V3"),
                                 x.key()
                             ),
                         )

@@ -17,10 +17,10 @@ pub mod install;
 mod launcher;
 mod logger;
 pub mod nervia;
-pub mod octra_accounts;
-pub mod octra_legacy;
-pub mod octra_skins;
-pub mod octra_sync;
+pub mod lumen_accounts;
+pub mod lumen_legacy;
+pub mod lumen_skins;
+pub mod lumen_sync;
 mod state;
 
 pub use api::*;

@@ -1,5 +1,5 @@
 <template>
-	<ModrinthServersPurchaseModal
+	<LumenServersPurchaseModal
 		v-if="customer && regionsData"
 		ref="purchaseModal"
 		:publishable-key="props.stripePublishableKey"
@@ -27,13 +27,13 @@
 </template>
 
 <script setup lang="ts">
-import type { Archon, Labrinth } from '@modrinth/api-client'
+import type { Archon, Labrinth } from '@lumen/api-client'
 import {
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
-	ModrinthServersPurchaseModal,
+	LumenServersPurchaseModal,
 	useDebugLogger,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useMutation, useQuery } from '@tanstack/vue-query'
 import { computed, ref, watch } from 'vue'
 
@@ -48,9 +48,9 @@ const checkoutReturnUrl = computed(() => {
 })
 
 const { addNotification } = injectNotificationManager()
-const { labrinth, archon } = injectModrinthClient()
+const { labrinth, archon } = injectLumenClient()
 const debug = useDebugLogger('ServersUpgradeModalWrapper')
-const purchaseModal = ref<InstanceType<typeof ModrinthServersPurchaseModal> | null>(null)
+const purchaseModal = ref<InstanceType<typeof LumenServersPurchaseModal> | null>(null)
 
 // stripe type
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

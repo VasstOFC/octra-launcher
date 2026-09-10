@@ -118,22 +118,22 @@
 </template>
 
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
-import { HashIcon, ListIcon, SearchIcon, TrashIcon } from '@modrinth/assets'
+import type { Labrinth } from '@lumen/api-client'
+import { HashIcon, ListIcon, SearchIcon, TrashIcon } from '@lumen/assets'
 import {
 	Badge,
 	Button,
 	ButtonLink,
 	EmptyState,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	Input,
 	Pagination,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 
 import GlobalDetailLocalTraceCard from '~/components/ui/moderation/GlobalDetailLocalTraceCard.vue'
 
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const { addNotification } = injectNotificationManager()
 const query = ref('')
 const activeQuery = ref<string | null>(null)

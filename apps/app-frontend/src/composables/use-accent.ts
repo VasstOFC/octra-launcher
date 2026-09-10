@@ -1,4 +1,4 @@
-import { prepareThemeColorTransition } from '@modrinth/ui'
+import { prepareThemeColorTransition } from '@lumen/ui'
 import { reactive, ref, watch } from 'vue'
 
 import { isDarkTheme, useTheme } from '@/composables/use-theme.ts'
@@ -10,7 +10,7 @@ import {
 	normalizeHexColor,
 } from '@/helpers/accent-colors.ts'
 
-const ACCENT_STORAGE_KEY = 'octra.accent'
+const ACCENT_STORAGE_KEY = 'Lumen.accent'
 
 export type AccentSettingsValue = {
 	preset: AccentPresetId

@@ -149,9 +149,9 @@
 </template>
 
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
-import { BanIcon, DownloadIcon, EyeIcon, ReportIcon, XIcon } from '@modrinth/assets'
-import { Button } from '@modrinth/ui'
+import type { Labrinth } from '@lumen/api-client'
+import { BanIcon, DownloadIcon, EyeIcon, ReportIcon, XIcon } from '@lumen/assets'
+import { Button } from '@lumen/ui'
 import {
 	Admonition,
 	Avatar,
@@ -165,7 +165,7 @@ import {
 	type TableColumn,
 	useScrollIndicator,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { openUrl } from '@tauri-apps/plugin-opener'
 import { computed, nextTick, ref } from 'vue'
 
@@ -264,7 +264,7 @@ function handleDecline() {
 
 function handleReport() {
 	if (project.value?.id) {
-		openUrl(`https://modrinth.com/report?item=project&itemID=${project.value.id}`)
+		openUrl(`https://Lumen.com/report?item=project&itemID=${project.value.id}`)
 	}
 }
 
@@ -372,7 +372,7 @@ const messages = defineMessages({
 	inviteWarning: {
 		id: 'app.modal.install-to-play.invite-warning',
 		defaultMessage:
-			'This invite was created by another Modrinth user, not Modrinth. Only accept invites from people you trust.',
+			'This invite was created by another Lumen user, not Lumen. Only accept invites from people you trust.',
 	},
 	sharedInstance: {
 		id: 'app.modal.install-to-play.shared-instance',
@@ -397,7 +397,7 @@ const messages = defineMessages({
 	unknownFilesDescription: {
 		id: 'app.modal.install-to-play.unknown-files-description',
 		defaultMessage:
-			'This server modpack contains files that aren’t published on Modrinth. We strongly recommend only installing files from sources you trust.',
+			'This server modpack contains files that aren’t published on Lumen. We strongly recommend only installing files from sources you trust.',
 	},
 	unrecognizedFiles: {
 		id: 'app.modal.install-to-play.unrecognized-files',
@@ -405,7 +405,7 @@ const messages = defineMessages({
 	},
 	reviewedFiles: {
 		id: 'app.modal.install-to-play.reviewed-files',
-		defaultMessage: "Files that aren't published to Modrinth aren't reviewed.",
+		defaultMessage: "Files that aren't published to Lumen aren't reviewed.",
 	},
 	installAnyway: {
 		id: 'app.modal.install-to-play.install-anyway',

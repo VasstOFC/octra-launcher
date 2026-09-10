@@ -129,23 +129,23 @@
 </template>
 
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
-import { OrganizationIcon, PlusIcon, XIcon } from '@modrinth/assets'
-import { Button } from '@modrinth/ui'
+import type { Labrinth } from '@lumen/api-client'
+import { OrganizationIcon, PlusIcon, XIcon } from '@lumen/assets'
+import { Button } from '@lumen/ui'
 import {
 	Chips,
 	Combobox,
 	type ComboboxOption,
 	commonMessages,
 	defineMessages,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	Input,
 	NewModal,
 	Textarea,
 	useDebugLogger,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { computed, defineAsyncComponent, h } from 'vue'
 
 import { generateUrlSlug } from '~/utils/slugs'
@@ -350,7 +350,7 @@ const userOption = computed(() => ({
 		: undefined,
 }))
 
-const { labrinth } = injectModrinthClient()
+const { labrinth } = injectLumenClient()
 
 async function fetchOrganizations() {
 	if (!auth.value.user?.id) return

@@ -1,10 +1,10 @@
-import type { Labrinth } from '@modrinth/api-client'
+import type { Labrinth } from '@lumen/api-client'
 import {
 	createContext,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	type ProjectPageContext,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
 import type { ComputedRef, Ref } from 'vue'
 
@@ -277,7 +277,7 @@ export const [injectAnalyticsDashboardContext, provideAnalyticsDashboardContext]
 export function createAnalyticsDashboardContext(
 	options: CreateAnalyticsDashboardContextOptions,
 ): AnalyticsDashboardContextValue {
-	const client = injectModrinthClient()
+	const client = injectLumenClient()
 	const { addNotification } = injectNotificationManager()
 	const queryClient = useQueryClient()
 	const route = useRoute()

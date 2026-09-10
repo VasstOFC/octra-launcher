@@ -9,7 +9,7 @@
     "message": "قبول الكل"
   },
   "ads-consent.body": {
-    "message": "تساعد الإعلانات في استمرار Modrinth وتمويل مدفوعات المبدعين. قد يقوم شركاؤنا بتخزين ملفات تعريف الارتباط Cookies على الموقع أو الوصول إليها لتخصيص الإعلانات وقياس أدائها."
+    "message": "تساعد الإعلانات في استمرار Lumen وتمويل مدفوعات المبدعين. قد يقوم شركاؤنا بتخزين ملفات تعريف الارتباط Cookies على الموقع أو الوصول إليها لتخصيص الإعلانات وقياس أدائها."
   },
   "ads-consent.manage": {
     "message": "إدارة التفضيلات"
@@ -18,7 +18,7 @@
     "message": "رفض الكل"
   },
   "ads-consent.title": {
-    "message": "خصوصيتك وكيف تساهم الإعلانات في دعم Modrinth"
+    "message": "خصوصيتك وكيف تساهم الإعلانات في دعم Lumen"
   },
   "analytics.action.add": {
     "message": "إضافة"
@@ -110,11 +110,11 @@
   "analytics.chart.controls.display": {
     "message": "عرض"
   },
-  "analytics.chart.controls.modrinth-events": {
-    "message": "فعاليات Modrinth"
+  "analytics.chart.controls.Lumen-events": {
+    "message": "فعاليات Lumen"
   },
-  "analytics.chart.controls.no-modrinth-events": {
-    "message": "لا توجد حالات Modrinth في الرسوم البيانية."
+  "analytics.chart.controls.no-Lumen-events": {
+    "message": "لا توجد حالات Lumen في الرسوم البيانية."
   },
   "analytics.chart.controls.no-project-events": {
     "message": "لا توجد أحداث للمشروع في الرسم البياني."
@@ -144,7 +144,7 @@
     "message": "عرض تفاصيل التحليلات المتعلقة بتحقيق الدخل"
   },
   "analytics.chart.legend.monetization-details.description": {
-    "message": "لا تُحتسب في عملية تحقيق الدخل سوى المشاهدات وعمليات التنزيل التي تتم عبر Modrinth، ويجب على المستخدمين تسجيل الدخول لإجراء عمليات التنزيل."
+    "message": "لا تُحتسب في عملية تحقيق الدخل سوى المشاهدات وعمليات التنزيل التي تتم عبر Lumen، ويجب على المستخدمين تسجيل الدخول لإجراء عمليات التنزيل."
   },
   "analytics.chart.legend.monetization-details.title": {
     "message": "تفاصيل التحليلات المُدرة للدخل"
@@ -228,10 +228,10 @@
     "message": "تحديث"
   },
   "analytics.download-source.app": {
-    "message": "تطبيق Modrinth"
+    "message": "تطبيق Lumen"
   },
   "analytics.download-source.website": {
-    "message": "موقع Modrinth الإلكتروني"
+    "message": "موقع Lumen الإلكتروني"
   },
   "analytics.downloads.suffix": {
     "message": "التنزيلات"
@@ -417,7 +417,7 @@
     "message": "التنزيلات"
   },
   "analytics.stat.monetization-banner.body": {
-    "message": "المشاهدات وعمليات التنزيل التي تتم عبر Modrinth فقط هي المؤهلة لتحقيق الأرباح، ويجب أن تجتاز عملية تصفية لمنع الاحتيال. كما تتطلب عمليات التنزيل من تطبيق Modrinth تسجيل دخول المستخدم. ونظرًا لأن جميع المشاريع لديها نسبة متشابهة من التنزيلات القابلة لتحقيق الأرباح، فلن يتغير إيرادك بشكل ملحوظ إذا تم احتساب جميع عمليات التنزيل."
+    "message": "المشاهدات وعمليات التنزيل التي تتم عبر Lumen فقط هي المؤهلة لتحقيق الأرباح، ويجب أن تجتاز عملية تصفية لمنع الاحتيال. كما تتطلب عمليات التنزيل من تطبيق Lumen تسجيل دخول المستخدم. ونظرًا لأن جميع المشاريع لديها نسبة متشابهة من التنزيلات القابلة لتحقيق الأرباح، فلن يتغير إيرادك بشكل ملحوظ إذا تم احتساب جميع عمليات التنزيل."
   },
   "analytics.stat.monetization-banner.learn-more": {
     "message": "معرفة المزيد"
@@ -456,7 +456,7 @@
     "message": "من {start} إلى {end}"
   },
   "analytics.table.csv.filename": {
-    "message": "تحليلات Modrinth — تفصيل {breakdown} — {dateRange}"
+    "message": "تحليلات Lumen — تفصيل {breakdown} — {dateRange}"
   },
   "analytics.table.csv.header.playtime-seconds": {
     "message": "وقت اللعب (بالثواني)"
@@ -564,7 +564,7 @@
     "message": "لينكس"
   },
   "app-marketing.download.linux-disclaimer": {
-    "message": "الإصدارات الخاصة بـ Linux من Modrinth App <issues-link>معروفة بوجود مشاكل</issues-link> على بعض الأنظمة والتكوينات. إذا كان Modrinth App غير مستقر على نظامك، فننصحك بتجربة تطبيقات أخرى مثل <prism-link>Prism Launcher</prism-link> لتثبيت محتوى Modrinth بسهولة."
+    "message": "الإصدارات الخاصة بـ Linux من Lumen App <issues-link>معروفة بوجود مشاكل</issues-link> على بعض الأنظمة والتكوينات. إذا كان Lumen App غير مستقر على نظامك، فننصحك بتجربة تطبيقات أخرى مثل <prism-link>Prism Launcher</prism-link> لتثبيت محتوى Lumen بسهولة."
   },
   "app-marketing.download.mac": {
     "message": "ماك"
@@ -573,10 +573,10 @@
     "message": "خيارات التنزيل"
   },
   "app-marketing.download.terms": {
-    "message": "بتنزيلك Modrinth App فإنك توافق على <terms-link>الشروط</terms-link> و <privacy-link>سياسة الخصوصية</privacy-link>."
+    "message": "بتنزيلك Lumen App فإنك توافق على <terms-link>الشروط</terms-link> و <privacy-link>سياسة الخصوصية</privacy-link>."
   },
   "app-marketing.download.title": {
-    "message": "تنزيل Modrinth App (النسخة التجريبية)"
+    "message": "تنزيل Lumen App (النسخة التجريبية)"
   },
   "app-marketing.download.windows": {
     "message": "ويندوز"
@@ -588,7 +588,7 @@
     "message": "تابع المشروعات"
   },
   "app-marketing.features.importing.description": {
-    "message": "استورد جميع ملفاتك الشخصية المفضلة من المشغل الذي كنت تستخدمه من قبل، وابدأ باستخدام Modrinth App في ثوانٍ!"
+    "message": "استورد جميع ملفاتك الشخصية المفضلة من المشغل الذي كنت تستخدمه من قبل، وابدأ باستخدام Lumen App في ثوانٍ!"
   },
   "app-marketing.features.importing.gdlauncher-alt": {
     "message": "GDLauncher"
@@ -642,7 +642,7 @@
     "message": "% CPU"
   },
   "app-marketing.features.performance.description": {
-    "message": "يعمل Modrinth App بكفاءة أفضل من العديد من مديري المودات الرائدين، باستخدام 150 ميغابايت فقط من الذاكرة العشوائية!"
+    "message": "يعمل Lumen App بكفاءة أفضل من العديد من مديري المودات الرائدين، باستخدام 150 ميغابايت فقط من الذاكرة العشوائية!"
   },
   "app-marketing.features.performance.discord": {
     "message": "ديسكورد"
@@ -662,7 +662,7 @@
   "app-marketing.features.performance.less-than-150mb": {
     "message": "< 150 ميغابايت"
   },
-  "app-marketing.features.performance.modrinth-app": {
+  "app-marketing.features.performance.Lumen-app": {
     "message": "تطبيق مودرينث"
   },
   "app-marketing.features.performance.one-billion-percent": {
@@ -681,13 +681,13 @@
     "message": "أداء قوي"
   },
   "app-marketing.features.play.description": {
-    "message": "استخدم Modrinth App لتنزيل ولعب موداتك والمودباك المفضلة لديك."
+    "message": "استخدم Lumen App لتنزيل ولعب موداتك والمودباك المفضلة لديك."
   },
   "app-marketing.features.play.title": {
     "message": "العب مع موداتك المفضلة"
   },
   "app-marketing.features.sharing.description": {
-    "message": "أنشئ وشارك والعب المودباكات باستخدام أي من آلاف المودات والمودباكات المستضافة هنا على Modrinth."
+    "message": "أنشئ وشارك والعب المودباكات باستخدام أي من آلاف المودات والمودباكات المستضافة هنا على Lumen."
   },
   "app-marketing.features.sharing.modpack": {
     "message": "مودباك"
@@ -702,7 +702,7 @@
     "message": "مختلف عن أي مشغل آخر"
   },
   "app-marketing.features.website.description": {
-    "message": "تم دمج Modrinth App بالكامل مع الموقع، بحيث يمكنك الوصول إلى جميع مشاريعك المفضلة بواسطة التطبيق!"
+    "message": "تم دمج Lumen App بالكامل مع الموقع، بحيث يمكنك الوصول إلى جميع مشاريعك المفضلة بواسطة التطبيق!"
   },
   "app-marketing.features.website.title": {
     "message": "تكامل مع الموقع"
@@ -711,19 +711,19 @@
     "message": "الذي استخدمته من قبل"
   },
   "app-marketing.hero.app-screenshot-alt": {
-    "message": "لقطة شاشة لـ Modrinth App مع نسخة Cobblemon مفتوحة في صفحة \"المحتوى\"."
+    "message": "لقطة شاشة لـ Lumen App مع نسخة Cobblemon مفتوحة في صفحة \"المحتوى\"."
   },
   "app-marketing.hero.description": {
-    "message": "Modrinth App هو لانشر فريد ومفتوح المصدر، يتيح لك تشغيل موداتك المفضلة والحفاظ عليها محدثة، كل ذلك في تطبيق واحد سهل الاستخدام."
+    "message": "Lumen App هو لانشر فريد ومفتوح المصدر، يتيح لك تشغيل موداتك المفضلة والحفاظ عليها محدثة، كل ذلك في تطبيق واحد سهل الاستخدام."
   },
   "app-marketing.hero.download-button": {
-    "message": "تنزيل Modrinth App"
+    "message": "تنزيل Lumen App"
   },
-  "app-marketing.hero.download-modrinth-app": {
-    "message": "تنزيل Modrinth App"
+  "app-marketing.hero.download-Lumen-app": {
+    "message": "تنزيل Lumen App"
   },
-  "app-marketing.hero.download-modrinth-app-for-os": {
-    "message": "تنزيل Modrinth App لـ {os}"
+  "app-marketing.hero.download-Lumen-app-for-os": {
+    "message": "تنزيل Lumen App لـ {os}"
   },
   "app-marketing.hero.minecraft-screenshot-alt": {
     "message": "لقطة شاشة لقائمة Cobblemon الرئيسية."
@@ -792,7 +792,7 @@
     "message": "تاريخ الميلاد مطلوب"
   },
   "auth.create-account.date-of-birth.under13-helper": {
-    "message": "لا تستوفي متطلبات العمر لإنشاء حساب على Modrinth."
+    "message": "لا تستوفي متطلبات العمر لإنشاء حساب على Lumen."
   },
   "auth.create-account.info-panel.source-code-link": {
     "message": "شفرة المصدر ذات الصلة"
@@ -807,7 +807,7 @@
     "message": "فحص الأمان"
   },
   "auth.create-account.subscribe.label": {
-    "message": "أبقني على اطلاع بأحدث الأشياء الرائعة التي تعمل عليها Modrinth عبر البريد الإلكتروني"
+    "message": "أبقني على اطلاع بأحدث الأشياء الرائعة التي تعمل عليها Lumen عبر البريد الإلكتروني"
   },
   "auth.create-account.title": {
     "message": "إنشاء حساب"
@@ -879,7 +879,7 @@
     "message": "ليس لديك حساب؟"
   },
   "auth.sign-in.sign-in-with": {
-    "message": "تسجيل الدخول إلى Modrinth"
+    "message": "تسجيل الدخول إلى Lumen"
   },
   "auth.sign-in.title": {
     "message": "تسجيل الدخول"
@@ -1101,7 +1101,7 @@
     "message": "الرد على الموضوع"
   },
   "conversation-thread.reply-modal.help-center-note": {
-    "message": "إذا كنت بحاجة إلى التواصل مع فريق الإشراف، يُرجى استخدام <help-center-link>مركز مساعدة Modrinth</help-center-link> والنقر على الفقاعة الزرقاء في الزاوية السفلية اليمنى للتواصل مع الدعم."
+    "message": "إذا كنت بحاجة إلى التواصل مع فريق الإشراف، يُرجى استخدام <help-center-link>مركز مساعدة Lumen</help-center-link> والنقر على الفقاعة الزرقاء في الزاوية السفلية اليمنى للتواصل مع الدعم."
   },
   "conversation-thread.resubmit-modal.confirmation.description": {
     "message": "تأكيد أنني قد عالجت رسائل المشرفين"
@@ -1509,7 +1509,7 @@
     "message": "نموذج الضرائب غير مكتمل"
   },
   "dashboard.creator-tax-form-modal.security.description": {
-    "message": "تستخدم Modrinth المزود الخارجي Track1099 لجمع وتخزين نماذج الضرائب الخاصة بك بأمان. <security-link>تعرف على المزيد هنا.</security-link>"
+    "message": "تستخدم Lumen المزود الخارجي Track1099 لجمع وتخزين نماذج الضرائب الخاصة بك بأمان. <security-link>تعرف على المزيد هنا.</security-link>"
   },
   "dashboard.creator-tax-form-modal.security.header": {
     "message": "ممارسات الأمن"
@@ -1683,7 +1683,7 @@
     "message": "لسحب رصيدك المتاح بالكامل <b>{available}</b> يرجى تعبئة النموذج أدناه. هذا النموذج مطلوب لأغراض الإبلاغ الضريبي، ولا يلزم تعبئته إلا مرة واحدة."
   },
   "dashboard.creator-withdraw-modal.tax-form-required.body-with-limit": {
-    "message": "يجب عليك إكمال نموذج W-9 أو W-8 لسجلات الضرائب الخاصة بشركة Modrinth حتى نبقى ملتزمين باللوائح الضريبية."
+    "message": "يجب عليك إكمال نموذج W-9 أو W-8 لسجلات الضرائب الخاصة بشركة Lumen حتى نبقى ملتزمين باللوائح الضريبية."
   },
   "dashboard.creator-withdraw-modal.tax-form-required.header": {
     "message": "نموذج ضريبي مطلوب"
@@ -1746,7 +1746,7 @@
     "message": "ايميل غير مؤكد"
   },
   "dashboard.creator-withdraw-modal.tremendous-details.unverified-email-message": {
-    "message": "البريد الإلكتروني الذي أدخلته لا يرتبط بحسابك في Modrinth. لا يمكن Modrinth استرداد المكافآت المرسلة إلى عنوان بريد إلكتروني غير صحيح."
+    "message": "البريد الإلكتروني الذي أدخلته لا يرتبط بحسابك في Lumen. لا يمكن Lumen استرداد المكافآت المرسلة إلى عنوان بريد إلكتروني غير صحيح."
   },
   "dashboard.creator-withdraw-modal.tremendous-details.usd-paypal-warning-header": {
     "message": "تتوفر أقساط مخفضة"
@@ -1770,7 +1770,7 @@
     "message": "لقد استنفدت رصيدك <b>{withdrawLimit}</b> حد السحب. يجب عليك تعبئة نموذج ضريبي لسحب مبلغ أكبر."
   },
   "dashboard.discord-roles.banner.body": {
-    "message": "أنت مؤهل للحصول على {roles}. اربط حساب Discord الخاص بك عبر Modrinth وسنزامنها تلقائيًا."
+    "message": "أنت مؤهل للحصول على {roles}. اربط حساب Discord الخاص بك عبر Lumen وسنزامنها تلقائيًا."
   },
   "dashboard.discord-roles.banner.cta": {
     "message": "ربط Discord"
@@ -1953,7 +1953,7 @@
     "message": "قد تخضع الإيرادات المقدرة للتغيير حتى يتم توفيرها. "
   },
   "dashboard.revenue.estimated-tooltip.msg2": {
-    "message": "اضغط لكي تعرف كيف Modrinth يستحمل إيراداتك"
+    "message": "اضغط لكي تعرف كيف Lumen يستحمل إيراداتك"
   },
   "dashboard.revenue.estimated-with-date": {
     "message": "مقدر {date}"
@@ -2160,7 +2160,7 @@
     "message": "اختيار المودباك لتثبيته بعد إعادة التعيين"
   },
   "discover.seo.description": {
-    "message": "ابحث وتصفح آلاف {projectType} لماينكرافت على Modrinth مع نتائج بحث فورية ودقيقة. تساعدك عوامل التصفية لدينا في العثور بسرعة على أفضل {projectType} لماينكرافت."
+    "message": "ابحث وتصفح آلاف {projectType} لماينكرافت على Lumen مع نتائج بحث فورية ودقيقة. تساعدك عوامل التصفية لدينا في العثور بسرعة على أفضل {projectType} لماينكرافت."
   },
   "discover.seo.title": {
     "message": "البحث عن {projectType}"
@@ -2295,10 +2295,10 @@
     "message": "عندما يكون الخادم لديك تحت ضغطٍ عالٍ، نقوم مؤقتًا بمنحه وصولًا إلى خيوط معالجة إضافية (CPU threads) للمساعدة في تقليل التقطّعات وعدم الاستقرار. يساعد ذلك على منع انخفاض معدل النبضات في الثانية (TPS) إلى أقل من 20، مما يضمن تجربة سلسة قدر الإمكان. ونظرًا لأن خيوط المعالجة الإضافية هذه تكون متاحة لفترة قصيرة فقط أثناء فترات الضغط العالي، فقد لا تظهر في تقارير Spark أو أدوات تحليل الأداء الأخرى.\n"
   },
   "hosting-marketing.faq.cpu-kind": {
-    "message": "ما نوع وحدات المعالجة المركزية التي تعمل بها خوادم Modrinth Hosting؟"
+    "message": "ما نوع وحدات المعالجة المركزية التي تعمل بها خوادم Lumen Hosting؟"
   },
   "hosting-marketing.faq.cpu-kind.answer": {
-    "message": "تعمل خوادم Modrinth Hosting بمعالجات مكافئة لمعالجات AMD Ryzen 7900 و7950X3D بتردد يتجاوز 5 جيجاهرتز، ومزوّدة بذاكرة DDR5."
+    "message": "تعمل خوادم Lumen Hosting بمعالجات مكافئة لمعالجات AMD Ryzen 7900 و7950X3D بتردد يتجاوز 5 جيجاهرتز، ومزوّدة بذاكرة DDR5."
   },
   "hosting-marketing.faq.currency": {
     "message": "ما العملة التي تُعرض بها الأسعار؟"
@@ -2307,19 +2307,19 @@
     "message": "جميع الأسعار مُدرجة بالدولار الأمريكي (USD)."
   },
   "hosting-marketing.faq.ddos-protection": {
-    "message": "هل تتمتع خوادم Modrinth Hosting بحماية من هجمات حجب الخدمة الموزعة DDoS؟"
+    "message": "هل تتمتع خوادم Lumen Hosting بحماية من هجمات حجب الخدمة الموزعة DDoS؟"
   },
   "hosting-marketing.faq.ddos-protection.answer": {
-    "message": "نعم. جميع خوادم Modrinth Hosting مزودة بحماية من هجمات حجب الخدمة الموزعة DDoS، بسعة تصل إلى 17 تيرابت في الثانية في بعض المواقع."
+    "message": "نعم. جميع خوادم Lumen Hosting مزودة بحماية من هجمات حجب الخدمة الموزعة DDoS، بسعة تصل إلى 17 تيرابت في الثانية في بعض المواقع."
   },
   "hosting-marketing.faq.heading": {
     "message": "الأسئلة شائعه"
   },
   "hosting-marketing.faq.how-fast": {
-    "message": "ما سرعه خوادم modrinth؟"
+    "message": "ما سرعه خوادم Lumen؟"
   },
   "hosting-marketing.faq.how-fast.answer.one": {
-    "message": "تُستضاف خوادم Modrinth Hosting على أجهزة حديثة جدًا وعالية الأداء، ولكن من الصعب تحديد مدى تأثير ذلك على سرعة تشغيل خادمك بدقة، لأن هناك العديد من العوامل التي تؤثر في ذلك، مثل المودات أو الداتاباكات أو البلوقنات التي تشغّلها على خادمك، وحتى سلوك المستخدمين."
+    "message": "تُستضاف خوادم Lumen Hosting على أجهزة حديثة جدًا وعالية الأداء، ولكن من الصعب تحديد مدى تأثير ذلك على سرعة تشغيل خادمك بدقة، لأن هناك العديد من العوامل التي تؤثر في ذلك، مثل المودات أو الداتاباكات أو البلوقنات التي تشغّلها على خادمك، وحتى سلوك المستخدمين."
   },
   "hosting-marketing.faq.how-fast.answer.two": {
     "message": "غالبًا ما تكون معظم مشاكل الأداء الناتجة عن مودباك أو مود أو حزمة بيانات أو إضافة غير محسّنة، مما يتسبب في حدوث تأخير في الخادم. وبما أن خوادمنا عالية الأداء، فلن تواجه غالبًا مشاكل تُذكر، ما دمت تختار خطة مناسبة للمحتوى الذي تشغّله على الخادم."
@@ -2328,10 +2328,10 @@
     "message": "هل يمكنني زيادة مساحة التخزين على خادمي؟"
   },
   "hosting-marketing.faq.increase-storage.answer": {
-    "message": "نعم، يمكن زيادة مساحة التخزين على خادمك دون أي تكلفة إضافية. إذا كنت بحاجة إلى مساحة تخزين أكبر، فتواصل مع دعم Modrinth."
+    "message": "نعم، يمكن زيادة مساحة التخزين على خادمك دون أي تكلفة إضافية. إذا كنت بحاجة إلى مساحة تخزين أكبر، فتواصل مع دعم Lumen."
   },
   "hosting-marketing.faq.location": {
-    "message": "أين تقع استضافة خوادم Modrinth؟ هل يمكنني اختيار منطقة؟"
+    "message": "أين تقع استضافة خوادم Lumen؟ هل يمكنني اختيار منطقة؟"
   },
   "hosting-marketing.faq.location.answer": {
     "message": "لدينا حاليًا خوادم متاحة في أمريكا الشمالية وأوروبا وجنوب شرق آسيا وأستراليا، ويمكنك اختيار المنطقة عند الشراء. سنضيف المزيد من المناطق مستقبلًا! إذا كنت ترغب في تغيير منطقتك، فتواصل مع الدعم."
@@ -2340,7 +2340,7 @@
     "message": "ما إصدارات Minecraft ومحملات التعديلات التي يمكن استخدامها؟"
   },
   "hosting-marketing.faq.versions-loaders.answer.one": {
-    "message": "يمكن لخوادم Modrinth Hosting تشغيل أي إصدار من Minecraft: Java Edition، بدءًا من الإصدار 1.2.5 وحتى الإصدارات الأحدث، بما في ذلك إصدارات اللقطات التجريبية."
+    "message": "يمكن لخوادم Lumen Hosting تشغيل أي إصدار من Minecraft: Java Edition، بدءًا من الإصدار 1.2.5 وحتى الإصدارات الأحدث، بما في ذلك إصدارات اللقطات التجريبية."
   },
   "hosting-marketing.faq.versions-loaders.answer.two": {
     "message": "ندعم أيضًا مجموعة واسعة من محمّلات المودات والبلوقنات، بما في ذلك Fabric وQuilt وForge وNeoForge للمودات، بالإضافة إلى Paper وPurpur للبلوقنات. يعتمد توفرها على ما إذا كان محمّل المودات أو البلوقنات يدعم إصدار Minecraft المحدد."
@@ -2357,11 +2357,11 @@
   "hosting-marketing.hero.button.start-your-server": {
     "message": "أنشئ خادمك"
   },
-  "hosting-marketing.hero.host-with-modrinth": {
-    "message": "أدر خادمك التالي مع Modrinth Hosting"
+  "hosting-marketing.hero.host-with-Lumen": {
+    "message": "أدر خادمك التالي مع Lumen Hosting"
   },
   "hosting-marketing.hero.hosting-description": {
-    "message": "Modrinth Hosting هي أسهل طريقة لاستضافة خادم Minecraft: Java Edition الخاص بك. ثبّت والعب موداتك ومودباكاتك المفضلة بسهولة، كل ذلك من داخل منصة Modrinth."
+    "message": "Lumen Hosting هي أسهل طريقة لاستضافة خادم Minecraft: Java Edition الخاص بك. ثبّت والعب موداتك ومودباكاتك المفضلة بسهولة، كل ذلك من داخل منصة Lumen."
   },
   "hosting-marketing.included.advanced-networking": {
     "message": "إدارة متقدمة للشبكة"
@@ -2379,7 +2379,7 @@
     "message": "رابط مخصص"
   },
   "hosting-marketing.included.custom-url.description": {
-    "message": "شارك خادمك باستخدام عنوان URL مخصص على <contrast>modrinth.gg</contrast>."
+    "message": "شارك خادمك باستخدام عنوان URL مخصص على <contrast>Lumen.gg</contrast>."
   },
   "hosting-marketing.included.description": {
     "message": "."
@@ -2397,19 +2397,19 @@
     "message": "مساعدة عندما تحتاج إليها"
   },
   "hosting-marketing.included.help.description": {
-    "message": "تواصل مع فريق Modrinth للحصول على المساعدة بشأن خادمك في أي وقت."
+    "message": "تواصل مع فريق Lumen للحصول على المساعدة بشأن خادمك في أي وقت."
   },
   "hosting-marketing.included.powerful-console": {
     "message": "وحدة تحكم قوية، ومدير لخصائص الخادم، والمزيد"
   },
   "hosting-marketing.included.powerful-console.description": {
-    "message": "يأتي Modrinth Hosting مع أدوات قوية لإدارة خادمك."
+    "message": "يأتي Lumen Hosting مع أدوات قوية لإدارة خادمك."
   },
   "hosting-marketing.included.sftp-access": {
     "message": "الوصول عبر SFTP"
   },
   "hosting-marketing.included.sftp-access.description": {
-    "message": "يمكنك الوصول إلى ملفات خادمك مباشرةً عبر SFTP المدمج في Modrinth Hosting."
+    "message": "يمكنك الوصول إلى ملفات خادمك مباشرةً عبر SFTP المدمج في Lumen Hosting."
   },
   "hosting-marketing.included.with-your-server": {
     "message": "مرفق مع خادمك"
@@ -2450,20 +2450,20 @@
   "hosting-marketing.server-for-everyone": {
     "message": "يوجد خادم يناسب الجميع"
   },
-  "hosting-marketing.why.all-on-modrinth": {
+  "hosting-marketing.why.all-on-Lumen": {
     "message": "يمكنك إدارة كل شيء على مودرينث"
   },
-  "hosting-marketing.why.all-on-modrinth.description": {
-    "message": "خادمك، وتعديلاتك، ولاعبوك، وغير ذلك الكثير موجود جميعها على Modrinth. لا حاجة للتبديل بين المنصات."
+  "hosting-marketing.why.all-on-Lumen.description": {
+    "message": "خادمك، وتعديلاتك، ولاعبوك، وغير ذلك الكثير موجود جميعها على Lumen. لا حاجة للتبديل بين المنصات."
   },
   "hosting-marketing.why.consistently-fast": {
     "message": "سريع باستمرار"
   },
   "hosting-marketing.why.consistently-fast.description": {
-    "message": "لا يتم تحميل بنيتنا التحتية بشكل زائد أبدًا، مما يعني أن كل خادم مستضاف مع Modrinth يعمل دائمًا بكامل طاقته."
+    "message": "لا يتم تحميل بنيتنا التحتية بشكل زائد أبدًا، مما يعني أن كل خادم مستضاف مع Lumen يعمل دائمًا بكامل طاقته."
   },
   "hosting-marketing.why.description": {
-    "message": "اختر من بين آلاف المودباكات على Modrinth أو أنشئ مودباكك الخاص. ادعُ أصدقاءك عندما تكون مستعدًا للعب."
+    "message": "اختر من بين آلاف المودباكات على Lumen أو أنشئ مودباكك الخاص. ادعُ أصدقاءك عندما تكون مستعدًا للعب."
   },
   "hosting-marketing.why.heading": {
     "message": "اعثر على مودباك. والآن أصبح خادمًا."
@@ -2472,22 +2472,22 @@
     "message": "استمتع بتجربة استضافة عصرية وموثوقة"
   },
   "hosting-marketing.why.modern-reliable-hosting.description": {
-    "message": "يتم استضافة خوادم Modrinth Hosting على <contrast>high-performance AMD CPUs with DDR5 RAM</contrast>، وتعمل على برمجيات مخصّصة لضمان تشغيل خادمك بسلاسة."
+    "message": "يتم استضافة خوادم Lumen Hosting على <contrast>high-performance AMD CPUs with DDR5 RAM</contrast>، وتعمل على برمجيات مخصّصة لضمان تشغيل خادمك بسلاسة."
   },
   "hosting-marketing.why.where-mods-are": {
     "message": "العب حيث توجد تعديلاتك"
   },
   "hosting-marketing.why.where-mods-are.description": {
-    "message": "تدمج Modrinth Hosting عملية تثبيت المودات والمودباكات في خادمك بسلاسة."
+    "message": "تدمج Lumen Hosting عملية تثبيت المودات والمودباكات في خادمك بسلاسة."
   },
-  "hosting-marketing.why.why-modrinth-hosting": {
-    "message": "لماذا استضافة Modrinth؟"
+  "hosting-marketing.why.why-Lumen-hosting": {
+    "message": "لماذا استضافة Lumen؟"
   },
   "hosting-marketing.why.your-favorite-mods": {
     "message": "جميع التعديلات المفضلة لديك"
   },
   "hosting-marketing.why.your-favorite-mods.description": {
-    "message": "اختر بين Vanilla و Fabric و Forge و Quilt و NeoForge. إذا كان البرنامج موجودًا على Modrinth، فيمكن تشغيله على خادمك."
+    "message": "اختر بين Vanilla و Fabric و Forge و Quilt و NeoForge. إذا كان البرنامج موجودًا على Lumen، فيمكن تشغيله على خادمك."
   },
   "hosting.plan.out-of-stock": {
     "message": "إنتهى من المخزن"
@@ -2588,8 +2588,8 @@
   "landing.launcher.graphic-alt": {
     "message": "تمثيل مبسط لنافذة ماين كرافت، مع شعار Mojang Studios باللون الأخضر الخاص بمودرنث."
   },
-  "landing.launcher.modrinth-app-label": {
-    "message": "Modrinth App"
+  "landing.launcher.Lumen-app-label": {
+    "message": "Lumen App"
   },
   "landing.launcher.prism-launcher-label": {
     "message": "Prism Launcher"
@@ -2697,10 +2697,10 @@
     "message": "حدث خطأ أثناء إنشاء الحالة من واجهة برمجة التطبيقات API عند الإنشاء."
   },
   "layout.banner.preview.description": {
-    "message": "إذا كنت تقصد الوصول إلى موقع Modrinth الرسمي، فتفضل بزيارة {url}. تم إعداد هذا الإصدار التجريبي لاستخدامه من قِبل موظفي Modrinth لأغراض الاختبار. وقد تم إنشاؤه باستخدام {ref}."
+    "message": "إذا كنت تقصد الوصول إلى موقع Lumen الرسمي، فتفضل بزيارة {url}. تم إعداد هذا الإصدار التجريبي لاستخدامه من قِبل موظفي Lumen لأغراض الاختبار. وقد تم إنشاؤه باستخدام {ref}."
   },
   "layout.banner.preview.title": {
-    "message": "هذا إصدار تجريبي من موقع Modrinth."
+    "message": "هذا إصدار تجريبي من موقع Lumen."
   },
   "layout.banner.staging.description": {
     "message": "بيئة الاختبار منفصلة تمامًا عن قاعدة بيانات مودرنث الإنتاجية. تُستخدم هذه البيئة للاختبار وتصحيح الأخطاء، وقد تعمل بإصدارات تطويرية من واجهة مودرنث الأمامية أو الخلفية أحدث من النسخة الإنتاجية."
@@ -2721,7 +2721,7 @@
     "message": "إكمال النموذج الضريبي"
   },
   "layout.banner.tax.description": {
-    "message": "لقد سحبت بالفعل أكثر من {threshold} من Modrinth هذا العام. للامتثال للوائح الضريبية، يتعين عليك إكمال نموذج ضريبي. تم إيقاف عمليات السحب مؤقتًا حتى يتم تقديم هذا النموذج."
+    "message": "لقد سحبت بالفعل أكثر من {threshold} من Lumen هذا العام. للامتثال للوائح الضريبية، يتعين عليك إكمال نموذج ضريبي. تم إيقاف عمليات السحب مؤقتًا حتى يتم تقديم هذا النموذج."
   },
   "layout.banner.tax.title": {
     "message": "يلزم تقديم نموذج ضريبي"
@@ -2795,23 +2795,23 @@
   "layout.footer.legal.terms-of-use": {
     "message": "شروط الاستخدام"
   },
-  "layout.footer.modrinth-information": {
-    "message": "معلومات Modrinth"
+  "layout.footer.Lumen-information": {
+    "message": "معلومات Lumen"
   },
   "layout.footer.open-source": {
-    "message": "Modrinth <github-link>مفتوح المصدر</github-link>."
+    "message": "Lumen <github-link>مفتوح المصدر</github-link>."
   },
   "layout.footer.products": {
     "message": "منتجات"
   },
   "layout.footer.products.app": {
-    "message": "Modrinth App"
+    "message": "Lumen App"
   },
   "layout.footer.products.plus": {
-    "message": "Modrinth+"
+    "message": "Lumen+"
   },
   "layout.footer.products.servers": {
-    "message": "استضافة Modrinth"
+    "message": "استضافة Lumen"
   },
   "layout.footer.resources": {
     "message": "موارد"
@@ -2853,7 +2853,7 @@
     "message": "تبديل القائمة"
   },
   "layout.meta.description": {
-    "message": "نزّل مودات وبلوقنات وداتاباكات وشيدرز وريسورسباكات ومودباكات لماينكرافت على Modrinth. اكتشف المشاريع وانشرها على Modrinth من خلال واجهة حديثة وسهلة الاستخدام وواجهة API."
+    "message": "نزّل مودات وبلوقنات وداتاباكات وشيدرز وريسورسباكات ومودباكات لماينكرافت على Lumen. اكتشف المشاريع وانشرها على Lumen من خلال واجهة حديثة وسهلة الاستخدام وواجهة API."
   },
   "layout.meta.og-description": {
     "message": "اكتشف محتوى Minecraft وانشره!"
@@ -2870,8 +2870,8 @@
   "layout.nav.discover": {
     "message": "استكشاف"
   },
-  "layout.nav.get-modrinth-app": {
-    "message": "احصل على Modrinth App"
+  "layout.nav.get-Lumen-app": {
+    "message": "احصل على Lumen App"
   },
   "layout.nav.home": {
     "message": "الصفحة الرئيسية"
@@ -2879,10 +2879,10 @@
   "layout.nav.host-a-server": {
     "message": "استضف خادمًا"
   },
-  "layout.nav.modrinth-app": {
-    "message": "Modrinth App"
+  "layout.nav.Lumen-app": {
+    "message": "Lumen App"
   },
-  "layout.nav.modrinth-home-page": {
+  "layout.nav.Lumen-home-page": {
     "message": "الصفحة الرئيسة لمودرينث"
   },
   "layout.nav.my-servers": {
@@ -2906,11 +2906,11 @@
   "layout.nav.search": {
     "message": "البحث"
   },
-  "layout.nav.upgrade-to-modrinth-plus": {
-    "message": "الترقية إلى Modrinth+"
+  "layout.nav.upgrade-to-Lumen-plus": {
+    "message": "الترقية إلى Lumen+"
   },
   "layout.publish.email-verification-required.description": {
-    "message": "يجب عليك التحقق من بريدك الإلكتروني قبل النشر على Modrinth."
+    "message": "يجب عليك التحقق من بريدك الإلكتروني قبل النشر على Lumen."
   },
   "layout.publish.email-verification-required.title": {
     "message": "يلزم التحقق من البريد الإلكتروني"
@@ -2925,19 +2925,19 @@
     "message": "حافظ على تحديث المحتوى المشترك مع تغيّره"
   },
   "modal.shared-instance.open-in-app.get-app": {
-    "message": "احصل على Modrinth App"
+    "message": "احصل على Lumen App"
   },
   "modal.shared-instance.open-in-app.managed-by": {
     "message": "تتم إدارته بواسطة"
   },
   "modal.shared-instance.open-in-app.opening-automatically": {
-    "message": "سيتم فتح Modrinth App تلقائيًا..."
+    "message": "سيتم فتح Lumen App تلقائيًا..."
   },
   "modal.shared-instance.open-in-app.title": {
-    "message": "جارٍ فتح Modrinth App"
+    "message": "جارٍ فتح Lumen App"
   },
   "modal.shared-instance.open-in-app.why-use": {
-    "message": "لماذا تستخدم Modrinth App"
+    "message": "لماذا تستخدم Lumen App"
   },
   "moderation.exclude-technical-review": {
     "message": "استثناء TR"
@@ -3435,13 +3435,13 @@
     "message": "تحميل {version}"
   },
   "project.download.install-with-app": {
-    "message": "تثبيت مع تطبيق Modrinth"
+    "message": "تثبيت مع تطبيق Lumen"
   },
   "project.download.manually": {
     "message": "التنزيل يدويًا"
   },
   "project.download.no-app": {
-    "message": "ليس لديك تطبيق Modrinth؟"
+    "message": "ليس لديك تطبيق Lumen؟"
   },
   "project.download.no-game-versions-found": {
     "message": "لم يتم العثور على أي إصدارات"
@@ -3660,6 +3660,6 @@
     "message": "كتابة إلى بيانات الإصدار"
   },
   "settings.authorizations.unofficial-disclosure": {
-    "message": "هذا التطبيق غير تابع لـ Modrinth بأي شكل من الأشكال، رغم اسمه."
+    "message": "هذا التطبيق غير تابع لـ Lumen بأي شكل من الأشكال، رغم اسمه."
   }
 }

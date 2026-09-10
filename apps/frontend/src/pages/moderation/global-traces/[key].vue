@@ -87,21 +87,21 @@
 </template>
 
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
-import { ArrowLeftIcon, HashIcon, TrashIcon } from '@modrinth/assets'
+import type { Labrinth } from '@lumen/api-client'
+import { ArrowLeftIcon, HashIcon, TrashIcon } from '@lumen/assets'
 import {
 	Badge,
 	Button,
 	ButtonLink,
 	EmptyState,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	Pagination,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 
 import GlobalDetailLocalTraceCard from '~/components/ui/moderation/GlobalDetailLocalTraceCard.vue'
 
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const { addNotification } = injectNotificationManager()
 const route = useRoute()
 const router = useRouter()
@@ -111,7 +111,7 @@ const detailKey = computed(() => {
 	return Array.isArray(key) ? key.join('/') : String(key)
 })
 
-useHead({ title: () => `Global trace - ${detailKey.value} - Modrinth` })
+useHead({ title: () => `Global trace - ${detailKey.value} - Lumen` })
 
 const localTracePageSize = 20
 const isLoading = ref(false)

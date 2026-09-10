@@ -1,11 +1,11 @@
 <script setup>
-import { CheckIcon } from '@modrinth/assets'
-import { Badge, IconButton } from '@modrinth/ui'
+import { CheckIcon } from '@lumen/assets'
+import { Badge, IconButton } from '@lumen/ui'
 import { computed, ref } from 'vue'
 
 import { SwapIcon } from '@/assets/icons/index.js'
 import ModalWrapper from '@/components/ui/modal/ModalWrapper.vue'
-import { update_managed_modrinth_version } from '@/helpers/instance'
+import { update_managed_Lumen_version } from '@/helpers/instance'
 import { releaseColor } from '@/helpers/utils'
 
 const props = defineProps({
@@ -39,7 +39,7 @@ const inProgress = ref(false)
 const switchVersion = async (versionId) => {
 	modpackVersionModal.value.hide()
 	inProgress.value = true
-	await update_managed_modrinth_version(props.instance.id, versionId)
+	await update_managed_Lumen_version(props.instance.id, versionId)
 	inProgress.value = false
 	emit('finish-install')
 }

@@ -1,4 +1,4 @@
-import type { AbstractModrinthClient } from '../core/abstract-client'
+import type { AbstractLumenClient } from '../core/abstract-client'
 import type { AbstractModule } from '../core/abstract-module'
 import { ArchonActionsV1Module } from './archon/actions/v1'
 import { ArchonBackupsV1Module } from './archon/backups/v1'
@@ -67,7 +67,7 @@ import { SharedInstancesInvitesV1Module } from './shared-instances/invites/v1'
 import { SharedInstancesModerationV1Module } from './shared-instances/moderation/v1'
 import { SharedInstancesUsersV1Module } from './shared-instances/users/v1'
 
-type ModuleConstructor = new (client: AbstractModrinthClient) => AbstractModule
+type ModuleConstructor = new (client: AbstractLumenClient) => AbstractModule
 
 /**
  * To add a new module:

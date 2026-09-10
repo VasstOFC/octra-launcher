@@ -5512,8 +5512,8 @@ dependencies = [
  "json-patch 4.1.0",
  "labrinth",
  "lettre",
- "modrinth-content-management",
- "modrinth-util",
+ "lumen-content-management",
+ "lumen-util",
  "muralpay",
  "murmur2",
  "neverbounce",
@@ -5845,6 +5845,62 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "112b39cec0b298b6c1999fee3e31427f74f676e4cb9879ed1a121b43661a4154"
 
 [[package]]
+name = "lumen-content-management"
+version = "0.0.0"
+dependencies = [
+ "async-trait",
+ "chrono",
+ "serde",
+ "thiserror 2.0.17",
+ "tokio",
+]
+
+[[package]]
+name = "lumen-log"
+version = "0.0.0"
+dependencies = [
+ "dotenvy",
+ "eyre",
+ "sentry",
+ "tracing",
+ "tracing-ecs",
+ "tracing-subscriber",
+]
+
+[[package]]
+name = "lumen-maxmind"
+version = "0.0.0"
+dependencies = [
+ "bytes",
+ "clap 4.5.48",
+ "directories",
+ "eyre",
+ "flate2",
+ "lumen-util",
+ "maxminddb",
+ "reqwest 0.12.24",
+ "tar",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
+name = "lumen-util"
+version = "0.0.0"
+dependencies = [
+ "actix-web",
+ "derive_more 2.1.1",
+ "dotenvy",
+ "eyre",
+ "lumen-log",
+ "rust_decimal",
+ "serde",
+ "serde_json",
+ "utoipa",
+]
+
+[[package]]
 name = "lz4_flex"
 version = "0.11.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6037,62 +6093,6 @@ dependencies = [
  "log",
  "wasi 0.11.1+wasi-snapshot-preview1",
  "windows-sys 0.61.2",
-]
-
-[[package]]
-name = "modrinth-content-management"
-version = "0.0.0"
-dependencies = [
- "async-trait",
- "chrono",
- "serde",
- "thiserror 2.0.17",
- "tokio",
-]
-
-[[package]]
-name = "modrinth-log"
-version = "0.0.0"
-dependencies = [
- "dotenvy",
- "eyre",
- "sentry",
- "tracing",
- "tracing-ecs",
- "tracing-subscriber",
-]
-
-[[package]]
-name = "modrinth-maxmind"
-version = "0.0.0"
-dependencies = [
- "bytes",
- "clap 4.5.48",
- "directories",
- "eyre",
- "flate2",
- "maxminddb",
- "modrinth-util",
- "reqwest 0.12.24",
- "tar",
- "tokio",
- "tracing",
- "tracing-subscriber",
-]
-
-[[package]]
-name = "modrinth-util"
-version = "0.0.0"
-dependencies = [
- "actix-web",
- "derive_more 2.1.1",
- "dotenvy",
- "eyre",
- "modrinth-log",
- "rust_decimal",
- "serde",
- "serde_json",
- "utoipa",
 ]
 
 [[package]]
@@ -11108,8 +11108,8 @@ dependencies = [
  "indicatif",
  "itertools 0.14.0",
  "json5",
+ "lumen-content-management",
  "md-5",
- "modrinth-content-management",
  "notify",
  "notify-debouncer-mini",
  "p256",

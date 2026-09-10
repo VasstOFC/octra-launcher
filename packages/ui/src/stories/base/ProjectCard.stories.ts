@@ -21,7 +21,7 @@ export const Default: Story = {
 		link: '/mod/example-mod',
 		layout: 'grid',
 		title: 'Example Mod',
-		author: { name: 'Prospector', link: 'https://modrinth.com/user/Prospector' },
+		author: { name: 'Prospector', link: 'https://Lumen.com/user/Prospector' },
 		summary:
 			'An example mod that demonstrates the ProjectCard component with a detailed description.',
 		iconUrl: 'https://cdn.modrinth.com/data/AANobbMI/icon.png',

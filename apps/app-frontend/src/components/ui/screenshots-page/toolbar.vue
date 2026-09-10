@@ -1,13 +1,6 @@
 <script setup lang="ts">
-import { ArrowUpDownIcon, LayoutGridIcon, SearchIcon, SquarePlusIcon } from '@modrinth/assets'
-import {
-	Button,
-	Combobox,
-	type ComboboxOption,
-	defineMessages,
-	Input,
-	useVIntl,
-} from '@modrinth/ui'
+import { ArrowUpDownIcon, LayoutGridIcon, SearchIcon, SquarePlusIcon } from '@lumen/assets'
+import { Button, Combobox, type ComboboxOption, defineMessages, Input, useVIntl } from '@lumen/ui'
 
 const search = defineModel<string>('search', { required: true })
 const sort = defineModel<string>('sort', { required: true })

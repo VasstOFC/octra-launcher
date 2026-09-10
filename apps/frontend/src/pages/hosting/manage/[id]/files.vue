@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import {
-	injectModrinthClient,
-	injectModrinthServerContext,
+	injectLumenClient,
+	injectLumenServerContext,
 	ServersManageFilesPage,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useQueryClient } from '@tanstack/vue-query'
 
-const client = injectModrinthClient()
-const { server, serverId } = injectModrinthServerContext()
+const client = injectLumenClient()
+const { server, serverId } = injectLumenServerContext()
 const queryClient = useQueryClient()
 const flags = useFeatureFlags()
 
@@ -22,7 +22,7 @@ try {
 }
 
 useHead({
-	title: computed(() => `Files - ${server.value?.name ?? 'Server'} - Modrinth`),
+	title: computed(() => `Files - ${server.value?.name ?? 'Server'} - Lumen`),
 })
 </script>
 

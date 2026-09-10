@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Archon, Labrinth } from '@modrinth/api-client'
+import type { Archon, Labrinth } from '@lumen/api-client'
 import {
 	EditIcon,
 	ExternalIcon,
@@ -9,8 +9,8 @@ import {
 	SignalIcon,
 	SpinnerIcon,
 	XIcon,
-} from '@modrinth/assets'
-import { getPingLevel } from '@modrinth/utils'
+} from '@lumen/assets'
+import { getPingLevel } from '@lumen/utils'
 import dayjs from 'dayjs'
 import type Stripe from 'stripe'
 import { computed } from 'vue'
@@ -23,10 +23,10 @@ import { getPriceForInterval, monthsInInterval } from '../../utils/product-utils
 import { regionOverrides } from '../../utils/regions'
 import Checkbox from '../base/Checkbox.vue'
 import TagItem from '../base/TagItem.vue'
-import ModrinthServersIcon from '../servers/ModrinthServersIcon.vue'
+import LumenServersIcon from '../servers/LumenServersIcon.vue'
 import ExpandableInvoiceTotal from './ExpandableInvoiceTotal.vue'
 import FormattedPaymentMethod from './FormattedPaymentMethod.vue'
-import type { ServerBillingInterval } from './ModrinthServersPurchaseModal.vue'
+import type { ServerBillingInterval } from './LumenServersPurchaseModal.vue'
 import ServersSpecs from './ServersSpecs.vue'
 
 const { formatMessage } = useVIntl()
@@ -182,7 +182,7 @@ function setInterval(newInterval: ServerBillingInterval) {
 	<div class="grid sm:grid-cols-[3fr_2fr] gap-4">
 		<div class="bg-surface-2 p-4 rounded-2xl">
 			<div class="flex items-center gap-2 mb-3">
-				<ModrinthServersIcon class="flex h-5 w-fit" />
+				<LumenServersIcon class="flex h-5 w-fit" />
 				<TagItem>{{ planName }}</TagItem>
 			</div>
 			<div>
@@ -288,10 +288,10 @@ function setInterval(newInterval: ServerBillingInterval) {
 								{
 									title:
 										isProratedCharge && prorationDays
-											? `Modrinth Hosting (${planName}) — prorated for ${prorationDays} day${
+											? `Lumen Hosting (${planName}) — prorated for ${prorationDays} day${
 													prorationDays === 1 ? '' : 's'
 												}`
-											: `Modrinth Hosting (${planName})`,
+											: `Lumen Hosting (${planName})`,
 									amount: total - tax,
 								},
 								{

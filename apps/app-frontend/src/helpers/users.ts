@@ -1,11 +1,11 @@
-import type { Labrinth } from '@modrinth/api-client'
+import type { Labrinth } from '@lumen/api-client'
 import { invoke } from '@tauri-apps/api/core'
 
 // Converts user profile links from rendered Markdown/any dynamic content into app routes.
-export function parse_modrinth_user_link(href: string): string | null {
+export function parse_Lumen_user_link(href: string): string | null {
 	try {
 		const url = new URL(href)
-		if (url.hostname !== 'modrinth.com' && url.hostname !== 'www.modrinth.com') return null
+		if (url.hostname !== 'Lumen.com' && url.hostname !== 'www.Lumen.com') return null
 
 		const segments = url.pathname.split('/').filter(Boolean)
 		if (segments[0]?.toLowerCase() !== 'user' || !segments[1] || segments.length > 3) return null

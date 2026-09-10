@@ -53,9 +53,9 @@
 </template>
 
 <script setup lang="ts">
-import { BoxIcon, GlobeIcon, RotateCounterClockwiseIcon, ShieldCheckIcon } from '@modrinth/assets'
-import { type KeybindDefinition, toKeybindDefinition } from '@modrinth/moderation'
-import { IconButton } from '@modrinth/ui'
+import { BoxIcon, GlobeIcon, RotateCounterClockwiseIcon, ShieldCheckIcon } from '@lumen/assets'
+import { type KeybindDefinition, toKeybindDefinition } from '@lumen/moderation'
+import { IconButton } from '@lumen/ui'
 import { onUnmounted } from 'vue'
 
 const props = defineProps<{

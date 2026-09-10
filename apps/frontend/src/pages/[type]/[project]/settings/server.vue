@@ -166,14 +166,14 @@
 </template>
 
 <script setup>
-import { InfoIcon, RefreshCwIcon, SpinnerIcon } from '@modrinth/assets'
+import { InfoIcon, RefreshCwIcon, SpinnerIcon } from '@lumen/assets'
 import {
 	Combobox,
 	commonProjectSettingsMessages,
 	ConfirmLeaveModal,
 	defineMessages,
 	IconButton,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	injectProjectPageContext,
 	Input,
@@ -185,7 +185,7 @@ import {
 	UnsavedChangesPopup,
 	usePageLeaveSafety,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 
 import CompatibilityCard from '~/components/ui/project-settings/CompatibilityCard.vue'
 
@@ -268,7 +268,7 @@ const messages = defineMessages({
 	},
 })
 
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const { addNotification } = injectNotificationManager()
 const { projectV3, currentMember, patchProjectV3 } = injectProjectPageContext()
 

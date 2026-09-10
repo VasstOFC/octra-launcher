@@ -23,7 +23,7 @@
 					show-search-icon
 					:show-chevron="false"
 					search-type="search"
-					search-name="modrinth-server-access-member-search"
+					search-name="Lumen-server-access-member-search"
 					search-inputmode="search"
 					search-autocomplete="new-password"
 					search-autocorrect="off"
@@ -146,7 +146,7 @@
 </template>
 
 <script setup lang="ts">
-import { EyeIcon, PencilIcon, UserPlusIcon, XIcon } from '@modrinth/assets'
+import { EyeIcon, PencilIcon, UserPlusIcon, XIcon } from '@lumen/assets'
 import { useDebounceFn } from '@vueuse/core'
 import { computed, ref } from 'vue'
 
@@ -213,11 +213,11 @@ const messages = defineMessages({
 	},
 	targetLabel: {
 		id: 'servers.grant-access-modal.target.label',
-		defaultMessage: 'Modrinth username',
+		defaultMessage: 'Lumen username',
 	},
 	targetPlaceholder: {
 		id: 'servers.grant-access-modal.target.placeholder',
-		defaultMessage: 'Enter Modrinth username',
+		defaultMessage: 'Enter Lumen username',
 	},
 	noSuggestions: {
 		id: 'servers.grant-access-modal.target.no-suggestions',

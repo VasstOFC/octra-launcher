@@ -1,4 +1,4 @@
-import type { Labrinth } from '@modrinth/api-client'
+import type { Labrinth } from '@lumen/api-client'
 import {
 	BadgeDollarSignIcon,
 	GiftIcon,
@@ -6,9 +6,9 @@ import {
 	LandmarkIcon,
 	PayPalColorIcon,
 	VenmoColorIcon,
-} from '@modrinth/assets'
-import type { MessageDescriptor } from '@modrinth/ui'
-import { createContext, getCurrencyIcon, paymentMethodMessages, useDebugLogger } from '@modrinth/ui'
+} from '@lumen/assets'
+import type { MessageDescriptor } from '@lumen/ui'
+import { createContext, getCurrencyIcon, paymentMethodMessages, useDebugLogger } from '@lumen/ui'
 import { type Component, computed, type ComputedRef, type Ref, ref } from 'vue'
 
 import { type FieldConfig, getRailConfig } from '@/utils/muralpay-rails'
@@ -375,7 +375,7 @@ function buildPayoutPayload(data: WithdrawData): PayoutPayload {
 	throw new Error('Invalid provider')
 }
 
-const STORAGE_KEY = 'modrinth_withdraw_state'
+const STORAGE_KEY = 'Lumen_withdraw_state'
 const STATE_EXPIRY_MS = 15 * 60 * 1000 // 15 minutes
 
 export function createWithdrawContext(

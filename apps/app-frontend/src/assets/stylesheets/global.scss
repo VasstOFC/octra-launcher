@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import '@modrinth/ui/src/styles/tailwind-utilities.css';
+@import '@lumen/ui/src/styles/tailwind-utilities.css';
 
 @font-face {
 	font-family: 'bundled-minecraft-font-mrapp';
@@ -185,7 +185,7 @@ img {
 	}
 }
 
-@import '@modrinth/assets/omorphia.scss';
+@import '@lumen/assets/omorphia.scss';
 
 /* Warm utility density — launcher-local overrides (after shared tokens) */
 :root {
@@ -202,12 +202,13 @@ html.dark-mode,
 html.dark,
 html[data-theme='dark'],
 :root:not(.light-mode):not(.light) {
-	--color-text-default: #c0c8d2;
-	--color-text-tertiary: #a8b2be;
+	--color-text-default: #c8d0dc;
+	--color-text-tertiary: #8892a4;
 	--color-base: var(--color-text-default);
 	--color-secondary: var(--color-text-tertiary);
-	--color-brand-highlight: rgba(228, 154, 74, 0.14);
-	--color-brand-shadow: rgba(228, 154, 74, 0.35);
+	--color-brand-highlight: rgba(0, 212, 255, 0.12);
+	--color-brand-shadow: rgba(0, 212, 255, 0.35);
+	--color-scrollbar: rgba(255, 255, 255, 0.12);
 }
 
 html.light-mode,
@@ -218,18 +219,34 @@ html.light {
 	--color-brand-shadow: rgba(201, 107, 53, 0.35);
 }
 
-/* App settings modal (TabbedModal emberslot) — warm utility, NavButton-like active tab.
-   !important beats TabbedModal scoped selectors (teleported out of AppSettingsModal). */
+.app-grid-statusbar {
+	background: rgba(10, 10, 15, 0.7) !important;
+	backdrop-filter: blur(20px) !important;
+	-webkit-backdrop-filter: blur(20px) !important;
+}
+
+.app-grid-navbar {
+	background: rgba(10, 10, 15, 0.75) !important;
+	backdrop-filter: blur(16px) !important;
+	-webkit-backdrop-filter: blur(16px) !important;
+}
+
+.splash-screen .base-bg {
+	background: #0a0a0f;
+}
+
+/* App settings modal (TabbedModal emberslot) — NoPixel neon accent active tab */
 .emberslot-tab {
 	border-radius: 0.5rem !important;
 	box-shadow: none !important;
 	transform: none !important;
+	transition: all 0.2s ease;
 }
 
 .emberslot-tab--active {
-	color: var(--color-brand) !important;
-	background: var(--surface-3) !important;
-	box-shadow: none !important;
+	color: #00d4ff !important;
+	background: rgba(0, 212, 255, 0.08) !important;
+	box-shadow: 0 0 10px rgba(0, 212, 255, 0.15) !important;
 	transform: none !important;
 
 	&::before {
@@ -237,7 +254,8 @@ html.light {
 		height: 1.25rem !important;
 		width: 2px !important;
 		border-radius: 1px !important;
-		background: var(--color-brand) !important;
+		background: #00d4ff !important;
+		box-shadow: 0 0 6px rgba(0, 212, 255, 0.5) !important;
 	}
 }
 
@@ -271,7 +289,7 @@ html.light {
 	}
 
 	.emberslot-content {
-		border: 1px solid var(--surface-5);
+		border: 1px solid rgba(255, 255, 255, 0.06);
 	}
 }
 
@@ -331,4 +349,336 @@ textarea {
 		color: var(--color-button-text);
 		opacity: 0.6;
 	}
+}
+
+/* ============================================
+   NoPixel-Style UI — Lumen Launcher
+   ============================================ */
+
+/* Glassmorphism panels and modals */
+.modal-body,
+.emberslot-panel,
+.emberslot-content,
+.emberslot-sidebar {
+	background: rgba(15, 15, 25, 0.85) !important;
+	backdrop-filter: blur(20px);
+	-webkit-backdrop-filter: blur(20px);
+	border: 1px solid rgba(255, 255, 255, 0.08) !important;
+	box-shadow:
+		0 0 0 1px rgba(0, 212, 255, 0.08),
+		0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Neon glow on hover for interactive elements */
+.button-base,
+.button-primary,
+.button-colored,
+.button outlined {
+	transition: all 0.2s ease;
+}
+
+.button-primary,
+.button-colored,
+button[type='submit'] {
+	background: linear-gradient(135deg, #00d4ff 0%, #7c3aed 100%) !important;
+	border: none !important;
+	box-shadow: 0 0 0 rgba(0, 212, 255, 0) !important;
+	transition: all 0.2s ease;
+
+	&:hover:not(:disabled) {
+		transform: translateY(-1px);
+		box-shadow: 0 0 20px rgba(0, 212, 255, 0.35) !important;
+	}
+}
+
+/* Neon focus ring for inputs */
+input,
+textarea,
+select {
+	transition: border-color 0.2s, box-shadow 0.2s;
+
+	&:focus,
+	&:focus-visible {
+		box-shadow:
+			inset 0 0 0 transparent,
+			0 0 0 3px rgba(0, 212, 255, 0.15) !important;
+		border-color: #00d4ff !important;
+	}
+}
+
+/* Card hover glow */
+.card,
+.universal-card {
+	transition: all 0.2s ease;
+
+	&:hover {
+		border-color: rgba(0, 212, 255, 0.15) !important;
+		box-shadow: 0 0 15px rgba(0, 212, 255, 0.08) !important;
+	}
+}
+
+/* Scrollbar — NoPixel style */
+*::-webkit-scrollbar {
+	width: 6px !important;
+	border: none !important;
+}
+
+*::-webkit-scrollbar-track {
+	background: rgba(0, 0, 0, 0.2) !important;
+}
+
+*::-webkit-scrollbar-thumb {
+	background: rgba(255, 255, 255, 0.12) !important;
+	border-radius: 3px !important;
+	border: none !important;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+	background: rgba(255, 255, 255, 0.22) !important;
+}
+
+/* Loading bar — cyan→purple gradient */
+.loading-bar {
+	background: linear-gradient(to right, #00d4ff 0%, #7c3aed 100%) !important;
+}
+
+/* Nav button active state — neon accent */
+.nav-button--active {
+	color: #00d4ff !important;
+	background: rgba(0, 212, 255, 0.1) !important;
+}
+
+/* App grid background */
+.app-grid-layout,
+.app-contents {
+	background: #0a0a0f !important;
+}
+
+/* Sidebar / rail */
+.app-grid-navbar {
+	background: rgba(10, 10, 15, 0.95) !important;
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+	border-right: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+/* Popovers / tooltips */
+.v-popper--theme-dropdown .v-popper-inner {
+	background: rgba(15, 15, 25, 0.92) !important;
+	backdrop-filter: blur(16px);
+	-webkit-backdrop-filter: blur(16px);
+	border: 1px solid rgba(255, 255, 255, 0.08) !important;
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Glow pulse animation */
+@keyframes lumen-glow {
+	0%, 100% { box-shadow: 0 0 10px rgba(0, 212, 255, 0.2); }
+	50% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.4); }
+}
+
+@keyframes lumen-pulse {
+	0%, 100% { opacity: 1; }
+	50% { opacity: 0.7; }
+}
+
+.animate-glow {
+	animation: lumen-glow 2s ease-in-out infinite;
+}
+
+.animate-pulse-neon {
+	animation: lumen-pulse 2s ease-in-out infinite;
+}
+
+/* ============================================
+   Context Menu — glassmorphism
+   ============================================ */
+.v-popper--theme-dropdown .v-popper-inner {
+	background: rgba(15, 15, 25, 0.92) !important;
+	backdrop-filter: blur(20px);
+	-webkit-backdrop-filter: blur(20px);
+	border: 1px solid rgba(255, 255, 255, 0.08) !important;
+	border-radius: 12px !important;
+	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
+	padding: 6px !important;
+}
+
+.context-menu-list,
+.v-popper__popper .context-menu {
+	background: rgba(15, 15, 25, 0.92) !important;
+	backdrop-filter: blur(20px);
+	-webkit-backdrop-filter: blur(20px);
+	border: 1px solid rgba(255, 255, 255, 0.08) !important;
+	border-radius: 12px !important;
+	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
+	padding: 6px !important;
+}
+
+.context-menu-item,
+.v-popper__popper .context-menu-item {
+	border-radius: 8px !important;
+	transition: all 0.15s ease !important;
+	padding: 8px 12px !important;
+}
+
+.context-menu-item:hover,
+.v-popper__popper .context-menu-item:hover {
+	background: rgba(0, 212, 255, 0.1) !important;
+	color: #00d4ff !important;
+}
+
+.context-menu-item--danger:hover {
+	background: rgba(239, 68, 68, 0.15) !important;
+	color: #ef4444 !important;
+}
+
+/* ============================================
+   Toast / Notification — glassmorphism
+   ============================================ */
+.notification-panel,
+.popup-notification-panel {
+	background: rgba(15, 15, 25, 0.9) !important;
+	backdrop-filter: blur(20px);
+	-webkit-backdrop-filter: blur(20px);
+	border: 1px solid rgba(255, 255, 255, 0.08) !important;
+	border-radius: 12px !important;
+	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
+}
+
+.notification-item,
+.popup-notification {
+	background: rgba(20, 20, 35, 0.8) !important;
+	border: 1px solid rgba(255, 255, 255, 0.06) !important;
+	border-radius: 10px !important;
+	transition: all 0.2s ease;
+
+	&:hover {
+		border-color: rgba(255, 255, 255, 0.12) !important;
+	}
+}
+
+.notification-item--error,
+.popup-notification--error {
+	border-left: 3px solid #ef4444 !important;
+	box-shadow: inset 4px 0 8px -4px rgba(239, 68, 68, 0.3);
+}
+
+.notification-item--warning,
+.popup-notification--warning {
+	border-left: 3px solid #f59e0b !important;
+	box-shadow: inset 4px 0 8px -4px rgba(245, 158, 11, 0.3);
+}
+
+.notification-item--success,
+.popup-notification--success {
+	border-left: 3px solid #10b981 !important;
+	box-shadow: inset 4px 0 8px -4px rgba(16, 185, 129, 0.3);
+}
+
+.notification-item--info,
+.popup-notification--info {
+	border-left: 3px solid #00d4ff !important;
+	box-shadow: inset 4px 0 8px -4px rgba(0, 212, 255, 0.3);
+}
+
+/* ============================================
+   Tags / Badges — neon colors
+   ============================================ */
+.tag-item,
+.badge-item,
+.project-tag {
+	background: rgba(0, 212, 255, 0.1) !important;
+	border: 1px solid rgba(0, 212, 255, 0.2) !important;
+	color: #00d4ff !important;
+	border-radius: 6px !important;
+	font-weight: 500 !important;
+	transition: all 0.2s ease;
+
+	&:hover {
+		background: rgba(0, 212, 255, 0.15) !important;
+		box-shadow: 0 0 8px rgba(0, 212, 255, 0.2) !important;
+	}
+}
+
+/* ============================================
+   Progress bar — animated gradient
+   ============================================ */
+.progress-bar,
+.loading-bar {
+	background: linear-gradient(90deg, #00d4ff, #7c3aed, #00d4ff) !important;
+	background-size: 200% 100% !important;
+	animation: progress-shimmer 2s ease-in-out infinite !important;
+}
+
+@keyframes progress-shimmer {
+	0% { background-position: 200% 0; }
+	100% { background-position: -200% 0; }
+}
+
+/* ============================================
+   Settings modal — glassmorphism
+   ============================================ */
+.modal-body,
+.tabbed-modal {
+	background: rgba(15, 15, 25, 0.92) !important;
+	backdrop-filter: blur(24px);
+	-webkit-backdrop-filter: blur(24px);
+	border: 1px solid rgba(255, 255, 255, 0.08) !important;
+	border-radius: 16px !important;
+	box-shadow:
+		0 0 0 1px rgba(0, 212, 255, 0.06),
+		0 25px 60px -15px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Toggle switch — neon */
+button[class*="toggle"],
+.toggle-switch {
+	transition: all 0.2s ease;
+}
+
+button[class*="toggle"][aria-checked="true"],
+.toggle-switch.active {
+	background: #00d4ff !important;
+	box-shadow: 0 0 12px rgba(0, 212, 255, 0.4);
+}
+
+/* ============================================
+   Instance group header — glassmorphism
+   ============================================ */
+.group\/instance-container .group\/header {
+	background: rgba(20, 20, 35, 0.5);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+	border-radius: 8px;
+	padding: 0 8px;
+	transition: all 0.2s ease;
+}
+
+.group\/instance-container .group\/header:hover {
+	background: rgba(20, 20, 35, 0.7);
+}
+
+/* ============================================
+   Library section heading
+   ============================================ */
+.home-stage h2,
+.library-section h2 {
+	color: var(--color-contrast);
+	text-shadow: 0 0 20px rgba(0, 212, 255, 0.15);
+	font-weight: 700;
+}
+
+/* ============================================
+   Modal transitions
+   ============================================ */
+.modal-fade-enter-active,
+.modal-fade-leave-active {
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-fade-enter-from,
+.modal-fade-leave-to {
+	opacity: 0;
+	transform: scale(0.95);
+	filter: blur(4px);
 }

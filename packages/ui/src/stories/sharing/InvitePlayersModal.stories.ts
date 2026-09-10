@@ -1,4 +1,4 @@
-import type { Labrinth } from '@modrinth/api-client'
+import type { Labrinth } from '@lumen/api-client'
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { ref } from 'vue'
 
@@ -185,7 +185,7 @@ function createRender(args: Record<string, unknown>) {
 export const ShareInstance: Story = {
 	args: {
 		header: 'Share instance',
-		link: 'https://modrinth.com/instance/abc123',
+		link: 'https://Lumen.com/instance/abc123',
 		linkExpiresAt: new Date(Date.now() + 7 * 86_400_000).toISOString(),
 		linkMaxUses: 10,
 	},

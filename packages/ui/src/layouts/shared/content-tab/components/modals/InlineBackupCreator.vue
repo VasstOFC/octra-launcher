@@ -56,13 +56,13 @@
 </template>
 
 <script setup lang="ts">
-import { CheckCircleIcon, PlusIcon, SpinnerIcon, TriangleAlertIcon } from '@modrinth/assets'
+import { CheckCircleIcon, PlusIcon, SpinnerIcon, TriangleAlertIcon } from '@lumen/assets'
 import { computed, watch } from 'vue'
 
 import { Button } from '#ui/components/base/buttons'
 import { defineMessages, useVIntl } from '#ui/composables/i18n'
 import { hasServerPermission } from '#ui/composables/server-permissions'
-import { injectModrinthServerContext } from '#ui/providers'
+import { injectLumenServerContext } from '#ui/providers'
 import { commonMessages } from '#ui/utils/common-messages'
 
 import { useInlineBackup } from '../../composables/use-inline-backup'
@@ -78,7 +78,7 @@ const emit = defineEmits<{
 }>()
 
 const { formatMessage } = useVIntl()
-const serverCtx = injectModrinthServerContext(null)
+const serverCtx = injectLumenServerContext(null)
 const canManageBackups = computed(
 	() => !serverCtx || hasServerPermission(serverCtx.currentUserPermissions.value, 'BACKUPS'),
 )

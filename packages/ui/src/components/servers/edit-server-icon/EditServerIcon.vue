@@ -51,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import { EditIcon, SpinnerIcon, TransferIcon, UploadIcon } from '@modrinth/assets'
+import { EditIcon, SpinnerIcon, TransferIcon, UploadIcon } from '@lumen/assets'
 import { useQueryClient } from '@tanstack/vue-query'
 import { computed, ref } from 'vue'
 
@@ -59,8 +59,8 @@ import { ServerIcon, TeleportOverflowMenu } from '#ui/components'
 import { useServerImage } from '#ui/composables'
 import { useVIntl } from '#ui/composables/i18n'
 import {
-	injectModrinthClient,
-	injectModrinthServerContext,
+	injectLumenClient,
+	injectLumenServerContext,
 	injectNotificationManager,
 } from '#ui/providers'
 import { commonMessages } from '#ui/utils/common-messages'
@@ -78,8 +78,8 @@ const props = withDefaults(
 
 const { addNotification } = injectNotificationManager()
 const { formatMessage } = useVIntl()
-const client = injectModrinthClient()
-const { serverId, server } = injectModrinthServerContext()
+const client = injectLumenClient()
+const { serverId, server } = injectLumenServerContext()
 const queryClient = useQueryClient()
 const isUploadingIcon = ref(false)
 const isSyncingIcon = ref(false)

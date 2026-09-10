@@ -228,7 +228,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
+import type { Labrinth } from '@lumen/api-client'
 import {
 	EditIcon,
 	ExternalIcon,
@@ -237,14 +237,14 @@ import {
 	SearchIcon,
 	SpinnerIcon,
 	TrashIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import {
 	Button,
 	ButtonLink,
 	ConfirmModal,
 	DatePicker,
 	IconButton,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	Input,
 	MultiSelect,
@@ -253,8 +253,8 @@ import {
 	type SortDirection,
 	Table,
 	type TableColumn,
-} from '@modrinth/ui'
-import { isAdmin } from '@modrinth/utils'
+} from '@lumen/ui'
+import { isAdmin } from '@lumen/utils'
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 
@@ -296,7 +296,7 @@ type EventForm = {
 type DatePickerValue = string | Date | null | undefined
 
 const { addNotification } = injectNotificationManager()
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const queryClient = useQueryClient()
 const analyticsEventsQueryKey = ['analytics-events'] as const
 const EVENT_TIME_ZONE = 'America/Los_Angeles'

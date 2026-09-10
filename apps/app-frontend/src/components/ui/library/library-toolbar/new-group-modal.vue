@@ -103,8 +103,8 @@
 </template>
 
 <script setup lang="ts">
-import { CheckIcon, PlusIcon, SearchIcon, SpinnerIcon, XIcon } from '@modrinth/assets'
-import { Avatar, Button, defineMessages, Input, NewModal, TagItem, useVIntl } from '@modrinth/ui'
+import { CheckIcon, PlusIcon, SearchIcon, SpinnerIcon, XIcon } from '@lumen/assets'
+import { Avatar, Button, defineMessages, Input, NewModal, TagItem, useVIntl } from '@lumen/ui'
 import { computed, ref, watch } from 'vue'
 
 import { useLibrary } from '@/components/ui/library/use-library'

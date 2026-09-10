@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { CopyIcon, LibraryIcon, PlayIcon, SearchIcon } from '@modrinth/assets'
-import { Button, IconButton, Input, NewModal } from '@modrinth/ui'
+import { CopyIcon, LibraryIcon, PlayIcon, SearchIcon } from '@lumen/assets'
+import { Button, IconButton, Input, NewModal } from '@lumen/ui'
 import { computed, onMounted, ref } from 'vue'
 
 import docs from '~/templates/docs'

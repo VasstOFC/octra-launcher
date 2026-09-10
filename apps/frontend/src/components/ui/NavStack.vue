@@ -84,8 +84,8 @@
 </template>
 
 <script setup lang="ts">
-import { ChevronRightIcon } from '@modrinth/assets'
-import { Button, ButtonLink, truncatedTooltip } from '@modrinth/ui'
+import { ChevronRightIcon } from '@lumen/assets'
+import { Button, ButtonLink, truncatedTooltip } from '@lumen/ui'
 import { type Component, type ComponentPublicInstance, computed, ref, useSlots } from 'vue'
 
 type NavStackBaseItem = {

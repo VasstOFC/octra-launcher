@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Archon } from '@modrinth/api-client'
+import type { Archon } from '@lumen/api-client'
 import {
 	ClipboardCopyIcon,
 	DownloadIcon,
@@ -10,7 +10,7 @@ import {
 	ShieldIcon,
 	TrashIcon,
 	UserRoundIcon,
-} from '@modrinth/assets'
+} from '@lumen/assets'
 import { computed, ref } from 'vue'
 
 import type { ButtonMenuOption } from '#ui/components/base/buttons'
@@ -113,7 +113,7 @@ const overflowMenuOptions = computed<ButtonMenuOption[]>(() => {
 		id: 'download',
 		label: formatMessage(commonMessages.downloadButton),
 		type: 'link',
-		href: `https://${props.kyrosUrl}/modrinth/v0/backups/${props.backup.id}/download?auth=${props.jwt}`,
+		href: `https://${props.kyrosUrl}/Lumen/v0/backups/${props.backup.id}/download?auth=${props.jwt}`,
 		disabled: !props.kyrosUrl || !props.jwt,
 	})
 

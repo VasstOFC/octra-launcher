@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { MailIcon, SearchIcon, SendIcon, UserIcon, UserPlusIcon, XIcon } from '@modrinth/assets'
+import { MailIcon, SearchIcon, SendIcon, UserIcon, UserPlusIcon, XIcon } from '@lumen/assets'
 import {
 	Avatar,
 	Button,
@@ -10,7 +10,7 @@ import {
 	IntlFormatted,
 	useRelativeTime,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { computed, ref } from 'vue'
 
 import FriendsSection from '@/components/ui/friends/FriendsSection.vue'
@@ -18,7 +18,7 @@ import ModalWrapper from '@/components/ui/modal/ModalWrapper.vue'
 import { useAppSettings } from '@/composables/use-app-settings.ts'
 import { useFriends } from '@/composables/use-friends'
 import type { FriendWithUserData } from '@/helpers/friends.ts'
-import type { ModrinthCredentials } from '@/helpers/mr_auth'
+import type { LumenCredentials } from '@/helpers/mr_auth'
 import { get as getSettings, set as setSettings } from '@/helpers/settings.ts'
 
 const { formatMessage } = useVIntl()
@@ -28,7 +28,7 @@ const formatRelativeTime = useRelativeTime()
 const appSettings = useAppSettings()
 
 const props = defineProps<{
-	credentials: ModrinthCredentials | null
+	credentials: LumenCredentials | null
 	signIn: () => void
 }>()
 
@@ -148,7 +148,7 @@ const messages = defineMessages({
 	},
 	usernameTitle: {
 		id: 'friends.add-friend.username.title',
-		defaultMessage: "What's your friend's Modrinth username?",
+		defaultMessage: "What's your friend's Lumen username?",
 	},
 	usernameDescription: {
 		id: 'friends.add-friend.username.description',
@@ -156,7 +156,7 @@ const messages = defineMessages({
 	},
 	usernamePlaceholder: {
 		id: 'friends.add-friend.username.placeholder',
-		defaultMessage: 'Enter Modrinth username...',
+		defaultMessage: 'Enter Lumen username...',
 	},
 	sendFriendRequest: {
 		id: 'friends.add-friend.submit',
@@ -196,7 +196,7 @@ const messages = defineMessages({
 	},
 	signInToAddFriends: {
 		id: 'friends.sign-in-to-add-friends',
-		defaultMessage: 'Octra accounts are coming later. Friends will be available then.',
+		defaultMessage: 'Lumen accounts are coming later. Friends will be available then.',
 	},
 	addFriendsToShare: {
 		id: 'friends.add-friends-to-share',

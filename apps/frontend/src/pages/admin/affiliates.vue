@@ -78,8 +78,8 @@
 	</div>
 </template>
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
-import { PlusIcon, SearchIcon, XCircleIcon } from '@modrinth/assets'
+import type { Labrinth } from '@lumen/api-client'
+import { PlusIcon, SearchIcon, XCircleIcon } from '@lumen/assets'
 import {
 	Accordion,
 	Admonition,
@@ -88,15 +88,15 @@ import {
 	Avatar,
 	Button,
 	ConfirmModal,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	Input,
-} from '@modrinth/ui'
-import type { User } from '@modrinth/utils'
+} from '@lumen/ui'
+import type { User } from '@lumen/utils'
 import { useQuery } from '@tanstack/vue-query'
 import { computed, ref } from 'vue'
 
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const { handleError } = injectNotificationManager()
 
 type UserGroup = {

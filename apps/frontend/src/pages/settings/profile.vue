@@ -19,21 +19,21 @@
 </template>
 
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
+import type { Labrinth } from '@lumen/api-client'
 import {
 	AccountProfileSettings,
 	commonSettingsMessages,
-	injectModrinthClient,
+	injectLumenClient,
 	UnsavedChangesPopup,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 
 definePageMeta({
 	middleware: 'auth',
 })
 
 const auth = await useAuth()
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const { formatMessage } = useVIntl()
 const profileSettings = ref<InstanceType<typeof AccountProfileSettings> | null>(null)
 const emptyProfileState = {
@@ -72,6 +72,6 @@ function saveProfileSettings(): void {
 }
 
 useHead({
-	title: () => `${formatMessage(commonSettingsMessages.profile)} - Modrinth`,
+	title: () => `${formatMessage(commonSettingsMessages.profile)} - Lumen`,
 })
 </script>

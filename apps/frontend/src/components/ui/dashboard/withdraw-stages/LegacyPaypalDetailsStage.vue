@@ -103,7 +103,7 @@
 </template>
 
 <script setup lang="ts">
-import { CheckIcon, PayPalColorIcon, SaveIcon, XIcon } from '@modrinth/assets'
+import { CheckIcon, PayPalColorIcon, SaveIcon, XIcon } from '@lumen/assets'
 import {
 	Button,
 	ButtonLink,
@@ -116,7 +116,7 @@ import {
 	IntlFormatted,
 	normalizeChildren,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { useDebounceFn } from '@vueuse/core'
 import { computed, onMounted, ref, watch } from 'vue'
 

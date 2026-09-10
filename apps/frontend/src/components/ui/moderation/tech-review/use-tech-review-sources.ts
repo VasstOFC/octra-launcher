@@ -1,5 +1,5 @@
-import type { Labrinth } from '@modrinth/api-client'
-import { injectModrinthClient } from '@modrinth/ui'
+import type { Labrinth } from '@lumen/api-client'
+import { injectLumenClient } from '@lumen/ui'
 import { type MaybeRefOrGetter, reactive, toValue } from 'vue'
 
 const CACHE_TTL = 24 * 60 * 60 * 1000
@@ -65,7 +65,7 @@ function clearExpiredCache(): void {
 export function useTechReviewSources(
 	issues: MaybeRefOrGetter<Labrinth.TechReview.Internal.FileIssue[]>,
 ) {
-	const client = injectModrinthClient()
+	const client = injectLumenClient()
 
 	if (import.meta.client) {
 		clearExpiredCache()

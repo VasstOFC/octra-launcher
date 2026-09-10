@@ -28,8 +28,8 @@
 	</div>
 </template>
 <script setup lang="ts">
-import { MailIcon } from '@modrinth/assets'
-import { Button, injectNotificationManager, Input } from '@modrinth/ui'
+import { MailIcon } from '@lumen/assets'
+import { Button, injectNotificationManager, Input } from '@lumen/ui'
 
 const { addNotification } = injectNotificationManager()
 

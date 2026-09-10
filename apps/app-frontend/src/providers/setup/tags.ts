@@ -1,5 +1,5 @@
-import type { AbstractWebNotificationManager } from '@modrinth/ui'
-import { provideTags } from '@modrinth/ui'
+import type { AbstractWebNotificationManager } from '@lumen/ui'
+import { provideTags } from '@lumen/ui'
 import type { Ref } from 'vue'
 import { ref, watch } from 'vue'
 

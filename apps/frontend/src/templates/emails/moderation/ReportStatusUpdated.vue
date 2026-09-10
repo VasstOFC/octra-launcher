@@ -8,9 +8,9 @@ import StyledEmail from '../shared/StyledEmail.vue'
 	<StyledEmail
 		title="Report of '{report.title}' has been updated"
 		:manual-links="[
-			{ link: 'https://modrinth.com/legal/rules', label: 'Community Guidelines' },
+			{ link: 'https://Lumen.com/legal/rules', label: 'Community Guidelines' },
 			{
-				link: 'https://modrinth.com/dashboard/report/{report.id}',
+				link: 'https://Lumen.com/dashboard/report/{report.id}',
 				label: 'View report in dashboard',
 			},
 			{ link: 'https://support.modrinth.com', label: 'Support Portal' },
@@ -29,7 +29,7 @@ import StyledEmail from '../shared/StyledEmail.vue'
 
 		<Text class="text-base">
 			You can
-			<VLink href="https://modrinth.com/dashboard/report/{report.id}" class="text-green underline"
+			<VLink href="https://Lumen.com/dashboard/report/{report.id}" class="text-green underline"
 				>view the full report thread</VLink
 			>
 			to see the update. If you have more information to add, please reply in the report thread for
@@ -37,7 +37,7 @@ import StyledEmail from '../shared/StyledEmail.vue'
 		</Text>
 
 		<Text class="text-base"
-			>Thank you for helping keep Modrinth safe and welcoming for everyone.</Text
+			>Thank you for helping keep Lumen safe and welcoming for everyone.</Text
 		>
 	</StyledEmail>
 </template>

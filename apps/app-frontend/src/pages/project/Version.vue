@@ -45,7 +45,7 @@
 							id: 'open-in-browser',
 							label: formatMessage(commonMessages.openInBrowserButton),
 							type: 'link',
-							href: `https://modrinth.com/${project.project_type}/${project.slug}/version/${version.id}`,
+							href: `https://Lumen.com/${project.project_type}/${project.slug}/version/${version.id}`,
 							target: '_blank',
 						},
 						{
@@ -53,7 +53,7 @@
 							label: formatMessage(commonMessages.reportButton),
 							type: 'link',
 							tone: 'red',
-							href: `https://modrinth.com/report?item=version&itemID=${version.id}`,
+							href: `https://Lumen.com/report?item=version&itemID=${version.id}`,
 							target: '_blank',
 						},
 					]"
@@ -79,7 +79,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
+import type { Labrinth } from '@lumen/api-client'
 import {
 	CheckIcon,
 	DownloadIcon,
@@ -87,8 +87,8 @@ import {
 	MoreVerticalIcon,
 	ReportIcon,
 	VersionIcon,
-} from '@modrinth/assets'
-import { BackToParentLink, Button, ButtonLink, TeleportOverflowMenu } from '@modrinth/ui'
+} from '@lumen/assets'
+import { BackToParentLink, Button, ButtonLink, TeleportOverflowMenu } from '@lumen/ui'
 import {
 	commonMessages,
 	defineMessages,
@@ -96,7 +96,7 @@ import {
 	useFormatBytes,
 	useVIntl,
 	VersionPage,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { computed, ref, shallowRef, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 

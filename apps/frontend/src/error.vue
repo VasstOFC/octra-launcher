@@ -11,13 +11,13 @@
 				<img
 					v-if="is401"
 					:src="AnnoyedRinthbot"
-					alt="Annoyed Modrinth bot"
+					alt="Annoyed Lumen bot"
 					class="error-box__sad-bot"
 				/>
 				<img
 					v-else-if="!is404"
 					:src="SadRinthbot"
-					alt="Sad Modrinth bot"
+					alt="Sad Lumen bot"
 					class="error-box__sad-bot"
 				/>
 				<div v-if="!is404" class="error-box__top-glow" />
@@ -72,12 +72,12 @@
 						<li v-for="item in errorMessages.list_items" :key="item">
 							<IntlFormatted :message-id="item">
 								<template #status-link="{ children }">
-									<a href="https://status.modrinth.com" target="_blank" rel="noopener">
+									<a href="https://status.Lumen.com" target="_blank" rel="noopener">
 										<component :is="() => normalizeChildren(children)" />
 									</a>
 								</template>
 								<template #discord-link="{ children }">
-									<a href="https://discord.modrinth.com" target="_blank" rel="noopener">
+									<a href="https://discord.Lumen.com" target="_blank" rel="noopener">
 										<component :is="() => normalizeChildren(children)" />
 									</a>
 								</template>
@@ -100,7 +100,7 @@
 </template>
 
 <script setup>
-import { AnnoyedRinthbot, LogInIcon, LogOutIcon, SadRinthbot } from '@modrinth/assets'
+import { AnnoyedRinthbot, LogInIcon, LogOutIcon, SadRinthbot } from '@lumen/assets'
 import {
 	AccountChoiceList,
 	AccountSwitchOverlay,
@@ -116,7 +116,7 @@ import {
 	NotificationPanel,
 	UserRoleIcon,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 
 import Logo404 from '~/assets/images/404.svg'
 import {
@@ -245,12 +245,12 @@ const messages = {
 		list_items: [
 			defineMessage({
 				id: 'error.generic.default.list_item.1',
-				defaultMessage: 'Check if Modrinth is down on our <status-link>Status page</status-link>.',
+				defaultMessage: 'Check if Lumen is down on our <status-link>Status page</status-link>.',
 			}),
 			defineMessage({
 				id: 'error.generic.default.list_item.2',
 				defaultMessage:
-					'If this keeps happening, you may want to let the Modrinth Team know by joining our <discord-link>Discord server</discord-link>.',
+					'If this keeps happening, you may want to let the Lumen Team know by joining our <discord-link>Discord server</discord-link>.',
 			}),
 		],
 	},
@@ -292,7 +292,7 @@ const routeMessages = [
 					defineMessage({
 						id: 'error.project.404.list_item.3',
 						defaultMessage:
-							"The project may have been taken down by Modrinth's moderation team for violating our <tou-link>Terms of Use</tou-link>.",
+							"The project may have been taken down by Lumen's moderation team for violating our <tou-link>Terms of Use</tou-link>.",
 					}),
 				],
 			},
@@ -322,7 +322,7 @@ const routeMessages = [
 					defineMessage({
 						id: 'error.user.404.list_item.3',
 						defaultMessage:
-							"The user's account may have been terminated for violating Modrinth's <tou-link>Terms of Use</tou-link>.",
+							"The user's account may have been terminated for violating Lumen's <tou-link>Terms of Use</tou-link>.",
 					}),
 				],
 			},
@@ -352,7 +352,7 @@ const routeMessages = [
 					defineMessage({
 						id: 'error.organization.404.list_item.3',
 						defaultMessage:
-							"The organization may have been removed by Modrinth's moderation team for violating our <tou-link>Terms of Use</tou-link>.",
+							"The organization may have been removed by Lumen's moderation team for violating our <tou-link>Terms of Use</tou-link>.",
 					}),
 				],
 			},
@@ -382,7 +382,7 @@ const routeMessages = [
 					defineMessage({
 						id: 'error.collection.404.list_item.3',
 						defaultMessage:
-							"The collection may have been taken down by Modrinth's moderation team for violating our <tou-link>Terms of Use</tou-link>.",
+							"The collection may have been taken down by Lumen's moderation team for violating our <tou-link>Terms of Use</tou-link>.",
 					}),
 				],
 			},

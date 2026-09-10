@@ -50,7 +50,7 @@
 </template>
 
 <script setup lang="ts">
-import { CalendarIcon } from '@modrinth/assets'
+import { CalendarIcon } from '@lumen/assets'
 import { computed, type InputHTMLAttributes, mergeProps, ref, useAttrs } from 'vue'
 
 import InputClearButton from './InputClearButton.vue'

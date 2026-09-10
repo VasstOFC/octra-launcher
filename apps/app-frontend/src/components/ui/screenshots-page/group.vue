@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useDroppable } from '@dnd-kit/vue'
-import { defineMessages, useVIntl } from '@modrinth/ui'
+import { defineMessages, useVIntl } from '@lumen/ui'
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 
 import type { InstanceScreenshot } from '@/helpers/instance'

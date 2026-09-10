@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Labrinth } from '@modrinth/api-client'
+import type { Labrinth } from '@lumen/api-client'
 import {
 	BookmarkIcon,
 	CheckIcon,
@@ -10,8 +10,8 @@ import {
 	ListIcon,
 	MoreVerticalIcon,
 	SpinnerIcon,
-} from '@modrinth/assets'
-import type { CardAction } from '@modrinth/ui'
+} from '@lumen/assets'
+import type { CardAction } from '@lumen/ui'
 import {
 	BrowseInstallHeader,
 	BrowsePageLayout,
@@ -20,7 +20,7 @@ import {
 	CreationFlowModal,
 	defineMessages,
 	formatProjectTypeSentence,
-	injectModrinthClient,
+	injectLumenClient,
 	injectUserPreferences,
 	PROJECT_DEP_MARKER_QUERY,
 	provideBrowseManager,
@@ -29,8 +29,8 @@ import {
 	useDebugLogger,
 	useStickyObserver,
 	useVIntl,
-} from '@modrinth/ui'
-import { cycleValue } from '@modrinth/utils'
+} from '@lumen/ui'
+import { cycleValue } from '@lumen/utils'
 import { useQueryClient } from '@tanstack/vue-query'
 import { useTimeoutFn } from '@vueuse/core'
 import { computed, ref, watch } from 'vue'
@@ -53,7 +53,7 @@ const debug = useDebugLogger('Discover')
 
 const { updateDiscoverFilterContext } = useCdnDownloadContext()
 
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const { updatePreferences } = injectUserPreferences()
 const queryClient = useQueryClient()
 
@@ -428,7 +428,7 @@ const messages = defineMessages({
 	seoDescription: {
 		id: 'discover.seo.description',
 		defaultMessage:
-			'Search and browse thousands of Minecraft {projectType} on Modrinth with instant, accurate search results. Our filters help you quickly find the best Minecraft {projectType}.',
+			'Search and browse thousands of Minecraft {projectType} on Lumen with instant, accurate search results. Our filters help you quickly find the best Minecraft {projectType}.',
 	},
 	gameVersionShaderMessage: {
 		id: 'search.filter.game-version-shader-message',

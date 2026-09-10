@@ -9,7 +9,7 @@ use zip::ZipArchive;
 
 use super::{APP_DISPLAY_NAME, APP_EXECUTABLE, INSTALLER_EXECUTABLE, InstallProgress};
 
-const REGISTRY_KEY: &str = "OctraApp";
+const REGISTRY_KEY: &str = "LumenApp";
 
 #[derive(Debug, Clone)]
 pub struct InstallOptions {
@@ -37,7 +37,7 @@ pub fn default_install_dir() -> PathBuf {
 				.join("AppData/Local/Programs")
 				.join(APP_DISPLAY_NAME)
 		})
-		.unwrap_or_else(|| PathBuf::from(r"C:\Octra App"))
+		.unwrap_or_else(|| PathBuf::from(r"C:\Lumen App"))
 }
 
 pub async fn run_install(app: &AppHandle, options: InstallOptions) -> Result<(), InstallError> {
@@ -104,7 +104,7 @@ pub fn uninstall(install_dir: PathBuf) -> Result<(), InstallError> {
 }
 
 fn resolve_payload(app: &AppHandle) -> Result<PathBuf, InstallError> {
-	if let Ok(path) = std::env::var("OCTRA_INSTALLER_PAYLOAD") {
+	if let Ok(path) = std::env::var("LUMEN_INSTALLER_PAYLOAD") {
 		let path = PathBuf::from(path);
 		if path.is_file() {
 			return Ok(path);
@@ -142,7 +142,7 @@ fn resolve_payload(app: &AppHandle) -> Result<PathBuf, InstallError> {
 	}
 
 	Err(InstallError::PayloadMissing(
-		"brak paczki instalacyjnej (app.zip). Zbuduj najpierw Octra App.".into(),
+		"brak paczki instalacyjnej (app.zip). Zbuduj najpierw Lumen App.".into(),
 	))
 }
 
@@ -269,7 +269,7 @@ fn register_uninstall(install_dir: &Path) -> Result<(), InstallError> {
 		)?;
 		key.set_value("InstallLocation", &install_dir.to_string_lossy().to_string())?;
 		key.set_value("DisplayIcon", &app_exe.to_string_lossy().to_string())?;
-		key.set_value("Publisher", &"Octra")?;
+		key.set_value("Publisher", &"Lumen")?;
 	}
 	#[cfg(not(windows))]
 	{
@@ -310,7 +310,7 @@ fn cleanup_legacy_installs() -> Result<(), InstallError> {
 fn kill_running_apps() -> Result<(), InstallError> {
 	#[cfg(windows)]
 	{
-		for process in ["Octra App.exe", "Octra Launcher.exe", "octra-launcher.exe"] {
+		for process in ["Lumen App.exe", "Octra Launcher.exe", "octra-launcher.exe"] {
 			let _ = Command::new("taskkill").args(["/F", "/IM", process]).status();
 		}
 	}

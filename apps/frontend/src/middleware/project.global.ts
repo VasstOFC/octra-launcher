@@ -3,9 +3,9 @@ import type { RouteLocationNormalized } from 'vue-router'
 import { useGeneratedState } from '~/composables/generated'
 import { projectQueryOptions, warmProjectCheckCaches } from '~/composables/queries/project'
 import { useAppQueryClient } from '~/composables/query-client'
-import { createModrinthClient } from '~/helpers/api.ts'
+import { createLumenClient } from '~/helpers/api.ts'
 import { getProjectTypeForUrlShorthand } from '~/helpers/projects.js'
-import { useServerModrinthClient } from '~/server/utils/api-client'
+import { useServerLumenClient } from '~/server/utils/api-client'
 
 // All valid project type URL segments
 const PROJECT_TYPES = [
@@ -90,13 +90,13 @@ export default defineNuxtRouteMiddleware(async (to) => {
 async function getProjectMiddlewareClient(route: RouteLocationNormalized) {
 	if (import.meta.server) {
 		const authToken = useCookie('auth-token')
-		return useServerModrinthClient({ authToken: authToken.value || undefined })
+		return useServerLumenClient({ authToken: authToken.value || undefined })
 	}
 
 	const auth = await useAuth(null, route)
 	const config = useRuntimeConfig()
 
-	return createModrinthClient(auth, {
+	return createLumenClient(auth, {
 		apiBaseUrl: config.public.apiBaseUrl.replace('/v2/', '/'),
 		archonBaseUrl: config.public.pyroBaseUrl.replace('/v2/', '/'),
 		sharedInstancesBaseUrl: config.public.sharedInstancesBaseUrl,

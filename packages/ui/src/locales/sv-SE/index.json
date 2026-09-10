@@ -105,7 +105,7 @@
     "defaultMessage": "Inga resultat hittades för din sökning!"
   },
   "browse.offline": {
-    "defaultMessage": "Du är för nuvarande offline. Koppla upp dig till internet för att bläddra bland Modrinth!"
+    "defaultMessage": "Du är för nuvarande offline. Koppla upp dig till internet för att bläddra bland Lumen!"
   },
   "browse.search.placeholder": {
     "defaultMessage": "Sök {projectType}..."
@@ -239,8 +239,8 @@
   "button.open-in-folder": {
     "defaultMessage": "Öppna i mapp"
   },
-  "button.open-in-modrinth": {
-    "defaultMessage": "Öppna i Modrinth"
+  "button.open-in-Lumen": {
+    "defaultMessage": "Öppna i Lumen"
   },
   "button.play": {
     "defaultMessage": "Spela"
@@ -516,13 +516,13 @@
     "defaultMessage": "{count} borttagna"
   },
   "content.diff-modal.reviewed-files": {
-    "defaultMessage": "Filer som inte publiceras på Modrinth granskas inte."
+    "defaultMessage": "Filer som inte publiceras på Lumen granskas inte."
   },
   "content.diff-modal.unknown-content-body": {
     "defaultMessage": "Något innehåll på din server kunde inte analyseras och kommer kanske påverkas av denna ändring."
   },
   "content.diff-modal.unknown-files-description": {
-    "defaultMessage": "Denna uppdatering innehåller filer som inte är utgivna på Modrinth. Vi rekommenderar att endast installera filer från källor du litar på."
+    "defaultMessage": "Denna uppdatering innehåller filer som inte är utgivna på Lumen. Vi rekommenderar att endast installera filer från källor du litar på."
   },
   "content.diff-modal.unknown-files-warning": {
     "defaultMessage": "Okända filvarningar"
@@ -1167,7 +1167,7 @@
     "defaultMessage": "Bevisbilder:"
   },
   "external-files.permissions-card.reason.globally-allowed.description": {
-    "defaultMessage": "Vi har sett den här filen tidigare och har förberett en tillskrivning för dig. Om något verkar fel, vänligen kontakta Modrinth support genom hjälpcentret"
+    "defaultMessage": "Vi har sett den här filen tidigare och har förberett en tillskrivning för dig. Om något verkar fel, vänligen kontakta Lumen support genom hjälpcentret"
   },
   "external-files.permissions-card.reason.license": {
     "defaultMessage": "Licens"
@@ -2013,7 +2013,7 @@
     "defaultMessage": "Extern"
   },
   "instances.managed-content-modal.external-content-description": {
-    "defaultMessage": "Den här filer är inte publicerad på Modrinth."
+    "defaultMessage": "Den här filer är inte publicerad på Lumen."
   },
   "instances.managed-content-modal.loading": {
     "defaultMessage": "Laddar in innehåll..."
@@ -2598,16 +2598,16 @@
     "defaultMessage": "Håll filer uppdaterade när servern ändras"
   },
   "modal.open-in-app.get-app": {
-    "defaultMessage": "Skaffa Modrinth App"
+    "defaultMessage": "Skaffa Lumen App"
   },
   "modal.open-in-app.opening-automatically": {
-    "defaultMessage": "Modrinth App kommer att öppnas automatiskt..."
+    "defaultMessage": "Lumen App kommer att öppnas automatiskt..."
   },
   "modal.open-in-app.title": {
-    "defaultMessage": "Öppnar Modrinth App"
+    "defaultMessage": "Öppnar Lumen App"
   },
   "modal.open-in-app.why-use": {
-    "defaultMessage": "Varför använda Modrinth App"
+    "defaultMessage": "Varför använda Lumen App"
   },
   "notification.error.title": {
     "defaultMessage": "Ett fel inträffade"
@@ -2660,8 +2660,8 @@
   "omorphia.component.badge.label.moderator": {
     "defaultMessage": "Moderator"
   },
-  "omorphia.component.badge.label.modrinth-team": {
-    "defaultMessage": "Modrinth-teamet"
+  "omorphia.component.badge.label.Lumen-team": {
+    "defaultMessage": "Lumen-teamet"
   },
   "omorphia.component.badge.label.pending": {
     "defaultMessage": "Väntar"
@@ -2778,10 +2778,10 @@
     "defaultMessage": "Visa"
   },
   "profile.bio.fallback.creator": {
-    "defaultMessage": "En Modrinth-skapare"
+    "defaultMessage": "En Lumen-skapare"
   },
   "profile.bio.fallback.user": {
-    "defaultMessage": "En Modrinth-användare."
+    "defaultMessage": "En Lumen-användare."
   },
   "profile.block-user.admonition-title": {
     "defaultMessage": "Är du säker på att du vill blocka den här användaren?"
@@ -2889,10 +2889,10 @@
     "defaultMessage": "Projekt"
   },
   "profile.official-account": {
-    "defaultMessage": "Officiellt Modrinth-konto"
+    "defaultMessage": "Officiellt Lumen-konto"
   },
   "profile.official-account.bio": {
-    "defaultMessage": "Modrinths officiella användarkonto. Få stöd på <support-link></support-link> eller via e-post hos <email></email>"
+    "defaultMessage": "Lumens officiella användarkonto. Få stöd på <support-link></support-link> eller via e-post hos <email></email>"
   },
   "profile.unblock-user.error-description": {
     "defaultMessage": "Ett fel inträffade under avblockeringen av den här användaren. Vänligen försök igen."
@@ -3258,7 +3258,7 @@
     "defaultMessage": "Spelades senast {count} {countPlural, plural, one {gång} other {gånger}}"
   },
   "project.recent-plays.tooltip": {
-    "defaultMessage": "Spelades på Modrinth {count} {countPlural, plural, one {gång} other {gånger}} i de 2 sista veckorna"
+    "defaultMessage": "Spelades på Lumen {count} {countPlural, plural, one {gång} other {gånger}} i de 2 sista veckorna"
   },
   "project.server.customModpackTooltip": {
     "defaultMessage": "Detta projektet använder ett modpaket"
@@ -3582,7 +3582,7 @@
     "defaultMessage": "Ditt projekt har flera miljöer"
   },
   "project.settings.environment.notice.review-options.description": {
-    "defaultMessage": "Vi har just förbättrat Miljösystemet på Modrinth och nya val finns nu. Vänligen kontrollera att rätt val är vald nedanför och sen klicka på 'Verifiera' när du är klar!"
+    "defaultMessage": "Vi har just förbättrat Miljösystemet på Lumen och nya val finns nu. Vänligen kontrollera att rätt val är vald nedanför och sen klicka på 'Verifiera' när du är klar!"
   },
   "project.settings.environment.notice.review-options.title": {
     "defaultMessage": "Granska valen nedan"
@@ -3873,13 +3873,13 @@
     "defaultMessage": "Laddare"
   },
   "search.photosensitivity-warning-modal.body.1": {
-    "defaultMessage": "Vi kan inte garantera att allt innehåll på Modrinth har lämpliga etiketter."
+    "defaultMessage": "Vi kan inte garantera att allt innehåll på Lumen har lämpliga etiketter."
   },
   "search.photosensitivity-warning-modal.body.2": {
-    "defaultMessage": "Innehållsetiketter för ljuskänslighetsutlösare är självtilldelade av skaparna som laddar upp deras innehåll på Modrinth. De här projekten har inte gått igenom någon säkerhetstest."
+    "defaultMessage": "Innehållsetiketter för ljuskänslighetsutlösare är självtilldelade av skaparna som laddar upp deras innehåll på Lumen. De här projekten har inte gått igenom någon säkerhetstest."
   },
   "search.photosensitivity-warning-modal.body.3": {
-    "defaultMessage": "Att använda innehåll på Modrinth görs på egen risk. Håll dig säker! 💚"
+    "defaultMessage": "Att använda innehåll på Lumen görs på egen risk. Håll dig säker! 💚"
   },
   "search.photosensitivity-warning-modal.dont-show-again": {
     "defaultMessage": "Visa inte det här igen"
@@ -4563,13 +4563,13 @@
     "defaultMessage": "Använd inte deras Minecraft-användarnamn."
   },
   "servers.grant-access-modal.target.label": {
-    "defaultMessage": "Modrinth-användarnamn"
+    "defaultMessage": "Lumen-användarnamn"
   },
   "servers.grant-access-modal.target.no-suggestions": {
     "defaultMessage": "Ingen matchande användare hittades."
   },
   "servers.grant-access-modal.target.placeholder": {
-    "defaultMessage": "Ange Modrinth-användarnamn"
+    "defaultMessage": "Ange Lumen-användarnamn"
   },
   "servers.grant-access-modal.target.searching": {
     "defaultMessage": "Söker..."
@@ -4625,14 +4625,14 @@
   "servers.list-empty.already-have-server-label": {
     "defaultMessage": "Har du redan en server?"
   },
-  "servers.list-empty.modrinth-hosting-label": {
-    "defaultMessage": "Modrinth Hosting"
+  "servers.list-empty.Lumen-hosting-label": {
+    "defaultMessage": "Lumen Hosting"
   },
   "servers.list-empty.new-server-button": {
     "defaultMessage": "Ny server"
   },
   "servers.list-empty.no-servers-description": {
-    "defaultMessage": "Installera moddar, bjud in vänner och spela tillsammans, allt från Modrinth App."
+    "defaultMessage": "Installera moddar, bjud in vänner och spela tillsammans, allt från Lumen App."
   },
   "servers.list-empty.one-click-mod-installs-description": {
     "defaultMessage": "Välj dina favorit moddar så hanterar vi resten."
@@ -4710,7 +4710,7 @@
     "defaultMessage": "Uppladdning pågår"
   },
   "servers.manage.contact-support-button": {
-    "defaultMessage": "Kontakta Modrinth-support"
+    "defaultMessage": "Kontakta Lumen-support"
   },
   "servers.manage.error.description": {
     "defaultMessage": "Vi kan ha tillfälliga problem med våra servrar."
@@ -4746,7 +4746,7 @@
     "defaultMessage": "Ladda om"
   },
   "servers.manage.resubscribe-error.text": {
-    "defaultMessage": "Ett fel inträffade när du återprenumererade till din Modrinth server."
+    "defaultMessage": "Ett fel inträffade när du återprenumererade till din Lumen server."
   },
   "servers.manage.resubscribe-error.title": {
     "defaultMessage": "Fel vid återprenumerering"
@@ -4758,7 +4758,7 @@
     "defaultMessage": "Sök {count} {count, plural,one {server}other {servrar}}..."
   },
   "servers.manage.servers-title": {
-    "defaultMessage": "Modrinth Hosting"
+    "defaultMessage": "Lumen Hosting"
   },
   "servers.manage.settings-hint.description": {
     "defaultMessage": "De kan nu hittas här!"
@@ -4911,7 +4911,7 @@
     "defaultMessage": "Vart vill du att din server ska vara placerad?"
   },
   "servers.region.region-unsupported": {
-    "defaultMessage": "Är området inte med i listan? <link>Berätta vart du vill se Modrinth Hosting härnäst!</link>"
+    "defaultMessage": "Är området inte med i listan? <link>Berätta vart du vill se Lumen Hosting härnäst!</link>"
   },
   "servers.region.southeast-asia": {
     "defaultMessage": "Sydostasien"
@@ -4983,7 +4983,7 @@
     "defaultMessage": "Ställ in server"
   },
   "servers.setup.onboarding.step.choose.description": {
-    "defaultMessage": "Välj ditt favorit modpaket från Modrinth, eller välj en loader och lägg till de moddar du vill."
+    "defaultMessage": "Välj ditt favorit modpaket från Lumen, eller välj en loader och lägg till de moddar du vill."
   },
   "servers.setup.onboarding.step.choose.title": {
     "defaultMessage": "Välj vad du vill spela"
@@ -5007,7 +5007,7 @@
     "defaultMessage": "Din server är redo. Här är vad du behöver göra för att börja spela!"
   },
   "servers.setup.onboarding.welcome.title": {
-    "defaultMessage": "Välkommen till Modrinth Hosting"
+    "defaultMessage": "Välkommen till Lumen Hosting"
   },
   "servers.setup.rate-limit.text": {
     "defaultMessage": "Du blir hastighetsbegränsad. Vänligen försök igen senare."
@@ -5115,10 +5115,10 @@
     "defaultMessage": "Kunde inte att uppdatera profil"
   },
   "settings.profile.sign-in-required.description": {
-    "defaultMessage": "Logga in på ett Modrinth-konto för att anpassa din offentliga profil."
+    "defaultMessage": "Logga in på ett Lumen-konto för att anpassa din offentliga profil."
   },
   "settings.profile.sign-in-required.title": {
-    "defaultMessage": "Modrinth-konto behövs"
+    "defaultMessage": "Lumen-konto behövs"
   },
   "settings.sessions.title": {
     "defaultMessage": "Sessioner"
@@ -5130,7 +5130,7 @@
     "defaultMessage": "Användare"
   },
   "settings.social.blocked-users.description": {
-    "defaultMessage": "Det här är användare du har blockat på Modrinth. De kan inte:"
+    "defaultMessage": "Det här är användare du har blockat på Lumen. De kan inte:"
   },
   "settings.social.blocked-users.empty": {
     "defaultMessage": "Du har inte blockerat någon."
@@ -5163,7 +5163,7 @@
     "defaultMessage": "{username}s avatar"
   },
   "settings.social.friend-requests.description": {
-    "defaultMessage": "Bestäm vilka som kan skicka vänförfrågningar på Modrinth."
+    "defaultMessage": "Bestäm vilka som kan skicka vänförfrågningar på Lumen."
   },
   "settings.social.friend-requests.title": {
     "defaultMessage": "Vänförfrågningar"
@@ -5181,10 +5181,10 @@
     "defaultMessage": "Ingen"
   },
   "settings.social.sign-in-required.description": {
-    "defaultMessage": "Med ett Modrinth-konto kan du bestämma vem som kan interagera med dig och hantera blockade användare"
+    "defaultMessage": "Med ett Lumen-konto kan du bestämma vem som kan interagera med dig och hantera blockade användare"
   },
   "settings.social.sign-in-required.title": {
-    "defaultMessage": "Modrinth-konto krävs"
+    "defaultMessage": "Lumen-konto krävs"
   },
   "sharing.invite-players-modal.add": {
     "defaultMessage": "Lägg till"
@@ -5274,7 +5274,7 @@
     "defaultMessage": "Spara"
   },
   "sharing.invite-players-modal.search-placeholder": {
-    "defaultMessage": "Ange Modrinth-användarnamn"
+    "defaultMessage": "Ange Lumen-användarnamn"
   },
   "sharing.invite-players-modal.searching": {
     "defaultMessage": "Söker..."
@@ -5808,31 +5808,31 @@
     "defaultMessage": "Skadeprogram distribueras ofta via moddfiler genom att dela dem på plattformar som Discord."
   },
   "unknown-file-warning-modal.mod-warning-body": {
-    "defaultMessage": " är inte publiserad på Modrinth. Vi rekommenderar starkt att endast installera filer från källor du litar på."
+    "defaultMessage": " är inte publiserad på Lumen. Vi rekommenderar starkt att endast installera filer från källor du litar på."
   },
   "unknown-file-warning-modal.mod-warning-title": {
     "defaultMessage": "Okänd filvarning"
   },
   "unknown-file-warning-modal.modpack-warning-body": {
-    "defaultMessage": " innehåller filer som inte är utgivna på Modrinth. Vi rekommenderar att endast installera filer från källor du litar på."
+    "defaultMessage": " innehåller filer som inte är utgivna på Lumen. Vi rekommenderar att endast installera filer från källor du litar på."
   },
   "unknown-file-warning-modal.modpack-warning-title": {
     "defaultMessage": "Okända filvarningar"
   },
   "unknown-file-warning-modal.reviewed-files": {
-    "defaultMessage": "Filer som inte publiceras på Modrinth granskas inte."
+    "defaultMessage": "Filer som inte publiceras på Lumen granskas inte."
   },
   "user.profile.badge.alpha.about.1": {
-    "defaultMessage": "Denna användare har funnits sedan Modrinth alfa, som slutate i november 2020."
+    "defaultMessage": "Denna användare har funnits sedan Lumen alfa, som slutate i november 2020."
   },
   "user.profile.badge.alpha.name": {
     "defaultMessage": "Alfa-testare"
   },
   "user.profile.badge.beta.about.1": {
-    "defaultMessage": "Denna användare har funnits sedan Modrinth beta, som slutade i februari 2022."
+    "defaultMessage": "Denna användare har funnits sedan Lumen beta, som slutade i februari 2022."
   },
   "user.profile.badge.beta.link": {
-    "defaultMessage": "Klicka för att läsa om lanseringen av Modrinth Beta."
+    "defaultMessage": "Klicka för att läsa om lanseringen av Lumen Beta."
   },
   "user.profile.badge.beta.name": {
     "defaultMessage": "Beta-testare"
@@ -5844,7 +5844,7 @@
     "defaultMessage": "{download_sum} nedladdningar"
   },
   "user.profile.badge.moderator.about.1": {
-    "defaultMessage": "Den här användaren arbetar för Modrinth som en innehållsmoderator."
+    "defaultMessage": "Den här användaren arbetar för Lumen som en innehållsmoderator."
   },
   "user.profile.badge.moderator.name": {
     "defaultMessage": "Innehållsmoderator"
@@ -5853,19 +5853,19 @@
     "defaultMessage": "Klicka för att läsa mer om hur du kan bli en medlem."
   },
   "user.profile.badge.plus.name": {
-    "defaultMessage": "Modrinth+ medlem"
+    "defaultMessage": "Lumen+ medlem"
   },
   "user.profile.badge.pride.about.1": {
-    "defaultMessage": "Denna användare har deltagit i åtminstone ett av Modrinths Pride-insamlingar för LGBTQ+ gemenskapen."
+    "defaultMessage": "Denna användare har deltagit i åtminstone ett av Lumens Pride-insamlingar för LGBTQ+ gemenskapen."
   },
   "user.profile.badge.pride.link": {
     "defaultMessage": "Klicka för att besöka vår senaste Pride-insamling."
   },
   "user.profile.badge.staff.about.1": {
-    "defaultMessage": "Den här användaren arbetar för Modrinth."
+    "defaultMessage": "Den här användaren arbetar för Lumen."
   },
   "user.profile.badge.staff.name": {
-    "defaultMessage": "Modrinth-team"
+    "defaultMessage": "Lumen-team"
   },
   "version.content.name": {
     "defaultMessage": "Namn"

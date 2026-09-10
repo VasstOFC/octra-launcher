@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TagItem } from '@modrinth/ui'
+import { TagItem } from '@lumen/ui'
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 
 import type { InstanceScreenshot } from '@/helpers/instance'

@@ -8,7 +8,7 @@ import StyledEmail from '../shared/StyledEmail.vue'
 	<StyledEmail
 		title="Your project, {project.name}, status has been updated"
 		:manual-links="[
-			{ link: 'https://modrinth.com/legal/rules', label: 'Community Guidelines' },
+			{ link: 'https://Lumen.com/legal/rules', label: 'Community Guidelines' },
 			{
 				link: 'https://modrinth.com/project/{project.id}/moderation',
 				label: 'Your project\'s moderation thread',
@@ -57,6 +57,6 @@ import StyledEmail from '../shared/StyledEmail.vue'
 			>.
 		</Text>
 
-		<Text class="text-base">Thank you for publishing on Modrinth!</Text>
+		<Text class="text-base">Thank you for publishing on Lumen!</Text>
 	</StyledEmail>
 </template>

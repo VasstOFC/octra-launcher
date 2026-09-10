@@ -578,8 +578,8 @@ import {
 	ServerPlusIcon,
 	SettingsIcon,
 	XIcon,
-} from '@modrinth/assets'
-import { getMarginTarget, moderationSettings } from '@modrinth/moderation'
+} from '@lumen/assets'
+import { getMarginTarget, moderationSettings } from '@lumen/moderation'
 import {
 	Admonition,
 	ArchivedProjectBanner,
@@ -593,7 +593,7 @@ import {
 	formatProjectTypeSentence,
 	getActiveDisclosures,
 	IconButton,
-	injectModrinthClient,
+	injectLumenClient,
 	injectNotificationManager,
 	IntlFormatted,
 	NavTabs,
@@ -620,8 +620,8 @@ import {
 	useRelativeTime,
 	useStickyObserver,
 	useVIntl,
-} from '@modrinth/ui'
-import { formatProjectType, isStaff } from '@modrinth/utils'
+} from '@lumen/ui'
+import { formatProjectType, isStaff } from '@lumen/utils'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
 import { useLocalStorage } from '@vueuse/core'
 import { Tooltip } from 'floating-vue'
@@ -781,7 +781,7 @@ const messages = defineMessages({
 	environmentMigrationMessage: {
 		id: 'project.environment.migration.message',
 		defaultMessage:
-			"We've just overhauled the Environments system on Modrinth and new options are now available. Please verify that the metadata is correct.",
+			"We've just overhauled the Environments system on Lumen and new options are now available. Please verify that the metadata is correct.",
 	},
 	environmentMigrationTitle: {
 		id: 'project.environment.migration.title',
@@ -790,7 +790,7 @@ const messages = defineMessages({
 	environmentMigrationNoPermissionMessage: {
 		id: 'project.environment.migration-no-permission.message',
 		defaultMessage:
-			"We've just overhauled the Environments system on Modrinth and new options are now available. You don't have permission to modify these settings, but please let another member of the project know that the environment metadata needs to be verified.",
+			"We've just overhauled the Environments system on Lumen and new options are now available. You don't have permission to modify these settings, but please let another member of the project know that the environment metadata needs to be verified.",
 	},
 	environmentMigrationNoPermissionTitle: {
 		id: 'project.environment.migration-no-permission.title',
@@ -903,7 +903,7 @@ const messages = defineMessages({
 	},
 	serversPromoDescription: {
 		id: 'project.actions.servers-promo.description',
-		defaultMessage: 'Modrinth Hosting is the easiest way to play with your friends without hassle!',
+		defaultMessage: 'Lumen Hosting is the easiest way to play with your friends without hassle!',
 	},
 	serversPromoPricing: {
 		id: 'project.actions.servers-promo.pricing',
@@ -944,7 +944,7 @@ if (
 }
 
 // Use DI client for TanStack Query
-const client = injectModrinthClient()
+const client = injectLumenClient()
 const queryClient = useQueryClient()
 
 // Resolve route slug/ID to the canonical project ID (middleware warms this cache)
@@ -990,7 +990,7 @@ watch(
 	projectV2Error,
 	(error) => {
 		if (error) {
-			// error.statusCode from ModrinthApiError, error.status as fallback
+			// error.statusCode from LumenApiError, error.status as fallback
 			const status = error.statusCode ?? error.status ?? 500
 			showError({
 				fatal: true,
@@ -1769,7 +1769,7 @@ const following = computed(() => {
 })
 
 const PROJECT_NOT_FOUND_DESCRIPTION =
-	"There's no project here, check that you have the right link! It may still be under review or no longer publicly available on Modrinth."
+	"There's no project here, check that you have the right link! It may still be under review or no longer publicly available on Lumen."
 
 const title = computed(() =>
 	project.value
@@ -1784,7 +1784,7 @@ const description = computed(() => {
 	const creator = organization.value?.name || members.value.find((x) => x.is_owner)?.user?.username
 	const byLine = creator ? ` by ${creator}` : ''
 
-	return `${project.value.description} - Download the Minecraft ${projectTypeDisplay.value} ${project.value.title}${byLine} on Modrinth`
+	return `${project.value.description} - Download the Minecraft ${projectTypeDisplay.value} ${project.value.title}${byLine} on Lumen`
 })
 
 const canCreateServerFrom = computed(() => {
@@ -2081,8 +2081,8 @@ if (!route.name.startsWith('type-project-settings')) {
 		ogDescription: () => project.value?.description ?? PROJECT_NOT_FOUND_DESCRIPTION,
 		ogImage: () =>
 			project.value
-				? (project.value?.icon_url ?? 'https://cdn-raw.modrinth.com/placeholder-square.png')
-				: 'https://cdn-raw.modrinth.com/not-found.png',
+				? (project.value?.icon_url ?? 'https://cdn-raw.Lumen.com/placeholder-square.png')
+				: 'https://cdn-raw.Lumen.com/not-found.png',
 		ogUrl: createCanonicalUrl,
 		robots: () => (project.value?.status === 'approved' ? 'all' : 'noindex'),
 	})

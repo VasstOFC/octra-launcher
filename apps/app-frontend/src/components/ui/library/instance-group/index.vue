@@ -1,13 +1,6 @@
 <script setup lang="ts">
 import { useDroppable } from '@dnd-kit/vue'
-import {
-	DropdownIcon,
-	EditIcon,
-	PlusIcon,
-	SquarePlusIcon,
-	TrashIcon,
-	XIcon,
-} from '@modrinth/assets'
+import { DropdownIcon, EditIcon, PlusIcon, SquarePlusIcon, TrashIcon, XIcon } from '@lumen/assets'
 import {
 	Accordion,
 	Button,
@@ -19,7 +12,7 @@ import {
 	NewModal,
 	TagItem,
 	useVIntl,
-} from '@modrinth/ui'
+} from '@lumen/ui'
 import { computed, inject, nextTick, onActivated, onDeactivated, onMounted, ref, watch } from 'vue'
 
 import GroupActionButtons from '@/components/ui/library/instance-group/group-action-buttons.vue'

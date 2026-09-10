@@ -140,12 +140,12 @@
 </template>
 
 <script setup lang="ts">
-import { BanIcon, DropdownIcon, PackageIcon, XIcon } from '@modrinth/assets'
+import { BanIcon, DropdownIcon, PackageIcon, XIcon } from '@lumen/assets'
 import { useQuery } from '@tanstack/vue-query'
 import { computed, ref, watch } from 'vue'
 
 import { defineMessages, useVIntl } from '../../composables/i18n'
-import { injectModrinthClient } from '../../providers'
+import { injectLumenClient } from '../../providers'
 import {
 	type DependencyType,
 	type FilterValue,
@@ -162,7 +162,7 @@ import ProjectCombobox, {
 const FILTER_TYPE_ID = 'compatible_dependency_project_ids'
 
 const { formatMessage } = useVIntl()
-const { labrinth } = injectModrinthClient()
+const { labrinth } = injectLumenClient()
 
 const selectedFilters = defineModel<FilterValue[]>('selectedFilters', { required: true })
 

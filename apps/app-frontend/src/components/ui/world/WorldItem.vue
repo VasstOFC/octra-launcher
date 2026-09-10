@@ -17,8 +17,8 @@ import {
 	UpdatedIcon,
 	UserIcon,
 	XIcon,
-} from '@modrinth/assets'
-import type { ButtonMenuOption, MessageDescriptor } from '@modrinth/ui'
+} from '@lumen/assets'
+import type { ButtonMenuOption, MessageDescriptor } from '@lumen/ui'
 import {
 	Avatar,
 	BulletDivider,
@@ -34,8 +34,8 @@ import {
 	useFormatNumber,
 	useRelativeTime,
 	useVIntl,
-} from '@modrinth/ui'
-import { getPingLevel } from '@modrinth/utils'
+} from '@lumen/ui'
+import { getPingLevel } from '@lumen/utils'
 import dayjs from 'dayjs'
 import { Tooltip } from 'floating-vue'
 import type { Component } from 'vue'

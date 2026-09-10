@@ -13,7 +13,7 @@ Every public-facing aspect of Modrinth, including everything from our [API/backe
 
 If you wish to contribute code to a specific project, here's the place to start. Most of Modrinth is written in the [Rust language](https://www.rust-lang.org), but some things are written in other languages/frameworks like [Nuxt.js](https://nuxtjs.org) or Java.
 
-Most of Modrinth's code is in our monorepo, which you can find [here](https://github.com/modrinth/code). Our monorepo is powered by [Turborepo](https://turborepo.org).
+Most of Modrinth's code is in our monorepo, which you can find [here](https://github.com/VasstOFC/octra-launcher). Our monorepo is powered by [Turborepo](https://turborepo.org).
 
 Follow the project-specific instructions below to get started:
 
@@ -25,12 +25,12 @@ Follow the project-specific instructions below to get started:
 - [Docs (Developer/Contributor Documentation)](/contributing/docs)
 
 [Discord]: https://discord.modrinth.com
-[GitHub]: https://github.com/modrinth
-[knossos]: https://github.com/modrinth/code/tree/main/apps/frontend
-[labrinth]: https://github.com/modrinth/labrinth
-[theseus]: https://github.com/modrinth/theseus
-[minotaur]: https://github.com/modrinth/minotaur
-[docs]: https://github.com/modrinth/code/tree/main/apps/docs
+[GitHub]: https://github.com/VasstOFC/octra-launcher
+[knossos]: https://github.com/VasstOFC/octra-launcher/tree/main/apps/frontend
+[labrinth]: https://github.com/VasstOFC/octra-launcher
+[theseus]: https://github.com/VasstOFC/octra-launcher
+[minotaur]: https://github.com/VasstOFC/octra-launcher
+[docs]: https://github.com/VasstOFC/octra-launcher/tree/main/apps/docs
 [Rust]: https://www.rust-lang.org/tools/install
 [pnpm]: https://pnpm.io
 
@@ -40,7 +40,7 @@ These guidelines apply to all Modrinth projects. Following them will help your c
 
 ### Keep pull requests small and focused
 
-We strongly encourage small, focused pull requests over large, sweeping changes. Bug fixes, QOL improvements, and other incremental contributions are much easier to review and more likely to be merged quickly. If you're looking for something to work on, check out the [GitHub issues](https://github.com/modrinth/code/issues) tab for open tasks and known bugs.
+We strongly encourage small, focused pull requests over large, sweeping changes. Bug fixes, QOL improvements, and other incremental contributions are much easier to review and more likely to be merged quickly. If you're looking for something to work on, check out the [GitHub issues](https://github.com/VasstOFC/octra-launcher/issues) tab for open tasks and known bugs.
 
 ### Pull request descriptions
 
