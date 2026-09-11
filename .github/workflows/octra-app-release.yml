@@ -69,11 +69,34 @@ jobs:
       - name: Prepare installer payload
         shell: pwsh
         run: |
-          $appExe = Get-ChildItem 'target/release' -Filter 'Octra App.exe' -ErrorAction SilentlyContinue | Select-Object -First 1
-          if (-not $appExe) {
-            $appExe = Get-ChildItem 'apps/app/target/release' -Filter 'Octra App.exe' | Select-Object -First 1
+          function Find-ReleaseExe([string[]]$Names) {
+            $dirs = @(
+              'target/release',
+              'apps/app/target/release'
+            )
+            foreach ($dir in $dirs) {
+              if (-not (Test-Path $dir)) { continue }
+              foreach ($name in $Names) {
+                $hit = Get-ChildItem $dir -Filter $name -ErrorAction SilentlyContinue | Select-Object -First 1
+                if ($hit) { return $hit }
+              }
+            }
+            return $null
           }
-          if (-not $appExe) { throw 'Octra App.exe not found in target/release' }
+
+          $appExe = Find-ReleaseExe @('Lumen App.exe', 'Octra App.exe')
+          if (-not $appExe) {
+            Write-Host 'Release dirs:'
+            @('target/release', 'apps/app/target/release') | ForEach-Object {
+              if (Test-Path $_) {
+                Get-ChildItem $_ -Filter '*.exe' | ForEach-Object { Write-Host $_.FullName }
+              } else {
+                Write-Host "missing: $_"
+              }
+            }
+            throw 'Lumen App.exe not found in target/release'
+          }
+          Write-Host "Using $($appExe.FullName)"
           New-Item -ItemType Directory -Force -Path 'apps/installer/resources/payload' | Out-Null
           $payloadZip = Join-Path $PWD 'apps/installer/resources/payload/app.zip'
           if (Test-Path $payloadZip) { Remove-Item $payloadZip -Force }
@@ -92,27 +115,40 @@ jobs:
       - name: Verify Octra Setup payload
         shell: pwsh
         run: |
-          $setup = Get-ChildItem 'target/release' -Filter 'Octra Setup.exe' -ErrorAction SilentlyContinue | Select-Object -First 1
-          if (-not $setup) {
-            $setup = Get-ChildItem 'apps/installer/target/release' -Filter 'Octra Setup.exe' | Select-Object -First 1
+          function Find-SetupExe {
+            $dirs = @('target/release', 'apps/installer/target/release')
+            foreach ($dir in $dirs) {
+              if (-not (Test-Path $dir)) { continue }
+              foreach ($name in @('Lumen Setup.exe', 'Octra Setup.exe')) {
+                $hit = Get-ChildItem $dir -Filter $name -ErrorAction SilentlyContinue | Select-Object -First 1
+                if ($hit) { return $hit }
+              }
+            }
+            return $null
           }
-          if (-not $setup) { throw 'Octra Setup.exe not found after build' }
+          $setup = Find-SetupExe
+          if (-not $setup) { throw 'Lumen Setup.exe not found after build' }
           $setupSize = $setup.Length
           if ($setupSize -lt 15MB) {
-            throw "Octra Setup.exe is too small ($setupSize bytes) — app.zip was not embedded"
+            throw "$($setup.Name) is too small ($setupSize bytes) — app.zip was not embedded"
           }
-          Write-Host "Octra Setup.exe size OK ($([math]::Round($setupSize / 1MB, 2)) MB)"
+          Write-Host "$($setup.Name) size OK ($([math]::Round($setupSize / 1MB, 2)) MB)"
 
       - name: Pack release assets
         shell: pwsh
         run: |
           $nsis = 'target/release/bundle/nsis'
           if (-not (Test-Path $nsis)) { $nsis = 'apps/app/target/release/bundle/nsis' }
-          $setup = Get-ChildItem 'target/release' -Filter 'Octra Setup.exe' -ErrorAction SilentlyContinue | Select-Object -First 1
-          if (-not $setup) {
-            $setup = Get-ChildItem 'apps/installer/target/release' -Filter 'Octra Setup.exe' | Select-Object -First 1
+          $setup = $null
+          foreach ($dir in @('target/release', 'apps/installer/target/release')) {
+            if (-not (Test-Path $dir)) { continue }
+            foreach ($name in @('Lumen Setup.exe', 'Octra Setup.exe')) {
+              $setup = Get-ChildItem $dir -Filter $name -ErrorAction SilentlyContinue | Select-Object -First 1
+              if ($setup) { break }
+            }
+            if ($setup) { break }
           }
-          if (-not $setup) { throw 'Octra Setup.exe not found in target/release' }
+          if (-not $setup) { throw 'Lumen Setup.exe not found in target/release' }
           $out = 'dist-installer'
           New-Item -ItemType Directory -Force -Path $out | Out-Null
           Copy-Item $setup.FullName "$out/Octra-setup.exe"
