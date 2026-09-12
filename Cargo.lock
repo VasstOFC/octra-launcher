@@ -5856,6 +5856,26 @@ dependencies = [
 ]
 
 [[package]]
+name = "lumen-installer"
+version = "1.0.0-local"
+dependencies = [
+ "directories",
+ "serde",
+ "serde_json",
+ "tauri",
+ "tauri-build",
+ "tauri-plugin-dialog",
+ "tauri-plugin-opener",
+ "thiserror 2.0.17",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+ "windows",
+ "winreg 0.55.0",
+ "zip 6.0.0",
+]
+
+[[package]]
 name = "lumen-log"
 version = "0.0.0"
 dependencies = [
@@ -6808,26 +6828,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ff76201f031d8863c38aa7f905eca4f53abbfa15f609db4277d44cd8938f33fe"
 dependencies = [
  "memchr",
-]
-
-[[package]]
-name = "octra-installer"
-version = "1.0.0-local"
-dependencies = [
- "directories",
- "serde",
- "serde_json",
- "tauri",
- "tauri-build",
- "tauri-plugin-dialog",
- "tauri-plugin-opener",
- "thiserror 2.0.17",
- "tokio",
- "tracing",
- "tracing-subscriber",
- "windows",
- "winreg 0.55.0",
- "zip 6.0.0",
 ]
 
 [[package]]

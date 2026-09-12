@@ -140,7 +140,7 @@ fn resolve_payload(app: &AppHandle) -> Result<PathBuf, InstallError> {
 	];
 	for dev_exe in dev_candidates {
 		if dev_exe.is_file() {
-			let temp_zip = std::env::temp_dir().join("octra-dev-payload.zip");
+			let temp_zip = std::env::temp_dir().join("lumen-dev-payload.zip");
 			create_zip_from_exe(&dev_exe, &temp_zip)?;
 			return Ok(temp_zip);
 		}
@@ -159,7 +159,7 @@ fn materialize_embedded_payload() -> Result<Option<PathBuf>, InstallError> {
 		return Ok(None);
 	}
 
-	let path = std::env::temp_dir().join("octra-installer-payload.zip");
+	let path = std::env::temp_dir().join("lumen-installer-payload.zip");
 	fs::write(&path, PAYLOAD)?;
 	Ok(Some(path))
 }

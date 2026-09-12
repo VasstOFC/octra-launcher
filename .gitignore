@@ -91,7 +91,7 @@ apps/frontend/src/public/robots.txt
 # Oh My Code
 .omc/
 
-# Local caches / Tauri temp (Octra App)
+# Local caches / Tauri temp (Lumen App)
 .tmp/
 packages/app-lib/java/bin/
 

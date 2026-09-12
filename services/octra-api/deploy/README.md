@@ -128,7 +128,7 @@ openssl rand -hex 32   # JWT_SECRET
 openssl rand -hex 16   # API_KEY (opcjonalnie, dla starych launcherów)
 ```
 
-`API_KEY` is optional (legacy `X-Octra-Key` uploads). Current Octra App builds use Bearer JWT and do **not** embed an API key. For transitional/dev builds only, set env `LUMEN_SKINS_API_KEY` on the client to match this `API_KEY`.
+`API_KEY` is optional (legacy `X-Octra-Key` uploads). Current Lumen App builds use Bearer JWT and do **not** embed an API key. For transitional/dev builds only, set env `LUMEN_SKINS_API_KEY` on the client to match this `API_KEY`.
 
 Optional featured pack CMS: host `GET /featured-pack.json` on the same origin as the skins API, for example:
 

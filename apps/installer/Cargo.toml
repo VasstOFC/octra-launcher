@@ -1,8 +1,8 @@
 [package]
-name = "octra-installer"
+name = "lumen-installer"
 version = "1.0.0-local"
 edition.workspace = true
-description = "Octra App custom installer"
+description = "Lumen App custom installer"
 publish = false
 
 [dependencies]

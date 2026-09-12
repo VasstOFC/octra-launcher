@@ -1,6 +1,6 @@
 <template>
 	<img
-		src="@/assets/brand/octra-mark.png"
+		src="@/assets/brand/lumen-mark.png"
 		alt=""
 		aria-hidden="true"
 		draggable="false"

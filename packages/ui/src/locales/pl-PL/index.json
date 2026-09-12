@@ -2982,16 +2982,16 @@
     "defaultMessage": "Otrzymuj aktualizacje plików, gdy zmienione są na serwerze"
   },
   "modal.open-in-app.get-app": {
-    "defaultMessage": "Pobierz Octra App"
+    "defaultMessage": "Pobierz Lumen App"
   },
   "modal.open-in-app.opening-automatically": {
-    "defaultMessage": "Octra App zostanie otwarte automatycznie..."
+    "defaultMessage": "Lumen App zostanie otwarte automatycznie..."
   },
   "modal.open-in-app.title": {
-    "defaultMessage": "Otwieranie Octra App"
+    "defaultMessage": "Otwieranie Lumen App"
   },
   "modal.open-in-app.why-use": {
-    "defaultMessage": "Czemu warto używać Octra App"
+    "defaultMessage": "Czemu warto używać Lumen App"
   },
   "notification.error.title": {
     "defaultMessage": "Wystąpił błąd"
@@ -5247,7 +5247,7 @@
     "defaultMessage": "Nowy serwer"
   },
   "servers.list-empty.no-servers-description": {
-    "defaultMessage": "Instaluj modyfikacje, zapraszaj znajomych i graj z nimi przy użyciu Octra App."
+    "defaultMessage": "Instaluj modyfikacje, zapraszaj znajomych i graj z nimi przy użyciu Lumen App."
   },
   "servers.list-empty.one-click-mod-installs-description": {
     "defaultMessage": "Wybierz swoje ulubione mody, a my zajmiemy się resztą."
@@ -5256,7 +5256,7 @@
     "defaultMessage": "Instalacja modyfikacji za jednym kliknięciem"
   },
   "servers.list-empty.play-with-friends-description": {
-    "defaultMessage": "Zaproś znajomych do gry na swoim serwerze jednym kliknięciem z Octra App."
+    "defaultMessage": "Zaproś znajomych do gry na swoim serwerze jednym kliknięciem z Lumen App."
   },
   "servers.list-empty.play-with-friends-title": {
     "defaultMessage": "Graj z przyjaciółmi"
@@ -5790,7 +5790,7 @@
     "defaultMessage": "Ciemny"
   },
   "settings.display.theme.description": {
-    "defaultMessage": "Wybierz preferowany motyw kolorystyczny dla Octra App."
+    "defaultMessage": "Wybierz preferowany motyw kolorystyczny dla Lumen App."
   },
   "settings.display.theme.light": {
     "defaultMessage": "Jasny"
@@ -5835,7 +5835,7 @@
     "defaultMessage": "Wyniki wyszukiwania"
   },
   "settings.language.coverage.app-tooltip": {
-    "defaultMessage": "Około {percentage}% Octra App jest dostępne w tym języku."
+    "defaultMessage": "Około {percentage}% Lumen App jest dostępne w tym języku."
   },
   "settings.language.coverage.label": {
     "defaultMessage": "{percentage}% obsługiwane"

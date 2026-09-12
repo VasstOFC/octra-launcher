@@ -1,4 +1,4 @@
-//! Octra App identity (workspace folder is still "Nervia App").
+//! Lumen App identity (workspace folder is still "Nervia App").
 //!
 //! Minecraft sign-in uses the Xbox SISU flow. Catalog still talks to Modrinth.
 //! Octra accounts use the VPS at [`SKINS_URL`] (register/login + JWT skin uploads).

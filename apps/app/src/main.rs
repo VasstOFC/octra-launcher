@@ -161,7 +161,7 @@ async fn check_setup_update(version: String) -> api::Result<Option<SetupUpdateIn
     use tauri_plugin_http::reqwest::{ClientBuilder, Url};
 
     let url_string = format!(
-        "https://github.com/VasstOFC/octra-launcher/releases/download/v{version}/Octra-setup.exe"
+        "https://github.com/VasstOFC/octra-launcher/releases/download/v{version}/Lumen-setup.exe"
     );
     let url: Url = url_string
         .parse()
@@ -352,7 +352,7 @@ fn main() {
 
     let _log_guard = theseus::start_logger(&tauri_context.config().identifier);
 
-    tracing::info!("Initialized tracing subscriber. Loading Octra App!");
+    tracing::info!("Initialized tracing subscriber. Loading Lumen App!");
 
     let mut builder = tauri::Builder::default();
 
@@ -636,7 +636,7 @@ fn main() {
                     DialogBuilder::message()
                         .set_level(MessageLevel::Error)
                         .set_title("Initialization error")
-                        .set_text("Your Microsoft Edge WebView2 installation is corrupt.\n\nMicrosoft Edge WebView2 is required to run Octra App.\n\nInstall or repair WebView2 from Microsoft, then try again.")
+                        .set_text("Your Microsoft Edge WebView2 installation is corrupt.\n\nMicrosoft Edge WebView2 is required to run Lumen App.\n\nInstall or repair WebView2 from Microsoft, then try again.")
                         .alert()
                         .show()
                         .unwrap();

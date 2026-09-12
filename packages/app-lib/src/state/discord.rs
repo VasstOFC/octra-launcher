@@ -71,9 +71,9 @@ impl DiscordGuard {
         }
 
         let activity = Activity::new()
-            .details("Octra App")
+            .details("Lumen App")
             .state(msg)
-            .assets(Assets::new().large_text("Octra App"));
+            .assets(Assets::new().large_text("Lumen App"));
 
         // Attempt to set the activity
         // If the existing connection fails, attempt to reconnect and try again

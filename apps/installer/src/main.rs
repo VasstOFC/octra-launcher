@@ -40,5 +40,5 @@ fn main() {
 			Ok(())
 		})
 		.run(tauri::generate_context!())
-		.expect("error while running Octra installer");
+		.expect("error while running Lumen installer");
 }

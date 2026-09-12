@@ -8,7 +8,7 @@
 		<div class="login-drag-bar" data-tauri-drag-region />
 		<div class="relative flex flex-col items-center gap-6 w-full max-w-sm px-6 login-card">
 			<div class="flex items-center gap-3" data-tauri-drag-region>
-				<img src="@/assets/brand/octra-mark.png" alt="" class="h-8 w-8" />
+				<img src="@/assets/brand/lumen-mark.png" alt="" class="h-8 w-8" />
 				<span class="text-lg font-bold text-contrast">Lumen App</span>
 			</div>
 

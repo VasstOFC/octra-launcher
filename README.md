@@ -1,4 +1,4 @@
-# Octra App
+# Lumen App
 
 Minecraft launcher based on [Modrinth Theseus](https://github.com/VasstOFC/octra-launcher). Catalog still uses Modrinth's API.
 
@@ -9,7 +9,7 @@ pnpm install
 pnpm app:dev
 ```
 
-Windows installer: **Actions → Octra App update** on this repo (branch `app`) builds `Octra-setup.exe`. Needs GitHub secret `TAURI_SIGNING_PRIVATE_KEY`. After you rename the repo to `octra-app`, old `octra-launcher` download URLs keep working via GitHub redirect.
+Windows installer: **Actions → Lumen App update** on this repo (branch `app`) builds `Lumen-setup.exe`. Needs GitHub secret `TAURI_SIGNING_PRIVATE_KEY`. After you rename the repo to `octra-app`, old `octra-launcher` download URLs keep working via GitHub redirect.
 
 ## Upstream (Modrinth monorepo)
 

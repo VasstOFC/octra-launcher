@@ -25,7 +25,7 @@ const APP_TITLE_BAR_HEIGHT: f32 = 48.0;
 pub(super) const OCCLUDED_AREA_THRESHOLD: f64 = 0.5;
 
 fn should_show_ads_webview(state: &AdsState) -> bool {
-    // Octra App does not serve ads.
+    // Lumen App does not serve ads.
     let _ = state;
     false
 }
