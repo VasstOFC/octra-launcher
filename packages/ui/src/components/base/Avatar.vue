@@ -291,6 +291,11 @@ function hash(str: string): number {
 	width: var(--_override-size, var(--_size));
 	min-height: var(--_override-size, var(--_size));
 	min-width: var(--_override-size, var(--_size));
+	transition: opacity 0.2s ease-in-out;
+
+	&.detecting {
+		opacity: 0;
+	}
 
 	&.circle {
 		border-radius: 50%;
@@ -306,10 +311,6 @@ function hash(str: string): number {
 
 	&.pixelated {
 		image-rendering: pixelated;
-	}
-
-	&.detecting {
-		visibility: hidden;
 	}
 
 	&.padded {

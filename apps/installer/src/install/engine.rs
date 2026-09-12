@@ -31,6 +31,9 @@ pub enum InstallError {
 }
 
 pub fn default_install_dir() -> PathBuf {
+	// Wbudowany updater (NSIS) jest kierowany do tego katalogu wpisem
+	// w rejestrze (steer_nsis_updates_to), więc update podmienia działającą
+	// aplikację zamiast tworzyć drugą kopię obok.
 	directories::BaseDirs::new()
 		.map(|dirs| {
 			dirs.home_dir()
@@ -53,8 +56,10 @@ pub async fn run_install(app: &AppHandle, options: InstallOptions) -> Result<(),
 	};
 
 	emit("prepare", 0.05, "Przygotowywanie instalacji…");
-	cleanup_legacy_installs()?;
+	// Najpierw ubijamy procesy (pliki exe są zablokowane dopóki działają),
+	// dopiero potem usuwamy stare katalogi.
 	kill_running_apps()?;
+	cleanup_legacy_installs(&options.install_dir)?;
 
 	emit("extract", 0.2, "Kopiowanie plików…");
 	let payload = resolve_payload(app)?;
@@ -242,6 +247,8 @@ fn remove_shortcuts() -> Result<(), InstallError> {
 		let _ = fs::remove_file(desktop_dir()?.join(format!("{APP_DISPLAY_NAME}.lnk")));
 		let _ = fs::remove_file(start_menu_programs_dir()?.join("Octra Launcher.lnk"));
 		let _ = fs::remove_file(desktop_dir()?.join("Octra Launcher.lnk"));
+		let _ = fs::remove_file(start_menu_programs_dir()?.join("Octra App.lnk"));
+		let _ = fs::remove_file(desktop_dir()?.join("Octra App.lnk"));
 	}
 	Ok(())
 }
@@ -270,6 +277,10 @@ fn register_uninstall(install_dir: &Path) -> Result<(), InstallError> {
 		key.set_value("InstallLocation", &install_dir.to_string_lossy().to_string())?;
 		key.set_value("DisplayIcon", &app_exe.to_string_lossy().to_string())?;
 		key.set_value("Publisher", &"Lumen")?;
+
+		// Kierujemy przyszłe instalacje NSIS (w tym silent update'y z updatera)
+		// do tego samego katalogu, żeby update podmieniał działającą aplikację.
+		steer_nsis_updates_to(install_dir);
 	}
 	#[cfg(not(windows))]
 	{
@@ -292,17 +303,62 @@ fn remove_uninstall_registry() -> Result<(), InstallError> {
 	Ok(())
 }
 
-fn cleanup_legacy_installs() -> Result<(), InstallError> {
+/// Klucz rejestru, z którego szablon NSIS Tauri (installMode: currentUser)
+/// odczytuje poprzednią lokalizację instalacji (`RestorePreviousInstallLocation`).
+/// MANUFACTURER w szablonie = `bundle.publisher`, a gdy go brak —
+/// drugi człon identyfikatora lub cały identyfikator. U nas publisher jest pusty,
+/// a identyfikator to "OctraApp" (bez kropki), więc MANUFACTURER = "OctraApp".
+/// Zmiana identyfikatora lub ustawienie bundle.publisher wymaga aktualizacji tej stałej!
+#[cfg(windows)]
+const NSIS_RESTORE_KEY: &str = r"Software\OctraApp\Lumen App";
+
+/// Zapisuje katalog instalacji tak, żeby przyszłe instalacje NSIS
+/// (w tym silent update'y z wbudowanego updatera) trafiały w to samo miejsce.
+/// Idempotentne: zapis tylko gdy wartość jest inna lub brak. Błędy ignorowane.
+#[cfg(windows)]
+fn steer_nsis_updates_to(install_dir: &Path) {
+	use winreg::{RegKey, enums::*};
+
+	let Ok((key, _)) = RegKey::predef(HKEY_CURRENT_USER).create_subkey(NSIS_RESTORE_KEY) else {
+		return;
+	};
+	let current: String = key.get_value("").unwrap_or_default();
+	if current.to_lowercase() != install_dir.to_string_lossy().to_lowercase() {
+		let _ = key.set_value("", &install_dir.to_string_lossy().to_string());
+	}
+}
+
+fn cleanup_legacy_installs(install_dir: &Path) -> Result<(), InstallError> {
 	#[cfg(windows)]
 	{
 		let _ = fs::remove_file(desktop_dir()?.join("Octra Launcher.lnk"));
 		let _ = fs::remove_file(start_menu_programs_dir()?.join("Octra Launcher.lnk"));
-		let legacy_dir = directories::BaseDirs::new()
-			.map(|dirs| dirs.home_dir().join("AppData/Local/Octra Launcher"))
-			.unwrap_or_default();
-		if legacy_dir.is_dir() {
-			let _ = fs::remove_dir_all(legacy_dir);
+		let _ = fs::remove_file(desktop_dir()?.join("Octra App.lnk"));
+		let _ = fs::remove_file(start_menu_programs_dir()?.join("Octra App.lnk"));
+
+		if let Some(base_dirs) = directories::BaseDirs::new() {
+			let local_app_data = base_dirs.home_dir().join("AppData/Local");
+			// Katalogi poprzednich instalacji, które nie dostaną już aktualizacji
+			// (updater NSIS jest sterowany wpisem z steer_nsis_updates_to).
+			let legacy_dirs = [
+				local_app_data.join("Octra Launcher"),
+				local_app_data.join("Octra App"),
+				local_app_data.join(APP_DISPLAY_NAME),
+			];
+			let target = install_dir.to_string_lossy().to_lowercase();
+			for legacy_dir in legacy_dirs {
+				// Nigdy nie usuwamy katalogu, do którego właśnie instalujemy.
+				if legacy_dir.is_dir()
+					&& legacy_dir.to_string_lossy().to_lowercase() != target
+				{
+					let _ = fs::remove_dir_all(legacy_dir);
+				}
+			}
 		}
+	}
+	#[cfg(not(windows))]
+	{
+		let _ = install_dir;
 	}
 	Ok(())
 }
@@ -310,7 +366,13 @@ fn cleanup_legacy_installs() -> Result<(), InstallError> {
 fn kill_running_apps() -> Result<(), InstallError> {
 	#[cfg(windows)]
 	{
-		for process in ["Lumen App.exe", "Octra Launcher.exe", "octra-launcher.exe"] {
+		for process in [
+			"Lumen App.exe",
+			"Octra App.exe",
+			"Modrinth App.exe",
+			"Octra Launcher.exe",
+			"octra-launcher.exe",
+		] {
 			let _ = Command::new("taskkill").args(["/F", "/IM", process]).status();
 		}
 	}

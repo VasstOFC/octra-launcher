@@ -7,6 +7,7 @@ import { useInstaller } from '@/composables/use-installer'
 
 const {
 	step,
+	mode,
 	installDir,
 	desktopShortcut,
 	launchAfter,
@@ -18,6 +19,13 @@ const {
 	startInstall,
 	closeInstaller,
 } = useInstaller()
+
+const freshSteps = ['welcome', 'destination', 'options'] as const
+const isFreshWizardStep = computed(
+	() =>
+		mode.value?.mode !== 'update' &&
+		(step.value === 'welcome' || step.value === 'destination' || step.value === 'options'),
+)
 
 const canGoBack = computed(
 	() => step.value === 'destination' || step.value === 'options',
@@ -64,6 +72,14 @@ function goNext() {
 		</header>
 
 		<main class="installer-shell__content">
+			<nav v-if="isFreshWizardStep" class="installer-steps" aria-hidden="true">
+				<span
+					v-for="wizardStep in freshSteps"
+					:key="wizardStep"
+					class="installer-steps__dot"
+					:class="{ 'installer-steps__dot--active': step === wizardStep }"
+				/>
+			</nav>
 			<section v-if="step === 'welcome'">
 				<h1 class="installer-step-title">Witaj w Lumen App</h1>
 				<p class="installer-step-desc">
@@ -107,6 +123,34 @@ function goNext() {
 				<p class="installer-progress-copy">{{ statusMessage }}</p>
 			</section>
 
+			<section v-else-if="step === 'updating'">
+				<h1 class="installer-step-title">Aktualizowanie…</h1>
+				<p class="installer-step-desc">
+					Nowa wersja jest gotowa — podmieniamy pliki Lumen App. Nie zamykaj tego okna.
+				</p>
+				<ProgressBar class="mt-6" :progress="progress" />
+				<p class="installer-progress-copy">{{ statusMessage }}</p>
+			</section>
+
+			<section v-else-if="step === 'updated'">
+				<h1 class="installer-step-title">Zaktualizowano!</h1>
+				<p class="installer-step-desc">
+					Lumen App została zaktualizowana. Uruchamiamy aplikację…
+				</p>
+			</section>
+
+			<section v-else-if="step === 'update-error'">
+				<h1 class="installer-step-title">Aktualizacja nie powiodła się</h1>
+				<p class="installer-error">{{ error }}</p>
+				<button
+					type="button"
+					class="installer-btn installer-btn--primary mt-6"
+					@click="closeInstaller"
+				>
+					Zamknij
+				</button>
+			</section>
+
 			<section v-else>
 				<h1 class="installer-step-title">Gotowe!</h1>
 				<p class="installer-step-desc">
@@ -117,7 +161,7 @@ function goNext() {
 			</section>
 		</main>
 
-		<footer class="installer-shell__footer">
+		<footer v-if="mode?.mode !== 'update'" class="installer-shell__footer">
 			<div>
 				<button
 					v-if="canGoBack"

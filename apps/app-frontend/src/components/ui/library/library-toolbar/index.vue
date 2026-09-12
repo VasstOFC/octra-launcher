@@ -8,7 +8,8 @@ import NewGroupModal from '@/components/ui/library/library-toolbar/new-group-mod
 import SortMenu from '@/components/ui/library/library-toolbar/sort-menu.vue'
 import { useLibrary } from '@/components/ui/library/use-library'
 
-const { search, selectedLibraryInstances, openNewGroupModal } = useLibrary()
+const { searchInput, setSearchInput, selectedLibraryInstances, openNewGroupModal } =
+	useLibrary()
 const showCreationModal = inject<() => void>('showCreationModal')
 const { formatMessage } = useVIntl()
 const messages = defineMessages({
@@ -27,30 +28,28 @@ function openNewGroup() {
 </script>
 
 <template>
-	<div class="flex flex-col gap-2">
-		<div class="flex flex-wrap gap-2">
-			<Input
-				v-model="search"
-				:icon="SearchIcon"
-				type="text"
-				:placeholder="formatMessage(messages.search)"
-				clearable
-				wrapper-class="min-w-[16rem] flex-1"
-			/>
-			<Button @click="openNewGroup">
-				<SquarePlusIcon />
-				{{ formatMessage(messages.newGroup) }}
-			</Button>
-			<Button type="colored" color="brand" @click="showCreationModal?.()">
-				<PlusIcon />
-				{{ formatMessage(messages.newInstance) }}
-			</Button>
-		</div>
-		<div class="flex flex-wrap items-center gap-2">
-			<SortMenu />
-			<div class="mx-2 h-6 w-px bg-surface-5" />
-			<FilterMenu />
-		</div>
+	<div class="flex flex-wrap items-center gap-2">
+		<Input
+			:model-value="searchInput"
+			:icon="SearchIcon"
+			type="text"
+			:placeholder="formatMessage(messages.search)"
+			clearable
+			wrapper-class="min-w-[12rem] flex-1"
+			@update:model-value="(value: string) => setSearchInput(value)"
+		/>
+		<SortMenu />
+		<div class="mx-1 h-6 w-px bg-surface-5 max-sm:hidden" />
+		<FilterMenu />
+		<div class="mx-1 h-6 w-px bg-surface-5 max-sm:hidden" />
+		<Button @click="openNewGroup">
+			<SquarePlusIcon />
+			{{ formatMessage(messages.newGroup) }}
+		</Button>
+		<Button type="colored" color="brand" @click="showCreationModal?.()">
+			<PlusIcon />
+			{{ formatMessage(messages.newInstance) }}
+		</Button>
 	</div>
 	<NewGroupModal />
 </template>

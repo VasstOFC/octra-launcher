@@ -1,4 +1,3 @@
-import type { Labrinth } from '@lumen/api-client'
 import {
 	ClipboardCopyIcon,
 	EditIcon,
@@ -17,7 +16,6 @@ import type { ButtonMenuLeafOption, ButtonMenuOption } from '@lumen/ui'
 import { defineMessages, formatLoader, injectNotificationManager, useVIntl } from '@lumen/ui'
 import { open as openDialog } from '@tauri-apps/plugin-dialog'
 import { useEventListener, useStorage } from '@vueuse/core'
-import dayjs from 'dayjs'
 import {
 	computed,
 	inject,
@@ -27,11 +25,20 @@ import {
 	type Ref,
 	ref,
 	watch,
-	watchEffect,
 } from 'vue'
 
+import { useLibrarySearch } from '@/components/ui/library/composables/use-library-search'
+import { useLibrarySelection } from '@/components/ui/library/composables/use-library-selection'
+import { useLibraryServerTypes } from '@/components/ui/library/composables/use-library-server-types'
+import { useLibraryTimestamps } from '@/components/ui/library/composables/use-library-timestamps'
+import {
+	type ActiveInstanceGroupDrag,
+	getLibraryInstanceSelectionKey,
+	type InstanceCard,
+	type InstanceGroup,
+	type LibraryInstanceSelection,
+} from '@/components/ui/library/library-types'
 import { trackEvent } from '@/helpers/analytics'
-import { get_project_v3_many } from '@/helpers/cache.js'
 import { toError } from '@/helpers/errors'
 import { install_duplicate_instance } from '@/helpers/install'
 import { edit, edit_icon, remove } from '@/helpers/instance'
@@ -47,6 +54,14 @@ import {
 	set_group_order as setInstanceGroupOrder,
 } from '@/helpers/instance-groups'
 import type { GameInstance, InstanceIconConfig } from '@/helpers/types'
+
+export type {
+	ActiveInstanceGroupDrag,
+	InstanceCard,
+	InstanceGroup,
+	LibraryInstanceSelection,
+} from '@/components/ui/library/library-types'
+export { getLibraryInstanceSelectionKey } from '@/components/ui/library/library-types'
 
 export const librarySortOptions = [
 	'Name',
@@ -81,36 +96,6 @@ const libraryLoaderPriority: Record<string, number> = {
 export type LibrarySort = (typeof librarySortOptions)[number]
 export type LibraryGroupBy = (typeof libraryGroupOptions)[number]['value']
 export type LibraryFilters = Record<'instanceType' | 'gameVersion' | 'loader', string[]>
-
-export type InstanceGroup = {
-	id: string
-	key: string
-	instances: GameInstance[]
-}
-
-export type LibraryInstanceSelection = {
-	instanceId: string
-	groupId: string
-}
-
-export type ActiveInstanceGroupDrag = {
-	instances: LibraryInstanceSelection[]
-	primaryInstanceId: string
-	fromGroup: string | null
-}
-
-export const getLibraryInstanceSelectionKey = ({ instanceId, groupId }: LibraryInstanceSelection) =>
-	JSON.stringify([groupId, instanceId])
-
-export type InstanceCard = {
-	instance: GameInstance
-	playing: boolean
-	play: (event: MouseEvent | null, context: string) => Promise<void>
-	stop: (event: MouseEvent | null, context: string) => Promise<void>
-	addContent: () => Promise<void>
-	seeInstance: () => Promise<void>
-	openFolder: () => Promise<void>
-}
 
 type InstanceContextMenu = {
 	open: (event: MouseEvent, options: ButtonMenuOption[]) => void
@@ -177,11 +162,39 @@ const instanceActionMessages = defineMessages({
 	},
 })
 
+const instanceDragMessages = defineMessages({
+	alreadyInGroup: {
+		id: 'app.library.drag.already-in-group',
+		defaultMessage: 'Already in this group',
+	},
+	duplicateIntoGroup: {
+		id: 'app.library.drag.duplicate-into-group',
+		defaultMessage: 'Duplicate into group',
+	},
+	duplicateInstancesIntoGroup: {
+		id: 'app.library.drag.duplicate-instances-into-group',
+		defaultMessage: 'Duplicate {count, plural, one {# instance} other {# instances}} to group',
+	},
+	duplicateToGroup: {
+		id: 'app.library.drag.duplicate-to-group',
+		defaultMessage: 'Duplicate to group',
+	},
+})
+
 function createLibraryState(instances: Ref<GameInstance[]>) {
 	const { handleError } = injectNotificationManager()
 	const { formatMessage } = useVIntl()
 
-	const search = ref('')
+	const { searchInput, search, setSearchInput, isSearching } = useLibrarySearch()
+	const {
+		selectedLibraryInstances,
+		isLibraryInstanceSelectionActive,
+		clearLibraryInstanceSelection,
+		setSelectedLibraryInstances,
+		toggleLibraryInstanceSelection,
+	} = useLibrarySelection()
+	const { refreshServerTypes, getInstanceType } = useLibraryServerTypes()
+	const { timestamps: instanceTimestamps } = useLibraryTimestamps(instances)
 	const filters = useStorage<LibraryFilters>(
 		'Instances-grid-filters',
 		{
@@ -192,7 +205,6 @@ function createLibraryState(instances: Ref<GameInstance[]>) {
 		localStorage,
 		{ mergeDefaults: true },
 	)
-	const serverProjectIds = ref(new Set<string>())
 	const libraryGroups = ref<InstanceGroupDefinition[]>([])
 	const libraryGroupsLoaded = ref(false)
 	const isNewGroupModalOpen = ref(false)
@@ -204,8 +216,6 @@ function createLibraryState(instances: Ref<GameInstance[]>) {
 	const groupInstancesSearch = ref('')
 	const selectedGroupInstanceIds = ref(new Set<string>())
 	const savingGroupInstances = ref(false)
-	const selectedLibraryInstances = ref(new Map<string, LibraryInstanceSelection>())
-	const isLibraryInstanceSelectionActive = computed(() => selectedLibraryInstances.value.size > 0)
 	const creatingGroup = ref(false)
 	const reorderingGroups = ref(false)
 	const groupIdPendingNameEdit = ref<string | null>(null)
@@ -257,7 +267,6 @@ function createLibraryState(instances: Ref<GameInstance[]>) {
 	}
 
 	const linkedInstances = computed(() => instances.value.filter((instance) => instance.link))
-	const isSearching = computed(() => search.value.length > 0)
 	const collapsedSectionKeys = computed(() => new Set(displayState.value.collapsedGroups))
 	const groupNames = computed(
 		() =>
@@ -342,42 +351,14 @@ function createLibraryState(instances: Ref<GameInstance[]>) {
 
 	void refreshGroups()
 
-	watchEffect(async () => {
-		const projectIds = [
-			...new Set(
-				linkedInstances.value.flatMap((instance) =>
-					instance.link?.project_id ? [instance.link.project_id] : [],
-				),
-			),
-		]
+	watch(
+		linkedInstances,
+		(currentLinkedInstances) => {
+			void refreshServerTypes(currentLinkedInstances)
+		},
+		{ immediate: true },
+	)
 
-		if (projectIds.length === 0) {
-			serverProjectIds.value = new Set()
-			return
-		}
-
-		try {
-			const projects = (await get_project_v3_many(
-				projectIds,
-				'must_revalidate',
-			)) as Array<Labrinth.Projects.v3.Project | null>
-			serverProjectIds.value = new Set(
-				projects
-					.filter(
-						(project): project is Labrinth.Projects.v3.Project => project?.minecraft_server != null,
-					)
-					.map((project) => project.id),
-			)
-		} catch {
-			serverProjectIds.value = new Set()
-		}
-	})
-
-	const getInstanceType = (instance: GameInstance) => {
-		if (!instance.link) return 'custom'
-		if (serverProjectIds.value.has(instance.link.project_id ?? '')) return 'server'
-		return 'modpack'
-	}
 	const getEffectiveInstanceGroupIds = (instance: GameInstance) =>
 		pendingInstanceGroupIds.value.get(instance.id) ?? instance.group_ids
 	const haveSameGroupIds = (first: string[], second: string[]) =>
@@ -422,6 +403,7 @@ function createLibraryState(instances: Ref<GameInstance[]>) {
 		const visibleInstances = filteredInstances.value.filter((instance) =>
 			instance.name.toLowerCase().includes(search.value.toLowerCase()),
 		)
+		const timestampCache = instanceTimestamps.value
 
 		switch (displayState.value.sortBy) {
 			case 'Name':
@@ -440,21 +422,32 @@ function createLibraryState(instances: Ref<GameInstance[]>) {
 				)
 				break
 			case 'Last played':
-				visibleInstances.sort((a, b) => dayjs(b.last_played ?? 0).diff(dayjs(a.last_played ?? 0)))
+				visibleInstances.sort(
+					(a, b) =>
+						(timestampCache.get(b.id)?.lastPlayed ?? 0) -
+						(timestampCache.get(a.id)?.lastPlayed ?? 0),
+				)
 				break
 			case 'Hours played':
 				visibleInstances.sort(
 					(a, b) =>
-						b.recent_time_played +
-						b.submitted_time_played -
-						(a.recent_time_played + a.submitted_time_played),
+						(timestampCache.get(b.id)?.hoursPlayed ?? 0) -
+						(timestampCache.get(a.id)?.hoursPlayed ?? 0),
 				)
 				break
 			case 'Date created':
-				visibleInstances.sort((a, b) => dayjs(b.created).diff(dayjs(a.created)))
+				visibleInstances.sort(
+					(a, b) =>
+						(timestampCache.get(b.id)?.created ?? 0) -
+						(timestampCache.get(a.id)?.created ?? 0),
+				)
 				break
 			case 'Date modified':
-				visibleInstances.sort((a, b) => dayjs(b.modified).diff(dayjs(a.modified)))
+				visibleInstances.sort(
+					(a, b) =>
+						(timestampCache.get(b.id)?.modified ?? 0) -
+						(timestampCache.get(a.id)?.modified ?? 0),
+				)
 				break
 		}
 
@@ -681,17 +674,20 @@ function createLibraryState(instances: Ref<GameInstance[]>) {
 			const isSourceGroup =
 				normalizeInstanceGroupId(target) === activeInstanceGroupDrag.value?.fromGroup
 			if (!isSourceGroup && !dropState.canDrop && dropState.alreadyInGroup) {
-				return 'Already in this group'
+				return formatMessage(instanceDragMessages.alreadyInGroup)
 			}
 			if (!dropState.canDrop || dropState.operation !== 'add') return
 
 			const count = new Set(
 				activeInstanceGroupDrag.value?.instances.map((selection) => selection.instanceId) ?? [],
 			).size
-			return count > 1 ? `Duplicate ${count} instances to group` : 'Duplicate into group'
+			if (count > 1) {
+				return formatMessage(instanceDragMessages.duplicateInstancesIntoGroup, { count })
+			}
+			return formatMessage(instanceDragMessages.duplicateIntoGroup)
 		}
 
-		if (isAddingInstanceToGroup.value) return 'Duplicate to group'
+		if (isAddingInstanceToGroup.value) return formatMessage(instanceDragMessages.duplicateToGroup)
 		return
 	})
 
@@ -945,40 +941,7 @@ function createLibraryState(instances: Ref<GameInstance[]>) {
 		selectedNewGroupInstanceIds.value = selectedIds
 	}
 
-	const clearLibraryInstanceSelection = () => {
-		selectedLibraryInstances.value = new Map()
-	}
-
 	watch(() => displayState.value.group, clearLibraryInstanceSelection)
-
-	const setSelectedLibraryInstances = (selections: Iterable<LibraryInstanceSelection>) => {
-		selectedLibraryInstances.value = new Map(
-			[...selections].map((selection) => [getLibraryInstanceSelectionKey(selection), selection]),
-		)
-	}
-
-	const toggleLibraryInstanceSelection = (selection: LibraryInstanceSelection) => {
-		const selectedInstances = new Map(selectedLibraryInstances.value)
-		const selectionKey = getLibraryInstanceSelectionKey(selection)
-
-		if (selectedInstances.has(selectionKey)) {
-			selectedInstances.delete(selectionKey)
-		} else {
-			selectedInstances.set(selectionKey, selection)
-		}
-
-		selectedLibraryInstances.value = selectedInstances
-	}
-
-	useEventListener(window, 'keydown', (event) => {
-		if (
-			event.key === 'Escape' &&
-			!event.defaultPrevented &&
-			isLibraryInstanceSelectionActive.value
-		) {
-			clearLibraryInstanceSelection()
-		}
-	})
 
 	const createGroup = async () => {
 		if (!canCreateGroup.value) return false
@@ -1223,6 +1186,16 @@ function createLibraryState(instances: Ref<GameInstance[]>) {
 			handleError(toError(error)),
 		)
 
+	const toggleInstanceFavorite = async (instance: GameInstance) => {
+		const isFavorite = instance.group_ids.includes(FAVORITES_GROUP_ID)
+		const nextGroupIds = isFavorite
+			? instance.group_ids.filter((groupId) => groupId !== FAVORITES_GROUP_ID)
+			: [...new Set([...instance.group_ids, FAVORITES_GROUP_ID])]
+		await edit(instance.id, { group_ids: nextGroupIds }).catch((error) =>
+			handleError(toError(error)),
+		)
+	}
+
 	const buildInstanceIconOptions = (item: InstanceCard): ButtonMenuLeafOption[] => [
 		{
 			id: item.instance.icon_path ? 'replace_icon' : 'select_icon',
@@ -1372,6 +1345,8 @@ function createLibraryState(instances: Ref<GameInstance[]>) {
 		libraryGroups,
 		libraryGroupsLoaded,
 		search,
+		searchInput,
+		setSearchInput,
 		isSearching,
 		filters,
 		displayState,
@@ -1432,6 +1407,7 @@ function createLibraryState(instances: Ref<GameInstance[]>) {
 		reorderGroups,
 		moveGroup,
 		deleteInstance,
+		toggleInstanceFavorite,
 		handleInstanceContextMenu,
 		handleInstanceIconSaved,
 	}

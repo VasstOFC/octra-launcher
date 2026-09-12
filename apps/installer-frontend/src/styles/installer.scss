@@ -13,9 +13,9 @@
 	inset: 0;
 	pointer-events: none;
 	background:
-		radial-gradient(circle at 20% 0%, rgba(196, 123, 198, 0.18), transparent 45%),
-		radial-gradient(circle at 80% 100%, rgba(160, 81, 162, 0.12), transparent 40%),
-		linear-gradient(180deg, #110915 0%, #17131c 100%);
+		radial-gradient(circle at 20% 0%, rgba(0, 212, 255, 0.12), transparent 45%),
+		radial-gradient(circle at 80% 100%, rgba(124, 58, 237, 0.14), transparent 40%),
+		linear-gradient(180deg, #0a0a0f 0%, #101019 100%);
 }
 
 .installer-shell__cube {
@@ -42,6 +42,7 @@
 	width: 2rem;
 	height: 2rem;
 	color: var(--color-brand);
+	filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.45));
 }
 
 .installer-shell__title {
@@ -84,11 +85,11 @@
 	min-width: 7rem;
 	padding: 0.65rem 1.1rem;
 	border: none;
-	border-radius: var(--radius-lg);
+	border-radius: 10px;
 	font-size: 0.875rem;
 	font-weight: 600;
 	cursor: pointer;
-	transition: background-color 0.15s ease, opacity 0.15s ease;
+	transition: all 0.2s ease;
 }
 
 .installer-btn:disabled {
@@ -98,11 +99,12 @@
 
 .installer-btn--primary {
 	color: white;
-	background: var(--color-brand);
+	background: linear-gradient(135deg, #00d4ff 0%, #7c3aed 100%);
 }
 
 .installer-btn--primary:hover:not(:disabled) {
-	filter: brightness(1.08);
+	transform: translateY(-1px);
+	box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
 }
 
 .installer-btn--ghost {
@@ -137,10 +139,21 @@
 	flex: 1;
 	padding: 0.65rem 0.75rem;
 	border: 1px solid var(--color-divider);
-	border-radius: var(--radius-lg);
-	background: var(--color-raised-bg);
+	border-radius: 8px;
+	background: rgba(0, 0, 0, 0.3);
 	color: var(--color-contrast);
 	font-size: 0.875rem;
+	transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.installer-field input[type='text']:focus {
+	outline: none;
+	border-color: #00d4ff;
+	box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.15);
+}
+
+.installer-option input[type='checkbox'] {
+	accent-color: #00d4ff;
 }
 
 .installer-option {
@@ -164,6 +177,25 @@
 	margin: 0;
 	font-size: 1.5rem;
 	font-weight: 700;
+}
+
+.installer-steps {
+	display: flex;
+	gap: 0.5rem;
+	margin-bottom: 1.25rem;
+}
+
+.installer-steps__dot {
+	width: 2rem;
+	height: 0.375rem;
+	border-radius: 999px;
+	background: rgba(255, 255, 255, 0.12);
+	transition: all 0.2s ease;
+}
+
+.installer-steps__dot--active {
+	background: linear-gradient(90deg, #00d4ff, #7c3aed);
+	box-shadow: 0 0 12px rgba(0, 212, 255, 0.5);
 }
 
 .installer-step-desc {
@@ -200,15 +232,15 @@ body {
 
 .dark-mode,
 :root {
-	--color-bg: #110915;
-	--color-raised-bg: #17131c;
-	--color-divider: #2a2230;
-	--color-contrast: #f5eef8;
-	--color-secondary: #b8a8c0;
-	--color-brand: #c47bc6;
+	--color-bg: #0a0a0f;
+	--color-raised-bg: #14141f;
+	--color-divider: rgba(255, 255, 255, 0.08);
+	--color-contrast: #ffffff;
+	--color-secondary: rgba(255, 255, 255, 0.6);
+	--color-brand: #00d4ff;
 	--color-button-bg: rgba(255, 255, 255, 0.06);
 	--color-red: #ff6b6b;
 	--color-red-highlight: rgba(255, 107, 107, 0.15);
-	--color-green: #57d657;
+	--color-green: #10b981;
 	--radius-lg: 0.75rem;
 }

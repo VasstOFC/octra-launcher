@@ -574,6 +574,7 @@ onUnmounted(async () => {
 	stopChatUnreadPoll()
 
 	await unlistenUpdateDownload?.()
+	await unlistenSetupDownload?.()
 })
 
 const { formatMessage } = useVIntl()
@@ -1719,6 +1720,9 @@ const appUpdateDownload = {
 	version: ref(),
 }
 let unlistenUpdateDownload
+let unlistenSetupDownload: (() => void) | null = null
+const setupUpdateInfo = ref<{ url: string; size: number | null } | null>(null)
+const setupUpdatePath = ref<string | null>(null)
 
 const {
 	metered,
@@ -1910,8 +1914,23 @@ async function performUpdateCheck() {
 	downloading.value = false
 	updateSize.value = null
 	availableUpdate.value = update
+	setupUpdateInfo.value = null
+	setupUpdatePath.value = null
 
 	console.log(`Update ${update.version} is available.`)
+
+	try {
+		const setupInfo = await invoke<{ url: string; size: number | null } | null>(
+			'check_setup_update',
+			{ version: update.version },
+		)
+		if (setupInfo) {
+			setupUpdateInfo.value = setupInfo
+			console.log(`Custom setup update available for ${update.version}.`)
+		}
+	} catch (error) {
+		console.error('Failed to check for custom setup update:', error)
+	}
 
 	metered.value = await isNetworkMetered()
 	if (!metered.value) {
@@ -1923,7 +1942,11 @@ async function performUpdateCheck() {
 		scheduleDelayedUpdatePopup()
 	}
 
-	getUpdateSize(update.rid).then((size) => (updateSize.value = size))
+	if (setupUpdateInfo.value) {
+		updateSize.value = setupUpdateInfo.value.size
+	} else {
+		getUpdateSize(update.rid).then((size) => (updateSize.value = size))
+	}
 	return true
 }
 
@@ -1984,9 +2007,66 @@ async function downloadUpdate(versionToDownload) {
 		return
 	}
 
+	if (setupUpdateInfo.value) {
+		await downloadSetupUpdate(versionToDownload)
+		return
+	}
+
+	await downloadNsisUpdate(versionToDownload)
+}
+
+async function downloadSetupUpdate(versionToDownload) {
+	const setupUrl = setupUpdateInfo.value?.url
+	if (!setupUrl) {
+		handleError(formatMessage(messages.updateDownloadMissingVersion))
+		return
+	}
+
+	console.log(`Downloading custom setup update ${versionToDownload.version}`)
+	downloading.value = true
+	try {
+		if (unlistenSetupDownload) {
+			unlistenSetupDownload()
+			unlistenSetupDownload = null
+		}
+		unlistenSetupDownload = await listen<{
+			downloaded: number
+			total: number | null
+			version: string
+		}>('setup-download-progress', (event) => {
+			if (event.payload.version !== versionToDownload.version) {
+				return
+			}
+			const { downloaded, total } = event.payload
+			appUpdateDownload.progress.value = total ? downloaded / total : 0
+			if (total) {
+				updateSize.value = total
+			}
+		})
+		const setupPath = await invoke<string>('download_setup_update', {
+			url: setupUrl,
+			version: versionToDownload.version,
+		})
+		setupUpdatePath.value = setupPath
+		downloading.value = false
+		finishedDownloading.value = true
+		if (unlistenSetupDownload) {
+			unlistenSetupDownload()
+			unlistenSetupDownload = null
+		}
+		console.log('Finished downloading setup update!')
+		markAppUpdateActionable(versionToDownload.version, 'downloaded')
+		scheduleDelayedUpdatePopup()
+	} catch (e) {
+		downloading.value = false
+		appUpdateDownload.progress.value = 0
+		handleError(e)
+	}
+}
+
+async function downloadNsisUpdate(versionToDownload) {
 	console.log(`Downloading update ${versionToDownload.version}`)
 	downloading.value = true
-
 	try {
 		enqueueUpdateForInstallation(versionToDownload.rid)
 			.then(() => {
@@ -2017,6 +2097,20 @@ async function downloadUpdate(versionToDownload) {
 
 async function installUpdate() {
 	restarting.value = true
+
+	if (setupUpdatePath.value) {
+		try {
+			await invoke('launch_installer_update', { setupPath: setupUpdatePath.value })
+		} catch (e) {
+			restarting.value = false
+			handleError(e)
+			return
+		}
+		setTimeout(async () => {
+			await handleClose()
+		}, 250)
+		return
+	}
 
 	try {
 		await setRestartAfterPendingUpdate(true)

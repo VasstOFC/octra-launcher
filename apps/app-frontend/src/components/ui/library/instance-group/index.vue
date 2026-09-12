@@ -3,6 +3,7 @@ import { useDroppable } from '@dnd-kit/vue'
 import { DropdownIcon, EditIcon, PlusIcon, SquarePlusIcon, TrashIcon, XIcon } from '@lumen/assets'
 import {
 	Accordion,
+	Avatar,
 	Button,
 	commonMessages,
 	ContextMenu,
@@ -23,6 +24,7 @@ import type {
 } from '@/components/ui/library/use-library'
 import { useLibrary } from '@/components/ui/library/use-library'
 import { useAppSettings } from '@/composables/use-app-settings.ts'
+import { getInstanceIconUrl } from '@/helpers/instance'
 import { FAVORITES_GROUP_ID, MAX_INSTANCE_GROUP_NAME_LENGTH } from '@/helpers/instance-groups'
 
 const INSTANCE_GRID_OBSERVER_ACTIVATION_DELAY = 500
@@ -82,6 +84,13 @@ const isCustomGroup = computed(
 )
 const isReorderableGroup = computed(
 	() => displayState.value.group === 'Group' && !isFavorites.value,
+)
+const GROUP_PREVIEW_MAX_ICONS = 5
+const previewInstances = computed(() =>
+	props.instanceGroup.instances.slice(0, GROUP_PREVIEW_MAX_ICONS),
+)
+const hiddenPreviewCount = computed(() =>
+	Math.max(0, props.instanceGroup.instances.length - GROUP_PREVIEW_MAX_ICONS),
 )
 const groupContextMenuOpen = ref(false)
 const isGroupToggleBlocked = computed(
@@ -380,7 +389,7 @@ onMounted(startInstanceGridResizeObserver)
 		</Transition>
 		<div
 			v-if="!hideHeader"
-			class="group/header h-10 flex w-full items-center gap-2 border-0 border-b border-solid border-b-surface-5"
+			class="group/header flex min-h-11 w-full items-center gap-2 rounded-xl border border-transparent px-2 py-1 transition-all duration-200 hover:border-[rgba(0,212,255,0.15)] hover:bg-[rgba(25,25,45,0.6)]"
 			:class="{
 				'instance-group-reorder-handle': isReorderableGroup && canDragReorder,
 			}"
@@ -404,7 +413,10 @@ onMounted(startInstanceGridResizeObserver)
 				>
 					<DropdownIcon
 						class="size-5 shrink-0 text-secondary transition-all duration-300 group-hover/open-target:text-primary"
-						:class="{ 'rotate-180': groupAccordion?.isOpen }"
+						:class="{
+							'rotate-180': groupAccordion?.isOpen,
+							'!text-contrast': groupAccordion?.isOpen,
+						}"
 					/>
 				</button>
 				<InlineEditableText
@@ -434,10 +446,28 @@ onMounted(startInstanceGridResizeObserver)
 				</span>
 				<TagItem
 					v-if="instanceGroup.instances.length"
-					class="shrink-0 border-surface-3 bg-surface-2"
+					class="shrink-0 !border-[rgba(0,212,255,0.25)] !bg-[rgba(0,212,255,0.08)]"
 				>
 					{{ instanceGroup.instances.length }}
 				</TagItem>
+				<div
+					v-if="groupAccordion && !groupAccordion.isOpen && instanceGroup.instances.length > 0"
+					class="flex shrink-0 items-center pl-1"
+				>
+					<Avatar
+						v-for="instance in previewInstances"
+						:key="instance.id"
+						:src="getInstanceIconUrl(instance.icon_path)"
+						:tint-by="instance.id"
+						size="1.5rem"
+						circle
+						no-shadow
+						class="-ml-1.5 border border-surface-1 first:ml-0"
+					/>
+					<span v-if="hiddenPreviewCount > 0" class="ml-1.5 text-xs font-semibold text-secondary">
+						+{{ hiddenPreviewCount }}
+					</span>
+				</div>
 			</div>
 			<div class="min-w-0 flex-1" />
 			<GroupActionButtons
@@ -475,7 +505,7 @@ onMounted(startInstanceGridResizeObserver)
 						:class="
 							compactMode
 								? 'grid-cols-1'
-								: 'grid-cols-[repeat(auto-fill,minmax(min(9.5rem,100%),1fr))] gap-2 max-xl:grid-cols-[repeat(auto-fill,minmax(min(8rem,100%),1fr))]'
+								: 'grid-cols-[repeat(auto-fill,minmax(min(22rem,100%),1fr))] gap-2'
 						"
 						move-class="transition-transform duration-200 ease-out motion-reduce:transition-none"
 						enter-active-class="transition-[opacity,transform] duration-[150ms] ease-out motion-reduce:transition-none"
@@ -544,3 +574,10 @@ onMounted(startInstanceGridResizeObserver)
 		</template>
 	</NewModal>
 </template>
+
+<style scoped>
+.instance-group {
+	content-visibility: auto;
+	contain-intrinsic-size: auto 320px;
+}
+</style>

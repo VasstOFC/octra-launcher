@@ -5,6 +5,7 @@ import {
 	Button,
 	defineMessages,
 	injectNotificationManager,
+	TagItem,
 	useRelativeTime,
 	useVIntl,
 } from '@lumen/ui'
@@ -95,6 +96,14 @@ const metaLine = computed(() => {
 	if (!props.instance) return ''
 	return `${props.instance.loader} ${props.instance.game_version}`
 })
+const playtimeTag = computed(() => {
+	const playtime = props.instance?.playtime
+	if (!playtime) return null
+	const hours = Math.floor(playtime / 3600)
+	const minutes = Math.floor((playtime % 3600) / 60)
+	if (hours > 0) return `${hours}h ${minutes}m`
+	return `${minutes}m`
+})
 
 async function checkProcess() {
 	if (!props.instance) {
@@ -158,6 +167,9 @@ onMounted(() => {
 
 <template>
 	<section class="continue-band" :aria-label="formatMessage(messages.continue)">
+		<div v-if="iconSrc" aria-hidden="true" class="continue-band__ambient">
+			<img :src="iconSrc" alt="" />
+		</div>
 		<div v-if="instance" class="continue-band__row">
 			<button
 				type="button"
@@ -183,10 +195,13 @@ onMounted(() => {
 					<h2 class="m-0 truncate text-2xl font-semibold leading-7 text-contrast">
 						{{ instance.name }}
 					</h2>
-					<p class="m-0 truncate text-sm capitalize leading-5 text-primary">
-						{{ metaLine }}
-						<span class="text-secondary"> · {{ statusLine }}</span>
+					<p class="m-0 truncate text-sm leading-5 text-secondary">
+						{{ statusLine }}
 					</p>
+					<div class="mt-1.5 flex max-w-full flex-wrap items-center gap-1.5">
+						<TagItem class="band-tag capitalize">{{ metaLine }}</TagItem>
+						<TagItem v-if="playtimeTag" class="band-tag">{{ playtimeTag }}</TagItem>
+					</div>
 				</div>
 			</button>
 			<div class="continue-band__actions">
@@ -298,6 +313,34 @@ onMounted(() => {
 	gap: 1.25rem;
 	justify-content: space-between;
 	min-width: 0;
+	position: relative;
+	z-index: 1;
+}
+
+.continue-band__ambient {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	width: 45%;
+	pointer-events: none;
+	overflow: hidden;
+	opacity: 0.35;
+	mask-image: linear-gradient(to left, black 30%, transparent 100%);
+	-webkit-mask-image: linear-gradient(to left, black 30%, transparent 100%);
+
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		filter: blur(50px) saturate(1.2);
+		transform: scale(1.2);
+	}
+}
+
+.band-tag {
+	border-color: rgba(0, 212, 255, 0.25) !important;
+	background: rgba(0, 212, 255, 0.08) !important;
 }
 
 .continue-band__identity {

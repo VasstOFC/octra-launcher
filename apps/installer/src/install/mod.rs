@@ -49,6 +49,46 @@ pub fn launch_installed_app(install_dir: PathBuf) -> Result<(), String> {
 	engine::launch_app(&install_dir).map_err(|error| error.to_string())
 }
 
+#[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "camelCase", tag = "mode")]
+pub enum InstallerMode {
+	Fresh,
+	Update { install_dir: PathBuf },
+}
+
+pub fn parse_update_request() -> Option<PathBuf> {
+	let mut args = std::env::args().skip(1);
+	while let Some(flag) = args.next() {
+		if flag == "--update" {
+			return args.next().map(PathBuf::from);
+		}
+	}
+	None
+}
+
+#[tauri::command]
+pub fn installer_mode(state: tauri::State<InstallerMode>) -> InstallerMode {
+	state.inner().clone()
+}
+
+#[tauri::command]
+pub async fn run_update(app: tauri::AppHandle, install_dir: PathBuf) -> Result<(), String> {
+	// Bezpiecznik: aktualizujemy tylko istniejącą instalację.
+	// Świeżą instalację obsługuje run_install (tam katalog docelowy może nie istnieć).
+	if !install_dir.join(APP_EXECUTABLE).is_file() {
+		return Err(format!(
+			"nie znaleziono instalacji Lumen App w {} — aktualizacja przerwana",
+			install_dir.display()
+		));
+	}
+	let options = InstallOptions {
+		install_dir,
+		desktop_shortcut: false,
+		launch_after: true,
+	};
+	engine::run_install(&app, options).await.map_err(|error| error.to_string())
+}
+
 pub fn try_uninstall_from_cli() -> Result<bool, String> {
 	let mut args = std::env::args().skip(1);
 	let Some(flag) = args.next() else {

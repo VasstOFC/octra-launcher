@@ -1,6 +1,13 @@
 <script setup lang="ts">
 import { KeyboardSensor, PointerSensor, useDraggable } from '@dnd-kit/vue'
-import { CheckIcon, DownloadIcon, PlayIcon, SpinnerIcon, StopCircleIcon } from '@lumen/assets'
+import {
+	CheckIcon,
+	DownloadIcon,
+	PlayIcon,
+	SpinnerIcon,
+	StarIcon,
+	StopCircleIcon,
+} from '@lumen/assets'
 import { defineMessages, IconButton, injectNotificationManager, useVIntl } from '@lumen/ui'
 import { useEventListener, useMagicKeys } from '@vueuse/core'
 import { computed, onMounted, ref, watch } from 'vue'
@@ -13,6 +20,7 @@ import { handleSevereError } from '@/composables/use-error.js'
 import { trackEvent } from '@/helpers/analytics'
 import { install_existing_instance, install_pack_to_existing_instance } from '@/helpers/install'
 import { kill, run } from '@/helpers/instance'
+import { FAVORITES_GROUP_ID } from '@/helpers/instance-groups'
 import { get_by_instance_id } from '@/helpers/process'
 import type { GameInstance } from '@/helpers/types'
 import { showInstanceInFolder } from '@/helpers/utils.js'
@@ -50,12 +58,21 @@ const messages = defineMessages({
 	play: { id: 'app.library.instance.play', defaultMessage: 'Play' },
 	select: { id: 'app.library.instance.select', defaultMessage: 'Select instance' },
 	deselect: { id: 'app.library.instance.deselect', defaultMessage: 'Deselect instance' },
+	addToFavorites: {
+		id: 'app.library.instance.action.add-to-favorites',
+		defaultMessage: 'Add to favorites',
+	},
+	removeFromFavorites: {
+		id: 'app.library.instance.action.remove-from-favorites',
+		defaultMessage: 'Remove from favorites',
+	},
 })
 const {
 	displayState,
 	selectedLibraryInstances,
 	isLibraryInstanceSelectionActive,
 	activeDraggedInstanceKeys,
+	toggleInstanceFavorite,
 } = useLibrary()
 
 const props = defineProps<{
@@ -128,6 +145,12 @@ const seeInstance = async () => {
 
 const toggleSelection = (event?: MouseEvent) => {
 	emit('toggle-selection', event?.shiftKey ?? false)
+}
+
+const isFavorite = computed(() => props.instance.group_ids.includes(FAVORITES_GROUP_ID))
+
+const toggleFavorite = () => {
+	void toggleInstanceFavorite(props.instance)
 }
 
 const handlePointerDown = (event: PointerEvent) => {
@@ -303,68 +326,67 @@ onMounted(() => {
 			</div>
 		</template>
 		<template #leading="{ compact }">
-			<div
-				class="relative flex shrink-0 items-center justify-center"
-				:class="compact ? 'size-10' : 'size-12'"
-			>
-				<div class="absolute inset-0 flex items-center justify-center">
-					<IconButton
-						v-if="playing"
-						v-tooltip="formatMessage(messages.stop)"
-						:label="formatMessage(messages.stop)"
-						type="colored"
-						color="red"
-						:size="compact ? 'md' : 'lg'"
-						@click="(e) => stop(e, 'InstanceCard')"
-						@mouseenter="checkProcess"
-					>
-						<StopCircleIcon />
-					</IconButton>
-					<IconButton
-						v-else-if="
-							!modLoading &&
-							!installing &&
-							!isLibraryInstanceSelectionActive &&
-							!installed &&
-							!instance.quarantined
+			<div class="flex shrink-0 items-center gap-1.5">
+				<IconButton
+					v-tooltip="
+						formatMessage(isFavorite ? messages.removeFromFavorites : messages.addToFavorites)
+					"
+					:label="formatMessage(isFavorite ? messages.removeFromFavorites : messages.addToFavorites)"
+					:size="compact ? 'md' : 'lg'"
+					@click.stop="toggleFavorite"
+				>
+					<StarIcon
+						:style="
+							isFavorite ? 'color: var(--color-brand); fill: var(--color-brand);' : undefined
 						"
-						v-tooltip="formatMessage(messages.repair)"
-						:label="formatMessage(messages.repair)"
-						type="colored"
-						color="brand"
-						:size="compact ? 'md' : 'lg'"
-						:class="
-							compact
-								? ''
-								: 'origin-bottom scale-75 opacity-0 transition-opacity group-hover/card:scale-100 group-hover/card:opacity-100'
-						"
-						@click="(e) => repair(e)"
-					>
-						<DownloadIcon />
-					</IconButton>
-					<IconButton
-						v-else-if="
-							!modLoading &&
-							!installing &&
-							!isLibraryInstanceSelectionActive &&
-							!instance.quarantined
-						"
-						v-tooltip="formatMessage(messages.play)"
-						:label="formatMessage(messages.play)"
-						type="colored"
-						color="brand"
-						:size="compact ? 'md' : 'lg'"
-						:class="
-							compact
-								? ''
-								: 'origin-bottom scale-75 opacity-0 transition-opacity group-hover/card:scale-100 group-hover/card:opacity-100'
-						"
-						@click="(e) => play(e, 'InstanceCard')"
-						@mouseenter="checkProcess"
-					>
-						<PlayIcon class="translate-x-px" />
-					</IconButton>
-				</div>
+					/>
+				</IconButton>
+				<IconButton
+					v-if="playing"
+					v-tooltip="formatMessage(messages.stop)"
+					:label="formatMessage(messages.stop)"
+					type="colored"
+					color="red"
+					:size="compact ? 'md' : 'lg'"
+					@click="(e) => stop(e, 'InstanceCard')"
+					@mouseenter="checkProcess"
+				>
+					<StopCircleIcon />
+				</IconButton>
+				<IconButton
+					v-else-if="
+						!modLoading &&
+						!installing &&
+						!isLibraryInstanceSelectionActive &&
+						!installed &&
+						!instance.quarantined
+					"
+					v-tooltip="formatMessage(messages.repair)"
+					:label="formatMessage(messages.repair)"
+					type="colored"
+					color="brand"
+					:size="compact ? 'md' : 'lg'"
+					@click="(e) => repair(e)"
+				>
+					<DownloadIcon />
+				</IconButton>
+				<IconButton
+					v-else-if="
+						!modLoading &&
+						!installing &&
+						!isLibraryInstanceSelectionActive &&
+						!instance.quarantined
+					"
+					v-tooltip="formatMessage(messages.play)"
+					:label="formatMessage(messages.play)"
+					type="colored"
+					color="brand"
+					:size="compact ? 'md' : 'lg'"
+					@click="(e) => play(e, 'InstanceCard')"
+					@mouseenter="checkProcess"
+				>
+					<PlayIcon class="translate-x-px" />
+				</IconButton>
 			</div>
 		</template>
 		<template #overlay="{ compact }">

@@ -7,7 +7,7 @@
 use native_dialog::{DialogBuilder, MessageLevel};
 use std::env;
 use std::sync::atomic::Ordering;
-use tauri::{Listener, Manager};
+use tauri::{Emitter, Listener, Manager};
 use tauri_plugin_fs::FsExt;
 use theseus::prelude::*;
 
@@ -29,6 +29,9 @@ async fn initialize_state(
     app: tauri::AppHandle,
     events: tauri::ipc::Channel<tauri::ipc::InvokeResponseBody>,
 ) -> api::Result<()> {
+    #[cfg(all(windows, not(debug_assertions)))]
+    steer_nsis_updates_to_current_dir();
+
     tracing::info!("Initializing app event state...");
     theseus::EventState::init(app.clone(), events).await?;
 
@@ -117,6 +120,196 @@ async fn toggle_decorations(b: bool, window: tauri::Window) -> api::Result<()> {
 #[tauri::command]
 fn restart_app(app: tauri::AppHandle) {
     app.restart();
+}
+
+fn current_exe_dir() -> Result<std::path::PathBuf, theseus::Error> {
+    let exe = std::env::current_exe().map_err(|e| {
+        theseus::Error::from(theseus::ErrorKind::OtherError(format!(
+            "Failed to locate application executable: {e}"
+        )))
+    })?;
+    exe.parent()
+        .map(|dir| dir.to_path_buf())
+        .ok_or_else(|| {
+            theseus::Error::from(theseus::ErrorKind::OtherError(
+                "Application executable has no parent directory".to_string(),
+            ))
+        })
+}
+
+#[tauri::command]
+async fn app_install_dir() -> api::Result<String> {
+    Ok(current_exe_dir()?.to_string_lossy().to_string())
+}
+
+#[derive(Clone, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+struct SetupUpdateInfo {
+    url: String,
+    size: Option<u64>,
+}
+
+/// Sprawdza, czy dla danej wersji istnieje instalator custom (Lumen Setup)
+/// z wbudowanym payloadem. Zwraca URL i rozmiar albo None (fallback na NSIS).
+fn http_error(context: &str, error: impl std::fmt::Display) -> theseus::Error {
+    theseus::Error::from(theseus::ErrorKind::OtherError(format!("{context}: {error}")))
+}
+
+#[tauri::command]
+async fn check_setup_update(version: String) -> api::Result<Option<SetupUpdateInfo>> {
+    use tauri_plugin_http::reqwest::header::{HeaderValue, ACCEPT};
+    use tauri_plugin_http::reqwest::{ClientBuilder, Url};
+
+    let url_string = format!(
+        "https://github.com/VasstOFC/octra-launcher/releases/download/v{version}/Octra-setup.exe"
+    );
+    let url: Url = url_string
+        .parse()
+        .map_err(|e| http_error("Invalid setup update URL", e))?;
+    let client = ClientBuilder::new()
+        .user_agent(theseus::launcher_user_agent())
+        .build()
+        .map_err(|e| http_error("Failed to build HTTP client", e))?;
+    let response = client
+        .head(url.clone())
+        .header(ACCEPT, HeaderValue::from_static("application/octet-stream"))
+        .send()
+        .await
+        .map_err(|e| http_error("Setup update check request failed", e))?;
+    if !response.status().is_success() {
+        return Ok(None);
+    }
+    let size = response
+        .headers()
+        .get("Content-Length")
+        .and_then(|value| value.to_str().ok())
+        .and_then(|value| value.parse().ok());
+    Ok(Some(SetupUpdateInfo {
+        url: url_string,
+        size,
+    }))
+}
+
+#[derive(Clone, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+struct SetupDownloadProgress {
+    downloaded: u64,
+    total: Option<u64>,
+    version: String,
+}
+
+#[tauri::command]
+async fn download_setup_update(
+    app: tauri::AppHandle,
+    url: String,
+    version: String,
+) -> api::Result<String> {
+    use tauri_plugin_http::reqwest::{ClientBuilder, Url};
+    use tokio::io::AsyncWriteExt;
+
+    let dest = std::env::temp_dir().join(format!("Lumen-Setup-{version}.exe"));
+    let client = ClientBuilder::new()
+        .user_agent(theseus::launcher_user_agent())
+        .build()
+        .map_err(|e| http_error("Failed to build HTTP client", e))?;
+    let download_url: Url = url
+        .parse()
+        .map_err(|e| http_error("Invalid setup download URL", e))?;
+    let mut response = client
+        .get(download_url)
+        .send()
+        .await
+        .map_err(|e| http_error("Setup download request failed", e))?;
+    if !response.status().is_success() {
+        return Err(theseus::Error::from(theseus::ErrorKind::OtherError(format!(
+            "Setup download failed with status: {}",
+            response.status()
+        )))
+        .into());
+    }
+    let total = response.content_length();
+    let mut file = tokio::fs::File::create(&dest).await.map_err(|e| {
+        theseus::Error::from(theseus::ErrorKind::OtherError(format!(
+            "Failed to create temporary setup file: {e}"
+        )))
+    })?;
+    let mut downloaded: u64 = 0;
+    loop {
+        match response
+            .chunk()
+            .await
+            .map_err(|e| http_error("Setup download failed", e))? {
+            Some(chunk) => {
+                file.write_all(&chunk).await.map_err(|e| {
+                    theseus::Error::from(theseus::ErrorKind::OtherError(format!(
+                        "Failed to write setup file: {e}"
+                    )))
+                })?;
+                downloaded += chunk.len() as u64;
+                let _ = app.emit(
+                    "setup-download-progress",
+                    SetupDownloadProgress {
+                        downloaded,
+                        total,
+                        version: version.clone(),
+                    },
+                );
+            }
+            None => break,
+        }
+    }
+    Ok(dest.to_string_lossy().to_string())
+}
+
+#[tauri::command]
+fn launch_installer_update(setup_path: String) -> api::Result<()> {
+    use std::process::Command;
+
+    let setup = std::path::PathBuf::from(&setup_path);
+    if !setup.is_file() {
+        return Err(theseus::Error::from(theseus::ErrorKind::OtherError(format!(
+            "Update installer not found at {setup_path}"
+        )))
+        .into());
+    }
+    let exe_dir = current_exe_dir()?;
+    Command::new(&setup)
+        .arg("--update")
+        .arg(exe_dir)
+        .spawn()
+        .map_err(|e| {
+            theseus::Error::from(theseus::ErrorKind::OtherError(format!(
+                "Failed to launch update installer: {e}"
+            )))
+        })?;
+    Ok(())
+}
+
+/// Zapewnia, że przyszłe aktualizacje NSIS instalują się w katalogu,
+/// z którego działa aplikacja. Szablon NSIS Tauri odczytuje tę wartość
+/// (`RestorePreviousInstallLocation`), więc update podmienia działający exe
+/// zamiast tworzyć drugą kopię. Idempotentne (zapis tylko przy zmianie),
+/// pomijane w buildach dev, żeby nie kierować updatera do katalogów `target/`.
+/// Klucz musi odpowiadać stałej NSIS_RESTORE_KEY w instalatorze.
+#[cfg(all(windows, not(debug_assertions)))]
+fn steer_nsis_updates_to_current_dir() {
+    use winreg::{enums::*, RegKey};
+
+    const NSIS_RESTORE_KEY: &str = r"Software\OctraApp\Lumen App";
+
+    let Some(exe_dir) = std::env::current_exe()
+        .ok()
+        .and_then(|exe| exe.parent().map(|dir| dir.to_path_buf()))
+    else {
+        return;
+    };
+    let Ok((key, _)) = RegKey::predef(HKEY_CURRENT_USER).create_subkey(NSIS_RESTORE_KEY) else {
+        return;
+    };
+    let current: String = key.get_value("").unwrap_or_default();
+    if current.to_lowercase() != exe_dir.to_string_lossy().to_lowercase() {
+        let _ = key.set_value("", &exe_dir.to_string_lossy().to_string());
+    }
 }
 
 #[tauri::command]
@@ -314,6 +507,10 @@ fn main() {
             enqueue_update_for_installation,
             remove_enqueued_update,
             set_restart_after_pending_update,
+            app_install_dir,
+            check_setup_update,
+            download_setup_update,
+            launch_installer_update,
             toggle_decorations,
             show_window,
             restart_app,

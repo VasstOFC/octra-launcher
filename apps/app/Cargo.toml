@@ -33,7 +33,7 @@ tauri-plugin-updater = { workspace = true }
 tauri-plugin-window-state = { workspace = true }
 theseus = { workspace = true, features = ["tauri"] }
 thiserror = { workspace = true }
-tokio = { workspace = true, features = ["time"] }
+tokio = { workspace = true, features = ["time", "fs", "io-util"] }
 tracing = { workspace = true }
 tracing-error = { workspace = true }
 url = { workspace = true }
@@ -58,6 +58,7 @@ objc2-app-kit = { workspace = true, features = ["NSWindow"] }
 [target."cfg(windows)".dependencies]
 webview2-com.workspace = true
 windows-core.workspace = true
+winreg.workspace = true
 
 [target."cfg(windows)".dependencies.windows]
 workspace = true
