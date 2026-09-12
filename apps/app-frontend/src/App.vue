@@ -1720,9 +1720,9 @@ const appUpdateDownload = {
 	version: ref(),
 }
 let unlistenUpdateDownload
-let unlistenSetupDownload: (() => void) | null = null
-const setupUpdateInfo = ref<{ url: string; size: number | null } | null>(null)
-const setupUpdatePath = ref<string | null>(null)
+let unlistenSetupDownload = null
+const setupUpdateInfo = ref(null)
+const setupUpdatePath = ref(null)
 
 const {
 	metered,
@@ -1920,10 +1920,9 @@ async function performUpdateCheck() {
 	console.log(`Update ${update.version} is available.`)
 
 	try {
-		const setupInfo = await invoke<{ url: string; size: number | null } | null>(
-			'check_setup_update',
-			{ version: update.version },
-		)
+		const setupInfo = await invoke('check_setup_update', {
+			version: update.version,
+		})
 		if (setupInfo) {
 			setupUpdateInfo.value = setupInfo
 			console.log(`Custom setup update available for ${update.version}.`)
@@ -2029,11 +2028,7 @@ async function downloadSetupUpdate(versionToDownload) {
 			unlistenSetupDownload()
 			unlistenSetupDownload = null
 		}
-		unlistenSetupDownload = await listen<{
-			downloaded: number
-			total: number | null
-			version: string
-		}>('setup-download-progress', (event) => {
+		unlistenSetupDownload = await listen('setup-download-progress', (event) => {
 			if (event.payload.version !== versionToDownload.version) {
 				return
 			}
@@ -2043,7 +2038,7 @@ async function downloadSetupUpdate(versionToDownload) {
 				updateSize.value = total
 			}
 		})
-		const setupPath = await invoke<string>('download_setup_update', {
+		const setupPath = await invoke('download_setup_update', {
 			url: setupUrl,
 			version: versionToDownload.version,
 		})
