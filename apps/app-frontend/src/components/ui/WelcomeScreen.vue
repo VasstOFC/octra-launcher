@@ -180,25 +180,9 @@ onUnmounted(() => {
 	position: absolute;
 	inset: 0;
 	background:
-		radial-gradient(ellipse at 20% 30%, rgba(0, 212, 255, 0.12) 0%, transparent 50%),
-		radial-gradient(ellipse at 80% 70%, rgba(124, 58, 237, 0.1) 0%, transparent 50%),
-		radial-gradient(ellipse at 50% 50%, rgba(0, 212, 255, 0.05) 0%, transparent 70%);
-	animation: mesh-shift 20s ease-in-out infinite;
-}
-
-@keyframes mesh-shift {
-	0%, 100% {
-		opacity: 1;
-		transform: scale(1) rotate(0deg);
-	}
-	33% {
-		opacity: 0.8;
-		transform: scale(1.05) rotate(1deg);
-	}
-	66% {
-		opacity: 0.9;
-		transform: scale(0.95) rotate(-1deg);
-	}
+		radial-gradient(ellipse at 20% 30%, rgba(31, 107, 79, 0.12) 0%, transparent 50%),
+		radial-gradient(ellipse at 80% 70%, rgba(31, 107, 79, 0.07) 0%, transparent 50%),
+		radial-gradient(ellipse at 50% 50%, rgba(31, 107, 79, 0.04) 0%, transparent 70%);
 }
 
 .particles {
@@ -208,7 +192,7 @@ onUnmounted(() => {
 
 .particle {
 	position: absolute;
-	background: #00d4ff;
+	background: rgba(85, 169, 130, 0.55);
 	border-radius: 50%;
 	animation: particle-float ease-in-out infinite;
 	filter: blur(1px);
@@ -259,27 +243,16 @@ onUnmounted(() => {
 .logo-glow {
 	width: 100%;
 	height: 100%;
-	filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.4)) drop-shadow(0 0 60px rgba(0, 212, 255, 0.2));
-	animation: logo-pulse 3s ease-in-out infinite;
-}
-
-@keyframes logo-pulse {
-	0%, 100% {
-		filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.4)) drop-shadow(0 0 60px rgba(0, 212, 255, 0.2));
-	}
-	50% {
-		filter: drop-shadow(0 0 40px rgba(0, 212, 255, 0.6)) drop-shadow(0 0 80px rgba(0, 212, 255, 0.3));
-	}
+	filter: drop-shadow(0 0 24px rgba(31, 107, 79, 0.35));
 }
 
 .welcome-title {
 	margin: 0;
 	font-size: 2.5rem;
-	font-weight: 800;
+	font-weight: 700;
 	letter-spacing: -0.04em;
 	line-height: 1;
 	color: white;
-	text-shadow: 0 0 40px rgba(0, 212, 255, 0.3);
 	animation: title-in 0.8s cubic-bezier(0.32, 0.72, 0, 1) both;
 }
 
@@ -316,22 +289,9 @@ onUnmounted(() => {
 
 .welcome-cta {
 	width: 100%;
-	background: linear-gradient(135deg, #00d4ff 0%, #7c3aed 100%) !important;
-	border: none !important;
 	font-weight: 600;
 	padding: 1rem 2rem;
 	font-size: 1rem;
-	box-shadow: 0 0 0 rgba(0, 212, 255, 0) !important;
-	transition: all 0.3s ease;
-
-	&:hover:not(:disabled) {
-		transform: translateY(-2px) !important;
-		box-shadow: 0 0 30px rgba(0, 212, 255, 0.4), 0 0 60px rgba(0, 212, 255, 0.15) !important;
-	}
-
-	&:active:not(:disabled) {
-		transform: translateY(0) !important;
-	}
 }
 
 .hint-text {
@@ -377,8 +337,7 @@ onUnmounted(() => {
 
 	&:hover:not(:disabled) {
 		background: rgba(255, 255, 255, 0.1) !important;
-		border-color: rgba(0, 212, 255, 0.3) !important;
-		box-shadow: 0 0 20px rgba(0, 212, 255, 0.15) !important;
+		border-color: rgba(31, 107, 79, 0.5) !important;
 	}
 }
 </style>

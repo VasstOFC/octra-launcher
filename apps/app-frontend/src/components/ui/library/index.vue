@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { StarIcon } from '@lumen/assets'
-import { ContextMenu, defineMessages, useVIntl } from '@lumen/ui'
+import { Button, ContextMenu, defineMessages, EmptyState, useVIntl } from '@lumen/ui'
 import { computed, nextTick, onDeactivated, onUnmounted, ref, toRef, watch } from 'vue'
 import Draggable from 'vuedraggable'
 
@@ -30,6 +30,14 @@ const messages = defineMessages({
 		id: 'app.library.search.no-results.title',
 		defaultMessage: 'No instances match your search.',
 	},
+	noSearchResultsHint: {
+		id: 'app.library.search.no-results.hint',
+		defaultMessage: 'Try a different search term or clear the search to see all instances.',
+	},
+	clearSearch: {
+		id: 'app.library.search.clear',
+		defaultMessage: 'Clear search',
+	},
 	instanceActionsLabel: {
 		id: 'app.library.instance.actions.label',
 		defaultMessage: 'Instance actions',
@@ -53,9 +61,14 @@ const {
 	deleteInstance,
 	handleInstanceIconSaved,
 	selectedLibraryInstances,
+	setSearchInput,
 	setSelectedLibraryInstances,
 	toggleLibraryInstanceSelection,
 } = provideLibrary(toRef(props, 'instances'))
+
+function clearSearch() {
+	setSearchInput('')
+}
 
 const hasActiveFilters = computed(() =>
 	Object.values(filters.value).some((selectedValues) => selectedValues.length > 0),
@@ -251,12 +264,18 @@ watch(selectedLibraryInstances, (selectedInstances) => {
 			</h2>
 			<slot name="promo" />
 			<LibraryToolbar />
-			<div
+			<EmptyState
 				v-if="libraryGroupsLoaded && isSearching && visibleInstanceGroups.length === 0"
-				class="text-base text-primary"
+				type="no-search-result"
+				:heading="formatMessage(messages.noSearchResults)"
+				:description="formatMessage(messages.noSearchResultsHint)"
 			>
-				{{ formatMessage(messages.noSearchResults) }}
-			</div>
+				<template #actions>
+					<Button @click="clearSearch">
+						{{ formatMessage(messages.clearSearch) }}
+					</Button>
+				</template>
+			</EmptyState>
 			<Transition
 				v-else
 				enter-active-class="transition-opacity duration-200 ease-out motion-reduce:transition-none"

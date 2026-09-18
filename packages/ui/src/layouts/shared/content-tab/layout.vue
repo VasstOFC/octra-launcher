@@ -994,9 +994,12 @@ const confirmUnlinkModal = ref<InstanceType<typeof ConfirmUnlinkModal>>()
 							</div>
 						</div>
 
-						<div class="@container flex items-start gap-2">
+						<div class="@container flex flex-wrap items-start gap-2">
 							<div ref="filterControlsRef" class="flex min-w-0 flex-1 flex-wrap items-center gap-2">
-								<div ref="projectTypeFiltersRef" class="flex items-center gap-2">
+								<div
+									ref="projectTypeFiltersRef"
+									class="flex min-w-0 flex-wrap items-center gap-2"
+								>
 									<TeleportOverflowMenu
 										class="!h-[34px] !text-sm !font-medium"
 										:icon-only="false"

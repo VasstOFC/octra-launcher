@@ -159,7 +159,7 @@ useAppEvent('loading', (e) => {
 .particle {
 	position: absolute;
 	bottom: -10px;
-	background: #00d4ff;
+	background: rgba(85, 169, 130, 0.55);
 	border-radius: 50%;
 	animation: particle-float linear infinite;
 	filter: blur(1px);
@@ -200,17 +200,7 @@ useAppEvent('loading', (e) => {
 
 .logo-glow {
 	position: relative;
-	filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.4)) drop-shadow(0 0 40px rgba(0, 212, 255, 0.2));
-	animation: logo-glow-pulse 3s ease-in-out infinite;
-}
-
-@keyframes logo-glow-pulse {
-	0%, 100% {
-		filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.4)) drop-shadow(0 0 40px rgba(0, 212, 255, 0.2));
-	}
-	50% {
-		filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.6)) drop-shadow(0 0 60px rgba(0, 212, 255, 0.3));
-	}
+	filter: drop-shadow(0 0 24px rgba(31, 107, 79, 0.35));
 }
 
 .app-logo {
@@ -221,11 +211,10 @@ useAppEvent('loading', (e) => {
 .app-title {
 	margin: 0;
 	font-size: 1.75rem;
-	font-weight: 800;
+	font-weight: 700;
 	letter-spacing: -0.04em;
 	line-height: 1;
 	animation: splash-copy-in 0.7s cubic-bezier(0.32, 0.72, 0, 1) 0.12s both;
-	text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
 }
 
 .app-tagline {
@@ -269,10 +258,6 @@ useAppEvent('loading', (e) => {
 	}
 
 	.particle {
-		animation: none;
-	}
-
-	.logo-glow {
 		animation: none;
 	}
 }

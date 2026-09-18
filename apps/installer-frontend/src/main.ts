@@ -1,4 +1,5 @@
 import '@lumen/assets/styles/variables.scss'
+import '@lumen/assets/styles/emerus.scss'
 import '@lumen/assets/styles/inter.scss'
 import './styles/installer.scss'
 

@@ -73,6 +73,15 @@ pub enum MinecraftAuthenticationError {
         #[source]
         source: reqwest::Error,
     },
+    #[error(
+        "Minecraft services are rate limiting login requests (HTTP {status_code} during step {step:?}). Please wait a moment and try again."
+    )]
+    RateLimited {
+        step: MinecraftAuthStep,
+        status_code: StatusCode,
+        retry_after_secs: Option<u64>,
+        raw: String,
+    },
     #[error("Error reading XBOX Session ID header")]
     NoSessionId,
     #[error("Error reading user hash")]
@@ -1207,30 +1216,81 @@ async fn minecraft_token(
 
     let token = token.token;
 
-    let res = auth_retry(|| {
-        INSECURE_REQWEST_CLIENT
-            .post("https://api.minecraftservices.com/launcher/login")
-            .header("Accept", "application/json")
-            .header("User-Agent", MINECRAFT_SERVICES_USER_AGENT)
-            .json(&json!({
-                "platform": "PC_LAUNCHER",
-                "xtoken": format!("XBL3.0 x={uhs};{token}"),
-            }))
-            .send()
-    })
-    .await
-    .map_err(|source| MinecraftAuthenticationError::Request {
-        source,
-        step: MinecraftAuthStep::MinecraftToken,
-    })?;
+    // Mojang aggressively rate limits the login endpoint (HTTP 429 with a
+    // `{"path": ...}` body instead of a token). Retry a few times honoring
+    // Retry-After before surfacing a friendly error instead of a confusing
+    // deserialize failure.
+    const RATE_LIMIT_MAX_RETRIES: usize = 3;
+    const RATE_LIMIT_MAX_WAIT: std::time::Duration = std::time::Duration::from_secs(30);
 
-    let status = res.status();
-    let text = res.text().await.map_err(|source| {
-        MinecraftAuthenticationError::Request {
+    let mut attempt = 0;
+    let (status, text, retry_after_secs) = loop {
+        let res = auth_retry(|| {
+            INSECURE_REQWEST_CLIENT
+                .post("https://api.minecraftservices.com/launcher/login")
+                .header("Accept", "application/json")
+                .header("User-Agent", MINECRAFT_SERVICES_USER_AGENT)
+                .json(&json!({
+                    "platform": "PC_LAUNCHER",
+                    "xtoken": format!("XBL3.0 x={uhs};{token}"),
+                }))
+                .send()
+        })
+        .await
+        .map_err(|source| MinecraftAuthenticationError::Request {
             source,
             step: MinecraftAuthStep::MinecraftToken,
+        })?;
+
+        let status = res.status();
+        if status != StatusCode::TOO_MANY_REQUESTS {
+            let text = res.text().await.map_err(|source| {
+                MinecraftAuthenticationError::Request {
+                    source,
+                    step: MinecraftAuthStep::MinecraftToken,
+                }
+            })?;
+            break (status, text, None);
         }
-    })?;
+
+        let retry_after_secs = res
+            .headers()
+            .get(reqwest::header::RETRY_AFTER)
+            .and_then(|value| value.to_str().ok())
+            .and_then(|value| value.parse::<u64>().ok());
+        let text = res.text().await.map_err(|source| {
+            MinecraftAuthenticationError::Request {
+                source,
+                step: MinecraftAuthStep::MinecraftToken,
+            }
+        })?;
+
+        if attempt >= RATE_LIMIT_MAX_RETRIES {
+            break (status, text, retry_after_secs);
+        }
+        attempt += 1;
+
+        let wait = retry_after_secs
+            .map(std::time::Duration::from_secs)
+            .unwrap_or_else(|| std::time::Duration::from_secs(2_u64.pow(attempt as u32)));
+        let wait = wait.min(RATE_LIMIT_MAX_WAIT);
+        tracing::warn!(
+            "Minecraft login rate limited (HTTP 429, attempt {attempt}/{RATE_LIMIT_MAX_RETRIES}); retrying in {wait:?}"
+        );
+        tokio::time::sleep(wait).await;
+    };
+
+    if status == StatusCode::TOO_MANY_REQUESTS {
+        tracing::warn!(
+            "Minecraft login still rate limited after {attempt} retries; giving up"
+        );
+        return Err(MinecraftAuthenticationError::RateLimited {
+            step: MinecraftAuthStep::MinecraftToken,
+            status_code: status,
+            retry_after_secs,
+            raw: text,
+        });
+    }
 
     serde_json::from_str(&text).map_err(|source| {
         MinecraftAuthenticationError::DeserializeResponse {

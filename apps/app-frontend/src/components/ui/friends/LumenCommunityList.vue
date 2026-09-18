@@ -608,9 +608,8 @@ const messages = defineMessages({
 .community-heading {
 	margin: 0;
 	font-size: 0.9rem;
-	font-weight: 700;
+	font-weight: 600;
 	color: var(--color-contrast);
-	text-shadow: 0 0 20px rgba(0, 212, 255, 0.15);
 }
 
 .community-status {
@@ -649,7 +648,7 @@ const messages = defineMessages({
 	grid-template-columns: 1fr 1fr;
 	gap: 0;
 	margin: 0 0.5rem;
-	border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+	border-bottom: 1px solid var(--shell-border);
 }
 
 .community-tab {
@@ -674,9 +673,9 @@ const messages = defineMessages({
 }
 
 .community-tab--active {
-	border-bottom-color: #00d4ff;
-	color: #00d4ff;
-	text-shadow: 0 0 12px rgba(0, 212, 255, 0.3);
+	border-bottom-color: var(--color-brand);
+	color: var(--color-brand);
+	text-shadow: 0 0 12px color-mix(in srgb, var(--color-brand) 35%, transparent);
 }
 
 .tab-badge {
@@ -698,18 +697,8 @@ const messages = defineMessages({
 }
 
 .tab-badge--unread {
-	background: #00d4ff;
-	color: #0a0a0f;
-	animation: badge-pulse 2s ease-in-out infinite;
-}
-
-@keyframes badge-pulse {
-	0%, 100% {
-		box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.3);
-	}
-	50% {
-		box-shadow: 0 0 0 4px rgba(0, 212, 255, 0);
-	}
+	background: var(--emerus-primary);
+	color: #f1f4f2;
 }
 
 .community-search-wrapper {
@@ -732,8 +721,8 @@ const messages = defineMessages({
 	width: 100%;
 	box-sizing: border-box;
 	padding: 0.5rem 0.625rem 0.5rem 2rem;
-	background: rgba(255, 255, 255, 0.04);
-	border: 1px solid rgba(255, 255, 255, 0.06);
+	background: var(--shell-card);
+	border: 1px solid var(--shell-border);
 	border-radius: 10px;
 	color: var(--color-contrast);
 	font-size: 0.75rem;
@@ -747,8 +736,7 @@ const messages = defineMessages({
 }
 
 .community-search-input:focus {
-	background: rgba(255, 255, 255, 0.06);
-	border-color: rgba(0, 212, 255, 0.2);
+	border-color: color-mix(in srgb, var(--color-brand) 35%, transparent);
 }
 
 .community-section {
@@ -773,7 +761,7 @@ const messages = defineMessages({
 }
 
 .community-section-header--clickable:hover {
-	background: rgba(255, 255, 255, 0.04);
+	background: color-mix(in srgb, var(--color-brand) 8%, transparent);
 }
 
 .community-section-title {
@@ -827,7 +815,7 @@ const messages = defineMessages({
 }
 
 .community-card:hover {
-	background: rgba(255, 255, 255, 0.04);
+	background: color-mix(in srgb, var(--color-brand) 8%, transparent);
 }
 
 .community-card--offline {
@@ -862,13 +850,11 @@ const messages = defineMessages({
 	width: 10px;
 	height: 10px;
 	border-radius: 50%;
-	border: 2px solid rgba(15, 15, 25, 0.85);
+	border: 2px solid var(--shell-panel-strong);
 }
 
 .presence-dot--ingame {
-	background: #00d4ff;
-	box-shadow: 0 0 6px rgba(0, 212, 255, 0.5);
-	animation: dot-pulse 2s ease-in-out infinite;
+	background: var(--emerus-accent-bright);
 }
 
 .presence-dot--launcher {
@@ -878,15 +864,6 @@ const messages = defineMessages({
 
 .presence-dot--offline {
 	background: #6b7280;
-}
-
-@keyframes dot-pulse {
-	0%, 100% {
-		box-shadow: 0 0 4px rgba(0, 212, 255, 0.3);
-	}
-	50% {
-		box-shadow: 0 0 8px rgba(0, 212, 255, 0.6);
-	}
 }
 
 .community-card-info {
@@ -913,7 +890,7 @@ const messages = defineMessages({
 }
 
 .community-card-status--ingame {
-	color: #00d4ff;
+	color: var(--color-brand);
 }
 
 .community-card-action {
@@ -993,7 +970,7 @@ const messages = defineMessages({
 	width: 36px;
 	height: 36px;
 	border-radius: 50%;
-	background: rgba(255, 255, 255, 0.06);
+	background: var(--shell-border);
 }
 
 .skeleton-text {
@@ -1006,7 +983,7 @@ const messages = defineMessages({
 .skeleton-line {
 	height: 8px;
 	border-radius: 4px;
-	background: rgba(255, 255, 255, 0.06);
+	background: var(--shell-border);
 }
 
 .skeleton-line--short {

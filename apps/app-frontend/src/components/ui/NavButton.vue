@@ -73,8 +73,8 @@ defineOptions({
 
 	&:hover:not(.router-link-active):not(.disabled) {
 		transform: scale(1.08);
-		background: rgba(0, 212, 255, 0.08);
-		box-shadow: 0 0 15px rgba(0, 212, 255, 0.1);
+		background: color-mix(in srgb, var(--color-brand) 10%, transparent);
+		box-shadow: 0 0 15px color-mix(in srgb, var(--color-brand) 12%, transparent);
 	}
 
 	&:active:not(.disabled) {
@@ -104,26 +104,26 @@ defineOptions({
 }
 
 .router-link-active {
-	color: #00d4ff !important;
-	background: rgba(0, 212, 255, 0.12) !important;
-	box-shadow: 0 0 15px rgba(0, 212, 255, 0.15);
+	color: var(--color-brand) !important;
+	background: color-mix(in srgb, var(--color-brand) 14%, transparent) !important;
+	box-shadow: 0 0 15px color-mix(in srgb, var(--color-brand) 18%, transparent);
 	animation: nav-glow 2s ease-in-out infinite;
 }
 
 @keyframes nav-glow {
 	0%, 100% {
-		box-shadow: 0 0 12px rgba(0, 212, 255, 0.12);
+		box-shadow: 0 0 12px color-mix(in srgb, var(--color-brand) 14%, transparent);
 	}
 	50% {
-		box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+		box-shadow: 0 0 20px color-mix(in srgb, var(--color-brand) 24%, transparent);
 	}
 }
 
 .router-link-active.expanded,
 button.expanded.router-link-active {
-	color: #00d4ff !important;
-	background: rgba(0, 212, 255, 0.12) !important;
-	box-shadow: 0 0 15px rgba(0, 212, 255, 0.15);
+	color: var(--color-brand) !important;
+	background: color-mix(in srgb, var(--color-brand) 14%, transparent) !important;
+	box-shadow: 0 0 15px color-mix(in srgb, var(--color-brand) 18%, transparent);
 }
 
 .subpage-active {
@@ -140,8 +140,8 @@ button.expanded.router-link-active {
 	height: 1.25rem;
 	width: 2px;
 	border-radius: 1px;
-	background: #00d4ff;
-	box-shadow: 0 0 8px rgba(0, 212, 255, 0.6), 0 0 16px rgba(0, 212, 255, 0.3);
+	background: var(--color-brand);
+	box-shadow: 0 0 8px color-mix(in srgb, var(--color-brand) 60%, transparent);
 	opacity: 1;
 	transition: opacity 0.2s ease;
 }

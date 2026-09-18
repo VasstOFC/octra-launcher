@@ -37,11 +37,11 @@ const messages = defineMessages({
 	},
 	title: {
 		id: 'app.featured-pack.title',
-		defaultMessage: 'Cobblemon Vasst',
+		defaultMessage: 'Lumen Pack 26.2',
 	},
 	blurb: {
 		id: 'app.featured-pack.blurb',
-		defaultMessage: 'Catch, battle, explore — install once and jump straight in.',
+		defaultMessage: 'Zoptymalizowana paczka na 1.26.2 ⚡ Więcej FPS-ów, garść dodatków i emotki 💬 Wskakuj i graj! 🎮',
 	},
 	install: {
 		id: 'app.featured-pack.install',

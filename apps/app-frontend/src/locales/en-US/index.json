@@ -1,4 +1,16 @@
 {
+  "account-manager.empty-hint": {
+    "message": "Add a Microsoft or offline account to start playing."
+  },
+  "account-manager.tab.lumen": {
+    "message": "Lumen"
+  },
+  "account-manager.tab.minecraft": {
+    "message": "Minecraft"
+  },
+  "account-manager.title": {
+    "message": "Accounts"
+  },
   "app.action-bar.downloading-java": {
     "message": "Downloading Java {version}"
   },
@@ -306,7 +318,7 @@
     "message": "1.0.0"
   },
   "app.featured-pack.blurb": {
-    "message": "Catch, battle, explore — install once and jump straight in."
+    "message": "Zoptymalizowana paczka na 1.26.2 ⚡ Więcej FPS-ów, garść dodatków i emotki 💬 Wskakuj i graj! 🎮"
   },
   "app.featured-pack.install": {
     "message": "Install"
@@ -318,7 +330,7 @@
     "message": "Staff pick"
   },
   "app.featured-pack.title": {
-    "message": "Cobblemon Vasst"
+    "message": "Lumen Pack 26.2"
   },
   "app.home.continue.empty": {
     "message": "Create an instance to start playing."
@@ -1112,6 +1124,12 @@
   "app.library.search.no-results.title": {
     "message": "No instances match your search."
   },
+  "app.library.search.no-results.hint": {
+    "message": "Try a different search term or clear the search to see all instances."
+  },
+  "app.library.search.clear": {
+    "message": "Clear search"
+  },
   "app.library.search.placeholder": {
     "message": "Search"
   },
@@ -1304,13 +1322,13 @@
   "app.nav.identity-minecraft-section": {
     "message": "Minecraft"
   },
-  "app.nav.identity-octra-row": {
+  "app.nav.identity-lumen-row": {
     "message": "Lumen · {name}"
   },
-  "app.nav.identity-octra-section": {
+  "app.nav.identity-lumen-section": {
     "message": "Lumen"
   },
-  "app.nav.identity-octra-sign-in": {
+  "app.nav.identity-lumen-sign-in": {
     "message": "Sign in to Lumen"
   },
   "app.nav.identity-tooltip": {
@@ -1775,24 +1793,6 @@
   "app.settings.accent.description": {
     "message": "Change the accent color used for buttons, highlights, and glow effects."
   },
-  "app.settings.accent.preset.aurora": {
-    "message": "Aurora"
-  },
-  "app.settings.accent.preset.cobalt": {
-    "message": "Cobalt"
-  },
-  "app.settings.accent.preset.ember": {
-    "message": "Ember"
-  },
-  "app.settings.accent.preset.mint": {
-    "message": "Mint"
-  },
-  "app.settings.accent.preset.octra": {
-    "message": "Lumen"
-  },
-  "app.settings.accent.preset.rose": {
-    "message": "Rose"
-  },
   "app.settings.accent.title": {
     "message": "Accent color"
   },
@@ -1820,14 +1820,8 @@
   "app.settings.app-version": {
     "message": "Lumen App {version}"
   },
-  "app.settings.appearance.group.accent": {
-    "message": "Accent"
-  },
-  "app.settings.appearance.group.accent.description": {
-    "message": "Change the accent color used for buttons, highlights, and selection."
-  },
   "app.settings.appearance.panel.description": {
-    "message": "Theme, accent color, and window chrome."
+    "message": "Theme and window chrome."
   },
   "app.settings.appearance.panel.title": {
     "message": "Appearance"

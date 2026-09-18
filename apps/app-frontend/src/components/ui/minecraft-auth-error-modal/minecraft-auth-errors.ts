@@ -43,6 +43,16 @@ export const minecraftAuthErrors: MinecraftAuthError[] = [
 		],
 	},
 	{
+		errorMatchers: ['Minecraft services are rate limiting login requests'],
+		whatHappened:
+			'Minecraft services temporarily blocked the sign-in request because there were too many recent attempts. Lumen App already retried a few times automatically.',
+		stepsToFix: [
+			'Wait a few minutes before trying again',
+			'Avoid repeated sign-in attempts while the limit is active',
+			'Try signing in once more after waiting',
+		],
+	},
+	{
 		matches: (message) =>
 			message.includes('Failed to deserialize response to JSON during step MinecraftToken:') &&
 			/Status Code: 5\d\d/.test(message),

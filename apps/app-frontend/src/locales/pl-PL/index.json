@@ -1,4 +1,16 @@
 {
+  "account-manager.empty-hint": {
+    "message": "Dodaj konto Microsoft lub offline, aby zacząć grać."
+  },
+  "account-manager.tab.lumen": {
+    "message": "Lumen"
+  },
+  "account-manager.tab.minecraft": {
+    "message": "Minecraft"
+  },
+  "account-manager.title": {
+    "message": "Konta"
+  },
   "app.action-bar.downloading-java": {
     "message": "Pobieranie Java {version}"
   },
@@ -300,7 +312,7 @@
     "message": "1.0.0"
   },
   "app.featured-pack.blurb": {
-    "message": "Łap, walcz, odkrywaj — zainstaluj raz i wskakuj do gry."
+    "message": "Zoptymalizowana paczka na 1.26.2 ⚡ Więcej FPS-ów, garść dodatków i emotki 💬 Wskakuj i graj! 🎮"
   },
   "app.featured-pack.install": {
     "message": "Zainstaluj"
@@ -312,7 +324,7 @@
     "message": "Wybór Lumen"
   },
   "app.featured-pack.title": {
-    "message": "Cobblemon Vasst"
+    "message": "Lumen Pack 26.2"
   },
   "app.home.continue.empty": {
     "message": "Utwórz instancję, aby zacząć grać."
@@ -1100,6 +1112,12 @@
   "app.library.search.no-results.title": {
     "message": "Żadna instancja nie pasuje do wyszukiwania."
   },
+  "app.library.search.no-results.hint": {
+    "message": "Spróbuj innej frazy albo wyczyść wyszukiwanie, aby zobaczyć wszystkie instancje."
+  },
+  "app.library.search.clear": {
+    "message": "Wyczyść wyszukiwanie"
+  },
   "app.library.search.placeholder": {
     "message": "Szukaj"
   },
@@ -1289,13 +1307,13 @@
   "app.nav.identity-minecraft-section": {
     "message": "Minecraft"
   },
-  "app.nav.identity-octra-row": {
+  "app.nav.identity-lumen-row": {
     "message": "Lumen · {name}"
   },
-  "app.nav.identity-octra-section": {
+  "app.nav.identity-lumen-section": {
     "message": "Lumen"
   },
-  "app.nav.identity-octra-sign-in": {
+  "app.nav.identity-lumen-sign-in": {
     "message": "Zaloguj do Lumen"
   },
   "app.nav.identity-tooltip": {
@@ -1745,24 +1763,6 @@
   "app.settings.accent.description": {
     "message": "Zmienia kolor akcentu używany w przyciskach, podświetleniach i poświatach."
   },
-  "app.settings.accent.preset.aurora": {
-    "message": "Aurora"
-  },
-  "app.settings.accent.preset.cobalt": {
-    "message": "Kobalt"
-  },
-  "app.settings.accent.preset.ember": {
-    "message": "Miedź"
-  },
-  "app.settings.accent.preset.mint": {
-    "message": "Mięta"
-  },
-  "app.settings.accent.preset.octra": {
-    "message": "Lawenda"
-  },
-  "app.settings.accent.preset.rose": {
-    "message": "Róż"
-  },
   "app.settings.accent.title": {
     "message": "Kolor akcentu"
   },
@@ -1790,14 +1790,8 @@
   "app.settings.app-version": {
     "message": "Lumen App {version}"
   },
-  "app.settings.appearance.group.accent": {
-    "message": "Akcent"
-  },
-  "app.settings.appearance.group.accent.description": {
-    "message": "Kolor marki w całym launcherze."
-  },
   "app.settings.appearance.panel.description": {
-    "message": "Motyw, kolor akcentu i wygląd okna."
+    "message": "Motyw i wygląd okna."
   },
   "app.settings.appearance.panel.title": {
     "message": "Wygląd"
@@ -3411,7 +3405,7 @@
     "message": "Zalogowano do Lumen"
   },
   "lumen-account.logout": {
-    "message": "Wyloguj"
+    "message": "Wyloguj się"
   },
   "lumen-account.no-minecraft": {
     "message": "Najpierw dodaj konto Microsoft lub offline Minecraft."

@@ -1,0 +1,102 @@
+/* ============================================================
+   EmerusUI — design tokens (source of truth, see EmerusUI.md)
+   Imported by apps that implement the Emerus visual language.
+   ============================================================ */
+
+:root {
+	/* Surfaces (dark graphite-green scale) */
+	--emerus-bg-0: #0b0d0c;
+	--emerus-bg-1: #101311;
+	--emerus-surface: #151917;
+	--emerus-surface-2: #1a1f1c;
+	--emerus-surface-3: #202622;
+
+	/* Borders */
+	--emerus-border-subtle: rgba(255, 255, 255, 0.06);
+	--emerus-border: rgba(255, 255, 255, 0.09);
+	--emerus-border-strong: rgba(255, 255, 255, 0.14);
+
+	/* Text */
+	--emerus-text: #f1f4f2;
+	--emerus-text-secondary: #a8b0ab;
+	--emerus-text-muted: #737b76;
+	--emerus-text-disabled: #505752;
+
+	/* Primary — Emerus bottle green */
+	--emerus-primary: #1f6b4f;
+	--emerus-primary-hover: #287d5d;
+	--emerus-primary-active: #18543e;
+	--emerus-primary-subtle: rgba(31, 107, 79, 0.14);
+	--emerus-primary-glow: rgba(31, 107, 79, 0.22);
+
+	/* Bright accent for text/icons on dark surfaces.
+	   Derived midpoint between primary and bright: readable both as
+	   text on dark and (on light themes) via per-theme brand tokens. */
+	--emerus-accent-bright: #55a982;
+	--emerus-accent-text: #35946e;
+
+	/* Status colors (muted, never neon) */
+	--emerus-success: #4faf7b;
+	--emerus-warning: #c49a52;
+	--emerus-danger: #c96b6b;
+	--emerus-info: #6f96b5;
+
+	/* Radius scale */
+	--emerus-radius-sm: 6px;
+	--emerus-radius-md: 8px;
+	--emerus-radius-lg: 12px;
+	--emerus-radius-xl: 16px;
+	--emerus-radius-modal: 20px;
+
+	/* Spacing scale */
+	--emerus-space-1: 4px;
+	--emerus-space-2: 8px;
+	--emerus-space-3: 12px;
+	--emerus-space-4: 16px;
+	--emerus-space-5: 20px;
+	--emerus-space-6: 24px;
+	--emerus-space-7: 32px;
+	--emerus-space-8: 40px;
+	--emerus-space-9: 48px;
+	--emerus-space-10: 64px;
+
+	/* Motion */
+	--emerus-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+	--emerus-duration-micro: 150ms;
+	--emerus-duration-component: 200ms;
+	--emerus-duration-panel: 300ms;
+	--emerus-duration-layout: 400ms;
+
+	/* Modal */
+	--emerus-modal-overlay: rgba(0, 0, 0, 0.6);
+
+	/* Soft multi-layer shadow (no harsh black) */
+	--emerus-shadow-soft:
+		0 1px 2px rgba(0, 0, 0, 0.18),
+		0 4px 12px -2px rgba(0, 0, 0, 0.22),
+		0 12px 32px -8px rgba(0, 0, 0, 0.25);
+	--emerus-shadow-raised:
+		0 1px 2px rgba(0, 0, 0, 0.2),
+		0 8px 24px -6px rgba(0, 0, 0, 0.3);
+}
+
+/* Light companions — same token names, light-appropriate values.
+   EmerusUI specifies the dark system; these keep shared components
+   coherent when the user picks the light theme. */
+html.light-mode,
+html.light {
+	--emerus-border-subtle: rgba(20, 30, 50, 0.08);
+	--emerus-border: rgba(20, 30, 50, 0.12);
+	--emerus-border-strong: rgba(20, 30, 50, 0.2);
+	--emerus-text: #161c19;
+	--emerus-text-secondary: #4a5250;
+	--emerus-text-muted: #6e7673;
+	--emerus-shadow-soft:
+		0 1px 2px rgba(30, 40, 70, 0.08),
+		0 4px 12px -2px rgba(30, 40, 70, 0.1),
+		0 12px 32px -8px rgba(30, 40, 70, 0.12);
+	--emerus-shadow-raised:
+		0 1px 2px rgba(30, 40, 70, 0.1),
+		0 8px 24px -6px rgba(30, 40, 70, 0.16);
+	--emerus-modal-overlay: rgba(20, 26, 24, 0.45);
+}

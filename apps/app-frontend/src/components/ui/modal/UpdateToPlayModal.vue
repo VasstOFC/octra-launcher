@@ -74,7 +74,7 @@ type ProjectInfo = {
 	slug: string
 }
 
-const { formatMessage } = useVIntl()
+const { formatMessage, locale } = useVIntl()
 const appEvents = injectAppEvents()
 const { startInstallingServer, stopInstallingServer } = injectServerInstall()
 type UpdateCompleteCallback = () => void | Promise<void>
@@ -108,7 +108,9 @@ const normalizedDiffs = computed<ContentDiffItem[]>(() => {
 
 const versionDate = computed(() =>
 	modpackVersion.value?.date_published
-		? dayjs(modpackVersion.value.date_published).format('MMMM D, YYYY')
+		? new Intl.DateTimeFormat(locale.value, { dateStyle: 'long' }).format(
+				new Date(modpackVersion.value.date_published),
+			)
 		: undefined,
 )
 

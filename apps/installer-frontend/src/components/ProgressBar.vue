@@ -19,8 +19,7 @@ defineProps<{ progress: number }>()
 
 .progress-bar__fill {
 	height: 100%;
-	background: linear-gradient(to right, #00d4ff, #7c3aed);
-	box-shadow: 0 0 12px rgba(0, 212, 255, 0.45);
+	background: var(--emerus-primary);
 	transition: width 0.25s ease-out;
 }
 </style>

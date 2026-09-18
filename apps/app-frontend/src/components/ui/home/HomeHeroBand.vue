@@ -210,7 +210,7 @@ onMounted(() => {
 					type="colored"
 					color="red"
 					size="lg"
-					class="!shadow-none band-btn--stop"
+					class="!shadow-none"
 					@click="stop"
 				>
 					<StopCircleIcon />
@@ -232,7 +232,7 @@ onMounted(() => {
 					type="colored"
 					color="brand"
 					size="lg"
-					class="!shadow-none band-btn--play"
+					class="!shadow-none"
 					@click="play"
 					@mouseenter="checkProcess"
 				>
@@ -259,50 +259,70 @@ onMounted(() => {
 <style scoped lang="scss">
 .continue-band {
 	position: relative;
-	border: 1px solid rgba(0, 212, 255, 0.12);
 	border-radius: var(--radius-lg);
 	margin: 0;
 	padding: 2rem;
-	background:
-		linear-gradient(
-			120deg,
-			rgba(0, 212, 255, 0.08) 0%,
-			transparent 52%
-		),
-		rgba(15, 15, 25, 0.85);
 	backdrop-filter: blur(20px);
 	-webkit-backdrop-filter: blur(20px);
-	box-shadow:
-		0 0 0 1px rgba(0, 212, 255, 0.06),
-		inset 0 2px 0 0 rgba(0, 212, 255, 0.2),
-		0 20px 40px -15px rgba(0, 0, 0, 0.4);
 	overflow: hidden;
 	transition: all 0.3s ease;
+}
 
-	&::before {
-		content: '';
-		position: absolute;
-		inset: 0;
-		background: radial-gradient(
-			ellipse at 20% 50%,
-			rgba(0, 212, 255, 0.06) 0%,
-			transparent 60%
-		);
-		pointer-events: none;
+html.dark-mode,
+html.oled-mode,
+html.retro-mode {
+	.continue-band {
+		border: 1px solid var(--emerus-border-subtle);
+		background:
+			linear-gradient(
+				120deg,
+				var(--emerus-primary-subtle) 0%,
+				transparent 52%
+			),
+			rgba(21, 25, 23, 0.85);
+		box-shadow: var(--emerus-shadow-soft);
+
+		&::before {
+			content: '';
+			position: absolute;
+			inset: 0;
+			background: radial-gradient(
+				ellipse at 20% 50%,
+				rgba(31, 107, 79, 0.08) 0%,
+				transparent 60%
+			);
+			pointer-events: none;
+		}
+
+		&:hover {
+			border-color: var(--emerus-border-strong);
+		}
 	}
+}
 
-	&:hover {
-		border-color: rgba(0, 212, 255, 0.18);
-		box-shadow:
-			0 0 0 1px rgba(0, 212, 255, 0.1),
-			inset 0 2px 0 0 rgba(0, 212, 255, 0.3),
-			0 25px 50px -15px rgba(0, 0, 0, 0.5);
+html.light-mode,
+html.light {
+	.continue-band {
+		border: 1px solid rgba(20, 30, 50, 0.1);
+		background:
+			linear-gradient(
+				120deg,
+				color-mix(in srgb, var(--color-brand) 8%, transparent) 0%,
+				transparent 52%
+			),
+			rgba(255, 255, 255, 0.75);
+		box-shadow: 0 20px 40px -15px rgba(30, 40, 70, 0.18);
+
+		&:hover {
+			border-color: color-mix(in srgb, var(--color-brand) 30%, transparent);
+			box-shadow: 0 25px 50px -15px rgba(30, 40, 70, 0.25);
+		}
 	}
 }
 
 .continue-band__kicker {
-	color: #00d4ff;
-	text-shadow: 0 0 10px rgba(0, 212, 255, 0.4);
+	color: var(--color-brand);
+	text-shadow: 0 0 10px color-mix(in srgb, var(--color-brand) 40%, transparent);
 	letter-spacing: 0.08em;
 }
 
@@ -339,8 +359,8 @@ onMounted(() => {
 }
 
 .band-tag {
-	border-color: rgba(0, 212, 255, 0.25) !important;
-	background: rgba(0, 212, 255, 0.08) !important;
+	border-color: color-mix(in srgb, var(--color-brand) 30%, transparent) !important;
+	background: color-mix(in srgb, var(--color-brand) 10%, transparent) !important;
 }
 
 .continue-band__identity {
@@ -360,7 +380,7 @@ onMounted(() => {
 	}
 
 	&:focus-visible {
-		outline: 2px solid #00d4ff;
+		outline: 2px solid var(--emerus-primary);
 		outline-offset: 2px;
 		border-radius: var(--radius-sm);
 	}
@@ -376,34 +396,5 @@ onMounted(() => {
 	min-width: 7.5rem;
 }
 
-.band-btn--play {
-	background: linear-gradient(135deg, #00d4ff 0%, #7c3aed 100%) !important;
-	border: none !important;
-	box-shadow: 0 0 0 rgba(0, 212, 255, 0) !important;
-	transition: all 0.2s ease;
 
-	&:hover:not(:disabled) {
-		transform: translateY(-2px) !important;
-		box-shadow: 0 0 25px rgba(0, 212, 255, 0.4), 0 0 50px rgba(0, 212, 255, 0.15) !important;
-		animation: play-glow 1.5s ease-in-out infinite;
-	}
-}
-
-@keyframes play-glow {
-	0%, 100% {
-		box-shadow: 0 0 20px rgba(0, 212, 255, 0.4), 0 0 40px rgba(0, 212, 255, 0.1);
-	}
-	50% {
-		box-shadow: 0 0 30px rgba(0, 212, 255, 0.6), 0 0 60px rgba(0, 212, 255, 0.2);
-	}
-}
-
-.band-btn--stop {
-	transition: all 0.2s ease;
-
-	&:hover:not(:disabled) {
-		transform: translateY(-2px) !important;
-		box-shadow: 0 0 20px rgba(239, 68, 68, 0.4) !important;
-	}
-}
 </style>

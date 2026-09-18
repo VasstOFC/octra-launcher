@@ -172,7 +172,7 @@ function handleSort(column: ContentCardTableSortColumn) {
 <template>
 	<div
 		role="table"
-		class="@container border border-solid border-surface-4 shadow-sm overflow-clip"
+		class="@container border border-solid border-surface-4 shadow-sm overflow-x-auto"
 		:class="[flat ? '' : 'rounded-[20px]', isStuck || hideHeader ? 'border-t-0' : '']"
 	>
 		<div

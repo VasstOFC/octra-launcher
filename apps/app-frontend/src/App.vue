@@ -15,16 +15,12 @@ import {
 	CompassIcon,
 	GlobeIcon,
 	ImagesIcon,
-	LogInIcon,
-	LogOutIcon,
 	PlayIcon,
 	PlusIcon,
 	RefreshCwIcon,
 	SettingsIcon,
 	ShirtIcon,
-	TrashIcon,
 	UserIcon,
-	UserPlusIcon,
 	UsersIcon,
 } from '@lumen/assets'
 import {
@@ -46,7 +42,7 @@ import {
 	provideNotificationManager,
 	providePageContext,
 	providePopupNotificationManager,
-	TeleportOverflowMenu,
+	TeleportPopoutMenu,
 	useDebugLogger,
 	useFormatBytes,
 	useHostingIntercom,
@@ -68,6 +64,7 @@ import { RouterView, useRoute, useRouter } from 'vue-router'
 import LumenMark from '@/components/brand/LumenMark.vue'
 import LumenWordmark from '@/components/brand/LumenWordmark.vue'
 import AccountsCard from '@/components/ui/AccountsCard.vue'
+import AccountManagerPanel from '@/components/ui/AccountManagerPanel.vue'
 import AddOfflineAccountModal from '@/components/ui/AddOfflineAccountModal.vue'
 import AppActionBar from '@/components/ui/AppActionBar.vue'
 import Breadcrumbs from '@/components/ui/Breadcrumbs.vue'
@@ -98,7 +95,6 @@ import SurveyPopup from '@/components/ui/SurveyPopup.vue'
 import WhatsNewModal from '@/components/ui/WhatsNewModal.vue'
 import WindowControls from '@/components/ui/WindowControls.vue'
 import { useCheckDisableMouseover } from '@/composables/macCssFix.js'
-import { bootstrapAccent } from '@/composables/use-accent.ts'
 import { useAppEvent } from '@/composables/use-app-event'
 import { useAppSettings } from '@/composables/use-app-settings.ts'
 import { handleSevereError, useError } from '@/composables/use-error.js'
@@ -112,7 +108,6 @@ import {
 	get_default_user,
 	isOfflineAccount,
 	login as loginMinecraft,
-	remove_user,
 	set_default_user,
 	users as listMinecraftUsers,
 } from '@/helpers/auth.js'
@@ -127,7 +122,6 @@ import {
 } from '@/helpers/instance'
 import { get as getCreds, removeUser } from '@/helpers/mr_auth.ts'
 import {
-	LumenAccountLogout,
 	LumenAccountSession,
 	LumenChatChannels,
 } from '@/helpers/lumen-account.js'
@@ -678,10 +672,7 @@ const messages = defineMessages({
 		id: 'app.nav.add-account',
 		defaultMessage: 'Add account',
 	},
-	removeAccount: {
-		id: 'app.nav.remove-account',
-		defaultMessage: 'Remove account',
-	},
+
 	restarting: {
 		id: 'app.restarting',
 		defaultMessage: 'Restarting...',
@@ -691,7 +682,7 @@ const messages = defineMessages({
 		defaultMessage: 'Connect Lumen account',
 	},
 	LumenLogout: {
-		id: 'Lumen-account.logout',
+		id: 'lumen-account.logout',
 		defaultMessage: 'Log out',
 	},
 	news: {
@@ -710,50 +701,25 @@ const messages = defineMessages({
 		id: 'minecraft-account.label',
 		defaultMessage: 'Minecraft account',
 	},
-	addMicrosoftAccount: {
-		id: 'minecraft-account.add-microsoft',
-		defaultMessage: 'Add Microsoft account',
-	},
-	addOfflineAccount: {
-		id: 'minecraft-account.add-offline',
-		defaultMessage: 'Add offline account',
-	},
-	nonPremium: {
-		id: 'minecraft-account.non-premium',
-		defaultMessage: 'Non-premium',
-	},
+
 	playOffline: {
 		id: 'minecraft-account.play-offline',
 		defaultMessage: 'Play offline',
 	},
-	identityMinecraftSection: {
-		id: 'app.nav.identity-minecraft-section',
-		defaultMessage: 'Minecraft',
-	},
-	identityLumenSection: {
-		id: 'app.nav.identity-Lumen-section',
-		defaultMessage: 'Lumen',
-	},
+
 	identityLumenRow: {
-		id: 'app.nav.identity-Lumen-row',
+		id: 'app.nav.identity-lumen-row',
 		defaultMessage: 'Lumen Â· {name}',
 	},
 	identityLumenSignIn: {
-		id: 'app.nav.identity-Lumen-sign-in',
+		id: 'app.nav.identity-lumen-sign-in',
 		defaultMessage: 'Sign in to Lumen',
 	},
 	identityTooltip: {
 		id: 'app.nav.identity-tooltip',
 		defaultMessage: 'MC Â· {minecraft} Â· Lumen Â· {Lumen}',
 	},
-	LumenLogin: {
-		id: 'Lumen-account.login',
-		defaultMessage: 'Log in',
-	},
-	LumenRegister: {
-		id: 'Lumen-account.register',
-		defaultMessage: 'Connect',
-	},
+
 	chatNewMessage: {
 		id: 'Lumen.chat.new-message-toast',
 		defaultMessage: 'New chat message',
@@ -819,7 +785,6 @@ async function setupApp() {
 	appTheme.preferred = theme
 	appTheme.advancedRendering = advanced_rendering
 	appTheme.syncAcrossDevices = sync_theme_across_devices
-	bootstrapAccent()
 	appSettings.syncBehaviorAcrossDevices = sync_behavior_across_devices
 	appSettings.hideNametagSkinsPage = hide_nametag_skins_page
 	appSettings.devMode = developer_mode
@@ -1309,11 +1274,6 @@ async function onLumenLoginRequiredSuccess() {
 	await accounts.value?.refreshValues?.()
 }
 
-async function logoutLumenAccount() {
-	await LumenAccountLogout().catch(handleError)
-	lumenSession.value = null
-	await accounts.value?.refreshValues?.()
-}
 provide('accountsCard', accounts)
 provide('openFriendsSidebar', (tab) => {
 	sidebarExpandedPreference.value = true
@@ -1396,27 +1356,7 @@ const minecraftAccountAvatar = computed(() =>
 	),
 )
 
-const minecraftAccountSwitcherAccounts = computed(() =>
-	minecraftAccounts.value.map((account) => ({
-		...account,
-		optionId: `mc-account-${account.profile.id}`,
-		offline: isOfflineAccount(account),
-		avatarUrl: getAccountAvatarUrl(
-			account.profile.id,
-			account.profile.id === minecraftDefaultUser.value,
-			isOfflineAccount(account),
-		),
-	})),
-)
-
 const addOfflineAccountModal = ref(null)
-
-async function setMinecraftAccount(account) {
-	if (!account?.profile?.id || account.profile.id === minecraftDefaultUser.value) return
-	await set_default_user(account.profile.id).catch(handleError)
-	await refreshMinecraftAccounts()
-	await accounts.value?.refreshValues?.()
-}
 
 async function addMicrosoftMinecraftAccount() {
 	accounts.value?.setLoginDisabled?.(true)
@@ -1439,107 +1379,12 @@ async function onOfflineMinecraftAccountAdded(loggedIn) {
 	await accounts.value?.refreshValues?.()
 }
 
-async function removeMinecraftAccount(account) {
-	if (!account?.profile?.id) return
-	await remove_user(account.profile.id).catch(handleError)
+async function onAccountManagerChange(close) {
 	await refreshMinecraftAccounts()
 	await accounts.value?.refreshValues?.()
+	close()
 }
 
-async function signOutMinecraftAccount() {
-	const selected = selectedMinecraftAccount.value
-	if (!selected?.profile?.id) return
-	await removeMinecraftAccount(selected)
-}
-
-const identityAccountMenuOptions = computed(() => {
-	const options = [
-		{
-			type: 'heading',
-			id: 'identity-minecraft-heading',
-			label: formatMessage(messages.identityMinecraftSection),
-		},
-	]
-
-	for (const account of minecraftAccountSwitcherAccounts.value) {
-		options.push({
-			id: account.optionId,
-			label: account.profile.name,
-			selected: account.profile.id === minecraftDefaultUser.value,
-			remainOpen: true,
-			action: () => setMinecraftAccount(account),
-			trailingAction: {
-				label: formatMessage(messages.removeAccount),
-				icon: TrashIcon,
-				color: 'red',
-				action: (event) => {
-					event.stopPropagation()
-					removeMinecraftAccount(account)
-				},
-			},
-		})
-	}
-
-	if (minecraftAccountSwitcherAccounts.value.length > 0) {
-		options.push({ type: 'divider' })
-	}
-
-	options.push({
-		id: 'add-microsoft',
-		label: formatMessage(messages.addMicrosoftAccount),
-		icon: PlusIcon,
-		action: () => addMicrosoftMinecraftAccount(),
-	})
-	options.push({
-		id: 'add-offline',
-		label: formatMessage(messages.addOfflineAccount),
-		icon: PlusIcon,
-		action: () => addOfflineAccountModal.value?.show(),
-	})
-
-	if (selectedMinecraftAccount.value?.profile?.id) {
-		options.push({ type: 'divider' })
-		options.push({
-			id: 'sign-out-minecraft',
-			label: formatMessage(commonMessages.signOutButton),
-			icon: LogOutIcon,
-			tone: 'red',
-			action: () => signOutMinecraftAccount(),
-		})
-	}
-
-	options.push({ type: 'divider' })
-	options.push({
-		type: 'heading',
-		id: 'identity-Lumen-heading',
-		label: formatMessage(messages.identityLumenSection),
-	})
-
-	if (lumenSession.value) {
-		options.push({
-			id: 'Lumen-logout',
-			label: formatMessage(messages.LumenLogout),
-			icon: LogOutIcon,
-			tone: 'red',
-			action: () => logoutLumenAccount(),
-		})
-	} else {
-		options.push({
-			id: 'Lumen-login',
-			label: formatMessage(messages.LumenLogin),
-			icon: LogInIcon,
-			action: () => openLumenAccount('login'),
-		})
-		options.push({
-			id: 'Lumen-register',
-			label: formatMessage(messages.LumenRegister),
-			icon: UserPlusIcon,
-			action: () => openLumenAccount('register'),
-		})
-	}
-
-	return options
-})
 
 watch(
 	stateInitialized,
@@ -2314,15 +2159,14 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 					class="inline-flex"
 					:class="{ 'w-full': railExpanded }"
 				>
-					<TeleportOverflowMenu
+					<TeleportPopoutMenu
 						type="quiet"
 						size="xl"
 						:icon-only="!railExpanded"
-						:circular="!railExpanded"
+						:circular="railExpanded ? undefined : true"
 						:label="identityAccountTooltip"
-						:options="identityAccountMenuOptions"
+						:tooltip="railExpanded ? undefined : identityAccountTooltip"
 						placement="right-end"
-						:distance="4"
 						class="nav-rail-account nav-rail-identity brightness-100 hover:!brightness-100 focus-visible:!brightness-100"
 						:class="
 							railExpanded
@@ -2330,59 +2174,50 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 								: ''
 						"
 					>
-						<Avatar
-							:src="minecraftAccountAvatar"
-							alt=""
-							size="24px"
-							circle
-							no-shadow
-							class="pointer-events-none !size-6 shrink-0"
-						/>
-						<span
-							v-if="railExpanded"
-							class="nav-rail-identity-text flex min-w-0 flex-1 flex-col items-start gap-0.5"
-						>
-							<span class="min-w-0 truncate text-[13px] font-medium text-primary">
-								{{
-									selectedMinecraftAccount?.profile?.name ??
-									formatMessage(messages.minecraftAccount)
-								}}
-							</span>
+						<template #trigger>
+							<Avatar
+								:src="minecraftAccountAvatar"
+								alt=""
+								size="24px"
+								circle
+								no-shadow
+								class="pointer-events-none !size-6 shrink-0"
+							/>
 							<span
-								class="flex min-w-0 items-center gap-1 text-[11px] leading-tight text-secondary"
+								v-if="railExpanded"
+								class="nav-rail-identity-text flex min-w-0 flex-1 flex-col items-start gap-0.5"
 							>
-								<UserIcon class="size-3 shrink-0 opacity-80" />
-								<span class="min-w-0 truncate">{{ identityLumenRowText }}</span>
-							</span>
-							<span
-								v-if="runningInstanceName !== null"
-								class="flex min-w-0 items-center gap-1 text-[10px] leading-tight text-brand-green"
-							>
-								<span class="size-1.5 shrink-0 rounded-full bg-brand-green" />
-								<span class="min-w-0 truncate">
+								<span class="min-w-0 truncate text-[13px] font-medium text-primary">
 									{{
-										runningInstanceName
-											? formatMessage(messages.identityInGame, { name: runningInstanceName })
-											: formatMessage(messages.identityInGameUnknown)
+										selectedMinecraftAccount?.profile?.name ??
+										formatMessage(messages.minecraftAccount)
 									}}
 								</span>
-							</span>
-						</span>
-						<template
-							v-for="account in minecraftAccountSwitcherAccounts"
-							:key="account.optionId"
-							#[account.optionId]
-						>
-							<Avatar :src="account.avatarUrl" size="1.25rem" aria-hidden="true" circle />
-							<span class="min-w-0 truncate">{{ account.profile.name }}</span>
-							<span
-								v-if="account.offline"
-								class="shrink-0 rounded-full bg-surface-3 px-1.5 py-0.5 text-[0.65rem] font-semibold leading-none text-secondary"
-							>
-								{{ formatMessage(messages.nonPremium) }}
+								<span
+									class="flex min-w-0 items-center gap-1 text-[11px] leading-tight text-secondary"
+								>
+									<UserIcon class="size-3 shrink-0 opacity-80" />
+									<span class="min-w-0 truncate">{{ identityLumenRowText }}</span>
+								</span>
+								<span
+									v-if="runningInstanceName !== null"
+									class="flex min-w-0 items-center gap-1 text-[10px] leading-tight text-brand-green"
+								>
+									<span class="size-1.5 shrink-0 rounded-full bg-brand-green" />
+									<span class="min-w-0 truncate">
+										{{
+											runningInstanceName
+												? formatMessage(messages.identityInGame, { name: runningInstanceName })
+												: formatMessage(messages.identityInGameUnknown)
+										}}
+									</span>
+								</span>
 							</span>
 						</template>
-					</TeleportOverflowMenu>
+						<template #panel="{ close }">
+							<AccountManagerPanel @change="onAccountManagerChange(close)" />
+						</template>
+					</TeleportPopoutMenu>
 				</span>
 				<NavButton
 					v-if="globalSyncedOptionsQuery.data.value?.screenshots"
@@ -2735,7 +2570,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	grid-template-columns: auto 1fr;
 	grid-template-rows: auto 1fr;
 	position: relative;
-	background-color: #0a0a0f;
+	background-color: var(--shell-bg);
 	height: 100vh;
 }
 
@@ -2745,10 +2580,10 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	z-index: 2;
 	width: var(--left-bar-width);
 	transition: width var(--shell-motion);
-	background: rgba(10, 10, 15, 0.95);
+	background: var(--shell-panel);
 	backdrop-filter: blur(12px);
 	-webkit-backdrop-filter: blur(12px);
-	border-right: 1px solid rgba(255, 255, 255, 0.06);
+	border-right: 1px solid var(--shell-border);
 
 	@media (prefers-reduced-motion: reduce) {
 		transition: none;
@@ -2789,8 +2624,8 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 }
 
 .nav-rail-slot--active {
-	background: rgba(0, 212, 255, 0.1) !important;
-	box-shadow: 0 0 12px rgba(0, 212, 255, 0.12) !important;
+	background: color-mix(in srgb, var(--color-brand) 12%, transparent) !important;
+	box-shadow: 0 0 12px color-mix(in srgb, var(--color-brand) 15%, transparent) !important;
 
 	&::before {
 		content: '';
@@ -2801,8 +2636,8 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 		height: 1.25rem;
 		width: 2px;
 		border-radius: 1px;
-		background: #00d4ff;
-		box-shadow: 0 0 8px rgba(0, 212, 255, 0.6);
+		background: var(--color-brand);
+		box-shadow: 0 0 8px color-mix(in srgb, var(--color-brand) 60%, transparent);
 	}
 }
 
@@ -2813,7 +2648,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 .nav-rail-footer {
 	margin-top: 0.25rem;
 	padding-top: 0.35rem;
-	border-top: 1px solid rgba(255, 255, 255, 0.06);
+	border-top: 1px solid var(--shell-border);
 }
 
 .nav-rail-account {
@@ -2826,9 +2661,9 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 
 	&:hover,
 	&:focus-visible {
-		background: rgba(0, 212, 255, 0.08) !important;
+		background: color-mix(in srgb, var(--color-brand) 10%, transparent) !important;
 		color: var(--color-contrast) !important;
-		box-shadow: 0 0 10px rgba(0, 212, 255, 0.1);
+		box-shadow: 0 0 10px color-mix(in srgb, var(--color-brand) 12%, transparent);
 	}
 
 	&:not(.nav-rail-account--expanded) {
@@ -2861,11 +2696,11 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	padding-right: var(--window-controls-width, 0px);
 	position: relative;
 	z-index: 2;
-	background: rgba(10, 10, 15, 0.9);
+	background: var(--shell-panel);
 	backdrop-filter: blur(16px);
 	-webkit-backdrop-filter: blur(16px);
-	border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-	box-shadow: 0 1px 0 rgba(0, 212, 255, 0.05);
+	border-bottom: 1px solid var(--shell-border);
+	box-shadow: 0 1px 0 color-mix(in srgb, var(--color-brand) 8%, transparent);
 }
 
 [data-tauri-drag-region-exclude] {
@@ -2880,7 +2715,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	right: 0;
 	bottom: 0;
 	height: calc(100vh - var(--top-bar-height));
-	background-color: #0a0a0f;
+	background-color: var(--shell-bg);
 	border-top-left-radius: var(--radius-lg);
 	overflow: hidden;
 }
@@ -2897,7 +2732,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	overflow-x: hidden;
 	scrollbar-gutter: stable;
 	position: relative;
-	background: #0a0a0f;
+	background: var(--shell-bg);
 	transition: margin-right var(--shell-motion);
 
 	&.sidebar-open {
@@ -2918,14 +2753,14 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	overflow: hidden;
 	width: 300px;
 	height: 100%;
-	background: rgba(15, 15, 25, 0.85);
+	background: var(--shell-panel-strong);
 	backdrop-filter: blur(20px);
 	-webkit-backdrop-filter: blur(20px);
-	border-left: 1px solid rgba(255, 255, 255, 0.06);
+	border-left: 1px solid var(--shell-border);
 	transform: translateX(100%);
 	pointer-events: none;
 	transition: transform var(--shell-motion);
-	box-shadow: -10px 0 30px rgba(0, 0, 0, 0.3);
+	box-shadow: var(--shell-shadow);
 
 	&.open {
 		transform: translateX(0);
@@ -2961,7 +2796,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	left: 0;
 	right: 0;
 	height: 5rem;
-	background: linear-gradient(to bottom, rgba(15, 15, 25, 0), rgba(10, 10, 15, 0.9));
+	background: linear-gradient(to bottom, transparent 0%, var(--shell-bg) 90%);
 	pointer-events: none;
 }
 
@@ -2972,19 +2807,17 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 .friends-fab {
 	right: 1.25rem;
 	bottom: 1.25rem;
-	background: rgba(0, 212, 255, 0.18) !important;
+	background: var(--shell-panel-strong) !important;
 	backdrop-filter: blur(12px);
 	-webkit-backdrop-filter: blur(12px);
-	border: 1px solid rgba(0, 212, 255, 0.25) !important;
-	box-shadow: 0 0 20px rgba(0, 212, 255, 0.25) !important;
-	color: rgba(255, 255, 255, 0.8);
+	border: 1px solid var(--shell-border) !important;
+	box-shadow: var(--emerus-shadow-soft) !important;
+	color: var(--color-contrast);
 	opacity: 1 !important;
 
 	&:hover {
-		background: rgba(0, 212, 255, 0.28) !important;
-		box-shadow: 0 0 30px rgba(0, 212, 255, 0.35) !important;
+		border-color: color-mix(in srgb, var(--emerus-primary) 40%, transparent) !important;
 		transform: scale(1.05);
-		color: #ffffff;
 	}
 
 	&:active {
@@ -2997,8 +2830,8 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 }
 
 .friends-fab--presence {
-	color: #00d4ff !important;
-	box-shadow: inset 0 0 0 2px #00d4ff, 0 0 15px rgba(0, 212, 255, 0.3);
+	color: var(--emerus-accent-bright) !important;
+	box-shadow: inset 0 0 0 2px var(--emerus-primary);
 }
 
 .friends-fab-enter-active,

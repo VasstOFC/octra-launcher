@@ -60,6 +60,42 @@ html.light-mode {
 	color-scheme: light;
 }
 
+/* EmerusUI brand — single bottle-green identity (app-local override,
+   the shared package keeps its own defaults for the website) */
+:root {
+	--color-brand: #1f6b4f;
+	--color-brand-highlight: rgba(31, 107, 79, 0.18);
+	--color-brand-shadow: rgba(31, 107, 79, 0.35);
+}
+
+/* Shell surfaces — theme-aware (app chrome uses these instead of hardcoded darks) */
+:root {
+	--shell-bg: #e9edf2;
+	--shell-panel: rgba(255, 255, 255, 0.85);
+	--shell-panel-strong: rgba(255, 255, 255, 0.92);
+	--shell-card: rgba(255, 255, 255, 0.7);
+	--shell-border: rgba(20, 30, 50, 0.1);
+	--shell-shadow: 0 8px 32px rgba(30, 40, 70, 0.12);
+}
+
+html.dark-mode,
+html.oled-mode,
+html.retro-mode {
+	--color-brand: #35946e;
+	--color-brand-highlight: rgba(53, 148, 110, 0.16);
+	--color-brand-shadow: rgba(53, 148, 110, 0.35);
+	--splash-tint-top: rgba(31, 107, 79, 0.16);
+	--splash-tint-bottom: rgba(11, 13, 12, 0.5);
+	--splash-overlay: rgba(11, 13, 12, 0.64);
+
+	--shell-bg: var(--emerus-bg-0);
+	--shell-panel: rgba(11, 13, 12, 0.95);
+	--shell-panel-strong: rgba(21, 25, 23, 0.85);
+	--shell-card: rgba(21, 25, 23, 0.7);
+	--shell-border: var(--emerus-border-subtle);
+	--shell-shadow: var(--emerus-shadow-soft);
+}
+
 body {
 	position: fixed;
 	width: 100%;
@@ -186,6 +222,7 @@ img {
 }
 
 @import '@lumen/assets/omorphia.scss';
+@import '@lumen/assets/styles/emerus.scss';
 
 /* Warm utility density — launcher-local overrides (after shared tokens) */
 :root {
@@ -206,8 +243,8 @@ html[data-theme='dark'],
 	--color-text-tertiary: #8892a4;
 	--color-base: var(--color-text-default);
 	--color-secondary: var(--color-text-tertiary);
-	--color-brand-highlight: rgba(0, 212, 255, 0.12);
-	--color-brand-shadow: rgba(0, 212, 255, 0.35);
+	--color-brand-highlight: rgba(53, 148, 110, 0.16);
+	--color-brand-shadow: rgba(53, 148, 110, 0.35);
 	--color-scrollbar: rgba(255, 255, 255, 0.12);
 }
 
@@ -215,24 +252,28 @@ html.light-mode,
 html.light {
 	--color-text-tertiary: #3f454d;
 	--color-secondary: var(--color-text-tertiary);
-	--color-brand-highlight: rgba(201, 107, 53, 0.14);
-	--color-brand-shadow: rgba(201, 107, 53, 0.35);
+	--color-brand-highlight: rgba(31, 107, 79, 0.14);
+	--color-brand-shadow: rgba(31, 107, 79, 0.35);
 }
 
-.app-grid-statusbar {
-	background: rgba(10, 10, 15, 0.7) !important;
-	backdrop-filter: blur(20px) !important;
-	-webkit-backdrop-filter: blur(20px) !important;
-}
+html.dark-mode,
+html.oled-mode,
+html.retro-mode {
+	.app-grid-statusbar {
+		background: rgba(10, 10, 15, 0.7) !important;
+		backdrop-filter: blur(20px) !important;
+		-webkit-backdrop-filter: blur(20px) !important;
+	}
 
-.app-grid-navbar {
-	background: rgba(10, 10, 15, 0.75) !important;
-	backdrop-filter: blur(16px) !important;
-	-webkit-backdrop-filter: blur(16px) !important;
-}
+	.app-grid-navbar {
+		background: rgba(10, 10, 15, 0.75) !important;
+		backdrop-filter: blur(16px) !important;
+		-webkit-backdrop-filter: blur(16px) !important;
+	}
 
-.splash-screen .base-bg {
-	background: #0a0a0f;
+	.splash-screen .base-bg {
+		background: #0a0a0f;
+	}
 }
 
 /* App settings modal (TabbedModal emberslot) — NoPixel neon accent active tab */
@@ -243,30 +284,34 @@ html.light {
 	transition: all 0.2s ease;
 }
 
-.emberslot-tab--active {
-	color: #00d4ff !important;
-	background: rgba(0, 212, 255, 0.08) !important;
-	box-shadow: 0 0 10px rgba(0, 212, 255, 0.15) !important;
-	transform: none !important;
+html.dark-mode,
+html.oled-mode,
+html.retro-mode {
+	.emberslot-tab--active {
+		color: var(--emerus-accent-bright) !important;
+		background: var(--emerus-primary-subtle) !important;
+		box-shadow: none !important;
+		transform: none !important;
 
-	&::before {
-		left: 0 !important;
-		height: 1.25rem !important;
-		width: 2px !important;
-		border-radius: 1px !important;
-		background: #00d4ff !important;
-		box-shadow: 0 0 6px rgba(0, 212, 255, 0.5) !important;
+		&::before {
+			left: 0 !important;
+			height: 1.25rem !important;
+			width: 2px !important;
+			border-radius: 1px !important;
+			background: var(--emerus-primary) !important;
+			box-shadow: none !important;
+		}
 	}
-}
 
-.emberslot-tab--top.emberslot-tab--active::before {
-	left: 50% !important;
-	top: auto !important;
-	bottom: 0 !important;
-	transform: translateX(-50%) !important;
-	height: 2px !important;
-	width: 1.25rem !important;
-	border-radius: 1px !important;
+	.emberslot-tab--top.emberslot-tab--active::before {
+		left: 50% !important;
+		top: auto !important;
+		bottom: 0 !important;
+		transform: translateX(-50%) !important;
+		height: 2px !important;
+		width: 1.25rem !important;
+		border-radius: 1px !important;
+	}
 }
 
 .emberslot-category--active {
@@ -315,7 +360,7 @@ pre {
 input,
 textarea {
 	background: var(--color-button-bg);
-	color: var(--color-text);
+	color: var(--color-contrast);
 	padding: 0.5rem 1rem;
 	font-weight: var(--font-weight-medium);
 	border: none;
@@ -331,7 +376,7 @@ textarea {
 		box-shadow:
 			inset 0 0 0 transparent,
 			0 0 0 0.25rem var(--color-brand-shadow);
-		color: var(--color-button-text-active);
+		color: var(--color-contrast);
 	}
 
 	&:disabled,
@@ -346,7 +391,7 @@ textarea {
 	}
 
 	&::placeholder {
-		color: var(--color-button-text);
+		color: var(--color-secondary);
 		opacity: 0.6;
 	}
 }
@@ -355,43 +400,35 @@ textarea {
    NoPixel-Style UI — Lumen Launcher
    ============================================ */
 
-/* Glassmorphism panels and modals */
-.modal-body,
-.emberslot-panel,
-.emberslot-content,
-.emberslot-sidebar {
-	background: rgba(15, 15, 25, 0.85) !important;
-	backdrop-filter: blur(20px);
-	-webkit-backdrop-filter: blur(20px);
-	border: 1px solid rgba(255, 255, 255, 0.08) !important;
-	box-shadow:
-		0 0 0 1px rgba(0, 212, 255, 0.08),
-		0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+/* Glassmorphism panels and modals (dark themes; light uses native component styles) */
+html.dark-mode,
+html.oled-mode,
+html.retro-mode {
+	.modal-body,
+	.emberslot-panel,
+	.emberslot-content,
+	.emberslot-sidebar {
+		background: rgba(21, 25, 23, 0.85) !important;
+		backdrop-filter: blur(20px);
+		-webkit-backdrop-filter: blur(20px);
+		border: 1px solid var(--emerus-border-subtle) !important;
+		box-shadow: var(--emerus-shadow-soft) !important;
+	}
 }
 
-/* Neon glow on hover for interactive elements */
+/* Interactive elements — EmerusUI restraint (native components own their states) */
 .button-base,
 .button-primary,
 .button-colored,
 .button outlined {
-	transition: all 0.2s ease;
+	transition:
+		background-color 0.15s ease,
+		border-color 0.15s ease,
+		box-shadow 0.15s ease,
+		transform 0.15s ease;
 }
 
-.button-primary,
-.button-colored,
-button[type='submit'] {
-	background: linear-gradient(135deg, #00d4ff 0%, #7c3aed 100%) !important;
-	border: none !important;
-	box-shadow: 0 0 0 rgba(0, 212, 255, 0) !important;
-	transition: all 0.2s ease;
-
-	&:hover:not(:disabled) {
-		transform: translateY(-1px);
-		box-shadow: 0 0 20px rgba(0, 212, 255, 0.35) !important;
-	}
-}
-
-/* Neon focus ring for inputs */
+/* Input focus — subtle Emerus green ring */
 input,
 textarea,
 select {
@@ -401,117 +438,119 @@ select {
 	&:focus-visible {
 		box-shadow:
 			inset 0 0 0 transparent,
-			0 0 0 3px rgba(0, 212, 255, 0.15) !important;
-		border-color: #00d4ff !important;
+			0 0 0 2px var(--emerus-primary-glow) !important;
+		border-color: var(--emerus-primary) !important;
 	}
 }
 
-/* Card hover glow */
+/* Card hover — subtle separation, no neon */
 .card,
 .universal-card {
-	transition: all 0.2s ease;
+	transition:
+		background-color 0.2s ease,
+		border-color 0.2s ease,
+		box-shadow 0.2s ease;
 
 	&:hover {
-		border-color: rgba(0, 212, 255, 0.15) !important;
-		box-shadow: 0 0 15px rgba(0, 212, 255, 0.08) !important;
+		border-color: var(--emerus-border-strong) !important;
+		box-shadow: var(--emerus-shadow-soft) !important;
 	}
 }
 
-/* Scrollbar — NoPixel style */
-*::-webkit-scrollbar {
-	width: 6px !important;
-	border: none !important;
+/* Scrollbar — NoPixel style (dark themes; light uses native themed scrollbar) */
+html.dark-mode,
+html.oled-mode,
+html.retro-mode {
+	*::-webkit-scrollbar {
+		width: 6px !important;
+		border: none !important;
+	}
+
+	*::-webkit-scrollbar-track {
+		background: rgba(0, 0, 0, 0.2) !important;
+	}
+
+	*::-webkit-scrollbar-thumb {
+		background: rgba(255, 255, 255, 0.12) !important;
+		border-radius: 3px !important;
+		border: none !important;
+	}
+
+	*::-webkit-scrollbar-thumb:hover {
+		background: rgba(255, 255, 255, 0.22) !important;
+	}
 }
 
-*::-webkit-scrollbar-track {
-	background: rgba(0, 0, 0, 0.2) !important;
-}
-
-*::-webkit-scrollbar-thumb {
-	background: rgba(255, 255, 255, 0.12) !important;
-	border-radius: 3px !important;
-	border: none !important;
-}
-
-*::-webkit-scrollbar-thumb:hover {
-	background: rgba(255, 255, 255, 0.22) !important;
-}
-
-/* Loading bar — cyan→purple gradient */
+/* Loading bar — Emerus green */
 .loading-bar {
-	background: linear-gradient(to right, #00d4ff 0%, #7c3aed 100%) !important;
+	background: linear-gradient(
+		to right,
+		var(--emerus-primary) 0%,
+		var(--emerus-accent-bright) 100%
+	) !important;
 }
 
-/* Nav button active state — neon accent */
-.nav-button--active {
-	color: #00d4ff !important;
-	background: rgba(0, 212, 255, 0.1) !important;
+/* Nav button active state — neon accent (dark themes; light uses native brand state) */
+html.dark-mode,
+html.oled-mode,
+html.retro-mode {
+	.nav-button--active {
+		color: var(--emerus-accent-bright) !important;
+		background: var(--emerus-primary-subtle) !important;
+	}
+
+	/* App grid background */
+	.app-grid-layout,
+	.app-contents {
+		background: var(--emerus-bg-0) !important;
+	}
+
+	/* Sidebar / rail */
+	.app-grid-navbar {
+		background: rgba(11, 13, 12, 0.95) !important;
+		backdrop-filter: blur(12px);
+		-webkit-backdrop-filter: blur(12px);
+		border-right: 1px solid var(--emerus-border-subtle) !important;
+	}
+
+	/* Popovers / tooltips */
+	.v-popper--theme-dropdown .v-popper-inner {
+		background: rgba(21, 25, 23, 0.92) !important;
+		backdrop-filter: blur(16px);
+		-webkit-backdrop-filter: blur(16px);
+		border: 1px solid var(--emerus-border-subtle) !important;
+		box-shadow: var(--emerus-shadow-soft) !important;
+	}
 }
 
-/* App grid background */
-.app-grid-layout,
-.app-contents {
-	background: #0a0a0f !important;
-}
 
-/* Sidebar / rail */
-.app-grid-navbar {
-	background: rgba(10, 10, 15, 0.95) !important;
-	backdrop-filter: blur(12px);
-	-webkit-backdrop-filter: blur(12px);
-	border-right: 1px solid rgba(255, 255, 255, 0.06) !important;
-}
-
-/* Popovers / tooltips */
-.v-popper--theme-dropdown .v-popper-inner {
-	background: rgba(15, 15, 25, 0.92) !important;
-	backdrop-filter: blur(16px);
-	-webkit-backdrop-filter: blur(16px);
-	border: 1px solid rgba(255, 255, 255, 0.08) !important;
-	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
-}
-
-/* Glow pulse animation */
-@keyframes lumen-glow {
-	0%, 100% { box-shadow: 0 0 10px rgba(0, 212, 255, 0.2); }
-	50% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.4); }
-}
-
-@keyframes lumen-pulse {
-	0%, 100% { opacity: 1; }
-	50% { opacity: 0.7; }
-}
-
-.animate-glow {
-	animation: lumen-glow 2s ease-in-out infinite;
-}
-
-.animate-pulse-neon {
-	animation: lumen-pulse 2s ease-in-out infinite;
-}
 
 /* ============================================
-   Context Menu — glassmorphism
+   Context Menu — glassmorphism (dark themes; light uses native styles)
    ============================================ */
-.v-popper--theme-dropdown .v-popper-inner {
-	background: rgba(15, 15, 25, 0.92) !important;
-	backdrop-filter: blur(20px);
-	-webkit-backdrop-filter: blur(20px);
-	border: 1px solid rgba(255, 255, 255, 0.08) !important;
-	border-radius: 12px !important;
-	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
-	padding: 6px !important;
-}
+html.dark-mode,
+html.oled-mode,
+html.retro-mode {
+	.v-popper--theme-dropdown .v-popper-inner {
+		background: rgba(21, 25, 23, 0.92) !important;
+		backdrop-filter: blur(20px);
+		-webkit-backdrop-filter: blur(20px);
+		border: 1px solid var(--emerus-border-subtle) !important;
+		border-radius: 12px !important;
+		box-shadow: var(--emerus-shadow-soft) !important;
+		padding: 6px !important;
+	}
 
-.context-menu-list,
-.v-popper__popper .context-menu {
-	background: rgba(15, 15, 25, 0.92) !important;
-	backdrop-filter: blur(20px);
-	-webkit-backdrop-filter: blur(20px);
-	border: 1px solid rgba(255, 255, 255, 0.08) !important;
-	border-radius: 12px !important;
-	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
-	padding: 6px !important;
+	.context-menu-list,
+	.v-popper__popper .context-menu {
+		background: rgba(21, 25, 23, 0.92) !important;
+		backdrop-filter: blur(20px);
+		-webkit-backdrop-filter: blur(20px);
+		border: 1px solid var(--emerus-border-subtle) !important;
+		border-radius: 12px !important;
+		box-shadow: var(--emerus-shadow-soft) !important;
+		padding: 6px !important;
+	}
 }
 
 .context-menu-item,
@@ -523,114 +562,127 @@ select {
 
 .context-menu-item:hover,
 .v-popper__popper .context-menu-item:hover {
-	background: rgba(0, 212, 255, 0.1) !important;
-	color: #00d4ff !important;
+	background: var(--emerus-primary-subtle) !important;
+	color: var(--emerus-accent-bright) !important;
 }
 
 .context-menu-item--danger:hover {
-	background: rgba(239, 68, 68, 0.15) !important;
-	color: #ef4444 !important;
+	background: rgba(201, 107, 107, 0.15) !important;
+	color: var(--emerus-danger) !important;
 }
 
 /* ============================================
-   Toast / Notification — glassmorphism
+   Toast / Notification — glassmorphism (dark themes; light uses native styles)
    ============================================ */
-.notification-panel,
-.popup-notification-panel {
-	background: rgba(15, 15, 25, 0.9) !important;
-	backdrop-filter: blur(20px);
-	-webkit-backdrop-filter: blur(20px);
-	border: 1px solid rgba(255, 255, 255, 0.08) !important;
-	border-radius: 12px !important;
-	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
-}
+html.dark-mode,
+html.oled-mode,
+html.retro-mode {
+	.notification-panel,
+	.popup-notification-panel {
+		background: rgba(21, 25, 23, 0.9) !important;
+		backdrop-filter: blur(20px);
+		-webkit-backdrop-filter: blur(20px);
+		border: 1px solid var(--emerus-border-subtle) !important;
+		border-radius: 12px !important;
+		box-shadow: var(--emerus-shadow-soft) !important;
+	}
 
-.notification-item,
-.popup-notification {
-	background: rgba(20, 20, 35, 0.8) !important;
-	border: 1px solid rgba(255, 255, 255, 0.06) !important;
-	border-radius: 10px !important;
-	transition: all 0.2s ease;
+	.notification-item,
+	.popup-notification {
+		background: rgba(26, 31, 28, 0.8) !important;
+		border: 1px solid var(--emerus-border-subtle) !important;
+		border-radius: 10px !important;
+		transition:
+			background-color 0.2s ease,
+			border-color 0.2s ease;
 
-	&:hover {
-		border-color: rgba(255, 255, 255, 0.12) !important;
+		&:hover {
+			border-color: var(--emerus-border) !important;
+		}
 	}
 }
 
 .notification-item--error,
 .popup-notification--error {
-	border-left: 3px solid #ef4444 !important;
-	box-shadow: inset 4px 0 8px -4px rgba(239, 68, 68, 0.3);
+	border-left: 3px solid var(--emerus-danger) !important;
 }
 
 .notification-item--warning,
 .popup-notification--warning {
-	border-left: 3px solid #f59e0b !important;
-	box-shadow: inset 4px 0 8px -4px rgba(245, 158, 11, 0.3);
+	border-left: 3px solid var(--emerus-warning) !important;
 }
 
 .notification-item--success,
 .popup-notification--success {
-	border-left: 3px solid #10b981 !important;
-	box-shadow: inset 4px 0 8px -4px rgba(16, 185, 129, 0.3);
+	border-left: 3px solid var(--emerus-success) !important;
 }
 
 .notification-item--info,
 .popup-notification--info {
-	border-left: 3px solid #00d4ff !important;
-	box-shadow: inset 4px 0 8px -4px rgba(0, 212, 255, 0.3);
+	border-left: 3px solid var(--emerus-info) !important;
 }
 
 /* ============================================
-   Tags / Badges — neon colors
+   Tags / Badges — subtle emerus (dark themes; light uses native brand tags)
    ============================================ */
-.tag-item,
-.badge-item,
-.project-tag {
-	background: rgba(0, 212, 255, 0.1) !important;
-	border: 1px solid rgba(0, 212, 255, 0.2) !important;
-	color: #00d4ff !important;
-	border-radius: 6px !important;
-	font-weight: 500 !important;
-	transition: all 0.2s ease;
-
-	&:hover {
-		background: rgba(0, 212, 255, 0.15) !important;
-		box-shadow: 0 0 8px rgba(0, 212, 255, 0.2) !important;
+html.dark-mode,
+html.oled-mode,
+html.retro-mode {
+	.tag-item,
+	.badge-item,
+	.project-tag {
+		background: var(--emerus-primary-subtle) !important;
+		border: 1px solid color-mix(in srgb, var(--emerus-primary) 35%, transparent) !important;
+		color: var(--emerus-accent-bright) !important;
+		border-radius: 6px !important;
+		font-weight: 500 !important;
+		transition:
+			background-color 0.15s ease,
+			border-color 0.15s ease;
 	}
 }
 
 /* ============================================
-   Progress bar — animated gradient
+   Progress bar — Emerus green, no show-off animation
    ============================================ */
 .progress-bar,
 .loading-bar {
-	background: linear-gradient(90deg, #00d4ff, #7c3aed, #00d4ff) !important;
-	background-size: 200% 100% !important;
-	animation: progress-shimmer 2s ease-in-out infinite !important;
+	background: linear-gradient(
+		to right,
+		var(--emerus-primary) 0%,
+		var(--emerus-accent-bright) 100%
+	) !important;
 }
 
-@keyframes progress-shimmer {
-	0% { background-position: 200% 0; }
-	100% { background-position: -200% 0; }
+/* Modal backdrop wash — bottle green instead of magenta (EmerusUI).
+   App-local override of the shared NewModal overlay; the shared
+   component itself is untouched. */
+.modal-overlay.standard {
+	background: linear-gradient(
+		to bottom,
+		rgba(31, 107, 79, 0.16) 0%,
+		rgba(11, 13, 12, 0.92) 100%
+	) !important;
 }
 
 /* ============================================
-   Settings modal — glassmorphism
+   Settings modal — glassmorphism (dark themes; light uses native styles)
    ============================================ */
-.modal-body,
-.tabbed-modal {
-	background: rgba(15, 15, 25, 0.92) !important;
-	backdrop-filter: blur(24px);
-	-webkit-backdrop-filter: blur(24px);
-	border: 1px solid rgba(255, 255, 255, 0.08) !important;
-	border-radius: 16px !important;
-	box-shadow:
-		0 0 0 1px rgba(0, 212, 255, 0.06),
-		0 25px 60px -15px rgba(0, 0, 0, 0.6) !important;
+html.dark-mode,
+html.oled-mode,
+html.retro-mode {
+	.modal-body,
+	.tabbed-modal {
+		background: rgba(21, 25, 23, 0.92) !important;
+		backdrop-filter: blur(24px);
+		-webkit-backdrop-filter: blur(24px);
+		border: 1px solid var(--emerus-border-subtle) !important;
+		border-radius: 16px !important;
+		box-shadow: var(--emerus-shadow-raised) !important;
+	}
 }
 
-/* Toggle switch — neon */
+/* Toggle switch — follows the active accent in every theme */
 button[class*="toggle"],
 .toggle-switch {
 	transition: all 0.2s ease;
@@ -638,24 +690,28 @@ button[class*="toggle"],
 
 button[class*="toggle"][aria-checked="true"],
 .toggle-switch.active {
-	background: #00d4ff !important;
-	box-shadow: 0 0 12px rgba(0, 212, 255, 0.4);
+	background: var(--color-brand) !important;
+	box-shadow: 0 0 12px var(--color-brand-shadow);
 }
 
 /* ============================================
-   Instance group header — glassmorphism
+   Instance group header — glassmorphism (dark themes; light uses native styles)
    ============================================ */
-.group\/instance-container .group\/header {
-	background: rgba(20, 20, 35, 0.5);
-	backdrop-filter: blur(8px);
-	-webkit-backdrop-filter: blur(8px);
-	border-radius: 8px;
-	padding: 0 8px;
-	transition: all 0.2s ease;
-}
+html.dark-mode,
+html.oled-mode,
+html.retro-mode {
+	.group\/instance-container .group\/header {
+		background: rgba(26, 31, 28, 0.5);
+		backdrop-filter: blur(8px);
+		-webkit-backdrop-filter: blur(8px);
+		border-radius: 8px;
+		padding: 0 8px;
+		transition: background-color 0.2s ease;
+	}
 
-.group\/instance-container .group\/header:hover {
-	background: rgba(20, 20, 35, 0.7);
+	.group\/instance-container .group\/header:hover {
+		background: rgba(26, 31, 28, 0.7);
+	}
 }
 
 /* ============================================
@@ -664,21 +720,33 @@ button[class*="toggle"][aria-checked="true"],
 .home-stage h2,
 .library-section h2 {
 	color: var(--color-contrast);
-	text-shadow: 0 0 20px rgba(0, 212, 255, 0.15);
 	font-weight: 700;
 }
 
 /* ============================================
-   Modal transitions
+   Modal transitions — fade + subtle translate (EmerusUI)
    ============================================ */
 .modal-fade-enter-active,
 .modal-fade-leave-active {
-	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	transition:
+		opacity 0.25s var(--emerus-ease-out),
+		transform 0.25s var(--emerus-ease-out);
 }
 
 .modal-fade-enter-from,
 .modal-fade-leave-to {
 	opacity: 0;
-	transform: scale(0.95);
-	filter: blur(4px);
+	transform: translateY(8px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.modal-fade-enter-active,
+	.modal-fade-leave-active {
+		transition: opacity 0.15s ease;
+	}
+
+	.modal-fade-enter-from,
+	.modal-fade-leave-to {
+		transform: none;
+	}
 }

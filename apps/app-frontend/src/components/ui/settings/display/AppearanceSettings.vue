@@ -10,18 +10,14 @@ import {
 } from '@lumen/ui'
 import { computed, inject, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
-import { SettingsGroup, SettingsPanelHeader } from '@/components/ui/settings/_shared'
-import AccentColorSettings from '@/components/ui/settings/display/AccentColorSettings.vue'
-import { useAccent } from '@/composables/use-accent.ts'
+import { SettingsPanelHeader } from '@/components/ui/settings/_shared'
 import { type ColorTheme, isDarkTheme, useTheme } from '@/composables/use-theme.ts'
-import type { AccentPresetId } from '@/helpers/accent-colors.ts'
 import { type AppSettings, get, set } from '@/helpers/settings.ts'
 import { getOS } from '@/helpers/utils'
 import { appSettingsModalContextKey } from '@/providers/app-settings-modal'
 
 const { formatMessage } = useVIntl()
 const theme = useTheme()
-const accent = useAccent()
 const auth = injectAuth()
 const { updatePreferences } = injectUserPreferences()
 const settingsModal = inject(appSettingsModalContextKey, null)
@@ -35,15 +31,7 @@ const messages = defineMessages({
 	},
 	panelDescription: {
 		id: 'app.settings.appearance.panel.description',
-		defaultMessage: 'Motyw, kolor akcentu i wystrój okna.',
-	},
-	accentGroup: {
-		id: 'app.settings.appearance.group.accent',
-		defaultMessage: 'Akcent',
-	},
-	accentGroupDescription: {
-		id: 'app.settings.appearance.group.accent.description',
-		defaultMessage: 'Zmień kolor akcentu używany dla przycisków, podświetleń i zaznaczeń.',
+		defaultMessage: 'Motyw i wystrój okna.',
 	},
 })
 
@@ -52,19 +40,14 @@ type AppearanceSettingsState = {
 	syncAcrossDevices: boolean
 	advancedRendering: boolean
 	nativeDecorations: boolean
-	accentPreset: AccentPresetId
-	accentCustomHex: string
 }
 
 function getAppearanceSettingsState(settings: AppSettings): AppearanceSettingsState {
-	const accentValue = accent.toSettingsValue(accent.saved)
 	return {
 		theme: settings.theme,
 		syncAcrossDevices: settings.sync_theme_across_devices,
 		advancedRendering: settings.advanced_rendering,
 		nativeDecorations: settings.native_decorations,
-		accentPreset: accentValue.preset,
-		accentCustomHex: accentValue.customHex,
 	}
 }
 
@@ -98,12 +81,6 @@ const { saved, current, changes, saving, hasChanges, reset, save } = useSavable(
 		theme.preferred = value.theme
 		theme.syncAcrossDevices = value.syncAcrossDevices
 		theme.advancedRendering = value.advancedRendering
-		accent.save(
-			accent.fromSettingsValue({
-				preset: value.accentPreset,
-				customHex: value.accentCustomHex,
-			}),
-		)
 	},
 )
 
@@ -134,57 +111,10 @@ function setNativeDecorations(enabled: boolean): void {
 	current.value.nativeDecorations = enabled
 }
 
-function setAccentPreset(preset: AccentPresetId): void {
-	current.value.accentPreset = preset
-	accent.setPreview(
-		accent.fromSettingsValue({
-			preset,
-			customHex: current.value.accentCustomHex,
-		}),
-	)
-}
-
-function setAccentCustomHex(hex: string): void {
-	current.value.accentCustomHex = hex
-	if (current.value.accentPreset !== 'custom') {
-		return
-	}
-
-	accent.setPreview(
-		accent.fromSettingsValue({
-			preset: 'custom',
-			customHex: hex,
-		}),
-	)
-}
-
 watch(
 	[() => current.value.theme, () => saved.value.theme],
 	([selectedTheme, savedTheme]) => {
 		theme.preview = selectedTheme === savedTheme ? null : selectedTheme
-	},
-	{ immediate: true },
-)
-
-watch(
-	[
-		() => current.value.accentPreset,
-		() => current.value.accentCustomHex,
-		() => saved.value.accentPreset,
-		() => saved.value.accentCustomHex,
-	],
-	([preset, customHex, savedPreset, savedCustomHex]) => {
-		if (preset === savedPreset && customHex === savedCustomHex) {
-			accent.resetPreview()
-			return
-		}
-
-		accent.setPreview(
-			accent.fromSettingsValue({
-				preset,
-				customHex,
-			}),
-		)
 	},
 	{ immediate: true },
 )
@@ -210,7 +140,6 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
 	theme.preview = null
-	accent.resetPreview()
 	settingsModal?.registerUnsavedChangesController(null)
 })
 
@@ -249,19 +178,6 @@ provideAppearanceSettings({
 			:title="formatMessage(messages.panelTitle)"
 			:description="formatMessage(messages.panelDescription)"
 		/>
-
-		<SettingsGroup
-			:label="formatMessage(messages.accentGroup)"
-			:description="formatMessage(messages.accentGroupDescription)"
-		>
-			<AccentColorSettings
-				embedded
-				:preset="current.accentPreset"
-				:custom-hex="current.accentCustomHex"
-				@update:preset="setAccentPreset"
-				@update:custom-hex="setAccentCustomHex"
-			/>
-		</SettingsGroup>
 
 		<section class="settings-group border-0 border-solid border-surface-5 pt-4 mt-4 border-t">
 			<AppearanceSettingsLayout />

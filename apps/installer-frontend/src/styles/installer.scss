@@ -4,8 +4,8 @@
 	flex-direction: column;
 	height: 100vh;
 	overflow: hidden;
-	color: var(--color-contrast);
-	background: var(--color-bg);
+	color: var(--emerus-text);
+	background: var(--emerus-bg-0);
 }
 
 .installer-shell__bg {
@@ -13,9 +13,9 @@
 	inset: 0;
 	pointer-events: none;
 	background:
-		radial-gradient(circle at 20% 0%, rgba(0, 212, 255, 0.12), transparent 45%),
-		radial-gradient(circle at 80% 100%, rgba(124, 58, 237, 0.14), transparent 40%),
-		linear-gradient(180deg, #0a0a0f 0%, #101019 100%);
+		radial-gradient(circle at 20% 0%, rgba(31, 107, 79, 0.14), transparent 45%),
+		radial-gradient(circle at 80% 100%, rgba(31, 107, 79, 0.08), transparent 40%),
+		linear-gradient(180deg, #0b0d0c 0%, #101311 100%);
 }
 
 .installer-shell__cube {
@@ -41,8 +41,7 @@
 .installer-shell__logo {
 	width: 2rem;
 	height: 2rem;
-	color: var(--color-brand);
-	filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.45));
+	color: var(--emerus-accent-bright);
 }
 
 .installer-shell__title {
@@ -98,13 +97,14 @@
 }
 
 .installer-btn--primary {
-	color: white;
-	background: linear-gradient(135deg, #00d4ff 0%, #7c3aed 100%);
+	color: #f1f4f2;
+	background: var(--emerus-primary);
+	border: 1px solid rgba(255, 255, 255, 0.09);
+	box-shadow: var(--emerus-shadow-soft);
 }
 
 .installer-btn--primary:hover:not(:disabled) {
-	transform: translateY(-1px);
-	box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+	background: var(--emerus-primary-hover);
 }
 
 .installer-btn--ghost {
@@ -148,12 +148,12 @@
 
 .installer-field input[type='text']:focus {
 	outline: none;
-	border-color: #00d4ff;
-	box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.15);
+	border-color: var(--emerus-primary);
+	box-shadow: 0 0 0 2px var(--emerus-primary-glow);
 }
 
 .installer-option input[type='checkbox'] {
-	accent-color: #00d4ff;
+	accent-color: var(--emerus-primary);
 }
 
 .installer-option {
@@ -194,8 +194,7 @@
 }
 
 .installer-steps__dot--active {
-	background: linear-gradient(90deg, #00d4ff, #7c3aed);
-	box-shadow: 0 0 12px rgba(0, 212, 255, 0.5);
+	background: var(--emerus-primary);
 }
 
 .installer-step-desc {
@@ -232,15 +231,15 @@ body {
 
 .dark-mode,
 :root {
-	--color-bg: #0a0a0f;
-	--color-raised-bg: #14141f;
+	--color-bg: #0b0d0c;
+	--color-raised-bg: #151917;
 	--color-divider: rgba(255, 255, 255, 0.08);
-	--color-contrast: #ffffff;
-	--color-secondary: rgba(255, 255, 255, 0.6);
-	--color-brand: #00d4ff;
+	--color-contrast: #f1f4f2;
+	--color-secondary: #a8b0ab;
+	--color-brand: #35946e;
 	--color-button-bg: rgba(255, 255, 255, 0.06);
-	--color-red: #ff6b6b;
-	--color-red-highlight: rgba(255, 107, 107, 0.15);
-	--color-green: #10b981;
+	--color-red: #c96b6b;
+	--color-red-highlight: rgba(201, 107, 107, 0.15);
+	--color-green: #4faf7b;
 	--radius-lg: 0.75rem;
 }

@@ -1,14 +1,11 @@
 <script setup lang="ts">
-import { Avatar, truncatedTooltip } from '@lumen/ui'
+import { Avatar, truncatedTooltip, useRelativeTime } from '@lumen/ui'
 import dayjs from 'dayjs'
-import relativeTime from 'dayjs/plugin/relativeTime'
 import { computed, ref } from 'vue'
 
 import { useAppSettings } from '@/composables/use-app-settings.ts'
 import { getInstanceIconUrl } from '@/helpers/instance'
 import type { GameInstance } from '@/helpers/types'
-
-dayjs.extend(relativeTime)
 
 const props = withDefaults(
 	defineProps<{
@@ -27,9 +24,11 @@ const compactMode = computed(() => appSettings.getFeatureFlag('compact_instance_
 const nameRef = ref<HTMLElement | null>(null)
 const versionRef = ref<HTMLElement | null>(null)
 
+const formatRelativeTime = useRelativeTime({ numeric: 'auto', style: 'short' })
+
 const lastPlayedText = computed(() => {
 	if (!props.instance.last_played) return null
-	return dayjs(props.instance.last_played).fromNow()
+	return formatRelativeTime(dayjs(props.instance.last_played).toISOString())
 })
 
 const playtimeText = computed(() => {
@@ -100,9 +99,9 @@ const metaText = computed(() => {
 
 <style scoped>
 .instance-card--selected {
-	background: rgba(0, 212, 255, 0.08) !important;
-	border: 1px solid rgba(0, 212, 255, 0.2);
-	box-shadow: 0 0 12px rgba(0, 212, 255, 0.1);
+	background: color-mix(in srgb, var(--color-brand) 10%, transparent) !important;
+	border: 1px solid color-mix(in srgb, var(--color-brand) 30%, transparent);
+	box-shadow: 0 0 12px color-mix(in srgb, var(--color-brand) 15%, transparent);
 }
 
 .instance-card--compact-hover {
@@ -110,23 +109,23 @@ const metaText = computed(() => {
 }
 
 .instance-card--compact-hover:hover {
-	background: rgba(0, 212, 255, 0.06) !important;
-	box-shadow: 0 0 8px rgba(0, 212, 255, 0.08);
+	background: color-mix(in srgb, var(--color-brand) 8%, transparent) !important;
+	box-shadow: 0 0 8px color-mix(in srgb, var(--color-brand) 10%, transparent);
 }
 
 .instance-card--card-hover {
-	background: rgba(20, 20, 35, 0.7) !important;
+	background: var(--shell-card) !important;
 	backdrop-filter: blur(12px);
 	-webkit-backdrop-filter: blur(12px);
-	border: 1px solid rgba(255, 255, 255, 0.06);
+	border: 1px solid var(--shell-border);
 	transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .instance-card--card-hover:hover {
-	background: rgba(25, 25, 45, 0.85) !important;
-	border-color: rgba(0, 212, 255, 0.25);
+	background: color-mix(in srgb, var(--color-brand) 9%, var(--shell-card)) !important;
+	border-color: color-mix(in srgb, var(--color-brand) 30%, transparent);
 	box-shadow:
-		0 0 0 1px rgba(0, 212, 255, 0.12),
-		0 0 20px -5px rgba(0, 212, 255, 0.25);
+		0 0 0 1px color-mix(in srgb, var(--color-brand) 14%, transparent),
+		0 0 20px -5px color-mix(in srgb, var(--color-brand) 25%, transparent);
 }
 </style>

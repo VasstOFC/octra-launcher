@@ -85,17 +85,17 @@ pub fn skins_api_key() -> Option<&'static str> {
 }
 
 /// Relative path used when looking for a local drop-in `.mrpack`.
-pub const FEATURED_PACK: &str = "packs/Cobblemon vasst 1.0.0.mrpack";
-pub const FEATURED_PACK_TITLE: &str = "Cobblemon Vasst";
+pub const FEATURED_PACK: &str = "packs/Lumen Pack 1.0.0.mrpack";
+pub const FEATURED_PACK_TITLE: &str = "Lumen Pack 26.2";
 pub const FEATURED_PACK_BLURB: &str =
-	"Catch, battle, explore — install once and jump straight in.";
+	"Zoptymalizowana paczka na 1.26.2 ⚡ Więcej FPS-ów, garść dodatków i emotki 💬 Wskakuj i graj! 🎮";
 /// Hosted next to the skin registry so the NSIS installer stays small.
 /// Keep on the same host as [`SKINS_URL`] until the HTTPS cutover.
 /// Prefer remote override via `{skins_url}/featured-pack.json` (see pack::featured).
 pub const FEATURED_PACK_URL: &str =
-	"http://92.5.186.6/packs/Cobblemon-vasst.mrpack";
+	"http://92.5.186.6/packs/Lumen-Pack-1.0.0.mrpack";
 pub const FEATURED_PACK_VERSION: &str = "1.0.0";
-pub const FEATURED_PACK_CACHE_NAME: &str = "cobblemon-vasst.mrpack";
+pub const FEATURED_PACK_CACHE_NAME: &str = "lumen-pack.mrpack";
 
 /// Optional CMS-style override fetched from the Octra API host.
 pub const FEATURED_PACK_CONFIG_PATH: &str = "/featured-pack.json";

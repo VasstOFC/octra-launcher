@@ -60,7 +60,7 @@ const continueInstance = computed(() => {
 })
 
 const hasFeaturedPack = computed(() =>
-	instances.value.some((instance) => instance.name.toLowerCase() === 'cobblemon vasst'),
+	instances.value.some((instance) => instance.name.toLowerCase() === 'lumen pack 26.2'),
 )
 
 async function fetchInstances() {

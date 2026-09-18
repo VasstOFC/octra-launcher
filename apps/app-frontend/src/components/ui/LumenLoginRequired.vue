@@ -269,8 +269,8 @@ void loadLinkedMinecraft()
 
 		&:focus,
 		&:focus-visible {
-			border-color: rgba(255, 255, 255, 0.15) !important;
-			box-shadow: none !important;
+			border-color: var(--emerus-primary) !important;
+			box-shadow: 0 0 0 2px var(--emerus-primary-glow) !important;
 		}
 	}
 }

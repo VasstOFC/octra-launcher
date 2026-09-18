@@ -389,7 +389,7 @@ onMounted(startInstanceGridResizeObserver)
 		</Transition>
 		<div
 			v-if="!hideHeader"
-			class="group/header flex min-h-11 w-full items-center gap-2 rounded-xl border border-transparent px-2 py-1 transition-all duration-200 hover:border-[rgba(0,212,255,0.15)] hover:bg-[rgba(25,25,45,0.6)]"
+			class="group/header flex min-h-11 w-full items-center gap-2 rounded-xl border border-transparent px-2 py-1 transition-all duration-200 hover:border-[color-mix(in_srgb,var(--color-brand)_20%,transparent)] hover:bg-[color-mix(in_srgb,var(--color-brand)_8%,transparent)]"
 			:class="{
 				'instance-group-reorder-handle': isReorderableGroup && canDragReorder,
 			}"
@@ -446,7 +446,7 @@ onMounted(startInstanceGridResizeObserver)
 				</span>
 				<TagItem
 					v-if="instanceGroup.instances.length"
-					class="shrink-0 !border-[rgba(0,212,255,0.25)] !bg-[rgba(0,212,255,0.08)]"
+					class="shrink-0 !border-[color-mix(in_srgb,var(--color-brand)_30%,transparent)] !bg-[color-mix(in_srgb,var(--color-brand)_10%,transparent)]"
 				>
 					{{ instanceGroup.instances.length }}
 				</TagItem>
